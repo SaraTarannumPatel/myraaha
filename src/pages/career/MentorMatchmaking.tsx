@@ -520,7 +520,7 @@ const MentorMatchmaking = () => {
                   <Card key={req.id}>
                     <CardContent className="pt-6">
                       <div className="flex items-center gap-4">
-                        <div className="w-12 h-12 rounded-full bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center text-white font-display text-lg">
+                        <div className="w-12 h-12 rounded-full bg-gradient-to-br from-accent to-primary flex items-center justify-center text-primary-foreground font-display text-lg">
                           {mentor?.name.charAt(0) || "?"}
                         </div>
                         <div className="flex-1">
