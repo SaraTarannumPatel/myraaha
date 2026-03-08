@@ -9,12 +9,12 @@ import { toast } from "sonner";
 import { Link } from "react-router-dom";
 import {
   Lightbulb, Plus, Sparkles, Target, Users, Tag, Star, Loader2, Brain,
-  CheckCircle2, AlertTriangle, ArrowRight, Eye, Search, Heart, X,
-  Bookmark, ThumbsDown, MessageCircle, Trophy, Zap, Globe, GraduationCap,
-  Compass, PenLine, Filter
+  CheckCircle2, ArrowRight, Eye, Heart, X,
+  Bookmark, ThumbsDown, PenLine, Trophy, Zap, Globe, GraduationCap,
+  Compass, Filter, Rocket, MessageCircle, BookOpen, LifeBuoy, Wrench, Clock
 } from "lucide-react";
 
-type Tab = "ideas" | "my-ideas" | "problem-spotting" | "quests";
+type Tab = "discover" | "ideas" | "my-ideas" | "problem-spotting" | "quests";
 
 const sectors = [
   { value: "all", label: "All Sectors", icon: Globe },
@@ -25,9 +25,22 @@ const sectors = [
   { value: "emerging_trends", label: "Emerging Trends", icon: Target },
 ];
 
+const explorationQuestions = [
+  { id: "problemTypes", question: "What kind of problems do you want to solve?", placeholder: "e.g., education access, local transportation, mental health..." },
+  { id: "skillsInterests", question: "What skills or interests do you want to explore?", placeholder: "e.g., coding, design, storytelling, community building..." },
+  { id: "startupType", question: "What kind of startup excites you?", placeholder: "e.g., social enterprise, tech startup, creative agency, freelancing..." },
+];
+
+const modulePathMap: Record<string, string> = {
+  "mvp-builder": "/dashboard/mvp-builder",
+  "startup-lab": "/dashboard/startup-lab",
+  "mindset-builder": "/dashboard/mindset-builder",
+  "startup-communities": "/dashboard/startup-communities",
+};
+
 const StartupSparks = () => {
   const { user, profile } = useAuth();
-  const [activeTab, setActiveTab] = useState<Tab>("ideas");
+  const [activeTab, setActiveTab] = useState<Tab>("discover");
   const [sectorFilter, setSectorFilter] = useState("all");
 
   // Idea Cards state
@@ -57,6 +70,15 @@ const StartupSparks = () => {
   const [questResponse, setQuestResponse] = useState("");
   const [submittingQuest, setSubmittingQuest] = useState(false);
   const [questFeedback, setQuestFeedback] = useState<Record<string, any>>({});
+
+  // Discover tab state
+  const [explorationAnswers, setExplorationAnswers] = useState<Record<string, string>>({});
+  const [explorationInsights, setExplorationInsights] = useState<any>(null);
+  const [loadingExploration, setLoadingExploration] = useState(false);
+  const [resourceSuggestions, setResourceSuggestions] = useState<any>(null);
+  const [loadingResources, setLoadingResources] = useState(false);
+  const [actionPrompts, setActionPrompts] = useState<any>(null);
+  const [loadingActions, setLoadingActions] = useState(false);
 
   useEffect(() => {
     fetchIdeaCards();
@@ -90,16 +112,32 @@ const StartupSparks = () => {
 
   const interactWithCard = async (cardId: string, type: string) => {
     if (!user) return;
-    // Remove existing interaction first
     await supabase.from("idea_card_interactions").delete().eq("user_id", user.id).eq("idea_card_id", cardId);
     if (interactions[cardId] === type) {
-      // Toggle off
       setInteractions(prev => { const n = { ...prev }; delete n[cardId]; return n; });
       return;
     }
     await supabase.from("idea_card_interactions").insert({ user_id: user.id, idea_card_id: cardId, interaction_type: type });
     setInteractions(prev => ({ ...prev, [cardId]: type }));
     if (type === "save") toast.success("Idea saved!");
+
+    // Profile sync: track sector affinity
+    const card = ideaCards.find(c => c.id === cardId);
+    if (card?.sector && type === "like") {
+      syncToFounderProfile(card.sector);
+    }
+  };
+
+  const syncToFounderProfile = async (sector: string) => {
+    if (!user) return;
+    // Log interest pattern to journal for founder profiling
+    await supabase.from("journal_entries").insert({
+      user_id: user.id,
+      title: `Startup Spark: Explored ${sector.replace("_", " ")}`,
+      content: `Showed interest in ${sector.replace("_", " ")} sector through Startup Sparks idea exploration.`,
+      tags: ["startup-sparks", "exploration", sector],
+      intent: "entrepreneurship" as any,
+    });
   };
 
   const saveIdeaNote = async (cardId: string) => {
@@ -113,19 +151,16 @@ const StartupSparks = () => {
   const generateAICards = async () => {
     setGeneratingCards(true);
     try {
-      const resp = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/startup-sparks-ai`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json", Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}` },
-        body: JSON.stringify({ type: "generate_ideas", data: { interests: profile?.areas_of_focus?.join(", ") || profile?.industry, sector: sectorFilter !== "all" ? sectorFilter : undefined, userType: profile?.user_type } }),
+      const { data, error } = await supabase.functions.invoke("startup-sparks-ai", {
+        body: { type: "generate_ideas", data: { interests: profile?.areas_of_focus?.join(", ") || profile?.industry, sector: sectorFilter !== "all" ? sectorFilter : undefined, userType: profile?.user_type } },
       });
-      if (!resp.ok) { const err = await resp.json().catch(() => ({})); toast.error(err.error || "Failed to generate"); setGeneratingCards(false); return; }
-      const result = await resp.json();
-      if (result.ideas) {
-        for (const idea of result.ideas) {
+      if (error) throw error;
+      if (data?.ideas) {
+        for (const idea of data.ideas) {
           await supabase.from("idea_cards").insert({ ...idea, source: "ai_generated" });
         }
         fetchIdeaCards();
-        toast.success(`${result.ideas.length} new idea cards generated!`);
+        toast.success(`${data.ideas.length} new idea cards generated!`);
       }
     } catch { toast.error("Failed to generate ideas"); }
     setGeneratingCards(false);
@@ -157,16 +192,11 @@ const StartupSparks = () => {
   const validateIdea = async (idea: any) => {
     setValidating(idea.id);
     try {
-      const resp = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/ai-validate-idea`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json", Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}` },
-        body: JSON.stringify({ idea }),
-      });
-      if (!resp.ok) { toast.error("Validation failed"); setValidating(null); return; }
-      const result = await resp.json();
-      setValidation(prev => ({ ...prev, [idea.id]: result }));
-      if (result.score !== undefined) {
-        await supabase.from("startup_ideas").update({ validation_score: result.score }).eq("id", idea.id);
+      const { data, error } = await supabase.functions.invoke("ai-validate-idea", { body: { idea } });
+      if (error) throw error;
+      setValidation(prev => ({ ...prev, [idea.id]: data }));
+      if (data?.score !== undefined) {
+        await supabase.from("startup_ideas").update({ validation_score: data.score }).eq("id", idea.id);
         fetchMyIdeas();
       }
       toast.success("Idea validated!");
@@ -185,19 +215,14 @@ const StartupSparks = () => {
     if (!user || !newObservation.trim()) { toast.error("Describe a problem you've noticed"); return; }
     setAnalyzingObs(true);
     try {
-      // Save observation first
       const { data: obs, error } = await supabase.from("problem_observations").insert({ user_id: user.id, observation: newObservation }).select().single();
       if (error) throw error;
 
-      // Analyze with AI
-      const resp = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/startup-sparks-ai`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json", Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}` },
-        body: JSON.stringify({ type: "analyze_problem", data: { observation: newObservation } }),
+      const { data: analysis } = await supabase.functions.invoke("startup-sparks-ai", {
+        body: { type: "analyze_problem", data: { observation: newObservation } },
       });
 
-      if (resp.ok) {
-        const analysis = await resp.json();
+      if (analysis) {
         await supabase.from("problem_observations").update({
           category: analysis.category,
           scale: analysis.scale,
@@ -238,31 +263,20 @@ const StartupSparks = () => {
     if (!user || !questResponse.trim()) { toast.error("Write your response first"); return; }
     setSubmittingQuest(true);
     try {
-      // Get AI feedback
-      const resp = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/startup-sparks-ai`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json", Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}` },
-        body: JSON.stringify({ type: "quest_feedback", data: { questTitle: quest.title, questDescription: quest.description, response: questResponse } }),
+      const { data: feedback } = await supabase.functions.invoke("startup-sparks-ai", {
+        body: { type: "quest_feedback", data: { questTitle: quest.title, questDescription: quest.description, response: questResponse } },
       });
 
-      let feedback: any = null;
-      if (resp.ok) {
-        feedback = await resp.json();
-        setQuestFeedback(prev => ({ ...prev, [quest.id]: feedback }));
-      }
+      if (feedback) setQuestFeedback(prev => ({ ...prev, [quest.id]: feedback }));
 
       const pointsEarned = feedback?.score ? Math.round(quest.points * (feedback.score / 100)) : quest.points;
       await supabase.from("quest_progress").update({
         status: "completed", response: questResponse, completed_at: new Date().toISOString(), points_earned: pointsEarned,
       }).eq("user_id", user.id).eq("quest_id", quest.id);
 
-      // Award achievement
       await supabase.from("achievements").insert({
-        user_id: user.id,
-        title: `Quest Complete: ${quest.title}`,
-        description: `Earned ${pointsEarned} points`,
-        achievement_type: "quest",
-        points: pointsEarned,
+        user_id: user.id, title: `Quest Complete: ${quest.title}`,
+        description: `Earned ${pointsEarned} points`, achievement_type: "quest", points: pointsEarned,
       });
 
       toast.success(`Quest completed! +${pointsEarned} points 🏆`);
@@ -273,13 +287,93 @@ const StartupSparks = () => {
     setSubmittingQuest(false);
   };
 
+  // ========== DISCOVER TAB ==========
+  const submitExploration = async () => {
+    if (!user) return;
+    const answered = Object.values(explorationAnswers).filter(v => v.trim()).length;
+    if (answered < 2) { toast.error("Answer at least 2 questions"); return; }
+    setLoadingExploration(true);
+
+    // Gather liked sectors from interactions
+    const likedSectors = ideaCards
+      .filter(c => interactions[c.id] === "like" || interactions[c.id] === "save")
+      .map(c => c.sector)
+      .filter(Boolean);
+
+    try {
+      const { data, error } = await supabase.functions.invoke("startup-sparks-ai", {
+        body: {
+          type: "guided_exploration",
+          data: {
+            name: profile?.full_name || "Explorer",
+            ...explorationAnswers,
+            likedSectors: [...new Set(likedSectors)],
+          },
+        },
+      });
+      if (error) throw error;
+      setExplorationInsights(data);
+
+      // Sync exploration to journal for founder profiling
+      await supabase.from("journal_entries").insert({
+        user_id: user.id,
+        title: "Startup Sparks: Guided Exploration Complete",
+        content: `**Exploration answers:**\n${Object.entries(explorationAnswers).map(([k, v]) => `- ${k}: ${v}`).join("\n")}\n\n**AI Insights:**\n- Traits: ${data?.founder_traits?.join(", ")}\n- Sectors: ${data?.suggested_sectors?.join(", ")}`,
+        tags: ["startup-sparks", "guided-exploration", "founder-profiling"],
+        intent: "entrepreneurship" as any,
+      });
+    } catch { toast.error("Failed to get insights"); }
+    setLoadingExploration(false);
+  };
+
+  const fetchResourceSuggestions = async () => {
+    if (!user) return;
+    setLoadingResources(true);
+    const likedIdeas = ideaCards.filter(c => interactions[c.id] === "like" || interactions[c.id] === "save").map(c => c.title);
+    const problems = observations.map(o => o.observation?.slice(0, 50));
+    const sectorSet = [...new Set(ideaCards.filter(c => interactions[c.id] === "like").map(c => c.sector).filter(Boolean))];
+
+    try {
+      const { data, error } = await supabase.functions.invoke("startup-sparks-ai", {
+        body: { type: "resource_suggestions", data: { sectors: sectorSet, likedIdeas, problems } },
+      });
+      if (error) throw error;
+      setResourceSuggestions(data);
+    } catch { toast.error("Failed to get suggestions"); }
+    setLoadingResources(false);
+  };
+
+  const fetchActionPrompts = async () => {
+    if (!user) return;
+    setLoadingActions(true);
+    const topSectors = [...new Set(ideaCards.filter(c => interactions[c.id] === "like").map(c => c.sector).filter(Boolean))];
+    try {
+      const { data, error } = await supabase.functions.invoke("startup-sparks-ai", {
+        body: {
+          type: "action_prompts",
+          data: {
+            ideasCount: myIdeas.length,
+            likedCount: Object.values(interactions).filter(v => v === "like").length,
+            problemsCount: observations.length,
+            questsCount: Object.values(questProgress).filter((p: any) => p.status === "completed").length,
+            topSectors,
+          },
+        },
+      });
+      if (error) throw error;
+      setActionPrompts(data);
+    } catch { toast.error("Failed to get action prompts"); }
+    setLoadingActions(false);
+  };
+
   const totalQuestPoints = Object.values(questProgress).reduce((sum: number, p: any) => sum + (p.points_earned || 0), 0);
   const completedQuests = Object.values(questProgress).filter((p: any) => p.status === "completed").length;
 
   const tabs = [
+    { id: "discover" as Tab, label: "Discover", icon: Compass, count: "" },
     { id: "ideas" as Tab, label: "Idea Cards", icon: Lightbulb, count: filteredCards.length },
     { id: "my-ideas" as Tab, label: "My Ideas", icon: Star, count: myIdeas.length },
-    { id: "problem-spotting" as Tab, label: "Problem Spotting", icon: Eye, count: observations.length },
+    { id: "problem-spotting" as Tab, label: "Problems", icon: Eye, count: observations.length },
     { id: "quests" as Tab, label: "Quests", icon: Trophy, count: `${completedQuests}/${quests.length}` },
   ];
 
@@ -289,7 +383,7 @@ const StartupSparks = () => {
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
         <div className="flex items-center gap-3 mb-1">
           <div className="w-10 h-10 rounded-xl bg-accent/10 flex items-center justify-center">
-            <Lightbulb size={20} className="text-accent" />
+            <Lightbulb size={20} className="text-accent-foreground" />
           </div>
           <div>
             <h1 className="font-display text-3xl text-foreground">Startup Sparks</h1>
@@ -318,23 +412,222 @@ const StartupSparks = () => {
       </motion.div>
 
       {/* Tabs */}
-      <div className="flex gap-1 bg-muted/30 rounded-lg p-1">
+      <div className="flex gap-1 bg-muted/30 rounded-lg p-1 overflow-x-auto">
         {tabs.map(tab => (
           <button key={tab.id} onClick={() => setActiveTab(tab.id)}
-            className={`flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-md font-body text-xs transition-all ${
+            className={`flex items-center justify-center gap-1.5 px-3 py-2 rounded-md font-body text-xs transition-all whitespace-nowrap ${
               activeTab === tab.id ? "bg-card text-foreground shadow-sm font-medium" : "text-muted-foreground hover:text-foreground"
             }`}>
             <tab.icon size={14} />
             <span className="hidden sm:inline">{tab.label}</span>
-            <span className="text-[10px] bg-muted rounded-full px-1.5">{tab.count}</span>
+            {tab.count && <span className="text-[10px] bg-muted rounded-full px-1.5">{tab.count}</span>}
           </button>
         ))}
       </div>
 
+      {/* ===== DISCOVER TAB ===== */}
+      {activeTab === "discover" && (
+        <div className="space-y-6">
+          {/* Welcome */}
+          <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
+            className="bg-card rounded-xl border border-border p-6 text-center">
+            <Sparkles size={28} className="mx-auto text-primary mb-3" />
+            <h2 className="font-display text-2xl text-foreground mb-2">Welcome to Startup Sparks</h2>
+            <p className="font-body text-sm text-muted-foreground max-w-lg mx-auto">
+              Where ideas meet inspiration and you can start exploring how you can make an impact. Let's understand what excites you.
+            </p>
+          </motion.div>
+
+          {/* Guided Questionnaire */}
+          <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}
+            className="bg-card rounded-xl border border-border p-5">
+            <div className="flex items-center gap-2 mb-4">
+              <Compass size={18} className="text-primary" />
+              <h3 className="font-display text-lg text-foreground">Guided Exploration</h3>
+            </div>
+            <div className="space-y-4">
+              {explorationQuestions.map(q => (
+                <div key={q.id}>
+                  <p className="font-body text-sm text-foreground mb-1.5">{q.question}</p>
+                  <Textarea
+                    placeholder={q.placeholder}
+                    value={explorationAnswers[q.id] || ""}
+                    onChange={e => setExplorationAnswers(prev => ({ ...prev, [q.id]: e.target.value }))}
+                    rows={2} className="text-sm"
+                  />
+                </div>
+              ))}
+              <Button onClick={submitExploration} disabled={loadingExploration} className="bg-primary text-primary-foreground font-body text-sm">
+                {loadingExploration ? <><Loader2 size={14} className="animate-spin" /> Analyzing...</> : <><Brain size={14} /> Get My Insights</>}
+              </Button>
+            </div>
+
+            {/* Exploration Insights */}
+            {explorationInsights && (
+              <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="mt-5 space-y-4">
+                <div className="bg-primary/5 rounded-lg p-4 border border-primary/20">
+                  <p className="font-body text-sm text-foreground italic mb-3">{explorationInsights.encouragement}</p>
+
+                  {explorationInsights.founder_traits?.length > 0 && (
+                    <div className="mb-3">
+                      <p className="font-body text-xs font-semibold text-primary mb-1">Your Emerging Founder Traits</p>
+                      <div className="flex flex-wrap gap-1.5">
+                        {explorationInsights.founder_traits.map((t: string) => (
+                          <span key={t} className="px-2.5 py-1 rounded-full bg-primary/10 text-primary font-body text-[11px]">{t}</span>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {explorationInsights.suggested_sectors?.length > 0 && (
+                    <div className="mb-3">
+                      <p className="font-body text-xs font-semibold text-foreground mb-1">Suggested Sectors for You</p>
+                      <div className="flex flex-wrap gap-1.5">
+                        {explorationInsights.suggested_sectors.map((s: string) => (
+                          <span key={s} className="px-2.5 py-1 rounded-full bg-accent/10 text-accent-foreground font-body text-[11px]">{s}</span>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {explorationInsights.next_steps?.length > 0 && (
+                    <div className="mb-3">
+                      <p className="font-body text-xs font-semibold text-foreground mb-1">Your Next Steps</p>
+                      {explorationInsights.next_steps.map((s: string, i: number) => (
+                        <p key={i} className="font-body text-xs text-muted-foreground">→ {s}</p>
+                      ))}
+                    </div>
+                  )}
+
+                  {explorationInsights.mindset_tip && (
+                    <div className="bg-accent/10 rounded-lg p-3 mt-2">
+                      <p className="font-body text-xs text-accent-foreground"><strong>Mindset Tip:</strong> {explorationInsights.mindset_tip}</p>
+                    </div>
+                  )}
+                </div>
+              </motion.div>
+            )}
+          </motion.div>
+
+          {/* Resource Suggestions */}
+          <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }}
+            className="bg-card rounded-xl border border-border p-5">
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center gap-2">
+                <GraduationCap size={18} className="text-primary" />
+                <h3 className="font-display text-lg text-foreground">Learning Suggestions</h3>
+              </div>
+              <Button variant="ghost" size="sm" onClick={fetchResourceSuggestions} disabled={loadingResources} className="font-body text-xs">
+                {loadingResources ? <Loader2 size={14} className="animate-spin" /> : "Get Suggestions"}
+              </Button>
+            </div>
+            {resourceSuggestions?.topics ? (
+              <div className="space-y-2">
+                {resourceSuggestions.topics.map((t: any, i: number) => (
+                  <div key={i} className="flex items-start gap-3 p-3 rounded-lg border border-border hover:bg-muted/30 transition-colors">
+                    <BookOpen size={14} className="text-primary mt-0.5 shrink-0" />
+                    <div>
+                      <p className="font-body text-sm text-foreground font-medium">{t.title}</p>
+                      <p className="font-body text-[10px] text-muted-foreground mt-0.5">{t.why_it_matters}</p>
+                      <div className="flex gap-2 mt-1">
+                        <span className="font-body text-[10px] text-primary">{t.category}</span>
+                        <span className="font-body text-[10px] text-muted-foreground">{t.difficulty}</span>
+                      </div>
+                    </div>
+                    <Link to="/dashboard/founders-learning-library" className="shrink-0 ml-auto">
+                      <ArrowRight size={12} className="text-muted-foreground" />
+                    </Link>
+                  </div>
+                ))}
+                {resourceSuggestions.encouragement && (
+                  <p className="font-body text-xs text-primary italic mt-2">{resourceSuggestions.encouragement}</p>
+                )}
+              </div>
+            ) : (
+              <p className="font-body text-sm text-muted-foreground text-center py-4">
+                Click "Get Suggestions" to receive personalized learning recommendations based on your explorations.
+              </p>
+            )}
+          </motion.div>
+
+          {/* Action Prompts */}
+          <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}
+            className="bg-card rounded-xl border border-border p-5">
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center gap-2">
+                <Rocket size={18} className="text-primary" />
+                <h3 className="font-display text-lg text-foreground">Start Small Experiments</h3>
+              </div>
+              <Button variant="ghost" size="sm" onClick={fetchActionPrompts} disabled={loadingActions} className="font-body text-xs">
+                {loadingActions ? <Loader2 size={14} className="animate-spin" /> : "Get Actions"}
+              </Button>
+            </div>
+            {actionPrompts?.experiments ? (
+              <div className="space-y-3">
+                {actionPrompts.experiments.map((exp: any, i: number) => (
+                  <Link key={i} to={modulePathMap[exp.module_link] || "/dashboard/mvp-builder"}
+                    className="flex items-start gap-3 p-4 rounded-lg border border-border hover:border-primary/30 hover:bg-primary/5 transition-all group">
+                    <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
+                      <Zap size={14} className="text-primary" />
+                    </div>
+                    <div className="flex-1">
+                      <h4 className="font-body text-sm text-foreground font-medium">{exp.title}</h4>
+                      <p className="font-body text-[10px] text-muted-foreground mt-0.5">{exp.description}</p>
+                      <div className="flex items-center gap-2 mt-1">
+                        <Clock size={10} className="text-muted-foreground" />
+                        <span className="font-body text-[10px] text-muted-foreground">{exp.time_needed}</span>
+                      </div>
+                    </div>
+                    <ArrowRight size={14} className="text-muted-foreground group-hover:text-primary shrink-0 mt-1" />
+                  </Link>
+                ))}
+                {actionPrompts.encouragement && (
+                  <p className="font-body text-xs text-primary italic">{actionPrompts.encouragement}</p>
+                )}
+              </div>
+            ) : (
+              <p className="font-body text-sm text-muted-foreground text-center py-4">
+                Click "Get Actions" to receive small experiments you can start this week.
+              </p>
+            )}
+          </motion.div>
+
+          {/* Early Connections Panel */}
+          <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.25 }}
+            className="bg-card rounded-xl border border-border p-5">
+            <div className="flex items-center gap-2 mb-3">
+              <Users size={18} className="text-primary" />
+              <h3 className="font-display text-lg text-foreground">Connect & Collaborate</h3>
+            </div>
+            <p className="font-body text-xs text-muted-foreground mb-4">
+              Join others exploring similar paths. Founders grow faster together.
+            </p>
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
+              {[
+                { label: "Startup Communities", path: "/dashboard/startup-communities", icon: Globe, desc: "Join peer groups" },
+                { label: "Startup Showcase", path: "/dashboard/startup-showcase", icon: Eye, desc: "Share your ideas" },
+                { label: "Founder Profile", path: "/dashboard/founder-profile", icon: Users, desc: "Track your growth" },
+                { label: "Mindset Builder", path: "/dashboard/mindset-builder", icon: Brain, desc: "Build founder habits" },
+                { label: "Learning Library", path: "/dashboard/founders-learning-library", icon: GraduationCap, desc: "Deepen knowledge" },
+                { label: "Startup Support", path: "/dashboard/startup-support", icon: LifeBuoy, desc: "Get mentorship" },
+              ].map(link => (
+                <Link key={link.path} to={link.path}
+                  className="flex items-center gap-2 p-3 rounded-lg hover:bg-muted/30 transition-colors border border-transparent hover:border-border">
+                  <link.icon size={14} className="text-primary shrink-0" />
+                  <div>
+                    <span className="font-body text-xs text-foreground font-medium block">{link.label}</span>
+                    <span className="font-body text-[10px] text-muted-foreground">{link.desc}</span>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </motion.div>
+        </div>
+      )}
+
       {/* ===== IDEA CARDS TAB ===== */}
       {activeTab === "ideas" && (
         <div className="space-y-4">
-          {/* Sector Filter + Generate */}
           <div className="flex flex-wrap items-center gap-2">
             {sectors.map(s => (
               <button key={s.value} onClick={() => setSectorFilter(s.value)}
@@ -350,7 +643,6 @@ const StartupSparks = () => {
             </Button>
           </div>
 
-          {/* Cards Grid */}
           {loadingCards ? (
             <div className="text-center py-12"><Loader2 className="animate-spin mx-auto text-muted-foreground" /></div>
           ) : filteredCards.length === 0 ? (
@@ -378,37 +670,30 @@ const StartupSparks = () => {
                       ))}
                     </div>
                   )}
-                  {/* Interaction buttons */}
                   <div className="flex items-center gap-1 mt-3 pt-3 border-t border-border">
                     <button onClick={() => interactWithCard(card.id, "like")}
-                      className={`p-1.5 rounded-md transition-all ${interactions[card.id] === "like" ? "bg-accent/10 text-accent" : "text-muted-foreground hover:text-foreground"}`}>
-                      <Heart size={14} className={interactions[card.id] === "like" ? "fill-accent" : ""} />
+                      className={`p-1.5 rounded-md transition-all ${interactions[card.id] === "like" ? "bg-accent/10 text-accent-foreground" : "text-muted-foreground hover:text-foreground"}`}>
+                      <Heart size={14} className={interactions[card.id] === "like" ? "fill-current" : ""} />
                     </button>
                     <button onClick={() => interactWithCard(card.id, "save")}
                       className={`p-1.5 rounded-md transition-all ${interactions[card.id] === "save" ? "bg-primary/10 text-primary" : "text-muted-foreground hover:text-foreground"}`}>
-                      <Bookmark size={14} className={interactions[card.id] === "save" ? "fill-primary" : ""} />
+                      <Bookmark size={14} className={interactions[card.id] === "save" ? "fill-current" : ""} />
                     </button>
                     <button onClick={() => interactWithCard(card.id, "reject")}
                       className={`p-1.5 rounded-md transition-all ${interactions[card.id] === "reject" ? "bg-destructive/10 text-destructive" : "text-muted-foreground hover:text-foreground"}`}>
                       <ThumbsDown size={14} />
                     </button>
                     <button onClick={() => setShowNotesFor(showNotesFor === card.id ? null : card.id)}
-                      className={`p-1.5 rounded-md transition-all ${ideaNotes[card.id] ? "text-accent" : "text-muted-foreground hover:text-foreground"}`}>
+                      className={`p-1.5 rounded-md transition-all ${ideaNotes[card.id] ? "text-primary" : "text-muted-foreground hover:text-foreground"}`}>
                       <PenLine size={14} />
                     </button>
                   </div>
-                  {/* Notes input */}
                   <AnimatePresence>
                     {showNotesFor === card.id && (
-                      <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} exit={{ height: 0, opacity: 0 }}
-                        className="overflow-hidden">
+                      <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} exit={{ height: 0, opacity: 0 }} className="overflow-hidden">
                         <div className="mt-2 space-y-2">
-                          <Textarea placeholder="Why does this idea excite or challenge you?"
-                            value={ideaNotes[card.id] || ""} onChange={e => setIdeaNotes(prev => ({ ...prev, [card.id]: e.target.value }))}
-                            rows={2} className="text-xs" />
-                          <Button size="sm" onClick={() => saveIdeaNote(card.id)} className="bg-primary text-primary-foreground font-body text-xs">
-                            Save Note
-                          </Button>
+                          <Textarea placeholder="Why does this idea excite or challenge you?" value={ideaNotes[card.id] || ""} onChange={e => setIdeaNotes(prev => ({ ...prev, [card.id]: e.target.value }))} rows={2} className="text-xs" />
+                          <Button size="sm" onClick={() => saveIdeaNote(card.id)} className="bg-primary text-primary-foreground font-body text-xs">Save Note</Button>
                         </div>
                       </motion.div>
                     )}
@@ -456,14 +741,14 @@ const StartupSparks = () => {
             <div className="grid md:grid-cols-2 gap-4">
               {myIdeas.map((idea, i) => (
                 <motion.div key={idea.id} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.03 }}
-                  className={`bg-card rounded-xl border p-5 ${idea.is_active ? "border-accent/30" : "border-border opacity-60"}`}>
+                  className={`bg-card rounded-xl border p-5 ${idea.is_active ? "border-primary/30" : "border-border opacity-60"}`}>
                   <div className="flex items-start justify-between mb-2">
                     <h3 className="font-display text-base text-foreground">{idea.title}</h3>
                     <button onClick={() => toggleActive(idea.id, idea.is_active)}>
-                      <Star size={16} className={idea.is_active ? "text-accent fill-accent" : "text-muted-foreground"} />
+                      <Star size={16} className={idea.is_active ? "text-accent fill-current" : "text-muted-foreground"} />
                     </button>
                   </div>
-                  {idea.category && <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-accent/10 text-accent font-body text-[10px] mb-2"><Tag size={10} /> {idea.category}</span>}
+                  {idea.category && <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-accent/10 text-accent-foreground font-body text-[10px] mb-2"><Tag size={10} /> {idea.category}</span>}
                   {idea.problem_statement && <p className="font-body text-xs text-muted-foreground mb-1"><strong>Problem:</strong> {idea.problem_statement}</p>}
                   {idea.solution && <p className="font-body text-xs text-muted-foreground mb-1"><strong>Solution:</strong> {idea.solution}</p>}
                   {idea.target_audience && <p className="font-body text-xs text-muted-foreground flex items-center gap-1"><Users size={10} /> {idea.target_audience}</p>}
@@ -494,9 +779,14 @@ const StartupSparks = () => {
                       </div>
                     </div>
                   )}
-                  <Button size="sm" variant="outline" className="mt-3 w-full font-body text-xs" onClick={() => validateIdea(idea)} disabled={validating === idea.id}>
-                    {validating === idea.id ? <><Loader2 size={12} className="animate-spin" /> Validating...</> : <><Brain size={12} /> AI Validate</>}
-                  </Button>
+                  <div className="flex gap-2 mt-3">
+                    <Button size="sm" variant="outline" className="flex-1 font-body text-xs" onClick={() => validateIdea(idea)} disabled={validating === idea.id}>
+                      {validating === idea.id ? <><Loader2 size={12} className="animate-spin" /> Validating...</> : <><Brain size={12} /> AI Validate</>}
+                    </Button>
+                    <Link to="/dashboard/mvp-builder">
+                      <Button size="sm" variant="ghost" className="font-body text-xs"><Wrench size={12} /> Build MVP</Button>
+                    </Link>
+                  </div>
                 </motion.div>
               ))}
             </div>
@@ -543,7 +833,7 @@ const StartupSparks = () => {
                     <div className="bg-muted/30 rounded-lg p-3 space-y-2">
                       <div className="flex flex-wrap gap-2">
                         {obs.category && <span className="px-2 py-0.5 rounded-full bg-primary/10 text-primary font-body text-[10px]">{obs.category.replace("_", " ")}</span>}
-                        {obs.scale && <span className="px-2 py-0.5 rounded-full bg-accent/10 text-accent font-body text-[10px]">Scale: {obs.scale}</span>}
+                        {obs.scale && <span className="px-2 py-0.5 rounded-full bg-accent/10 text-accent-foreground font-body text-[10px]">Scale: {obs.scale}</span>}
                         {obs.feasibility && <span className="px-2 py-0.5 rounded-full bg-muted text-muted-foreground font-body text-[10px]">Feasibility: {obs.feasibility}</span>}
                         {obs.relevance_score > 0 && <span className="px-2 py-0.5 rounded-full bg-primary/10 text-primary font-body text-[10px]">Relevance: {Math.round(obs.relevance_score * 100)}%</span>}
                       </div>
@@ -578,14 +868,14 @@ const StartupSparks = () => {
         <div className="space-y-4">
           <div className="bg-card rounded-xl border border-border p-4 flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <Trophy size={20} className="text-accent" />
+              <Trophy size={20} className="text-accent-foreground" />
               <div>
                 <p className="font-display text-lg text-foreground">{totalQuestPoints} Points</p>
                 <p className="font-body text-xs text-muted-foreground">{completedQuests} of {quests.length} quests completed</p>
               </div>
             </div>
             <div className="h-2 w-32 bg-muted rounded-full overflow-hidden">
-              <div className="h-full bg-accent rounded-full" style={{ width: `${quests.length ? (completedQuests / quests.length) * 100 : 0}%` }} />
+              <div className="h-full bg-primary rounded-full" style={{ width: `${quests.length ? (completedQuests / quests.length) * 100 : 0}%` }} />
             </div>
           </div>
 
@@ -601,10 +891,10 @@ const StartupSparks = () => {
                   className={`bg-card rounded-xl border p-5 ${isCompleted ? "border-primary/20 bg-primary/5" : "border-border"}`}>
                   <div className="flex items-start justify-between mb-2">
                     <div className="flex items-center gap-2">
-                      {isCompleted ? <CheckCircle2 size={16} className="text-primary" /> : <Trophy size={16} className="text-accent" />}
+                      {isCompleted ? <CheckCircle2 size={16} className="text-primary" /> : <Trophy size={16} className="text-accent-foreground" />}
                       <span className="font-body text-[10px] text-muted-foreground uppercase">{quest.quest_type} • {quest.difficulty}</span>
                     </div>
-                    <span className="font-body text-xs text-accent font-semibold">{quest.points} pts</span>
+                    <span className="font-body text-xs text-primary font-semibold">{quest.points} pts</span>
                   </div>
                   <h3 className="font-display text-base text-foreground mb-1">{quest.title}</h3>
                   <p className="font-body text-xs text-muted-foreground mb-3">{quest.description}</p>
@@ -621,7 +911,7 @@ const StartupSparks = () => {
 
                   {feedback && (
                     <div className="bg-accent/5 rounded-lg p-3 mb-3 space-y-1">
-                      <p className="font-body text-[10px] font-semibold text-accent">AI Feedback</p>
+                      <p className="font-body text-[10px] font-semibold text-accent-foreground">AI Feedback</p>
                       <p className="font-body text-xs text-foreground italic">{feedback.encouragement}</p>
                       {feedback.strengths?.length > 0 && (
                         <div>
