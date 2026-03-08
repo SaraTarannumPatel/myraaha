@@ -9,11 +9,13 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
+import { useCareerInsights } from "@/hooks/useCareerInsights";
 import {
   Compass, Map, Brain, FileText, Sparkles, ArrowRight, TrendingUp,
   Target, Clock, BookOpen, Trophy, Bell, Users, Briefcase, Heart,
   Lightbulb, CheckCircle2, Play, Zap, Star, MessageSquare, Bot,
-  GraduationCap, Flame, Calendar, ChevronRight, UserPlus, Building2
+  GraduationCap, Flame, Calendar, ChevronRight, UserPlus, Building2,
+  AlertCircle, Shield, RefreshCw
 } from "lucide-react";
 
 const JOURNEY_PHASES = [
