@@ -1261,9 +1261,9 @@ const SelfGraph = () => {
                           )}
                           {(digest.skills_progress as any)?.suggested_focus?.length > 0 && (
                             <div>
-                              <span className="font-body text-xs text-orange-600">Focus next: </span>
+                              <span className="font-body text-xs text-warmth">Focus next: </span>
                               {(digest.skills_progress as any).suggested_focus.map((s: string, i: number) => (
-                                <span key={i} className="px-1.5 py-0.5 rounded bg-orange-500/10 text-orange-600 font-body text-xs mr-1">{s}</span>
+                                <span key={i} className="px-1.5 py-0.5 rounded bg-warmth/10 text-warmth font-body text-xs mr-1">{s}</span>
                               ))}
                             </div>
                           )}
