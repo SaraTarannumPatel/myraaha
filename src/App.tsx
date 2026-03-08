@@ -14,6 +14,8 @@ import UserTypeSelection from "./pages/onboarding/UserTypeSelection";
 import IntentSelection from "./pages/onboarding/IntentSelection";
 import PersonalInfo from "./pages/onboarding/PersonalInfo";
 import ConsentStep from "./pages/onboarding/ConsentStep";
+import GuidedOnboarding from "./pages/onboarding/GuidedOnboarding";
+import ResetPassword from "./pages/ResetPassword";
 import DashboardLayout from "./layouts/DashboardLayout";
 import Dashboard from "./pages/Dashboard";
 // Career
