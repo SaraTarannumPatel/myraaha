@@ -171,9 +171,7 @@ const Achievements = () => {
       experimentsRes, validationsRes, checkinsRes, habitsRes, challengesRes,
       communitiesRes, postsRes, pathsRes, moodboardsRes, learningRes,
     ] = queries2;
-    const [
-      applicationsRes, reflectionsRes, circlesRes, mentorSessionsRes, challengeCompletesRes,
-    ] = queries3;
+    const [applicationsRes, reflectionsRes, circlesRes] = queries3;
 
     const { data: existing } = await supabase.from("achievements").select("achievement_type").eq("user_id", user.id);
     const earned = new Set((existing || []).map((a: any) => a.achievement_type));
