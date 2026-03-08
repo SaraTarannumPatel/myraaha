@@ -92,6 +92,8 @@ const App = () => (
               <Route path="journal" element={<Journal />} />
               <Route path="connections" element={<Connections />} />
               <Route path="achievements" element={<Achievements />} />
+              <Route path="leaderboard" element={<Leaderboard />} />
+              <Route path="notifications" element={<Notifications />} />
               <Route path="settings" element={<Settings />} />
             </Route>
             <Route path="*" element={<NotFound />} />

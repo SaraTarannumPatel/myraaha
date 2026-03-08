@@ -45,6 +45,8 @@ const sharedNav = [
   { label: "Journal", icon: BookOpen, path: "/dashboard/journal" },
   { label: "Connections", icon: Users, path: "/dashboard/connections" },
   { label: "Achievements", icon: Trophy, path: "/dashboard/achievements" },
+  { label: "Leaderboard", icon: Trophy, path: "/dashboard/leaderboard" },
+  { label: "Notifications", icon: Bell, path: "/dashboard/notifications" },
   { label: "Settings", icon: Settings, path: "/dashboard/settings" },
 ];
 
