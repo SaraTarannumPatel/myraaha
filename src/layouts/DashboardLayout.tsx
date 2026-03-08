@@ -7,7 +7,7 @@ import {
   Compass, Map, Brain, FileText, Sparkles, Rocket, Lightbulb, Wrench, User,
   Zap, BookOpen, Users, Trophy, Settings, LogOut, Menu, X, ArrowLeftRight,
   LayoutDashboard, Bell, UserCheck, FolderKanban, Briefcase, Bot, Heart,
-  Presentation, Building2, LifeBuoy, Globe, Navigation, Medal, Palette
+  Presentation, Building2, LifeBuoy, Globe, Navigation, Medal, Palette, RefreshCw
 } from "lucide-react";
 
 const careerNav = [
@@ -26,6 +26,7 @@ const careerNav = [
   { label: "Career Therapist", icon: Heart, path: "/dashboard/career-therapist" },
   { label: "Career Moodboard", icon: Palette, path: "/dashboard/career-moodboard" },
   { label: "Inspirations", icon: Lightbulb, path: "/dashboard/career-inspirations" },
+  { label: "Transition Planner", icon: RefreshCw, path: "/dashboard/transition-planner" },
   { label: "Explore", icon: Sparkles, path: "/dashboard/explore" },
 ];
 
