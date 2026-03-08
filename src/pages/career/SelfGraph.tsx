@@ -661,7 +661,7 @@ const SelfGraph = () => {
                           </div>
                           <div className="flex flex-wrap gap-1">
                             {categoryTraits.slice(0, 4).map(t => (
-                              <span key={t.id} className={`px-2 py-0.5 rounded text-xs text-white ${color}`}>
+                              <span key={t.id} className={`px-2 py-0.5 rounded text-xs text-primary-foreground ${color}`}>
                                 {t.trait_name.replace(/_/g, " ")}
                               </span>
                             ))}
