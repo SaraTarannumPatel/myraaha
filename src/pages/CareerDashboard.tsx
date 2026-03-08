@@ -512,7 +512,7 @@ const CareerDashboard = () => {
           <CardHeader className="pb-3">
             <div className="flex items-center justify-between">
               <CardTitle className="text-lg flex items-center gap-2">
-                <TrendingUp className="h-5 w-5 text-primary" />
+                <TrendingUp className="h-5 w-5 text-terracotta" />
                 My Progress
               </CardTitle>
               <Badge variant="secondary" className="text-lg px-3">{profile?.completion_percentage || 0}%</Badge>
