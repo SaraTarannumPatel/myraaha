@@ -403,7 +403,7 @@ const CareerDashboard = () => {
             <CardHeader className="pb-3">
               <div className="flex items-center justify-between">
                 <CardTitle className="text-lg flex items-center gap-2">
-                  <FileText className="h-5 w-5 text-primary" />
+                  <FileText className="h-5 w-5 text-terracotta" />
                   Living Resume Snapshot
                 </CardTitle>
                 <Link to="/dashboard/living-resume" className="text-xs text-primary hover:underline flex items-center gap-1">
