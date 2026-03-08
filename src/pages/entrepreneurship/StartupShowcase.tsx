@@ -412,7 +412,7 @@ const StartupShowcase = () => {
         {/* LAUNCHPAD TAB */}
         <TabsContent value="launchpad" className="space-y-4 mt-4">
           <div className="flex items-center justify-between">
-            <h2 className="font-display text-xl text-foreground flex items-center gap-2"><Rocket size={20} /> ShuttlEx Launchpad</h2>
+            <h2 className="font-display text-xl text-foreground flex items-center gap-2"><Rocket size={20} /> MyRaaha Launchpad</h2>
             <Button
               variant="outline"
               disabled={aiLoading === "launch_checklist" || myProjects.length === 0}

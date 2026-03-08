@@ -18,7 +18,7 @@ const ConsentStep = () => {
     const notifications = [
       {
         user_id: user.id,
-        title: "Welcome to ShuttlEx! 🎉",
+        title: "Welcome to MyRaaha! 🎉",
         message: "Your journey starts now. Explore your dashboard and discover tools tailored for you.",
         notification_type: "welcome",
         action_url: "/dashboard",
@@ -83,7 +83,7 @@ const ConsentStep = () => {
     });
 
     await createWelcomeNotifications();
-    localStorage.removeItem("shuttlex_initial_path");
+    localStorage.removeItem("myraaha_initial_path");
     navigate("/dashboard");
   };
 
@@ -110,7 +110,7 @@ const ConsentStep = () => {
               <div className="flex-1">
                 <h3 className="font-display text-lg text-foreground">Personalized Experience</h3>
                 <p className="font-body text-sm text-muted-foreground mt-1">
-                  Allow ShuttlEx to use your interests, skills, and goals to provide personalized recommendations, AI insights, and tailored content.
+                  Allow MyRaaha to use your interests, skills, and goals to provide personalized recommendations, AI insights, and tailored content.
                 </p>
                 <button onClick={() => setConsentData(!consentData)}
                   className={`mt-3 flex items-center gap-2 px-4 py-2 rounded-full font-body text-sm transition-all ${

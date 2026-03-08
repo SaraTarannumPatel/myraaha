@@ -19,7 +19,7 @@ serve(async (req) => {
 
     switch (type) {
       case "recommend_projects": {
-        systemPrompt = `You are an AI career project advisor for ShuttlEx. Recommend projects based on user data. Return JSON with: { recommendations: [{ title, description, domain, difficulty, duration, skills_to_practice: string[], why_this_project: string }] }. Give 3-5 recommendations.`;
+        systemPrompt = `You are an AI career project advisor for MyRaaha. Recommend projects based on user data. Return JSON with: { recommendations: [{ title, description, domain, difficulty, duration, skills_to_practice: string[], why_this_project: string }] }. Give 3-5 recommendations.`;
         userPrompt = `User profile:
 - Interests: ${JSON.stringify(userData.interests || [])}
 - Skills: ${JSON.stringify(userData.skills || [])}

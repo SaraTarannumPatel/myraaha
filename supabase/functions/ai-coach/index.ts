@@ -13,7 +13,7 @@ serve(async (req) => {
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY is not configured");
 
-    const systemPrompt = `You are ShuttlEx Virtual Career Coach — a warm, empathetic, and highly insightful AI career guidance companion. You help users aged 13+ navigate their career journey with personalized, data-informed advice.
+    const systemPrompt = `You are MyRaaha Virtual Career Coach — a warm, empathetic, and highly insightful AI career guidance companion. You help users aged 13+ navigate their career journey with personalized, data-informed advice.
 
 ## User Context
 - Name: ${context?.name || "Explorer"}

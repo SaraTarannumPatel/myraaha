@@ -39,7 +39,7 @@ const GetStarted = () => {
   const navigate = useNavigate();
 
   const handleSelect = (path: string) => {
-    localStorage.setItem("shuttlex_initial_path", path);
+    localStorage.setItem("myraaha_initial_path", path);
     navigate("/auth");
   };
 
@@ -61,7 +61,7 @@ const GetStarted = () => {
             <Sparkles className="text-primary-foreground" size={36} />
           </motion.div>
           <h1 className="font-display text-4xl md:text-5xl text-foreground mt-6">
-            Welcome to <em className="text-gradient-warm">ShuttlEx</em>
+            Welcome to <em className="text-gradient-warm">MyRaaha</em>
           </h1>
           <p className="font-body text-muted-foreground text-lg max-w-xl mx-auto">
             Where your career growth and startup journey meet. Let's help you explore what you love and build what you dream.

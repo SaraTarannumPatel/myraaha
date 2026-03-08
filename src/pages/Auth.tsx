@@ -79,7 +79,7 @@ const Auth = () => {
           transition={{ duration: 0.8 }}
           className="relative z-10 text-center"
         >
-          <h1 className="font-display text-6xl text-primary-foreground mb-4">ShuttlEx</h1>
+          <h1 className="font-display text-6xl text-primary-foreground mb-4">MyRaaha</h1>
           <p className="font-body text-primary-foreground/70 text-lg max-w-md">
             Your personal launchpad for careers & entrepreneurship. Discover, build, connect, evolve.
           </p>
@@ -106,7 +106,7 @@ const Auth = () => {
               {isLogin ? "Welcome back" : "Create your account"}
             </h2>
             <p className="font-body text-muted-foreground mt-2">
-              {isLogin ? "Sign in to continue your journey" : "Start your ShuttlEx journey today"}
+              {isLogin ? "Sign in to continue your journey" : "Start your MyRaaha journey today"}
             </p>
           </div>
 

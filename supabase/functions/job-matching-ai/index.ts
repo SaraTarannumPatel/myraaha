@@ -19,7 +19,7 @@ serve(async (req) => {
 
     switch (type) {
       case "smart_match": {
-        systemPrompt = `You are an AI career matching advisor for ShuttlEx. Calculate fit scores and match users to job opportunities. Return JSON: { matches: [{ opportunity_title: string, fit_score: number (0-100), fit_breakdown: { skills_match: number, experience_match: number, energy_fit: number, roadmap_alignment: number }, strengths: string[], gaps: string[], recommendation: string }] }. Analyze 3-5 matches.`;
+        systemPrompt = `You are an AI career matching advisor for MyRaaha. Calculate fit scores and match users to job opportunities. Return JSON: { matches: [{ opportunity_title: string, fit_score: number (0-100), fit_breakdown: { skills_match: number, experience_match: number, energy_fit: number, roadmap_alignment: number }, strengths: string[], gaps: string[], recommendation: string }] }. Analyze 3-5 matches.`;
         userPrompt = `User profile:
 - Skills: ${JSON.stringify(userData.skills || [])}
 - Interests: ${JSON.stringify(userData.interests || [])}
