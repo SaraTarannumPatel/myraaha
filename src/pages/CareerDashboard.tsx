@@ -844,7 +844,7 @@ const CareerDashboard = () => {
             <Card>
               <CardHeader className="pb-3">
                 <CardTitle className="text-lg flex items-center gap-2">
-                  <MessageSquare className="h-5 w-5 text-primary" />
+                  <MessageSquare className="h-5 w-5 text-terracotta" />
                   Peer Circles
                 </CardTitle>
               </CardHeader>
