@@ -565,6 +565,7 @@ const CareerDashboard = () => {
 
           <div className="grid md:grid-cols-2 gap-6">
             {/* Tasks & Roadmap Steps */}
+            <Card>
               <CardHeader className="pb-3">
                 <CardTitle className="text-lg flex items-center gap-2">
                   <Target className="h-5 w-5 text-primary" />
