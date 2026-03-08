@@ -276,7 +276,7 @@ const CareerDashboard = () => {
             <CardHeader className="pb-3">
               <div className="flex items-center justify-between">
                 <CardTitle className="text-lg flex items-center gap-2">
-                  <Shield className="h-5 w-5 text-primary" />
+                  <Shield className="h-5 w-5 text-blue" />
                   Career Readiness
                 </CardTitle>
                 <div className="flex items-center gap-2">
