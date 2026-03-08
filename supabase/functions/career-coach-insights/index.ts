@@ -42,7 +42,10 @@ Energy: ${context.energy || "moderate"}
 Completed tasks: ${context.completedTasks || 0}
 Active projects: ${context.activeProjects || 0}
 Learning streak: ${context.learningStreak || 0} days
-Roadmap progress: ${context.roadmapProgress || 0}%`;
+Roadmap progress: ${context.roadmapProgress || 0}%
+Journal entries: ${context.journalEntries || 0}
+Energy zones: ${JSON.stringify(context.energyZones || [])}
+Career stage: ${context.careerStage || "early"}`;
         break;
 
       case "reroute":
@@ -98,7 +101,10 @@ Journal entries: ${context.journalEntries || 0}
 Achievements: ${context.achievements || 0}
 Days active: ${context.daysActive || 0}
 Mood data: ${JSON.stringify(context.moodData || [])}
-Recent interests: ${JSON.stringify(context.recentInterests || [])}`;
+Recent interests: ${JSON.stringify(context.recentInterests || [])}
+Energy zones: ${JSON.stringify(context.energyZones || [])}
+Roadmap milestones completed: ${context.roadmapMilestonesCompleted || 0}
+Total roadmap milestones: ${context.totalRoadmapMilestones || 0}`;
         break;
 
       case "backtrack_paths":
@@ -121,6 +127,110 @@ Last active: ${context.lastActive || "recently"}
 Past achievements: ${JSON.stringify(context.pastAchievements || [])}
 Skills practiced: ${JSON.stringify(context.skills || [])}
 Energy level: ${context.energy || "low"}`;
+        break;
+
+      case "reflection_analysis":
+        systemPrompt = `You are an empathetic career reflection coach. Analyze the user's reflection after a coaching session. Identify patterns, strengths shown, and suggest concrete next actions. Be warm and encouraging.
+
+Return JSON: {
+  "reflection_insights": string[],
+  "strengths_identified": string[],
+  "skills_to_build": string[],
+  "next_actions": [{
+    "action": string,
+    "category": "learning"|"project"|"connection"|"exploration",
+    "priority": "high"|"medium"|"low"
+  }],
+  "growth_note": string,
+  "encouragement": string
+}`;
+        userPrompt = `Reflection: "${context.reflection}"
+What excites them: "${context.excitement || "not specified"}"
+Action they'll take today: "${context.todayAction || "not specified"}"
+What helped them move forward: "${context.whatHelped || "not specified"}"
+Current mood: ${context.mood || "neutral"}
+Skills: ${JSON.stringify(context.skills || [])}
+Goals: ${context.goals || "exploring"}`;
+        break;
+
+      case "learning_suggestions":
+        systemPrompt = `You are a personalized learning advisor. Based on the user's skills, gaps, interests, and current journey, suggest specific learning resources, courses, certifications, and project ideas. Include mentorship and peer learning suggestions.
+
+Return JSON: {
+  "learning_paths": [{
+    "title": string,
+    "description": string,
+    "type": "course"|"certification"|"project"|"workshop",
+    "relevance": string,
+    "effort": "1 week"|"2 weeks"|"1 month"|"ongoing"
+  }],
+  "skill_gaps_to_address": [{
+    "skill": string,
+    "current_level": "beginner"|"intermediate"|"advanced",
+    "recommended_action": string
+  }],
+  "mentor_topics": string[] (topics to discuss with a mentor),
+  "peer_activities": string[] (activities to do with peers),
+  "encouragement": string
+}`;
+        userPrompt = `Skills: ${JSON.stringify(context.skills || [])}
+Skills in progress: ${JSON.stringify(context.skillsInProgress || [])}
+Interests: ${JSON.stringify(context.interests || [])}
+Career stage: ${context.careerStage || "early"}
+Goals: ${context.goals || "exploring"}
+Industry: ${context.industry || "general"}
+Recent learning: ${JSON.stringify(context.recentLearning || [])}
+Roadmap phase: ${context.roadmapPhase || "exploration"}`;
+        break;
+
+      case "decision_dialogue":
+        systemPrompt = `You are a career decision facilitator. Help the user weigh their options using structured pros/cons analysis based on their skills, interests, mood data, and career goals. Be balanced, thoughtful, and encouraging.
+
+Return JSON: {
+  "decision_summary": string,
+  "options_analysis": [{
+    "option": string,
+    "pros": string[],
+    "cons": string[],
+    "fit_score": number (0-100),
+    "fit_reason": string
+  }],
+  "recommendation": string,
+  "key_questions": string[] (2-3 clarifying questions for the user),
+  "encouragement": string
+}`;
+        userPrompt = `Decision to make: "${context.decision}"
+Options: ${JSON.stringify(context.options || [])}
+Skills: ${JSON.stringify(context.skills || [])}
+Interests: ${JSON.stringify(context.interests || [])}
+Mood: ${context.mood || "neutral"}
+Career stage: ${context.careerStage || "early"}
+Goals: ${context.goals || "exploring"}`;
+        break;
+
+      case "mood_energy_insights":
+        systemPrompt = `You are a behavioral wellness analyst. Analyze the user's mood and energy patterns to provide personalized insights about their engagement, productivity cycles, and emotional well-being as it relates to career growth.
+
+Return JSON: {
+  "mood_summary": string,
+  "energy_patterns": [{
+    "domain": string,
+    "avg_energy": number (1-10),
+    "trend": "rising"|"stable"|"declining",
+    "insight": string
+  }],
+  "peak_performance": string,
+  "low_energy_advice": string,
+  "emotional_strengths": string[],
+  "wellbeing_tips": string[],
+  "encouragement": string
+}`;
+        userPrompt = `Recent moods: ${JSON.stringify(context.moodData || [])}
+Energy zones: ${JSON.stringify(context.energyZones || [])}
+Checkins: ${JSON.stringify(context.checkins || [])}
+Skills: ${JSON.stringify(context.skills || [])}
+Current mood: ${context.mood || "neutral"}
+Current energy: ${context.energy || "moderate"}`;
         break;
 
       default:
