@@ -928,6 +928,104 @@ export type Database = {
         }
         Relationships: []
       }
+      moodboard_items: {
+        Row: {
+          content: string
+          content_type: string
+          created_at: string
+          emotional_note: string | null
+          goal_tags: string[] | null
+          id: string
+          mood_feeling: string | null
+          moodboard_id: string
+          position_x: number | null
+          position_y: number | null
+          tags: string[] | null
+          title: string | null
+          updated_at: string
+          url: string | null
+          user_id: string
+        }
+        Insert: {
+          content: string
+          content_type?: string
+          created_at?: string
+          emotional_note?: string | null
+          goal_tags?: string[] | null
+          id?: string
+          mood_feeling?: string | null
+          moodboard_id: string
+          position_x?: number | null
+          position_y?: number | null
+          tags?: string[] | null
+          title?: string | null
+          updated_at?: string
+          url?: string | null
+          user_id: string
+        }
+        Update: {
+          content?: string
+          content_type?: string
+          created_at?: string
+          emotional_note?: string | null
+          goal_tags?: string[] | null
+          id?: string
+          mood_feeling?: string | null
+          moodboard_id?: string
+          position_x?: number | null
+          position_y?: number | null
+          tags?: string[] | null
+          title?: string | null
+          updated_at?: string
+          url?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "moodboard_items_moodboard_id_fkey"
+            columns: ["moodboard_id"]
+            isOneToOne: false
+            referencedRelation: "moodboards"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      moodboards: {
+        Row: {
+          created_at: string
+          description: string | null
+          id: string
+          is_shared: boolean | null
+          tags: string[] | null
+          theme: string | null
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_shared?: boolean | null
+          tags?: string[] | null
+          theme?: string | null
+          title: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_shared?: boolean | null
+          tags?: string[] | null
+          theme?: string | null
+          title?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       mvp_experiments: {
         Row: {
           created_at: string
