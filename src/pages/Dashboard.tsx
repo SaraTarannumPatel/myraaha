@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 import { Progress } from "@/components/ui/progress";
 import {
   Compass, Map, Brain, FileText, Sparkles, Lightbulb, Wrench, User, Zap, Rocket,
-  ArrowRight, TrendingUp, Target, Clock, BookOpen, Trophy, Bell
+  ArrowRight, TrendingUp, Target, Clock, BookOpen, Trophy, Bell, Bot, Globe, Users
 } from "lucide-react";
 
 const careerQuickActions = [
@@ -20,9 +20,9 @@ const careerQuickActions = [
 const entrepreneurshipQuickActions = [
   { label: "Startup Sparks", icon: Lightbulb, path: "/dashboard/startup-sparks", color: "bg-accent/10 text-accent" },
   { label: "MVP Builder", icon: Wrench, path: "/dashboard/mvp-builder", color: "bg-primary/10 text-primary" },
-  { label: "Founder Profile", icon: User, path: "/dashboard/founder-profile", color: "bg-accent/10 text-accent" },
+  { label: "AI Coach", icon: Bot, path: "/dashboard/ai-coach", color: "bg-accent/10 text-accent" },
   { label: "Mindset Builder", icon: Zap, path: "/dashboard/mindset-builder", color: "bg-primary/10 text-primary" },
-  { label: "Startup Lab", icon: Rocket, path: "/dashboard/startup-lab", color: "bg-accent/10 text-accent" },
+  { label: "Communities", icon: Globe, path: "/dashboard/startup-communities", color: "bg-accent/10 text-accent" },
 ];
 
 interface Stats {
@@ -32,6 +32,9 @@ interface Stats {
   achievementsCount: number;
   interestsCount: number;
   journalCount: number;
+  ideasCount: number;
+  challengesCompleted: number;
+  projectsCount: number;
 }
 
 interface ActivityItem {
@@ -45,8 +48,10 @@ interface ActivityItem {
 const Dashboard = () => {
   const { user, profile } = useAuth();
   const isCareer = profile?.active_intent === "career";
+  const isEntrepreneurship = profile?.active_intent === "entrepreneurship";
+  const isBoth = profile?.active_intent === "both";
   const quickActions = isCareer ? careerQuickActions : entrepreneurshipQuickActions;
-  const [stats, setStats] = useState<Stats>({ skillsCount: 0, goalsCount: 0, streak: 0, achievementsCount: 0, interestsCount: 0, journalCount: 0 });
+  const [stats, setStats] = useState<Stats>({ skillsCount: 0, goalsCount: 0, streak: 0, achievementsCount: 0, interestsCount: 0, journalCount: 0, ideasCount: 0, challengesCompleted: 0, projectsCount: 0 });
   const [activity, setActivity] = useState<ActivityItem[]>([]);
   const [notifications, setNotifications] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -57,7 +62,6 @@ const Dashboard = () => {
     fetchActivity();
     fetchNotifications();
 
-    // Realtime subscriptions
     const channel = supabase
       .channel('dashboard-realtime')
       .on('postgres_changes', { event: '*', schema: 'public', table: 'skills', filter: `user_id=eq.${user.id}` }, () => fetchStats())
@@ -65,6 +69,8 @@ const Dashboard = () => {
       .on('postgres_changes', { event: '*', schema: 'public', table: 'achievements', filter: `user_id=eq.${user.id}` }, () => fetchStats())
       .on('postgres_changes', { event: '*', schema: 'public', table: 'journal_entries', filter: `user_id=eq.${user.id}` }, () => { fetchStats(); fetchActivity(); })
       .on('postgres_changes', { event: '*', schema: 'public', table: 'notifications', filter: `user_id=eq.${user.id}` }, () => fetchNotifications())
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'startup_ideas', filter: `user_id=eq.${user.id}` }, () => fetchStats())
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'mindset_challenges', filter: `user_id=eq.${user.id}` }, () => fetchStats())
       .subscribe();
 
     return () => { supabase.removeChannel(channel); };
@@ -72,15 +78,17 @@ const Dashboard = () => {
 
   const fetchStats = async () => {
     if (!user) return;
-    const [skillsRes, goalsRes, achievementsRes, interestsRes, journalRes] = await Promise.all([
+    const [skillsRes, goalsRes, achievementsRes, interestsRes, journalRes, ideasRes, challengesRes, projectsRes] = await Promise.all([
       supabase.from("skills").select("id", { count: "exact", head: true }).eq("user_id", user.id),
       supabase.from("roadmap_steps").select("id", { count: "exact", head: true }).eq("user_id", user.id).eq("status", "completed"),
       supabase.from("achievements").select("id", { count: "exact", head: true }).eq("user_id", user.id),
       supabase.from("interests").select("id", { count: "exact", head: true }).eq("user_id", user.id),
       supabase.from("journal_entries").select("created_at").eq("user_id", user.id).order("created_at", { ascending: false }).limit(30),
+      supabase.from("startup_ideas").select("id", { count: "exact", head: true }).eq("user_id", user.id),
+      supabase.from("mindset_challenges").select("id", { count: "exact", head: true }).eq("user_id", user.id).eq("status", "completed"),
+      supabase.from("projects").select("id", { count: "exact", head: true }).eq("user_id", user.id),
     ]);
 
-    // Calculate streak from journal entries
     let streak = 0;
     if (journalRes.data && journalRes.data.length > 0) {
       const dates = [...new Set(journalRes.data.map(e => new Date(e.created_at).toDateString()))];
@@ -88,9 +96,8 @@ const Dashboard = () => {
       for (let i = 0; i < dates.length; i++) {
         const expected = new Date(today);
         expected.setDate(expected.getDate() - i);
-        if (dates[i] === expected.toDateString()) {
-          streak++;
-        } else break;
+        if (dates[i] === expected.toDateString()) streak++;
+        else break;
       }
     }
 
@@ -101,17 +108,22 @@ const Dashboard = () => {
       achievementsCount: achievementsRes.count || 0,
       interestsCount: interestsRes.count || 0,
       journalCount: journalRes.data?.length || 0,
+      ideasCount: ideasRes.count || 0,
+      challengesCompleted: challengesRes.count || 0,
+      projectsCount: projectsRes.count || 0,
     });
     setLoading(false);
   };
 
   const fetchActivity = async () => {
     if (!user) return;
-    const [journalRes, skillsRes, interestsRes, projectsRes] = await Promise.all([
+    const [journalRes, skillsRes, interestsRes, projectsRes, ideasRes, challengesRes] = await Promise.all([
       supabase.from("journal_entries").select("id, title, created_at").eq("user_id", user.id).order("created_at", { ascending: false }).limit(3),
       supabase.from("skills").select("id, name, created_at").eq("user_id", user.id).order("created_at", { ascending: false }).limit(3),
       supabase.from("interests").select("id, name, created_at").eq("user_id", user.id).order("created_at", { ascending: false }).limit(3),
       supabase.from("projects").select("id, title, created_at").eq("user_id", user.id).order("created_at", { ascending: false }).limit(3),
+      supabase.from("startup_ideas").select("id, title, created_at").eq("user_id", user.id).order("created_at", { ascending: false }).limit(3),
+      supabase.from("mindset_challenges").select("id, title, completed_at").eq("user_id", user.id).eq("status", "completed").order("completed_at", { ascending: false }).limit(3),
     ]);
 
     const items: ActivityItem[] = [
@@ -119,6 +131,8 @@ const Dashboard = () => {
       ...(skillsRes.data || []).map(e => ({ id: e.id, type: "skill", title: `Added skill: ${e.name}`, timestamp: e.created_at, icon: "🎯" })),
       ...(interestsRes.data || []).map(e => ({ id: e.id, type: "interest", title: `New interest: ${e.name}`, timestamp: e.created_at, icon: "🧭" })),
       ...(projectsRes.data || []).map(e => ({ id: e.id, type: "project", title: `Project: ${e.title}`, timestamp: e.created_at, icon: "🚀" })),
+      ...(ideasRes.data || []).map(e => ({ id: e.id, type: "idea", title: `Idea: ${e.title}`, timestamp: e.created_at, icon: "💡" })),
+      ...(challengesRes.data || []).map(e => ({ id: e.id, type: "challenge", title: `Completed: ${e.title}`, timestamp: e.completed_at || e.id, icon: "⚡" })),
     ].sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()).slice(0, 8);
 
     setActivity(items);
@@ -126,13 +140,7 @@ const Dashboard = () => {
 
   const fetchNotifications = async () => {
     if (!user) return;
-    const { data } = await supabase
-      .from("notifications")
-      .select("*")
-      .eq("user_id", user.id)
-      .eq("is_read", false)
-      .order("created_at", { ascending: false })
-      .limit(5);
+    const { data } = await supabase.from("notifications").select("*").eq("user_id", user.id).eq("is_read", false).order("created_at", { ascending: false }).limit(5);
     setNotifications(data || []);
   };
 
@@ -153,19 +161,37 @@ const Dashboard = () => {
     return `${Math.floor(hours / 24)}d ago`;
   };
 
+  const careerStats = [
+    { label: "Goals Done", value: stats.goalsCount, icon: Target, color: "bg-accent/10 text-accent" },
+    { label: "Skills", value: stats.skillsCount, icon: TrendingUp, color: "bg-primary/10 text-primary" },
+    { label: "Streak", value: `${stats.streak}d`, icon: Clock, color: "bg-accent/10 text-accent" },
+    { label: "Interests", value: stats.interestsCount, icon: Compass, color: "bg-primary/10 text-primary" },
+    { label: "Badges", value: stats.achievementsCount, icon: Trophy, color: "bg-accent/10 text-accent" },
+    { label: "Journals", value: stats.journalCount, icon: BookOpen, color: "bg-primary/10 text-primary" },
+  ];
+
+  const entrepreneurStats = [
+    { label: "Ideas", value: stats.ideasCount, icon: Lightbulb, color: "bg-accent/10 text-accent" },
+    { label: "MVPs", value: stats.projectsCount, icon: Rocket, color: "bg-primary/10 text-primary" },
+    { label: "Challenges", value: stats.challengesCompleted, icon: Zap, color: "bg-accent/10 text-accent" },
+    { label: "Skills", value: stats.skillsCount, icon: TrendingUp, color: "bg-primary/10 text-primary" },
+    { label: "Badges", value: stats.achievementsCount, icon: Trophy, color: "bg-accent/10 text-accent" },
+    { label: "Streak", value: `${stats.streak}d`, icon: Clock, color: "bg-primary/10 text-primary" },
+  ];
+
+  const displayStats = isCareer ? careerStats : entrepreneurStats;
+
   return (
     <div className="space-y-8">
-      {/* Header */}
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-1">
         <h1 className="font-display text-3xl md:text-4xl text-foreground">
-          {greeting()}, <em className="text-gradient-warm">{profile?.full_name || "Explorer"}</em>
+          {greeting()}, <em className="text-primary">{profile?.full_name || "Explorer"}</em>
         </h1>
         <p className="font-body text-muted-foreground">
-          {isCareer ? "Your career journey awaits." : "Your startup journey awaits."}
+          {isCareer ? "Your career journey awaits." : isEntrepreneurship ? "Your startup journey awaits." : "Your career & startup journey awaits."}
         </p>
       </motion.div>
 
-      {/* Notifications Banner */}
       {notifications.length > 0 && (
         <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="bg-accent/10 border border-accent/20 rounded-xl p-4">
           <div className="flex items-center gap-2 mb-2">
@@ -177,10 +203,12 @@ const Dashboard = () => {
               <p key={n.id} className="font-body text-xs text-foreground">{n.title}: {n.message}</p>
             ))}
           </div>
+          <Link to="/dashboard/notifications" className="inline-flex items-center gap-1 mt-2 font-body text-xs text-accent hover:underline">
+            View all <ArrowRight size={12} />
+          </Link>
         </motion.div>
       )}
 
-      {/* Progress + Stats */}
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="bg-card rounded-xl border border-border p-6 shadow-soft">
         <div className="flex items-center justify-between mb-4">
           <h2 className="font-display text-xl text-foreground">Your Progress</h2>
@@ -188,14 +216,7 @@ const Dashboard = () => {
         </div>
         <Progress value={profile?.completion_percentage || 0} className="h-2" />
         <div className="grid grid-cols-3 sm:grid-cols-6 gap-4 mt-6">
-          {[
-            { label: "Goals Done", value: stats.goalsCount, icon: Target, color: "bg-accent/10 text-accent" },
-            { label: "Skills", value: stats.skillsCount, icon: TrendingUp, color: "bg-primary/10 text-primary" },
-            { label: "Streak", value: `${stats.streak}d`, icon: Clock, color: "bg-accent/10 text-accent" },
-            { label: "Interests", value: stats.interestsCount, icon: Compass, color: "bg-primary/10 text-primary" },
-            { label: "Badges", value: stats.achievementsCount, icon: Trophy, color: "bg-accent/10 text-accent" },
-            { label: "Journals", value: stats.journalCount, icon: BookOpen, color: "bg-primary/10 text-primary" },
-          ].map((s) => (
+          {displayStats.map((s) => (
             <div key={s.label} className="text-center">
               <div className={`w-10 h-10 rounded-lg ${s.color} flex items-center justify-center mx-auto mb-1`}>
                 <s.icon size={18} />
@@ -207,7 +228,35 @@ const Dashboard = () => {
         </div>
       </motion.div>
 
-      {/* Quick Actions */}
+      {/* Startup Journey Nudge for entrepreneurship users */}
+      {(isEntrepreneurship || isBoth) && stats.ideasCount === 0 && (
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }}
+          className="bg-primary/5 border border-primary/20 rounded-xl p-6">
+          <div className="flex items-start gap-4">
+            <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center shrink-0">
+              <Lightbulb size={20} className="text-primary" />
+            </div>
+            <div>
+              <h3 className="font-display text-lg text-foreground">Start Your Startup Journey</h3>
+              <p className="font-body text-sm text-muted-foreground mt-1">
+                Every great venture begins with an idea. Head to Startup Sparks to capture your first idea, then validate it with our AI engine.
+              </p>
+              <div className="flex flex-wrap gap-2 mt-3">
+                <Link to="/dashboard/startup-sparks" className="inline-flex items-center gap-1 px-3 py-1.5 rounded-full bg-primary text-primary-foreground font-body text-xs font-semibold">
+                  Spark an Idea <ArrowRight size={12} />
+                </Link>
+                <Link to="/dashboard/mindset-builder" className="inline-flex items-center gap-1 px-3 py-1.5 rounded-full bg-muted text-foreground font-body text-xs">
+                  Build Mindset <Zap size={12} />
+                </Link>
+                <Link to="/dashboard/ai-coach" className="inline-flex items-center gap-1 px-3 py-1.5 rounded-full bg-muted text-foreground font-body text-xs">
+                  Ask AI Coach <Bot size={12} />
+                </Link>
+              </div>
+            </div>
+          </div>
+        </motion.div>
+      )}
+
       <div>
         <h2 className="font-display text-xl text-foreground mb-4">Quick Actions</h2>
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
@@ -225,7 +274,28 @@ const Dashboard = () => {
         </div>
       </div>
 
-      {/* Recent Activity */}
+      {/* Both users: secondary actions */}
+      {isBoth && (
+        <div>
+          <h2 className="font-display text-xl text-foreground mb-4">
+            {isCareer ? "Startup Tools" : "Career Tools"}
+          </h2>
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+            {careerQuickActions.map((action, i) => (
+              <motion.div key={action.path} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 + i * 0.05 }}>
+                <Link to={action.path} className="group flex flex-col items-center p-5 bg-card rounded-xl border border-border hover:border-primary/30 hover:shadow-soft transition-all text-center">
+                  <div className={`w-12 h-12 rounded-xl flex items-center justify-center mb-3 ${action.color}`}>
+                    <action.icon size={22} />
+                  </div>
+                  <span className="font-body text-sm text-foreground font-medium">{action.label}</span>
+                  <ArrowRight size={14} className="text-muted-foreground mt-2 group-hover:text-primary group-hover:translate-x-1 transition-all" />
+                </Link>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      )}
+
       <div className="bg-card rounded-xl border border-border p-6">
         <h2 className="font-display text-xl text-foreground mb-4">Recent Activity</h2>
         {activity.length === 0 ? (

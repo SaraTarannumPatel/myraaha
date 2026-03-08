@@ -2,14 +2,76 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useAuth } from "@/contexts/AuthContext";
+import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, ArrowLeft, Shield, Users, Eye, Lock } from "lucide-react";
 
 const ConsentStep = () => {
-  const { updateProfile } = useAuth();
+  const { user, profile, updateProfile } = useAuth();
   const navigate = useNavigate();
   const [consentData, setConsentData] = useState(false);
   const [consentMentor, setConsentMentor] = useState(false);
+
+  const createWelcomeNotifications = async () => {
+    if (!user) return;
+    const intent = profile?.active_intent || "career";
+    const notifications = [
+      {
+        user_id: user.id,
+        title: "Welcome to ShuttlEx! 🎉",
+        message: "Your journey starts now. Explore your dashboard and discover tools tailored for you.",
+        notification_type: "welcome",
+        action_url: "/dashboard",
+      },
+    ];
+
+    if (intent === "entrepreneurship" || intent === "both") {
+      notifications.push(
+        {
+          user_id: user.id,
+          title: "Spark your first idea 💡",
+          message: "Head to Startup Sparks to capture and validate your startup ideas with AI.",
+          notification_type: "nudge",
+          action_url: "/dashboard/startup-sparks",
+        },
+        {
+          user_id: user.id,
+          title: "Build your founder mindset ⚡",
+          message: "Start a mindset challenge to develop resilience and entrepreneurial thinking.",
+          notification_type: "nudge",
+          action_url: "/dashboard/mindset-builder",
+        },
+        {
+          user_id: user.id,
+          title: "Meet your AI Coach 🤖",
+          message: "Get personalized guidance on your startup journey from our AI entrepreneurship coach.",
+          notification_type: "nudge",
+          action_url: "/dashboard/ai-coach",
+        }
+      );
+    }
+
+    if (intent === "career" || intent === "both") {
+      notifications.push(
+        {
+          user_id: user.id,
+          title: "Discover your interests 🧭",
+          message: "Use the Curiosity Compass to explore what drives you and find your direction.",
+          notification_type: "nudge",
+          action_url: "/dashboard/curiosity-compass",
+        },
+        {
+          user_id: user.id,
+          title: "Build your SelfGraph™ 🧠",
+          message: "Map your skills, interests, and growth areas with our identity mirror.",
+          notification_type: "nudge",
+          action_url: "/dashboard/selfgraph",
+        }
+      );
+    }
+
+    await supabase.from("notifications").insert(notifications);
+  };
 
   const handleContinue = async () => {
     await updateProfile({
@@ -19,6 +81,8 @@ const ConsentStep = () => {
         consent_mentor_sharing: consentMentor,
       } as any),
     });
+
+    await createWelcomeNotifications();
     localStorage.removeItem("shuttlex_initial_path");
     navigate("/dashboard");
   };
@@ -39,32 +103,20 @@ const ConsentStep = () => {
         </div>
 
         <div className="space-y-4">
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
-            className="bg-card rounded-xl border border-border p-5"
-          >
+          <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}
+            className="bg-card rounded-xl border border-border p-5">
             <div className="flex items-start gap-4">
-              <div className="p-2 rounded-lg bg-primary/10">
-                <Eye size={20} className="text-primary" />
-              </div>
+              <div className="p-2 rounded-lg bg-primary/10"><Eye size={20} className="text-primary" /></div>
               <div className="flex-1">
                 <h3 className="font-display text-lg text-foreground">Personalized Experience</h3>
                 <p className="font-body text-sm text-muted-foreground mt-1">
                   Allow ShuttlEx to use your interests, skills, and goals to provide personalized recommendations, AI insights, and tailored content.
                 </p>
-                <button
-                  onClick={() => setConsentData(!consentData)}
+                <button onClick={() => setConsentData(!consentData)}
                   className={`mt-3 flex items-center gap-2 px-4 py-2 rounded-full font-body text-sm transition-all ${
-                    consentData
-                      ? "gradient-warm text-primary-foreground"
-                      : "bg-muted text-muted-foreground hover:text-foreground"
-                  }`}
-                >
-                  <div className={`w-4 h-4 rounded border-2 flex items-center justify-center ${
-                    consentData ? "border-primary-foreground bg-primary-foreground/20" : "border-muted-foreground"
+                    consentData ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground hover:text-foreground"
                   }`}>
+                  <div className={`w-4 h-4 rounded border-2 flex items-center justify-center ${consentData ? "border-primary-foreground bg-primary-foreground/20" : "border-muted-foreground"}`}>
                     {consentData && <div className="w-2 h-2 rounded-sm bg-primary-foreground" />}
                   </div>
                   {consentData ? "Enabled" : "Enable personalization"}
@@ -73,32 +125,20 @@ const ConsentStep = () => {
             </div>
           </motion.div>
 
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-            className="bg-card rounded-xl border border-border p-5"
-          >
+          <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}
+            className="bg-card rounded-xl border border-border p-5">
             <div className="flex items-start gap-4">
-              <div className="p-2 rounded-lg bg-primary/10">
-                <Users size={20} className="text-primary" />
-              </div>
+              <div className="p-2 rounded-lg bg-primary/10"><Users size={20} className="text-primary" /></div>
               <div className="flex-1">
                 <h3 className="font-display text-lg text-foreground">Mentor & Community Sharing</h3>
                 <p className="font-body text-sm text-muted-foreground mt-1">
                   Allow your profile highlights and progress to be visible to matched mentors and community groups for collaboration and guidance.
                 </p>
-                <button
-                  onClick={() => setConsentMentor(!consentMentor)}
+                <button onClick={() => setConsentMentor(!consentMentor)}
                   className={`mt-3 flex items-center gap-2 px-4 py-2 rounded-full font-body text-sm transition-all ${
-                    consentMentor
-                      ? "gradient-warm text-primary-foreground"
-                      : "bg-muted text-muted-foreground hover:text-foreground"
-                  }`}
-                >
-                  <div className={`w-4 h-4 rounded border-2 flex items-center justify-center ${
-                    consentMentor ? "border-primary-foreground bg-primary-foreground/20" : "border-muted-foreground"
+                    consentMentor ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground hover:text-foreground"
                   }`}>
+                  <div className={`w-4 h-4 rounded border-2 flex items-center justify-center ${consentMentor ? "border-primary-foreground bg-primary-foreground/20" : "border-muted-foreground"}`}>
                     {consentMentor && <div className="w-2 h-2 rounded-sm bg-primary-foreground" />}
                   </div>
                   {consentMentor ? "Enabled" : "Enable sharing"}
@@ -107,16 +147,10 @@ const ConsentStep = () => {
             </div>
           </motion.div>
 
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3 }}
-            className="bg-card rounded-xl border border-border p-5"
-          >
+          <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}
+            className="bg-card rounded-xl border border-border p-5">
             <div className="flex items-start gap-4">
-              <div className="p-2 rounded-lg bg-primary/10">
-                <Lock size={20} className="text-primary" />
-              </div>
+              <div className="p-2 rounded-lg bg-primary/10"><Lock size={20} className="text-primary" /></div>
               <div>
                 <h3 className="font-display text-lg text-foreground">Your Data, Your Control</h3>
                 <p className="font-body text-sm text-muted-foreground mt-1">
@@ -131,10 +165,8 @@ const ConsentStep = () => {
           <Button variant="ghost" onClick={() => navigate("/onboarding/personal-info")} className="font-body">
             <ArrowLeft size={18} /> Back
           </Button>
-          <Button
-            onClick={handleContinue}
-            className="gradient-warm text-primary-foreground rounded-full px-8 font-body font-semibold shadow-accent"
-          >
+          <Button onClick={handleContinue}
+            className="bg-primary text-primary-foreground rounded-full px-8 font-body font-semibold">
             Enter Dashboard <ArrowRight size={18} />
           </Button>
         </div>
