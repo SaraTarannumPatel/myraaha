@@ -79,7 +79,7 @@ const TransitionSection = () => {
                 <img
                   src={transitionIllustration}
                   alt="AI precision with human empathy"
-                  className="relative w-full max-w-xs"
+                  className="relative w-full max-w-md"
                 />
               </div>
             </motion.div>

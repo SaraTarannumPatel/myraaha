@@ -35,7 +35,7 @@ const ProblemSection = () => {
             <img
               src={problemIllustration}
               alt="A confused person surrounded by too many options"
-              className="w-full max-w-xs relative"
+              className="w-full max-w-md relative"
             />
           </motion.div>
 
