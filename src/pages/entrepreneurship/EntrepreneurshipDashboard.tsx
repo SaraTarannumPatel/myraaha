@@ -694,7 +694,7 @@ const EntrepreneurshipDashboard = () => {
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}
         className="bg-card rounded-xl border border-border p-5">
         <div className="flex items-center gap-2 mb-3">
-          <PenLine size={16} className="text-primary" />
+          <PenLine size={16} className="text-terracotta" />
           <h3 className="font-display text-lg text-foreground">Quick Reflection</h3>
         </div>
         <p className="font-body text-xs text-muted-foreground mb-3">How are you feeling about your startup journey right now?</p>
