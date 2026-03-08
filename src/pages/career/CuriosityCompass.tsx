@@ -447,8 +447,8 @@ const CuriosityCompass = () => {
                 <p className="font-body text-xs text-muted-foreground">Recommendations</p>
               </div>
               <div>
-                <div className="w-10 h-10 rounded-full bg-purple-500/10 flex items-center justify-center mx-auto mb-2">
-                  <PenLine className="text-purple-500" size={18} />
+                <div className="w-10 h-10 rounded-full bg-indigo/10 flex items-center justify-center mx-auto mb-2">
+                  <PenLine className="text-indigo" size={18} />
                 </div>
                 <p className="font-display text-2xl text-foreground">{interests.length}</p>
                 <p className="font-body text-xs text-muted-foreground">Interests Found</p>
