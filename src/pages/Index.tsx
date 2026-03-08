@@ -7,6 +7,7 @@ import AppWalkthroughSection from "@/components/landing/AppWalkthroughSection";
 import USPsSection from "@/components/landing/USPsSection";
 import EditionsSection from "@/components/landing/EditionsSection";
 import EntrepreneurshipSection from "@/components/landing/EntrepreneurshipSection";
+import EntrepreneurshipWalkthroughSection from "@/components/landing/EntrepreneurshipWalkthroughSection";
 import LoopSection from "@/components/landing/LoopSection";
 import JourneySection from "@/components/landing/JourneySection";
 import TransitionSection from "@/components/landing/TransitionSection";
@@ -29,6 +30,7 @@ const Index = () => {
       <USPsSection />
       <EditionsSection />
       <EntrepreneurshipSection />
+      <EntrepreneurshipWalkthroughSection />
       <LoopSection />
       <JourneySection />
       <TransitionSection />
