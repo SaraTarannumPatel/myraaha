@@ -653,7 +653,7 @@ const CareerDashboard = () => {
             <CardHeader className="pb-3">
               <div className="flex items-center justify-between">
                 <CardTitle className="text-lg flex items-center gap-2">
-                  <TrendingUp className="h-5 w-5 text-primary" />
+                  <TrendingUp className="h-5 w-5 text-blue" />
                   Skill Tracker
                 </CardTitle>
                 <Link to="/dashboard/living-resume" className="text-sm text-primary hover:underline flex items-center gap-1">
