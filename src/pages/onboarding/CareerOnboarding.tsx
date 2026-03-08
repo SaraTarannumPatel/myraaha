@@ -53,12 +53,12 @@ const careerSteps = [
     subtitle: "Based on what you shared, here's what we've prepared for you.",
     type: "preview",
     tools: [
-      { icon: Compass, name: "Curiosity Compass", desc: "Explore interests through story-based quests tailored to your curiosity areas", color: "bg-accent/10 text-accent" },
-      { icon: Map, name: "AI Roadmaps", desc: "Step-by-step career roadmaps generated from your strengths and goals", color: "bg-primary/10 text-primary" },
-      { icon: Brain, name: "SelfGraph™", desc: "Your identity mirror mapping skills, strengths, and growth patterns", color: "bg-accent/10 text-accent" },
+      { icon: Compass, name: "Curiosity Compass", desc: "Explore interests through story-based quests tailored to your curiosity areas", color: "bg-blue/10 text-blue" },
+      { icon: Map, name: "AI Roadmaps", desc: "Step-by-step career roadmaps generated from your strengths and goals", color: "bg-indigo/10 text-indigo" },
+      { icon: Brain, name: "SelfGraph™", desc: "Your identity mirror mapping skills, strengths, and growth patterns", color: "bg-terracotta/10 text-terracotta" },
       { icon: BookOpen, name: "Content Library", desc: "Micro-learning capsules matched to your learning style", color: "bg-primary/10 text-primary" },
-      { icon: FileText, name: "Living Resume", desc: "An evolving profile that grows with every skill and project you complete", color: "bg-accent/10 text-accent" },
-      { icon: Users, name: "Peer Circles", desc: "Community groups aligned with your interests and career stage", color: "bg-primary/10 text-primary" },
+      { icon: FileText, name: "Living Resume", desc: "An evolving profile that grows with every skill and project you complete", color: "bg-maroon/10 text-maroon" },
+      { icon: Users, name: "Peer Circles", desc: "Community groups aligned with your interests and career stage", color: "bg-accent/20 text-accent-foreground" },
     ],
   },
 ];
