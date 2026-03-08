@@ -32,11 +32,11 @@ const JOURNEY_PHASES = [
 ];
 
 const careerQuickActions = [
-  { label: "Curiosity Compass", icon: Compass, path: "/dashboard/curiosity-compass", color: "bg-accent/10 text-accent", desc: "Explore interests" },
-  { label: "AI Roadmap", icon: Map, path: "/dashboard/roadmap", color: "bg-primary/10 text-primary", desc: "Plan your path" },
-  { label: "SelfGraph™", icon: Brain, path: "/dashboard/selfgraph", color: "bg-accent/10 text-accent", desc: "Know yourself" },
+  { label: "Curiosity Compass", icon: Compass, path: "/dashboard/curiosity-compass", color: "bg-blue/10 text-blue", desc: "Explore interests" },
+  { label: "AI Roadmap", icon: Map, path: "/dashboard/roadmap", color: "bg-indigo/10 text-indigo", desc: "Plan your path" },
+  { label: "SelfGraph™", icon: Brain, path: "/dashboard/selfgraph", color: "bg-terracotta/10 text-terracotta", desc: "Know yourself" },
   { label: "Living Resume", icon: FileText, path: "/dashboard/living-resume", color: "bg-primary/10 text-primary", desc: "Track growth" },
-  { label: "Career Coach", icon: Bot, path: "/dashboard/career-coach", color: "bg-accent/10 text-accent", desc: "Get guidance" },
+  { label: "Career Coach", icon: Bot, path: "/dashboard/career-coach", color: "bg-maroon/10 text-maroon", desc: "Get guidance" },
 ];
 
 const CareerDashboard = () => {
