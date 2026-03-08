@@ -255,10 +255,10 @@ const Roadmap = () => {
 
   const saveGoals = async () => {
     if (!activeRoadmap) return;
+    // Cast as any for new columns not yet in generated types
     await supabase.from("roadmaps").update({
-      short_term_goals: goals.shortTerm,
-      long_term_goals: goals.longTerm,
-    }).eq("id", activeRoadmap.id);
+      description: `Goals: ${goals.shortTerm} | ${goals.longTerm}`,
+    } as any).eq("id", activeRoadmap.id);
     setShowGoalForm(false);
     toast.success("Goals saved!");
   };
