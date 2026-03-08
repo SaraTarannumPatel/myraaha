@@ -14,3 +14,6 @@ verify_jwt = false
 
 [functions.project-playground-ai]
 verify_jwt = false
+
+[functions.job-matching-ai]
+verify_jwt = false
