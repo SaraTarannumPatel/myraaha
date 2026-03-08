@@ -930,7 +930,7 @@ const SelfGraph = () => {
                         <div className="mt-2">
                           <span className="font-body text-xs text-muted-foreground">Growth areas: </span>
                           {getLatestEvaluation().ai_feedback.areas_for_growth.map((s: string, i: number) => (
-                            <span key={i} className="px-2 py-0.5 rounded bg-orange-500/10 text-orange-600 font-body text-xs mr-1">{s}</span>
+                            <span key={i} className="px-2 py-0.5 rounded bg-warmth/10 text-warmth font-body text-xs mr-1">{s}</span>
                           ))}
                         </div>
                       )}
