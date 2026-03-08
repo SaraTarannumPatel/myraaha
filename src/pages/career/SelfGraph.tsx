@@ -732,7 +732,7 @@ const SelfGraph = () => {
                         <div key={domain.id} className="flex items-center gap-3">
                           <span className="font-body text-sm text-foreground w-24 truncate">{domain.domain_name}</span>
                           <div className="flex-1 h-2 bg-muted rounded-full overflow-hidden">
-                            <div className={`h-full rounded-full ${avgEnergy >= 7 ? "bg-green-500" : avgEnergy >= 4 ? "bg-yellow-500" : "bg-red-500"}`} style={{ width: `${avgEnergy * 10}%` }} />
+                            <div className={`h-full rounded-full ${avgEnergy >= 7 ? "bg-success" : avgEnergy >= 4 ? "bg-warning" : "bg-destructive"}`} style={{ width: `${avgEnergy * 10}%` }} />
                           </div>
                           <span className="font-body text-xs text-muted-foreground w-8">{avgEnergy.toFixed(1)}</span>
                         </div>
