@@ -9,10 +9,19 @@ interface Profile {
   avatar_url: string | null;
   bio: string | null;
   age: number | null;
-  user_type: "school" | "college" | "transitioner" | null;
-  active_intent: "career" | "entrepreneurship";
-  onboarding_status: "welcome" | "user_type" | "intent" | "complete";
+  user_type: string | null;
+  active_intent: string;
+  onboarding_status: string;
   completion_percentage: number;
+  location: string | null;
+  education_level: string | null;
+  industry: string | null;
+  career_stage: string | null;
+  short_term_goals: string | null;
+  long_term_goals: string | null;
+  consent_data_usage: boolean;
+  consent_mentor_sharing: boolean;
+  areas_of_focus: string[];
 }
 
 interface AuthContextType {
@@ -47,7 +56,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       .select("*")
       .eq("user_id", userId)
       .single();
-    if (data) setProfile(data as Profile);
+    if (data) setProfile(data as unknown as Profile);
   };
 
   const refreshProfile = async () => {
@@ -106,7 +115,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     if (!user) return;
     const { error } = await supabase
       .from("profiles")
-      .update(updates)
+      .update(updates as any)
       .eq("user_id", user.id);
     if (!error) await fetchProfile(user.id);
   };

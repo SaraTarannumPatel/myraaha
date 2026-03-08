@@ -33,15 +33,15 @@ const Navbar = () => {
           ))}
           <Link
             to="/auth"
-            className="text-sm font-body font-medium text-foreground hover:text-accent transition-colors"
+            className="text-sm font-body font-medium text-foreground hover:text-primary transition-colors"
           >
             Log In
           </Link>
           <Link
-            to="/auth"
-            className="gradient-warm text-secondary-foreground px-5 py-2 rounded-full text-sm font-body font-semibold shadow-accent hover:opacity-90 transition-opacity"
+            to="/get-started"
+            className="gradient-warm text-primary-foreground px-5 py-2 rounded-full text-sm font-body font-semibold shadow-accent hover:opacity-90 transition-opacity"
           >
-            Sign Up
+            Get Started
           </Link>
         </div>
 
@@ -80,11 +80,11 @@ const Navbar = () => {
               Log In
             </Link>
             <Link
-              to="/auth"
-              className="gradient-warm text-secondary-foreground px-5 py-2.5 rounded-full text-sm font-body font-semibold w-full text-center"
+              to="/get-started"
+              className="gradient-warm text-primary-foreground px-5 py-2.5 rounded-full text-sm font-body font-semibold w-full text-center"
               onClick={() => setIsOpen(false)}
             >
-              Sign Up
+              Get Started
             </Link>
           </div>
         </motion.div>

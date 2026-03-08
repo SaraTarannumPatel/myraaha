@@ -20,10 +20,10 @@ const CTASection = () => {
           <h2 className="font-display text-4xl md:text-5xl lg:text-6xl text-foreground mb-6">
             Your journey starts <em className="text-gradient-warm">today.</em>
           </h2>
-          <button className="gradient-warm text-secondary-foreground px-10 py-4 rounded-full font-body font-semibold text-lg shadow-accent hover:opacity-90 transition-opacity inline-flex items-center gap-2 group">
-            Get Early Access
+          <a href="/get-started" className="gradient-warm text-primary-foreground px-10 py-4 rounded-full font-body font-semibold text-lg shadow-accent hover:opacity-90 transition-opacity inline-flex items-center gap-2 group">
+            Get Started
             <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
-          </button>
+          </a>
         </motion.div>
       </div>
     </section>

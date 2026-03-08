@@ -9,7 +9,13 @@ const Welcome = () => {
   const { profile, updateProfile } = useAuth();
 
   const handleContinue = async () => {
-    await updateProfile({ onboarding_status: "user_type" });
+    // Apply the pre-auth path selection if available
+    const savedPath = localStorage.getItem("shuttlex_initial_path");
+    if (savedPath && (savedPath === "career" || savedPath === "entrepreneurship" || savedPath === "both")) {
+      await updateProfile({ active_intent: savedPath as any, onboarding_status: "user_type" as any });
+    } else {
+      await updateProfile({ onboarding_status: "user_type" as any });
+    }
     navigate("/onboarding/user-type");
   };
 
@@ -28,7 +34,7 @@ const Welcome = () => {
             transition={{ delay: 0.3, type: "spring" }}
             className="w-20 h-20 gradient-warm rounded-2xl mx-auto flex items-center justify-center shadow-accent"
           >
-            <Sparkles className="text-secondary-foreground" size={36} />
+            <Sparkles className="text-primary-foreground" size={36} />
           </motion.div>
           <h1 className="font-display text-5xl text-foreground mt-6">
             Welcome to <em className="text-gradient-warm">ShuttlEx</em>
@@ -51,7 +57,7 @@ const Welcome = () => {
               transition={{ delay: 0.5 + i * 0.15 }}
               className="bg-card rounded-xl p-4 shadow-soft border border-border"
             >
-              <item.icon size={24} className="text-accent mb-2" />
+              <item.icon size={24} className="text-primary mb-2" />
               <h3 className="font-display text-lg text-foreground">{item.title}</h3>
               <p className="font-body text-sm text-muted-foreground">{item.desc}</p>
             </motion.div>
@@ -60,7 +66,7 @@ const Welcome = () => {
 
         <Button
           onClick={handleContinue}
-          className="gradient-warm text-secondary-foreground rounded-full h-12 px-8 font-body font-semibold text-base shadow-accent"
+          className="gradient-warm text-primary-foreground rounded-full h-12 px-8 font-body font-semibold text-base shadow-accent"
         >
           Let's Go <ArrowRight size={18} />
         </Button>

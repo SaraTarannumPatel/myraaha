@@ -36,10 +36,10 @@ const HeroSection = () => {
               transition={{ duration: 0.6, delay: 0.35 }}
               className="flex flex-col sm:flex-row gap-4"
             >
-              <button className="gradient-warm text-secondary-foreground px-8 py-3.5 rounded-full font-body font-semibold text-base shadow-accent hover:opacity-90 transition-opacity flex items-center gap-2 group">
+              <a href="/get-started" className="gradient-warm text-primary-foreground px-8 py-3.5 rounded-full font-body font-semibold text-base shadow-accent hover:opacity-90 transition-opacity flex items-center gap-2 group">
                 Start Your Journey
                 <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
-              </button>
+              </a>
               <button className="bg-card text-foreground px-8 py-3.5 rounded-full font-body font-semibold text-base shadow-soft border border-border hover:bg-muted transition-colors">
                 Watch Demo
               </button>

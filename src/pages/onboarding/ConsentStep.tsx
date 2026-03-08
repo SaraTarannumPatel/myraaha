@@ -1,0 +1,146 @@
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
+import { useAuth } from "@/contexts/AuthContext";
+import { Button } from "@/components/ui/button";
+import { ArrowRight, ArrowLeft, Shield, Users, Eye, Lock } from "lucide-react";
+
+const ConsentStep = () => {
+  const { updateProfile } = useAuth();
+  const navigate = useNavigate();
+  const [consentData, setConsentData] = useState(false);
+  const [consentMentor, setConsentMentor] = useState(false);
+
+  const handleContinue = async () => {
+    await updateProfile({
+      onboarding_status: "complete",
+      ...({
+        consent_data_usage: consentData,
+        consent_mentor_sharing: consentMentor,
+      } as any),
+    });
+    localStorage.removeItem("shuttlex_initial_path");
+    navigate("/dashboard");
+  };
+
+  return (
+    <div className="min-h-screen bg-background flex items-center justify-center p-6">
+      <motion.div
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="max-w-xl w-full space-y-8"
+      >
+        <div className="text-center space-y-2">
+          <p className="font-body text-sm text-primary font-semibold uppercase tracking-wider">Step 4 of 4</p>
+          <h1 className="font-display text-4xl text-foreground">Your Privacy Matters</h1>
+          <p className="font-body text-muted-foreground">
+            Your journey is personal. You control what you share and who sees your progress.
+          </p>
+        </div>
+
+        <div className="space-y-4">
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1 }}
+            className="bg-card rounded-xl border border-border p-5"
+          >
+            <div className="flex items-start gap-4">
+              <div className="p-2 rounded-lg bg-primary/10">
+                <Eye size={20} className="text-primary" />
+              </div>
+              <div className="flex-1">
+                <h3 className="font-display text-lg text-foreground">Personalized Experience</h3>
+                <p className="font-body text-sm text-muted-foreground mt-1">
+                  Allow ShuttlEx to use your interests, skills, and goals to provide personalized recommendations, AI insights, and tailored content.
+                </p>
+                <button
+                  onClick={() => setConsentData(!consentData)}
+                  className={`mt-3 flex items-center gap-2 px-4 py-2 rounded-full font-body text-sm transition-all ${
+                    consentData
+                      ? "gradient-warm text-primary-foreground"
+                      : "bg-muted text-muted-foreground hover:text-foreground"
+                  }`}
+                >
+                  <div className={`w-4 h-4 rounded border-2 flex items-center justify-center ${
+                    consentData ? "border-primary-foreground bg-primary-foreground/20" : "border-muted-foreground"
+                  }`}>
+                    {consentData && <div className="w-2 h-2 rounded-sm bg-primary-foreground" />}
+                  </div>
+                  {consentData ? "Enabled" : "Enable personalization"}
+                </button>
+              </div>
+            </div>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+            className="bg-card rounded-xl border border-border p-5"
+          >
+            <div className="flex items-start gap-4">
+              <div className="p-2 rounded-lg bg-primary/10">
+                <Users size={20} className="text-primary" />
+              </div>
+              <div className="flex-1">
+                <h3 className="font-display text-lg text-foreground">Mentor & Community Sharing</h3>
+                <p className="font-body text-sm text-muted-foreground mt-1">
+                  Allow your profile highlights and progress to be visible to matched mentors and community groups for collaboration and guidance.
+                </p>
+                <button
+                  onClick={() => setConsentMentor(!consentMentor)}
+                  className={`mt-3 flex items-center gap-2 px-4 py-2 rounded-full font-body text-sm transition-all ${
+                    consentMentor
+                      ? "gradient-warm text-primary-foreground"
+                      : "bg-muted text-muted-foreground hover:text-foreground"
+                  }`}
+                >
+                  <div className={`w-4 h-4 rounded border-2 flex items-center justify-center ${
+                    consentMentor ? "border-primary-foreground bg-primary-foreground/20" : "border-muted-foreground"
+                  }`}>
+                    {consentMentor && <div className="w-2 h-2 rounded-sm bg-primary-foreground" />}
+                  </div>
+                  {consentMentor ? "Enabled" : "Enable sharing"}
+                </button>
+              </div>
+            </div>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3 }}
+            className="bg-card rounded-xl border border-border p-5"
+          >
+            <div className="flex items-start gap-4">
+              <div className="p-2 rounded-lg bg-primary/10">
+                <Lock size={20} className="text-primary" />
+              </div>
+              <div>
+                <h3 className="font-display text-lg text-foreground">Your Data, Your Control</h3>
+                <p className="font-body text-sm text-muted-foreground mt-1">
+                  You can change these preferences anytime in Settings. We never sell your data. Your progress and reflections remain private unless you choose to share.
+                </p>
+              </div>
+            </div>
+          </motion.div>
+        </div>
+
+        <div className="flex justify-between">
+          <Button variant="ghost" onClick={() => navigate("/onboarding/personal-info")} className="font-body">
+            <ArrowLeft size={18} /> Back
+          </Button>
+          <Button
+            onClick={handleContinue}
+            className="gradient-warm text-primary-foreground rounded-full px-8 font-body font-semibold shadow-accent"
+          >
+            Enter Dashboard <ArrowRight size={18} />
+          </Button>
+        </div>
+      </motion.div>
+    </div>
+  );
+};
+
+export default ConsentStep;

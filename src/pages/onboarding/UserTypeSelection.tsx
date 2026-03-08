@@ -1,42 +1,63 @@
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useAuth } from "@/contexts/AuthContext";
-import { GraduationCap, School, Briefcase, ArrowRight, ArrowLeft } from "lucide-react";
+import { GraduationCap, School, Briefcase, Rocket, Laptop, HelpCircle, ArrowRight, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 
 const userTypes = [
   {
-    value: "school" as const,
+    value: "school",
     icon: School,
-    title: "School Student",
-    age: "Ages 13–17",
+    title: "Student (School)",
     description: "Exploring interests, building early skills, and finding your spark.",
   },
   {
-    value: "college" as const,
+    value: "college",
     icon: GraduationCap,
-    title: "College Student",
-    age: "Ages 18–24",
-    description: "Building expertise, creating projects, and preparing for your career.",
+    title: "Student (College / Postgrad)",
+    description: "Building expertise, creating projects, and preparing for your career or venture.",
   },
   {
-    value: "transitioner" as const,
+    value: "working_professional",
+    icon: Briefcase,
+    title: "Working Professional",
+    description: "Upskilling, exploring lateral moves, or planning your next big career step.",
+  },
+  {
+    value: "transitioner",
     icon: Briefcase,
     title: "Career Transitioner",
-    age: "Age 25+",
-    description: "Pivoting careers, upskilling, or launching your own venture.",
+    description: "Pivoting careers, reskilling, or exploring entirely new directions.",
+  },
+  {
+    value: "aspiring_entrepreneur",
+    icon: Rocket,
+    title: "Aspiring Entrepreneur",
+    description: "Turning ideas into startups, validating concepts, and building from scratch.",
+  },
+  {
+    value: "freelancer",
+    icon: Laptop,
+    title: "Freelancer / Consultant",
+    description: "Building a personal brand, finding clients, and growing your independent practice.",
+  },
+  {
+    value: "other",
+    icon: HelpCircle,
+    title: "Other",
+    description: "Your path is unique — ShuttlEx adapts to however you want to grow.",
   },
 ];
 
 const UserTypeSelection = () => {
-  const [selected, setSelected] = useState<"school" | "college" | "transitioner" | null>(null);
+  const [selected, setSelected] = useState<string | null>(null);
   const { updateProfile } = useAuth();
   const navigate = useNavigate();
 
   const handleContinue = async () => {
     if (!selected) return;
-    await updateProfile({ user_type: selected, onboarding_status: "intent" });
+    await updateProfile({ user_type: selected as any, onboarding_status: "intent" as any });
     navigate("/onboarding/intent");
   };
 
@@ -48,32 +69,31 @@ const UserTypeSelection = () => {
         className="max-w-2xl w-full space-y-8"
       >
         <div className="text-center space-y-2">
-          <p className="font-body text-sm text-accent font-semibold uppercase tracking-wider">Step 1 of 2</p>
+          <p className="font-body text-sm text-primary font-semibold uppercase tracking-wider">Step 1 of 4</p>
           <h1 className="font-display text-4xl text-foreground">Where are you in your journey?</h1>
           <p className="font-body text-muted-foreground">This helps us calibrate your experience.</p>
         </div>
 
-        <div className="grid gap-4">
+        <div className="grid gap-3">
           {userTypes.map((type, i) => (
             <motion.button
               key={type.value}
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: i * 0.1 }}
+              transition={{ delay: i * 0.06 }}
               onClick={() => setSelected(type.value)}
-              className={`w-full text-left p-6 rounded-xl border-2 transition-all flex items-start gap-4 ${
+              className={`w-full text-left p-5 rounded-xl border-2 transition-all flex items-start gap-4 ${
                 selected === type.value
-                  ? "border-accent bg-accent/5 shadow-accent"
-                  : "border-border bg-card hover:border-accent/30"
+                  ? "border-primary bg-primary/5 shadow-accent"
+                  : "border-border bg-card hover:border-primary/30"
               }`}
             >
-              <div className={`p-3 rounded-lg ${selected === type.value ? "gradient-warm" : "bg-muted"}`}>
-                <type.icon size={24} className={selected === type.value ? "text-secondary-foreground" : "text-muted-foreground"} />
+              <div className={`p-2.5 rounded-lg ${selected === type.value ? "gradient-warm" : "bg-muted"}`}>
+                <type.icon size={20} className={selected === type.value ? "text-primary-foreground" : "text-muted-foreground"} />
               </div>
               <div>
-                <h3 className="font-display text-xl text-foreground">{type.title}</h3>
-                <p className="font-body text-sm text-accent font-medium">{type.age}</p>
-                <p className="font-body text-sm text-muted-foreground mt-1">{type.description}</p>
+                <h3 className="font-display text-lg text-foreground">{type.title}</h3>
+                <p className="font-body text-sm text-muted-foreground mt-0.5">{type.description}</p>
               </div>
             </motion.button>
           ))}
@@ -86,7 +106,7 @@ const UserTypeSelection = () => {
           <Button
             onClick={handleContinue}
             disabled={!selected}
-            className="gradient-warm text-secondary-foreground rounded-full px-8 font-body font-semibold shadow-accent disabled:opacity-50"
+            className="gradient-warm text-primary-foreground rounded-full px-8 font-body font-semibold shadow-accent disabled:opacity-50"
           >
             Continue <ArrowRight size={18} />
           </Button>

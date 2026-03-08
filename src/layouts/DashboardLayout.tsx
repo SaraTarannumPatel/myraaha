@@ -7,7 +7,7 @@ import {
   Compass, Map, Brain, FileText, Sparkles, Rocket, Lightbulb, Wrench, User,
   Zap, BookOpen, Users, Trophy, Settings, LogOut, Menu, X, ArrowLeftRight,
   LayoutDashboard, Bell, UserCheck, FolderKanban, Briefcase, Bot, Heart,
-  Presentation, Building2, LifeBuoy, Globe, Navigation
+  Presentation, Building2, LifeBuoy, Globe, Navigation, Medal
 } from "lucide-react";
 
 const careerNav = [
@@ -45,7 +45,7 @@ const sharedNav = [
   { label: "Journal", icon: BookOpen, path: "/dashboard/journal" },
   { label: "Connections", icon: Users, path: "/dashboard/connections" },
   { label: "Achievements", icon: Trophy, path: "/dashboard/achievements" },
-  { label: "Leaderboard", icon: Trophy, path: "/dashboard/leaderboard" },
+  { label: "Leaderboard", icon: Medal, path: "/dashboard/leaderboard" },
   { label: "Notifications", icon: Bell, path: "/dashboard/notifications" },
   { label: "Settings", icon: Settings, path: "/dashboard/settings" },
 ];
@@ -57,11 +57,13 @@ const DashboardLayout = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
 
   const isCareer = profile?.active_intent === "career";
-  const mainNav = isCareer ? careerNav : entrepreneurshipNav;
+  const isEntrepreneurship = profile?.active_intent === "entrepreneurship";
+  const isBoth = profile?.active_intent === "both";
 
   const switchIntent = async () => {
+    if (isBoth) return; // Already has both
     const newIntent = isCareer ? "entrepreneurship" : "career";
-    await updateProfile({ active_intent: newIntent });
+    await updateProfile({ active_intent: newIntent } as any);
   };
 
   const handleSignOut = async () => {
@@ -76,32 +78,84 @@ const DashboardLayout = () => {
           Shuttl<em className="text-gradient-warm">Ex</em>
         </Link>
         <p className="font-body text-xs text-muted-foreground mt-1">
-          {isCareer ? "Career & Jobs" : "Entrepreneurship"}
+          {isBoth ? "Career & Entrepreneurship" : isCareer ? "Career & Jobs" : "Entrepreneurship"}
         </p>
       </div>
 
       <nav className="flex-1 p-3 space-y-0.5 overflow-y-auto">
-        <p className="font-body text-[10px] uppercase tracking-wider text-muted-foreground px-3 pt-2 pb-1">
-          {isCareer ? "Career Tools" : "Startup Tools"}
-        </p>
-        {mainNav.map((item) => {
-          const isActive = location.pathname === item.path;
-          return (
+        {/* Career section */}
+        {(isCareer || isBoth) && (
+          <>
+            <p className="font-body text-[10px] uppercase tracking-wider text-muted-foreground px-3 pt-2 pb-1">
+              Career Tools
+            </p>
+            {careerNav.filter(item => !isBoth || item.path !== "/dashboard").map((item) => {
+              const isActive = location.pathname === item.path;
+              return (
+                <Link
+                  key={`career-${item.path}`}
+                  to={item.path}
+                  onClick={() => setMobileOpen(false)}
+                  className={`flex items-center gap-3 px-3 py-2 rounded-lg font-body text-sm transition-colors ${
+                    isActive
+                      ? "bg-primary/10 text-primary font-medium"
+                      : "text-muted-foreground hover:text-foreground hover:bg-muted"
+                  }`}
+                >
+                  <item.icon size={16} />
+                  {item.label}
+                </Link>
+              );
+            })}
+          </>
+        )}
+
+        {/* Entrepreneurship section */}
+        {(isEntrepreneurship || isBoth) && (
+          <>
+            <div className={isBoth ? "h-px bg-border my-2" : ""} />
+            <p className="font-body text-[10px] uppercase tracking-wider text-muted-foreground px-3 pt-2 pb-1">
+              Startup Tools
+            </p>
+            {entrepreneurshipNav.filter(item => !isBoth || item.path !== "/dashboard").map((item) => {
+              const isActive = location.pathname === item.path;
+              return (
+                <Link
+                  key={`entre-${item.path}`}
+                  to={item.path}
+                  onClick={() => setMobileOpen(false)}
+                  className={`flex items-center gap-3 px-3 py-2 rounded-lg font-body text-sm transition-colors ${
+                    isActive
+                      ? "bg-primary/10 text-primary font-medium"
+                      : "text-muted-foreground hover:text-foreground hover:bg-muted"
+                  }`}
+                >
+                  <item.icon size={16} />
+                  {item.label}
+                </Link>
+              );
+            })}
+          </>
+        )}
+
+        {/* Dashboard link for "both" users */}
+        {isBoth && (
+          <>
+            <div className="h-px bg-border my-2" />
             <Link
-              key={item.path}
-              to={item.path}
+              to="/dashboard"
               onClick={() => setMobileOpen(false)}
               className={`flex items-center gap-3 px-3 py-2 rounded-lg font-body text-sm transition-colors ${
-                isActive
-                  ? "bg-accent/10 text-accent font-medium"
+                location.pathname === "/dashboard"
+                  ? "bg-primary/10 text-primary font-medium"
                   : "text-muted-foreground hover:text-foreground hover:bg-muted"
               }`}
             >
-              <item.icon size={16} />
-              {item.label}
+              <LayoutDashboard size={16} />
+              Dashboard
             </Link>
-          );
-        })}
+          </>
+        )}
 
         <div className="h-px bg-border my-3" />
         <p className="font-body text-[10px] uppercase tracking-wider text-muted-foreground px-3 pt-2 pb-1">General</p>
@@ -114,7 +168,7 @@ const DashboardLayout = () => {
               onClick={() => setMobileOpen(false)}
               className={`flex items-center gap-3 px-3 py-2 rounded-lg font-body text-sm transition-colors ${
                 isActive
-                  ? "bg-accent/10 text-accent font-medium"
+                  ? "bg-primary/10 text-primary font-medium"
                   : "text-muted-foreground hover:text-foreground hover:bg-muted"
               }`}
             >
@@ -126,13 +180,15 @@ const DashboardLayout = () => {
       </nav>
 
       <div className="p-3 border-t border-border space-y-1">
-        <button
-          onClick={switchIntent}
-          className="w-full flex items-center gap-2 px-3 py-2 rounded-lg font-body text-sm text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
-        >
-          <ArrowLeftRight size={16} />
-          Switch to {isCareer ? "Entrepreneurship" : "Career"}
-        </button>
+        {!isBoth && (
+          <button
+            onClick={switchIntent}
+            className="w-full flex items-center gap-2 px-3 py-2 rounded-lg font-body text-sm text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
+          >
+            <ArrowLeftRight size={16} />
+            Switch to {isCareer ? "Entrepreneurship" : "Career"}
+          </button>
+        )}
         <button
           onClick={handleSignOut}
           className="w-full flex items-center gap-2 px-3 py-2 rounded-lg font-body text-sm text-destructive hover:bg-destructive/10 transition-colors"
@@ -156,7 +212,9 @@ const DashboardLayout = () => {
             Shuttl<em className="text-gradient-warm">Ex</em>
           </Link>
           <div className="flex items-center gap-2">
-            <Button variant="ghost" size="icon"><Bell size={18} /></Button>
+            <Button variant="ghost" size="icon" onClick={() => navigate("/dashboard/notifications")}>
+              <Bell size={18} />
+            </Button>
             <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
               <SheetTrigger asChild>
                 <Button variant="ghost" size="icon">
