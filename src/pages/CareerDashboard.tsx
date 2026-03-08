@@ -291,20 +291,27 @@ const CareerDashboard = () => {
             <CardContent>
               <Progress value={readiness.score} className="h-3 mb-4" />
               <div className="grid grid-cols-3 sm:grid-cols-6 gap-3">
-                {Object.entries(readiness.breakdown).map(([key, value]) => (
-                  <div key={key} className="text-center">
-                    <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center mx-auto mb-1">
-                      {key === "skills" ? <TrendingUp size={16} className="text-primary" /> :
-                       key === "interests" ? <Compass size={16} className="text-primary" /> :
-                       key === "resume" ? <FileText size={16} className="text-primary" /> :
-                       key === "activity" ? <Flame size={16} className="text-primary" /> :
-                       key === "goals" ? <Target size={16} className="text-primary" /> :
-                       <Map size={16} className="text-primary" />}
+                {Object.entries(readiness.breakdown).map(([key, value]) => {
+                  const iconMap: Record<string, { icon: any; color: string; bg: string }> = {
+                    skills: { icon: TrendingUp, color: "text-blue", bg: "bg-blue/10" },
+                    interests: { icon: Compass, color: "text-primary", bg: "bg-primary/10" },
+                    resume: { icon: FileText, color: "text-terracotta", bg: "bg-terracotta/10" },
+                    activity: { icon: Flame, color: "text-maroon", bg: "bg-maroon/10" },
+                    goals: { icon: Target, color: "text-indigo", bg: "bg-indigo/10" },
+                    roadmap: { icon: Map, color: "text-accent-foreground", bg: "bg-accent/20" },
+                  };
+                  const cfg = iconMap[key] || { icon: Map, color: "text-primary", bg: "bg-primary/10" };
+                  const Icon = cfg.icon;
+                  return (
+                    <div key={key} className="text-center">
+                      <div className={`w-10 h-10 rounded-lg ${cfg.bg} flex items-center justify-center mx-auto mb-1`}>
+                        <Icon size={16} className={cfg.color} />
+                      </div>
+                      <p className="font-body text-[10px] text-muted-foreground capitalize">{key}</p>
+                      <p className="font-display text-sm text-foreground">{value}</p>
                     </div>
-                    <p className="font-body text-[10px] text-muted-foreground capitalize">{key}</p>
-                    <p className="font-display text-sm text-foreground">{value}</p>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             </CardContent>
           </Card>
