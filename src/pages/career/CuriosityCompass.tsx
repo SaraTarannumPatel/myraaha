@@ -142,7 +142,7 @@ const CuriosityCompass = () => {
               <h3 className="font-display text-lg text-foreground mb-3 flex items-center gap-2">
                 <TrendingUp size={16} className="text-accent" />
                 {category}
-                <span className="font-body text-xs text-muted-foreground">({items.length})</span>
+                <span className="font-body text-xs text-muted-foreground">({(items as any[]).length})</span>
               </h3>
               <div className="space-y-2">
                 {items.map((interest: any) => (
