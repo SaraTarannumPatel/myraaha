@@ -30,6 +30,28 @@ serve(async (req) => {
         { role: "system", content: "You are a startup mentor reviewing a student's exploration quest response. Give encouraging, constructive feedback." },
         { role: "user", content: `Quest: "${data.questTitle}"\nDescription: "${data.questDescription}"\n\nUser's response:\n"${data.response}"\n\nProvide feedback on their thinking, highlight strengths, and suggest one area to explore deeper.` }
       ];
+    } else if (type === "guided_exploration") {
+      messages = [
+        { role: "system", content: `You are MyRaaha's Startup Sparks exploration guide. Based on a user's answers to discovery questions, generate personalized entrepreneurial insights. Be warm, encouraging, and specific. Use Gen Z–friendly language.
+
+User context:
+- Name: ${data.name || "Explorer"}
+- Problems they want to solve: ${data.problemTypes || "not specified"}
+- Skills/interests: ${data.skillsInterests || "not specified"}
+- Startup type that excites them: ${data.startupType || "not specified"}
+- Past interactions: ${data.likedSectors?.join(", ") || "none yet"}` },
+        { role: "user", content: "Based on my answers, give me personalized entrepreneurial exploration suggestions." }
+      ];
+    } else if (type === "resource_suggestions") {
+      messages = [
+        { role: "system", content: "You are a startup learning advisor. Suggest learning resources and next steps based on the user's exploration patterns." },
+        { role: "user", content: `This user has explored these sectors: ${data.sectors?.join(", ") || "various"}. They liked these ideas: ${data.likedIdeas?.join(", ") || "none yet"}. They spotted these problems: ${data.problems?.join(", ") || "none yet"}. Suggest 4 specific learning topics and why each matters for their entrepreneurial journey.` }
+      ];
+    } else if (type === "action_prompts") {
+      messages = [
+        { role: "system", content: "You are a startup action coach. Based on user's exploration data, suggest concrete small experiments they can start right now." },
+        { role: "user", content: `User has ${data.ideasCount || 0} ideas, liked ${data.likedCount || 0} idea cards, spotted ${data.problemsCount || 0} problems, and completed ${data.questsCount || 0} quests. Their top sectors: ${data.topSectors?.join(", ") || "general"}. Suggest 3 small, actionable experiments they can start this week.` }
+      ];
     }
 
     const toolDefs: Record<string, any> = {
@@ -42,13 +64,13 @@ serve(async (req) => {
             parameters: {
               type: "object",
               properties: {
-                category: { type: "string", description: "Problem category: social_impact, tech_innovation, creative_industries, local_needs, emerging_trends" },
+                category: { type: "string" },
                 scale: { type: "string", enum: ["local", "regional", "national", "global"] },
                 feasibility: { type: "string", enum: ["low", "medium", "high"] },
-                relevance_score: { type: "number", description: "0.0 to 1.0 relevance score" },
-                affected_groups: { type: "array", items: { type: "string" }, description: "Groups affected by this problem" },
-                potential_approaches: { type: "array", items: { type: "string" }, description: "3 potential approaches to solve this" },
-                encouragement: { type: "string", description: "Encouraging message about their observation skills" }
+                relevance_score: { type: "number" },
+                affected_groups: { type: "array", items: { type: "string" } },
+                potential_approaches: { type: "array", items: { type: "string" } },
+                encouragement: { type: "string" }
               },
               required: ["category", "scale", "feasibility", "relevance_score", "affected_groups", "potential_approaches", "encouragement"],
               additionalProperties: false
@@ -98,7 +120,7 @@ serve(async (req) => {
             parameters: {
               type: "object",
               properties: {
-                score: { type: "number", description: "Quality score 0-100" },
+                score: { type: "number" },
                 strengths: { type: "array", items: { type: "string" } },
                 suggestions: { type: "array", items: { type: "string" } },
                 encouragement: { type: "string" },
@@ -110,6 +132,92 @@ serve(async (req) => {
           }
         }],
         tool_choice: { type: "function", function: { name: "provide_feedback" } }
+      },
+      guided_exploration: {
+        tools: [{
+          type: "function",
+          function: {
+            name: "exploration_insights",
+            description: "Return personalized exploration insights and suggestions",
+            parameters: {
+              type: "object",
+              properties: {
+                founder_traits: { type: "array", items: { type: "string" }, description: "3-4 emerging founder traits detected" },
+                suggested_sectors: { type: "array", items: { type: "string" }, description: "2-3 sectors that match their profile" },
+                next_steps: { type: "array", items: { type: "string" }, description: "3 actionable next steps" },
+                encouragement: { type: "string" },
+                mindset_tip: { type: "string" }
+              },
+              required: ["founder_traits", "suggested_sectors", "next_steps", "encouragement", "mindset_tip"],
+              additionalProperties: false
+            }
+          }
+        }],
+        tool_choice: { type: "function", function: { name: "exploration_insights" } }
+      },
+      resource_suggestions: {
+        tools: [{
+          type: "function",
+          function: {
+            name: "suggest_resources",
+            description: "Return personalized learning resource suggestions",
+            parameters: {
+              type: "object",
+              properties: {
+                topics: {
+                  type: "array",
+                  items: {
+                    type: "object",
+                    properties: {
+                      title: { type: "string" },
+                      why_it_matters: { type: "string" },
+                      category: { type: "string" },
+                      difficulty: { type: "string", enum: ["beginner", "intermediate", "advanced"] }
+                    },
+                    required: ["title", "why_it_matters", "category", "difficulty"],
+                    additionalProperties: false
+                  }
+                },
+                encouragement: { type: "string" }
+              },
+              required: ["topics", "encouragement"],
+              additionalProperties: false
+            }
+          }
+        }],
+        tool_choice: { type: "function", function: { name: "suggest_resources" } }
+      },
+      action_prompts: {
+        tools: [{
+          type: "function",
+          function: {
+            name: "suggest_actions",
+            description: "Return 3 actionable experiments",
+            parameters: {
+              type: "object",
+              properties: {
+                experiments: {
+                  type: "array",
+                  items: {
+                    type: "object",
+                    properties: {
+                      title: { type: "string" },
+                      description: { type: "string" },
+                      time_needed: { type: "string" },
+                      module_link: { type: "string", description: "mvp-builder, startup-lab, mindset-builder, or startup-communities" }
+                    },
+                    required: ["title", "description", "time_needed", "module_link"],
+                    additionalProperties: false
+                  }
+                },
+                encouragement: { type: "string" }
+              },
+              required: ["experiments", "encouragement"],
+              additionalProperties: false
+            }
+          }
+        }],
+        tool_choice: { type: "function", function: { name: "suggest_actions" } }
       }
     };
 
