@@ -17,10 +17,10 @@ import {
 } from "lucide-react";
 
 const MOODS = [
-  { id: "excited", label: "Excited", icon: Zap, color: "text-yellow-500" },
+  { id: "excited", label: "Excited", icon: Zap, color: "text-accent" },
   { id: "curious", label: "Curious", icon: Lightbulb, color: "text-primary" },
   { id: "unsure", label: "Unsure", icon: HelpCircle, color: "text-muted-foreground" },
-  { id: "bored", label: "Bored", icon: Meh, color: "text-orange-500" },
+  { id: "bored", label: "Bored", icon: Meh, color: "text-warmth" },
 ];
 
 const MODES = [
