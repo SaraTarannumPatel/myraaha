@@ -17,3 +17,6 @@ verify_jwt = false
 
 [functions.job-matching-ai]
 verify_jwt = false
+
+[functions.achievements-ai]
+verify_jwt = false
