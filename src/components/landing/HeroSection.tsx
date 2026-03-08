@@ -97,7 +97,7 @@ const HeroSection = () => {
             transition={{ duration: 1, delay: 0.3, ease: "easeOut" }}
             className="relative flex justify-center lg:justify-end"
           >
-            <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-transparent to-accent/10 rounded-full blur-3xl scale-110" />
+            <div className="absolute inset-0 bg-gradient-to-br from-blue/10 via-accent/8 to-terracotta/8 rounded-full blur-3xl scale-110" />
             
             <motion.img
               src={appMockup}
