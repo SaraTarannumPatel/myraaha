@@ -188,7 +188,7 @@ const DashboardLayout = () => {
       <div className="md:hidden fixed top-0 left-0 right-0 z-50 bg-card/80 backdrop-blur-md border-b border-border">
         <div className="flex items-center justify-between px-4 h-14">
           <Link to="/dashboard" className="font-display text-xl text-foreground">
-            Shuttl<em className="text-gradient-warm">Ex</em>
+            My<span className="text-gradient-warm">Raaha</span>
           </Link>
           <div className="flex items-center gap-2">
             <Button variant="ghost" size="icon" onClick={() => navigate("/dashboard/notifications")}>

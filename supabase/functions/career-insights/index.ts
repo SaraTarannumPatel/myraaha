@@ -149,7 +149,7 @@ serve(async (req) => {
             messages: [
               {
                 role: "system",
-                content: `You are a career advisor AI for ShuttlEx. Generate personalized career recommendations based on user data. Return JSON:
+                content: `You are a career advisor AI for MyRaaha. Generate personalized career recommendations based on user data. Return JSON:
 {
   "next_steps": [{ "title": string, "description": string, "action_url": string, "category": "learning"|"networking"|"skills"|"experience"|"reflection", "priority": "high"|"medium"|"low" }],
   "career_insight": string,

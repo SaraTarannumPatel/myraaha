@@ -9,7 +9,7 @@ const Welcome = () => {
   const { profile, updateProfile } = useAuth();
 
   const handleContinue = async () => {
-    const savedPath = localStorage.getItem("shuttlex_initial_path");
+    const savedPath = localStorage.getItem("myraaha_initial_path");
     if (savedPath && (savedPath === "career" || savedPath === "entrepreneurship" || savedPath === "both")) {
       await updateProfile({ active_intent: savedPath as any, onboarding_status: "user_type" as any });
     } else {

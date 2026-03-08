@@ -76,7 +76,7 @@ const userTypes = [
     value: "other",
     icon: HelpCircle,
     title: "Other",
-    description: "Your path is unique — ShuttlEx adapts to however you want to grow.",
+    description: "Your path is unique — MyRaaha adapts to however you want to grow.",
     color: "border-border",
     selectedColor: "border-primary bg-primary/5",
     iconBg: "bg-muted",

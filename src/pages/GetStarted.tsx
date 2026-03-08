@@ -39,7 +39,7 @@ const GetStarted = () => {
   const navigate = useNavigate();
 
   const handleSelect = (path: string) => {
-    localStorage.setItem("shuttlex_initial_path", path);
+    localStorage.setItem("myraaha_initial_path", path);
     navigate("/auth");
   };
 
