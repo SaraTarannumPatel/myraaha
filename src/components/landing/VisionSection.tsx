@@ -3,12 +3,12 @@ import { useRef } from "react";
 import visionIllustration from "@/assets/vision-illustration.png";
 
 const fragments = [
-  { text: "Aptitude tests on one platform", emoji: "📝" },
-  { text: "Courses somewhere else entirely", emoji: "📚" },
-  { text: "Mentors on Instagram reels lol", emoji: "📱" },
-  { text: "Job portals disconnected from skill-building", emoji: "💼" },
-  { text: "Startup advice scattered across random blogs", emoji: "🚀" },
-  { text: "Funding info gatekept behind networks", emoji: "🔒" },
+  { text: "Aptitude tests on one platform", emoji: "📝", border: "border-blue/20", bg: "bg-blue/5" },
+  { text: "Courses somewhere else entirely", emoji: "📚", border: "border-indigo/20", bg: "bg-indigo/5" },
+  { text: "Mentors on Instagram reels lol", emoji: "📱", border: "border-terracotta/20", bg: "bg-terracotta/5" },
+  { text: "Job portals disconnected from skill-building", emoji: "💼", border: "border-maroon/20", bg: "bg-maroon/5" },
+  { text: "Startup advice scattered across random blogs", emoji: "🚀", border: "border-primary/20", bg: "bg-primary/5" },
+  { text: "Funding info gatekept behind networks", emoji: "🔒", border: "border-accent/30", bg: "bg-accent/10" },
 ];
 
 const VisionSection = () => {
@@ -22,12 +22,11 @@ const VisionSection = () => {
       </div>
 
       <div className="container mx-auto px-5 sm:px-6 relative z-10 max-w-5xl">
-        {/* Header */}
         <div className="text-center mb-10 sm:mb-12">
           <motion.p
             initial={{ opacity: 0 }}
             animate={isInView ? { opacity: 1 } : {}}
-            className="font-body text-[10px] sm:text-xs uppercase tracking-[0.25em] text-blue font-semibold mb-3"
+            className="font-body text-[10px] sm:text-xs uppercase tracking-[0.25em] text-indigo font-semibold mb-3"
           >
             Because The System Is Lowkey Broken
           </motion.p>
@@ -43,21 +42,22 @@ const VisionSection = () => {
           </motion.h2>
         </div>
 
-        {/* Illustration centered */}
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           animate={isInView ? { opacity: 1, scale: 1 } : {}}
           transition={{ duration: 0.6, delay: 0.15 }}
           className="flex justify-center mb-10 sm:mb-14"
         >
-          <img
-            src={visionIllustration}
-            alt="Fragmented tools failing users"
-            className="w-full max-w-[200px] sm:max-w-xs md:max-w-sm"
-          />
+          <div className="relative">
+            <div className="absolute -inset-8 bg-gradient-to-br from-indigo/10 via-blue/8 to-transparent rounded-full blur-3xl" />
+            <img
+              src={visionIllustration}
+              alt="Fragmented tools failing users"
+              className="w-full max-w-[200px] sm:max-w-xs md:max-w-sm relative"
+            />
+          </div>
         </motion.div>
 
-        {/* Fragment cards — 3-column grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 mb-10 sm:mb-14">
           {fragments.map((item, i) => (
             <motion.div
@@ -65,7 +65,7 @@ const VisionSection = () => {
               initial={{ opacity: 0, y: 16 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
               transition={{ delay: 0.25 + i * 0.06 }}
-              className="bg-card rounded-2xl p-4 sm:p-5 border border-border shadow-soft flex items-start gap-3"
+              className={`${item.bg} rounded-2xl p-4 sm:p-5 border ${item.border} shadow-soft flex items-start gap-3`}
             >
               <span className="text-lg sm:text-xl shrink-0">{item.emoji}</span>
               <p className="font-body text-xs sm:text-sm text-muted-foreground leading-snug">{item.text}</p>
@@ -73,7 +73,6 @@ const VisionSection = () => {
           ))}
         </div>
 
-        {/* Bottom statement */}
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
@@ -84,9 +83,13 @@ const VisionSection = () => {
             You're literally expected to connect all this yourself. And when something flops, you start from scratch. it's giving 💀
           </p>
           <div className="flex items-center justify-center gap-4 sm:gap-6">
-            {["Late", "Behind", "Misaligned"].map((word, i) => (
-              <span key={word} className="font-display text-base sm:text-lg text-foreground">
-                {word}{i < 2 && <span className="text-grey-disabled ml-4 sm:ml-6">·</span>}
+            {[
+              { word: "Late", color: "text-maroon" },
+              { word: "Behind", color: "text-terracotta" },
+              { word: "Misaligned", color: "text-indigo" },
+            ].map((item, i) => (
+              <span key={item.word} className={`font-display text-base sm:text-lg ${item.color}`}>
+                {item.word}{i < 2 && <span className="text-grey-disabled ml-4 sm:ml-6">·</span>}
               </span>
             ))}
           </div>

@@ -10,6 +10,9 @@ const features = [
     title: "Personal Intelligence Setup",
     highlights: ["Strength profile", "Work-style analysis", "Risk tolerance score", "Decision-making pattern", "Energy gain vs drain map"],
     description: "Structured assessments + continuous behavioural learning. A dynamic identity model that keeps evolving — not some one-time test from 2015.",
+    color: "text-blue",
+    gradient: "from-blue/10 to-blue/5",
+    iconBg: "bg-blue",
   },
   {
     icon: Route,
@@ -17,6 +20,9 @@ const features = [
     title: "Pathway Narrowing Engine",
     highlights: ["Top aligned paths ranked", "Transition feasibility", "Skills gap breakdown", "Time-to-readiness", "Effort vs reward"],
     description: "Filters based on your intelligence model, real-time job demand, skill saturation, and income stability. We do the heavy lifting.",
+    color: "text-indigo",
+    gradient: "from-indigo/10 to-indigo/5",
+    iconBg: "bg-indigo",
   },
   {
     icon: Briefcase,
@@ -24,6 +30,9 @@ const features = [
     title: "Career Execution System",
     highlights: ["Structured skill roadmap", "Learning sequence", "Portfolio requirements", "Market-fit checkpoints", "Interview readiness"],
     description: "Adjusts if you fall behind, switch interests, or the market shifts. Clear next moves every week. No random course hopping.",
+    color: "text-terracotta",
+    gradient: "from-terracotta/10 to-terracotta/5",
+    iconBg: "bg-terracotta",
   },
   {
     icon: Rocket,
@@ -31,6 +40,9 @@ const features = [
     title: "Startup Validation & Build",
     highlights: ["Validation checklist", "Market signal analysis", "Founder mindset score", "Execution tracker", "Funding readiness"],
     description: "Idea → Problem validation → Market testing → Build → Launch → Funding readiness. No skipping the validation era.",
+    color: "text-maroon",
+    gradient: "from-maroon/10 to-maroon/5",
+    iconBg: "bg-maroon",
   },
 ];
 
@@ -46,13 +58,12 @@ const FeaturesSection = () => {
       </div>
 
       <div className="container mx-auto px-5 sm:px-6 relative z-10 max-w-6xl">
-        {/* Header + Illustration */}
         <div className="grid lg:grid-cols-2 gap-8 sm:gap-12 items-center mb-14 sm:mb-20">
           <div>
             <motion.p
               initial={{ opacity: 0 }}
               animate={isInView ? { opacity: 1 } : {}}
-              className="font-body text-[10px] sm:text-xs uppercase tracking-[0.25em] text-primary font-semibold mb-3"
+              className="font-body text-[10px] sm:text-xs uppercase tracking-[0.25em] text-blue font-semibold mb-3"
             >
               How MyRaaha Works
             </motion.p>
@@ -89,9 +100,7 @@ const FeaturesSection = () => {
           </motion.div>
         </div>
 
-        {/* Interactive tabs + detail */}
         <div className="grid lg:grid-cols-5 gap-4 sm:gap-6 items-start">
-          {/* Tabs */}
           <div className="lg:col-span-2 grid grid-cols-2 lg:grid-cols-1 gap-2">
             {features.map((feature, i) => (
               <motion.div
@@ -101,14 +110,14 @@ const FeaturesSection = () => {
                 transition={{ delay: 0.25 + i * 0.06 }}
                 className={`p-3 sm:p-5 rounded-2xl cursor-pointer transition-all duration-400 border ${
                   activeIndex === i
-                    ? "bg-card border-primary/20 shadow-card"
+                    ? `bg-gradient-to-r ${feature.gradient} border-current/20 shadow-card`
                     : "border-transparent hover:bg-background-alt"
                 }`}
                 onClick={() => setActiveIndex(i)}
               >
                 <div className="flex items-center gap-2 sm:gap-3 mb-1">
                   <span className={`font-display text-[10px] sm:text-xs transition-colors ${
-                    activeIndex === i ? "text-primary" : "text-grey-meta"
+                    activeIndex === i ? feature.color : "text-grey-meta"
                   }`}>{feature.num}</span>
                   <h3 className="font-display text-sm sm:text-lg text-foreground leading-tight">{feature.title}</h3>
                 </div>
@@ -125,7 +134,6 @@ const FeaturesSection = () => {
             ))}
           </div>
 
-          {/* Detail panel */}
           <div className="lg:col-span-3">
             <motion.div
               key={activeIndex}
@@ -135,14 +143,14 @@ const FeaturesSection = () => {
               className="bg-card rounded-2xl sm:rounded-3xl p-5 sm:p-8 border border-border shadow-card"
             >
               <div className="flex items-center gap-3 sm:gap-4 mb-5 sm:mb-6">
-                <div className="w-11 sm:w-14 h-11 sm:h-14 rounded-xl sm:rounded-2xl gradient-warm flex items-center justify-center">
+                <div className={`w-11 sm:w-14 h-11 sm:h-14 rounded-xl sm:rounded-2xl ${features[activeIndex].iconBg} flex items-center justify-center`}>
                   {(() => {
                     const Icon = features[activeIndex].icon;
-                    return <Icon size={20} className="text-primary-foreground sm:w-6 sm:h-6" />;
+                    return <Icon size={20} className="text-white sm:w-6 sm:h-6" />;
                   })()}
                 </div>
                 <div>
-                  <p className="font-body text-[10px] sm:text-xs text-primary font-semibold uppercase tracking-wider">Step {features[activeIndex].num}</p>
+                  <p className={`font-body text-[10px] sm:text-xs ${features[activeIndex].color} font-semibold uppercase tracking-wider`}>Step {features[activeIndex].num}</p>
                   <h3 className="font-display text-lg sm:text-2xl text-foreground">{features[activeIndex].title}</h3>
                 </div>
               </div>
@@ -151,11 +159,11 @@ const FeaturesSection = () => {
                 {features[activeIndex].description}
               </p>
 
-              <p className="font-body text-[10px] sm:text-xs uppercase tracking-wider text-primary font-semibold mb-3">What you get:</p>
+              <p className={`font-body text-[10px] sm:text-xs uppercase tracking-wider ${features[activeIndex].color} font-semibold mb-3`}>What you get:</p>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                 {features[activeIndex].highlights.map((h) => (
                   <div key={h} className="flex items-center gap-2">
-                    <Check size={14} className="text-primary shrink-0" />
+                    <Check size={14} className={`${features[activeIndex].color} shrink-0`} />
                     <span className="font-body text-xs sm:text-sm text-foreground">{h}</span>
                   </div>
                 ))}

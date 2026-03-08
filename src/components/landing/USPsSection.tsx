@@ -8,6 +8,18 @@ import {
   GraduationCap, Network, Activity, MessageCircle,
 } from "lucide-react";
 
+const iconColors = [
+  "bg-primary", "bg-blue", "bg-terracotta", "bg-indigo", "bg-maroon",
+  "bg-primary", "bg-blue", "bg-terracotta", "bg-indigo", "bg-maroon",
+  "bg-primary", "bg-blue", "bg-terracotta", "bg-indigo", "bg-maroon",
+];
+
+const borderColors = [
+  "hover:border-primary/30", "hover:border-blue/30", "hover:border-terracotta/30", "hover:border-indigo/30", "hover:border-maroon/30",
+  "hover:border-primary/30", "hover:border-blue/30", "hover:border-terracotta/30", "hover:border-indigo/30", "hover:border-maroon/30",
+  "hover:border-primary/30", "hover:border-blue/30", "hover:border-terracotta/30", "hover:border-indigo/30", "hover:border-maroon/30",
+];
+
 const careerUSPs = [
   { icon: Route, title: "End-to-End Journey", desc: "From class 8 to first job — no resets, no confusion, just guided growth." },
   { icon: Fingerprint, title: "Identity over Aptitude", desc: "Storytelling, creativity, and behavior tracking — not generic tests." },
@@ -50,15 +62,14 @@ const USPsSection = () => {
 
   return (
     <section ref={ref} className="py-20 sm:py-28 md:py-36 bg-background-alt relative overflow-hidden">
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] sm:w-[800px] h-[600px] sm:h-[800px] bg-gradient-to-br from-primary/5 to-accent/5 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] sm:w-[800px] h-[600px] sm:h-[800px] bg-gradient-to-br from-blue/5 via-accent/5 to-terracotta/5 rounded-full blur-3xl pointer-events-none" />
 
       <div className="container mx-auto px-5 sm:px-6 relative z-10">
-        {/* Header */}
         <div className="text-center mb-10 sm:mb-14 max-w-2xl mx-auto">
           <motion.p
             initial={{ opacity: 0 }}
             animate={isInView ? { opacity: 1 } : {}}
-            className="font-body text-[10px] sm:text-xs uppercase tracking-[0.25em] text-blue font-semibold mb-3"
+            className="font-body text-[10px] sm:text-xs uppercase tracking-[0.25em] text-maroon font-semibold mb-3"
           >
             What Makes MyRaaha Hit Different
           </motion.p>
@@ -70,11 +81,10 @@ const USPsSection = () => {
           >
             Not information. Not courses.
             <br />
-            A <em className="text-gradient-warm">decision operating system.</em>
+            A <em className="text-gradient-milestone">decision operating system.</em>
           </motion.h2>
         </div>
 
-        {/* Tab toggle */}
         <motion.div
           initial={{ opacity: 0, y: 12 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
@@ -87,7 +97,9 @@ const USPsSection = () => {
               onClick={() => setActiveTab(tab)}
               className={`font-body text-xs sm:text-sm px-5 sm:px-6 py-2.5 rounded-full border transition-all duration-300 ${
                 activeTab === tab
-                  ? "bg-primary text-primary-foreground border-primary shadow-sm"
+                  ? activeTab === "career"
+                    ? "bg-blue text-white border-blue shadow-sm"
+                    : "bg-terracotta text-white border-terracotta shadow-sm"
                   : "bg-card border-border text-muted-foreground hover:text-foreground"
               }`}
             >
@@ -96,7 +108,6 @@ const USPsSection = () => {
           ))}
         </motion.div>
 
-        {/* USP grid */}
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 max-w-5xl mx-auto">
           {usps.map((usp, i) => (
             <motion.div
@@ -104,12 +115,11 @@ const USPsSection = () => {
               initial={{ opacity: 0, y: 24 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.05 + i * 0.04 }}
-              className="group bg-card rounded-2xl sm:rounded-3xl p-5 sm:p-6 border border-border shadow-soft hover:shadow-card transition-all duration-500 relative overflow-hidden"
+              className={`group bg-card rounded-2xl sm:rounded-3xl p-5 sm:p-6 border border-border shadow-soft hover:shadow-card ${borderColors[i % borderColors.length]} transition-all duration-500 relative overflow-hidden`}
             >
-              <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-3xl" />
               <div className="relative z-10">
-                <div className="w-10 sm:w-11 h-10 sm:h-11 rounded-xl sm:rounded-2xl gradient-warm flex items-center justify-center mb-3 sm:mb-4 group-hover:scale-110 transition-transform duration-300">
-                  <usp.icon size={18} className="text-primary-foreground" />
+                <div className={`w-10 sm:w-11 h-10 sm:h-11 rounded-xl sm:rounded-2xl ${iconColors[i % iconColors.length]} flex items-center justify-center mb-3 sm:mb-4 group-hover:scale-110 transition-transform duration-300`}>
+                  <usp.icon size={18} className="text-white" />
                 </div>
                 <h3 className="font-display text-base sm:text-lg text-foreground mb-1.5">{usp.title}</h3>
                 <p className="font-body text-[11px] sm:text-xs text-muted-foreground leading-relaxed">{usp.desc}</p>

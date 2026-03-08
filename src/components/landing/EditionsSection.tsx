@@ -14,6 +14,10 @@ const userTypes = [
       "Identity evolution tracking",
     ],
     result: "You graduate with clarity, not an existential crisis.",
+    accentColor: "text-blue",
+    headerBg: "bg-blue",
+    borderHover: "hover:border-blue/30",
+    checkColor: "text-blue",
   },
   {
     icon: Briefcase,
@@ -26,6 +30,10 @@ const userTypes = [
       "Income-risk comparison",
     ],
     result: "You switch careers strategically — not on a random Tuesday meltdown.",
+    accentColor: "text-primary",
+    headerBg: "bg-primary",
+    borderHover: "hover:border-primary/30",
+    checkColor: "text-primary",
   },
   {
     icon: Rocket,
@@ -38,6 +46,10 @@ const userTypes = [
       "Capital readiness scoring",
     ],
     result: "You build with structure, not just vibes and hope.",
+    accentColor: "text-terracotta",
+    headerBg: "bg-terracotta",
+    borderHover: "hover:border-terracotta/30",
+    checkColor: "text-terracotta",
   },
   {
     icon: Wrench,
@@ -50,6 +62,10 @@ const userTypes = [
       "Funding eligibility insights",
     ],
     result: "Fewer blind pivots. More measured growth. W energy.",
+    accentColor: "text-maroon",
+    headerBg: "bg-maroon",
+    borderHover: "hover:border-maroon/30",
+    checkColor: "text-maroon",
   },
 ];
 
@@ -69,7 +85,7 @@ const EditionsSection = () => {
           <motion.p
             initial={{ opacity: 0 }}
             animate={isInView ? { opacity: 1 } : {}}
-            className="font-body text-[10px] sm:text-xs uppercase tracking-[0.25em] text-primary font-semibold mb-3"
+            className="font-body text-[10px] sm:text-xs uppercase tracking-[0.25em] text-terracotta font-semibold mb-3"
           >
             What Each User Type Gets
           </motion.p>
@@ -80,7 +96,7 @@ const EditionsSection = () => {
             className="font-display text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-foreground"
           >
             One platform,{" "}
-            <em className="text-gradient-warm">every stage of life.</em> literally.
+            <em className="text-gradient-milestone">every stage of life.</em> literally.
           </motion.h2>
         </div>
 
@@ -93,25 +109,28 @@ const EditionsSection = () => {
               transition={{ delay: 0.2 + i * 0.08 }}
               onMouseEnter={() => setHoveredIdx(i)}
               onMouseLeave={() => setHoveredIdx(null)}
-              className="bg-card rounded-2xl sm:rounded-3xl p-4 sm:p-6 border border-border shadow-soft hover:shadow-card transition-all duration-500 relative overflow-hidden group"
+              className={`bg-card rounded-2xl sm:rounded-3xl border border-border shadow-soft ${user.borderHover} transition-all duration-500 relative overflow-hidden group`}
             >
-              <div className="absolute inset-0 bg-gradient-to-b from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              {/* Colored top bar */}
+              <div className={`h-1.5 ${user.headerBg}`} />
               
-              <div className="relative z-10">
-                <span className="text-2xl sm:text-3xl block mb-2 sm:mb-3">{user.emoji}</span>
-                <h3 className="font-display text-base sm:text-xl text-foreground mb-3 sm:mb-4">{user.title}</h3>
-                <ul className="space-y-1.5 sm:space-y-2 mb-4 sm:mb-5">
-                  {user.points.map((p) => (
-                    <li key={p} className="flex items-start gap-1.5 sm:gap-2">
-                      <Check size={12} className="text-primary mt-0.5 shrink-0 sm:w-[14px] sm:h-[14px]" />
-                      <span className="font-body text-[10px] sm:text-xs text-muted-foreground leading-snug">{p}</span>
-                    </li>
-                  ))}
-                </ul>
-                <div className="border-t border-border pt-3 sm:pt-4">
-                  <p className="font-display text-xs sm:text-sm text-foreground italic leading-snug">
-                    {user.result}
-                  </p>
+              <div className="p-4 sm:p-6">
+                <div className="relative z-10">
+                  <span className="text-2xl sm:text-3xl block mb-2 sm:mb-3">{user.emoji}</span>
+                  <h3 className={`font-display text-base sm:text-xl ${user.accentColor} mb-3 sm:mb-4`}>{user.title}</h3>
+                  <ul className="space-y-1.5 sm:space-y-2 mb-4 sm:mb-5">
+                    {user.points.map((p) => (
+                      <li key={p} className="flex items-start gap-1.5 sm:gap-2">
+                        <Check size={12} className={`${user.checkColor} mt-0.5 shrink-0 sm:w-[14px] sm:h-[14px]`} />
+                        <span className="font-body text-[10px] sm:text-xs text-muted-foreground leading-snug">{p}</span>
+                      </li>
+                    ))}
+                  </ul>
+                  <div className="border-t border-border pt-3 sm:pt-4">
+                    <p className="font-display text-xs sm:text-sm text-foreground italic leading-snug">
+                      {user.result}
+                    </p>
+                  </div>
                 </div>
               </div>
             </motion.div>

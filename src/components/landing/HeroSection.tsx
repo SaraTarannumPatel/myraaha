@@ -7,8 +7,8 @@ const HeroSection = () => {
     <section className="relative min-h-screen flex items-center overflow-hidden gradient-hero pt-24 sm:pt-28 pb-16 sm:pb-20">
       <div className="absolute inset-0 gradient-glow pointer-events-none" />
       {/* Decorative circles */}
-      <div className="absolute top-32 right-[10%] w-48 sm:w-72 h-48 sm:h-72 rounded-full border border-border/40 opacity-30 hidden sm:block" />
-      <div className="absolute bottom-20 left-[5%] w-32 sm:w-48 h-32 sm:h-48 rounded-full border border-border/30 opacity-20 hidden sm:block" />
+      <div className="absolute top-32 right-[10%] w-48 sm:w-72 h-48 sm:h-72 rounded-full border border-blue/15 opacity-30 hidden sm:block" />
+      <div className="absolute bottom-20 left-[5%] w-32 sm:w-48 h-32 sm:h-48 rounded-full border border-terracotta/12 opacity-20 hidden sm:block" />
 
       <div className="container mx-auto px-5 sm:px-6 relative z-10">
         <div className="grid lg:grid-cols-2 gap-10 lg:gap-8 items-center">
@@ -79,12 +79,12 @@ const HeroSection = () => {
               className="flex gap-6 sm:gap-8 mt-10 sm:mt-12 pt-6 sm:pt-8 border-t border-border/50"
             >
               {[
-                { val: "4", label: "Structured stages" },
-                { val: "∞", label: "Evolves with you" },
-                { val: "1", label: "System for everything" },
+                { val: "4", label: "Structured stages", color: "text-blue" },
+                { val: "∞", label: "Evolves with you", color: "text-terracotta" },
+                { val: "1", label: "System for everything", color: "text-primary" },
               ].map((s) => (
                 <div key={s.label}>
-                  <p className="font-display text-xl sm:text-2xl text-gradient-warm">{s.val}</p>
+                  <p className={`font-display text-xl sm:text-2xl ${s.color}`}>{s.val}</p>
                   <p className="font-body text-[9px] sm:text-[10px] text-grey-meta mt-0.5">{s.label}</p>
                 </div>
               ))}
@@ -97,7 +97,7 @@ const HeroSection = () => {
             transition={{ duration: 1, delay: 0.3, ease: "easeOut" }}
             className="relative flex justify-center lg:justify-end"
           >
-            <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-transparent to-accent/10 rounded-full blur-3xl scale-110" />
+            <div className="absolute inset-0 bg-gradient-to-br from-blue/10 via-accent/8 to-terracotta/8 rounded-full blur-3xl scale-110" />
             
             <motion.img
               src={appMockup}

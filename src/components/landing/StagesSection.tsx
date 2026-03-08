@@ -3,10 +3,10 @@ import { useRef } from "react";
 import { Brain, BookmarkPlus, ShieldAlert, Sparkles } from "lucide-react";
 
 const traits = [
-  { icon: Brain, text: "Overthink before choosing (it's a whole thing)", emoji: "🧠" },
-  { icon: BookmarkPlus, text: "Save posts about \"finding purpose\" at 3am", emoji: "📌" },
-  { icon: ShieldAlert, text: "Fear choosing wrong and getting stuck", emoji: "😰" },
-  { icon: Sparkles, text: "Want clarity — not toxic positivity pressure", emoji: "✨" },
+  { icon: Brain, text: "Overthink before choosing (it's a whole thing)", emoji: "🧠", border: "border-blue/20", bg: "bg-blue/5" },
+  { icon: BookmarkPlus, text: "Save posts about \"finding purpose\" at 3am", emoji: "📌", border: "border-terracotta/20", bg: "bg-terracotta/5" },
+  { icon: ShieldAlert, text: "Fear choosing wrong and getting stuck", emoji: "😰", border: "border-maroon/20", bg: "bg-maroon/5" },
+  { icon: Sparkles, text: "Want clarity — not toxic positivity pressure", emoji: "✨", border: "border-accent/30", bg: "bg-accent/10" },
 ];
 
 const StagesSection = () => {
@@ -36,7 +36,7 @@ const StagesSection = () => {
               className="font-display text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-foreground leading-tight"
             >
               Built for{" "}
-              <em className="text-gradient-warm">thoughtful</em>
+              <em className="text-gradient-milestone">thoughtful</em>
               <br />decision-makers. like you bestie.
             </motion.h2>
           </div>
@@ -57,7 +57,7 @@ const StagesSection = () => {
                 initial={{ opacity: 0, y: 20, scale: 0.95 }}
                 animate={isInView ? { opacity: 1, y: 0, scale: 1 } : {}}
                 transition={{ delay: 0.3 + i * 0.08, type: "spring", stiffness: 200 }}
-                className="bg-card rounded-2xl sm:rounded-3xl p-4 sm:p-6 border border-border shadow-soft hover:shadow-card transition-all duration-400 group"
+                className={`${trait.bg} rounded-2xl sm:rounded-3xl p-4 sm:p-6 border ${trait.border} shadow-soft hover:shadow-card transition-all duration-400 group`}
               >
                 <div className="flex items-start gap-3 sm:gap-4">
                   <span className="text-xl sm:text-2xl">{trait.emoji}</span>
