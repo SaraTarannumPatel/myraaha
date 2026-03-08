@@ -44,6 +44,77 @@ export type Database = {
         }
         Relationships: []
       }
+      career_card_interactions: {
+        Row: {
+          card_id: string
+          created_at: string
+          id: string
+          interaction_type: string
+          time_spent_seconds: number | null
+          user_id: string
+        }
+        Insert: {
+          card_id: string
+          created_at?: string
+          id?: string
+          interaction_type?: string
+          time_spent_seconds?: number | null
+          user_id: string
+        }
+        Update: {
+          card_id?: string
+          created_at?: string
+          id?: string
+          interaction_type?: string
+          time_spent_seconds?: number | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "career_card_interactions_card_id_fkey"
+            columns: ["card_id"]
+            isOneToOne: false
+            referencedRelation: "career_cards"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      career_cards: {
+        Row: {
+          category: string
+          created_at: string
+          description: string | null
+          difficulty: string | null
+          icon_emoji: string | null
+          id: string
+          skills_related: string[] | null
+          tags: string[] | null
+          title: string
+        }
+        Insert: {
+          category?: string
+          created_at?: string
+          description?: string | null
+          difficulty?: string | null
+          icon_emoji?: string | null
+          id?: string
+          skills_related?: string[] | null
+          tags?: string[] | null
+          title: string
+        }
+        Update: {
+          category?: string
+          created_at?: string
+          description?: string | null
+          difficulty?: string | null
+          icon_emoji?: string | null
+          id?: string
+          skills_related?: string[] | null
+          tags?: string[] | null
+          title?: string
+        }
+        Relationships: []
+      }
       coaching_checkins: {
         Row: {
           ai_response: Json | null
@@ -331,6 +402,122 @@ export type Database = {
         }
         Relationships: []
       }
+      curiosity_quest_progress: {
+        Row: {
+          completed_at: string | null
+          id: string
+          mood_checkpoint: string | null
+          points_earned: number | null
+          quest_id: string
+          responses: Json | null
+          started_at: string
+          status: string
+          user_id: string
+        }
+        Insert: {
+          completed_at?: string | null
+          id?: string
+          mood_checkpoint?: string | null
+          points_earned?: number | null
+          quest_id: string
+          responses?: Json | null
+          started_at?: string
+          status?: string
+          user_id: string
+        }
+        Update: {
+          completed_at?: string | null
+          id?: string
+          mood_checkpoint?: string | null
+          points_earned?: number | null
+          quest_id?: string
+          responses?: Json | null
+          started_at?: string
+          status?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "curiosity_quest_progress_quest_id_fkey"
+            columns: ["quest_id"]
+            isOneToOne: false
+            referencedRelation: "curiosity_quests"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      curiosity_quests: {
+        Row: {
+          badge_reward: string | null
+          category: string | null
+          created_at: string
+          description: string | null
+          id: string
+          points: number | null
+          prompts: Json | null
+          quest_type: string
+          title: string
+        }
+        Insert: {
+          badge_reward?: string | null
+          category?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          points?: number | null
+          prompts?: Json | null
+          quest_type?: string
+          title: string
+        }
+        Update: {
+          badge_reward?: string | null
+          category?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          points?: number | null
+          prompts?: Json | null
+          quest_type?: string
+          title?: string
+        }
+        Relationships: []
+      }
+      domain_recommendations: {
+        Row: {
+          created_at: string
+          description: string | null
+          domain_name: string
+          id: string
+          match_score: number | null
+          reasons: string[] | null
+          status: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          domain_name: string
+          id?: string
+          match_score?: number | null
+          reasons?: string[] | null
+          status?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          domain_name?: string
+          id?: string
+          match_score?: number | null
+          reasons?: string[] | null
+          status?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       experiences: {
         Row: {
           created_at: string
@@ -406,6 +593,48 @@ export type Database = {
           quest_type?: string
           sector?: string | null
           title?: string
+        }
+        Relationships: []
+      }
+      exploration_sessions: {
+        Row: {
+          ai_insights: Json | null
+          domains_explored: string[] | null
+          ended_at: string | null
+          id: string
+          mode: string | null
+          mood_end: string | null
+          mood_start: string | null
+          session_type: string
+          started_at: string
+          total_interactions: number | null
+          user_id: string
+        }
+        Insert: {
+          ai_insights?: Json | null
+          domains_explored?: string[] | null
+          ended_at?: string | null
+          id?: string
+          mode?: string | null
+          mood_end?: string | null
+          mood_start?: string | null
+          session_type?: string
+          started_at?: string
+          total_interactions?: number | null
+          user_id: string
+        }
+        Update: {
+          ai_insights?: Json | null
+          domains_explored?: string[] | null
+          ended_at?: string | null
+          id?: string
+          mode?: string | null
+          mood_end?: string | null
+          mood_start?: string | null
+          session_type?: string
+          started_at?: string
+          total_interactions?: number | null
+          user_id?: string
         }
         Relationships: []
       }
