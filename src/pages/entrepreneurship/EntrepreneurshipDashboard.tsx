@@ -465,7 +465,7 @@ const EntrepreneurshipDashboard = () => {
         className="bg-card rounded-xl border border-border p-5">
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-2">
-            <Bot size={18} className="text-primary" />
+            <Bot size={18} className="text-indigo" />
             <h2 className="font-display text-lg text-foreground">Personalized Recommendations</h2>
           </div>
           <Button variant="ghost" size="sm" onClick={fetchAIInsights} disabled={aiLoading} className="font-body text-xs">
