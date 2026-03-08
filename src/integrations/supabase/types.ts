@@ -44,6 +44,45 @@ export type Database = {
         }
         Relationships: []
       }
+      badge_templates: {
+        Row: {
+          category: string
+          created_at: string | null
+          description: string | null
+          icon_emoji: string | null
+          id: string
+          is_active: boolean | null
+          points: number | null
+          title: string
+          type: string
+          unlock_criteria: Json | null
+        }
+        Insert: {
+          category?: string
+          created_at?: string | null
+          description?: string | null
+          icon_emoji?: string | null
+          id?: string
+          is_active?: boolean | null
+          points?: number | null
+          title: string
+          type: string
+          unlock_criteria?: Json | null
+        }
+        Update: {
+          category?: string
+          created_at?: string | null
+          description?: string | null
+          icon_emoji?: string | null
+          id?: string
+          is_active?: boolean | null
+          points?: number | null
+          title?: string
+          type?: string
+          unlock_criteria?: Json | null
+        }
+        Relationships: []
+      }
       behavior_patterns: {
         Row: {
           ai_generated: boolean | null
@@ -1839,6 +1878,48 @@ export type Database = {
         }
         Relationships: []
       }
+      leaderboard_entries: {
+        Row: {
+          badge_count: number | null
+          id: string
+          learning_hours: number | null
+          projects_completed: number | null
+          rank_position: number | null
+          scope: string | null
+          scope_id: string | null
+          streak_days: number | null
+          total_points: number | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          badge_count?: number | null
+          id?: string
+          learning_hours?: number | null
+          projects_completed?: number | null
+          rank_position?: number | null
+          scope?: string | null
+          scope_id?: string | null
+          streak_days?: number | null
+          total_points?: number | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          badge_count?: number | null
+          id?: string
+          learning_hours?: number | null
+          projects_completed?: number | null
+          rank_position?: number | null
+          scope?: string | null
+          scope_id?: string | null
+          streak_days?: number | null
+          total_points?: number | null
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       learning_capsules: {
         Row: {
           category: string
@@ -2495,6 +2576,39 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      milestone_celebrations: {
+        Row: {
+          celebration_data: Json | null
+          created_at: string | null
+          description: string | null
+          id: string
+          is_seen: boolean | null
+          milestone_type: string
+          title: string
+          user_id: string
+        }
+        Insert: {
+          celebration_data?: Json | null
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          is_seen?: boolean | null
+          milestone_type: string
+          title: string
+          user_id: string
+        }
+        Update: {
+          celebration_data?: Json | null
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          is_seen?: boolean | null
+          milestone_type?: string
+          title?: string
+          user_id?: string
+        }
+        Relationships: []
       }
       mindset_challenges: {
         Row: {
@@ -3265,6 +3379,44 @@ export type Database = {
           updated_at?: string
         }
         Relationships: []
+      }
+      peer_endorsements: {
+        Row: {
+          achievement_id: string | null
+          created_at: string | null
+          endorsed_id: string
+          endorsement_type: string | null
+          endorser_id: string
+          id: string
+          message: string | null
+        }
+        Insert: {
+          achievement_id?: string | null
+          created_at?: string | null
+          endorsed_id: string
+          endorsement_type?: string | null
+          endorser_id: string
+          id?: string
+          message?: string | null
+        }
+        Update: {
+          achievement_id?: string | null
+          created_at?: string | null
+          endorsed_id?: string
+          endorsement_type?: string | null
+          endorser_id?: string
+          id?: string
+          message?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "peer_endorsements_achievement_id_fkey"
+            columns: ["achievement_id"]
+            isOneToOne: false
+            referencedRelation: "achievements"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       peer_project_participants: {
         Row: {
@@ -4758,6 +4910,39 @@ export type Database = {
         Update: {
           id?: string
           role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
+      user_streaks: {
+        Row: {
+          current_streak: number | null
+          id: string
+          last_activity_date: string | null
+          longest_streak: number | null
+          started_at: string | null
+          streak_type: string | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          current_streak?: number | null
+          id?: string
+          last_activity_date?: string | null
+          longest_streak?: number | null
+          started_at?: string | null
+          streak_type?: string | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          current_streak?: number | null
+          id?: string
+          last_activity_date?: string | null
+          longest_streak?: number | null
+          started_at?: string | null
+          streak_type?: string | null
+          updated_at?: string | null
           user_id?: string
         }
         Relationships: []
