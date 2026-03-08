@@ -876,10 +876,10 @@ const EntrepreneurshipWalkthroughSection = () => {
         <div className="text-center mb-12 sm:mb-16 max-w-2xl mx-auto">
           <motion.p initial={{ opacity: 0 }} animate={isInView ? { opacity: 1 } : {}} className="font-body text-[10px] sm:text-xs uppercase tracking-[0.25em] text-warmth font-semibold mb-3">Entrepreneurship Edition</motion.p>
           <motion.h2 initial={{ opacity: 0, y: 20 }} animate={isInView ? { opacity: 1, y: 0 } : {}} transition={{ delay: 0.1 }} className="font-display text-3xl sm:text-4xl md:text-5xl text-foreground leading-tight">
-            AI that <em className="text-gradient-warm">builds with you</em> — not just for you.
+            AI that <em className="text-gradient-warm">builds with you</em> — not just for you. no cap.
           </motion.h2>
           <motion.p initial={{ opacity: 0 }} animate={isInView ? { opacity: 1 } : {}} transition={{ delay: 0.2 }} className="font-body text-xs sm:text-sm text-muted-foreground mt-3 sm:mt-4">
-            Watch each tool's complete journey — from first click to AI-powered results. Your startup path, uniquely yours.
+            Peep each tool's full journey — from first click to AI-powered W's. Your startup path, uniquely yours.
           </motion.p>
         </div>
 

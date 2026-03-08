@@ -1039,10 +1039,10 @@ const AppWalkthroughSection = () => {
         <div className="text-center mb-12 sm:mb-16 max-w-2xl mx-auto">
           <motion.p initial={{ opacity: 0 }} animate={isInView ? { opacity: 1 } : {}} className="font-body text-[10px] sm:text-xs uppercase tracking-[0.25em] text-indigo font-semibold mb-3">Inside The App</motion.p>
           <motion.h2 initial={{ opacity: 0, y: 20 }} animate={isInView ? { opacity: 1, y: 0 } : {}} transition={{ delay: 0.1 }} className="font-display text-3xl sm:text-4xl md:text-5xl text-foreground leading-tight">
-            Everything is <em className="text-gradient-warm">personalized, automated</em> & AI-analyzed.
+            Everything's <em className="text-gradient-warm">personalized, automated</em> & AI-powered. fr fr.
           </motion.h2>
           <motion.p initial={{ opacity: 0 }} animate={isInView ? { opacity: 1 } : {}} transition={{ delay: 0.2 }} className="font-body text-xs sm:text-sm text-muted-foreground mt-3 sm:mt-4">
-            Watch each feature's complete journey — from first interaction to AI-powered results. No two users see the same thing.
+            Peep each feature's full journey — from first tap to AI-powered results. No two users get the same vibe.
           </motion.p>
         </div>
 
