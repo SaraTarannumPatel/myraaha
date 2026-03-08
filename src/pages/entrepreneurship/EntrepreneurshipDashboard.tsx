@@ -11,7 +11,8 @@ import {
   Lightbulb, Wrench, Zap, Rocket, Bot, Globe, Users, ArrowRight, TrendingUp,
   Target, Clock, BookOpen, Trophy, Bell, Brain, Heart, Sparkles, LifeBuoy,
   Presentation, Building2, Navigation, PenLine, Smile, Frown, Meh, Star,
-  CheckCircle2, AlertCircle, DollarSign, GraduationCap, MessageCircle
+  CheckCircle2, DollarSign, GraduationCap, MessageCircle, Loader2, Plus,
+  Compass, BarChart3, Coins, Eye
 } from "lucide-react";
 
 interface DashboardStats {
@@ -53,6 +54,27 @@ interface ActivityItem {
   icon: string;
 }
 
+interface AIRecommendation {
+  title: string;
+  description: string;
+  module: string;
+  icon_hint: string;
+}
+
+interface AIGoalSuggestion {
+  title: string;
+  description: string;
+  category: string;
+}
+
+interface AIInsights {
+  greeting_nudge: string;
+  recommendations: AIRecommendation[];
+  goal_suggestions: AIGoalSuggestion[];
+  funding_tip: string;
+  emotional_check: string;
+}
+
 const moodOptions = [
   { emoji: "😊", label: "Energized", value: "energized", icon: Smile },
   { emoji: "😐", label: "Neutral", value: "neutral", icon: Meh },
@@ -62,17 +84,47 @@ const moodOptions = [
 ];
 
 const entrepreneurModules = [
-  { label: "Startup Sparks", icon: Lightbulb, path: "/dashboard/startup-sparks", desc: "Capture & validate ideas", color: "bg-accent/10 text-accent" },
+  { label: "Startup Sparks", icon: Lightbulb, path: "/dashboard/startup-sparks", desc: "Capture & validate ideas", color: "bg-accent/10 text-accent-foreground" },
   { label: "Mindset Builder", icon: Zap, path: "/dashboard/mindset-builder", desc: "Build resilience", color: "bg-primary/10 text-primary" },
-  { label: "MVP Builder", icon: Wrench, path: "/dashboard/mvp-builder", desc: "Build prototypes", color: "bg-accent/10 text-accent" },
+  { label: "MVP Builder", icon: Wrench, path: "/dashboard/mvp-builder", desc: "Build prototypes", color: "bg-accent/10 text-accent-foreground" },
   { label: "Path Selector", icon: Navigation, path: "/dashboard/path-selector", desc: "Choose your direction", color: "bg-primary/10 text-primary" },
-  { label: "Startup Lab", icon: Rocket, path: "/dashboard/startup-lab", desc: "Structured learning", color: "bg-accent/10 text-accent" },
+  { label: "Startup Lab", icon: Rocket, path: "/dashboard/startup-lab", desc: "Structured learning", color: "bg-accent/10 text-accent-foreground" },
   { label: "AI Coach", icon: Bot, path: "/dashboard/ai-coach", desc: "Get personalized guidance", color: "bg-primary/10 text-primary" },
-  { label: "Showcase", icon: Presentation, path: "/dashboard/startup-showcase", desc: "Share your work", color: "bg-accent/10 text-accent" },
+  { label: "Showcase", icon: Presentation, path: "/dashboard/startup-showcase", desc: "Share your work", color: "bg-accent/10 text-accent-foreground" },
   { label: "Founder Profile", icon: Building2, path: "/dashboard/founder-profile", desc: "Build your identity", color: "bg-primary/10 text-primary" },
-  { label: "Communities", icon: Globe, path: "/dashboard/startup-communities", desc: "Connect with peers", color: "bg-accent/10 text-accent" },
+  { label: "Startup Profiling", icon: BarChart3, path: "/dashboard/startup-profiling", desc: "Track startup metrics", color: "bg-accent/10 text-accent-foreground" },
+  { label: "Communities", icon: Globe, path: "/dashboard/startup-communities", desc: "Connect with peers", color: "bg-primary/10 text-primary" },
+  { label: "Learning Library", icon: GraduationCap, path: "/dashboard/founders-learning-library", desc: "Curated resources", color: "bg-accent/10 text-accent-foreground" },
   { label: "Support", icon: LifeBuoy, path: "/dashboard/startup-support", desc: "Get help anytime", color: "bg-primary/10 text-primary" },
 ];
+
+const modulePathMap: Record<string, string> = {
+  "startup-sparks": "/dashboard/startup-sparks",
+  "mindset-builder": "/dashboard/mindset-builder",
+  "mvp-builder": "/dashboard/mvp-builder",
+  "path-selector": "/dashboard/path-selector",
+  "startup-lab": "/dashboard/startup-lab",
+  "ai-coach": "/dashboard/ai-coach",
+  "startup-showcase": "/dashboard/startup-showcase",
+  "founder-profile": "/dashboard/founder-profile",
+  "startup-communities": "/dashboard/startup-communities",
+  "startup-support": "/dashboard/startup-support",
+  "content-library": "/dashboard/founders-learning-library",
+  "journal": "/dashboard/journal",
+  "startup-profiling": "/dashboard/startup-profiling",
+  "inspirations": "/dashboard/inspirations",
+  "moodboard": "/dashboard/moodboard",
+  "funding-path": "/dashboard/startup-support",
+};
+
+const goalCategoryIcons: Record<string, any> = {
+  ideation: Lightbulb,
+  validation: CheckCircle2,
+  building: Wrench,
+  mindset: Brain,
+  community: Users,
+  funding: Coins,
+};
 
 const EntrepreneurshipDashboard = () => {
   const { user, profile } = useAuth();
@@ -90,6 +142,9 @@ const EntrepreneurshipDashboard = () => {
   const [moodNote, setMoodNote] = useState("");
   const [selectedMood, setSelectedMood] = useState<string | null>(null);
   const [savingMood, setSavingMood] = useState(false);
+  const [aiInsights, setAiInsights] = useState<AIInsights | null>(null);
+  const [aiLoading, setAiLoading] = useState(false);
+  const [savedGoals, setSavedGoals] = useState<Set<string>>(new Set());
 
   useEffect(() => {
     if (!user) return;
@@ -204,6 +259,48 @@ const EntrepreneurshipDashboard = () => {
     setResources(data || []);
   };
 
+  const fetchAIInsights = async () => {
+    if (!user || aiLoading) return;
+    setAiLoading(true);
+    try {
+      const recentMoodEntry = await supabase.from("journal_entries")
+        .select("mood").eq("user_id", user.id).not("mood", "is", null)
+        .order("created_at", { ascending: false }).limit(1).single();
+
+      const { data, error } = await supabase.functions.invoke("entrepreneur-dashboard-ai", {
+        body: {
+          context: {
+            name: profile?.full_name || "Founder",
+            stage: getStageLabel(),
+            ideasCount: stats.ideasCount,
+            activeIdeas: stats.activeIdeas,
+            validatedIdeas: stats.validatedIdeas,
+            projectsCount: stats.projectsCount,
+            challengesCompleted: stats.challengesCompleted,
+            skillsCount: stats.skillsCount,
+            achievementsCount: stats.achievementsCount,
+            streak: stats.streak,
+            connectionsCount: stats.connectionsCount,
+            recentMood: recentMoodEntry.data?.mood || "unknown",
+            recentIdeas: recentIdeas.map(i => ({ title: i.title, category: i.category })),
+          },
+        },
+      });
+      if (error) throw error;
+      setAiInsights(data);
+    } catch (e) {
+      console.error("AI insights error:", e);
+      toast.error("Couldn't load AI recommendations right now");
+    }
+    setAiLoading(false);
+  };
+
+  useEffect(() => {
+    if (!loading && user && stats) {
+      fetchAIInsights();
+    }
+  }, [loading]);
+
   const saveReflection = async () => {
     if (!user || !selectedMood) { toast.error("Select a mood first"); return; }
     setSavingMood(true);
@@ -222,6 +319,22 @@ const EntrepreneurshipDashboard = () => {
       setMoodNote("");
     }
     setSavingMood(false);
+  };
+
+  const saveGoalToJournal = async (goal: AIGoalSuggestion) => {
+    if (!user) return;
+    const { error } = await supabase.from("journal_entries").insert({
+      user_id: user.id,
+      title: `Goal: ${goal.title}`,
+      content: `**New Goal Set:** ${goal.title}\n\n${goal.description}\n\nCategory: ${goal.category}`,
+      tags: ["goal", goal.category, "ai-suggested"],
+      intent: "entrepreneurship" as any,
+    });
+    if (error) { toast.error("Failed to save goal"); }
+    else {
+      toast.success("Goal saved to your journal! 🎯");
+      setSavedGoals(prev => new Set(prev).add(goal.title));
+    }
   };
 
   const greeting = () => {
@@ -261,14 +374,21 @@ const EntrepreneurshipDashboard = () => {
 
   return (
     <div className="space-y-6">
-      {/* Hero Greeting */}
-      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-1">
+      {/* Hero Greeting + AI Nudge */}
+      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-2">
         <h1 className="font-display text-3xl md:text-4xl text-foreground">
           {greeting()}, <em className="text-primary">{profile?.full_name || "Founder"}</em>
         </h1>
         <p className="font-body text-muted-foreground">
           Here's where your startup journey takes shape. Let's see where you're headed and what's next.
         </p>
+        {aiInsights?.greeting_nudge && (
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3 }}
+            className="flex items-start gap-2 bg-accent/10 border border-accent/20 rounded-lg px-4 py-3 mt-2">
+            <Sparkles size={16} className="text-accent shrink-0 mt-0.5" />
+            <p className="font-body text-sm text-foreground">{aiInsights.greeting_nudge}</p>
+          </motion.div>
+        )}
       </motion.div>
 
       {/* Notifications */}
@@ -277,9 +397,9 @@ const EntrepreneurshipDashboard = () => {
           <div className="flex items-center justify-between mb-2">
             <div className="flex items-center gap-2">
               <Bell size={16} className="text-accent" />
-              <span className="font-body text-sm font-semibold text-accent">{notifications.length} new</span>
+              <span className="font-body text-sm font-semibold text-accent-foreground">{notifications.length} new</span>
             </div>
-            <Link to="/dashboard/notifications" className="font-body text-xs text-accent hover:underline">View all</Link>
+            <Link to="/dashboard/notifications" className="font-body text-xs text-accent-foreground hover:underline">View all</Link>
           </div>
           <div className="space-y-1">
             {notifications.slice(0, 3).map(n => (
@@ -292,7 +412,6 @@ const EntrepreneurshipDashboard = () => {
       {/* Personalized Snapshot */}
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {/* Journey Stage Card */}
           <div className="bg-card rounded-xl border border-border p-5 md:col-span-2">
             <div className="flex items-center justify-between mb-4">
               <div>
@@ -321,12 +440,11 @@ const EntrepreneurshipDashboard = () => {
             </div>
           </div>
 
-          {/* Quick Stats Sidebar */}
           <div className="bg-card rounded-xl border border-border p-5 space-y-4">
             <h3 className="font-display text-sm text-foreground">At a Glance</h3>
             {[
-              { label: "Journal Streak", value: `${stats.streak}d`, icon: Clock, color: "text-accent" },
-              { label: "Achievements", value: stats.achievementsCount, icon: Trophy, color: "text-accent" },
+              { label: "Journal Streak", value: `${stats.streak}d`, icon: Clock, color: "text-accent-foreground" },
+              { label: "Achievements", value: stats.achievementsCount, icon: Trophy, color: "text-accent-foreground" },
               { label: "Connections", value: stats.connectionsCount, icon: Users, color: "text-primary" },
               { label: "Reflections", value: stats.journalCount, icon: BookOpen, color: "text-primary" },
             ].map(s => (
@@ -342,8 +460,127 @@ const EntrepreneurshipDashboard = () => {
         </div>
       </motion.div>
 
+      {/* AI Recommendations */}
+      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.12 }}
+        className="bg-card rounded-xl border border-border p-5">
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center gap-2">
+            <Bot size={18} className="text-primary" />
+            <h2 className="font-display text-lg text-foreground">Personalized Recommendations</h2>
+          </div>
+          <Button variant="ghost" size="sm" onClick={fetchAIInsights} disabled={aiLoading} className="font-body text-xs">
+            {aiLoading ? <Loader2 size={14} className="animate-spin" /> : "Refresh"}
+          </Button>
+        </div>
+        {aiLoading && !aiInsights ? (
+          <div className="flex items-center justify-center py-8 gap-2">
+            <Loader2 size={18} className="animate-spin text-primary" />
+            <span className="font-body text-sm text-muted-foreground">Analyzing your journey...</span>
+          </div>
+        ) : aiInsights?.recommendations && aiInsights.recommendations.length > 0 ? (
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+            {aiInsights.recommendations.slice(0, 3).map((rec, i) => (
+              <Link key={i} to={modulePathMap[rec.module] || "/dashboard"}
+                className="group p-4 rounded-lg border border-border hover:border-primary/30 hover:bg-primary/5 transition-all">
+                <div className="flex items-center gap-2 mb-2">
+                  <Compass size={14} className="text-primary" />
+                  <h4 className="font-display text-sm text-foreground">{rec.title}</h4>
+                </div>
+                <p className="font-body text-xs text-muted-foreground leading-relaxed">{rec.description}</p>
+                <span className="inline-flex items-center gap-1 mt-2 font-body text-[10px] text-primary group-hover:underline">
+                  Go to {rec.module.replace(/-/g, " ")} <ArrowRight size={10} />
+                </span>
+              </Link>
+            ))}
+          </div>
+        ) : (
+          <p className="font-body text-sm text-muted-foreground text-center py-4">AI recommendations will appear as you explore more.</p>
+        )}
+
+        {/* Emotional check */}
+        {aiInsights?.emotional_check && (
+          <div className="mt-4 flex items-start gap-2 bg-muted/30 rounded-lg px-4 py-3">
+            <Heart size={14} className="text-primary shrink-0 mt-0.5" />
+            <p className="font-body text-xs text-muted-foreground italic">{aiInsights.emotional_check}</p>
+          </div>
+        )}
+      </motion.div>
+
+      {/* Goal Mapping + Funding Tip */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {/* Goal Suggestions */}
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.14 }}
+          className="bg-card rounded-xl border border-border p-5">
+          <div className="flex items-center gap-2 mb-4">
+            <Target size={18} className="text-primary" />
+            <h3 className="font-display text-lg text-foreground">Suggested Goals</h3>
+          </div>
+          {aiInsights?.goal_suggestions && aiInsights.goal_suggestions.length > 0 ? (
+            <div className="space-y-3">
+              {aiInsights.goal_suggestions.map((goal, i) => {
+                const Icon = goalCategoryIcons[goal.category] || Target;
+                const isSaved = savedGoals.has(goal.title);
+                return (
+                  <div key={i} className="flex items-start gap-3 p-3 rounded-lg border border-border bg-muted/20">
+                    <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
+                      <Icon size={14} className="text-primary" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <h4 className="font-body text-sm text-foreground font-medium">{goal.title}</h4>
+                      <p className="font-body text-[10px] text-muted-foreground mt-0.5">{goal.description}</p>
+                    </div>
+                    <Button variant="ghost" size="sm" disabled={isSaved}
+                      onClick={() => saveGoalToJournal(goal)}
+                      className="shrink-0 h-8 w-8 p-0">
+                      {isSaved ? <CheckCircle2 size={14} className="text-primary" /> : <Plus size={14} />}
+                    </Button>
+                  </div>
+                );
+              })}
+            </div>
+          ) : (
+            <p className="font-body text-sm text-muted-foreground text-center py-4">Goal suggestions will appear once AI analyzes your journey.</p>
+          )}
+        </motion.div>
+
+        {/* Funding Path Preview */}
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.16 }}
+          className="bg-card rounded-xl border border-border p-5">
+          <div className="flex items-center gap-2 mb-4">
+            <DollarSign size={18} className="text-primary" />
+            <h3 className="font-display text-lg text-foreground">Funding & Validation</h3>
+          </div>
+          {/* Funding tip from AI */}
+          {aiInsights?.funding_tip && (
+            <div className="p-3 rounded-lg bg-accent/10 border border-accent/20 mb-4">
+              <div className="flex items-center gap-2 mb-1">
+                <Coins size={14} className="text-accent-foreground" />
+                <span className="font-body text-xs font-semibold text-accent-foreground">AI Funding Tip</span>
+              </div>
+              <p className="font-body text-xs text-foreground">{aiInsights.funding_tip}</p>
+            </div>
+          )}
+          {/* Stage-aware funding steps */}
+          <div className="space-y-2">
+            {[
+              { label: "Validate your idea first", done: stats.validatedIdeas > 0, path: "/dashboard/startup-sparks", icon: CheckCircle2 },
+              { label: "Build a working MVP", done: stats.projectsCount > 0, path: "/dashboard/mvp-builder", icon: Wrench },
+              { label: "Showcase your startup", done: false, path: "/dashboard/startup-showcase", icon: Eye },
+              { label: "Explore funding paths", done: false, path: "/dashboard/startup-support", icon: Coins },
+            ].map((step, i) => (
+              <Link key={i} to={step.path}
+                className={`flex items-center gap-3 p-3 rounded-lg transition-all ${step.done ? "bg-primary/5 border border-primary/20" : "hover:bg-muted/30 border border-transparent"}`}>
+                <step.icon size={14} className={step.done ? "text-primary" : "text-muted-foreground"} />
+                <span className={`font-body text-xs ${step.done ? "text-primary line-through" : "text-foreground"}`}>{step.label}</span>
+                {!step.done && <ArrowRight size={10} className="text-muted-foreground ml-auto" />}
+              </Link>
+            ))}
+          </div>
+        </motion.div>
+      </div>
+
       {/* Milestone Next Steps */}
-      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }}
+      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.18 }}
         className="bg-card rounded-xl border border-border p-5">
         <div className="flex items-center justify-between mb-4">
           <h2 className="font-display text-lg text-foreground">Your Startup Milestones</h2>
@@ -374,12 +611,11 @@ const EntrepreneurshipDashboard = () => {
 
       {/* Two-column: Ideas + Active Challenge */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {/* Recent Ideas */}
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}
           className="bg-card rounded-xl border border-border p-5">
           <div className="flex items-center justify-between mb-3">
             <h3 className="font-display text-lg text-foreground">Recent Ideas</h3>
-            <Link to="/dashboard/startup-sparks" className="font-body text-xs text-accent hover:underline flex items-center gap-1">
+            <Link to="/dashboard/startup-sparks" className="font-body text-xs text-primary hover:underline flex items-center gap-1">
               All ideas <ArrowRight size={10} />
             </Link>
           </div>
@@ -397,7 +633,7 @@ const EntrepreneurshipDashboard = () => {
                 <Link key={idea.id} to="/dashboard/startup-sparks"
                   className="flex items-center gap-3 p-3 rounded-lg hover:bg-muted/30 transition-colors">
                   <div className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 ${idea.is_active ? "bg-accent/10" : "bg-muted"}`}>
-                    <Lightbulb size={14} className={idea.is_active ? "text-accent" : "text-muted-foreground"} />
+                    <Lightbulb size={14} className={idea.is_active ? "text-accent-foreground" : "text-muted-foreground"} />
                   </div>
                   <div className="flex-1 min-w-0">
                     <p className="font-body text-sm text-foreground truncate">{idea.title}</p>
@@ -412,12 +648,11 @@ const EntrepreneurshipDashboard = () => {
           )}
         </motion.div>
 
-        {/* Active Challenge / Mindset */}
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.25 }}
           className="bg-card rounded-xl border border-border p-5">
           <div className="flex items-center justify-between mb-3">
             <h3 className="font-display text-lg text-foreground">Mindset & Challenges</h3>
-            <Link to="/dashboard/mindset-builder" className="font-body text-xs text-accent hover:underline flex items-center gap-1">
+            <Link to="/dashboard/mindset-builder" className="font-body text-xs text-primary hover:underline flex items-center gap-1">
               View all <ArrowRight size={10} />
             </Link>
           </div>
@@ -487,10 +722,10 @@ const EntrepreneurshipDashboard = () => {
       {/* Module Navigation Grid */}
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.35 }}>
         <h2 className="font-display text-xl text-foreground mb-4">Startup Toolkit</h2>
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
-          {entrepreneurModules.map((mod, i) => (
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+          {entrepreneurModules.map((mod) => (
             <Link key={mod.path} to={mod.path}
-              className="group flex flex-col items-center p-4 bg-card rounded-xl border border-border hover:border-accent/30 hover:shadow-soft transition-all text-center">
+              className="group flex flex-col items-center p-4 bg-card rounded-xl border border-border hover:border-primary/30 hover:shadow-soft transition-all text-center">
               <div className={`w-10 h-10 rounded-lg flex items-center justify-center mb-2 ${mod.color}`}>
                 <mod.icon size={18} />
               </div>
@@ -503,7 +738,6 @@ const EntrepreneurshipDashboard = () => {
 
       {/* Two-column: Activity + Support */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {/* Activity Feed */}
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }}
           className="bg-card rounded-xl border border-border p-5">
           <h3 className="font-display text-lg text-foreground mb-3">Recent Activity</h3>
@@ -527,7 +761,6 @@ const EntrepreneurshipDashboard = () => {
           )}
         </motion.div>
 
-        {/* Support & Coaching Access */}
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.45 }}
           className="bg-card rounded-xl border border-border p-5">
           <h3 className="font-display text-lg text-foreground mb-3">Support & Coaching</h3>
@@ -542,7 +775,7 @@ const EntrepreneurshipDashboard = () => {
               <ArrowRight size={14} className="text-muted-foreground ml-auto" />
             </Link>
             <Link to="/dashboard/startup-support" className="flex items-center gap-3 p-3 rounded-lg hover:bg-muted/30 transition-all">
-              <LifeBuoy size={18} className="text-accent" />
+              <LifeBuoy size={18} className="text-primary" />
               <div>
                 <p className="font-body text-sm text-foreground font-medium">Startup Support</p>
                 <p className="font-body text-[10px] text-muted-foreground">Troubleshooting & expert help</p>
@@ -558,7 +791,7 @@ const EntrepreneurshipDashboard = () => {
               <ArrowRight size={14} className="text-muted-foreground ml-auto" />
             </Link>
             <Link to="/dashboard/journal" className="flex items-center gap-3 p-3 rounded-lg hover:bg-muted/30 transition-all">
-              <Heart size={18} className="text-accent" />
+              <Heart size={18} className="text-primary" />
               <div>
                 <p className="font-body text-sm text-foreground font-medium">Journal & Reflect</p>
                 <p className="font-body text-[10px] text-muted-foreground">Process your thoughts</p>
@@ -575,7 +808,7 @@ const EntrepreneurshipDashboard = () => {
           className="bg-card rounded-xl border border-border p-5">
           <div className="flex items-center justify-between mb-3">
             <h3 className="font-display text-lg text-foreground">Recommended Resources</h3>
-            <Link to="/dashboard/content-library" className="font-body text-xs text-accent hover:underline flex items-center gap-1">
+            <Link to="/dashboard/founders-learning-library" className="font-body text-xs text-primary hover:underline flex items-center gap-1">
               Browse library <ArrowRight size={10} />
             </Link>
           </div>
@@ -587,7 +820,7 @@ const EntrepreneurshipDashboard = () => {
                   <p className="font-body text-sm text-foreground">{r.title}</p>
                   {r.description && <p className="font-body text-[10px] text-muted-foreground mt-0.5 line-clamp-2">{r.description}</p>}
                   <div className="flex items-center gap-2 mt-1">
-                    {r.difficulty_level && <span className="font-body text-[10px] text-accent">{r.difficulty_level}</span>}
+                    {r.difficulty_level && <span className="font-body text-[10px] text-primary">{r.difficulty_level}</span>}
                     {r.resource_type && <span className="font-body text-[10px] text-muted-foreground">{r.resource_type}</span>}
                   </div>
                 </div>
