@@ -24,8 +24,8 @@ const supportCategories = [
 ];
 
 const moodOptions = [
-  { value: "great", icon: Smile, label: "Great", color: "text-green-500" },
-  { value: "okay", icon: Meh, label: "Okay", color: "text-yellow-500" },
+  { value: "great", icon: Smile, label: "Great", color: "text-success" },
+  { value: "okay", icon: Meh, label: "Okay", color: "text-accent" },
   { value: "struggling", icon: Frown, label: "Struggling", color: "text-destructive" },
 ];
 

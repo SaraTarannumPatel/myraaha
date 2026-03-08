@@ -297,7 +297,7 @@ export default function CareerInspirations() {
           <p className="text-muted-foreground max-w-2xl">Explore how others navigated career shifts, overcame fear, and found their path — to fuel yours.</p>
           <div className="flex gap-3 mt-4 flex-wrap">
             <Button onClick={() => setShowSubmit(true)} variant="outline" className="gap-2"><PenLine className="h-4 w-4" /> Share Your Story</Button>
-            {user && <Button onClick={getAiSuggestions} disabled={aiLoading} className="gap-2 bg-blue-600 hover:bg-blue-700 text-white"><Sparkles className="h-4 w-4" /> Get Personalized Picks</Button>}
+            {user && <Button onClick={getAiSuggestions} disabled={aiLoading} className="gap-2 bg-info hover:bg-info/90 text-info-foreground"><Sparkles className="h-4 w-4" /> Get Personalized Picks</Button>}
           </div>
         </div>
       </motion.div>

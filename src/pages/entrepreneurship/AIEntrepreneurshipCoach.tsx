@@ -30,8 +30,8 @@ const quickTopics = [
 ];
 
 const moodEmojis: Record<string, { icon: typeof Smile; label: string; color: string }> = {
-  great: { icon: Smile, label: "Great", color: "text-green-500" },
-  okay: { icon: Meh, label: "Okay", color: "text-yellow-500" },
+  great: { icon: Smile, label: "Great", color: "text-success" },
+  okay: { icon: Meh, label: "Okay", color: "text-accent" },
   struggling: { icon: Frown, label: "Struggling", color: "text-destructive" },
 };
 

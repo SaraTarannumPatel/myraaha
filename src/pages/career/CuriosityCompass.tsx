@@ -17,10 +17,10 @@ import {
 } from "lucide-react";
 
 const MOODS = [
-  { id: "excited", label: "Excited", icon: Zap, color: "text-yellow-500" },
+  { id: "excited", label: "Excited", icon: Zap, color: "text-accent" },
   { id: "curious", label: "Curious", icon: Lightbulb, color: "text-primary" },
   { id: "unsure", label: "Unsure", icon: HelpCircle, color: "text-muted-foreground" },
-  { id: "bored", label: "Bored", icon: Meh, color: "text-orange-500" },
+  { id: "bored", label: "Bored", icon: Meh, color: "text-warmth" },
 ];
 
 const MODES = [
@@ -426,29 +426,29 @@ const CuriosityCompass = () => {
           <CardContent className="pt-6">
             <div className="grid grid-cols-4 gap-4 text-center">
               <div>
-                <div className="w-10 h-10 rounded-full bg-pink-500/10 flex items-center justify-center mx-auto mb-2">
-                  <Heart className="text-pink-500" size={18} />
+                <div className="w-10 h-10 rounded-full bg-terracotta/10 flex items-center justify-center mx-auto mb-2">
+                  <Heart className="text-terracotta" size={18} />
                 </div>
                 <p className="font-display text-2xl text-foreground">{likedCount}</p>
                 <p className="font-body text-xs text-muted-foreground">Domains Liked</p>
               </div>
               <div>
-                <div className="w-10 h-10 rounded-full bg-yellow-500/10 flex items-center justify-center mx-auto mb-2">
-                  <Trophy className="text-yellow-500" size={18} />
+                <div className="w-10 h-10 rounded-full bg-accent/10 flex items-center justify-center mx-auto mb-2">
+                  <Trophy className="text-accent" size={18} />
                 </div>
                 <p className="font-display text-2xl text-foreground">{completedQuests}</p>
                 <p className="font-body text-xs text-muted-foreground">Quests Done</p>
               </div>
               <div>
-                <div className="w-10 h-10 rounded-full bg-green-500/10 flex items-center justify-center mx-auto mb-2">
-                  <Star className="text-green-500" size={18} />
+                <div className="w-10 h-10 rounded-full bg-success/10 flex items-center justify-center mx-auto mb-2">
+                  <Star className="text-success" size={18} />
                 </div>
                 <p className="font-display text-2xl text-foreground">{domains.length}</p>
                 <p className="font-body text-xs text-muted-foreground">Recommendations</p>
               </div>
               <div>
-                <div className="w-10 h-10 rounded-full bg-purple-500/10 flex items-center justify-center mx-auto mb-2">
-                  <PenLine className="text-purple-500" size={18} />
+                <div className="w-10 h-10 rounded-full bg-indigo/10 flex items-center justify-center mx-auto mb-2">
+                  <PenLine className="text-indigo" size={18} />
                 </div>
                 <p className="font-display text-2xl text-foreground">{interests.length}</p>
                 <p className="font-body text-xs text-muted-foreground">Interests Found</p>
@@ -567,8 +567,8 @@ const CuriosityCompass = () => {
                   </div>
                 )}
                 {sessionSummary.motivational_note && (
-                  <div className="p-3 rounded-lg bg-green-500/5 border border-green-500/20">
-                    <p className="font-body text-sm text-green-700 dark:text-green-300">{sessionSummary.motivational_note}</p>
+                  <div className="p-3 rounded-lg bg-success/5 border border-success/20">
+                    <p className="font-body text-sm text-success">{sessionSummary.motivational_note}</p>
                   </div>
                 )}
               </CardContent>
@@ -811,7 +811,7 @@ const CuriosityCompass = () => {
                         const interaction = interactions[card.id];
                         return (
                           <motion.div key={card.id} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.03 }} onViewportEnter={() => handleCardView(card.id)}>
-                            <Card className={`h-full transition-all hover:shadow-lg ${interaction === "like" ? "border-pink-500/50 bg-pink-500/5" : interaction === "save" ? "border-primary/50 bg-primary/5" : interaction === "skip" ? "opacity-50" : ""}`}>
+                            <Card className={`h-full transition-all hover:shadow-lg ${interaction === "like" ? "border-terracotta/50 bg-terracotta/5" : interaction === "save" ? "border-primary/50 bg-primary/5" : interaction === "skip" ? "opacity-50" : ""}`}>
                               <CardContent className="pt-6">
                                 <div className="flex items-start gap-3 mb-3">
                                   <span className="text-2xl">{card.icon_emoji}</span>
@@ -918,7 +918,7 @@ const CuriosityCompass = () => {
                         </div>
                       ) : (
                         <div className="text-center py-8">
-                          <Check className="mx-auto text-green-500 mb-3" size={48} />
+                          <Check className="mx-auto text-success mb-3" size={48} />
                           <h3 className="font-display text-xl mb-2">Quest Complete!</h3>
                           <p className="font-body text-muted-foreground">You earned {activeQuest.points} points</p>
                         </div>
@@ -941,11 +941,11 @@ const CuriosityCompass = () => {
                     const isCompleted = status === "completed";
                     return (
                       <motion.div key={quest.id} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }}>
-                        <Card className={isCompleted ? "border-green-500/30 bg-green-500/5" : ""}>
+                        <Card className={isCompleted ? "border-success/30 bg-success/5" : ""}>
                           <CardContent className="pt-6">
                             <div className="flex items-start gap-3 mb-4">
-                              <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${quest.quest_type === "story" ? "bg-blue-500/10" : quest.quest_type === "challenge" ? "bg-orange-500/10" : "bg-purple-500/10"}`}>
-                                {quest.quest_type === "story" ? <MessageSquare className="text-blue-500" size={18} /> : quest.quest_type === "challenge" ? <Target className="text-orange-500" size={18} /> : <Palette className="text-purple-500" size={18} />}
+                              <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${quest.quest_type === "story" ? "bg-info/10" : quest.quest_type === "challenge" ? "bg-warmth/10" : "bg-indigo/10"}`}>
+                                {quest.quest_type === "story" ? <MessageSquare className="text-info" size={18} /> : quest.quest_type === "challenge" ? <Target className="text-warmth" size={18} /> : <Palette className="text-indigo" size={18} />}
                               </div>
                               <div className="flex-1">
                                 <h3 className="font-display text-lg text-foreground">{quest.title}</h3>
@@ -998,7 +998,7 @@ const CuriosityCompass = () => {
                             {domain.reasons?.length > 0 && (
                               <div className="space-y-1 mb-3">
                                 {domain.reasons.slice(0, 3).map((reason: string, j: number) => (
-                                  <p key={j} className="font-body text-xs text-muted-foreground flex items-center gap-2"><Check size={12} className="text-green-500" /> {reason}</p>
+                                  <p key={j} className="font-body text-xs text-muted-foreground flex items-center gap-2"><Check size={12} className="text-success" /> {reason}</p>
                                 ))}
                               </div>
                             )}

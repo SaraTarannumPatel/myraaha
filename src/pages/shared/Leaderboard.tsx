@@ -157,7 +157,7 @@ const Leaderboard = () => {
             </div>
             <div className="text-right">
               <p className="text-xs text-muted-foreground">of {entries.length} participants</p>
-              {myRank && myRank <= 3 && <Badge className="bg-amber-500/20 text-amber-600 mt-1">Top 3!</Badge>}
+              {myRank && myRank <= 3 && <Badge className="bg-accent/20 text-accent-foreground mt-1">Top 3!</Badge>}
             </div>
           </div>
         </Card>

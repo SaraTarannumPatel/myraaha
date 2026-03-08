@@ -18,11 +18,12 @@ import {
 } from "lucide-react";
 
 const TRAIT_CATEGORIES = {
-  cognitive: { label: "Cognitive", color: "bg-blue-500" },
-  emotional: { label: "Emotional", color: "bg-pink-500" },
-  social: { label: "Social", color: "bg-green-500" },
-  professional: { label: "Professional", color: "bg-purple-500" },
+  cognitive: { label: "Cognitive", color: "bg-blue" },
+  emotional: { label: "Emotional", color: "bg-terracotta" },
+  social: { label: "Social", color: "bg-green" },
+  professional: { label: "Professional", color: "bg-indigo" },
 };
+
 
 const DOMAINS = ["Technology", "Design", "Business", "Healthcare", "Education", "Finance", "Science", "Arts"];
 
@@ -660,7 +661,7 @@ const SelfGraph = () => {
                           </div>
                           <div className="flex flex-wrap gap-1">
                             {categoryTraits.slice(0, 4).map(t => (
-                              <span key={t.id} className={`px-2 py-0.5 rounded text-xs text-white ${color}`}>
+                              <span key={t.id} className={`px-2 py-0.5 rounded text-xs text-primary-foreground ${color}`}>
                                 {t.trait_name.replace(/_/g, " ")}
                               </span>
                             ))}
@@ -731,7 +732,7 @@ const SelfGraph = () => {
                         <div key={domain.id} className="flex items-center gap-3">
                           <span className="font-body text-sm text-foreground w-24 truncate">{domain.domain_name}</span>
                           <div className="flex-1 h-2 bg-muted rounded-full overflow-hidden">
-                            <div className={`h-full rounded-full ${avgEnergy >= 7 ? "bg-green-500" : avgEnergy >= 4 ? "bg-yellow-500" : "bg-red-500"}`} style={{ width: `${avgEnergy * 10}%` }} />
+                            <div className={`h-full rounded-full ${avgEnergy >= 7 ? "bg-success" : avgEnergy >= 4 ? "bg-warning" : "bg-destructive"}`} style={{ width: `${avgEnergy * 10}%` }} />
                           </div>
                           <span className="font-body text-xs text-muted-foreground w-8">{avgEnergy.toFixed(1)}</span>
                         </div>
@@ -763,9 +764,9 @@ const SelfGraph = () => {
                           onClick={() => setEnergyLevel(level)}
                           className={`w-8 h-8 rounded border text-sm font-body transition-colors ${
                             energyLevel === level ? "bg-accent text-accent-foreground border-accent" :
-                            level <= 3 ? "border-red-300 hover:bg-red-100" :
-                            level <= 6 ? "border-yellow-300 hover:bg-yellow-100" :
-                            "border-green-300 hover:bg-green-100"
+                            level <= 3 ? "border-destructive/30 hover:bg-destructive/10" :
+                            level <= 6 ? "border-warning/30 hover:bg-warning/10" :
+                            "border-success/30 hover:bg-success/10"
                           }`}
                         >
                           {level}
@@ -802,7 +803,7 @@ const SelfGraph = () => {
                   {energyZones.slice(0, 10).map(zone => (
                     <div key={zone.id} className="flex items-center justify-between p-2 rounded-lg bg-muted/30">
                       <div className="flex items-center gap-2">
-                        <div className={`w-3 h-3 rounded-full ${zone.energy_level >= 7 ? "bg-green-500" : zone.energy_level >= 4 ? "bg-yellow-500" : "bg-red-500"}`} />
+                        <div className={`w-3 h-3 rounded-full ${zone.energy_level >= 7 ? "bg-success" : zone.energy_level >= 4 ? "bg-warning" : "bg-destructive"}`} />
                         <span className="font-body text-sm text-foreground">{zone.domain}</span>
                         {zone.mood_after && <span className="font-body text-xs text-muted-foreground">({zone.mood_after})</span>}
                       </div>
@@ -840,10 +841,10 @@ const SelfGraph = () => {
                       <div>
                         <div className="flex items-center gap-2 mb-1">
                           <span className={`px-2 py-0.5 rounded text-xs font-body ${
-                            pattern.pattern_type === "habit" ? "bg-blue-500/10 text-blue-600" :
-                            pattern.pattern_type === "preference" ? "bg-purple-500/10 text-purple-600" :
-                            pattern.pattern_type === "tendency" ? "bg-green-500/10 text-green-600" :
-                            "bg-orange-500/10 text-orange-600"
+                            pattern.pattern_type === "habit" ? "bg-info/10 text-info" :
+                            pattern.pattern_type === "preference" ? "bg-indigo/10 text-indigo" :
+                            pattern.pattern_type === "tendency" ? "bg-success/10 text-success" :
+                            "bg-warmth/10 text-warmth"
                           }`}>{pattern.pattern_type}</span>
                           <span className="font-body text-xs text-muted-foreground">{pattern.frequency} • {pattern.occurrences} occurrences</span>
                         </div>
@@ -921,7 +922,7 @@ const SelfGraph = () => {
                         <div className="mt-2">
                           <span className="font-body text-xs text-muted-foreground">Strengths: </span>
                           {getLatestEvaluation().ai_feedback.strengths_shown.map((s: string, i: number) => (
-                            <span key={i} className="px-2 py-0.5 rounded bg-green-500/10 text-green-600 font-body text-xs mr-1">{s}</span>
+                            <span key={i} className="px-2 py-0.5 rounded bg-success/10 text-success font-body text-xs mr-1">{s}</span>
                           ))}
                         </div>
                       )}
@@ -929,7 +930,7 @@ const SelfGraph = () => {
                         <div className="mt-2">
                           <span className="font-body text-xs text-muted-foreground">Growth areas: </span>
                           {getLatestEvaluation().ai_feedback.areas_for_growth.map((s: string, i: number) => (
-                            <span key={i} className="px-2 py-0.5 rounded bg-orange-500/10 text-orange-600 font-body text-xs mr-1">{s}</span>
+                            <span key={i} className="px-2 py-0.5 rounded bg-warmth/10 text-warmth font-body text-xs mr-1">{s}</span>
                           ))}
                         </div>
                       )}
@@ -946,7 +947,7 @@ const SelfGraph = () => {
                       {evaluations.slice(1, 5).map(evaluation => (
                         <div key={evaluation.id} className="flex items-center justify-between p-3 rounded-lg bg-muted/30">
                           <span className="font-body text-sm text-foreground">{new Date(evaluation.evaluated_at).toLocaleDateString()}</span>
-                          <span className={`font-body text-sm ${(evaluation.overall_growth || 0) >= 0 ? "text-green-600" : "text-red-600"}`}>
+                          <span className={`font-body text-sm ${(evaluation.overall_growth || 0) >= 0 ? "text-success" : "text-destructive"}`}>
                             {(evaluation.overall_growth || 0) >= 0 ? "+" : ""}{Math.round((evaluation.overall_growth || 0) * 100)}% growth
                           </span>
                         </div>
@@ -983,8 +984,8 @@ const SelfGraph = () => {
                         </p>
                       </div>
                       <div className={`px-2 py-0.5 rounded text-xs font-body ${
-                        domain.trend === "growing" ? "bg-green-500/10 text-green-600" :
-                        domain.trend === "declining" ? "bg-red-500/10 text-red-600" :
+                        domain.trend === "growing" ? "bg-success/10 text-success" :
+                        domain.trend === "declining" ? "bg-destructive/10 text-destructive" :
                         "bg-muted text-muted-foreground"
                       }`}>{domain.trend || "stable"}</div>
                     </div>
@@ -1175,8 +1176,8 @@ const SelfGraph = () => {
                       {decisionActions.slice(0, 15).map((action, i) => (
                         <div key={action.id} className="relative pl-10">
                           <div className={`absolute left-2.5 w-3 h-3 rounded-full border-2 border-background ${
-                            (action.impact_score || 0) >= 7 ? "bg-green-500" :
-                            (action.impact_score || 0) >= 4 ? "bg-yellow-500" : "bg-muted-foreground"
+                            (action.impact_score || 0) >= 7 ? "bg-success" :
+                            (action.impact_score || 0) >= 4 ? "bg-warning" : "bg-muted-foreground"
                           }`} />
                           <div className="p-3 rounded-lg bg-muted/30">
                             <div className="flex items-center justify-between mb-1">
@@ -1252,17 +1253,17 @@ const SelfGraph = () => {
                           <h4 className="font-body text-sm font-medium text-foreground mb-2">Skills Progress</h4>
                           {(digest.skills_progress as any)?.improved?.length > 0 && (
                             <div className="mb-1">
-                              <span className="font-body text-xs text-green-600">Improved: </span>
+                              <span className="font-body text-xs text-success">Improved: </span>
                               {(digest.skills_progress as any).improved.map((s: string, i: number) => (
-                                <span key={i} className="px-1.5 py-0.5 rounded bg-green-500/10 text-green-600 font-body text-xs mr-1">{s}</span>
+                                <span key={i} className="px-1.5 py-0.5 rounded bg-success/10 text-success font-body text-xs mr-1">{s}</span>
                               ))}
                             </div>
                           )}
                           {(digest.skills_progress as any)?.suggested_focus?.length > 0 && (
                             <div>
-                              <span className="font-body text-xs text-orange-600">Focus next: </span>
+                              <span className="font-body text-xs text-warmth">Focus next: </span>
                               {(digest.skills_progress as any).suggested_focus.map((s: string, i: number) => (
-                                <span key={i} className="px-1.5 py-0.5 rounded bg-orange-500/10 text-orange-600 font-body text-xs mr-1">{s}</span>
+                                <span key={i} className="px-1.5 py-0.5 rounded bg-warmth/10 text-warmth font-body text-xs mr-1">{s}</span>
                               ))}
                             </div>
                           )}
@@ -1289,7 +1290,7 @@ const SelfGraph = () => {
                           {(digest.domain_shifts as any)?.growing_interest?.length > 0 && (
                             <p className="font-body text-xs text-muted-foreground">
                               Growing: {(digest.domain_shifts as any).growing_interest.map((d: string, i: number) => (
-                                <span key={i} className="text-green-600 mr-1">{d}</span>
+                                <span key={i} className="text-success mr-1">{d}</span>
                               ))}
                             </p>
                           )}
@@ -1302,7 +1303,7 @@ const SelfGraph = () => {
                           <h4 className="font-body text-sm font-medium text-foreground mb-2">Key Achievements</h4>
                           {digest.key_achievements.map((a: string, i: number) => (
                             <div key={i} className="flex items-center gap-2 mb-1">
-                              <CheckCircle2 size={12} className="text-green-500" />
+                              <CheckCircle2 size={12} className="text-success" />
                               <span className="font-body text-xs text-foreground">{a}</span>
                             </div>
                           ))}
@@ -1351,10 +1352,10 @@ const SelfGraph = () => {
                     <div className="space-y-3">
                       {aiInsights.insights.map((insight: any, i: number) => (
                         <div key={i} className={`p-3 rounded-lg border-l-4 ${
-                          insight.type === "strength" ? "border-l-green-500 bg-green-500/5" :
-                          insight.type === "opportunity" ? "border-l-blue-500 bg-blue-500/5" :
-                          insight.type === "warning" ? "border-l-orange-500 bg-orange-500/5" :
-                          "border-l-purple-500 bg-purple-500/5"
+                          insight.type === "strength" ? "border-l-success bg-success/5" :
+                          insight.type === "opportunity" ? "border-l-info bg-info/5" :
+                          insight.type === "warning" ? "border-l-warmth bg-warmth/5" :
+                          "border-l-indigo bg-indigo/5"
                         }`}>
                           <p className="font-body text-foreground">{insight.message}</p>
                           {insight.action_suggested && (
@@ -1377,9 +1378,9 @@ const SelfGraph = () => {
                           <div className="flex items-center justify-between mb-2">
                             <div className="flex items-center gap-2">
                               <span className={`px-2 py-0.5 rounded text-xs font-body ${
-                                fit.opportunity_type === "job" ? "bg-blue-500/10 text-blue-600" :
-                                fit.opportunity_type === "internship" ? "bg-purple-500/10 text-purple-600" :
-                                "bg-green-500/10 text-green-600"
+                                fit.opportunity_type === "job" ? "bg-info/10 text-info" :
+                                fit.opportunity_type === "internship" ? "bg-indigo/10 text-indigo" :
+                                "bg-success/10 text-success"
                               }`}>{fit.opportunity_type}</span>
                               <span className="font-body text-foreground">{fit.title}</span>
                             </div>
@@ -1388,14 +1389,14 @@ const SelfGraph = () => {
                           {fit.matching_traits?.length > 0 && (
                             <div className="flex flex-wrap gap-1 mb-1">
                               {fit.matching_traits.map((t: string, j: number) => (
-                                <span key={j} className="px-1.5 py-0.5 rounded bg-green-500/10 text-green-600 font-body text-xs">{t}</span>
+                                <span key={j} className="px-1.5 py-0.5 rounded bg-success/10 text-success font-body text-xs">{t}</span>
                               ))}
                             </div>
                           )}
                           {fit.gaps_to_fill?.length > 0 && (
                             <div className="flex flex-wrap gap-1">
                               {fit.gaps_to_fill.map((g: string, j: number) => (
-                                <span key={j} className="px-1.5 py-0.5 rounded bg-orange-500/10 text-orange-600 font-body text-xs">Gap: {g}</span>
+                                <span key={j} className="px-1.5 py-0.5 rounded bg-warmth/10 text-warmth font-body text-xs">Gap: {g}</span>
                               ))}
                             </div>
                           )}
@@ -1416,7 +1417,7 @@ const SelfGraph = () => {
                           <Lightbulb size={16} className="text-accent mt-0.5 flex-shrink-0" />
                           <div>
                             <p className="font-body text-sm text-foreground">{nudge.nudge}</p>
-                            <span className={`font-body text-xs ${nudge.priority === "high" ? "text-red-600" : nudge.priority === "medium" ? "text-yellow-600" : "text-green-600"}`}>
+                            <span className={`font-body text-xs ${nudge.priority === "high" ? "text-destructive" : nudge.priority === "medium" ? "text-warning" : "text-success"}`}>
                               {nudge.priority} priority • {nudge.category}
                             </span>
                           </div>
