@@ -35,10 +35,10 @@ const CATEGORIES: Record<string, { icon: any; label: string; color: string }> = 
 };
 
 const MOODS = [
-  { id: "confident", label: "Confident", icon: Heart, color: "text-green-500" },
-  { id: "motivated", label: "Motivated", icon: Zap, color: "text-yellow-500" },
+  { id: "confident", label: "Confident", icon: Heart, color: "text-success" },
+  { id: "motivated", label: "Motivated", icon: Zap, color: "text-accent" },
   { id: "uncertain", label: "Uncertain", icon: HelpCircle, color: "text-muted-foreground" },
-  { id: "overwhelmed", label: "Overwhelmed", icon: Meh, color: "text-orange-500" },
+  { id: "overwhelmed", label: "Overwhelmed", icon: Meh, color: "text-warmth" },
 ];
 
 const Roadmap = () => {
