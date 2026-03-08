@@ -426,8 +426,8 @@ const CuriosityCompass = () => {
           <CardContent className="pt-6">
             <div className="grid grid-cols-4 gap-4 text-center">
               <div>
-                <div className="w-10 h-10 rounded-full bg-pink-500/10 flex items-center justify-center mx-auto mb-2">
-                  <Heart className="text-pink-500" size={18} />
+                <div className="w-10 h-10 rounded-full bg-terracotta/10 flex items-center justify-center mx-auto mb-2">
+                  <Heart className="text-terracotta" size={18} />
                 </div>
                 <p className="font-display text-2xl text-foreground">{likedCount}</p>
                 <p className="font-body text-xs text-muted-foreground">Domains Liked</p>
