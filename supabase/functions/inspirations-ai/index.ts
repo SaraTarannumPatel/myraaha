@@ -1,12 +1,9 @@
-import "https://deno.land/x/xhr@0.1.0/mod.ts";
-import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
-
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
-serve(async (req) => {
+Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
 
   try {
@@ -17,15 +14,19 @@ serve(async (req) => {
     const systemPrompts: Record<string, string> = {
       suggest_stories: `You are an entrepreneurship inspiration curator. Based on the founder's profile, mood, challenges, and stage, suggest personalized story themes they should read. Return JSON: { "suggestions": [{ "title": string, "category": string, "reason": string, "mood_match": string }], "motivational_message": string }`,
 
-      career_suggest: `You are a career inspiration curator. Based on the user's skills, interests, mood, and career stage, suggest personalized inspirational story themes about career journeys, overcoming fear, self-discovery, career shifts, and skill building. Return JSON: { "suggestions": [{ "title": string, "category": string, "reason": string, "mood_match": string, "emotion_theme": string }], "motivational_message": string }`,
+      career_suggest: `You are a career inspiration curator. Based on the user's skills, interests, mood, energy zones, and career stage, suggest personalized inspirational story themes about career journeys, overcoming fear, self-discovery, career shifts, and skill building. Return JSON: { "suggestions": [{ "title": string, "category": string, "reason": string, "mood_match": string, "emotion_theme": string }], "motivational_message": string }`,
 
       reflection_prompt: `You are a reflective coaching guide. Based on the story the user just read, generate deep reflection prompts that help them connect the story to their own journey. Include prompts about: what resonates most, one small step they can take today, and who else might benefit. Return JSON: { "prompts": [{ "question": string, "focus_area": string }], "key_takeaway": string, "action_step": string }`,
 
       generate_story: `You are an expert storyteller. Create an inspiring, realistic story based on the given theme, domain, and stage. The story should feel authentic, include specific details, and offer actionable lessons. Return JSON: { "title": string, "content": string (400-600 words), "summary": string (1-2 sentences), "category": string, "tags": string[], "author_name": string (fictional but realistic), "author_role": string, "key_lessons": string[], "emotion_theme": string, "scope": string }`,
 
-      mood_recommendations: `You are an empathetic career and startup mentor. Based on the user's current mood and recent emotional patterns, recommend types of inspirational content that would be most helpful right now. Return JSON: { "recommended_categories": [{ "category": string, "reason": string, "emotional_benefit": string }], "encouraging_message": string, "self_care_tip": string }`,
+      mood_recommendations: `You are an empathetic career and startup mentor. Based on the user's current mood, recent emotional patterns from check-ins and energy zones, recommend types of inspirational content that would be most helpful right now. Return JSON: { "recommended_categories": [{ "category": string, "reason": string, "emotional_benefit": string }], "encouraging_message": string, "self_care_tip": string }`,
 
-      milestone_reminder: `You are a supportive career coach. Based on the user's saved inspirational stories and their current progress, generate a motivational reminder that reconnects them with their aspirations. Return JSON: { "reminder_message": string, "story_connection": string, "next_action": string, "encouragement": string }`,
+      milestone_reminder: `You are a supportive career coach. Based on the user's saved inspirational stories, their achievements, and current progress, generate a motivational reminder that reconnects them with their aspirations. Return JSON: { "reminder_message": string, "story_connections": [{ "theme": string, "connection_to_progress": string }], "next_action": string, "encouragement": string, "celebration": string }`,
+
+      impact_analysis: `You are a behavioral insights analyst. Based on the user's interaction patterns with inspirational stories (likes, bookmarks, comments, categories engaged with, emotion themes), analyze their inspiration impact. Return JSON: { "engagement_summary": string, "dominant_themes": [{ "theme": string, "count": number, "impact": string }], "emotional_patterns": [{ "emotion": string, "frequency": string, "effect": string }], "growth_indicators": string[], "motivation_type": string, "blind_spots": string[], "next_exploration": string }`,
+
+      story_to_action: `You are a career action planner. Based on a specific inspirational story and the user's profile/skills/interests, generate concrete action steps that connect the story's lessons to the user's journey. Return JSON: { "actions": [{ "action": string, "type": "learning"|"project"|"explore"|"connect"|"reflect", "urgency": "now"|"this_week"|"this_month", "connected_feature": string }], "skill_gaps": string[], "mentor_match_criteria": string, "roadmap_suggestion": string }`,
     };
 
     const systemPrompt = systemPrompts[type];
