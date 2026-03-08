@@ -1464,10 +1464,13 @@ export type Database = {
           content: string
           created_at: string
           domain: string | null
+          emotion_theme: string | null
           id: string
+          intent: string | null
           is_approved: boolean | null
           is_featured: boolean | null
           likes_count: number | null
+          scope: string | null
           stage: string | null
           story_type: string
           summary: string | null
@@ -1485,10 +1488,13 @@ export type Database = {
           content: string
           created_at?: string
           domain?: string | null
+          emotion_theme?: string | null
           id?: string
+          intent?: string | null
           is_approved?: boolean | null
           is_featured?: boolean | null
           likes_count?: number | null
+          scope?: string | null
           stage?: string | null
           story_type?: string
           summary?: string | null
@@ -1506,10 +1512,13 @@ export type Database = {
           content?: string
           created_at?: string
           domain?: string | null
+          emotion_theme?: string | null
           id?: string
+          intent?: string | null
           is_approved?: boolean | null
           is_featured?: boolean | null
           likes_count?: number | null
+          scope?: string | null
           stage?: string | null
           story_type?: string
           summary?: string | null
