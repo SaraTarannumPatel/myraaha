@@ -692,6 +692,45 @@ export type Database = {
         }
         Relationships: []
       }
+      domain_clubs: {
+        Row: {
+          created_at: string
+          description: string | null
+          domain: string
+          icon_emoji: string | null
+          id: string
+          is_active: boolean | null
+          member_count: number | null
+          name: string
+          tags: string[] | null
+          workshops_count: number | null
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          domain: string
+          icon_emoji?: string | null
+          id?: string
+          is_active?: boolean | null
+          member_count?: number | null
+          name: string
+          tags?: string[] | null
+          workshops_count?: number | null
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          domain?: string
+          icon_emoji?: string | null
+          id?: string
+          is_active?: boolean | null
+          member_count?: number | null
+          name?: string
+          tags?: string[] | null
+          workshops_count?: number | null
+        }
+        Relationships: []
+      }
       domain_recommendations: {
         Row: {
           created_at: string
@@ -1260,6 +1299,53 @@ export type Database = {
           user_id?: string | null
         }
         Relationships: []
+      }
+      inspire_wall_posts: {
+        Row: {
+          circle_id: string | null
+          comments_count: number | null
+          content: string
+          created_at: string
+          id: string
+          is_featured: boolean | null
+          likes_count: number | null
+          post_type: string
+          tags: string[] | null
+          user_id: string
+        }
+        Insert: {
+          circle_id?: string | null
+          comments_count?: number | null
+          content: string
+          created_at?: string
+          id?: string
+          is_featured?: boolean | null
+          likes_count?: number | null
+          post_type?: string
+          tags?: string[] | null
+          user_id: string
+        }
+        Update: {
+          circle_id?: string | null
+          comments_count?: number | null
+          content?: string
+          created_at?: string
+          id?: string
+          is_featured?: boolean | null
+          likes_count?: number | null
+          post_type?: string
+          tags?: string[] | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "inspire_wall_posts_circle_id_fkey"
+            columns: ["circle_id"]
+            isOneToOne: false
+            referencedRelation: "peer_circles"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       interests: {
         Row: {
@@ -2501,6 +2587,362 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      peer_circle_comments: {
+        Row: {
+          content: string
+          created_at: string
+          id: string
+          post_id: string
+          user_id: string
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          id?: string
+          post_id: string
+          user_id: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          id?: string
+          post_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "peer_circle_comments_post_id_fkey"
+            columns: ["post_id"]
+            isOneToOne: false
+            referencedRelation: "peer_circle_posts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      peer_circle_engagement: {
+        Row: {
+          circle_id: string
+          comments_count: number | null
+          engagement_level: string | null
+          id: string
+          last_prompt_at: string | null
+          mood_trend: string | null
+          posts_count: number | null
+          projects_joined: number | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          circle_id: string
+          comments_count?: number | null
+          engagement_level?: string | null
+          id?: string
+          last_prompt_at?: string | null
+          mood_trend?: string | null
+          posts_count?: number | null
+          projects_joined?: number | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          circle_id?: string
+          comments_count?: number | null
+          engagement_level?: string | null
+          id?: string
+          last_prompt_at?: string | null
+          mood_trend?: string | null
+          posts_count?: number | null
+          projects_joined?: number | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "peer_circle_engagement_circle_id_fkey"
+            columns: ["circle_id"]
+            isOneToOne: false
+            referencedRelation: "peer_circles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      peer_circle_members: {
+        Row: {
+          circle_id: string
+          engagement_score: number | null
+          id: string
+          joined_at: string
+          last_active_at: string | null
+          role: string
+          user_id: string
+        }
+        Insert: {
+          circle_id: string
+          engagement_score?: number | null
+          id?: string
+          joined_at?: string
+          last_active_at?: string | null
+          role?: string
+          user_id: string
+        }
+        Update: {
+          circle_id?: string
+          engagement_score?: number | null
+          id?: string
+          joined_at?: string
+          last_active_at?: string | null
+          role?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "peer_circle_members_circle_id_fkey"
+            columns: ["circle_id"]
+            isOneToOne: false
+            referencedRelation: "peer_circles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      peer_circle_milestones: {
+        Row: {
+          achieved_at: string
+          circle_id: string
+          description: string | null
+          id: string
+          milestone_type: string | null
+          title: string
+        }
+        Insert: {
+          achieved_at?: string
+          circle_id: string
+          description?: string | null
+          id?: string
+          milestone_type?: string | null
+          title: string
+        }
+        Update: {
+          achieved_at?: string
+          circle_id?: string
+          description?: string | null
+          id?: string
+          milestone_type?: string | null
+          title?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "peer_circle_milestones_circle_id_fkey"
+            columns: ["circle_id"]
+            isOneToOne: false
+            referencedRelation: "peer_circles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      peer_circle_posts: {
+        Row: {
+          circle_id: string
+          comments_count: number | null
+          content: string
+          created_at: string
+          id: string
+          is_pinned: boolean | null
+          likes_count: number | null
+          post_type: string
+          tags: string[] | null
+          title: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          circle_id: string
+          comments_count?: number | null
+          content: string
+          created_at?: string
+          id?: string
+          is_pinned?: boolean | null
+          likes_count?: number | null
+          post_type?: string
+          tags?: string[] | null
+          title?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          circle_id?: string
+          comments_count?: number | null
+          content?: string
+          created_at?: string
+          id?: string
+          is_pinned?: boolean | null
+          likes_count?: number | null
+          post_type?: string
+          tags?: string[] | null
+          title?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "peer_circle_posts_circle_id_fkey"
+            columns: ["circle_id"]
+            isOneToOne: false
+            referencedRelation: "peer_circles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      peer_circle_projects: {
+        Row: {
+          circle_id: string
+          created_at: string
+          created_by: string | null
+          deadline: string | null
+          description: string | null
+          difficulty: string | null
+          id: string
+          max_participants: number | null
+          participant_count: number | null
+          project_type: string
+          skills_targeted: string[] | null
+          status: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          circle_id: string
+          created_at?: string
+          created_by?: string | null
+          deadline?: string | null
+          description?: string | null
+          difficulty?: string | null
+          id?: string
+          max_participants?: number | null
+          participant_count?: number | null
+          project_type?: string
+          skills_targeted?: string[] | null
+          status?: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          circle_id?: string
+          created_at?: string
+          created_by?: string | null
+          deadline?: string | null
+          description?: string | null
+          difficulty?: string | null
+          id?: string
+          max_participants?: number | null
+          participant_count?: number | null
+          project_type?: string
+          skills_targeted?: string[] | null
+          status?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "peer_circle_projects_circle_id_fkey"
+            columns: ["circle_id"]
+            isOneToOne: false
+            referencedRelation: "peer_circles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      peer_circles: {
+        Row: {
+          activity_type: string
+          created_at: string
+          created_by: string | null
+          description: string | null
+          domain: string
+          experience_level: string | null
+          icon_emoji: string | null
+          id: string
+          is_active: boolean | null
+          is_featured: boolean | null
+          learning_focus: string | null
+          max_members: number | null
+          member_count: number | null
+          name: string
+          tags: string[] | null
+          updated_at: string
+        }
+        Insert: {
+          activity_type?: string
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          domain?: string
+          experience_level?: string | null
+          icon_emoji?: string | null
+          id?: string
+          is_active?: boolean | null
+          is_featured?: boolean | null
+          learning_focus?: string | null
+          max_members?: number | null
+          member_count?: number | null
+          name: string
+          tags?: string[] | null
+          updated_at?: string
+        }
+        Update: {
+          activity_type?: string
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          domain?: string
+          experience_level?: string | null
+          icon_emoji?: string | null
+          id?: string
+          is_active?: boolean | null
+          is_featured?: boolean | null
+          learning_focus?: string | null
+          max_members?: number | null
+          member_count?: number | null
+          name?: string
+          tags?: string[] | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      peer_project_participants: {
+        Row: {
+          contribution_notes: string | null
+          id: string
+          joined_at: string
+          project_id: string
+          role: string | null
+          user_id: string
+        }
+        Insert: {
+          contribution_notes?: string | null
+          id?: string
+          joined_at?: string
+          project_id: string
+          role?: string | null
+          user_id: string
+        }
+        Update: {
+          contribution_notes?: string | null
+          id?: string
+          joined_at?: string
+          project_id?: string
+          role?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "peer_project_participants_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "peer_circle_projects"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       pod_discussions: {
         Row: {

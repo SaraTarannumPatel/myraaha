@@ -8,3 +8,6 @@ verify_jwt = false
 
 [functions.mentor-matchmaking-ai]
 verify_jwt = false
+
+[functions.peer-circles-ai]
+verify_jwt = false
