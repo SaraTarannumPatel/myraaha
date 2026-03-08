@@ -425,10 +425,10 @@ const EntrepreneurshipDashboard = () => {
             <Progress value={profile?.completion_percentage || 0} className="h-2 mb-4" />
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
               {[
-                { label: "Ideas", value: stats.ideasCount, icon: Lightbulb, sub: `${stats.activeIdeas} active` },
-                { label: "MVPs", value: stats.projectsCount, icon: Rocket, sub: "in progress" },
-                { label: "Challenges", value: stats.challengesCompleted, icon: Zap, sub: `${stats.activeChallenges} active` },
-                { label: "Skills", value: stats.skillsCount, icon: TrendingUp, sub: "mapped" },
+                { label: "Ideas", value: stats.ideasCount, icon: Lightbulb, sub: `${stats.activeIdeas} active`, color: "text-accent-foreground" },
+                { label: "MVPs", value: stats.projectsCount, icon: Rocket, sub: "in progress", color: "text-terracotta" },
+                { label: "Challenges", value: stats.challengesCompleted, icon: Zap, sub: `${stats.activeChallenges} active`, color: "text-maroon" },
+                { label: "Skills", value: stats.skillsCount, icon: TrendingUp, sub: "mapped", color: "text-blue" },
               ].map(s => (
                 <div key={s.label} className="bg-muted/30 rounded-lg p-3 text-center">
                   <s.icon size={16} className="mx-auto text-primary mb-1" />
