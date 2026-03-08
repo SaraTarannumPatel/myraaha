@@ -947,7 +947,7 @@ const SelfGraph = () => {
                       {evaluations.slice(1, 5).map(evaluation => (
                         <div key={evaluation.id} className="flex items-center justify-between p-3 rounded-lg bg-muted/30">
                           <span className="font-body text-sm text-foreground">{new Date(evaluation.evaluated_at).toLocaleDateString()}</span>
-                          <span className={`font-body text-sm ${(evaluation.overall_growth || 0) >= 0 ? "text-green-600" : "text-red-600"}`}>
+                          <span className={`font-body text-sm ${(evaluation.overall_growth || 0) >= 0 ? "text-success" : "text-destructive"}`}>
                             {(evaluation.overall_growth || 0) >= 0 ? "+" : ""}{Math.round((evaluation.overall_growth || 0) * 100)}% growth
                           </span>
                         </div>
