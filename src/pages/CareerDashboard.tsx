@@ -17,6 +17,11 @@ import {
   GraduationCap, Flame, Calendar, ChevronRight, UserPlus, Building2,
   AlertCircle, Shield, RefreshCw
 } from "lucide-react";
+import SelfInsightsPanel from "@/components/dashboard/SelfInsightsPanel";
+import CommunityFeedPreview from "@/components/dashboard/CommunityFeedPreview";
+import JobMatchPreview from "@/components/dashboard/JobMatchPreview";
+import MoodCheckIn from "@/components/dashboard/MoodCheckIn";
+import DomainAffinityWidget from "@/components/dashboard/DomainAffinityWidget";
 
 const JOURNEY_PHASES = [
   { id: "discovery", label: "Discovery", icon: Compass, description: "Exploring interests" },
@@ -552,6 +557,12 @@ const CareerDashboard = () => {
             </div>
           </div>
 
+          {/* SelfGraph Insights + Domain Affinity */}
+          <div className="grid md:grid-cols-2 gap-6">
+            <SelfInsightsPanel />
+            <DomainAffinityWidget />
+          </div>
+
           <div className="grid md:grid-cols-2 gap-6">
             {/* Tasks & Roadmap Steps */}
             <Card>
@@ -774,33 +785,7 @@ const CareerDashboard = () => {
               </CardContent>
             </Card>
 
-            <Card>
-              <CardHeader className="pb-3">
-                <CardTitle className="text-lg flex items-center gap-2">
-                  <Heart className="h-5 w-5 text-pink-500" />
-                  Reflection & Mood
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="text-center py-4">
-                  <p className="font-body text-sm text-muted-foreground mb-4">Track your mood and reflect on your journey</p>
-                  <div className="flex justify-center gap-2">
-                    <Link to="/dashboard/journal">
-                      <Button variant="outline" size="sm">
-                        <BookOpen size={14} className="mr-2" />
-                        Journal
-                      </Button>
-                    </Link>
-                    <Link to="/dashboard/career-therapist">
-                      <Button variant="outline" size="sm">
-                        <Heart size={14} className="mr-2" />
-                        Therapist
-                      </Button>
-                    </Link>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
+            <MoodCheckIn intent="career" />
           </div>
         </TabsContent>
 
@@ -867,58 +852,13 @@ const CareerDashboard = () => {
               </CardContent>
             </Card>
 
-            <Card>
-              <CardHeader className="pb-3">
-                <CardTitle className="text-lg flex items-center gap-2">
-                  <Star className="h-5 w-5 text-yellow-500" />
-                  Community Highlights
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-3">
-                  <div className="flex items-center gap-2 p-2 rounded bg-yellow-500/5">
-                    <Trophy size={14} className="text-yellow-500" />
-                    <span className="font-body text-xs">New achievements this week: {stats.achievementsCount}</span>
-                  </div>
-                  <div className="flex items-center gap-2 p-2 rounded bg-primary/5">
-                    <Users size={14} className="text-primary" />
-                    <span className="font-body text-xs">Active connections: {stats.connectionsCount}</span>
-                  </div>
-                </div>
-                <Link to="/dashboard/connections" className="inline-flex items-center gap-1 mt-4 text-sm text-primary hover:underline">
-                  View all connections <ArrowRight size={14} />
-                </Link>
-              </CardContent>
-            </Card>
+            <CommunityFeedPreview />
           </div>
         </TabsContent>
 
         {/* Jobs Tab */}
         <TabsContent value="opportunities" className="space-y-6">
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Briefcase className="h-5 w-5 text-primary" />
-                Job Match Highlights
-              </CardTitle>
-              <CardDescription>Best-fit roles based on your skills and interests</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="text-center py-8">
-                <Building2 className="mx-auto text-muted-foreground mb-4" size={48} />
-                <h3 className="font-display text-lg text-foreground mb-2">Job Matching</h3>
-                <p className="font-body text-sm text-muted-foreground mb-4 max-w-md mx-auto">
-                  Complete your profile and add skills to unlock AI-powered job recommendations
-                </p>
-                <Link to="/dashboard/job-matching">
-                  <Button>
-                    <Briefcase size={14} className="mr-2" />
-                    Explore Job Matching
-                  </Button>
-                </Link>
-              </div>
-            </CardContent>
-          </Card>
+          <JobMatchPreview />
 
           <div className="grid md:grid-cols-2 gap-6">
             <Card>
