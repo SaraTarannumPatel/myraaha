@@ -1,40 +1,30 @@
 import { motion, useInView } from "framer-motion";
 import { useRef, useState } from "react";
 import {
-  Compass, Route, Layers, Users, Fingerprint, Brain,
+  Brain, Route, Briefcase, Rocket,
 } from "lucide-react";
 import featuresIllustration from "@/assets/features-illustration.png";
 
 const features = [
   {
-    icon: Compass,
-    title: "Curiosity Compass",
-    description: "Gamified exploration of your interests and strengths.",
+    icon: Brain,
+    title: "1. Personal Intelligence Setup",
+    description: "Structured assessments + continuous behavioural learning. Strength profile, work-style analysis, risk tolerance, decision patterns, energy map — a dynamic identity model, not a one-time test.",
   },
   {
     icon: Route,
-    title: "AI Roadmaps",
-    description: "Personalized, evolving paths based on your journey.",
+    title: "2. Pathway Narrowing Engine",
+    description: "Filters based on your intelligence model, real-time job demand, skill saturation, and income stability. Top aligned paths ranked with transition feasibility, skill gaps, and effort vs reward.",
   },
   {
-    icon: Layers,
-    title: "SkillStacker",
-    description: "Real-world skills aligned with industry trends.",
+    icon: Briefcase,
+    title: "3. Career Execution System",
+    description: "Structured skill roadmap, learning sequences, portfolio requirements, market-fit checkpoints, interview readiness. Adjusts if you fall behind, shift interest, or market demand changes.",
   },
   {
-    icon: Users,
-    title: "Mentor Match",
-    description: "AI-paired mentors who guide, not gatekeep.",
-  },
-  {
-    icon: Fingerprint,
-    title: "Living Resume",
-    description: "Auto-updated portfolio from day one.",
-  },
-  {
-    icon: Brain,
-    title: "SelfGraph™",
-    description: "AI identity mirror that evolves with you.",
+    icon: Rocket,
+    title: "4. Startup Validation & Build",
+    description: "Idea → Problem validation → Market testing → Build → Launch → Funding readiness. Validation checklist, market signals, founder mindset score, and capital readiness indicator.",
   },
 ];
 
@@ -44,7 +34,7 @@ const FeaturesSection = () => {
   const [activeIndex, setActiveIndex] = useState(0);
 
   return (
-    <section id="features" ref={ref} className="py-24 md:py-32 bg-background">
+    <section id="how-it-works" ref={ref} className="py-24 md:py-32 bg-background">
       <div className="container mx-auto px-6">
         <div className="text-center mb-16">
           <motion.p
@@ -52,20 +42,28 @@ const FeaturesSection = () => {
             animate={isInView ? { opacity: 1 } : {}}
             className="font-body text-xs uppercase tracking-[0.2em] text-secondary font-semibold mb-4"
           >
-            Features
+            How MyRaaha Works
           </motion.p>
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ delay: 0.1 }}
-            className="font-display text-4xl md:text-5xl text-foreground"
+            className="font-display text-4xl md:text-5xl text-foreground max-w-2xl mx-auto"
           >
-            Everything to <em className="text-gradient-warm">design your path</em>
+            A system that doesn't make you{" "}
+            <em className="text-gradient-warm">search</em>
           </motion.h2>
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={isInView ? { opacity: 1 } : {}}
+            transition={{ delay: 0.2 }}
+            className="font-body text-sm text-muted-foreground mt-4 max-w-xl mx-auto leading-relaxed"
+          >
+            Clarity → Direction → Action → Outcome. You don't jump between platforms. The system learns how you think, tracks what you're good at, notices what drains you, and connects that to real market data.
+          </motion.p>
         </div>
 
         <div className="grid lg:grid-cols-2 gap-12 items-center max-w-5xl mx-auto">
-          {/* Feature illustration with animated swap */}
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             animate={isInView ? { opacity: 1, scale: 1 } : {}}
@@ -75,12 +73,11 @@ const FeaturesSection = () => {
             <div className="absolute inset-0 bg-gradient-to-br from-secondary/10 to-transparent rounded-3xl blur-2xl" />
             <img
               src={featuresIllustration}
-              alt="ShuttlEx features - compass, skills, resume, mentor connection"
+              alt="MyRaaha feature walkthrough — intelligence, pathways, execution"
               className="relative w-full max-w-md"
             />
           </motion.div>
 
-          {/* Feature cards — interactive list */}
           <div className="space-y-3">
             {features.map((feature, i) => (
               <motion.div

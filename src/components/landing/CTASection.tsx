@@ -18,7 +18,8 @@ const CTASection = () => {
           className="max-w-xl mx-auto text-center"
         >
           <h2 className="font-display text-4xl md:text-5xl lg:text-6xl text-foreground mb-6">
-            Your journey starts <em className="text-gradient-warm">today.</em>
+            Start your journey with{" "}
+            <em className="text-gradient-warm">MyRaaha.</em>
           </h2>
           <a href="/get-started" className="gradient-warm text-primary-foreground px-10 py-4 rounded-full font-body font-semibold text-lg shadow-accent hover:opacity-90 transition-opacity inline-flex items-center gap-2 group">
             Get Started

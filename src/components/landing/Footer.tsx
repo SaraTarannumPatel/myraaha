@@ -5,25 +5,29 @@ const Footer = () => {
         <div className="flex flex-col md:flex-row items-center justify-between gap-6">
           <div>
             <a href="/" className="font-display text-xl text-foreground">
-              Shuttl<span className="text-gradient-warm">Ex</span>
+              My<span className="text-gradient-warm">Raaha</span>
             </a>
             <p className="font-body text-xs text-muted-foreground mt-1">
-              The Future of Careers & Creation.
+              Career and business decisions — without guesswork.
             </p>
           </div>
           <div className="flex items-center gap-6">
-            {["Features", "Journey", "Careers", "Entrepreneurship"].map((item) => (
+            {[
+              { label: "How It Works", href: "#how-it-works" },
+              { label: "Who It's For", href: "#who" },
+              { label: "Mission", href: "#mission" },
+            ].map((item) => (
               <a
-                key={item}
-                href={`#${item.toLowerCase()}`}
+                key={item.label}
+                href={item.href}
                 className="font-body text-xs text-muted-foreground hover:text-foreground transition-colors"
               >
-                {item}
+                {item.label}
               </a>
             ))}
           </div>
           <p className="font-body text-xs text-muted-foreground">
-            © {new Date().getFullYear()} ShuttlEx. All rights reserved.
+            © {new Date().getFullYear()} MyRaaha. All rights reserved.
           </p>
         </div>
       </div>

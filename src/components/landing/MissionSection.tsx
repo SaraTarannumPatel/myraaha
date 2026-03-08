@@ -7,50 +7,36 @@ const MissionSection = () => {
   const isInView = useInView(ref, { once: true, margin: "-80px" });
 
   return (
-    <section ref={ref} className="py-24 md:py-32 bg-muted/50 overflow-hidden">
+    <section id="mission" ref={ref} className="py-24 md:py-32 bg-muted/50 overflow-hidden">
       <div className="container mx-auto px-6">
         <div className="grid lg:grid-cols-2 gap-12 items-center max-w-5xl mx-auto">
-          {/* Copy */}
           <motion.div
             initial={{ opacity: 0, x: -30 }}
             animate={isInView ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.7 }}
           >
             <p className="font-body text-xs uppercase tracking-[0.2em] text-secondary font-semibold mb-4">
-              Our Mission
+              The Future MyRaaha Is Building
             </p>
             <h2 className="font-display text-3xl md:text-4xl text-foreground mb-6">
-              Every student deserves a <em className="text-gradient-warm">fair shot</em>
+              Navigation became <em className="text-gradient-warm">structured.</em>
             </h2>
             <div className="space-y-4 font-body text-sm text-muted-foreground leading-relaxed">
               <p>
-                From <strong className="text-foreground">Tier 1 cities to remote villages</strong> — every student 
-                should get to discover who they are and become who they're meant to be.
+                A world where people don't feel <strong className="text-foreground">lost at 22</strong>. Or <strong className="text-foreground">stuck at 30</strong>. Or <strong className="text-foreground">irrelevant at 40</strong>.
               </p>
               <p>
-                We start before the confusion begins — and walk with them till clarity becomes action. 
-                Not in class 12. Not after a wrong degree. <strong className="text-foreground">From the very beginning.</strong>
+                Not because life became easy. But because navigation became structured.
               </p>
               <p>
-                To make entrepreneurship and freelancing accessible, practical, and emotionally sustainable 
-                for anyone with the courage to begin.
+                One system. Full journey ownership.
+              </p>
+              <p className="font-display text-lg text-foreground">
+                Clarity → Direction → Action → Outcome.
               </p>
             </div>
-
-            <motion.div
-              initial={{ opacity: 0, y: 16 }}
-              animate={isInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ delay: 0.4 }}
-              className="mt-8 bg-card rounded-2xl p-5 border border-border shadow-soft"
-            >
-              <p className="font-display text-lg text-foreground italic">
-                "We turn curiosity into creation — helping individuals find problems worth solving, 
-                build ideas worth pursuing, and find people worth building with."
-              </p>
-            </motion.div>
           </motion.div>
 
-          {/* Illustration */}
           <motion.div
             initial={{ opacity: 0, x: 30 }}
             animate={isInView ? { opacity: 1, x: 0 } : {}}
@@ -59,7 +45,7 @@ const MissionSection = () => {
           >
             <img
               src={missionIllustration}
-              alt="Hands planting seeds of growth — inclusive mission"
+              alt="Structured navigation for every stage of life"
               className="w-full max-w-sm"
             />
           </motion.div>
