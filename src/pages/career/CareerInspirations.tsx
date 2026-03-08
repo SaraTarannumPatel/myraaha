@@ -161,7 +161,7 @@ export default function CareerInspirations() {
     try {
       // Check if moodboard exists
       let { data: boards } = await supabase
-        .from("moodboards")
+        .from("moodboards" as any)
         .select("id")
         .eq("user_id", user.id)
         .eq("board_type", "inspiration")
