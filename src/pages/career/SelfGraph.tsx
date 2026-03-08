@@ -764,9 +764,9 @@ const SelfGraph = () => {
                           onClick={() => setEnergyLevel(level)}
                           className={`w-8 h-8 rounded border text-sm font-body transition-colors ${
                             energyLevel === level ? "bg-accent text-accent-foreground border-accent" :
-                            level <= 3 ? "border-red-300 hover:bg-red-100" :
-                            level <= 6 ? "border-yellow-300 hover:bg-yellow-100" :
-                            "border-green-300 hover:bg-green-100"
+                            level <= 3 ? "border-destructive/30 hover:bg-destructive/10" :
+                            level <= 6 ? "border-warning/30 hover:bg-warning/10" :
+                            "border-success/30 hover:bg-success/10"
                           }`}
                         >
                           {level}
