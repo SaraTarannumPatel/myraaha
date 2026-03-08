@@ -69,6 +69,10 @@ const Auth = () => {
       {/* Left - Branding */}
       <div className="hidden lg:flex lg:w-1/2 gradient-dark items-center justify-center p-12 relative overflow-hidden">
         <div className="absolute inset-0 gradient-glow opacity-30" />
+        {/* Decorative color accents */}
+        <div className="absolute top-20 left-20 w-32 h-32 rounded-full bg-blue/10 blur-3xl" />
+        <div className="absolute bottom-32 right-16 w-40 h-40 rounded-full bg-terracotta/10 blur-3xl" />
+        <div className="absolute top-1/2 right-1/3 w-24 h-24 rounded-full bg-accent/10 blur-2xl" />
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -79,6 +83,13 @@ const Auth = () => {
           <p className="font-body text-primary-foreground/70 text-lg max-w-md">
             Your personal launchpad for careers & entrepreneurship. Discover, build, connect, evolve.
           </p>
+          {/* Color-coded feature pills */}
+          <div className="flex flex-wrap gap-2 justify-center mt-8">
+            <span className="px-3 py-1 rounded-full bg-blue/20 text-blue-light font-body text-xs">Career Clarity</span>
+            <span className="px-3 py-1 rounded-full bg-terracotta/20 text-terracotta-light font-body text-xs">Startup Sparks</span>
+            <span className="px-3 py-1 rounded-full bg-accent/20 text-accent font-body text-xs">AI Guidance</span>
+            <span className="px-3 py-1 rounded-full bg-maroon/20 text-maroon-light font-body text-xs">Community</span>
+          </div>
         </motion.div>
       </div>
 
@@ -191,7 +202,7 @@ const Auth = () => {
                   if (error) toast.error(error.message);
                   else toast.success("Check your email for a password reset link!");
                 }}
-                className="font-body text-sm text-primary hover:underline"
+                className="font-body text-sm text-blue hover:underline"
               >
                 Forgot your password?
               </button>
