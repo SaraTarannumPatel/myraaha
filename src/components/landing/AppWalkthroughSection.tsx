@@ -7,6 +7,34 @@ import {
   BarChart3, Filter, Clock, Award, Lightbulb, Eye,
 } from "lucide-react";
 
+/* ─── Reusable AI Badge ─── */
+const AIBadge = ({ label = "AI Personalized", delay = 0 }: { label?: string; delay?: number }) => (
+  <motion.div
+    initial={{ opacity: 0, scale: 0.8 }}
+    animate={{ opacity: 1, scale: 1 }}
+    transition={{ delay, type: "spring" }}
+    className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full bg-primary/10 border border-primary/20"
+  >
+    <Sparkles size={7} className="text-primary" />
+    <span className="text-[7px] font-body text-primary font-semibold">{label}</span>
+  </motion.div>
+);
+
+/* ─── AI Analyzing Indicator ─── */
+const AIAnalyzing = ({ label = "AI analyzing your behaviour..." }: { label?: string }) => (
+  <motion.div
+    initial={{ opacity: 0 }}
+    animate={{ opacity: [0.4, 1, 0.4] }}
+    transition={{ repeat: Infinity, duration: 2 }}
+    className="flex items-center gap-1.5 px-2 py-1 rounded-md bg-primary/5 border border-primary/10"
+  >
+    <motion.div animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 2, ease: "linear" }}>
+      <Sparkles size={8} className="text-primary" />
+    </motion.div>
+    <span className="text-[8px] font-body text-primary">{label}</span>
+  </motion.div>
+);
+
 /* ─── Phone Frame ─── */
 const PhoneFrame = ({ children, label, icon: Icon, isActive }: {
   children: React.ReactNode;
@@ -34,6 +62,9 @@ const PhoneFrame = ({ children, label, icon: Icon, isActive }: {
           <Icon size={12} className="text-primary" />
         </div>
         <span className="font-display text-xs text-foreground">{label}</span>
+        <div className="ml-auto">
+          <AIBadge label="For You" />
+        </div>
       </div>
       {/* Content */}
       <div className="p-3 h-[410px] overflow-hidden">
@@ -46,7 +77,7 @@ const PhoneFrame = ({ children, label, icon: Icon, isActive }: {
 /* ─── 1. SelfGraph™ ─── */
 const SelfGraphMock = () => {
   const [step, setStep] = useState(0);
-  useEffect(() => { const t = setInterval(() => setStep(s => (s + 1) % 4), 2000); return () => clearInterval(t); }, []);
+  useEffect(() => { const t = setInterval(() => setStep(s => (s + 1) % 5), 1800); return () => clearInterval(t); }, []);
 
   const traits = [
     { label: "Creativity", score: 82, color: "bg-primary" },
@@ -58,13 +89,14 @@ const SelfGraphMock = () => {
 
   return (
     <div className="space-y-3">
-      <div className="text-center mb-3">
+      <div className="text-center mb-2">
         <p className="font-display text-sm text-foreground">Your Identity Map</p>
-        <p className="font-body text-[10px] text-muted-foreground">Evolving in real time</p>
+        <p className="font-body text-[10px] text-muted-foreground">Auto-evolving from your activity</p>
       </div>
-      {/* Radar-like circle */}
-      <div className="flex justify-center mb-3">
-        <div className="relative w-28 h-28">
+      {step === 0 && <AIAnalyzing label="Mapping your behaviour patterns..." />}
+      {/* Radar */}
+      <div className="flex justify-center mb-2">
+        <div className="relative w-24 h-24">
           <svg viewBox="0 0 100 100" className="w-full h-full">
             {[80, 60, 40, 20].map(r => (
               <circle key={r} cx="50" cy="50" r={r/2} fill="none" stroke="hsl(var(--border))" strokeWidth="0.5" />
@@ -95,27 +127,30 @@ const SelfGraphMock = () => {
       </div>
       {/* Trait bars */}
       {traits.map((t, i) => (
-        <div key={t.label} className="space-y-1">
+        <div key={t.label} className="space-y-0.5">
           <div className="flex justify-between">
             <span className="font-body text-[10px] text-foreground">{t.label}</span>
             <span className="font-body text-[10px] text-muted-foreground">{step >= 2 ? t.score : "—"}%</span>
           </div>
           <div className="h-1.5 rounded-full bg-muted overflow-hidden">
-            <motion.div
-              className={`h-full rounded-full ${t.color}`}
-              initial={{ width: "0%" }}
-              animate={{ width: step >= 1 ? `${t.score}%` : "0%" }}
-              transition={{ duration: 0.8, delay: i * 0.1 }}
-            />
+            <motion.div className={`h-full rounded-full ${t.color}`} initial={{ width: "0%" }} animate={{ width: step >= 1 ? `${t.score}%` : "0%" }} transition={{ duration: 0.8, delay: i * 0.1 }} />
           </div>
         </div>
       ))}
       {step >= 3 && (
-        <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} className="bg-primary/5 rounded-xl p-2 border border-primary/10 mt-2">
+        <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} className="bg-primary/5 rounded-xl p-2 border border-primary/10">
           <div className="flex items-center gap-1.5">
             <Sparkles size={10} className="text-primary" />
-            <span className="font-body text-[9px] text-primary font-medium">AI Insight: Your creativity + empathy makes you ideal for human-centered roles</span>
+            <span className="font-body text-[9px] text-primary font-medium">AI: Your creativity + empathy → ideal for human-centered design</span>
           </div>
+        </motion.div>
+      )}
+      {step >= 4 && (
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex items-center gap-1.5 justify-center">
+          <motion.div animate={{ scale: [1, 1.2, 1] }} transition={{ repeat: Infinity, duration: 2 }}>
+            <TrendingUp size={8} className="text-primary" />
+          </motion.div>
+          <span className="text-[8px] font-body text-primary">+12% growth since last week · Auto-tracked</span>
         </motion.div>
       )}
     </div>
@@ -125,22 +160,34 @@ const SelfGraphMock = () => {
 /* ─── 2. Curiosity Compass ─── */
 const CuriosityCompassMock = () => {
   const [cardIndex, setCardIndex] = useState(0);
+  const [showInsight, setShowInsight] = useState(false);
   const cards = [
-    { emoji: "🎨", title: "UX Design", tag: "Creative" },
-    { emoji: "📊", title: "Data Science", tag: "Analytical" },
-    { emoji: "🎬", title: "Film Making", tag: "Storytelling" },
-    { emoji: "🧬", title: "Biotech", tag: "Research" },
+    { emoji: "🎨", title: "UX Design", tag: "Creative", aiNote: "Matches your creativity trait" },
+    { emoji: "📊", title: "Data Science", tag: "Analytical", aiNote: "Builds on your analytical skills" },
+    { emoji: "🎬", title: "Film Making", tag: "Storytelling", aiNote: "Aligns with communication strength" },
+    { emoji: "🧬", title: "Biotech", tag: "Research", aiNote: "New territory — explore mode" },
   ];
-  useEffect(() => { const t = setInterval(() => setCardIndex(s => (s + 1) % cards.length), 2500); return () => clearInterval(t); }, []);
+  useEffect(() => {
+    const t = setInterval(() => {
+      setCardIndex(s => {
+        const next = (s + 1) % cards.length;
+        if (next === 2) setShowInsight(true);
+        return next;
+      });
+    }, 2500);
+    return () => clearInterval(t);
+  }, []);
 
   return (
     <div className="space-y-3">
-      <div className="flex items-center gap-2 mb-2">
-        <span className="text-[10px] font-body text-muted-foreground bg-muted px-2 py-0.5 rounded-full">Story Mode</span>
-        <span className="text-[10px] font-body text-primary bg-primary/10 px-2 py-0.5 rounded-full">🧭 Curious</span>
+      <div className="flex items-center justify-between mb-2">
+        <div className="flex items-center gap-2">
+          <span className="text-[10px] font-body text-primary bg-primary/10 px-2 py-0.5 rounded-full">🧭 AI Curated</span>
+        </div>
+        <AIBadge label="Auto-matched" />
       </div>
       {/* Swipeable cards */}
-      <div className="relative h-52 flex items-center justify-center">
+      <div className="relative h-44 flex items-center justify-center">
         <AnimatePresence mode="popLayout">
           {cards.map((card, i) => {
             const offset = ((i - cardIndex + cards.length) % cards.length);
@@ -149,38 +196,43 @@ const CuriosityCompassMock = () => {
               <motion.div
                 key={card.title}
                 initial={{ scale: 0.9, y: 20, opacity: 0 }}
-                animate={{
-                  scale: offset === 0 ? 1 : 0.92 - offset * 0.04,
-                  y: offset * 12,
-                  opacity: offset === 0 ? 1 : 0.5,
-                  zIndex: cards.length - offset,
-                }}
+                animate={{ scale: offset === 0 ? 1 : 0.92 - offset * 0.04, y: offset * 12, opacity: offset === 0 ? 1 : 0.5, zIndex: cards.length - offset }}
                 exit={{ x: -200, opacity: 0, rotate: -15 }}
                 transition={{ type: "spring", stiffness: 300, damping: 30 }}
                 className="absolute w-48 bg-card rounded-2xl border border-border shadow-md p-4 text-center"
               >
-                <span className="text-4xl block mb-3">{card.emoji}</span>
-                <p className="font-display text-base text-foreground">{card.title}</p>
-                <span className="font-body text-[10px] text-primary bg-primary/10 px-2 py-0.5 rounded-full mt-2 inline-block">{card.tag}</span>
+                <span className="text-3xl block mb-2">{card.emoji}</span>
+                <p className="font-display text-sm text-foreground">{card.title}</p>
+                <span className="font-body text-[10px] text-primary bg-primary/10 px-2 py-0.5 rounded-full mt-1 inline-block">{card.tag}</span>
                 {offset === 0 && (
-                  <div className="flex justify-center gap-3 mt-4">
-                    <div className="w-8 h-8 rounded-full bg-destructive/10 flex items-center justify-center text-destructive text-sm">✕</div>
-                    <div className="w-8 h-8 rounded-full bg-accent/20 flex items-center justify-center text-sm">🤔</div>
-                    <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary text-sm">♥</div>
-                  </div>
+                  <>
+                    <p className="text-[8px] font-body text-muted-foreground mt-1.5 italic flex items-center justify-center gap-1">
+                      <Sparkles size={7} className="text-primary" /> {card.aiNote}
+                    </p>
+                    <div className="flex justify-center gap-3 mt-3">
+                      <div className="w-7 h-7 rounded-full bg-destructive/10 flex items-center justify-center text-destructive text-xs">✕</div>
+                      <div className="w-7 h-7 rounded-full bg-muted flex items-center justify-center text-xs">🤔</div>
+                      <div className="w-7 h-7 rounded-full bg-primary/10 flex items-center justify-center text-primary text-xs">♥</div>
+                    </div>
+                  </>
                 )}
               </motion.div>
             );
           })}
         </AnimatePresence>
       </div>
-      <div className="flex justify-center gap-1.5 mt-1">
+      {showInsight && (
+        <motion.div initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} className="bg-primary/5 rounded-xl p-2 border border-primary/10">
+          <div className="flex items-center gap-1.5">
+            <Brain size={9} className="text-primary" />
+            <span className="text-[8px] font-body text-primary">AI detected pattern: You gravitate toward creative + social impact domains</span>
+          </div>
+        </motion.div>
+      )}
+      <div className="flex justify-center gap-1.5">
         {cards.map((_, i) => (
           <div key={i} className={`w-1.5 h-1.5 rounded-full transition-colors ${i === cardIndex ? "bg-primary" : "bg-muted"}`} />
         ))}
-      </div>
-      <div className="bg-muted/50 rounded-xl p-2 text-center">
-        <span className="font-body text-[9px] text-muted-foreground">Swipe to explore • 24 domains discovered</span>
       </div>
     </div>
   );
@@ -191,37 +243,30 @@ const TherapistMock = () => {
   const [msgIndex, setMsgIndex] = useState(0);
   const msgs = [
     { role: "user", text: "I feel lost and don't know what to do 😞" },
-    { role: "ai", text: "That's a perfectly valid feeling. Let's explore what's creating this sense of confusion..." },
+    { role: "ai", text: "Based on your recent SelfGraph, your energy dips when you work in isolation. Let's explore social roles..." },
     { role: "user", text: "I think I chose the wrong career path" },
-    { role: "ai", text: "There's no wrong path — only paths that taught you something. What did you learn about yourself?" },
+    { role: "ai", text: "Your behaviour data shows 3x more engagement in creative tasks. There's no wrong path — let's redirect that energy." },
   ];
   useEffect(() => { const t = setInterval(() => setMsgIndex(s => Math.min(s + 1, msgs.length - 1)), 2200); return () => clearInterval(t); }, []);
 
   return (
     <div className="flex flex-col h-full">
-      <div className="flex gap-1.5 mb-3">
-        {["😰", "😞", "😵", "😴"].map(e => (
-          <span key={e} className="text-lg bg-muted rounded-lg p-1 cursor-default">{e}</span>
-        ))}
+      <div className="flex items-center justify-between mb-2">
+        <div className="flex gap-1.5">
+          {["😰", "😞", "😵", "😴"].map(e => (
+            <span key={e} className="text-base bg-muted rounded-lg p-0.5 cursor-default">{e}</span>
+          ))}
+        </div>
+        <AIBadge label="Reads your data" />
       </div>
       <div className="flex-1 space-y-2 overflow-hidden">
         {msgs.slice(0, msgIndex + 1).map((msg, i) => (
-          <motion.div
-            key={i}
-            initial={{ opacity: 0, y: 10, scale: 0.95 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            transition={{ duration: 0.3 }}
-            className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}
-          >
-            <div className={`max-w-[85%] rounded-2xl px-3 py-2 ${
-              msg.role === "user"
-                ? "bg-primary text-primary-foreground rounded-br-sm"
-                : "bg-muted text-foreground rounded-bl-sm"
-            }`}>
+          <motion.div key={i} initial={{ opacity: 0, y: 10, scale: 0.95 }} animate={{ opacity: 1, y: 0, scale: 1 }} transition={{ duration: 0.3 }} className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
+            <div className={`max-w-[85%] rounded-2xl px-3 py-2 ${msg.role === "user" ? "bg-primary text-primary-foreground rounded-br-sm" : "bg-muted text-foreground rounded-bl-sm"}`}>
               {msg.role === "ai" && (
                 <div className="flex items-center gap-1 mb-1">
                   <Heart size={8} className="text-primary" />
-                  <span className="font-body text-[8px] text-primary font-medium">AI Therapist</span>
+                  <span className="font-body text-[8px] text-primary font-medium">AI Therapist · Personalized</span>
                 </div>
               )}
               <p className="font-body text-[10px] leading-relaxed">{msg.text}</p>
@@ -249,13 +294,13 @@ const TherapistMock = () => {
 /* ─── 4. SkillStacker ─── */
 const SkillStackerMock = () => {
   const [step, setStep] = useState(0);
-  useEffect(() => { const t = setInterval(() => setStep(s => (s + 1) % 5), 1800); return () => clearInterval(t); }, []);
+  useEffect(() => { const t = setInterval(() => setStep(s => (s + 1) % 6), 1600); return () => clearInterval(t); }, []);
 
   const skills = [
     { name: "JavaScript", cat: "Core", progress: 78, icon: Shield },
     { name: "React", cat: "Core", progress: 65, icon: Shield },
     { name: "UI Design", cat: "Supporting", progress: 45, icon: Layers },
-    { name: "Data Viz", cat: "Exploration", progress: 30, icon: Eye },
+    { name: "Data Viz", cat: "AI Suggested", progress: 30, icon: Eye },
     { name: "Python", cat: "Supporting", progress: 52, icon: Layers },
   ];
 
@@ -263,46 +308,43 @@ const SkillStackerMock = () => {
     <div className="space-y-2">
       <div className="flex items-center justify-between mb-1">
         <p className="font-display text-xs text-foreground">Active Stack</p>
-        <span className="font-body text-[9px] bg-primary/10 text-primary px-2 py-0.5 rounded-full">5 skills</span>
+        <AIBadge label="Auto-tracked" />
       </div>
+      {step === 0 && <AIAnalyzing label="Analyzing your skill usage patterns..." />}
       {/* Category filter */}
-      <div className="flex gap-1 mb-2">
-        {["All", "Core", "Supporting", "Explore"].map((c, i) => (
+      <div className="flex gap-1 mb-1">
+        {["All", "Core", "Supporting", "AI Picks"].map((c, i) => (
           <span key={c} className={`font-body text-[9px] px-2 py-0.5 rounded-full border ${
-            i === 0 ? "bg-primary/10 border-primary/20 text-primary" : "border-border text-muted-foreground"
+            i === 0 ? "bg-primary/10 border-primary/20 text-primary" : i === 3 ? "border-primary/30 text-primary" : "border-border text-muted-foreground"
           }`}>{c}</span>
         ))}
       </div>
       {skills.map((s, i) => (
-        <motion.div
-          key={s.name}
-          initial={{ opacity: 0, x: -10 }}
-          animate={{ opacity: step >= i ? 1 : 0.3, x: step >= i ? 0 : -10 }}
-          transition={{ duration: 0.4 }}
-          className="bg-card rounded-xl p-2.5 border border-border"
-        >
+        <motion.div key={s.name} initial={{ opacity: 0, x: -10 }} animate={{ opacity: step >= i + 1 ? 1 : 0.3, x: step >= i + 1 ? 0 : -10 }} transition={{ duration: 0.4 }} className="bg-card rounded-xl p-2 border border-border">
           <div className="flex items-center justify-between mb-1">
             <div className="flex items-center gap-1.5">
               <s.icon size={10} className="text-primary" />
               <span className="font-body text-[10px] font-medium text-foreground">{s.name}</span>
             </div>
-            <span className="font-body text-[9px] text-muted-foreground">{s.cat}</span>
+            <span className={`font-body text-[9px] ${s.cat === "AI Suggested" ? "text-primary" : "text-muted-foreground"}`}>{s.cat === "AI Suggested" ? "✨ " + s.cat : s.cat}</span>
           </div>
           <div className="h-1 rounded-full bg-muted overflow-hidden">
-            <motion.div
-              className="h-full rounded-full bg-primary"
-              animate={{ width: step >= i ? `${s.progress}%` : "0%" }}
-              transition={{ duration: 0.6, delay: 0.1 }}
-            />
+            <motion.div className="h-full rounded-full bg-primary" animate={{ width: step >= i + 1 ? `${s.progress}%` : "0%" }} transition={{ duration: 0.6, delay: 0.1 }} />
           </div>
           <div className="flex justify-between mt-0.5">
-            <span className="font-body text-[8px] text-muted-foreground">{step >= i ? `${s.progress}%` : "—"}</span>
-            {step >= i && s.progress > 60 && (
-              <span className="font-body text-[8px] text-primary">✓ Validated</span>
-            )}
+            <span className="font-body text-[8px] text-muted-foreground">{step >= i + 1 ? `${s.progress}%` : "—"}</span>
+            {step >= i + 1 && s.progress > 60 && <span className="font-body text-[8px] text-primary">✓ Validated</span>}
           </div>
         </motion.div>
       ))}
+      {step >= 5 && (
+        <motion.div initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} className="bg-primary/5 rounded-xl p-2 border border-primary/10">
+          <div className="flex items-center gap-1.5">
+            <Sparkles size={9} className="text-primary" />
+            <span className="text-[8px] font-body text-primary">AI recommends: Add "Data Viz" to unlock Product Designer paths</span>
+          </div>
+        </motion.div>
+      )}
     </div>
   );
 };
@@ -323,27 +365,20 @@ const RoadmapMock = () => {
   return (
     <div className="space-y-2">
       <div className="flex items-center justify-between mb-2">
-        <p className="font-display text-xs text-foreground">Career Roadmap</p>
-        <span className="font-body text-[9px] text-muted-foreground">{Math.min(activeStep, 4)}/5 completed</span>
+        <p className="font-display text-xs text-foreground">Your Roadmap</p>
+        <AIBadge label="AI Generated" />
       </div>
       {/* Progress bar */}
-      <div className="h-1.5 rounded-full bg-muted overflow-hidden mb-3">
+      <div className="h-1.5 rounded-full bg-muted overflow-hidden mb-2">
         <motion.div className="h-full bg-primary rounded-full" animate={{ width: `${Math.min(activeStep, 5) * 20}%` }} transition={{ duration: 0.5 }} />
       </div>
+      {activeStep === 0 && <AIAnalyzing label="Building roadmap from your SelfGraph + skills..." />}
       {steps.map((s, i) => {
         const completed = i < activeStep;
         const active = i === activeStep;
         return (
-          <motion.div
-            key={s.label}
-            animate={{ opacity: completed || active ? 1 : 0.4 }}
-            className={`flex items-center gap-3 p-2 rounded-xl transition-all ${
-              active ? "bg-primary/5 border border-primary/20" : completed ? "bg-muted/30" : ""
-            }`}
-          >
-            <div className={`w-7 h-7 rounded-full flex items-center justify-center shrink-0 ${
-              completed ? "bg-primary text-primary-foreground" : active ? "bg-primary/10 text-primary ring-2 ring-primary/20" : "bg-muted text-muted-foreground"
-            }`}>
+          <motion.div key={s.label} animate={{ opacity: completed || active ? 1 : 0.4 }} className={`flex items-center gap-3 p-2 rounded-xl transition-all ${active ? "bg-primary/5 border border-primary/20" : completed ? "bg-muted/30" : ""}`}>
+            <div className={`w-7 h-7 rounded-full flex items-center justify-center shrink-0 ${completed ? "bg-primary text-primary-foreground" : active ? "bg-primary/10 text-primary ring-2 ring-primary/20" : "bg-muted text-muted-foreground"}`}>
               {completed ? <Check size={12} /> : <s.icon size={12} />}
             </div>
             <div className="flex-1 min-w-0">
@@ -359,9 +394,9 @@ const RoadmapMock = () => {
         );
       })}
       {activeStep >= 5 && (
-        <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} className="bg-accent/10 rounded-xl p-2 text-center border border-accent/20">
-          <Award size={16} className="mx-auto text-accent mb-1" />
-          <p className="font-body text-[9px] text-foreground font-medium">Roadmap Complete! 🎉</p>
+        <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} className="bg-primary/5 rounded-xl p-2 text-center border border-primary/20">
+          <Award size={14} className="mx-auto text-primary mb-1" />
+          <p className="font-body text-[9px] text-primary font-medium">Roadmap auto-adjusts as you grow 🎉</p>
         </motion.div>
       )}
     </div>
@@ -370,8 +405,8 @@ const RoadmapMock = () => {
 
 /* ─── 6. Job Matching ─── */
 const JobMatchingMock = () => {
-  const [filter, setFilter] = useState(0);
-  useEffect(() => { const t = setInterval(() => setFilter(s => (s + 1) % 3), 3000); return () => clearInterval(t); }, []);
+  const [step, setStep] = useState(0);
+  useEffect(() => { const t = setInterval(() => setStep(s => (s + 1) % 4), 2500); return () => clearInterval(t); }, []);
 
   const jobs = [
     { title: "UX Designer", company: "Flipkart", match: 94, tags: ["Remote", "Full-time"], salary: "₹12-18L" },
@@ -382,40 +417,34 @@ const JobMatchingMock = () => {
   return (
     <div className="space-y-2">
       {/* Filters */}
-      <div className="flex gap-1 mb-2 overflow-x-auto">
-        {["All", "Tech", "Design", "Business"].map((f, i) => (
-          <motion.span
-            key={f}
-            animate={{ scale: i === filter ? 1.05 : 1 }}
-            className={`font-body text-[9px] px-2 py-0.5 rounded-full shrink-0 transition-colors ${
-              i === filter ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground"
-            }`}
-          >{f}</motion.span>
-        ))}
+      <div className="flex items-center justify-between mb-1">
+        <div className="flex gap-1">
+          {["All", "Tech", "Design"].map((f, i) => (
+            <span key={f} className={`font-body text-[9px] px-2 py-0.5 rounded-full ${i === 0 ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground"}`}>{f}</span>
+          ))}
+        </div>
+        <AIBadge label="Matched to you" />
       </div>
+      {step === 0 && <AIAnalyzing label="Scoring jobs against your profile..." />}
       {/* AI match banner */}
-      <div className="bg-primary/5 rounded-xl p-2 border border-primary/10 flex items-center gap-2">
-        <Sparkles size={10} className="text-primary shrink-0" />
-        <span className="font-body text-[9px] text-primary">3 AI-matched opportunities based on your profile</span>
-      </div>
+      {step >= 1 && (
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="bg-primary/5 rounded-xl p-2 border border-primary/10 flex items-center gap-2">
+          <Sparkles size={10} className="text-primary shrink-0" />
+          <span className="font-body text-[9px] text-primary">3 personalized matches from your SelfGraph + SkillStack</span>
+        </motion.div>
+      )}
       {/* Job cards */}
       {jobs.map((job, i) => (
-        <motion.div
-          key={job.title}
-          initial={{ opacity: 0, y: 8 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: i * 0.15 }}
-          className="bg-card rounded-xl p-3 border border-border"
-        >
+        <motion.div key={job.title} initial={{ opacity: 0, y: 8 }} animate={{ opacity: step >= 1 ? 1 : 0.2, y: step >= 1 ? 0 : 8 }} transition={{ delay: i * 0.15 }} className="bg-card rounded-xl p-3 border border-border">
           <div className="flex items-start justify-between mb-1.5">
             <div>
               <p className="font-body text-[10px] font-medium text-foreground">{job.title}</p>
               <p className="font-body text-[9px] text-muted-foreground">{job.company}</p>
             </div>
-            <div className="flex items-center gap-1 bg-primary/10 rounded-full px-1.5 py-0.5">
+            <motion.div animate={{ scale: step >= 2 && i === 0 ? [1, 1.15, 1] : 1 }} className="flex items-center gap-1 bg-primary/10 rounded-full px-1.5 py-0.5">
               <Star size={8} className="text-primary fill-primary" />
               <span className="font-body text-[9px] text-primary font-semibold">{job.match}%</span>
-            </div>
+            </motion.div>
           </div>
           <div className="flex gap-1 flex-wrap">
             {job.tags.map(t => (
@@ -423,6 +452,13 @@ const JobMatchingMock = () => {
             ))}
             <span className="font-body text-[8px] bg-accent/10 text-accent-foreground px-1.5 py-0.5 rounded-full">{job.salary}</span>
           </div>
+          {step >= 3 && i === 0 && (
+            <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: "auto" }} className="mt-1.5 pt-1.5 border-t border-border">
+              <p className="text-[8px] font-body text-muted-foreground flex items-center gap-1">
+                <Brain size={7} className="text-primary" /> AI: 94% match because your creativity, UI skills, and empathy align perfectly
+              </p>
+            </motion.div>
+          )}
         </motion.div>
       ))}
     </div>
@@ -432,7 +468,7 @@ const JobMatchingMock = () => {
 /* ─── 7. Transition Planner ─── */
 const TransitionMock = () => {
   const [step, setStep] = useState(0);
-  useEffect(() => { const t = setInterval(() => setStep(s => (s + 1) % 4), 2500); return () => clearInterval(t); }, []);
+  useEffect(() => { const t = setInterval(() => setStep(s => (s + 1) % 5), 2200); return () => clearInterval(t); }, []);
 
   const paths = [
     { title: "Pivot within field", risk: "Low", time: "3-6 mo", match: 88 },
@@ -442,55 +478,42 @@ const TransitionMock = () => {
 
   return (
     <div className="space-y-2">
+      <div className="flex items-center justify-between mb-1">
+        <p className="font-display text-xs text-foreground">Transition Readiness</p>
+        <AIBadge label="Auto-assessed" />
+      </div>
+      {step === 0 && <AIAnalyzing label="Evaluating your readiness signals..." />}
       {/* Readiness gauge */}
-      <div className="text-center mb-2">
-        <p className="font-display text-xs text-foreground mb-1">Transition Readiness</p>
-        <div className="flex justify-center gap-3">
-          {[
-            { label: "Time", val: step >= 1 ? 72 : 0 },
-            { label: "Financial", val: step >= 1 ? 58 : 0 },
-            { label: "Emotional", val: step >= 1 ? 65 : 0 },
-          ].map(g => (
-            <div key={g.label} className="text-center">
-              <div className="relative w-12 h-12">
-                <svg viewBox="0 0 36 36" className="w-full h-full -rotate-90">
-                  <circle cx="18" cy="18" r="15" fill="none" stroke="hsl(var(--muted))" strokeWidth="2.5" />
-                  <motion.circle
-                    cx="18" cy="18" r="15" fill="none" stroke="hsl(var(--primary))" strokeWidth="2.5"
-                    strokeDasharray={`${g.val * 0.94} 100`}
-                    strokeLinecap="round"
-                    initial={{ strokeDasharray: "0 100" }}
-                    animate={{ strokeDasharray: `${g.val * 0.94} 100` }}
-                    transition={{ duration: 1 }}
-                  />
-                </svg>
-                <span className="absolute inset-0 flex items-center justify-center font-body text-[9px] font-medium text-foreground">
-                  {step >= 1 ? g.val : "—"}
-                </span>
-              </div>
-              <p className="font-body text-[8px] text-muted-foreground mt-0.5">{g.label}</p>
+      <div className="flex justify-center gap-3 mb-1">
+        {[
+          { label: "Time", val: step >= 1 ? 72 : 0 },
+          { label: "Financial", val: step >= 1 ? 58 : 0 },
+          { label: "Emotional", val: step >= 1 ? 65 : 0 },
+        ].map(g => (
+          <div key={g.label} className="text-center">
+            <div className="relative w-11 h-11">
+              <svg viewBox="0 0 36 36" className="w-full h-full -rotate-90">
+                <circle cx="18" cy="18" r="15" fill="none" stroke="hsl(var(--muted))" strokeWidth="2.5" />
+                <motion.circle cx="18" cy="18" r="15" fill="none" stroke="hsl(var(--primary))" strokeWidth="2.5" strokeDasharray={`${g.val * 0.94} 100`} strokeLinecap="round" initial={{ strokeDasharray: "0 100" }} animate={{ strokeDasharray: `${g.val * 0.94} 100` }} transition={{ duration: 1 }} />
+              </svg>
+              <span className="absolute inset-0 flex items-center justify-center font-body text-[9px] font-medium text-foreground">{step >= 1 ? g.val : "—"}</span>
             </div>
-          ))}
-        </div>
+            <p className="font-body text-[8px] text-muted-foreground mt-0.5">{g.label}</p>
+          </div>
+        ))}
       </div>
 
       {step >= 1 && (
-        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="bg-accent/10 rounded-xl p-2 text-center border border-accent/20">
-          <p className="font-body text-[9px] text-foreground">A <strong>low-risk transition</strong> suits you best right now</p>
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="bg-primary/5 rounded-xl p-2 text-center border border-primary/10">
+          <p className="font-body text-[9px] text-primary">AI recommends a <strong>low-risk transition</strong> based on your profile</p>
         </motion.div>
       )}
 
       {step >= 2 && (
         <>
-          <p className="font-display text-[10px] text-foreground mt-2">Parallel Paths</p>
+          <p className="font-display text-[10px] text-foreground mt-1">AI-Generated Parallel Paths</p>
           {paths.map((p, i) => (
-            <motion.div
-              key={p.title}
-              initial={{ opacity: 0, x: -10 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: i * 0.15 }}
-              className="flex items-center justify-between bg-card rounded-xl p-2 border border-border"
-            >
+            <motion.div key={p.title} initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.15 }} className="flex items-center justify-between bg-card rounded-xl p-2 border border-border">
               <div>
                 <p className="font-body text-[10px] font-medium text-foreground">{p.title}</p>
                 <div className="flex gap-2 mt-0.5">
@@ -502,6 +525,12 @@ const TransitionMock = () => {
             </motion.div>
           ))}
         </>
+      )}
+      {step >= 4 && (
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex items-center gap-1.5 justify-center">
+          <RefreshCw size={8} className="text-primary" />
+          <span className="text-[8px] font-body text-primary">Paths auto-update as your skills evolve</span>
+        </motion.div>
       )}
     </div>
   );
@@ -522,23 +551,19 @@ const StartupLabMock = () => {
 
   return (
     <div className="space-y-3">
-      <p className="font-display text-xs text-foreground mb-1">EduTech Startup</p>
+      <div className="flex items-center justify-between mb-1">
+        <p className="font-display text-xs text-foreground">EduTech Startup</p>
+        <AIBadge label="AI Guided" />
+      </div>
       {/* Stage tracker */}
       <div className="flex items-center justify-between mb-2">
         {stages.map((s, i) => (
           <div key={s.label} className="flex flex-col items-center relative">
-            <motion.div
-              animate={{ scale: s.done ? 1 : 0.8, opacity: s.done ? 1 : 0.4 }}
-              className={`w-8 h-8 rounded-full flex items-center justify-center text-sm ${
-                s.done ? "bg-primary/10" : "bg-muted"
-              }`}
-            >
+            <motion.div animate={{ scale: s.done ? 1 : 0.8, opacity: s.done ? 1 : 0.4 }} className={`w-8 h-8 rounded-full flex items-center justify-center text-sm ${s.done ? "bg-primary/10" : "bg-muted"}`}>
               {s.emoji}
             </motion.div>
             <span className="font-body text-[7px] text-muted-foreground mt-1">{s.label}</span>
-            {i < stages.length - 1 && (
-              <div className={`absolute top-4 left-8 w-6 h-[2px] ${s.done ? "bg-primary" : "bg-muted"}`} />
-            )}
+            {i < stages.length - 1 && <div className={`absolute top-4 left-8 w-6 h-[2px] ${s.done ? "bg-primary" : "bg-muted"}`} />}
           </div>
         ))}
       </div>
@@ -547,7 +572,7 @@ const StartupLabMock = () => {
       <div className="bg-card rounded-xl p-2.5 border border-border">
         <div className="flex items-center justify-between mb-1.5">
           <span className="font-body text-[10px] font-medium text-foreground">Sprint: Customer Interviews</span>
-          <span className="font-body text-[8px] bg-primary/10 text-primary px-1.5 py-0.5 rounded-full">Active</span>
+          <span className="font-body text-[8px] bg-primary/10 text-primary px-1.5 py-0.5 rounded-full">Auto-tracking</span>
         </div>
         <p className="font-body text-[9px] text-muted-foreground mb-2">Hypothesis: Students need async mentoring</p>
         <div className="h-1 rounded-full bg-muted overflow-hidden">
@@ -560,9 +585,7 @@ const StartupLabMock = () => {
       <div className="space-y-1.5">
         {["Define target segment", "Build landing page", "Run ads test", "Analyze signups"].map((m, i) => (
           <div key={m} className="flex items-center gap-2">
-            <div className={`w-4 h-4 rounded-full flex items-center justify-center ${
-              i <= step ? "bg-primary text-primary-foreground" : "bg-muted"
-            }`}>
+            <div className={`w-4 h-4 rounded-full flex items-center justify-center ${i <= step ? "bg-primary text-primary-foreground" : "bg-muted"}`}>
               {i <= step ? <Check size={8} /> : <div className="w-1.5 h-1.5 rounded-full bg-muted-foreground/30" />}
             </div>
             <span className={`font-body text-[9px] ${i <= step ? "text-foreground" : "text-muted-foreground"}`}>{m}</span>
@@ -574,7 +597,7 @@ const StartupLabMock = () => {
         <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} className="bg-primary/5 rounded-xl p-2 border border-primary/10">
           <div className="flex items-center gap-1.5">
             <Sparkles size={10} className="text-primary" />
-            <span className="font-body text-[9px] text-primary font-medium">Founder Readiness: 72% — Keep going!</span>
+            <span className="font-body text-[9px] text-primary font-medium">AI: Founder Readiness 72% — Next: validate pricing model</span>
           </div>
         </motion.div>
       )}
@@ -626,7 +649,7 @@ const AppWalkthroughSection = () => {
             transition={{ delay: 0.1 }}
             className="font-display text-4xl md:text-5xl text-foreground leading-tight"
           >
-            See how it <em className="text-gradient-warm">actually works.</em>
+            Everything is <em className="text-gradient-warm">personalized, automated</em> & AI-analyzed.
           </motion.h2>
           <motion.p
             initial={{ opacity: 0 }}
@@ -634,7 +657,7 @@ const AppWalkthroughSection = () => {
             transition={{ delay: 0.2 }}
             className="font-body text-sm text-muted-foreground mt-4"
           >
-            Every feature is designed to feel like a guide sitting beside you — tracking, adjusting, and staying with you.
+            No two users see the same thing. Every feature adapts to your behaviour, tracks your growth, and evolves with you — automatically.
           </motion.p>
         </div>
 
@@ -717,14 +740,14 @@ const AppWalkthroughSection = () => {
                 </div>
                 <p className="font-body text-sm text-muted-foreground leading-relaxed">
                   {[
-                    "Maps your cognitive, emotional, and professional traits into a living identity model that evolves as you grow.",
-                    "Explore careers through swipeable cards, guided scenarios, and AI-curated quests — not boring questionnaires.",
-                    "A safe, judgment-free space to process career anxiety, burnout, and confusion with an empathetic AI guide.",
-                    "Stack, track, and validate skills in structured layers — core, supporting, and exploration categories.",
-                    "AI generates a phased career roadmap with milestones, deadlines, and progress tracking tailored to your goals.",
-                    "AI-matched job opportunities ranked by your skills, interests, and career alignment — not just keywords.",
-                    "Compare parallel career futures with realistic timelines, skill gaps, and risk assessments before committing.",
-                    "Structure your startup journey from idea to launch with validation sprints, milestones, and founder readiness tracking.",
+                    "AI automatically maps your cognitive, emotional, and professional traits into a living identity graph that evolves from your behaviour — no manual input needed.",
+                    "AI curates career domains based on your SelfGraph traits. Each card is personalized — showing why it matches your unique profile pattern.",
+                    "Unlike generic chatbots, this AI reads your SelfGraph data and behaviour history to provide deeply personalized emotional career guidance.",
+                    "Skills are auto-tracked from your activities. AI suggests new skills based on your career goals and recommends what to learn next.",
+                    "AI generates a phased roadmap by analyzing your SelfGraph, skills, and interests — then auto-adjusts milestones as you progress.",
+                    "Every job is AI-scored against your complete profile — skills, interests, energy patterns, and personality traits. Not just keywords.",
+                    "AI assesses your readiness across emotional, financial, and time dimensions, then auto-generates personalized transition paths.",
+                    "AI guides your startup journey with automated validation tracking, founder readiness scoring, and personalized milestone recommendations.",
                   ][active]}
                 </p>
 
