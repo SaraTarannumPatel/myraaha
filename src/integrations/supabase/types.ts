@@ -44,6 +44,72 @@ export type Database = {
         }
         Relationships: []
       }
+      coaching_checkins: {
+        Row: {
+          ai_response: Json | null
+          confidence: number | null
+          created_at: string
+          energy: number | null
+          id: string
+          mood: string
+          reflection: string | null
+          user_id: string
+        }
+        Insert: {
+          ai_response?: Json | null
+          confidence?: number | null
+          created_at?: string
+          energy?: number | null
+          id?: string
+          mood: string
+          reflection?: string | null
+          user_id: string
+        }
+        Update: {
+          ai_response?: Json | null
+          confidence?: number | null
+          created_at?: string
+          energy?: number | null
+          id?: string
+          mood?: string
+          reflection?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      coaching_sessions: {
+        Row: {
+          created_at: string
+          id: string
+          messages: Json
+          mood: string | null
+          title: string
+          topic: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          messages?: Json
+          mood?: string | null
+          title?: string
+          topic?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          messages?: Json
+          mood?: string | null
+          title?: string
+          topic?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       connections: {
         Row: {
           connection_type: string
