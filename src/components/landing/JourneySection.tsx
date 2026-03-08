@@ -1,42 +1,17 @@
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
+import discoveryImg from "@/assets/journey-discovery.png";
+import directionImg from "@/assets/journey-direction.png";
+import buildImg from "@/assets/journey-build.png";
+import launchImg from "@/assets/journey-launch.png";
+import evolveImg from "@/assets/journey-evolve.png";
 
 const stages = [
-  {
-    age: "13–16",
-    label: "Discovery",
-    emoji: "🔍",
-    description:
-      "Explore curiosity, spot problems, build early self-awareness through games and stories.",
-  },
-  {
-    age: "17–19",
-    label: "Direction",
-    emoji: "🧭",
-    description:
-      "Develop entrepreneurial mindset, choose your path, get AI-powered guidance.",
-  },
-  {
-    age: "19–22",
-    label: "Development",
-    emoji: "🛠️",
-    description:
-      "Build real skills, create MVPs, connect with mentors, start projects.",
-  },
-  {
-    age: "22–25",
-    label: "Launch",
-    emoji: "🚀",
-    description:
-      "Validate ideas, showcase work, access funding & industry networks.",
-  },
-  {
-    age: "25+",
-    label: "Evolve",
-    emoji: "🔄",
-    description:
-      "Scale your venture, transition careers, or reinvent yourself — with full support.",
-  },
+  { age: "13–16", label: "Discovery", image: discoveryImg, description: "Explore curiosity & self-awareness" },
+  { age: "17–19", label: "Direction", image: directionImg, description: "Choose your path with AI guidance" },
+  { age: "19–22", label: "Development", image: buildImg, description: "Build real skills & projects" },
+  { age: "22–25", label: "Launch", image: launchImg, description: "Validate, showcase & get hired" },
+  { age: "25+", label: "Evolve", image: evolveImg, description: "Scale, pivot, or reinvent yourself" },
 ];
 
 const JourneySection = () => {
@@ -45,11 +20,10 @@ const JourneySection = () => {
 
   return (
     <section id="journey" ref={ref} className="py-24 md:py-32 gradient-dark relative overflow-hidden">
-      {/* Glow */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[400px] gradient-glow opacity-40 pointer-events-none" />
 
       <div className="container mx-auto px-6 relative z-10">
-        <div className="max-w-3xl mx-auto text-center mb-16">
+        <div className="text-center mb-16">
           <motion.p
             initial={{ opacity: 0 }}
             animate={isInView ? { opacity: 1 } : {}}
@@ -63,44 +37,45 @@ const JourneySection = () => {
             transition={{ delay: 0.1 }}
             className="font-display text-4xl md:text-5xl text-primary-foreground"
           >
-            A lifelong co-pilot that{" "}
-            <em className="text-gradient-warm">evolves with you</em>
+            A co-pilot that <em className="text-gradient-warm">evolves with you</em>
           </motion.h2>
         </div>
 
-        <div className="max-w-3xl mx-auto relative">
-          {/* Vertical line */}
-          <div className="absolute left-6 md:left-8 top-0 bottom-0 w-px bg-secondary/20" />
+        {/* Illustrated timeline — horizontal on desktop, vertical on mobile */}
+        <div className="relative max-w-5xl mx-auto">
+          {/* Horizontal connector line (desktop) */}
+          <div className="hidden md:block absolute top-24 left-0 right-0 h-px bg-secondary/20" />
 
-          <div className="space-y-8">
+          <div className="grid grid-cols-1 md:grid-cols-5 gap-8 md:gap-4">
             {stages.map((stage, i) => (
               <motion.div
                 key={stage.label}
-                initial={{ opacity: 0, x: -20 }}
-                animate={isInView ? { opacity: 1, x: 0 } : {}}
-                transition={{ delay: 0.2 + i * 0.1, duration: 0.5 }}
-                className="relative pl-16 md:pl-20"
+                initial={{ opacity: 0, y: 30 }}
+                animate={isInView ? { opacity: 1, y: 0 } : {}}
+                transition={{ delay: 0.2 + i * 0.12, duration: 0.5 }}
+                className="flex flex-col items-center text-center"
               >
-                {/* Dot */}
-                <div className="absolute left-4 md:left-6 top-1 w-4 h-4 rounded-full bg-secondary border-4 border-primary" />
-
-                <div className="bg-primary/40 backdrop-blur-sm rounded-2xl p-5 border border-secondary/10">
-                  <div className="flex items-center gap-3 mb-2">
-                    <span className="text-xl">{stage.emoji}</span>
-                    <span className="font-body text-xs uppercase tracking-wider text-secondary font-semibold">
-                      Age {stage.age}
-                    </span>
-                    <span className="font-body text-xs text-primary-foreground/50">
-                      •
-                    </span>
-                    <span className="font-display text-lg text-primary-foreground">
-                      {stage.label}
-                    </span>
-                  </div>
-                  <p className="font-body text-sm text-primary-foreground/70 leading-relaxed">
-                    {stage.description}
-                  </p>
+                {/* Illustration */}
+                <div className="w-36 h-36 mb-4 relative">
+                  <motion.img
+                    src={stage.image}
+                    alt={stage.label}
+                    className="w-full h-full object-contain"
+                    whileHover={{ scale: 1.08 }}
+                    transition={{ type: "spring", stiffness: 300 }}
+                  />
                 </div>
+
+                {/* Dot on line */}
+                <div className="hidden md:block w-3 h-3 rounded-full bg-secondary mb-4" />
+
+                <span className="font-body text-[10px] uppercase tracking-wider text-secondary font-semibold">
+                  Age {stage.age}
+                </span>
+                <h3 className="font-display text-xl text-primary-foreground mt-1">{stage.label}</h3>
+                <p className="font-body text-xs text-primary-foreground/60 mt-1 leading-snug max-w-[140px]">
+                  {stage.description}
+                </p>
               </motion.div>
             ))}
           </div>
