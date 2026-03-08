@@ -132,7 +132,7 @@ const Achievements = () => {
   const checkAndAwardBadges = useCallback(async () => {
     if (!user) return;
 
-    const queries1 = await Promise.all([
+    const queries1: any[] = await Promise.all([
       supabase.from("interests").select("id", { count: "exact", head: true }).eq("user_id", user.id),
       supabase.from("skills").select("id", { count: "exact", head: true }).eq("user_id", user.id),
       supabase.from("journal_entries").select("id", { count: "exact", head: true }).eq("user_id", user.id),
@@ -144,7 +144,7 @@ const Achievements = () => {
       supabase.from("idea_card_interactions").select("id", { count: "exact", head: true }).eq("user_id", user.id),
       supabase.from("lab_plans").select("id", { count: "exact", head: true }).eq("user_id", user.id),
     ]);
-    const queries2 = await Promise.all([
+    const queries2: any[] = await Promise.all([
       supabase.from("mvp_experiments").select("id", { count: "exact", head: true }).eq("user_id", user.id),
       supabase.from("validation_sprints").select("id", { count: "exact", head: true }).eq("user_id", user.id),
       supabase.from("coaching_checkins").select("id", { count: "exact", head: true }).eq("user_id", user.id),
@@ -156,7 +156,7 @@ const Achievements = () => {
       supabase.from("moodboards").select("id", { count: "exact", head: true }).eq("user_id", user.id),
       supabase.from("learning_track_progress").select("id", { count: "exact", head: true }).eq("user_id", user.id),
     ]);
-    const queries3 = await Promise.all([
+    const queries3: any[] = await Promise.all([
       supabase.from("job_applications").select("id", { count: "exact", head: true }).eq("user_id", user.id),
       supabase.from("project_reflections").select("id", { count: "exact", head: true }).eq("user_id", user.id),
       supabase.from("peer_circle_members").select("id", { count: "exact", head: true }).eq("user_id", user.id),
