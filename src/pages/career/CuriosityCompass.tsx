@@ -811,7 +811,7 @@ const CuriosityCompass = () => {
                         const interaction = interactions[card.id];
                         return (
                           <motion.div key={card.id} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.03 }} onViewportEnter={() => handleCardView(card.id)}>
-                            <Card className={`h-full transition-all hover:shadow-lg ${interaction === "like" ? "border-pink-500/50 bg-pink-500/5" : interaction === "save" ? "border-primary/50 bg-primary/5" : interaction === "skip" ? "opacity-50" : ""}`}>
+                            <Card className={`h-full transition-all hover:shadow-lg ${interaction === "like" ? "border-terracotta/50 bg-terracotta/5" : interaction === "save" ? "border-primary/50 bg-primary/5" : interaction === "skip" ? "opacity-50" : ""}`}>
                               <CardContent className="pt-6">
                                 <div className="flex items-start gap-3 mb-3">
                                   <span className="text-2xl">{card.icon_emoji}</span>
