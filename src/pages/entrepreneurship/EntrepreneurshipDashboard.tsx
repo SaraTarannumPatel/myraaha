@@ -431,7 +431,7 @@ const EntrepreneurshipDashboard = () => {
                 { label: "Skills", value: stats.skillsCount, icon: TrendingUp, sub: "mapped", color: "text-blue" },
               ].map(s => (
                 <div key={s.label} className="bg-muted/30 rounded-lg p-3 text-center">
-                  <s.icon size={16} className="mx-auto text-primary mb-1" />
+                  <s.icon size={16} className={`mx-auto mb-1 ${(s as any).color}`} />
                   <p className="font-display text-lg text-foreground">{loading ? "–" : s.value}</p>
                   <p className="font-body text-[10px] text-muted-foreground">{s.label}</p>
                   <p className="font-body text-[10px] text-muted-foreground">{s.sub}</p>
