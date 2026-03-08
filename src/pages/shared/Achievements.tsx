@@ -161,8 +161,8 @@ const Achievements = () => {
       supabase.from("project_reflections").select("id", { count: "exact", head: true }).eq("user_id", user.id),
       supabase.from("peer_circle_members").select("id", { count: "exact", head: true }).eq("user_id", user.id),
     ]);
-    const mentorSessionsRes = await supabase.from("mentorship_sessions").select("id", { count: "exact", head: true }).eq("mentee_id", user.id);
-    const challengeCompletesRes = await supabase.from("challenge_enrollments").select("id", { count: "exact", head: true }).eq("user_id", user.id).eq("status", "completed");
+    const mentorSessionsRes: any = await (supabase.from("mentorship_sessions") as any).select("id", { count: "exact", head: true }).eq("mentee_id", user.id);
+    const challengeCompletesRes: any = await (supabase.from("challenge_enrollments") as any).select("id", { count: "exact", head: true }).eq("user_id", user.id).eq("status", "completed");
     const [
       interestsRes, skillsRes, journalRes, projectsRes, roadmapsRes, connectionsRes,
       observationsRes, ideasRes, ideaCardsRes, labPlansRes,
