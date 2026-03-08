@@ -2,10 +2,10 @@ import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
 
 const lines = [
-  { text: "Every path is different.", delay: 0.15 },
-  { text: "Growth is non-linear.", delay: 0.2 },
+  { text: "Every path is different. and that's valid.", delay: 0.15 },
+  { text: "Growth is non-linear. it's giving rollercoaster.", delay: 0.2 },
   { text: "Reflection should come before direction.", delay: 0.25 },
-  { text: "Pace matters.", delay: 0.3 },
+  { text: "Pace matters. this isn't a race bestie.", delay: 0.3 },
 ];
 
 const RolloutSection = () => {
@@ -32,7 +32,7 @@ const RolloutSection = () => {
           <h2 className="font-display text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-primary-foreground leading-tight mb-8 sm:mb-10">
             It's about becoming{" "}
             <em className="text-gradient-accent">right</em>
-            <br />— not reaching fast.
+            <br />— not rushing to the finish line.
           </h2>
 
           <div className="space-y-1.5 sm:space-y-2 mb-8 sm:mb-10">
@@ -56,12 +56,12 @@ const RolloutSection = () => {
             className="bg-primary-foreground/5 backdrop-blur-sm rounded-2xl sm:rounded-3xl p-6 sm:p-8 border border-primary-foreground/10 mb-6 sm:mb-8"
           >
             <p className="font-body text-sm sm:text-base text-primary-foreground/80 leading-relaxed mb-3 sm:mb-4">
-              You don't need someone shouting instructions.
+              You don't need someone yelling instructions at you.
             </p>
             <p className="font-display text-lg sm:text-xl md:text-2xl text-primary-foreground leading-snug">
               You need a system sitting beside you.
               <br />
-              <span className="text-gradient-accent">Tracking. Guiding. Adjusting. Staying with you.</span>
+              <span className="text-gradient-accent">Tracking. Guiding. Adjusting. Staying. no ghosting.</span>
             </p>
           </motion.div>
 
@@ -71,7 +71,7 @@ const RolloutSection = () => {
             transition={{ delay: 0.6 }}
             className="font-display text-base sm:text-lg text-primary-foreground/50 italic"
           >
-            "To make decisions you don't regret later."
+            "To make decisions you won't regret later. that's the whole vibe."
           </motion.p>
         </motion.div>
       </div>

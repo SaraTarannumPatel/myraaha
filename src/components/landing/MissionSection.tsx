@@ -30,7 +30,7 @@ const MissionSection = () => {
             </p>
             <h2 className="font-display text-3xl sm:text-4xl md:text-5xl text-foreground mb-6 sm:mb-8 leading-tight">
               Navigation became{" "}
-              <em className="text-gradient-milestone">structured.</em>
+              <em className="text-gradient-milestone">structured.</em> finally.
             </h2>
 
             {/* Age milestone cards */}
@@ -53,10 +53,10 @@ const MissionSection = () => {
 
             <div className="space-y-3 sm:space-y-4 font-body text-xs sm:text-sm text-muted-foreground leading-relaxed">
               <p>
-                Not because life became easy. But because <strong className="text-foreground">navigation became structured.</strong>
+                Not because life got easier lol. But because <strong className="text-foreground">navigation became structured.</strong>
               </p>
               <p>
-                One system. Full journey ownership.
+                One system. Full journey ownership. that's the glow up.
               </p>
             </div>
 
@@ -73,7 +73,7 @@ const MissionSection = () => {
                 <span className="text-primary">→</span>
                 <span>Action</span>
                 <span className="text-primary">→</span>
-                <span className="text-gradient-warm">Outcome</span>
+                <span className="text-gradient-warm">Outcome 🔥</span>
               </div>
             </motion.div>
           </motion.div>

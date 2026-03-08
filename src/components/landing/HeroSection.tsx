@@ -40,10 +40,10 @@ const HeroSection = () => {
               className="mb-5 sm:mb-6"
             >
               <h2 className="font-display text-xl sm:text-2xl md:text-3xl lg:text-4xl text-foreground/90 leading-snug">
-                Career and business decisions
+                Career & business decisions
               </h2>
               <h2 className="font-display text-xl sm:text-2xl md:text-3xl lg:text-4xl text-foreground/90 leading-snug">
-                — <em className="text-gradient-warm">without guesswork.</em>
+                — <em className="text-gradient-warm">zero guesswork.</em>
               </h2>
             </motion.div>
 
@@ -53,7 +53,7 @@ const HeroSection = () => {
               transition={{ duration: 0.6, delay: 0.3 }}
               className="font-body text-sm sm:text-base text-muted-foreground mb-8 sm:mb-10 max-w-sm"
             >
-              Soft direction. Real outcomes.
+              Lowkey direction. Real outcomes. No cap.
             </motion.p>
 
             <motion.div
@@ -113,7 +113,7 @@ const HeroSection = () => {
               transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
             >
               <p className="font-display text-xs sm:text-sm text-foreground">Clarity → Direction</p>
-              <p className="font-body text-[9px] sm:text-[10px] text-grey-meta">Not guesswork</p>
+              <p className="font-body text-[9px] sm:text-[10px] text-grey-meta">Not vibes-only decisions</p>
             </motion.div>
 
             <motion.div

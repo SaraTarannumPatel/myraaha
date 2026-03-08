@@ -4,15 +4,15 @@ import { Briefcase, Rocket, Check } from "lucide-react";
 
 const careerFeatures = [
   "Skills mapped to real-time job demand",
-  "Structured progression",
+  "Structured progression that actually makes sense",
   "AI-guided transitions",
-  "Reduced risk when switching",
+  "Reduced risk when switching — no yolo moves",
 ];
 
 const startupFeatures = [
   "Idea → validation → build → launch → funding",
   "Founder mindset tracking",
-  "AI co-founder support",
+  "AI co-founder support (your startup bestie)",
   "Readiness-based funding paths",
 ];
 
@@ -43,7 +43,7 @@ const JourneySection = () => {
           >
             You don't keep{" "}
             <em className="text-gradient-warm">resetting</em>
-            <br />your journey.
+            <br />your journey. ever.
           </motion.h2>
           <motion.p
             initial={{ opacity: 0 }}
@@ -51,7 +51,7 @@ const JourneySection = () => {
             transition={{ delay: 0.2 }}
             className="font-body text-sm sm:text-base text-muted-foreground max-w-lg"
           >
-            Most platforms stop at "advice." MyRaaha continues. The system remembers your history.
+            Most platforms stop at "advice" and ghost you. MyRaaha keeps going. The system remembers your whole history. it's giving loyalty.
           </motion.p>
         </div>
 
@@ -78,7 +78,7 @@ const JourneySection = () => {
               </ul>
               <div className="bg-background-alt rounded-xl p-3 sm:p-4">
                 <p className="font-display text-xs sm:text-sm text-foreground italic">
-                  Clear next actions every week. No random course hopping.
+                  Clear next actions every week. No random course hopping. we ate that.
                 </p>
               </div>
             </div>
@@ -106,7 +106,7 @@ const JourneySection = () => {
               </ul>
               <div className="bg-background-alt rounded-xl p-3 sm:p-4">
                 <p className="font-display text-xs sm:text-sm text-foreground italic">
-                  You don't quit your job based on motivation. You move based on readiness.
+                  You don't quit your job based on motivation reels. You move based on readiness. that's elite.
                 </p>
               </div>
             </div>

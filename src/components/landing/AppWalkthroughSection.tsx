@@ -35,18 +35,18 @@ const ProgressDots = ({ current, total }: { current: number; total: number }) =>
 const PhoneFrame = ({ children, label, icon: Icon }: {
   children: React.ReactNode; label: string; icon: any;
 }) => (
-  <div className="relative w-[280px] h-[480px] rounded-[2rem] border-[3px] border-foreground/10 bg-card shadow-xl overflow-hidden">
-    <div className="flex items-center justify-between px-5 pt-3 pb-1">
-      <span className="text-[10px] font-body text-muted-foreground">9:41</span>
-      <div className="w-16 h-[3px] rounded-full bg-foreground/10" />
-      <div className="flex gap-1"><div className="w-3 h-[6px] rounded-sm bg-foreground/20" /><div className="w-1 h-[6px] rounded-sm bg-foreground/10" /></div>
+  <div className="relative w-[320px] sm:w-[360px] h-[560px] sm:h-[620px] rounded-[2.5rem] border-[3px] border-foreground/10 bg-card shadow-2xl overflow-hidden">
+    <div className="flex items-center justify-between px-6 pt-4 pb-1.5">
+      <span className="text-[11px] font-body text-muted-foreground">9:41</span>
+      <div className="w-20 h-[4px] rounded-full bg-foreground/10" />
+      <div className="flex gap-1"><div className="w-3.5 h-[7px] rounded-sm bg-foreground/20" /><div className="w-1.5 h-[7px] rounded-sm bg-foreground/10" /></div>
     </div>
-    <div className="px-4 pb-2 flex items-center gap-2 border-b border-border/50">
-      <div className="w-6 h-6 rounded-lg bg-primary/10 flex items-center justify-center"><Icon size={12} className="text-primary" /></div>
-      <span className="font-display text-xs text-foreground">{label}</span>
+    <div className="px-5 pb-2.5 flex items-center gap-2.5 border-b border-border/50">
+      <div className="w-7 h-7 rounded-lg bg-primary/10 flex items-center justify-center"><Icon size={14} className="text-primary" /></div>
+      <span className="font-display text-sm text-foreground">{label}</span>
       <div className="ml-auto"><AIBadge label="For You" /></div>
     </div>
-    <div className="p-3 h-[410px] overflow-hidden">{children}</div>
+    <div className="p-4 h-[470px] sm:h-[530px] overflow-hidden">{children}</div>
   </div>
 );
 
@@ -1039,10 +1039,10 @@ const AppWalkthroughSection = () => {
         <div className="text-center mb-12 sm:mb-16 max-w-2xl mx-auto">
           <motion.p initial={{ opacity: 0 }} animate={isInView ? { opacity: 1 } : {}} className="font-body text-[10px] sm:text-xs uppercase tracking-[0.25em] text-indigo font-semibold mb-3">Inside The App</motion.p>
           <motion.h2 initial={{ opacity: 0, y: 20 }} animate={isInView ? { opacity: 1, y: 0 } : {}} transition={{ delay: 0.1 }} className="font-display text-3xl sm:text-4xl md:text-5xl text-foreground leading-tight">
-            Everything is <em className="text-gradient-warm">personalized, automated</em> & AI-analyzed.
+            Everything's <em className="text-gradient-warm">personalized, automated</em> & AI-powered. fr fr.
           </motion.h2>
           <motion.p initial={{ opacity: 0 }} animate={isInView ? { opacity: 1 } : {}} transition={{ delay: 0.2 }} className="font-body text-xs sm:text-sm text-muted-foreground mt-3 sm:mt-4">
-            Watch each feature's complete journey — from first interaction to AI-powered results. No two users see the same thing.
+            Peep each feature's full journey — from first tap to AI-powered results. No two users get the same vibe.
           </motion.p>
         </div>
 

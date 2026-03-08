@@ -21,7 +21,7 @@ const PhilosophySection = () => {
             <span className="text-gradient-warm">motivation.</span>
           </blockquote>
           <blockquote className="font-display text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-foreground leading-[1.15] italic mt-2">
-            You need better <span className="text-gradient-warm">navigation.</span>"
+            You need better <span className="text-gradient-warm">navigation.</span> and that's on periodt."
           </blockquote>
         </motion.div>
       </div>

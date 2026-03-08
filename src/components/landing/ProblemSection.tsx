@@ -3,12 +3,12 @@ import { useRef } from "react";
 import problemIllustration from "@/assets/problem-illustration.png";
 
 const painPoints = [
-  "Watch YouTube videos",
+  "Doom-scroll YouTube videos",
   "Take random tests",
-  "Ask seniors",
-  "Scroll job portals",
+  "Ask seniors who are also lost",
+  "Scroll job portals at 2am",
   "Download 4–5 apps",
-  "Still unsure",
+  "Still have zero clue",
 ];
 
 const ProblemSection = () => {
@@ -57,7 +57,7 @@ const ProblemSection = () => {
               You don't lack{" "}
               <em className="text-gradient-warm">ambition.</em>
               <br />
-              You lack clarity.
+              You lack clarity. fr.
             </motion.h2>
 
             <motion.p
@@ -66,7 +66,7 @@ const ProblemSection = () => {
               transition={{ delay: 0.2 }}
               className="font-body text-sm sm:text-base text-muted-foreground leading-relaxed mb-6 sm:mb-8 max-w-lg"
             >
-              Engineering. MBA. Design. Government exams. Startup. Freelancing. Switch careers. Move cities. You have options. <strong className="text-foreground">Too many.</strong>
+              Engineering. MBA. Design. Govt exams. Startup. Freelancing. Switch careers. Move cities. You've got options. <strong className="text-foreground">Way too many.</strong>
             </motion.p>
 
             {/* Pain point pills */}
@@ -95,7 +95,7 @@ const ProblemSection = () => {
               className="bg-card rounded-2xl p-5 sm:p-6 border border-border shadow-soft max-w-lg"
             >
               <p className="font-display text-lg sm:text-xl md:text-2xl text-foreground italic leading-snug">
-                "Why is making a life decision still this <span className="text-gradient-warm">unstructured?</span>"
+                "Why is making a life decision still this <span className="text-gradient-warm">chaotic?</span> like bestie help 💀"
               </p>
             </motion.div>
           </div>

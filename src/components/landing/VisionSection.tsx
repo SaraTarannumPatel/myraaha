@@ -4,11 +4,11 @@ import visionIllustration from "@/assets/vision-illustration.png";
 
 const fragments = [
   { text: "Aptitude tests on one platform", emoji: "📝" },
-  { text: "Courses somewhere else", emoji: "📚" },
-  { text: "Mentors on Instagram", emoji: "📱" },
+  { text: "Courses somewhere else entirely", emoji: "📚" },
+  { text: "Mentors on Instagram reels lol", emoji: "📱" },
   { text: "Job portals disconnected from skill-building", emoji: "💼" },
-  { text: "Startup advice scattered across blogs", emoji: "🚀" },
-  { text: "Funding information hidden behind networks", emoji: "🔒" },
+  { text: "Startup advice scattered across random blogs", emoji: "🚀" },
+  { text: "Funding info gatekept behind networks", emoji: "🔒" },
 ];
 
 const VisionSection = () => {
@@ -29,7 +29,7 @@ const VisionSection = () => {
             animate={isInView ? { opacity: 1 } : {}}
             className="font-body text-[10px] sm:text-xs uppercase tracking-[0.25em] text-blue font-semibold mb-3"
           >
-            Because The System Is Fragmented
+            Because The System Is Lowkey Broken
           </motion.p>
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
@@ -37,7 +37,7 @@ const VisionSection = () => {
             transition={{ delay: 0.1 }}
             className="font-display text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-foreground leading-tight"
           >
-            This is not a talent problem.
+            This ain't a talent problem.
             <br />
             <em className="text-gradient-warm">It's an infrastructure problem.</em>
           </motion.h2>
@@ -81,7 +81,7 @@ const VisionSection = () => {
           className="text-center space-y-4 sm:space-y-5"
         >
           <p className="font-body text-xs sm:text-sm text-muted-foreground leading-relaxed max-w-lg mx-auto">
-            You are expected to connect all this yourself. And when something doesn't work, you start over.
+            You're literally expected to connect all this yourself. And when something flops, you start from scratch. it's giving 💀
           </p>
           <div className="flex items-center justify-center gap-4 sm:gap-6">
             {["Late", "Behind", "Misaligned"].map((word, i) => (
@@ -91,7 +91,7 @@ const VisionSection = () => {
             ))}
           </div>
           <p className="font-display text-lg sm:text-xl md:text-2xl text-foreground italic pt-2">
-            "So what would a real system look like?"
+            "So what would a real system actually look like tho?"
           </p>
         </motion.div>
       </div>

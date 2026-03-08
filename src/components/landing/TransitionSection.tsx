@@ -4,11 +4,11 @@ import { Cpu, Globe, BarChart3, DollarSign, Heart } from "lucide-react";
 import transitionIllustration from "@/assets/transition-illustration.png";
 
 const features = [
-  { icon: Cpu, title: "Built Specifically For", description: "Career navigation, entrepreneurship systems, and decision modeling — not generic AI.", num: "01" },
-  { icon: Globe, title: "Proactive, Not Reactive", description: "Anticipates confusion based on behaviour patterns before you even ask.", num: "02" },
-  { icon: BarChart3, title: "Connected Intelligence", description: "Industry data, skill demand signals, startup ecosystem insights, and funding readiness metrics.", num: "03" },
-  { icon: DollarSign, title: "Affordable at Scale", description: "Automated and revenue-sustained. Works in Tier 3, 4 and rural regions — not just metros.", num: "04" },
-  { icon: Heart, title: "Impact-Measured", description: "Every interaction tracked for real outcomes. Measurable career and business progress.", num: "05" },
+  { icon: Cpu, title: "Built Specifically For", description: "Career navigation, entrepreneurship systems, and decision modeling — not generic AI that hallucinates.", num: "01" },
+  { icon: Globe, title: "Proactive, Not Reactive", description: "Anticipates confusion based on behaviour patterns before you even ask. it's lowkey reading your mind.", num: "02" },
+  { icon: BarChart3, title: "Connected Intelligence", description: "Industry data, skill demand signals, startup ecosystem insights, and funding readiness metrics. the whole package.", num: "03" },
+  { icon: DollarSign, title: "Affordable at Scale", description: "Automated and revenue-sustained. Works in Tier 3, 4 and rural regions — not just metro girlies.", num: "04" },
+  { icon: Heart, title: "Impact-Measured", description: "Every interaction tracked for real outcomes. Measurable career and business progress. receipts included.", num: "05" },
 ];
 
 const TransitionSection = () => {
@@ -38,7 +38,7 @@ const TransitionSection = () => {
               className="font-display text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-foreground"
             >
               This is not{" "}
-              <em className="text-gradient-warm">generic AI.</em>
+              <em className="text-gradient-warm">generic AI.</em> this one's different fr.
             </motion.h2>
           </div>
 

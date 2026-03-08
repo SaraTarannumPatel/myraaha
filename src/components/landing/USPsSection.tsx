@@ -5,12 +5,12 @@ import {
 } from "lucide-react";
 
 const usps = [
-  { icon: Filter, title: "Filtering Noise", description: "Instead of 200 careers or ideas, MyRaaha narrows options responsibly based on your real data." },
-  { icon: BarChart3, title: "Ranking Responsibly", description: "Every path shows required skills, market demand, income realities, effort needed, and risk level." },
-  { icon: TrendingUp, title: "Showing Trade-offs", description: "Time-to-readiness estimates, effort vs reward comparisons, and income-risk analysis." },
-  { icon: Brain, title: "Auto Tracking Growth", description: "Your dynamic identity model evolves continuously — aptitude, attitude, and articulation." },
-  { icon: RefreshCw, title: "No Resets Needed", description: "The system remembers your history. Adjusts when you shift, fall behind, or markets change." },
-  { icon: Link2, title: "Skill → Outcome", description: "Connects learning directly to jobs, validation, and real opportunities. No random course hopping." },
+  { icon: Filter, title: "Filtering the Noise", description: "Instead of 200 careers or ideas, MyRaaha narrows it down responsibly based on your actual data. no fluff." },
+  { icon: BarChart3, title: "Ranking Responsibly", description: "Every path shows required skills, market demand, income realities, effort needed, and risk level. we keep it real." },
+  { icon: TrendingUp, title: "Showing Trade-offs", description: "Time-to-readiness estimates, effort vs reward comparisons, and income-risk analysis. the full tea." },
+  { icon: Brain, title: "Auto Tracking Growth", description: "Your dynamic identity model keeps evolving — aptitude, attitude, and articulation. it literally grows with you." },
+  { icon: RefreshCw, title: "No Resets Needed", description: "The system remembers your whole history. Adjusts when you pivot, fall behind, or markets shift. slay." },
+  { icon: Link2, title: "Skill → Outcome", description: "Connects learning directly to jobs, validation, and real opportunities. No random course hopping. that's bussin." },
 ];
 
 const USPsSection = () => {
@@ -28,7 +28,7 @@ const USPsSection = () => {
             animate={isInView ? { opacity: 1 } : {}}
             className="font-body text-[10px] sm:text-xs uppercase tracking-[0.25em] text-blue font-semibold mb-3"
           >
-            What Makes MyRaaha Different
+            What Makes MyRaaha Hit Different
           </motion.p>
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
@@ -70,7 +70,7 @@ const USPsSection = () => {
           transition={{ delay: 0.6 }}
           className="text-center font-body text-xs sm:text-sm text-grey-label mt-10 sm:mt-12"
         >
-          Instead of 10 disconnected tools → <strong className="text-foreground">one structured navigation system.</strong>
+          Instead of 10 disconnected tools → <strong className="text-foreground">one structured navigation system. that's the whole vibe.</strong>
         </motion.p>
       </div>
     </section>
