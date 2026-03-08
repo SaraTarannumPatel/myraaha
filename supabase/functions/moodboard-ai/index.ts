@@ -1,23 +1,24 @@
-import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
-
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
+  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
-serve(async (req) => {
-  if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
+Deno.serve(async (req) => {
+  if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
 
   try {
-    const { mode, profile, boards, items, theme } = await req.json();
+    const { mode, context, profile, boards, items, theme } = await req.json();
     const apiKey = Deno.env.get("LOVABLE_API_KEY");
     if (!apiKey) throw new Error("Missing API key");
 
+    const isCareer = context === "career";
+    const domain = isCareer ? "career exploration and professional growth" : "entrepreneurship and startup building";
+
     const systemPrompts: Record<string, string> = {
-      suggest_items: `You are a creative moodboard coach for entrepreneurs. Based on the user's profile and existing boards, suggest 5 inspirational items they could add. Return JSON: { "suggestions": [{ "title": string, "content": string, "content_type": "quote"|"text"|"link", "tags": string[], "why": string }] }`,
-      suggest_boards: `You are a startup moodboard strategist. Suggest 4 new board themes the user should create based on their profile and journey. Return JSON: { "boards": [{ "title": string, "description": string, "theme": string, "suggested_tags": string[] }] }`,
-      reflection_prompt: `You are an empathetic entrepreneurship reflection guide. Based on the user's moodboard items and emotional notes, generate a thoughtful reflection prompt. Return JSON: { "prompt": string, "follow_ups": string[], "insight": string }`,
-      community_inspiration: `You are a community curator. Generate 5 trending inspiration items that founders commonly find valuable. Return JSON: { "trending": [{ "title": string, "content": string, "content_type": "quote"|"text", "tags": string[], "category": string }] }`,
+      suggest_items: `You are a creative moodboard coach for ${domain}. Based on the user's profile and existing boards, suggest 5 inspirational items they could add. Return JSON: { "suggestions": [{ "title": string, "content": string, "content_type": "quote"|"text"|"link", "tags": string[], "why": string }] }`,
+      suggest_boards: `You are a ${isCareer ? "career" : "startup"} moodboard strategist. Suggest 4 new board themes the user should create based on their profile and journey. Return JSON: { "boards": [{ "title": string, "description": string, "theme": string, "suggested_tags": string[] }] }`,
+      reflection_prompt: `You are an empathetic ${isCareer ? "career" : "entrepreneurship"} reflection guide. Based on the user's moodboard items and emotional notes, generate a thoughtful reflection prompt. Return JSON: { "prompt": string, "follow_ups": string[], "insight": string }`,
+      community_inspiration: `You are a community curator for ${domain}. Generate 5 trending inspiration items that ${isCareer ? "professionals and career explorers" : "founders"} commonly find valuable. Return JSON: { "trending": [{ "title": string, "content": string, "content_type": "quote"|"text", "tags": string[], "category": string }] }`,
     };
 
     const systemPrompt = systemPrompts[mode] || systemPrompts.suggest_items;
@@ -29,7 +30,7 @@ serve(async (req) => {
       theme: theme || "general",
     });
 
-    const res = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+    const res = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
       headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -41,6 +42,14 @@ serve(async (req) => {
         response_format: { type: "json_object" },
       }),
     });
+
+    if (!res.ok) {
+      if (res.status === 429) return new Response(JSON.stringify({ error: "Rate limited, try again later" }), { status: 429, headers: { ...corsHeaders, "Content-Type": "application/json" } });
+      if (res.status === 402) return new Response(JSON.stringify({ error: "Payment required" }), { status: 402, headers: { ...corsHeaders, "Content-Type": "application/json" } });
+      const t = await res.text();
+      console.error("AI error:", res.status, t);
+      throw new Error("AI gateway error");
+    }
 
     const data = await res.json();
     const content = data.choices?.[0]?.message?.content;
