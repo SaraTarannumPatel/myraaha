@@ -65,14 +65,13 @@ const VirtualCareerCoach = () => {
 
   const fetchUserContext = async () => {
     try {
-      const [interestsRes, skillsRes, achievementsRes, checkinsRes, journalRes, energyRes, roadmapRes] = await Promise.all([
+      const [interestsRes, skillsRes, achievementsRes, checkinsRes, journalRes, energyRes] = await Promise.all([
         supabase.from("interests").select("name, category, strength").eq("user_id", user!.id).limit(20),
         supabase.from("skill_items").select("skill_name, status, confidence_score, category").eq("user_id", user!.id).limit(30),
         supabase.from("achievements").select("title, achievement_type, earned_at").eq("user_id", user!.id).order("earned_at", { ascending: false }).limit(10),
         supabase.from("coaching_checkins").select("mood, energy, confidence, created_at").eq("user_id", user!.id).order("created_at", { ascending: false }).limit(5),
         supabase.from("journal_entries").select("id, mood, tags, created_at").eq("user_id", user!.id).order("created_at", { ascending: false }).limit(10),
         supabase.from("energy_zones").select("domain, energy_level, engagement_score, mood_before, mood_after").eq("user_id", user!.id).order("recorded_at", { ascending: false }).limit(10),
-        supabase.from("roadmap_milestones").select("id, title, status").eq("user_id", user!.id).limit(20),
       ]);
 
       const checkins = checkinsRes.data || [];
