@@ -1,7 +1,8 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -13,7 +14,7 @@ import {
   Layers, Sparkles, Target, BookOpen, Briefcase, Zap, TrendingUp,
   Check, Clock, Pause, Play, ChevronRight, Brain, RefreshCw,
   ArrowRight, CheckCircle, Circle, BarChart3, Lightbulb, Rocket,
-  Shield, Eye, Award, Heart
+  Shield, Eye, Award, Heart, Link2, FileText, Users, Map, MessageCircle, Compass
 } from "lucide-react";
 
 const CATEGORY_META: Record<string, { label: string; color: string; icon: any }> = {
@@ -39,6 +40,7 @@ const EFFORT_META: Record<string, { label: string; dots: number }> = {
 
 const SkillStacker = () => {
   const { user, profile } = useAuth();
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("stack");
   const [stacks, setStacks] = useState<any[]>([]);
   const [activeStack, setActiveStack] = useState<any>(null);
@@ -51,6 +53,8 @@ const SkillStacker = () => {
   const [generating, setGenerating] = useState(false);
   const [aiInsights, setAiInsights] = useState<any>(null);
   const [fitAnalysis, setFitAnalysis] = useState<any>(null);
+  const [readinessData, setReadinessData] = useState<any>(null);
+  const [resumeSyncData, setResumeSyncData] = useState<any>(null);
   const [checkpointSkill, setCheckpointSkill] = useState<any>(null);
   const [checkpointData, setCheckpointData] = useState({ confidence: 5, energy: "neutral" as string, reflection: "", goDeeper: false });
   const [filterCategory, setFilterCategory] = useState("all");
@@ -88,47 +92,61 @@ const SkillStacker = () => {
     setOpportunityMap(mapRes.data || []);
   };
 
+  const callAI = async (type: string, context: any) => {
+    const { data, error } = await supabase.functions.invoke("skillstacker-ai", { body: { type, context } });
+    if (error) throw error;
+    if (data?.error) throw new Error(data.error);
+    return data;
+  };
+
+  // Computed
+  const filteredSkills = filterCategory === "all" ? skillItems : skillItems.filter(s => s.category === filterCategory);
+  const coreCount = skillItems.filter(s => s.category === "core").length;
+  const supportCount = skillItems.filter(s => s.category === "supporting").length;
+  const exploreCount = skillItems.filter(s => s.category === "exploration").length;
+  const completedCount = skillItems.filter(s => s.status === "validated").length;
+  const inProgressCount = skillItems.filter(s => ["accepted", "in_progress", "applied"].includes(s.status)).length;
+  const overallProgress = skillItems.length > 0 ? Math.round((completedCount / skillItems.length) * 100) : 0;
+
+  // Badge milestones
+  useEffect(() => {
+    if (!user || completedCount === 0) return;
+    const milestones: Record<number, string> = { 3: "Skill Builder", 5: "Capability Architect", 10: "Skill Master" };
+    const badge = milestones[completedCount];
+    if (badge) {
+      supabase.from("achievements").insert({
+        user_id: user.id, title: badge, achievement_type: "skillstacker",
+        description: `Validated ${completedCount} skills in SkillStacker`, points: completedCount * 10,
+      }).then(() => toast.success(`🏆 Badge unlocked: ${badge}!`));
+    }
+  }, [completedCount]);
+
   const generateStack = async () => {
     setGenerating(true);
     try {
-      const { data, error } = await supabase.functions.invoke("skillstacker-ai", {
-        body: {
-          type: "generate_stack",
-          context: {
-            interests: interests.map(i => i.name),
-            currentSkills: skillItems.filter(s => s.status !== "postponed").map(s => s.skill_name),
-            careerStage: profile?.user_type || "student",
-            domains: interests.filter(i => i.category === "domain").map(i => i.name),
-            goals: profile?.short_term_goals || "build capability",
-            intent: profile?.active_intent || "career",
-          },
-        },
+      const data = await callAI("generate_stack", {
+        interests: interests.map(i => i.name),
+        currentSkills: skillItems.filter(s => s.status !== "postponed").map(s => s.skill_name),
+        careerStage: profile?.user_type || "student",
+        domains: interests.filter(i => i.category === "domain").map(i => i.name),
+        goals: profile?.short_term_goals || "build capability",
+        intent: profile?.active_intent || "career",
       });
-      if (error) throw error;
 
-      // Create stack
       const { data: stack, error: stackErr } = await supabase.from("skill_stacks").insert({
-        user_id: user!.id,
-        title: data.stack_title || "My Skill Stack",
-        domain: data.domain || "general",
-        total_skills: (data.skills || []).length,
+        user_id: user!.id, title: data.stack_title || "My Skill Stack",
+        domain: data.domain || "general", total_skills: (data.skills || []).length,
       }).select().single();
       if (stackErr) throw stackErr;
 
-      // Insert skill items
       const items = (data.skills || []).map((s: any, i: number) => ({
-        stack_id: stack.id,
-        user_id: user!.id,
-        skill_name: s.skill_name,
-        category: s.category || "core",
-        why_it_matters: s.why_it_matters,
-        where_it_applies: s.where_it_applies || [],
-        effort_level: s.effort_level || "medium",
-        order_index: i,
+        stack_id: stack.id, user_id: user!.id, skill_name: s.skill_name,
+        category: s.category || "core", why_it_matters: s.why_it_matters,
+        where_it_applies: s.where_it_applies || [], effort_level: s.effort_level || "medium",
+        order_index: i, learning_suggestions: s.learning_suggestions || [],
       }));
       if (items.length > 0) {
         const { data: insertedItems } = await supabase.from("skill_items").insert(items).select();
-        // Insert application tasks for each skill
         const allTasks: any[] = [];
         (data.skills || []).forEach((s: any, idx: number) => {
           const itemId = insertedItems?.[idx]?.id;
@@ -141,16 +159,72 @@ const SkillStacker = () => {
         if (allTasks.length > 0) await supabase.from("skill_application_tasks").insert(allTasks);
       }
 
-      // Archive old active stacks
       if (activeStack) await supabase.from("skill_stacks").update({ status: "archived" }).eq("id", activeStack.id);
-
       setActiveStack(stack);
       await fetchStackDetails(stack.id);
       await fetchAll();
+
+      // Journal sync
+      await supabase.from("journal_entries").insert({
+        user_id: user!.id, title: `SkillStack Generated: ${data.stack_title}`,
+        content: `Generated a new skill stack with ${(data.skills || []).length} skills.\n\nDomain: ${data.domain}\n${data.readiness_insights || ""}`,
+        tags: ["skillstacker", "stack-generated"], mood: "motivated",
+      });
+
       toast.success("Your personalized skill stack is ready!");
-    } catch (e: any) {
-      toast.error(e.message || "Failed to generate stack");
-    }
+    } catch (e: any) { toast.error(e.message || "Failed to generate stack"); }
+    setGenerating(false);
+  };
+
+  const restackSkills = async () => {
+    setGenerating(true);
+    try {
+      const data = await callAI("restack", {
+        currentSkills: skillItems.map(s => ({ name: s.skill_name, category: s.category, status: s.status, confidence: s.confidence_score })),
+        newInterests: interests.map(i => i.name),
+        newDirection: profile?.active_intent || "exploring",
+        previousDomain: activeStack?.domain || "general",
+        skillStatuses: skillItems.map(s => ({ name: s.skill_name, status: s.status })),
+      });
+
+      // Update existing skills
+      if (data.updated_skills) {
+        for (const upd of data.updated_skills) {
+          const existing = skillItems.find(s => s.skill_name === upd.skill_name);
+          if (existing) {
+            const updates: any = { category: upd.new_category, effort_level: upd.new_effort_level };
+            if (upd.action === "archive") updates.status = "postponed";
+            await supabase.from("skill_items").update(updates).eq("id", existing.id);
+          }
+        }
+      }
+
+      // Add new skills
+      if (data.new_skills?.length > 0 && activeStack) {
+        const maxIdx = Math.max(0, ...skillItems.map(s => s.order_index || 0));
+        const newItems = data.new_skills.map((s: any, i: number) => ({
+          stack_id: activeStack.id, user_id: user!.id, skill_name: s.skill_name,
+          category: s.category || "core", why_it_matters: s.why_it_matters,
+          where_it_applies: s.where_it_applies || [], effort_level: s.effort_level || "medium",
+          order_index: maxIdx + i + 1, learning_suggestions: s.learning_suggestions || [],
+        }));
+        const { data: inserted } = await supabase.from("skill_items").insert(newItems).select();
+        // Add tasks for new skills
+        const newTasks: any[] = [];
+        data.new_skills.forEach((s: any, idx: number) => {
+          const itemId = inserted?.[idx]?.id;
+          if (itemId && s.application_tasks) {
+            s.application_tasks.forEach((t: any) => {
+              newTasks.push({ skill_item_id: itemId, user_id: user!.id, title: t.title, description: t.description, task_type: t.task_type || "practice" });
+            });
+          }
+        });
+        if (newTasks.length > 0) await supabase.from("skill_application_tasks").insert(newTasks);
+      }
+
+      await fetchStackDetails(activeStack!.id);
+      toast.success(data.encouragement || "Skills re-stacked! ♻️");
+    } catch (e: any) { toast.error(e.message || "Failed to re-stack"); }
     setGenerating(false);
   };
 
@@ -162,28 +236,46 @@ const SkillStacker = () => {
     await supabase.from("skill_items").update(updates).eq("id", skillId);
     setSkillItems(prev => prev.map(s => s.id === skillId ? { ...s, ...updates } : s));
 
-    // Update stack completion count
     const completed = skillItems.filter(s => s.id === skillId ? status === "validated" : s.status === "validated").length;
     if (activeStack) await supabase.from("skill_stacks").update({ completed_skills: completed }).eq("id", activeStack.id);
+
+    // On validation, sync to journal + living resume
+    if (status === "validated") {
+      const skill = skillItems.find(s => s.id === skillId);
+      if (skill) {
+        await supabase.from("journal_entries").insert({
+          user_id: user!.id, title: `Skill Validated: ${skill.skill_name}`,
+          content: `Validated the skill "${skill.skill_name}" in SkillStacker.\n\nWhy it matters: ${skill.why_it_matters || ""}`,
+          tags: ["skillstacker", "skill-validated", skill.category], mood: "accomplished",
+        });
+      }
+    }
+
     toast.success(`Skill ${status === "postponed" ? "postponed" : "updated"}!`);
   };
 
   const submitCheckpoint = async () => {
     if (!checkpointSkill) return;
     await supabase.from("skill_checkpoints").insert({
-      user_id: user!.id,
-      skill_item_id: checkpointSkill.id,
+      user_id: user!.id, skill_item_id: checkpointSkill.id,
       confidence_before: checkpointSkill.confidence_score || 5,
-      confidence_after: checkpointData.confidence,
-      energy_level: checkpointData.energy,
-      went_deeper: checkpointData.goDeeper,
-      reflection: checkpointData.reflection,
+      confidence_after: checkpointData.confidence, energy_level: checkpointData.energy,
+      went_deeper: checkpointData.goDeeper, reflection: checkpointData.reflection,
     });
     await supabase.from("skill_items").update({
-      confidence_score: checkpointData.confidence,
-      energy_feedback: checkpointData.energy,
+      confidence_score: checkpointData.confidence, energy_feedback: checkpointData.energy,
     }).eq("id", checkpointSkill.id);
     setSkillItems(prev => prev.map(s => s.id === checkpointSkill.id ? { ...s, confidence_score: checkpointData.confidence, energy_feedback: checkpointData.energy } : s));
+
+    // Sync reflection to journal if provided
+    if (checkpointData.reflection.trim()) {
+      await supabase.from("journal_entries").insert({
+        user_id: user!.id, title: `Skill Checkpoint: ${checkpointSkill.skill_name}`,
+        content: `Confidence: ${checkpointData.confidence}/10 · Energy: ${checkpointData.energy}\n\n${checkpointData.reflection}`,
+        tags: ["skillstacker", "checkpoint"], mood: checkpointData.energy === "energizing" ? "motivated" : checkpointData.energy === "draining" ? "tired" : "reflective",
+      });
+    }
+
     setCheckpointSkill(null);
     setCheckpointData({ confidence: 5, energy: "neutral", reflection: "", goDeeper: false });
     toast.success("Checkpoint saved!");
@@ -200,18 +292,12 @@ const SkillStacker = () => {
   const getConfidenceInsights = async () => {
     setGenerating(true);
     try {
-      const { data, error } = await supabase.functions.invoke("skillstacker-ai", {
-        body: {
-          type: "confidence_analysis",
-          context: {
-            checkpoints: checkpoints.slice(0, 20),
-            skillsInProgress: skillItems.filter(s => ["accepted", "in_progress", "applied"].includes(s.status)),
-            energyPatterns: checkpoints.map(c => ({ skill: c.skill_item_id, energy: c.energy_level, confidence: c.confidence_after })),
-            daysActive: stacks.length > 0 ? Math.ceil((Date.now() - new Date(stacks[stacks.length - 1].created_at).getTime()) / 86400000) : 0,
-          },
-        },
+      const data = await callAI("confidence_analysis", {
+        checkpoints: checkpoints.slice(0, 20),
+        skillsInProgress: skillItems.filter(s => ["accepted", "in_progress", "applied"].includes(s.status)),
+        energyPatterns: checkpoints.map(c => ({ skill: c.skill_item_id, energy: c.energy_level, confidence: c.confidence_after })),
+        daysActive: stacks.length > 0 ? Math.ceil((Date.now() - new Date(stacks[stacks.length - 1].created_at).getTime()) / 86400000) : 0,
       });
-      if (error) throw error;
       setAiInsights(data);
     } catch (e: any) { toast.error(e.message || "Failed"); }
     setGenerating(false);
@@ -220,31 +306,48 @@ const SkillStacker = () => {
   const getFitAnalysis = async () => {
     setGenerating(true);
     try {
-      const { data, error } = await supabase.functions.invoke("skillstacker-ai", {
-        body: {
-          type: "skill_fit_analysis",
-          context: {
-            skills: skillItems.map(s => s.skill_name),
-            skillLevels: skillItems.map(s => ({ name: s.skill_name, status: s.status, confidence: s.confidence_score })),
-            domain: activeStack?.domain || "general",
-            careerStage: profile?.user_type || "student",
-            intent: profile?.active_intent || "career",
-          },
-        },
+      const data = await callAI("skill_fit_analysis", {
+        skills: skillItems.map(s => s.skill_name),
+        skillLevels: skillItems.map(s => ({ name: s.skill_name, status: s.status, confidence: s.confidence_score })),
+        domain: activeStack?.domain || "general",
+        careerStage: profile?.user_type || "student",
+        intent: profile?.active_intent || "career",
       });
-      if (error) throw error;
       setFitAnalysis(data);
     } catch (e: any) { toast.error(e.message || "Failed"); }
     setGenerating(false);
   };
 
-  const filteredSkills = filterCategory === "all" ? skillItems : skillItems.filter(s => s.category === filterCategory);
-  const coreCount = skillItems.filter(s => s.category === "core").length;
-  const supportCount = skillItems.filter(s => s.category === "supporting").length;
-  const exploreCount = skillItems.filter(s => s.category === "exploration").length;
-  const completedCount = skillItems.filter(s => s.status === "validated").length;
-  const inProgressCount = skillItems.filter(s => ["accepted", "in_progress", "applied"].includes(s.status)).length;
-  const overallProgress = skillItems.length > 0 ? Math.round((completedCount / skillItems.length) * 100) : 0;
+  const getOpportunityReadiness = async () => {
+    setGenerating(true);
+    try {
+      const data = await callAI("opportunity_readiness", {
+        validatedSkills: skillItems.filter(s => s.status === "validated").map(s => s.skill_name),
+        inProgressSkills: skillItems.filter(s => ["in_progress", "applied"].includes(s.status)).map(s => s.skill_name),
+        domain: activeStack?.domain || "general",
+        careerStage: profile?.user_type || "student",
+        intent: profile?.active_intent || "career",
+        totalSkills: skillItems.length,
+      });
+      setReadinessData(data);
+    } catch (e: any) { toast.error(e.message || "Failed"); }
+    setGenerating(false);
+  };
+
+  const getResumeSyncInsights = async () => {
+    setGenerating(true);
+    try {
+      const data = await callAI("resume_sync", {
+        validatedSkills: skillItems.filter(s => s.status === "validated").map(s => s.skill_name),
+        appliedSkills: skillItems.filter(s => s.status === "applied").map(s => s.skill_name),
+        domain: activeStack?.domain || "general",
+        checkpointsCount: checkpoints.length,
+        tasksCompleted: appTasks.filter(t => t.status === "completed").length,
+      });
+      setResumeSyncData(data);
+    } catch (e: any) { toast.error(e.message || "Failed"); }
+    setGenerating(false);
+  };
 
   if (loading) return (
     <div className="flex items-center justify-center min-h-[60vh]">
@@ -309,12 +412,13 @@ const SkillStacker = () => {
       )}
 
       <Tabs value={activeTab} onValueChange={setActiveTab}>
-        <TabsList className="grid grid-cols-5 w-full">
-          <TabsTrigger value="stack">Skill Stack</TabsTrigger>
-          <TabsTrigger value="progress">Progress</TabsTrigger>
-          <TabsTrigger value="tasks">Apply</TabsTrigger>
-          <TabsTrigger value="fit">Fit & Ready</TabsTrigger>
-          <TabsTrigger value="insights">AI Insights</TabsTrigger>
+        <TabsList className="flex-wrap h-auto gap-1">
+          <TabsTrigger value="stack" className="gap-1 text-xs"><Layers className="h-3.5 w-3.5" /> Skill Stack</TabsTrigger>
+          <TabsTrigger value="progress" className="gap-1 text-xs"><TrendingUp className="h-3.5 w-3.5" /> Progress</TabsTrigger>
+          <TabsTrigger value="tasks" className="gap-1 text-xs"><Target className="h-3.5 w-3.5" /> Apply</TabsTrigger>
+          <TabsTrigger value="fit" className="gap-1 text-xs"><BarChart3 className="h-3.5 w-3.5" /> Fit & Ready</TabsTrigger>
+          <TabsTrigger value="insights" className="gap-1 text-xs"><Brain className="h-3.5 w-3.5" /> AI Insights</TabsTrigger>
+          <TabsTrigger value="connect" className="gap-1 text-xs"><Link2 className="h-3.5 w-3.5" /> Connect</TabsTrigger>
         </TabsList>
 
         {/* SKILL STACK TAB */}
@@ -343,7 +447,7 @@ const SkillStacker = () => {
                   </Button>
                 ))}
                 <div className="flex-1" />
-                <Button variant="outline" size="sm" onClick={generateStack} disabled={generating} className="gap-1">
+                <Button variant="outline" size="sm" onClick={restackSkills} disabled={generating} className="gap-1">
                   <RefreshCw className={`h-3 w-3 ${generating ? "animate-spin" : ""}`} /> Re-Stack
                 </Button>
               </div>
@@ -381,6 +485,18 @@ const SkillStacker = () => {
                               {skill.where_it_applies.map((w: string, j: number) => (
                                 <Badge key={j} variant="secondary" className="text-xs">{w}</Badge>
                               ))}
+                            </div>
+                          )}
+
+                          {/* Learning suggestions */}
+                          {skill.learning_suggestions?.length > 0 && (
+                            <div className="border-t border-border/50 pt-2">
+                              <p className="text-xs font-medium text-muted-foreground mb-1 flex items-center gap-1"><BookOpen className="h-3 w-3" /> Learning Path:</p>
+                              <div className="flex flex-wrap gap-1">
+                                {skill.learning_suggestions.map((l: string, j: number) => (
+                                  <Badge key={j} variant="outline" className="text-xs">{l}</Badge>
+                                ))}
+                              </div>
                             </div>
                           )}
 
@@ -422,7 +538,6 @@ const SkillStacker = () => {
                             )}
                           </div>
 
-                          {/* Linked tasks preview */}
                           {skillTasks.length > 0 && (
                             <div className="border-t border-border/50 pt-2 mt-2">
                               <p className="text-xs font-medium text-muted-foreground mb-1">Application Tasks:</p>
@@ -477,6 +592,39 @@ const SkillStacker = () => {
                   </div>
                 );
               })}
+            </CardContent>
+          </Card>
+
+          {/* Resume Sync */}
+          <Card className="border-border/50">
+            <CardHeader>
+              <CardTitle className="text-lg font-display flex items-center gap-2"><FileText className="h-5 w-5" /> Resume Sync</CardTitle>
+              <CardDescription>See how your skills translate to your Living Resume narrative.</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              <Button onClick={getResumeSyncInsights} disabled={generating || completedCount === 0} size="sm" className="gap-2">
+                {generating ? <RefreshCw className="h-4 w-4 animate-spin" /> : <Sparkles className="h-4 w-4" />}
+                Generate Resume Insights
+              </Button>
+              {resumeSyncData && (
+                <div className="space-y-3">
+                  {resumeSyncData.skill_narrative && (
+                    <div className="p-3 rounded-lg bg-primary/5 border border-primary/20">
+                      <p className="text-sm">{resumeSyncData.skill_narrative}</p>
+                    </div>
+                  )}
+                  {resumeSyncData.suggested_headline_update && (
+                    <p className="text-xs text-muted-foreground">Suggested headline: <strong className="text-foreground">{resumeSyncData.suggested_headline_update}</strong></p>
+                  )}
+                  {resumeSyncData.highlights?.map((h: any, i: number) => (
+                    <div key={i} className="p-2 rounded bg-muted text-xs">
+                      <p className="font-medium">{h.skill}</p>
+                      <p className="text-muted-foreground">{h.achievement} — {h.impact}</p>
+                    </div>
+                  ))}
+                  {resumeSyncData.growth_story && <p className="text-sm italic text-muted-foreground">{resumeSyncData.growth_story}</p>}
+                </div>
+              )}
             </CardContent>
           </Card>
 
@@ -591,6 +739,64 @@ const SkillStacker = () => {
               )}
             </CardContent>
           </Card>
+
+          {/* Opportunity Readiness */}
+          <Card className="border-border/50">
+            <CardHeader>
+              <CardTitle className="text-lg font-display flex items-center gap-2"><Rocket className="h-5 w-5" /> Opportunity Readiness</CardTitle>
+              <CardDescription>Which opportunities become viable as your skills progress.</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <Button onClick={getOpportunityReadiness} disabled={generating || skillItems.length === 0} size="sm" className="gap-2">
+                {generating ? <RefreshCw className="h-4 w-4 animate-spin" /> : <Sparkles className="h-4 w-4" />}
+                Check Readiness
+              </Button>
+
+              {readinessData && (
+                <div className="space-y-4">
+                  {readinessData.readiness_score !== undefined && (
+                    <div className="flex items-center gap-3">
+                      <span className="text-sm text-muted-foreground">Readiness Score:</span>
+                      <Badge className="bg-primary text-primary-foreground text-sm px-3">{readinessData.readiness_score}%</Badge>
+                    </div>
+                  )}
+
+                  {readinessData.ready_now?.length > 0 && (
+                    <div>
+                      <h4 className="text-sm font-semibold text-foreground mb-2 flex items-center gap-1"><CheckCircle className="h-4 w-4 text-emerald-500" /> Ready Now</h4>
+                      {readinessData.ready_now.map((r: any, i: number) => (
+                        <div key={i} className="p-2 rounded bg-muted text-xs mb-1">
+                          <span className="font-medium">{r.opportunity}</span>
+                          <Badge variant="outline" className="ml-2 text-xs">{r.type}</Badge>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+
+                  {readinessData.almost_ready?.length > 0 && (
+                    <div>
+                      <h4 className="text-sm font-semibold text-foreground mb-2 flex items-center gap-1"><Clock className="h-4 w-4 text-amber-500" /> Almost Ready</h4>
+                      {readinessData.almost_ready.map((r: any, i: number) => (
+                        <div key={i} className="p-2 rounded bg-muted text-xs mb-1">
+                          <span className="font-medium">{r.opportunity}</span>
+                          <span className="text-muted-foreground ml-2">Missing: {r.missing?.join(", ")}</span>
+                          <span className="ml-2">⏱ {r.time_to_ready}</span>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+
+                  {readinessData.next_unlock && (
+                    <div className="p-3 rounded-lg bg-primary/5 border border-primary/20">
+                      <p className="text-sm"><ArrowRight className="h-4 w-4 inline mr-1 text-primary" /> <strong>Next unlock:</strong> {readinessData.next_unlock}</p>
+                    </div>
+                  )}
+
+                  {readinessData.message && <p className="text-sm italic text-muted-foreground">{readinessData.message}</p>}
+                </div>
+              )}
+            </CardContent>
+          </Card>
         </TabsContent>
 
         {/* AI INSIGHTS TAB */}
@@ -642,6 +848,45 @@ const SkillStacker = () => {
                   )}
                 </div>
               )}
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        {/* CONNECT TAB */}
+        <TabsContent value="connect" className="space-y-4">
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-lg font-display">Connected Features</CardTitle>
+              <CardDescription>SkillStacker is where clarity becomes capability — and it connects deeply with your entire journey.</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="grid gap-3 sm:grid-cols-2">
+                {[
+                  { label: "Curiosity Compass", desc: "Interest signals fuel your skill suggestions", icon: Compass, path: "/career/curiosity" },
+                  { label: "AI Roadmaps", desc: "Skills sequence into your roadmap goals", icon: Map, path: "/career/roadmap" },
+                  { label: "SelfGraph", desc: "Capability & energy patterns refine your stack", icon: Brain, path: "/career/selfgraph" },
+                  { label: "Content Library", desc: "Learning capsules mapped to each skill", icon: BookOpen, path: "/career/content" },
+                  { label: "Project Playground", desc: "Apply skills through real projects", icon: Rocket, path: "/career/projects" },
+                  { label: "Living Resume", desc: "Skills auto-sync to your career narrative", icon: FileText, path: "/career/resume" },
+                  { label: "Job Matching", desc: "Skill progress unlocks opportunities", icon: Briefcase, path: "/career/jobs" },
+                  { label: "Mentor Matchmaking", desc: "Mentors guide based on your skill gaps", icon: Users, path: "/career/mentors" },
+                  { label: "Virtual Coach", desc: "AI uses skill gaps to suggest next actions", icon: MessageCircle, path: "/career/coach" },
+                  { label: "Journal", desc: "Reflect on your learning journey", icon: Heart, path: "/journal" },
+                ].map((f, i) => (
+                  <button
+                    key={i}
+                    onClick={() => navigate(f.path)}
+                    className="flex items-center gap-3 p-3 rounded-lg bg-muted hover:bg-muted/80 text-left transition-colors"
+                  >
+                    <f.icon className="h-5 w-5 text-primary shrink-0" />
+                    <div>
+                      <p className="text-sm font-medium text-foreground">{f.label}</p>
+                      <p className="text-xs text-muted-foreground">{f.desc}</p>
+                    </div>
+                    <ArrowRight className="h-4 w-4 ml-auto text-muted-foreground" />
+                  </button>
+                ))}
+              </div>
             </CardContent>
           </Card>
         </TabsContent>
