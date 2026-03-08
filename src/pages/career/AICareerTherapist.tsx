@@ -10,12 +10,14 @@ import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { toast } from "sonner";
 import ReactMarkdown from "react-markdown";
+import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from "recharts";
 import {
-  Heart, Send, Wind, BookHeart, Sparkles, Loader2, MessageCircle,
-  Brain, Smile, Meh, Frown, Activity, RefreshCw, Shield, Sun, Moon,
+  Heart, Send, Wind, BookHeart, Sparkles, Loader2,
+  Brain, Smile, Meh, Frown, Activity, Shield, Sun,
   CloudRain, Flame, Plus, Trash2, Eye, Target, Users, Map,
-  Compass, Zap, BookOpen, ChevronRight, AlertTriangle, CheckCircle
+  ChevronRight, Compass, Zap, BookOpen, Award
 } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 type Msg = { role: "user" | "assistant"; content: string };
 
@@ -39,6 +41,8 @@ const moodOptions = [
   { value: "stressed", icon: Flame, label: "Stressed", color: "text-orange-500" },
   { value: "overwhelmed", icon: Frown, label: "Overwhelmed", color: "text-destructive" },
 ];
+
+const moodToValue: Record<string, number> = { peaceful: 5, okay: 4, anxious: 3, stressed: 2, overwhelmed: 1 };
 
 async function streamTherapist({ messages, context, onDelta, onDone, onError }: {
   messages: Msg[]; context?: Record<string, any>;
@@ -85,6 +89,7 @@ async function streamTherapist({ messages, context, onDelta, onDone, onError }: 
 
 const AICareerTherapist = () => {
   const { user, profile } = useAuth();
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("chat");
   const [messages, setMessages] = useState<Msg[]>([]);
   const [input, setInput] = useState("");
@@ -94,6 +99,12 @@ const AICareerTherapist = () => {
   const [checkins, setCheckins] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const chatEndRef = useRef<HTMLDivElement>(null);
+
+  // Real user data for context
+  const [userSkills, setUserSkills] = useState<any[]>([]);
+  const [userAchievements, setUserAchievements] = useState<any[]>([]);
+  const [energyZones, setEnergyZones] = useState<any[]>([]);
+  const [journalEntries, setJournalEntries] = useState<any[]>([]);
 
   // Tool states
   const [breathingExercise, setBreathingExercise] = useState<any>(null);
@@ -119,29 +130,40 @@ const AICareerTherapist = () => {
   const loadData = useCallback(async () => {
     if (!user) return;
     setLoading(true);
-    const [sessRes, checkinRes] = await Promise.all([
+    const [sessRes, checkinRes, skillsRes, achieveRes, energyRes, journalRes] = await Promise.all([
       supabase.from("coaching_sessions").select("*").eq("user_id", user.id).order("updated_at", { ascending: false }).limit(20),
       supabase.from("coaching_checkins").select("*").eq("user_id", user.id).order("created_at", { ascending: false }).limit(30),
+      supabase.from("skill_items").select("name, category, proficiency_level").eq("user_id", user.id).limit(50),
+      supabase.from("achievements").select("title, achievement_type, earned_at").eq("user_id", user.id).order("earned_at", { ascending: false }).limit(20),
+      supabase.from("energy_zones").select("domain, energy_level, mood_before, mood_after, recorded_at").eq("user_id", user.id).order("recorded_at", { ascending: false }).limit(20),
+      supabase.from("journal_entries").select("title, mood, tags, created_at").eq("user_id", user.id).order("created_at", { ascending: false }).limit(10),
     ]);
     setSessions(sessRes.data || []);
     setCheckins(checkinRes.data || []);
+    setUserSkills(skillsRes.data || []);
+    setUserAchievements(achieveRes.data || []);
+    setEnergyZones(energyRes.data || []);
+    setJournalEntries(journalRes.data || []);
     setLoading(false);
   }, [user]);
 
   useEffect(() => { loadData(); }, [loadData]);
 
-  const getContext = () => ({
+  const getContext = useCallback(() => ({
     name: profile?.full_name || "friend",
     intent: profile?.active_intent || "career",
     userType: profile?.user_type || "student",
     recentMoods: checkins.slice(0, 5).map((c: any) => c.mood),
     challenges: profile?.areas_of_focus?.join(", ") || "not specified",
     stressLevel: checkins[0]?.energy ? (checkins[0].energy < 4 ? "high" : checkins[0].energy < 7 ? "moderate" : "low") : "unknown",
-    skills: [],
-    recentAchievements: [],
+    skills: userSkills.map(s => ({ name: s.name, category: s.category, level: s.proficiency_level })),
+    recentAchievements: userAchievements.slice(0, 5).map(a => ({ title: a.title, type: a.achievement_type })),
     energyLevel: checkins[0]?.energy || "unknown",
+    energyPatterns: energyZones.slice(0, 5).map(e => ({ domain: e.domain, energy: e.energy_level, moodBefore: e.mood_before, moodAfter: e.mood_after })),
+    recentJournals: journalEntries.slice(0, 3).map(j => ({ title: j.title, mood: j.mood, tags: j.tags })),
     checkins: checkins.slice(0, 10).map((c: any) => ({ mood: c.mood, energy: c.energy, confidence: c.confidence, reflection: c.reflection, date: c.created_at })),
-  });
+    daysSinceActive: checkins.length > 0 ? Math.floor((Date.now() - new Date(checkins[0].created_at).getTime()) / 86400000) : "unknown",
+  }), [profile, checkins, userSkills, userAchievements, energyZones, journalEntries]);
 
   const sendMessage = async (text?: string) => {
     const msg = text || input.trim();
@@ -203,16 +225,59 @@ const AICareerTherapist = () => {
     if (!user || !checkinMood) return;
     setSavingCheckin(true);
     try {
-      const { data } = await supabase.functions.invoke("ai-therapist", {
-        body: { type: "mood_analysis", context: { currentMood: checkinMood, energy: checkinEnergy, confidence: checkinConfidence, reflection: checkinReflection, history: checkins.slice(0, 10).map((c: any) => ({ mood: c.mood, energy: c.energy, date: c.created_at })) } },
-      });
+      const ctx = { currentMood: checkinMood, energy: checkinEnergy, confidence: checkinConfidence, reflection: checkinReflection, history: checkins.slice(0, 10).map((c: any) => ({ mood: c.mood, energy: c.energy, date: c.created_at })) };
+      const { data } = await supabase.functions.invoke("ai-therapist", { body: { type: "mood_analysis", context: ctx } });
+
       await supabase.from("coaching_checkins").insert({ user_id: user.id, mood: checkinMood, energy: checkinEnergy, confidence: checkinConfidence, reflection: checkinReflection, ai_response: data || {} });
+
+      // Sync reflection to journal
+      if (checkinReflection.trim()) {
+        await supabase.from("journal_entries").insert({
+          user_id: user.id,
+          title: `Emotional Check-in: ${checkinMood}`,
+          content: `**Mood:** ${checkinMood} | **Energy:** ${checkinEnergy}/10 | **Confidence:** ${checkinConfidence}/10\n\n${checkinReflection}${data?.affirmation ? `\n\n---\n💙 *AI Insight:* ${data.affirmation}` : ""}`,
+          mood: checkinMood,
+          tags: ["therapist", "check-in", "emotional-health"],
+        });
+      }
+
+      // Award resilience badge after 5 check-ins
+      const totalCheckins = checkins.length + 1;
+      if (totalCheckins === 5 || totalCheckins === 15 || totalCheckins === 30) {
+        const badgeTitle = totalCheckins === 5 ? "Emotional Explorer" : totalCheckins === 15 ? "Resilience Builder" : "Wellness Champion";
+        const existing = await supabase.from("achievements").select("id").eq("user_id", user.id).eq("title", badgeTitle).maybeSingle();
+        if (!existing.data) {
+          await supabase.from("achievements").insert({
+            user_id: user.id, title: badgeTitle, achievement_type: "resilience",
+            description: `Completed ${totalCheckins} emotional check-ins`, points: totalCheckins * 5,
+          });
+          toast.success(`🏅 Badge unlocked: ${badgeTitle}!`);
+        }
+      }
+
       toast.success("Check-in saved 💙");
       setCheckinMood(""); setCheckinReflection(""); setCheckinEnergy(5); setCheckinConfidence(5);
       loadData();
     } catch { toast.error("Failed to save"); }
     setSavingCheckin(false);
   };
+
+  // Mood chart data
+  const moodChartData = checkins.slice(0, 15).reverse().map((c: any) => ({
+    date: new Date(c.created_at).toLocaleDateString(undefined, { month: "short", day: "numeric" }),
+    mood: moodToValue[c.mood] || 3,
+    energy: c.energy,
+    confidence: c.confidence,
+  }));
+
+  const featureLinks = [
+    { icon: Compass, label: "Curiosity Compass", desc: "Re-explore interests when stuck", path: "/dashboard/curiosity-compass", color: "text-blue-500" },
+    { icon: Target, label: "Project Playground", desc: "Build momentum with small tasks", path: "/dashboard/project-playground", color: "text-emerald-500" },
+    { icon: BookOpen, label: "Content Library", desc: "Calming & focus content", path: "/dashboard/content-library", color: "text-purple-500" },
+    { icon: Users, label: "Peer Circles", desc: "Safe peer support spaces", path: "/dashboard/peer-circles", color: "text-orange-500" },
+    { icon: Zap, label: "SkillStacker", desc: "Rebuild confidence via skills", path: "/dashboard/skill-stacker", color: "text-amber-500" },
+    { icon: Map, label: "Roadmap", desc: "Adjust goals & milestones", path: "/dashboard/roadmap", color: "text-primary" },
+  ];
 
   return (
     <div className="space-y-6 pb-8">
@@ -230,12 +295,13 @@ const AICareerTherapist = () => {
       </motion.div>
 
       <Tabs value={activeTab} onValueChange={setActiveTab}>
-        <TabsList className="grid grid-cols-6 w-full">
+        <TabsList className="grid grid-cols-7 w-full">
           <TabsTrigger value="chat" className="text-xs">💬 Talk</TabsTrigger>
           <TabsTrigger value="tools" className="text-xs">🧘 Tools</TabsTrigger>
           <TabsTrigger value="checkin" className="text-xs">💓 Check-in</TabsTrigger>
           <TabsTrigger value="nudges" className="text-xs">👁 Nudges</TabsTrigger>
           <TabsTrigger value="insights" className="text-xs">🧠 Insights</TabsTrigger>
+          <TabsTrigger value="connect" className="text-xs">🔗 Connect</TabsTrigger>
           <TabsTrigger value="history" className="text-xs">📖 History</TabsTrigger>
         </TabsList>
 
@@ -281,11 +347,9 @@ const AICareerTherapist = () => {
               {isLoading && messages[messages.length - 1]?.role !== "assistant" && (
                 <div className="flex justify-start">
                   <div className="flex items-center gap-2 p-3 rounded-xl bg-muted">
-                    <div className="flex gap-1">
-                      <span className="w-2 h-2 rounded-full bg-pink-500 animate-bounce" style={{ animationDelay: "0ms" }} />
-                      <span className="w-2 h-2 rounded-full bg-pink-500 animate-bounce" style={{ animationDelay: "150ms" }} />
-                      <span className="w-2 h-2 rounded-full bg-pink-500 animate-bounce" style={{ animationDelay: "300ms" }} />
-                    </div>
+                    <span className="w-2 h-2 rounded-full bg-pink-500 animate-bounce" style={{ animationDelay: "0ms" }} />
+                    <span className="w-2 h-2 rounded-full bg-pink-500 animate-bounce" style={{ animationDelay: "150ms" }} />
+                    <span className="w-2 h-2 rounded-full bg-pink-500 animate-bounce" style={{ animationDelay: "300ms" }} />
                   </div>
                 </div>
               )}
@@ -305,7 +369,6 @@ const AICareerTherapist = () => {
         {/* TOOLS TAB */}
         <TabsContent value="tools" className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {/* Breathing */}
             <Card className="border-border/50">
               <CardContent className="p-5 space-y-3">
                 <div className="flex items-center gap-2"><Wind className="h-5 w-5 text-blue-500" /><h3 className="font-display text-base text-foreground">Breathing Exercise</h3></div>
@@ -330,7 +393,6 @@ const AICareerTherapist = () => {
               </CardContent>
             </Card>
 
-            {/* Journal Prompts */}
             <Card className="border-border/50">
               <CardContent className="p-5 space-y-3">
                 <div className="flex items-center gap-2"><BookHeart className="h-5 w-5 text-purple-500" /><h3 className="font-display text-base text-foreground">Journal Prompts</h3></div>
@@ -353,7 +415,6 @@ const AICareerTherapist = () => {
               </CardContent>
             </Card>
 
-            {/* Affirmations */}
             <Card className="border-border/50">
               <CardContent className="p-5 space-y-3">
                 <div className="flex items-center gap-2"><Sparkles className="h-5 w-5 text-amber-500" /><h3 className="font-display text-base text-foreground">Affirmations</h3></div>
@@ -382,7 +443,6 @@ const AICareerTherapist = () => {
               </CardContent>
             </Card>
 
-            {/* Coping Plan */}
             <Card className="border-border/50">
               <CardContent className="p-5 space-y-3">
                 <div className="flex items-center gap-2"><Shield className="h-5 w-5 text-emerald-500" /><h3 className="font-display text-base text-foreground">Coping Plan</h3></div>
@@ -440,6 +500,7 @@ const AICareerTherapist = () => {
                 </div>
               </div>
               <Textarea placeholder="What's on your heart today? (optional)" value={checkinReflection} onChange={e => setCheckinReflection(e.target.value)} rows={3} />
+              <p className="text-xs text-muted-foreground">💡 Reflections are automatically saved to your journal for long-term tracking.</p>
               <Button onClick={saveCheckin} disabled={!checkinMood || savingCheckin} className="w-full gap-1">
                 {savingCheckin ? <Loader2 className="h-4 w-4 animate-spin" /> : <Heart className="h-4 w-4" />} Save Check-in
               </Button>
@@ -454,6 +515,7 @@ const AICareerTherapist = () => {
                   <div key={c.id} className="flex items-center gap-3 p-2 rounded-lg bg-secondary/50">
                     <Badge variant="outline" className="text-xs capitalize">{c.mood}</Badge>
                     <span className="text-xs text-muted-foreground">⚡{c.energy}/10 💪{c.confidence}/10</span>
+                    {c.reflection && <span className="text-xs text-muted-foreground truncate max-w-[200px]">{c.reflection}</span>}
                     <span className="text-xs text-muted-foreground ml-auto">{new Date(c.created_at).toLocaleDateString()}</span>
                   </div>
                 ))}
@@ -462,9 +524,8 @@ const AICareerTherapist = () => {
           )}
         </TabsContent>
 
-        {/* NUDGES & SUPPORT TAB */}
+        {/* NUDGES TAB */}
         <TabsContent value="nudges" className="space-y-4">
-          {/* Behavioral Nudges */}
           <Card className="border-border/50">
             <CardHeader>
               <CardTitle className="text-lg font-display flex items-center gap-2"><Eye className="h-5 w-5 text-primary" /> Behavioral Observations</CardTitle>
@@ -495,12 +556,13 @@ const AICareerTherapist = () => {
                       <p className="text-sm text-foreground">🎉 {behavioralNudges.celebration}</p>
                     </div>
                   )}
+                  {behavioralNudges.energy_insight && <p className="text-xs text-muted-foreground">⚡ {behavioralNudges.energy_insight}</p>}
+                  {behavioralNudges.resilience_note && <p className="text-xs text-pink-500 italic">💪 {behavioralNudges.resilience_note}</p>}
                 </motion.div>
               )}
             </CardContent>
           </Card>
 
-          {/* Task Suggestions */}
           <Card className="border-border/50">
             <CardHeader>
               <CardTitle className="text-lg font-display flex items-center gap-2"><Target className="h-5 w-5 text-primary" /> Therapeutic Task Suggestions</CardTitle>
@@ -532,7 +594,6 @@ const AICareerTherapist = () => {
             </CardContent>
           </Card>
 
-          {/* Roadmap Adjustments */}
           <Card className="border-border/50">
             <CardHeader>
               <CardTitle className="text-lg font-display flex items-center gap-2"><Map className="h-5 w-5 text-primary" /> Roadmap Adjustments</CardTitle>
@@ -564,7 +625,6 @@ const AICareerTherapist = () => {
             </CardContent>
           </Card>
 
-          {/* Escalation Check */}
           <Card className="border-border/50">
             <CardHeader>
               <CardTitle className="text-lg font-display flex items-center gap-2"><Users className="h-5 w-5 text-primary" /> Need Deeper Support?</CardTitle>
@@ -589,15 +649,13 @@ const AICareerTherapist = () => {
                         <p className="text-sm text-foreground mt-1">{r.description}</p>
                       </div>
                       {(r.type === "mentor" || r.type === "peer_circle") && (
-                        <a href={r.type === "mentor" ? "/dashboard/mentor-matchmaking" : "/dashboard/peer-circles"}>
-                          <Button size="sm" variant="outline" className="gap-1"><ChevronRight className="h-3 w-3" /> Go</Button>
-                        </a>
+                        <Button size="sm" variant="outline" className="gap-1" onClick={() => navigate(r.type === "mentor" ? "/dashboard/mentor-matchmaking" : "/dashboard/peer-circles")}>
+                          <ChevronRight className="h-3 w-3" /> Go
+                        </Button>
                       )}
                     </div>
                   ))}
-                  {escalationCheck.self_care_reminder && (
-                    <p className="text-xs text-muted-foreground italic">🌸 {escalationCheck.self_care_reminder}</p>
-                  )}
+                  {escalationCheck.self_care_reminder && <p className="text-xs text-muted-foreground italic">🌸 {escalationCheck.self_care_reminder}</p>}
                 </motion.div>
               )}
             </CardContent>
@@ -649,29 +707,116 @@ const AICareerTherapist = () => {
             </CardContent>
           </Card>
 
-          {/* Mood Trend Visualization */}
-          {checkins.length >= 3 && (
+          {/* Mood Chart */}
+          {moodChartData.length >= 3 && (
             <Card className="border-border/50">
-              <CardHeader><CardTitle className="text-lg font-display">Mood & Energy Trends</CardTitle></CardHeader>
+              <CardHeader><CardTitle className="text-lg font-display">Mood, Energy & Confidence Trends</CardTitle></CardHeader>
               <CardContent>
-                <div className="space-y-2">
-                  {checkins.slice(0, 10).reverse().map((c: any, i: number) => (
-                    <div key={i} className="flex items-center gap-3">
-                      <span className="text-xs text-muted-foreground w-16">{new Date(c.created_at).toLocaleDateString(undefined, { month: "short", day: "numeric" })}</span>
-                      <Badge variant="outline" className="text-xs w-24 justify-center capitalize">{c.mood}</Badge>
-                      <div className="flex-1 flex gap-1">
-                        <div className="flex items-center gap-1 flex-1">
-                          <span className="text-[10px] text-muted-foreground">⚡</span>
-                          <Progress value={c.energy * 10} className="h-1.5 flex-1" />
-                        </div>
-                        <div className="flex items-center gap-1 flex-1">
-                          <span className="text-[10px] text-muted-foreground">💪</span>
-                          <Progress value={c.confidence * 10} className="h-1.5 flex-1" />
-                        </div>
+                <ResponsiveContainer width="100%" height={220}>
+                  <LineChart data={moodChartData}>
+                    <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+                    <XAxis dataKey="date" tick={{ fontSize: 10, fill: "hsl(var(--muted-foreground))" }} />
+                    <YAxis domain={[0, 10]} tick={{ fontSize: 10, fill: "hsl(var(--muted-foreground))" }} />
+                    <Tooltip contentStyle={{ backgroundColor: "hsl(var(--card))", border: "1px solid hsl(var(--border))", borderRadius: 8, fontSize: 12 }} />
+                    <Line type="monotone" dataKey="mood" stroke="hsl(var(--primary))" strokeWidth={2} name="Mood (1-5)" dot={{ r: 3 }} />
+                    <Line type="monotone" dataKey="energy" stroke="#f59e0b" strokeWidth={2} name="Energy" dot={{ r: 3 }} />
+                    <Line type="monotone" dataKey="confidence" stroke="#10b981" strokeWidth={2} name="Confidence" dot={{ r: 3 }} />
+                  </LineChart>
+                </ResponsiveContainer>
+              </CardContent>
+            </Card>
+          )}
+
+          {/* Resilience Badges */}
+          {userAchievements.filter(a => a.achievement_type === "resilience").length > 0 && (
+            <Card className="border-border/50">
+              <CardHeader><CardTitle className="text-lg font-display flex items-center gap-2"><Award className="h-5 w-5 text-amber-500" /> Resilience Badges</CardTitle></CardHeader>
+              <CardContent>
+                <div className="flex flex-wrap gap-3">
+                  {userAchievements.filter(a => a.achievement_type === "resilience").map((a: any) => (
+                    <div key={a.earned_at} className="flex items-center gap-2 p-2 rounded-lg bg-amber-500/10 border border-amber-500/20">
+                      <Award className="h-4 w-4 text-amber-500" />
+                      <div>
+                        <p className="text-sm font-medium text-foreground">{a.title}</p>
+                        <p className="text-xs text-muted-foreground">{new Date(a.earned_at).toLocaleDateString()}</p>
                       </div>
                     </div>
                   ))}
                 </div>
+              </CardContent>
+            </Card>
+          )}
+        </TabsContent>
+
+        {/* CONNECT TAB - Feature Links & Recommendations */}
+        <TabsContent value="connect" className="space-y-4">
+          <Card className="border-border/50">
+            <CardHeader>
+              <CardTitle className="text-lg font-display">Connected Support Features</CardTitle>
+              <CardDescription>Your emotional wellness is connected to every part of your journey. Explore these when you're ready.</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                {featureLinks.map(f => (
+                  <button key={f.path} onClick={() => navigate(f.path)}
+                    className="flex items-center gap-3 p-3 rounded-lg border border-border/50 hover:border-primary/30 hover:bg-primary/5 transition-all text-left">
+                    <f.icon className={`h-5 w-5 ${f.color}`} />
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-medium text-foreground">{f.label}</p>
+                      <p className="text-xs text-muted-foreground">{f.desc}</p>
+                    </div>
+                    <ChevronRight className="h-4 w-4 text-muted-foreground" />
+                  </button>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="border-border/50">
+            <CardHeader>
+              <CardTitle className="text-lg font-display flex items-center gap-2"><Users className="h-5 w-5 text-primary" /> Human Connection</CardTitle>
+              <CardDescription>Sometimes you need a real person. That's okay — it's a strength.</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              <button onClick={() => navigate("/dashboard/mentor-matchmaking")}
+                className="w-full flex items-center gap-3 p-4 rounded-lg border border-border/50 hover:border-primary/30 hover:bg-primary/5 transition-all text-left">
+                <div className="p-2 rounded-lg bg-blue-500/10"><Users className="h-5 w-5 text-blue-500" /></div>
+                <div className="flex-1">
+                  <p className="text-sm font-medium text-foreground">Find a Mentor</p>
+                  <p className="text-xs text-muted-foreground">Connect with experienced guides for deeper career conversations</p>
+                </div>
+                <ChevronRight className="h-4 w-4 text-muted-foreground" />
+              </button>
+              <button onClick={() => navigate("/dashboard/peer-circles")}
+                className="w-full flex items-center gap-3 p-4 rounded-lg border border-border/50 hover:border-primary/30 hover:bg-primary/5 transition-all text-left">
+                <div className="p-2 rounded-lg bg-orange-500/10"><Heart className="h-5 w-5 text-orange-500" /></div>
+                <div className="flex-1">
+                  <p className="text-sm font-medium text-foreground">Join a Peer Circle</p>
+                  <p className="text-xs text-muted-foreground">Safe spaces to share experiences and learn from others like you</p>
+                </div>
+                <ChevronRight className="h-4 w-4 text-muted-foreground" />
+              </button>
+            </CardContent>
+          </Card>
+
+          {/* Recent journal entries from therapist */}
+          {journalEntries.filter(j => j.tags?.includes("therapist")).length > 0 && (
+            <Card className="border-border/50">
+              <CardHeader>
+                <CardTitle className="text-lg font-display">Reflection Journal Sync</CardTitle>
+                <CardDescription>Your emotional check-ins are logged here for long-term tracking.</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-2">
+                {journalEntries.filter(j => j.tags?.includes("therapist")).slice(0, 5).map((j: any, i: number) => (
+                  <div key={i} className="flex items-center gap-3 p-2 rounded-lg bg-secondary/50">
+                    <Badge variant="outline" className="text-xs capitalize">{j.mood || "—"}</Badge>
+                    <span className="text-sm text-foreground truncate">{j.title}</span>
+                    <span className="text-xs text-muted-foreground ml-auto">{new Date(j.created_at).toLocaleDateString()}</span>
+                  </div>
+                ))}
+                <Button variant="link" size="sm" className="text-xs p-0" onClick={() => navigate("/dashboard/journal")}>
+                  View all journal entries →
+                </Button>
               </CardContent>
             </Card>
           )}
