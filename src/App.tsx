@@ -43,6 +43,8 @@ import Journal from "./pages/shared/Journal";
 import Connections from "./pages/shared/Connections";
 import Achievements from "./pages/shared/Achievements";
 import Settings from "./pages/shared/Settings";
+import Notifications from "./pages/shared/Notifications";
+import Leaderboard from "./pages/shared/Leaderboard";
 
 const queryClient = new QueryClient();
 
@@ -90,6 +92,8 @@ const App = () => (
               <Route path="journal" element={<Journal />} />
               <Route path="connections" element={<Connections />} />
               <Route path="achievements" element={<Achievements />} />
+              <Route path="leaderboard" element={<Leaderboard />} />
+              <Route path="notifications" element={<Notifications />} />
               <Route path="settings" element={<Settings />} />
             </Route>
             <Route path="*" element={<NotFound />} />
