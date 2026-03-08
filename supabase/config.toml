@@ -32,3 +32,6 @@ verify_jwt = false
 
 [functions.ai-therapist]
 verify_jwt = false
+
+[functions.journal-ai]
+verify_jwt = false
