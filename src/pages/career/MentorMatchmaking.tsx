@@ -109,8 +109,8 @@ const MentorMatchmaking = () => {
           context: {
             user_profile: profile,
             mentors: mentors.map(m => ({ id: m.id, name: m.name, expertise: m.expertise_areas, focus: m.focus_areas, industries: m.industries })),
-            user_interests: profile?.interests || [],
-            user_goals: profile?.goals || "career growth",
+            user_interests: profile?.intent || "career",
+            user_goals: "career growth and skill development",
           },
         },
       });
