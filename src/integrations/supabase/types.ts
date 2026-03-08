@@ -44,6 +44,54 @@ export type Database = {
         }
         Relationships: []
       }
+      behavior_patterns: {
+        Row: {
+          ai_generated: boolean | null
+          created_at: string
+          domains_affected: string[] | null
+          first_observed: string
+          frequency: string | null
+          id: string
+          is_positive: boolean | null
+          last_observed: string
+          occurrences: number | null
+          pattern_description: string
+          pattern_type: string
+          strength: number | null
+          user_id: string
+        }
+        Insert: {
+          ai_generated?: boolean | null
+          created_at?: string
+          domains_affected?: string[] | null
+          first_observed?: string
+          frequency?: string | null
+          id?: string
+          is_positive?: boolean | null
+          last_observed?: string
+          occurrences?: number | null
+          pattern_description: string
+          pattern_type: string
+          strength?: number | null
+          user_id: string
+        }
+        Update: {
+          ai_generated?: boolean | null
+          created_at?: string
+          domains_affected?: string[] | null
+          first_observed?: string
+          frequency?: string | null
+          id?: string
+          is_positive?: boolean | null
+          last_observed?: string
+          occurrences?: number | null
+          pattern_description?: string
+          pattern_type?: string
+          strength?: number | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       career_card_interactions: {
         Row: {
           card_id: string
@@ -112,6 +160,48 @@ export type Database = {
           skills_related?: string[] | null
           tags?: string[] | null
           title?: string
+        }
+        Relationships: []
+      }
+      clarity_scores: {
+        Row: {
+          activity_alignment: number | null
+          direction_confidence: number | null
+          factors: Json | null
+          goal_alignment: number | null
+          id: string
+          interest_alignment: number | null
+          overall_clarity: number
+          recorded_at: string
+          reflection_prompt: string | null
+          user_id: string
+          user_reflection: string | null
+        }
+        Insert: {
+          activity_alignment?: number | null
+          direction_confidence?: number | null
+          factors?: Json | null
+          goal_alignment?: number | null
+          id?: string
+          interest_alignment?: number | null
+          overall_clarity?: number
+          recorded_at?: string
+          reflection_prompt?: string | null
+          user_id: string
+          user_reflection?: string | null
+        }
+        Update: {
+          activity_alignment?: number | null
+          direction_confidence?: number | null
+          factors?: Json | null
+          goal_alignment?: number | null
+          id?: string
+          interest_alignment?: number | null
+          overall_clarity?: number
+          recorded_at?: string
+          reflection_prompt?: string | null
+          user_id?: string
+          user_reflection?: string | null
         }
         Relationships: []
       }
@@ -560,6 +650,48 @@ export type Database = {
         }
         Relationships: []
       }
+      domain_affinity: {
+        Row: {
+          affinity_score: number
+          content_consumed: number | null
+          created_at: string
+          domain_name: string
+          id: string
+          last_interaction: string | null
+          tasks_completed: number | null
+          time_invested_minutes: number | null
+          trend: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          affinity_score?: number
+          content_consumed?: number | null
+          created_at?: string
+          domain_name: string
+          id?: string
+          last_interaction?: string | null
+          tasks_completed?: number | null
+          time_invested_minutes?: number | null
+          trend?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          affinity_score?: number
+          content_consumed?: number | null
+          created_at?: string
+          domain_name?: string
+          id?: string
+          last_interaction?: string | null
+          tasks_completed?: number | null
+          time_invested_minutes?: number | null
+          trend?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       domain_recommendations: {
         Row: {
           created_at: string
@@ -592,6 +724,48 @@ export type Database = {
           reasons?: string[] | null
           status?: string | null
           updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      energy_zones: {
+        Row: {
+          domain: string
+          energy_level: number
+          engagement_score: number | null
+          id: string
+          mood_after: string | null
+          mood_before: string | null
+          notes: string | null
+          recorded_at: string
+          task_type: string | null
+          time_spent_minutes: number | null
+          user_id: string
+        }
+        Insert: {
+          domain: string
+          energy_level?: number
+          engagement_score?: number | null
+          id?: string
+          mood_after?: string | null
+          mood_before?: string | null
+          notes?: string | null
+          recorded_at?: string
+          task_type?: string | null
+          time_spent_minutes?: number | null
+          user_id: string
+        }
+        Update: {
+          domain?: string
+          energy_level?: number
+          engagement_score?: number | null
+          id?: string
+          mood_after?: string | null
+          mood_before?: string | null
+          notes?: string | null
+          recorded_at?: string
+          task_type?: string | null
+          time_spent_minutes?: number | null
           user_id?: string
         }
         Relationships: []
@@ -865,6 +1039,60 @@ export type Database = {
           source?: string | null
           tags?: string[] | null
           title?: string
+        }
+        Relationships: []
+      }
+      identity_evaluations: {
+        Row: {
+          adaptability_score: number | null
+          ai_feedback: Json | null
+          collaboration_score: number | null
+          confidence_score: number | null
+          creativity_score: number | null
+          emotional_intelligence_score: number | null
+          evaluated_at: string
+          evaluation_type: string
+          id: string
+          leadership_score: number | null
+          overall_growth: number | null
+          problem_solving_score: number | null
+          reflection: string | null
+          resilience_score: number | null
+          user_id: string
+        }
+        Insert: {
+          adaptability_score?: number | null
+          ai_feedback?: Json | null
+          collaboration_score?: number | null
+          confidence_score?: number | null
+          creativity_score?: number | null
+          emotional_intelligence_score?: number | null
+          evaluated_at?: string
+          evaluation_type: string
+          id?: string
+          leadership_score?: number | null
+          overall_growth?: number | null
+          problem_solving_score?: number | null
+          reflection?: string | null
+          resilience_score?: number | null
+          user_id: string
+        }
+        Update: {
+          adaptability_score?: number | null
+          ai_feedback?: Json | null
+          collaboration_score?: number | null
+          confidence_score?: number | null
+          creativity_score?: number | null
+          emotional_intelligence_score?: number | null
+          evaluated_at?: string
+          evaluation_type?: string
+          id?: string
+          leadership_score?: number | null
+          overall_growth?: number | null
+          problem_solving_score?: number | null
+          reflection?: string | null
+          resilience_score?: number | null
+          user_id?: string
         }
         Relationships: []
       }
@@ -1390,6 +1618,51 @@ export type Database = {
           prerequisites?: string[] | null
           skills_gained?: string[] | null
           title?: string
+        }
+        Relationships: []
+      }
+      mentor_shares: {
+        Row: {
+          created_at: string
+          id: string
+          is_active: boolean | null
+          mentor_id: string
+          share_clarity: boolean | null
+          share_energy: boolean | null
+          share_evaluations: boolean | null
+          share_patterns: boolean | null
+          share_traits: boolean | null
+          shared_sections: string[] | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_active?: boolean | null
+          mentor_id: string
+          share_clarity?: boolean | null
+          share_energy?: boolean | null
+          share_evaluations?: boolean | null
+          share_patterns?: boolean | null
+          share_traits?: boolean | null
+          shared_sections?: string[] | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_active?: boolean | null
+          mentor_id?: string
+          share_clarity?: boolean | null
+          share_energy?: boolean | null
+          share_evaluations?: boolean | null
+          share_patterns?: boolean | null
+          share_traits?: boolean | null
+          shared_sections?: string[] | null
+          updated_at?: string
+          user_id?: string
         }
         Relationships: []
       }
@@ -2007,6 +2280,45 @@ export type Database = {
           },
         ]
       }
+      reflection_prompts: {
+        Row: {
+          context: string | null
+          created_at: string
+          id: string
+          insights_generated: Json | null
+          mood_after: string | null
+          prompt_text: string
+          responded_at: string | null
+          trigger_type: string | null
+          user_id: string
+          user_response: string | null
+        }
+        Insert: {
+          context?: string | null
+          created_at?: string
+          id?: string
+          insights_generated?: Json | null
+          mood_after?: string | null
+          prompt_text: string
+          responded_at?: string | null
+          trigger_type?: string | null
+          user_id: string
+          user_response?: string | null
+        }
+        Update: {
+          context?: string | null
+          created_at?: string
+          id?: string
+          insights_generated?: Json | null
+          mood_after?: string | null
+          prompt_text?: string
+          responded_at?: string | null
+          trigger_type?: string | null
+          user_id?: string
+          user_response?: string | null
+        }
+        Relationships: []
+      }
       resources: {
         Row: {
           category: string | null
@@ -2207,6 +2519,45 @@ export type Database = {
           recorded_at?: string
           user_id?: string
           value?: number
+        }
+        Relationships: []
+      }
+      selfgraph_traits: {
+        Row: {
+          confidence: number | null
+          created_at: string
+          evidence: Json | null
+          id: string
+          score: number
+          source: string | null
+          trait_category: string
+          trait_name: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          confidence?: number | null
+          created_at?: string
+          evidence?: Json | null
+          id?: string
+          score?: number
+          source?: string | null
+          trait_category?: string
+          trait_name: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          confidence?: number | null
+          created_at?: string
+          evidence?: Json | null
+          id?: string
+          score?: number
+          source?: string | null
+          trait_category?: string
+          trait_name?: string
+          updated_at?: string
+          user_id?: string
         }
         Relationships: []
       }
@@ -2736,6 +3087,54 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      weekly_digests: {
+        Row: {
+          ai_summary: string | null
+          challenges_faced: string[] | null
+          created_at: string
+          domain_shifts: Json | null
+          energy_patterns: Json | null
+          id: string
+          key_achievements: string[] | null
+          mood_summary: Json | null
+          recommendations: Json | null
+          skills_progress: Json | null
+          user_id: string
+          week_end: string
+          week_start: string
+        }
+        Insert: {
+          ai_summary?: string | null
+          challenges_faced?: string[] | null
+          created_at?: string
+          domain_shifts?: Json | null
+          energy_patterns?: Json | null
+          id?: string
+          key_achievements?: string[] | null
+          mood_summary?: Json | null
+          recommendations?: Json | null
+          skills_progress?: Json | null
+          user_id: string
+          week_end: string
+          week_start: string
+        }
+        Update: {
+          ai_summary?: string | null
+          challenges_faced?: string[] | null
+          created_at?: string
+          domain_shifts?: Json | null
+          energy_patterns?: Json | null
+          id?: string
+          key_achievements?: string[] | null
+          mood_summary?: Json | null
+          recommendations?: Json | null
+          skills_progress?: Json | null
+          user_id?: string
+          week_end?: string
+          week_start?: string
+        }
+        Relationships: []
       }
     }
     Views: {
