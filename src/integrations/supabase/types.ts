@@ -376,6 +376,45 @@ export type Database = {
         }
         Relationships: []
       }
+      learning_capsules: {
+        Row: {
+          category: string
+          content: string
+          created_at: string
+          description: string | null
+          difficulty: string | null
+          duration_minutes: number | null
+          id: string
+          order_index: number | null
+          tags: string[] | null
+          title: string
+        }
+        Insert: {
+          category?: string
+          content: string
+          created_at?: string
+          description?: string | null
+          difficulty?: string | null
+          duration_minutes?: number | null
+          id?: string
+          order_index?: number | null
+          tags?: string[] | null
+          title: string
+        }
+        Update: {
+          category?: string
+          content?: string
+          created_at?: string
+          description?: string | null
+          difficulty?: string | null
+          duration_minutes?: number | null
+          id?: string
+          order_index?: number | null
+          tags?: string[] | null
+          title?: string
+        }
+        Relationships: []
+      }
       learning_track_progress: {
         Row: {
           completed_at: string | null
@@ -967,6 +1006,45 @@ export type Database = {
         }
         Relationships: []
       }
+      simulation_challenges: {
+        Row: {
+          category: string | null
+          constraints: Json | null
+          created_at: string
+          difficulty: string | null
+          id: string
+          learning_outcome: string | null
+          options: Json | null
+          points: number | null
+          scenario: string
+          title: string
+        }
+        Insert: {
+          category?: string | null
+          constraints?: Json | null
+          created_at?: string
+          difficulty?: string | null
+          id?: string
+          learning_outcome?: string | null
+          options?: Json | null
+          points?: number | null
+          scenario: string
+          title: string
+        }
+        Update: {
+          category?: string | null
+          constraints?: Json | null
+          created_at?: string
+          difficulty?: string | null
+          id?: string
+          learning_outcome?: string | null
+          options?: Json | null
+          points?: number | null
+          scenario?: string
+          title?: string
+        }
+        Relationships: []
+      }
       skills: {
         Row: {
           category: string | null
@@ -1045,6 +1123,81 @@ export type Database = {
           updated_at?: string
           user_id?: string
           validation_score?: number | null
+        }
+        Relationships: []
+      }
+      startup_playbooks: {
+        Row: {
+          case_study: string | null
+          checklist: Json | null
+          created_at: string
+          description: string | null
+          difficulty: string | null
+          id: string
+          phase: string
+          steps: Json | null
+          tags: string[] | null
+          title: string
+        }
+        Insert: {
+          case_study?: string | null
+          checklist?: Json | null
+          created_at?: string
+          description?: string | null
+          difficulty?: string | null
+          id?: string
+          phase?: string
+          steps?: Json | null
+          tags?: string[] | null
+          title: string
+        }
+        Update: {
+          case_study?: string | null
+          checklist?: Json | null
+          created_at?: string
+          description?: string | null
+          difficulty?: string | null
+          id?: string
+          phase?: string
+          steps?: Json | null
+          tags?: string[] | null
+          title?: string
+        }
+        Relationships: []
+      }
+      user_learning_progress: {
+        Row: {
+          completed_at: string | null
+          content_id: string
+          content_type: string
+          created_at: string
+          id: string
+          notes: string | null
+          score: number | null
+          status: string | null
+          user_id: string
+        }
+        Insert: {
+          completed_at?: string | null
+          content_id: string
+          content_type: string
+          created_at?: string
+          id?: string
+          notes?: string | null
+          score?: number | null
+          status?: string | null
+          user_id: string
+        }
+        Update: {
+          completed_at?: string | null
+          content_id?: string
+          content_type?: string
+          created_at?: string
+          id?: string
+          notes?: string | null
+          score?: number | null
+          status?: string | null
+          user_id?: string
         }
         Relationships: []
       }

@@ -41,6 +41,7 @@ import StartupProfiling from "./pages/entrepreneurship/StartupProfiling";
 import StartupSupport from "./pages/entrepreneurship/StartupSupport";
 import AIEntrepreneurshipCoach from "./pages/entrepreneurship/AIEntrepreneurshipCoach";
 import StartupCommunities from "./pages/entrepreneurship/StartupCommunities";
+import FoundersLearningLibrary from "./pages/entrepreneurship/FoundersLearningLibrary";
 // Shared
 import Journal from "./pages/shared/Journal";
 import Connections from "./pages/shared/Connections";
@@ -94,6 +95,7 @@ const App = () => (
               <Route path="startup-support" element={<StartupSupport />} />
               <Route path="ai-coach" element={<AIEntrepreneurshipCoach />} />
               <Route path="startup-communities" element={<StartupCommunities />} />
+              <Route path="founders-learning" element={<FoundersLearningLibrary />} />
               {/* Shared */}
               <Route path="journal" element={<Journal />} />
               <Route path="connections" element={<Connections />} />
