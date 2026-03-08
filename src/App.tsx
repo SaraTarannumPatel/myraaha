@@ -29,6 +29,7 @@ import ProjectPlayground from "./pages/career/ProjectPlayground";
 import JobMatching from "./pages/career/JobMatching";
 import VirtualCareerCoach from "./pages/career/VirtualCareerCoach";
 import AICareerTherapist from "./pages/career/AICareerTherapist";
+import SkillStacker from "./pages/career/SkillStacker";
 // Entrepreneurship
 import StartupSparks from "./pages/entrepreneurship/StartupSparks";
 import MVPBuilder from "./pages/entrepreneurship/MVPBuilder";
