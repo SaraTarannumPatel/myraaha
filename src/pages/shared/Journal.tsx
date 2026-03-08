@@ -327,8 +327,8 @@ const Journal = () => {
                           <span className="font-body text-sm text-foreground">{c.mood?.split(" ").slice(1).join(" ")}</span>
                           <span className="font-body text-[10px] text-muted-foreground">⚡{c.energy_level} 💪{c.confidence_level}</span>
                         </div>
-                        {c.wins && <p className="font-body text-xs text-green-400 truncate">✨ {c.wins}</p>}
-                        {c.challenges && <p className="font-body text-xs text-red-400 truncate">⚠ {c.challenges}</p>}
+                        {c.wins && <p className="font-body text-xs text-primary truncate">✨ {c.wins}</p>}
+                        {c.challenges && <p className="font-body text-xs text-destructive truncate">⚠ {c.challenges}</p>}
                       </div>
                       <span className="font-body text-[10px] text-muted-foreground shrink-0">
                         {new Date(c.created_at).toLocaleDateString()}
