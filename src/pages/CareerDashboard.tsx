@@ -801,7 +801,7 @@ const CareerDashboard = () => {
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <Users className="h-5 w-5 text-primary" />
+                <Users className="h-5 w-5 text-blue" />
                 Mentor Suggestions
               </CardTitle>
               <CardDescription>Connect with mentors aligned to your career goals</CardDescription>
