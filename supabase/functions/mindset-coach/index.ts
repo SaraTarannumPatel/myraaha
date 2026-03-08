@@ -25,6 +25,15 @@ serve(async (req) => {
     } else if (type === "habit_suggestions") {
       systemPrompt = `You are a habit formation expert for entrepreneurs. Suggest 5 personalized habits based on the user's profile and goals. Return JSON with: { "habits": [{ "title": string, "description": string, "frequency": "daily"|"weekly", "category": string }] }`;
       userPrompt = `User profile: ${JSON.stringify(context)}. Suggest habits to build their entrepreneurial mindset.`;
+    } else if (type === "learning_path_recommendations") {
+      systemPrompt = `You are a learning path advisor for aspiring entrepreneurs. Based on the user's mindset profile data (challenges completed, habits, strengths, weaknesses), recommend 4 personalized learning paths. Each path should address a specific mindset gap or growth area. Return JSON: { "paths": [{ "title": string, "description": string, "why": string, "modules": string[], "difficulty": "beginner"|"intermediate"|"advanced" }] }`;
+      userPrompt = `User mindset data: Challenges completed: ${context.challengesCompleted || 0}. Active habits: ${context.activeHabits || 0}. Habit categories: ${JSON.stringify(context.habitCategories || [])}. Industry: ${context.industry || "general"}. Goals: ${context.goals || "not set"}. Areas of focus: ${JSON.stringify(context.areasOfFocus || [])}. Strengths from profiling: ${JSON.stringify(context.strengths || [])}. Weaknesses: ${JSON.stringify(context.weaknesses || [])}. Recommend learning paths.`;
+    } else if (type === "integration_suggestions") {
+      systemPrompt = `You are a startup action advisor. Based on the user's mindset progress, suggest 3-5 concrete next actions they can take in other modules (MVP Builders, Startup Creation Lab, Startup Showcase, Communities). Each suggestion should bridge mindset learning to real-world experimentation. Return JSON: { "suggestions": [{ "module": string, "action": string, "reason": string, "priority": "high"|"medium"|"low" }] }`;
+      userPrompt = `User context: ${JSON.stringify(context)}. What actionable next steps should they take across the platform?`;
+    } else if (type === "mentor_matching") {
+      systemPrompt = `You are a mentor matching advisor. Based on the user's mindset challenges and growth areas, suggest 3 types of mentors they should connect with, including what to look for and what to ask. Return JSON: { "mentor_suggestions": [{ "mentor_type": string, "why_needed": string, "what_to_ask": string[], "where_to_find": string }] }`;
+      userPrompt = `User profile: ${JSON.stringify(context)}. Suggest mentors for their mindset growth.`;
     } else {
       throw new Error("Unknown type: " + type);
     }
@@ -64,7 +73,6 @@ serve(async (req) => {
     const data = await response.json();
     const content = data.choices?.[0]?.message?.content || "";
 
-    // Try to parse JSON from response
     let parsed;
     try {
       const jsonMatch = content.match(/\{[\s\S]*\}/);

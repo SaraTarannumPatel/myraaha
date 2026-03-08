@@ -8,10 +8,12 @@ import { Input } from "@/components/ui/input";
 import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
+import { Link } from "react-router-dom";
 import {
   Zap, Check, Sparkles, RefreshCw, BookOpen, Brain, Target,
   Heart, Trophy, ChevronRight, Plus, Flame, Calendar, ArrowRight,
-  MessageSquare, Star, TrendingUp
+  MessageSquare, Star, TrendingUp, Users, Compass, Rocket, Send,
+  Lightbulb, Shield, HandHeart
 } from "lucide-react";
 
 const challengeTemplates = [
@@ -50,16 +52,24 @@ const MindsetBuilder = () => {
   const [showHabitForm, setShowHabitForm] = useState(false);
   const [activeTrack, setActiveTrack] = useState<any>(null);
   const [reflectionFeedback, setReflectionFeedback] = useState<any>(null);
+  const [inlineReflection, setInlineReflection] = useState("");
+  const [inlineMood, setInlineMood] = useState("");
+  const [savingReflection, setSavingReflection] = useState(false);
+  const [aiPaths, setAiPaths] = useState<any>(null);
+  const [aiIntegrations, setAiIntegrations] = useState<any>(null);
+  const [aiMentors, setAiMentors] = useState<any>(null);
+  const [founderProfile, setFounderProfile] = useState<any>(null);
 
   useEffect(() => { fetchAll(); }, []);
 
   const fetchAll = async () => {
-    const [challengeRes, habitRes, trackRes, progressRes, completionRes] = await Promise.all([
+    const [challengeRes, habitRes, trackRes, progressRes, completionRes, founderRes] = await Promise.all([
       supabase.from("mindset_challenges").select("*").eq("user_id", user!.id).order("started_at", { ascending: false }),
       supabase.from("mindset_habits").select("*").eq("user_id", user!.id).order("created_at", { ascending: false }),
       supabase.from("mindset_learning_tracks").select("*").order("created_at", { ascending: true }),
       supabase.from("learning_track_progress").select("*").eq("user_id", user!.id),
       supabase.from("habit_completions").select("*").eq("user_id", user!.id).order("completed_at", { ascending: false }).limit(50),
+      supabase.from("founder_profiles").select("*").eq("user_id", user!.id).single(),
     ]);
     setChallenges(challengeRes.data || []);
     setActiveChallenge((challengeRes.data || []).find((c: any) => c.status === "active") || null);
@@ -67,6 +77,7 @@ const MindsetBuilder = () => {
     setTracks(trackRes.data || []);
     setTrackProgress(progressRes.data || []);
     setCompletions(completionRes.data || []);
+    if (founderRes.data) setFounderProfile(founderRes.data);
     setLoading(false);
   };
 
@@ -86,7 +97,15 @@ const MindsetBuilder = () => {
       status: "completed", reflection, completed_at: new Date().toISOString(),
     }).eq("id", activeChallenge.id);
 
-    // Get AI feedback on reflection
+    // Sync to journal
+    await supabase.from("journal_entries").insert({
+      user_id: user!.id,
+      title: `Mindset Challenge: ${activeChallenge.title}`,
+      content: reflection,
+      tags: ["mindset-builder", "challenge", activeChallenge.challenge_type],
+      intent: "entrepreneurship" as any,
+    });
+
     setAiLoading(true);
     try {
       const { data } = await supabase.functions.invoke("mindset-coach", {
@@ -206,6 +225,86 @@ const MindsetBuilder = () => {
     fetchAll();
   };
 
+  const saveInlineReflection = async () => {
+    if (!inlineReflection.trim()) { toast.error("Write something first"); return; }
+    setSavingReflection(true);
+    await supabase.from("journal_entries").insert({
+      user_id: user!.id,
+      title: `Mindset Reflection${inlineMood ? ` — Feeling ${inlineMood}` : ""}`,
+      content: inlineReflection,
+      mood: inlineMood || null,
+      tags: ["mindset-builder", "reflection"],
+      intent: "entrepreneurship" as any,
+    });
+    setInlineReflection("");
+    setInlineMood("");
+    setSavingReflection(false);
+    toast.success("Reflection saved to your journal! 🌱");
+  };
+
+  const getAiLearningPaths = async () => {
+    setAiLoading(true);
+    try {
+      const { data } = await supabase.functions.invoke("mindset-coach", {
+        body: {
+          type: "learning_path_recommendations",
+          context: {
+            challengesCompleted: challenges.filter((c: any) => c.status === "completed").length,
+            activeHabits: habits.filter((h: any) => h.is_active).length,
+            habitCategories: [...new Set(habits.map((h: any) => h.category))],
+            industry: profile?.industry,
+            goals: profile?.short_term_goals,
+            areasOfFocus: profile?.areas_of_focus,
+            strengths: founderProfile?.strengths || [],
+            weaknesses: founderProfile?.weaknesses || [],
+          },
+        },
+      });
+      if (data && !data.error) setAiPaths(data);
+    } catch { toast.error("Failed to get recommendations"); }
+    setAiLoading(false);
+  };
+
+  const getAiIntegrationSuggestions = async () => {
+    setAiLoading(true);
+    try {
+      const { data } = await supabase.functions.invoke("mindset-coach", {
+        body: {
+          type: "integration_suggestions",
+          context: {
+            challengesCompleted: challenges.filter((c: any) => c.status === "completed").length,
+            habitsActive: habits.filter((h: any) => h.is_active).length,
+            tracksCompleted: trackProgress.filter((p: any) => p.status === "completed").length,
+            industry: profile?.industry,
+            goals: profile?.short_term_goals,
+          },
+        },
+      });
+      if (data && !data.error) setAiIntegrations(data);
+    } catch { toast.error("Failed to get suggestions"); }
+    setAiLoading(false);
+  };
+
+  const getAiMentorSuggestions = async () => {
+    setAiLoading(true);
+    try {
+      const { data } = await supabase.functions.invoke("mindset-coach", {
+        body: {
+          type: "mentor_matching",
+          context: {
+            industry: profile?.industry,
+            goals: profile?.short_term_goals,
+            challenges: challenges.filter((c: any) => c.status === "completed").slice(0, 3).map((c: any) => c.title),
+            strengths: founderProfile?.strengths || [],
+            weaknesses: founderProfile?.weaknesses || [],
+          },
+        },
+      });
+      if (data && !data.error) setAiMentors(data);
+    } catch { toast.error("Failed to get mentor suggestions"); }
+    setAiLoading(false);
+  };
+
   const completedCount = challenges.filter((c: any) => c.status === "completed").length;
   const totalHabitCompletions = completions.length;
   const activeHabitsCount = habits.filter((h: any) => h.is_active).length;
@@ -277,6 +376,7 @@ const MindsetBuilder = () => {
           <TabsTrigger value="challenges" className="font-body text-xs">Challenges</TabsTrigger>
           <TabsTrigger value="tracks" className="font-body text-xs">Learning Tracks</TabsTrigger>
           <TabsTrigger value="reflections" className="font-body text-xs">Reflections</TabsTrigger>
+          <TabsTrigger value="connect" className="font-body text-xs">Connect & Act</TabsTrigger>
           <TabsTrigger value="progress" className="font-body text-xs">Progress</TabsTrigger>
         </TabsList>
 
@@ -445,6 +545,39 @@ const MindsetBuilder = () => {
 
         {/* LEARNING TRACKS */}
         <TabsContent value="tracks" className="space-y-4">
+          {/* AI-recommended paths */}
+          <div className="flex items-center justify-between">
+            <h2 className="font-display text-xl text-foreground">Learning Tracks</h2>
+            <Button onClick={getAiLearningPaths} variant="outline" size="sm" disabled={aiLoading}>
+              <Sparkles size={14} /> AI-Recommended Paths
+            </Button>
+          </div>
+
+          {aiPaths?.paths && (
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-3">
+              <h3 className="font-display text-base text-foreground flex items-center gap-2"><Lightbulb size={16} className="text-accent" /> Personalized for You</h3>
+              <div className="grid md:grid-cols-2 gap-3">
+                {aiPaths.paths.map((path: any, i: number) => (
+                  <div key={i} className="bg-accent/5 rounded-xl border border-accent/20 p-4">
+                    <div className="flex items-center gap-2 mb-1">
+                      <h4 className="font-display text-base text-foreground">{path.title}</h4>
+                      <span className="px-2 py-0.5 rounded-full bg-muted text-muted-foreground font-body text-[10px]">{path.difficulty}</span>
+                    </div>
+                    <p className="font-body text-xs text-muted-foreground mb-2">{path.description}</p>
+                    <p className="font-body text-xs text-accent mb-2">Why: {path.why}</p>
+                    {path.modules?.length > 0 && (
+                      <div className="flex flex-wrap gap-1">
+                        {path.modules.map((m: string, j: number) => (
+                          <span key={j} className="px-2 py-0.5 rounded bg-muted text-muted-foreground font-body text-[10px]">{m}</span>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </motion.div>
+          )}
+
           {activeTrack ? (
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-4">
               <Button onClick={() => setActiveTrack(null)} variant="ghost" size="sm">← Back to tracks</Button>
@@ -479,7 +612,7 @@ const MindsetBuilder = () => {
             </motion.div>
           ) : (
             <>
-              <h2 className="font-display text-xl text-foreground">Structured Learning Tracks</h2>
+              <h3 className="font-display text-lg text-foreground">Structured Tracks</h3>
               <div className="grid md:grid-cols-2 gap-4">
                 {tracks.map((track: any, i: number) => {
                   const progress = trackProgress.find((p: any) => p.track_id === track.id);
@@ -505,6 +638,12 @@ const MindsetBuilder = () => {
                   );
                 })}
               </div>
+              {tracks.length === 0 && (
+                <div className="text-center py-8 bg-card rounded-xl border border-border">
+                  <BookOpen className="mx-auto text-muted-foreground mb-3" size={40} />
+                  <p className="font-body text-muted-foreground">No tracks available yet. Use AI-Recommended Paths above for personalized suggestions.</p>
+                </div>
+              )}
             </>
           )}
         </TabsContent>
@@ -512,6 +651,24 @@ const MindsetBuilder = () => {
         {/* REFLECTIONS */}
         <TabsContent value="reflections" className="space-y-4">
           <h2 className="font-display text-xl text-foreground">Motivation & Reflection</h2>
+
+          {/* Inline journal */}
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="bg-card rounded-xl border border-border p-5 space-y-3">
+            <h3 className="font-display text-base text-foreground flex items-center gap-2"><Send size={16} className="text-accent" /> Quick Reflection</h3>
+            <div className="flex gap-2 flex-wrap">
+              {["energized", "reflective", "stressed", "motivated", "uncertain"].map(m => (
+                <button key={m} onClick={() => setInlineMood(m)}
+                  className={`px-3 py-1 rounded-full font-body text-xs transition-all ${inlineMood === m ? "bg-primary/10 border border-primary/30 text-primary" : "bg-muted/30 hover:bg-muted/50 text-muted-foreground"}`}>
+                  {m}
+                </button>
+              ))}
+            </div>
+            <Textarea placeholder="What's on your mind? How are you feeling about your growth today?" value={inlineReflection} onChange={(e) => setInlineReflection(e.target.value)} rows={3} />
+            <Button onClick={saveInlineReflection} size="sm" disabled={savingReflection}>
+              <Send size={14} /> {savingReflection ? "Saving..." : "Save to Journal"}
+            </Button>
+          </motion.div>
+
           <div className="grid md:grid-cols-3 gap-4">
             {[
               "What did you learn from your last failure?",
@@ -525,9 +682,10 @@ const MindsetBuilder = () => {
                 className="bg-card rounded-xl border border-border p-4">
                 <p className="font-body text-sm text-foreground mb-3">"{prompt}"</p>
                 <Button variant="outline" size="sm" onClick={() => {
-                  window.location.href = "/dashboard/journal";
+                  setInlineReflection(prev => prev ? prev + "\n\n" + prompt : prompt);
+                  window.scrollTo({ top: 0, behavior: "smooth" });
                 }}>
-                  <BookOpen size={14} /> Write in Journal
+                  <BookOpen size={14} /> Use This Prompt
                 </Button>
               </motion.div>
             ))}
@@ -550,6 +708,111 @@ const MindsetBuilder = () => {
               ))}
             </div>
           )}
+        </TabsContent>
+
+        {/* CONNECT & ACT */}
+        <TabsContent value="connect" className="space-y-6">
+          <h2 className="font-display text-xl text-foreground">Connect & Take Action</h2>
+
+          {/* Cross-module integration suggestions */}
+          <div className="bg-card rounded-xl border border-border p-5 space-y-4">
+            <div className="flex items-center justify-between">
+              <h3 className="font-display text-lg text-foreground flex items-center gap-2"><Rocket size={18} className="text-accent" /> Apply Your Mindset</h3>
+              <Button onClick={getAiIntegrationSuggestions} variant="outline" size="sm" disabled={aiLoading}>
+                <Sparkles size={14} /> Get Suggestions
+              </Button>
+            </div>
+            {aiIntegrations?.suggestions ? (
+              <div className="space-y-3">
+                {aiIntegrations.suggestions.map((s: any, i: number) => (
+                  <motion.div key={i} initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.05 }}
+                    className="flex items-start gap-3 p-3 rounded-lg bg-muted/30 border border-border">
+                    <div className={`px-2 py-0.5 rounded-full font-body text-[10px] ${s.priority === "high" ? "bg-destructive/10 text-destructive" : s.priority === "medium" ? "bg-accent/10 text-accent" : "bg-muted text-muted-foreground"}`}>
+                      {s.priority}
+                    </div>
+                    <div className="flex-1">
+                      <p className="font-display text-sm text-foreground">{s.module}</p>
+                      <p className="font-body text-xs text-muted-foreground">{s.action}</p>
+                      <p className="font-body text-xs text-accent mt-1">{s.reason}</p>
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+            ) : (
+              <p className="font-body text-sm text-muted-foreground">Get AI-powered suggestions on how to apply your mindset learnings across the platform.</p>
+            )}
+          </div>
+
+          {/* Quick navigation to connected modules */}
+          <div className="grid md:grid-cols-3 gap-3">
+            {[
+              { label: "MVP Builders", desc: "Apply mindset to prototyping", icon: Rocket, to: "/dashboard/mvp-builder" },
+              { label: "Startup Creation Lab", desc: "Turn mindset into action plans", icon: Target, to: "/dashboard/startup-lab" },
+              { label: "Startup Showcase", desc: "Share your growth journey", icon: Star, to: "/dashboard/startup-showcase" },
+              { label: "Startup Communities", desc: "Find peer accountability", icon: Users, to: "/dashboard/startup-communities" },
+              { label: "Startup Support", desc: "Get mentorship & guidance", icon: HandHeart, to: "/dashboard/startup-support" },
+              { label: "Founder Profiling", desc: "Track your mindset evolution", icon: Compass, to: "/dashboard/founder-profile" },
+            ].map((link, i) => (
+              <Link key={link.to} to={link.to}>
+                <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }}
+                  className="bg-card rounded-xl border border-border p-4 hover:border-accent/30 transition-colors cursor-pointer">
+                  <link.icon size={18} className="text-accent mb-2" />
+                  <h4 className="font-display text-sm text-foreground">{link.label}</h4>
+                  <p className="font-body text-xs text-muted-foreground">{link.desc}</p>
+                </motion.div>
+              </Link>
+            ))}
+          </div>
+
+          {/* Mentor suggestions */}
+          <div className="bg-card rounded-xl border border-border p-5 space-y-4">
+            <div className="flex items-center justify-between">
+              <h3 className="font-display text-lg text-foreground flex items-center gap-2"><Shield size={18} className="text-accent" /> Mentor Guidance</h3>
+              <Button onClick={getAiMentorSuggestions} variant="outline" size="sm" disabled={aiLoading}>
+                <Sparkles size={14} /> Find Mentors
+              </Button>
+            </div>
+            {aiMentors?.mentor_suggestions ? (
+              <div className="space-y-3">
+                {aiMentors.mentor_suggestions.map((m: any, i: number) => (
+                  <motion.div key={i} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: i * 0.1 }}
+                    className="p-4 rounded-lg bg-muted/30 border border-border">
+                    <h4 className="font-display text-base text-foreground mb-1">{m.mentor_type}</h4>
+                    <p className="font-body text-xs text-muted-foreground mb-2">{m.why_needed}</p>
+                    {m.what_to_ask?.length > 0 && (
+                      <div className="mb-2">
+                        <p className="font-body text-xs text-accent mb-1">Questions to ask:</p>
+                        <ul className="list-disc list-inside space-y-0.5">
+                          {m.what_to_ask.map((q: string, j: number) => (
+                            <li key={j} className="font-body text-xs text-foreground">{q}</li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+                    <p className="font-body text-[10px] text-muted-foreground">Where: {m.where_to_find}</p>
+                  </motion.div>
+                ))}
+              </div>
+            ) : (
+              <p className="font-body text-sm text-muted-foreground">Get personalized mentor recommendations based on your mindset challenges and growth areas.</p>
+            )}
+          </div>
+
+          {/* Community sharing prompt */}
+          <div className="bg-accent/5 rounded-xl border border-accent/20 p-5">
+            <h3 className="font-display text-lg text-foreground mb-2 flex items-center gap-2"><Users size={18} /> Share with Your Community</h3>
+            <p className="font-body text-sm text-muted-foreground mb-3">
+              Share your mindset wins and struggles with peers. Building in public creates accountability and inspires others.
+            </p>
+            <div className="flex gap-2">
+              <Link to="/dashboard/startup-communities">
+                <Button variant="outline" size="sm"><Users size={14} /> Join a Community</Button>
+              </Link>
+              <Link to="/dashboard/journal">
+                <Button variant="outline" size="sm"><BookOpen size={14} /> Open Journal</Button>
+              </Link>
+            </div>
+          </div>
         </TabsContent>
 
         {/* PROGRESS */}
@@ -586,11 +849,24 @@ const MindsetBuilder = () => {
                 {completedCount === 0 && <p className="font-body text-sm text-muted-foreground">→ Complete your first challenge</p>}
                 {activeHabitsCount === 0 && <p className="font-body text-sm text-muted-foreground">→ Add your first daily habit</p>}
                 {tracksCompleted === 0 && <p className="font-body text-sm text-muted-foreground">→ Start a learning track</p>}
+                {completedCount > 2 && <p className="font-body text-sm text-muted-foreground">→ Share your wins in Communities</p>}
+                {activeHabitsCount > 0 && totalHabitCompletions < 7 && <p className="font-body text-sm text-muted-foreground">→ Build a 7-day habit streak</p>}
                 {completedCount > 0 && activeHabitsCount > 0 && tracksCompleted > 0 && (
-                  <p className="font-body text-sm text-accent">🎉 Great progress! Keep building your mindset daily.</p>
+                  <p className="font-body text-sm text-accent">🎉 Great progress! Apply your mindset in MVP Builders next.</p>
                 )}
               </div>
             </div>
+          </div>
+
+          {/* Founder profiling link */}
+          <div className="bg-muted/50 rounded-xl p-5 border border-border">
+            <h3 className="font-display text-lg text-foreground mb-2">Your Founder Profile</h3>
+            <p className="font-body text-sm text-muted-foreground mb-3">
+              Your challenges, habits, and reflections feed into your evolving Founder Profile — tracking resilience, confidence, and growth patterns.
+            </p>
+            <Link to="/dashboard/founder-profile">
+              <Button variant="outline" size="sm"><Compass size={14} /> View Founder Profile</Button>
+            </Link>
           </div>
         </TabsContent>
       </Tabs>
