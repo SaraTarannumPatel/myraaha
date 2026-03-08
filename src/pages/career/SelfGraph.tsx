@@ -1378,9 +1378,9 @@ const SelfGraph = () => {
                           <div className="flex items-center justify-between mb-2">
                             <div className="flex items-center gap-2">
                               <span className={`px-2 py-0.5 rounded text-xs font-body ${
-                                fit.opportunity_type === "job" ? "bg-blue-500/10 text-blue-600" :
-                                fit.opportunity_type === "internship" ? "bg-purple-500/10 text-purple-600" :
-                                "bg-green-500/10 text-green-600"
+                                fit.opportunity_type === "job" ? "bg-info/10 text-info" :
+                                fit.opportunity_type === "internship" ? "bg-indigo/10 text-indigo" :
+                                "bg-success/10 text-success"
                               }`}>{fit.opportunity_type}</span>
                               <span className="font-body text-foreground">{fit.title}</span>
                             </div>
