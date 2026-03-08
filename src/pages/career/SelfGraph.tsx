@@ -1253,9 +1253,9 @@ const SelfGraph = () => {
                           <h4 className="font-body text-sm font-medium text-foreground mb-2">Skills Progress</h4>
                           {(digest.skills_progress as any)?.improved?.length > 0 && (
                             <div className="mb-1">
-                              <span className="font-body text-xs text-green-600">Improved: </span>
+                              <span className="font-body text-xs text-success">Improved: </span>
                               {(digest.skills_progress as any).improved.map((s: string, i: number) => (
-                                <span key={i} className="px-1.5 py-0.5 rounded bg-green-500/10 text-green-600 font-body text-xs mr-1">{s}</span>
+                                <span key={i} className="px-1.5 py-0.5 rounded bg-success/10 text-success font-body text-xs mr-1">{s}</span>
                               ))}
                             </div>
                           )}
