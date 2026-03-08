@@ -547,7 +547,7 @@ const EntrepreneurshipDashboard = () => {
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.16 }}
           className="bg-card rounded-xl border border-border p-5">
           <div className="flex items-center gap-2 mb-4">
-            <DollarSign size={18} className="text-primary" />
+            <DollarSign size={18} className="text-accent-foreground" />
             <h3 className="font-display text-lg text-foreground">Funding & Validation</h3>
           </div>
           {/* Funding tip from AI */}
