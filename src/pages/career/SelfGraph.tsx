@@ -1352,10 +1352,10 @@ const SelfGraph = () => {
                     <div className="space-y-3">
                       {aiInsights.insights.map((insight: any, i: number) => (
                         <div key={i} className={`p-3 rounded-lg border-l-4 ${
-                          insight.type === "strength" ? "border-l-green-500 bg-green-500/5" :
-                          insight.type === "opportunity" ? "border-l-blue-500 bg-blue-500/5" :
-                          insight.type === "warning" ? "border-l-orange-500 bg-orange-500/5" :
-                          "border-l-purple-500 bg-purple-500/5"
+                          insight.type === "strength" ? "border-l-success bg-success/5" :
+                          insight.type === "opportunity" ? "border-l-info bg-info/5" :
+                          insight.type === "warning" ? "border-l-warmth bg-warmth/5" :
+                          "border-l-indigo bg-indigo/5"
                         }`}>
                           <p className="font-body text-foreground">{insight.message}</p>
                           {insight.action_suggested && (
