@@ -18,7 +18,7 @@ const ConsentStep = () => {
     const notifications = [
       {
         user_id: user.id,
-        title: "Welcome to ShuttlEx! 🎉",
+        title: "Welcome to MyRaaha! 🎉",
         message: "Your journey starts now. Explore your dashboard and discover tools tailored for you.",
         notification_type: "welcome",
         action_url: "/dashboard",
