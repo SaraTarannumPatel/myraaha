@@ -61,6 +61,34 @@ export default {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
+        /* Extended brand palette */
+        green: {
+          DEFAULT: "hsl(var(--green-primary))",
+          secondary: "hsl(var(--green-secondary))",
+          wash: "hsl(var(--green-wash))",
+        },
+        blue: {
+          DEFAULT: "hsl(var(--blue-primary))",
+          secondary: "hsl(var(--blue-secondary))",
+          light: "hsl(var(--blue-light))",
+        },
+        yellow: {
+          DEFAULT: "hsl(var(--yellow-primary))",
+          highlight: "hsl(var(--yellow-highlight))",
+          icon: "hsl(var(--yellow-icon))",
+        },
+        indigo: {
+          DEFAULT: "hsl(var(--indigo-deep))",
+          analytical: "hsl(var(--indigo-analytical))",
+        },
+        terracotta: {
+          DEFAULT: "hsl(var(--terracotta))",
+          light: "hsl(var(--terracotta-light))",
+        },
+        maroon: {
+          DEFAULT: "hsl(var(--maroon))",
+          light: "hsl(var(--maroon-light))",
+        },
       },
       borderRadius: {
         lg: "var(--radius)",

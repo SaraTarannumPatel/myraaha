@@ -6,56 +6,87 @@
 
 @layer base {
   :root {
-    --background: 220 20% 97%;
-    --foreground: 220 25% 10%;
+    /* Foundational Neutrals */
+    --background: 60 14% 98%;
+    --foreground: 0 0% 7%;
 
     --card: 0 0% 100%;
-    --card-foreground: 220 25% 10%;
+    --card-foreground: 0 0% 10%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 220 25% 10%;
+    --popover-foreground: 0 0% 7%;
 
-    --primary: 220 25% 10%;
-    --primary-foreground: 220 20% 97%;
+    /* Calm Green – Trust / Empathy */
+    --primary: 158 17% 37%;
+    --primary-foreground: 60 14% 98%;
 
-    --secondary: 32 95% 55%;
-    --secondary-foreground: 0 0% 100%;
+    /* Section break neutral */
+    --secondary: 80 12% 96%;
+    --secondary-foreground: 0 0% 10%;
 
-    --muted: 220 15% 92%;
-    --muted-foreground: 220 10% 46%;
+    /* Cool Grey – Structure */
+    --muted: 75 6% 90%;
+    --muted-foreground: 140 2% 45%;
 
-    --accent: 32 95% 55%;
-    --accent-foreground: 0 0% 100%;
+    /* Soft Yellow – Raaha Signal / Guidance Accent */
+    --accent: 47 58% 73%;
+    --accent-foreground: 0 0% 7%;
 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 60 14% 98%;
 
-    --border: 220 15% 90%;
-    --input: 220 15% 90%;
-    --ring: 32 95% 55%;
+    --border: 75 6% 90%;
+    --input: 75 6% 90%;
+    --ring: 158 17% 37%;
 
     --radius: 0.75rem;
 
     --font-display: 'Instrument Serif', serif;
     --font-body: 'Inter', sans-serif;
 
-    --gradient-warm: linear-gradient(135deg, hsl(32 95% 55%), hsl(15 90% 58%));
-    --gradient-hero: linear-gradient(180deg, hsl(220 20% 97%) 0%, hsl(220 25% 93%) 100%);
-    --gradient-dark: linear-gradient(135deg, hsl(220 25% 10%), hsl(220 30% 18%));
-    --gradient-glow: radial-gradient(ellipse at 50% 0%, hsl(32 95% 55% / 0.12) 0%, transparent 60%);
+    /* Extended palette as CSS custom properties */
+    --green-primary: 158 17% 37%;
+    --green-secondary: 158 14% 50%;
+    --green-wash: 158 13% 67%;
 
-    --shadow-soft: 0 2px 20px -4px hsl(220 25% 10% / 0.08);
-    --shadow-card: 0 4px 32px -8px hsl(220 25% 10% / 0.1);
-    --shadow-accent: 0 8px 30px -6px hsl(32 95% 55% / 0.3);
+    --blue-primary: 203 29% 35%;
+    --blue-secondary: 203 22% 47%;
+    --blue-light: 203 19% 64%;
 
-    --sidebar-background: 0 0% 98%;
-    --sidebar-foreground: 240 5.3% 26.1%;
-    --sidebar-primary: 240 5.9% 10%;
-    --sidebar-primary-foreground: 0 0% 98%;
-    --sidebar-accent: 240 4.8% 95.9%;
-    --sidebar-accent-foreground: 240 5.9% 10%;
-    --sidebar-border: 220 13% 91%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --yellow-primary: 47 58% 73%;
+    --yellow-highlight: 47 62% 83%;
+    --yellow-icon: 47 50% 63%;
+
+    --indigo-deep: 220 32% 27%;
+    --indigo-analytical: 220 28% 32%;
+
+    --terracotta: 22 34% 52%;
+    --terracotta-light: 22 34% 59%;
+
+    --maroon: 343 32% 27%;
+    --maroon-light: 343 30% 33%;
+
+    /* Gradients */
+    --gradient-warm: linear-gradient(135deg, hsl(158 17% 37%), hsl(203 29% 35%));
+    --gradient-hero: linear-gradient(180deg, hsl(60 14% 98%) 0%, hsl(80 12% 96%) 100%);
+    --gradient-dark: linear-gradient(135deg, hsl(0 0% 7%), hsl(220 32% 27%));
+    --gradient-glow: radial-gradient(ellipse at 50% 0%, hsl(47 58% 73% / 0.12) 0%, transparent 60%);
+    --gradient-accent: linear-gradient(135deg, hsl(47 58% 73%), hsl(47 50% 63%));
+
+    /* Shadows */
+    --shadow-soft: 0 2px 20px -4px hsl(0 0% 7% / 0.06);
+    --shadow-card: 0 4px 32px -8px hsl(0 0% 7% / 0.08);
+    --shadow-accent: 0 8px 30px -6px hsl(158 17% 37% / 0.2);
+
+    /* Sidebar */
+    --sidebar-background: 60 14% 98%;
+    --sidebar-foreground: 0 0% 16%;
+    --sidebar-primary: 158 17% 37%;
+    --sidebar-primary-foreground: 60 14% 98%;
+    --sidebar-accent: 75 6% 90%;
+    --sidebar-accent-foreground: 0 0% 10%;
+    --sidebar-border: 75 6% 90%;
+    --sidebar-ring: 158 17% 37%;
   }
 }
 
@@ -98,6 +129,10 @@
     background: var(--gradient-glow);
   }
 
+  .gradient-accent {
+    background: var(--gradient-accent);
+  }
+
   .shadow-soft {
     box-shadow: var(--shadow-soft);
   }
@@ -112,6 +147,13 @@
 
   .text-gradient-warm {
     background: var(--gradient-warm);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .text-gradient-accent {
+    background: var(--gradient-accent);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
