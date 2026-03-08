@@ -25,6 +25,7 @@ const Index = () => {
       <ProblemSection />
       <VisionSection />
       <FeaturesSection />
+      <AppWalkthroughSection />
       <USPsSection />
       <EditionsSection />
       <EntrepreneurshipSection />
