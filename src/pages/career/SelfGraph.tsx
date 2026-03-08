@@ -1389,7 +1389,7 @@ const SelfGraph = () => {
                           {fit.matching_traits?.length > 0 && (
                             <div className="flex flex-wrap gap-1 mb-1">
                               {fit.matching_traits.map((t: string, j: number) => (
-                                <span key={j} className="px-1.5 py-0.5 rounded bg-green-500/10 text-green-600 font-body text-xs">{t}</span>
+                                <span key={j} className="px-1.5 py-0.5 rounded bg-success/10 text-success font-body text-xs">{t}</span>
                               ))}
                             </div>
                           )}
