@@ -110,6 +110,194 @@ export type Database = {
         }
         Relationships: []
       }
+      communities: {
+        Row: {
+          community_type: string
+          created_at: string
+          created_by: string | null
+          description: string | null
+          icon_emoji: string | null
+          id: string
+          is_featured: boolean | null
+          member_count: number | null
+          name: string
+          tags: string[] | null
+          topic: string
+          updated_at: string
+        }
+        Insert: {
+          community_type?: string
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          icon_emoji?: string | null
+          id?: string
+          is_featured?: boolean | null
+          member_count?: number | null
+          name: string
+          tags?: string[] | null
+          topic?: string
+          updated_at?: string
+        }
+        Update: {
+          community_type?: string
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          icon_emoji?: string | null
+          id?: string
+          is_featured?: boolean | null
+          member_count?: number | null
+          name?: string
+          tags?: string[] | null
+          topic?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      community_members: {
+        Row: {
+          community_id: string
+          id: string
+          joined_at: string
+          role: string
+          user_id: string
+        }
+        Insert: {
+          community_id: string
+          id?: string
+          joined_at?: string
+          role?: string
+          user_id: string
+        }
+        Update: {
+          community_id?: string
+          id?: string
+          joined_at?: string
+          role?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "community_members_community_id_fkey"
+            columns: ["community_id"]
+            isOneToOne: false
+            referencedRelation: "communities"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      community_post_comments: {
+        Row: {
+          content: string
+          created_at: string
+          id: string
+          post_id: string
+          user_id: string
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          id?: string
+          post_id: string
+          user_id: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          id?: string
+          post_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "community_post_comments_post_id_fkey"
+            columns: ["post_id"]
+            isOneToOne: false
+            referencedRelation: "community_posts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      community_post_likes: {
+        Row: {
+          created_at: string
+          id: string
+          post_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          post_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          post_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "community_post_likes_post_id_fkey"
+            columns: ["post_id"]
+            isOneToOne: false
+            referencedRelation: "community_posts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      community_posts: {
+        Row: {
+          comments_count: number | null
+          community_id: string
+          content: string
+          created_at: string
+          id: string
+          likes_count: number | null
+          post_type: string
+          tags: string[] | null
+          title: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          comments_count?: number | null
+          community_id: string
+          content: string
+          created_at?: string
+          id?: string
+          likes_count?: number | null
+          post_type?: string
+          tags?: string[] | null
+          title?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          comments_count?: number | null
+          community_id?: string
+          content?: string
+          created_at?: string
+          id?: string
+          likes_count?: number | null
+          post_type?: string
+          tags?: string[] | null
+          title?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "community_posts_community_id_fkey"
+            columns: ["community_id"]
+            isOneToOne: false
+            referencedRelation: "communities"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       connections: {
         Row: {
           connection_type: string
