@@ -1,12 +1,13 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useAuth } from "@/contexts/AuthContext";
+import { lovable } from "@/integrations/lovable/index";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
-import { ArrowRight, Eye, EyeOff } from "lucide-react";
+import { ArrowRight, Eye, EyeOff, Mail, Chrome } from "lucide-react";
 
 const Auth = () => {
   const [isLogin, setIsLogin] = useState(true);
@@ -18,10 +19,11 @@ const Auth = () => {
   const { signIn, signUp, user } = useAuth();
   const navigate = useNavigate();
 
-  if (user) {
-    navigate("/onboarding", { replace: true });
-    return null;
-  }
+  useEffect(() => {
+    if (user) {
+      navigate("/onboarding", { replace: true });
+    }
+  }, [user, navigate]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -49,6 +51,17 @@ const Auth = () => {
     }
     setSubmitting(false);
   };
+
+  const handleGoogleSignIn = async () => {
+    const { error } = await lovable.auth.signInWithOAuth("google", {
+      redirect_uri: window.location.origin,
+    });
+    if (error) {
+      toast.error("Google sign-in failed. Please try again.");
+    }
+  };
+
+  if (user) return null;
 
   return (
     <div className="min-h-screen bg-background flex">
@@ -85,10 +98,32 @@ const Auth = () => {
             </p>
           </div>
 
+          {/* Social Login */}
+          <div className="space-y-3">
+            <Button
+              type="button"
+              variant="outline"
+              className="w-full h-12 font-body text-sm"
+              onClick={handleGoogleSignIn}
+            >
+              <Chrome size={18} className="mr-2" />
+              Continue with Google
+            </Button>
+
+            <div className="relative">
+              <div className="absolute inset-0 flex items-center">
+                <span className="w-full border-t border-border" />
+              </div>
+              <div className="relative flex justify-center text-xs uppercase">
+                <span className="bg-background px-2 text-muted-foreground font-body">or continue with email</span>
+              </div>
+            </div>
+          </div>
+
           <form onSubmit={handleSubmit} className="space-y-5">
             {!isLogin && (
               <div className="space-y-2">
-                <Label htmlFor="fullName">Full Name</Label>
+                <Label htmlFor="fullName" className="font-body">Full Name</Label>
                 <Input
                   id="fullName"
                   value={fullName}
@@ -100,7 +135,7 @@ const Auth = () => {
             )}
 
             <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
+              <Label htmlFor="email" className="font-body">Email</Label>
               <Input
                 id="email"
                 type="email"
@@ -112,7 +147,7 @@ const Auth = () => {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="password">Password</Label>
+              <Label htmlFor="password" className="font-body">Password</Label>
               <div className="relative">
                 <Input
                   id="password"
@@ -136,7 +171,7 @@ const Auth = () => {
             <Button
               type="submit"
               disabled={submitting}
-              className="w-full gradient-warm text-secondary-foreground rounded-full h-12 font-body font-semibold text-base"
+              className="w-full gradient-warm text-primary-foreground rounded-full h-12 font-body font-semibold text-base"
             >
               {submitting ? "Please wait..." : isLogin ? "Sign In" : "Create Account"}
               <ArrowRight size={18} />
@@ -147,7 +182,7 @@ const Auth = () => {
             {isLogin ? "Don't have an account?" : "Already have an account?"}{" "}
             <button
               onClick={() => setIsLogin(!isLogin)}
-              className="text-accent font-semibold hover:underline"
+              className="text-primary font-semibold hover:underline"
             >
               {isLogin ? "Sign up" : "Sign in"}
             </button>
