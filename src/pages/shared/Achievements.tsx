@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
@@ -12,9 +12,11 @@ import { toast } from "sonner";
 import {
   Trophy, Medal, Star, Sparkles, Award, TrendingUp, Target, Flame,
   BookOpen, Rocket, Users, Brain, Lightbulb, Shield, Heart, Zap,
-  Crown, Gift, ArrowRight, ChevronRight, X, Calendar, BarChart3
+  Crown, Gift, ArrowRight, ChevronRight, X, Calendar, BarChart3,
+  Share2, MessageSquare
 } from "lucide-react";
 
+// ── Shared badge system ──────────────────────────────────────────
 type BadgeCategory = "exploration" | "learning" | "building" | "collaboration" | "resilience" | "funding" | "community" | "leadership";
 
 interface BadgeTemplate {
@@ -27,12 +29,14 @@ interface BadgeTemplate {
 }
 
 const BADGE_TEMPLATES: BadgeTemplate[] = [
+  // Exploration
   { type: "first_interest", title: "Curiosity Spark", description: "Added your first interest", icon: "🧭", points: 10, category: "exploration" },
   { type: "ten_interests", title: "Explorer", description: "Mapped 10+ interests", icon: "🌟", points: 25, category: "exploration" },
   { type: "first_observation", title: "Problem Spotter", description: "Logged your first problem observation", icon: "🔍", points: 15, category: "exploration" },
   { type: "first_idea_card", title: "Idea Collector", description: "Interacted with your first idea card", icon: "💡", points: 10, category: "exploration" },
   { type: "first_startup_idea", title: "Visionary", description: "Created your first startup idea", icon: "🎯", points: 20, category: "exploration" },
   { type: "first_application", title: "Go-Getter", description: "Submitted your first job application", icon: "📮", points: 15, category: "exploration" },
+  // Learning
   { type: "first_journal", title: "Reflector", description: "Wrote your first journal entry", icon: "📝", points: 10, category: "learning" },
   { type: "five_journals", title: "Deep Thinker", description: "Wrote 5 journal entries", icon: "📓", points: 30, category: "learning" },
   { type: "first_learning_track", title: "Student", description: "Started a learning track", icon: "📚", points: 15, category: "learning" },
@@ -40,19 +44,23 @@ const BADGE_TEMPLATES: BadgeTemplate[] = [
   { type: "five_skills", title: "Skill Builder", description: "Added 5 skills", icon: "🎯", points: 25, category: "learning" },
   { type: "ten_skills", title: "Skill Master", description: "Added 10 skills", icon: "🏅", points: 50, category: "learning" },
   { type: "first_reflection", title: "Thoughtful", description: "Wrote your first project reflection", icon: "💭", points: 10, category: "learning" },
+  // Building
   { type: "first_project", title: "Creator", description: "Started your first project", icon: "🚀", points: 20, category: "building" },
   { type: "first_lab_plan", title: "Lab Scientist", description: "Created your first lab plan", icon: "🧪", points: 20, category: "building" },
   { type: "first_experiment", title: "Experimenter", description: "Ran your first MVP experiment", icon: "⚗️", points: 25, category: "building" },
   { type: "first_milestone", title: "Milestone Maker", description: "Completed your first milestone", icon: "🏁", points: 20, category: "building" },
   { type: "first_validation", title: "Validator", description: "Completed a validation sprint", icon: "✅", points: 30, category: "building" },
   { type: "first_challenge_complete", title: "Challenge Champion", description: "Completed a project challenge", icon: "🏅", points: 30, category: "building" },
+  // Collaboration
   { type: "first_connection", title: "Networker", description: "Made your first connection", icon: "🤝", points: 15, category: "collaboration" },
   { type: "five_connections", title: "Connector", description: "Made 5 connections", icon: "🌐", points: 35, category: "collaboration" },
   { type: "first_mentor_session", title: "Guided", description: "Completed your first mentor session", icon: "🎓", points: 20, category: "collaboration" },
+  // Community
   { type: "first_community_join", title: "Community Member", description: "Joined your first community", icon: "👥", points: 10, category: "community" },
   { type: "first_post", title: "Voice Found", description: "Published your first community post", icon: "📢", points: 15, category: "community" },
   { type: "five_posts", title: "Thought Leader", description: "Published 5 community posts", icon: "🎤", points: 35, category: "community" },
   { type: "first_peer_circle", title: "Circle Joiner", description: "Joined your first peer circle", icon: "⭕", points: 15, category: "community" },
+  // Resilience
   { type: "first_checkin", title: "Self-Aware", description: "Completed your first mood check-in", icon: "🧘", points: 10, category: "resilience" },
   { type: "five_checkins", title: "Emotionally Intelligent", description: "Completed 5 mood check-ins", icon: "💪", points: 30, category: "resilience" },
   { type: "first_habit", title: "Habit Former", description: "Created your first mindset habit", icon: "🌱", points: 15, category: "resilience" },
@@ -61,6 +69,7 @@ const BADGE_TEMPLATES: BadgeTemplate[] = [
   { type: "streak_7", title: "Dedicated", description: "7-day activity streak", icon: "⚡", points: 50, category: "resilience" },
   { type: "streak_14", title: "Unstoppable", description: "14-day activity streak", icon: "💎", points: 75, category: "resilience" },
   { type: "streak_30", title: "Iron Will", description: "30-day activity streak", icon: "🏆", points: 100, category: "resilience" },
+  // Leadership
   { type: "first_roadmap", title: "Pathfinder", description: "Created your first roadmap", icon: "🗺️", points: 15, category: "leadership" },
   { type: "founder_profile", title: "Founder Identity", description: "Completed your founder profile", icon: "👤", points: 20, category: "leadership" },
   { type: "first_path", title: "Direction Set", description: "Selected your first entrepreneurial path", icon: "🧭", points: 20, category: "leadership" },
@@ -80,6 +89,16 @@ const CATEGORY_META: Record<BadgeCategory, { label: string; icon: React.ElementT
   leadership: { label: "Leadership", icon: Crown, color: "text-orange-500" },
 };
 
+const LEVEL_TIERS = [
+  { name: "Newcomer", icon: "🌱", min: 0, max: 49 },
+  { name: "Explorer", icon: "🧭", min: 50, max: 149 },
+  { name: "Builder", icon: "🔨", min: 150, max: 299 },
+  { name: "Innovator", icon: "💡", min: 300, max: 499 },
+  { name: "Legend", icon: "👑", min: 500, max: Infinity },
+];
+
+const getLevel = (pts: number) => LEVEL_TIERS.find(t => pts >= t.min && pts <= t.max) || LEVEL_TIERS[0];
+
 const Achievements = () => {
   const { user } = useAuth();
   const [achievements, setAchievements] = useState<any[]>([]);
@@ -90,22 +109,11 @@ const Achievements = () => {
   const [tab, setTab] = useState("wall");
   const [categoryFilter, setCategoryFilter] = useState("all");
   const [aiLoading, setAiLoading] = useState(false);
-  const [aiNudge, setAiNudge] = useState<any>(null);
+  const [aiResult, setAiResult] = useState<any>(null);
+  const [aiResultType, setAiResultType] = useState<string>("");
   const [showCelebration, setShowCelebration] = useState<any>(null);
 
-  useEffect(() => {
-    fetchAll();
-    checkAndAwardBadges();
-
-    const channel = supabase
-      .channel("achievements-watch")
-      .on("postgres_changes", { event: "*", schema: "public", table: "achievements", filter: `user_id=eq.${user!.id}` }, () => fetchAll())
-      .subscribe();
-
-    return () => { supabase.removeChannel(channel); };
-  }, []);
-
-  const fetchAll = async () => {
+  const fetchAll = useCallback(async () => {
     if (!user) return;
     const [aRes, sRes, eRes, cRes] = await Promise.all([
       supabase.from("achievements").select("*").eq("user_id", user.id).order("earned_at", { ascending: false }),
@@ -117,23 +125,14 @@ const Achievements = () => {
     setStreaks(sRes.data || []);
     setEndorsements(eRes.data || []);
     setCelebrations(cRes.data || []);
-
-    // Show unseen celebrations
-    if ((cRes.data || []).length > 0) {
-      setShowCelebration(cRes.data![0]);
-    }
+    if ((cRes.data || []).length > 0) setShowCelebration(cRes.data![0]);
     setLoading(false);
-  };
+  }, [user]);
 
-  const checkAndAwardBadges = async () => {
+  const checkAndAwardBadges = useCallback(async () => {
     if (!user) return;
 
-    const [
-      interestsRes, skillsRes, journalRes, projectsRes, roadmapsRes, connectionsRes,
-      observationsRes, ideasRes, ideaCardsRes, labPlansRes, experimentsRes, validationsRes,
-      checkinsRes, habitsRes, challengesRes, communitiesRes, postsRes, pathsRes, moodboardsRes,
-      learningRes, applicationsRes, reflectionsRes, circlesRes,
-    ] = await Promise.all([
+    const queries1: any[] = await Promise.all([
       supabase.from("interests").select("id", { count: "exact", head: true }).eq("user_id", user.id),
       supabase.from("skills").select("id", { count: "exact", head: true }).eq("user_id", user.id),
       supabase.from("journal_entries").select("id", { count: "exact", head: true }).eq("user_id", user.id),
@@ -144,6 +143,8 @@ const Achievements = () => {
       supabase.from("startup_ideas").select("id", { count: "exact", head: true }).eq("user_id", user.id),
       supabase.from("idea_card_interactions").select("id", { count: "exact", head: true }).eq("user_id", user.id),
       supabase.from("lab_plans").select("id", { count: "exact", head: true }).eq("user_id", user.id),
+    ]);
+    const queries2: any[] = await Promise.all([
       supabase.from("mvp_experiments").select("id", { count: "exact", head: true }).eq("user_id", user.id),
       supabase.from("validation_sprints").select("id", { count: "exact", head: true }).eq("user_id", user.id),
       supabase.from("coaching_checkins").select("id", { count: "exact", head: true }).eq("user_id", user.id),
@@ -154,10 +155,23 @@ const Achievements = () => {
       supabase.from("path_selections").select("id", { count: "exact", head: true }).eq("user_id", user.id),
       supabase.from("moodboards").select("id", { count: "exact", head: true }).eq("user_id", user.id),
       supabase.from("learning_track_progress").select("id", { count: "exact", head: true }).eq("user_id", user.id),
+    ]);
+    const queries3: any[] = await Promise.all([
       supabase.from("job_applications").select("id", { count: "exact", head: true }).eq("user_id", user.id),
       supabase.from("project_reflections").select("id", { count: "exact", head: true }).eq("user_id", user.id),
       supabase.from("peer_circle_members").select("id", { count: "exact", head: true }).eq("user_id", user.id),
     ]);
+    const mentorSessionsRes: any = await (supabase.from("mentorship_sessions") as any).select("id", { count: "exact", head: true }).eq("mentee_id", user.id);
+    const challengeCompletesRes: any = await (supabase.from("challenge_enrollments") as any).select("id", { count: "exact", head: true }).eq("user_id", user.id).eq("status", "completed");
+    const [
+      interestsRes, skillsRes, journalRes, projectsRes, roadmapsRes, connectionsRes,
+      observationsRes, ideasRes, ideaCardsRes, labPlansRes,
+    ] = queries1;
+    const [
+      experimentsRes, validationsRes, checkinsRes, habitsRes, challengesRes,
+      communitiesRes, postsRes, pathsRes, moodboardsRes, learningRes,
+    ] = queries2;
+    const [applicationsRes, reflectionsRes, circlesRes] = queries3;
 
     const { data: existing } = await supabase.from("achievements").select("achievement_type").eq("user_id", user.id);
     const earned = new Set((existing || []).map((a: any) => a.achievement_type));
@@ -193,6 +207,8 @@ const Achievements = () => {
       ["first_application", c(applicationsRes) >= 1],
       ["first_reflection", c(reflectionsRes) >= 1],
       ["first_peer_circle", c(circlesRes) >= 1],
+      ["first_mentor_session", c(mentorSessionsRes) >= 1],
+      ["first_challenge_complete", c(challengeCompletesRes) >= 1],
     ];
 
     const { data: fp } = await supabase.from("founder_profiles").select("id").eq("user_id", user.id).maybeSingle();
@@ -231,7 +247,6 @@ const Achievements = () => {
         toAward.map(b => ({ user_id: user.id, achievement_type: b.type, title: b.title, description: b.description, points: b.points }))
       );
 
-      // Create milestone celebrations
       for (const b of toAward) {
         await supabase.from("milestone_celebrations").insert({
           user_id: user.id, milestone_type: "badge_earned", title: `🎉 ${b.title} Unlocked!`, description: b.description,
@@ -239,7 +254,6 @@ const Achievements = () => {
         });
       }
 
-      // Update leaderboard
       const newTotal = currentPts + toAward.reduce((s, b) => s + b.points, 0);
       const newCount = (existing?.length || 0) + toAward.length;
       await supabase.from("leaderboard_entries").upsert({
@@ -267,19 +281,30 @@ const Achievements = () => {
         user_id: user.id, streak_type: "daily_activity", current_streak: 1, longest_streak: 1, last_activity_date: today,
       });
     }
-  };
+  }, [user, fetchAll]);
+
+  useEffect(() => {
+    fetchAll();
+    checkAndAwardBadges();
+    const channel = supabase
+      .channel("achievements-watch")
+      .on("postgres_changes", { event: "*", schema: "public", table: "achievements", filter: `user_id=eq.${user!.id}` }, () => fetchAll())
+      .subscribe();
+    return () => { supabase.removeChannel(channel); };
+  }, []);
 
   const dismissCelebration = async (id: string) => {
     await supabase.from("milestone_celebrations").update({ is_seen: true }).eq("id", id);
     setShowCelebration(null);
+    const next = celebrations.find(c => c.id !== id && !c.is_seen);
+    if (next) setShowCelebration(next);
   };
 
   const totalPoints = useMemo(() => achievements.reduce((s, a) => s + (a.points || 0), 0), [achievements]);
   const earnedTypes = useMemo(() => new Set(achievements.map(a => a.achievement_type)), [achievements]);
   const currentStreak = streaks.find(s => s.streak_type === "daily_activity")?.current_streak || 0;
   const longestStreak = streaks.find(s => s.streak_type === "daily_activity")?.longest_streak || 0;
-  const level = totalPoints < 50 ? "Newcomer" : totalPoints < 150 ? "Explorer" : totalPoints < 300 ? "Builder" : totalPoints < 500 ? "Innovator" : "Legend";
-  const levelIcon = totalPoints < 50 ? "🌱" : totalPoints < 150 ? "🧭" : totalPoints < 300 ? "🔨" : totalPoints < 500 ? "💡" : "👑";
+  const tier = getLevel(totalPoints);
 
   const filteredBadges = useMemo(() => {
     if (categoryFilter === "all") return BADGE_TEMPLATES;
@@ -299,18 +324,14 @@ const Achievements = () => {
 
   const nextToUnlock = useMemo(() => BADGE_TEMPLATES.filter(b => !earnedTypes.has(b.type)).slice(0, 5), [earnedTypes]);
 
-  const getNudge = async () => {
+  const callAI = async (type: string, context: any) => {
     setAiLoading(true);
+    setAiResultType(type);
     try {
-      const { data, error } = await supabase.functions.invoke("achievements-ai", {
-        body: {
-          type: "motivation_nudge",
-          context: { totalPoints, currentStreak, badgeCount: achievements.length, level },
-        },
-      });
+      const { data, error } = await supabase.functions.invoke("achievements-ai", { body: { type, context } });
       if (error) throw error;
-      setAiNudge(data);
-    } catch { toast.error("Failed to get nudge"); }
+      setAiResult(data);
+    } catch { toast.error("AI request failed"); }
     setAiLoading(false);
   };
 
@@ -321,16 +342,16 @@ const Achievements = () => {
         {showCelebration && (
           <motion.div initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.8 }}
             className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur-sm p-4">
-            <motion.div initial={{ y: 50 }} animate={{ y: 0 }} className="bg-card rounded-2xl border border-accent/30 p-8 max-w-md w-full text-center shadow-xl">
+            <motion.div initial={{ y: 50 }} animate={{ y: 0 }} className="bg-card rounded-2xl border border-primary/30 p-8 max-w-md w-full text-center shadow-xl">
               <motion.span animate={{ scale: [1, 1.3, 1] }} transition={{ repeat: 3, duration: 0.5 }} className="text-6xl block mb-4">
                 {(showCelebration.celebration_data as any)?.icon || "🎉"}
               </motion.span>
-              <h2 className="font-display text-2xl text-foreground mb-2">{showCelebration.title}</h2>
-              <p className="font-body text-sm text-muted-foreground mb-4">{showCelebration.description}</p>
+              <h2 className="text-2xl font-bold text-foreground mb-2">{showCelebration.title}</h2>
+              <p className="text-sm text-muted-foreground mb-4">{showCelebration.description}</p>
               {(showCelebration.celebration_data as any)?.points && (
-                <Badge className="bg-accent/10 text-accent mb-4">+{(showCelebration.celebration_data as any).points} points</Badge>
+                <Badge className="bg-primary/10 text-primary mb-4">+{(showCelebration.celebration_data as any).points} points</Badge>
               )}
-              <Button onClick={() => dismissCelebration(showCelebration.id)} className="gradient-warm text-secondary-foreground w-full">Awesome! 🎉</Button>
+              <Button onClick={() => dismissCelebration(showCelebration.id)} className="w-full">Awesome! 🎉</Button>
             </motion.div>
           </motion.div>
         )}
@@ -338,64 +359,54 @@ const Achievements = () => {
 
       {/* Hero */}
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
-        className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-amber-500/20 via-orange-500/10 to-rose-500/20 border border-amber-500/20 p-8">
+        className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-primary/20 via-accent/10 to-secondary/20 border border-primary/20 p-8">
         <div className="relative z-10">
           <div className="flex items-center gap-2 mb-2">
-            <Trophy className="h-6 w-6 text-amber-500" />
-            <span className="text-sm font-medium text-amber-600">Badges & Achievements</span>
+            <Trophy className="h-6 w-6 text-primary" />
+            <span className="text-sm font-medium text-primary">Badges & Achievements</span>
           </div>
-          <h1 className="font-display text-3xl text-foreground mb-1">Celebrate your journey.</h1>
-          <p className="font-body text-muted-foreground max-w-2xl">Track your progress, unlock badges, and see how far you've come.</p>
+          <h1 className="text-3xl font-bold text-foreground mb-1">Celebrate your journey.</h1>
+          <p className="text-muted-foreground max-w-2xl">Track your progress, unlock badges, and see how you compare with peers.</p>
         </div>
       </motion.div>
 
-      {/* Stats */}
+      {/* Stats Row */}
       <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
         {[
           { icon: Medal, label: "Points", value: totalPoints, accent: true },
           { icon: Award, label: "Badges", value: `${achievements.length}/${BADGE_TEMPLATES.length}` },
-          { icon: Zap, label: "Level", value: `${levelIcon} ${level}` },
+          { icon: Zap, label: "Level", value: `${tier.icon} ${tier.name}` },
           { icon: Flame, label: "Streak", value: `${currentStreak}🔥` },
-          { icon: Target, label: "Best Streak", value: `${longestStreak}d` },
+          { icon: Target, label: "Best", value: `${longestStreak}d` },
         ].map((stat, i) => (
-          <motion.div key={i} initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: i * 0.05 }}>
+          <motion.div key={i} initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: i * 0.04 }}>
             <Card className="text-center p-3">
-              <stat.icon className={`mx-auto mb-1 h-5 w-5 ${stat.accent ? "text-amber-500" : "text-muted-foreground"}`} />
-              <p className="font-display text-lg text-foreground">{stat.value}</p>
-              <p className="font-body text-[10px] text-muted-foreground">{stat.label}</p>
+              <stat.icon className={`mx-auto mb-1 h-5 w-5 ${stat.accent ? "text-primary" : "text-muted-foreground"}`} />
+              <p className="text-lg font-bold text-foreground">{stat.value}</p>
+              <p className="text-[10px] text-muted-foreground">{stat.label}</p>
             </Card>
           </motion.div>
         ))}
       </div>
 
-      {/* Progress */}
+      {/* Overall Progress */}
       <Card className="p-4">
         <div className="flex items-center justify-between mb-2">
-          <span className="font-display text-sm">Overall Progress</span>
-          <span className="font-body text-xs text-muted-foreground">{achievements.length} / {BADGE_TEMPLATES.length} badges</span>
+          <span className="text-sm font-medium">Overall Progress</span>
+          <span className="text-xs text-muted-foreground">{achievements.length} / {BADGE_TEMPLATES.length} badges</span>
         </div>
         <Progress value={(achievements.length / BADGE_TEMPLATES.length) * 100} className="h-3" />
       </Card>
 
-      {/* AI Nudge */}
-      {aiNudge && (
-        <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="bg-accent/5 rounded-xl border border-accent/20 p-4 flex items-center gap-3">
-          <Sparkles className="text-accent shrink-0" size={20} />
-          <div className="flex-1">
-            <p className="font-body text-sm text-foreground">{aiNudge.nudge_message}</p>
-            <p className="font-body text-xs text-accent mt-1">→ {aiNudge.suggested_activity}</p>
-          </div>
-          <Button size="sm" variant="ghost" onClick={() => setAiNudge(null)}><X size={14} /></Button>
-        </motion.div>
-      )}
-
+      {/* Tabs */}
       <Tabs value={tab} onValueChange={setTab}>
         <TabsList className="flex-wrap h-auto gap-1">
           <TabsTrigger value="wall" className="gap-1"><Award className="h-4 w-4" /> Badge Wall</TabsTrigger>
           <TabsTrigger value="gallery" className="gap-1"><Trophy className="h-4 w-4" /> Gallery</TabsTrigger>
           <TabsTrigger value="streaks" className="gap-1"><Flame className="h-4 w-4" /> Streaks</TabsTrigger>
           <TabsTrigger value="progress" className="gap-1"><BarChart3 className="h-4 w-4" /> Progress</TabsTrigger>
-          <TabsTrigger value="ai" className="gap-1"><Sparkles className="h-4 w-4" /> AI Insights</TabsTrigger>
+          <TabsTrigger value="recognition" className="gap-1"><Heart className="h-4 w-4" /> Recognition</TabsTrigger>
+          <TabsTrigger value="ai" className="gap-1"><Sparkles className="h-4 w-4" /> AI Coach</TabsTrigger>
         </TabsList>
 
         {/* Badge Wall */}
@@ -410,7 +421,7 @@ const Achievements = () => {
                 ))}
               </SelectContent>
             </Select>
-            <p className="font-body text-xs text-muted-foreground">
+            <p className="text-xs text-muted-foreground">
               {filteredBadges.filter(b => earnedTypes.has(b.type)).length}/{filteredBadges.length} earned
             </p>
           </div>
@@ -422,22 +433,22 @@ const Achievements = () => {
               const catMeta = CATEGORY_META[badge.category];
               const CatIcon = catMeta.icon;
               return (
-                <motion.div key={badge.type} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.03 }}>
-                  <Card className={`p-5 transition-all ${isEarned ? "border-amber-500/30 bg-amber-500/5 shadow-sm" : "opacity-50 hover:opacity-75"}`}>
+                <motion.div key={badge.type} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.02 }}>
+                  <Card className={`p-5 transition-all ${isEarned ? "border-primary/30 bg-primary/5 shadow-sm" : "opacity-50 hover:opacity-75"}`}>
                     <div className="flex items-start gap-3">
                       <span className={`text-3xl ${!isEarned ? "grayscale" : ""}`}>{badge.icon}</span>
                       <div className="flex-1">
                         <div className="flex items-center gap-2">
-                          <h3 className="font-display text-sm text-foreground">{badge.title}</h3>
-                          {isEarned && <Award className="h-4 w-4 text-amber-500" />}
+                          <h3 className="text-sm font-semibold text-foreground">{badge.title}</h3>
+                          {isEarned && <Award className="h-4 w-4 text-primary" />}
                         </div>
-                        <p className="font-body text-xs text-muted-foreground">{badge.description}</p>
+                        <p className="text-xs text-muted-foreground">{badge.description}</p>
                         <div className="flex items-center gap-2 mt-2">
                           <Badge variant="outline" className="text-[10px] gap-1"><CatIcon className={`h-3 w-3 ${catMeta.color}`} />{catMeta.label}</Badge>
-                          <span className="font-body text-xs text-amber-600 font-semibold">+{badge.points} pts</span>
+                          <span className="text-xs text-primary font-semibold">+{badge.points} pts</span>
                         </div>
                         {isEarned && earnedData && (
-                          <p className="font-body text-[10px] text-muted-foreground mt-1">Earned {new Date(earnedData.earned_at).toLocaleDateString()}</p>
+                          <p className="text-[10px] text-muted-foreground mt-1">Earned {new Date(earnedData.earned_at).toLocaleDateString()}</p>
                         )}
                       </div>
                     </div>
@@ -450,8 +461,7 @@ const Achievements = () => {
 
         {/* Achievement Gallery */}
         <TabsContent value="gallery" className="space-y-4 mt-4">
-          <h2 className="font-display text-lg text-foreground">🏆 Achievement Gallery</h2>
-          {/* Category breakdown */}
+          <h2 className="text-lg font-semibold text-foreground">🏆 Achievement Gallery</h2>
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-3">
             {Object.entries(CATEGORY_META).map(([key, meta]) => {
               const Icon = meta.icon;
@@ -461,33 +471,32 @@ const Achievements = () => {
                 <Card key={key} className="p-4 cursor-pointer hover:shadow-md transition-shadow" onClick={() => { setCategoryFilter(key); setTab("wall"); }}>
                   <div className="flex items-center gap-2 mb-2">
                     <Icon className={`h-5 w-5 ${meta.color}`} />
-                    <span className="font-display text-sm">{meta.label}</span>
+                    <span className="text-sm font-medium">{meta.label}</span>
                   </div>
                   <Progress value={pct} className="h-2 mb-1" />
-                  <p className="font-body text-xs text-muted-foreground">{ct.earned}/{ct.total} badges • {pct}%</p>
+                  <p className="text-xs text-muted-foreground">{ct.earned}/{ct.total} badges • {pct}%</p>
                 </Card>
               );
             })}
           </div>
 
-          {/* Recent */}
           {achievements.length > 0 && (
             <div>
-              <h3 className="font-display text-base text-foreground mb-3">Recently Earned</h3>
+              <h3 className="text-base font-semibold text-foreground mb-3">Recently Earned</h3>
               <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
                 {achievements.slice(0, 6).map((a, i) => {
                   const tmpl = BADGE_TEMPLATES.find(b => b.type === a.achievement_type);
                   return (
-                    <motion.div key={a.id} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }}>
-                      <Card className="p-4 border-amber-500/20 bg-amber-500/5">
+                    <motion.div key={a.id} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.04 }}>
+                      <Card className="p-4 border-primary/20 bg-primary/5">
                         <div className="flex items-start gap-3">
                           <span className="text-3xl">{tmpl?.icon || "🏆"}</span>
                           <div>
-                            <h3 className="font-display text-sm text-foreground">{a.title}</h3>
-                            <p className="font-body text-xs text-muted-foreground">{a.description}</p>
+                            <h3 className="text-sm font-semibold text-foreground">{a.title}</h3>
+                            <p className="text-xs text-muted-foreground">{a.description}</p>
                             <div className="flex items-center gap-2 mt-1">
                               <Badge variant="secondary" className="text-[10px]">+{a.points} pts</Badge>
-                              <span className="font-body text-[10px] text-muted-foreground">{new Date(a.earned_at).toLocaleDateString()}</span>
+                              <span className="text-[10px] text-muted-foreground">{new Date(a.earned_at).toLocaleDateString()}</span>
                             </div>
                           </div>
                         </div>
@@ -499,10 +508,9 @@ const Achievements = () => {
             </div>
           )}
 
-          {/* Next to Unlock */}
           {nextToUnlock.length > 0 && (
             <div>
-              <h3 className="font-display text-base text-foreground mb-3 flex items-center gap-2"><Target className="h-5 w-5" /> Next to Unlock</h3>
+              <h3 className="text-base font-semibold text-foreground mb-3 flex items-center gap-2"><Target className="h-5 w-5" /> Next to Unlock</h3>
               <div className="grid sm:grid-cols-2 gap-3">
                 {nextToUnlock.map(badge => {
                   const catMeta = CATEGORY_META[badge.category];
@@ -512,11 +520,11 @@ const Achievements = () => {
                         <span className="text-2xl grayscale">{badge.icon}</span>
                         <div className="flex-1">
                           <div className="flex items-center gap-2">
-                            <h3 className="font-display text-sm text-foreground">{badge.title}</h3>
+                            <h3 className="text-sm font-medium text-foreground">{badge.title}</h3>
                             <Badge variant="outline" className="text-[10px]">{catMeta.label}</Badge>
                           </div>
-                          <p className="font-body text-xs text-muted-foreground">{badge.description}</p>
-                          <span className="font-body text-xs text-amber-600 font-semibold">+{badge.points} pts</span>
+                          <p className="text-xs text-muted-foreground">{badge.description}</p>
+                          <span className="text-xs text-primary font-semibold">+{badge.points} pts</span>
                         </div>
                         <ArrowRight className="h-4 w-4 text-muted-foreground mt-1" />
                       </div>
@@ -527,29 +535,11 @@ const Achievements = () => {
             </div>
           )}
 
-          {/* Endorsements */}
-          {endorsements.length > 0 && (
-            <div>
-              <h3 className="font-display text-base text-foreground mb-3">🤝 Peer Endorsements</h3>
-              <div className="space-y-2">
-                {endorsements.map(e => (
-                  <Card key={e.id} className="p-3 flex items-center gap-3">
-                    <Heart className="h-4 w-4 text-pink-500" />
-                    <div>
-                      <p className="font-body text-sm text-foreground">{e.message || "Great work!"}</p>
-                      <p className="font-body text-[10px] text-muted-foreground">{new Date(e.created_at).toLocaleDateString()}</p>
-                    </div>
-                  </Card>
-                ))}
-              </div>
-            </div>
-          )}
-
           {achievements.length === 0 && (
             <Card className="p-12 text-center">
               <Sparkles className="mx-auto text-muted-foreground mb-3" size={40} />
-              <h3 className="font-display text-xl text-foreground mb-2">No achievements yet</h3>
-              <p className="font-body text-muted-foreground">Complete activities to earn badges and points!</p>
+              <h3 className="text-xl font-bold text-foreground mb-2">No achievements yet</h3>
+              <p className="text-muted-foreground">Complete activities to earn badges and points!</p>
             </Card>
           )}
         </TabsContent>
@@ -562,12 +552,12 @@ const Achievements = () => {
                 <Flame className="h-8 w-8 text-white" />
               </div>
               <div>
-                <h2 className="font-display text-2xl text-foreground">{currentStreak} Day Streak</h2>
-                <p className="font-body text-sm text-muted-foreground">Best: {longestStreak} days</p>
+                <h2 className="text-2xl font-bold text-foreground">{currentStreak} Day Streak</h2>
+                <p className="text-sm text-muted-foreground">Best: {longestStreak} days</p>
               </div>
             </div>
             <Progress value={Math.min((currentStreak / 30) * 100, 100)} className="h-3 mb-2" />
-            <p className="font-body text-xs text-muted-foreground">
+            <p className="text-xs text-muted-foreground">
               {currentStreak < 3 ? `${3 - currentStreak} more days for 🔥 Consistent badge` :
                currentStreak < 7 ? `${7 - currentStreak} more days for ⚡ Dedicated badge` :
                currentStreak < 14 ? `${14 - currentStreak} more days for 💎 Unstoppable badge` :
@@ -586,17 +576,17 @@ const Achievements = () => {
               const isEarned = earnedTypes.has(s.type);
               const progress = Math.min((currentStreak / s.days) * 100, 100);
               return (
-                <Card key={s.type} className={`p-4 ${isEarned ? "border-amber-500/30 bg-amber-500/5" : ""}`}>
+                <Card key={s.type} className={`p-4 ${isEarned ? "border-primary/30 bg-primary/5" : ""}`}>
                   <div className="flex items-center gap-3 mb-2">
                     <span className={`text-2xl ${!isEarned ? "grayscale" : ""}`}>{s.icon}</span>
                     <div>
-                      <h4 className="font-display text-sm text-foreground">{s.title}</h4>
-                      <p className="font-body text-xs text-muted-foreground">{s.days}-day streak</p>
+                      <h4 className="text-sm font-semibold text-foreground">{s.title}</h4>
+                      <p className="text-xs text-muted-foreground">{s.days}-day streak</p>
                     </div>
-                    {isEarned && <Award className="h-4 w-4 text-amber-500 ml-auto" />}
+                    {isEarned && <Award className="h-4 w-4 text-primary ml-auto" />}
                   </div>
                   <Progress value={progress} className="h-2" />
-                  <p className="font-body text-[10px] text-muted-foreground mt-1">{Math.min(currentStreak, s.days)}/{s.days} days</p>
+                  <p className="text-[10px] text-muted-foreground mt-1">{Math.min(currentStreak, s.days)}/{s.days} days</p>
                 </Card>
               );
             })}
@@ -606,9 +596,9 @@ const Achievements = () => {
             <div className="flex items-start gap-3">
               <Calendar className="h-6 w-6 text-muted-foreground" />
               <div>
-                <h3 className="font-display text-sm text-foreground">Streak Tips</h3>
-                <p className="font-body text-xs text-muted-foreground mt-1">• Log a journal entry, complete a task, or explore a new interest daily to maintain your streak.</p>
-                <p className="font-body text-xs text-muted-foreground">• Even small actions count — the key is consistency!</p>
+                <h3 className="text-sm font-semibold text-foreground">Streak Tips</h3>
+                <p className="text-xs text-muted-foreground mt-1">• Log a journal entry, complete a task, or explore a new interest daily.</p>
+                <p className="text-xs text-muted-foreground">• Even small actions count — the key is consistency!</p>
               </div>
             </div>
           </Card>
@@ -618,38 +608,31 @@ const Achievements = () => {
         <TabsContent value="progress" className="space-y-4 mt-4">
           <Card className="p-6">
             <div className="flex items-center gap-3 mb-4">
-              <div className="h-12 w-12 rounded-full bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center text-2xl">{levelIcon}</div>
+              <div className="h-12 w-12 rounded-full bg-gradient-to-br from-primary/80 to-accent/80 flex items-center justify-center text-2xl">{tier.icon}</div>
               <div>
-                <h3 className="font-display text-lg text-foreground">Level: {level}</h3>
-                <p className="font-body text-sm text-muted-foreground">{totalPoints} points • {achievements.length} badges</p>
+                <h3 className="text-lg font-bold text-foreground">Level: {tier.name}</h3>
+                <p className="text-sm text-muted-foreground">{totalPoints} points • {achievements.length} badges</p>
               </div>
             </div>
             <Progress value={(achievements.length / BADGE_TEMPLATES.length) * 100} className="h-3 mb-2" />
           </Card>
 
-          {/* Level tiers */}
           <div>
-            <h2 className="font-display text-base text-foreground mb-3">Level Tiers</h2>
+            <h2 className="text-base font-semibold text-foreground mb-3">Level Tiers</h2>
             <div className="space-y-2">
-              {[
-                { name: "Newcomer", icon: "🌱", min: 0, max: 49 },
-                { name: "Explorer", icon: "🧭", min: 50, max: 149 },
-                { name: "Builder", icon: "🔨", min: 150, max: 299 },
-                { name: "Innovator", icon: "💡", min: 300, max: 499 },
-                { name: "Legend", icon: "👑", min: 500, max: Infinity },
-              ].map(tier => {
-                const isCurrent = level === tier.name;
+              {LEVEL_TIERS.map(t => {
+                const isCurrent = tier.name === t.name;
                 return (
-                  <Card key={tier.name} className={`p-3 flex items-center gap-3 ${isCurrent ? "border-amber-500/30 bg-amber-500/5" : ""}`}>
-                    <span className="text-2xl">{tier.icon}</span>
+                  <Card key={t.name} className={`p-3 flex items-center gap-3 ${isCurrent ? "border-primary/30 bg-primary/5" : ""}`}>
+                    <span className="text-2xl">{t.icon}</span>
                     <div className="flex-1">
                       <div className="flex items-center gap-2">
-                        <span className="font-display text-sm">{tier.name}</span>
+                        <span className="text-sm font-medium">{t.name}</span>
                         {isCurrent && <Badge className="text-[10px]">Current</Badge>}
                       </div>
-                      <span className="font-body text-xs text-muted-foreground">{tier.max === Infinity ? `${tier.min}+ pts` : `${tier.min}–${tier.max} pts`}</span>
+                      <span className="text-xs text-muted-foreground">{t.max === Infinity ? `${t.min}+ pts` : `${t.min}–${t.max} pts`}</span>
                     </div>
-                    {isCurrent && <ChevronRight className="h-4 w-4 text-amber-500" />}
+                    {isCurrent && <ChevronRight className="h-4 w-4 text-primary" />}
                   </Card>
                 );
               })}
@@ -659,21 +642,21 @@ const Achievements = () => {
           {/* Achievement timeline */}
           {achievements.length > 0 && (
             <div>
-              <h2 className="font-display text-base text-foreground mb-3">Achievement Timeline</h2>
-              <div className="relative border-l-2 border-amber-500/20 ml-4 space-y-4">
-                {achievements.slice(0, 10).map((a, i) => {
+              <h2 className="text-base font-semibold text-foreground mb-3">Achievement Timeline</h2>
+              <div className="relative border-l-2 border-primary/20 ml-4 space-y-4">
+                {achievements.slice(0, 12).map((a, i) => {
                   const tmpl = BADGE_TEMPLATES.find(b => b.type === a.achievement_type);
                   return (
-                    <motion.div key={a.id} initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.05 }}
+                    <motion.div key={a.id} initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.04 }}
                       className="relative pl-6">
-                      <div className="absolute -left-[9px] top-1 w-4 h-4 rounded-full bg-amber-500/20 border-2 border-amber-500 flex items-center justify-center">
-                        <div className="w-1.5 h-1.5 rounded-full bg-amber-500" />
+                      <div className="absolute -left-[9px] top-1 w-4 h-4 rounded-full bg-primary/20 border-2 border-primary flex items-center justify-center">
+                        <div className="w-1.5 h-1.5 rounded-full bg-primary" />
                       </div>
                       <div className="flex items-center gap-2">
                         <span className="text-lg">{tmpl?.icon || "🏆"}</span>
                         <div>
-                          <p className="font-display text-sm text-foreground">{a.title}</p>
-                          <p className="font-body text-[10px] text-muted-foreground">{new Date(a.earned_at).toLocaleDateString()} • +{a.points} pts</p>
+                          <p className="text-sm font-medium text-foreground">{a.title}</p>
+                          <p className="text-[10px] text-muted-foreground">{new Date(a.earned_at).toLocaleDateString()} • +{a.points} pts</p>
                         </div>
                       </div>
                     </motion.div>
@@ -684,48 +667,154 @@ const Achievements = () => {
           )}
         </TabsContent>
 
-        {/* AI Insights */}
+        {/* Recognition */}
+        <TabsContent value="recognition" className="space-y-4 mt-4">
+          <Card className="p-6">
+            <div className="flex items-center gap-3 mb-4">
+              <Heart className="h-6 w-6 text-pink-500" />
+              <div>
+                <h3 className="text-lg font-semibold text-foreground">Peer & Mentor Recognition</h3>
+                <p className="text-sm text-muted-foreground">Endorsements and shout-outs from your network</p>
+              </div>
+            </div>
+
+            {endorsements.length > 0 ? (
+              <div className="space-y-3">
+                {endorsements.map(e => (
+                  <Card key={e.id} className="p-4 bg-muted/30">
+                    <div className="flex items-start gap-3">
+                      <MessageSquare className="h-4 w-4 text-primary mt-1 shrink-0" />
+                      <div>
+                        <p className="text-sm text-foreground">{e.message || "Great work! Keep it up!"}</p>
+                        <div className="flex items-center gap-2 mt-1">
+                          {e.badge_type && <Badge variant="outline" className="text-[10px]">{e.badge_type}</Badge>}
+                          <span className="text-[10px] text-muted-foreground">{new Date(e.created_at).toLocaleDateString()}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </Card>
+                ))}
+              </div>
+            ) : (
+              <div className="text-center py-8">
+                <Users className="mx-auto text-muted-foreground/40 mb-3" size={40} />
+                <p className="text-muted-foreground text-sm">No endorsements yet. As you earn badges, mentors and peers can recognize your achievements.</p>
+              </div>
+            )}
+          </Card>
+
+          <Card className="p-5 border-dashed">
+            <div className="flex items-start gap-3">
+              <Share2 className="h-6 w-6 text-muted-foreground" />
+              <div>
+                <h3 className="text-sm font-semibold text-foreground">Share & Celebrate</h3>
+                <p className="text-xs text-muted-foreground mt-1">Your badges are visible on your Living Resume, helping recruiters and mentors see your verified accomplishments.</p>
+              </div>
+            </div>
+          </Card>
+        </TabsContent>
+
+        {/* AI Coach */}
         <TabsContent value="ai" className="space-y-4 mt-4">
           <Card className="p-6 text-center">
-            <Brain className="mx-auto text-accent mb-3" size={40} />
-            <h2 className="font-display text-xl text-foreground mb-2">AI Achievement Coach</h2>
-            <p className="font-body text-sm text-muted-foreground mb-4">Get personalized suggestions to unlock more badges and stay motivated.</p>
-            <div className="flex gap-3 justify-center">
-              <Button onClick={getNudge} disabled={aiLoading} className="gradient-warm text-secondary-foreground">
-                <Sparkles size={16} /> {aiLoading ? "Thinking..." : "Get Motivation Nudge"}
+            <Brain className="mx-auto text-primary mb-3" size={40} />
+            <h2 className="text-xl font-bold text-foreground mb-2">AI Achievement Coach</h2>
+            <p className="text-sm text-muted-foreground mb-4">Get personalized suggestions, motivation, and progress analysis.</p>
+            <div className="flex flex-wrap gap-3 justify-center">
+              <Button onClick={() => callAI("motivation_nudge", { totalPoints, currentStreak, badgeCount: achievements.length, level: tier.name })} disabled={aiLoading}>
+                <Sparkles className="h-4 w-4" /> Motivation Nudge
               </Button>
-              <Button onClick={async () => {
-                setAiLoading(true);
-                try {
-                  const { data, error } = await supabase.functions.invoke("achievements-ai", {
-                    body: {
-                      type: "next_steps",
-                      context: { earned: achievements.map(a => a.achievement_type), totalPoints, badgeCount: achievements.length, totalBadges: BADGE_TEMPLATES.length },
-                    },
-                  });
-                  if (error) throw error;
-                  setAiNudge(data);
-                } catch { toast.error("Failed"); }
-                setAiLoading(false);
-              }} disabled={aiLoading} variant="outline"><Target size={16} /> Next Steps</Button>
+              <Button onClick={() => callAI("next_steps", { earned: achievements.map(a => a.achievement_type), totalPoints, badgeCount: achievements.length, totalBadges: BADGE_TEMPLATES.length })} disabled={aiLoading} variant="outline">
+                <Target className="h-4 w-4" /> Next Steps
+              </Button>
+              <Button onClick={() => callAI("progress_analysis", { earned: achievements.map(a => ({ type: a.achievement_type, date: a.earned_at })), totalPoints, categories: categoryCounts })} disabled={aiLoading} variant="outline">
+                <Brain className="h-4 w-4" /> Analyze Progress
+              </Button>
             </div>
           </Card>
 
-          {aiNudge?.suggestions && (
-            <div className="space-y-2">
-              <h3 className="font-display text-base text-foreground">Suggested Next Steps</h3>
-              {aiNudge.suggestions.map((s: any, i: number) => (
-                <Card key={i} className="p-3">
-                  <div className="flex items-center gap-2 mb-1">
-                    <ArrowRight className="h-4 w-4 text-amber-500" />
-                    <span className="font-display text-sm text-foreground">{s.title}</span>
+          <AnimatePresence>
+            {aiResult && aiResultType === "motivation_nudge" && (
+              <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
+                <Card className="border-primary/30 p-5">
+                  <div className="flex items-start justify-between mb-3">
+                    <div className="flex items-center gap-2"><Sparkles className="h-5 w-5 text-primary" /><h3 className="font-semibold">Motivation Nudge</h3></div>
+                    <Button size="icon" variant="ghost" onClick={() => setAiResult(null)}><X className="h-4 w-4" /></Button>
                   </div>
-                  <p className="font-body text-xs text-muted-foreground">{s.action}</p>
-                  {s.estimated_effort && <Badge variant="secondary" className="text-[10px] mt-1">{s.estimated_effort}</Badge>}
+                  <p className="text-sm text-foreground mb-2">{aiResult.nudge_message}</p>
+                  {aiResult.suggested_activity && <p className="text-xs text-primary">→ {aiResult.suggested_activity}</p>}
+                  {aiResult.streak_advice && <p className="text-xs text-muted-foreground mt-2">💡 {aiResult.streak_advice}</p>}
                 </Card>
-              ))}
-              {aiNudge.streak_tip && <p className="font-body text-xs text-muted-foreground">💡 {aiNudge.streak_tip}</p>}
-            </div>
+              </motion.div>
+            )}
+
+            {aiResult && aiResultType === "next_steps" && (
+              <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
+                <Card className="border-primary/30">
+                  <CardHeader className="pb-2 flex flex-row items-center justify-between">
+                    <div>
+                      <CardTitle className="text-lg flex items-center gap-2"><Target className="h-5 w-5 text-primary" /> Suggested Next Steps</CardTitle>
+                      {aiResult.encouragement && <CardDescription>{aiResult.encouragement}</CardDescription>}
+                    </div>
+                    <Button size="icon" variant="ghost" onClick={() => setAiResult(null)}><X className="h-4 w-4" /></Button>
+                  </CardHeader>
+                  <CardContent className="space-y-3">
+                    {aiResult.suggestions?.map((s: any, i: number) => (
+                      <div key={i} className="p-3 rounded-lg bg-muted/50 border">
+                        <div className="flex items-center gap-2 mb-1">
+                          <ArrowRight className="h-4 w-4 text-primary" />
+                          <span className="font-medium text-sm">{s.title}</span>
+                        </div>
+                        <p className="text-xs text-muted-foreground">{s.action}</p>
+                        {s.estimated_effort && <Badge variant="secondary" className="text-[10px] mt-1">{s.estimated_effort}</Badge>}
+                      </div>
+                    ))}
+                    {aiResult.streak_tip && <p className="text-xs text-muted-foreground border-t pt-2">💡 {aiResult.streak_tip}</p>}
+                  </CardContent>
+                </Card>
+              </motion.div>
+            )}
+
+            {aiResult && aiResultType === "progress_analysis" && (
+              <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
+                <Card className="border-blue-500/30">
+                  <CardHeader className="pb-2 flex flex-row items-center justify-between">
+                    <div>
+                      <CardTitle className="text-lg flex items-center gap-2"><Brain className="h-5 w-5 text-blue-500" /> Progress Analysis</CardTitle>
+                      {aiResult.celebration_message && <CardDescription>{aiResult.celebration_message}</CardDescription>}
+                    </div>
+                    <Button size="icon" variant="ghost" onClick={() => setAiResult(null)}><X className="h-4 w-4" /></Button>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    {aiResult.strength_areas?.length > 0 && (
+                      <div>
+                        <h4 className="text-sm font-medium mb-1">💪 Strengths</h4>
+                        <div className="flex flex-wrap gap-1">{aiResult.strength_areas.map((s: string, i: number) => <Badge key={i} variant="secondary" className="text-xs">{s}</Badge>)}</div>
+                      </div>
+                    )}
+                    {aiResult.growth_areas?.length > 0 && (
+                      <div>
+                        <h4 className="text-sm font-medium mb-1">🌱 Growth Areas</h4>
+                        <div className="flex flex-wrap gap-1">{aiResult.growth_areas.map((s: string, i: number) => <Badge key={i} variant="outline" className="text-xs">{s}</Badge>)}</div>
+                      </div>
+                    )}
+                    {aiResult.personalized_challenge && (
+                      <div className="p-3 rounded-lg bg-blue-500/5 border border-blue-500/20">
+                        <h4 className="text-sm font-medium mb-1">🎯 Personal Challenge</h4>
+                        <p className="text-sm text-muted-foreground">{aiResult.personalized_challenge}</p>
+                      </div>
+                    )}
+                  </CardContent>
+                </Card>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          {!aiResult && (
+            <Card className="p-8 text-center">
+              <Sparkles className="h-12 w-12 mx-auto text-muted-foreground/40 mb-3" />
+              <p className="text-muted-foreground">Click a button above to get AI-powered insights.</p>
+            </Card>
           )}
         </TabsContent>
       </Tabs>
