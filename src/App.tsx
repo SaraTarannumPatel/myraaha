@@ -95,6 +95,7 @@ const App = () => (
               <Route path="startup-support" element={<StartupSupport />} />
               <Route path="ai-coach" element={<AIEntrepreneurshipCoach />} />
               <Route path="startup-communities" element={<StartupCommunities />} />
+              <Route path="founders-learning" element={<FoundersLearningLibrary />} />
               {/* Shared */}
               <Route path="journal" element={<Journal />} />
               <Route path="connections" element={<Connections />} />
