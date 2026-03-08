@@ -680,7 +680,7 @@ const CapsuleCard = ({ capsule, index, progress, isBookmarked, onBookmark, onSta
       )}
     </div>
     {progress?.status === 'completed' ? (
-      <div className="flex items-center gap-1 text-green-500">
+      <div className="flex items-center gap-1 text-primary">
         <CheckCircle size={12} />
         <span className="font-body text-[10px]">Completed</span>
       </div>
