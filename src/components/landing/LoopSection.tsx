@@ -4,17 +4,17 @@ import { Eye, DollarSign, Clock, AlertTriangle, Gauge } from "lucide-react";
 import loopIllustration from "@/assets/loop-illustration.png";
 
 const pathInfo = [
-  { icon: Eye, label: "Required Skills", description: "What you actually need to learn for each path." },
-  { icon: Gauge, label: "Market Demand", description: "Real-time signals — not motivational lies." },
-  { icon: DollarSign, label: "Income Realities", description: "Honest salary and revenue projections." },
-  { icon: Clock, label: "Effort Needed", description: "Time-to-readiness with clear estimates." },
-  { icon: AlertTriangle, label: "Risk Level", description: "Financial, emotional, and career risk mapped." },
+  { icon: Eye, label: "Required Skills", description: "What you actually need to learn for each path. no bs." },
+  { icon: Gauge, label: "Market Demand", description: "Real-time signals — not motivational lies from LinkedIn." },
+  { icon: DollarSign, label: "Income Realities", description: "Honest salary and revenue projections. the unfiltered truth." },
+  { icon: Clock, label: "Effort Needed", description: "Time-to-readiness with clear estimates. we keep it 💯." },
+  { icon: AlertTriangle, label: "Risk Level", description: "Financial, emotional, and career risk mapped out for you." },
 ];
 
 const personas = [
-  { who: "Student", action: "See what a career actually demands before locking in." },
-  { who: "Working Professional", action: "See what a transition really costs — skills, time, money." },
-  { who: "Aspiring Founder", action: "Validate the problem before quitting your job." },
+  { who: "Student", action: "See what a career actually demands before locking in. main character energy." },
+  { who: "Working Professional", action: "See what a transition really costs — skills, time, money. no sugarcoating." },
+  { who: "Aspiring Founder", action: "Validate the problem before rage-quitting your job." },
 ];
 
 const LoopSection = () => {
@@ -43,7 +43,7 @@ const LoopSection = () => {
             transition={{ delay: 0.1 }}
             className="font-display text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-primary-foreground leading-tight"
           >
-            You <em className="text-gradient-accent">simulate</em> paths.
+            You <em className="text-gradient-accent">simulate</em> paths. before going all in.
           </motion.h2>
         </div>
 

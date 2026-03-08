@@ -8,12 +8,12 @@ const userTypes = [
     emoji: "🎓",
     title: "Student",
     points: [
-      "Clear direction before selecting degree",
-      "Skill roadmap aligned with demand",
-      "Career simulation before commitment",
+      "Clear direction before picking a degree",
+      "Skill roadmap aligned with actual demand",
+      "Career simulation before you commit",
       "Identity evolution tracking",
     ],
-    result: "You graduate with clarity, not confusion.",
+    result: "You graduate with clarity, not an existential crisis.",
   },
   {
     icon: Briefcase,
@@ -25,7 +25,7 @@ const userTypes = [
       "Skill gap precision",
       "Income-risk comparison",
     ],
-    result: "You switch careers strategically, not emotionally.",
+    result: "You switch careers strategically — not on a random Tuesday meltdown.",
   },
   {
     icon: Rocket,
@@ -37,7 +37,7 @@ const userTypes = [
       "Founder growth tracking",
       "Capital readiness scoring",
     ],
-    result: "You build with structure, not guesswork.",
+    result: "You build with structure, not just vibes and hope.",
   },
   {
     icon: Wrench,
@@ -49,7 +49,7 @@ const userTypes = [
       "Opportunity alerts",
       "Funding eligibility insights",
     ],
-    result: "Fewer blind pivots. More measured growth.",
+    result: "Fewer blind pivots. More measured growth. W energy.",
   },
 ];
 
@@ -80,7 +80,7 @@ const EditionsSection = () => {
             className="font-display text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-foreground"
           >
             One platform,{" "}
-            <em className="text-gradient-warm">every stage of life.</em>
+            <em className="text-gradient-warm">every stage of life.</em> literally.
           </motion.h2>
         </div>
 

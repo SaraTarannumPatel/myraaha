@@ -4,11 +4,11 @@ import { Eye, Pause, TrendingUp, MessageCircle, Activity } from "lucide-react";
 import entrepreneurshipIllustration from "@/assets/entrepreneurship-illustration.png";
 
 const signals = [
-  { icon: Eye, title: "Your Choices", description: "What options you explore and what you commit to." },
-  { icon: Pause, title: "Your Hesitation", description: "Where you slow down, pause, or drop off." },
-  { icon: TrendingUp, title: "Your Progress", description: "How you respond to difficulty and what you complete." },
-  { icon: MessageCircle, title: "Your Communication", description: "How clearly you express ideas and articulate goals." },
-  { icon: Activity, title: "Energy Gain vs Drain", description: "What tasks energize you and what depletes you." },
+  { icon: Eye, title: "Your Choices", description: "What options you explore and what you actually commit to." },
+  { icon: Pause, title: "Your Hesitation", description: "Where you slow down, pause, or straight up ghost a task." },
+  { icon: TrendingUp, title: "Your Progress", description: "How you respond to difficulty and what you actually finish." },
+  { icon: MessageCircle, title: "Your Communication", description: "How clearly you express ideas and articulate your goals." },
+  { icon: Activity, title: "Energy Gain vs Drain", description: "What tasks hype you up and what absolutely drains your soul." },
 ];
 
 const EntrepreneurshipSection = () => {
@@ -39,7 +39,7 @@ const EntrepreneurshipSection = () => {
               className="font-display text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-foreground leading-tight"
             >
               It studies your <em className="text-gradient-warm">behaviour</em>
-              <br className="hidden sm:block" /> — not just your answers.
+              <br className="hidden sm:block" /> — not just your answers. wild right?
             </motion.h2>
           </div>
 
@@ -87,7 +87,7 @@ const EntrepreneurshipSection = () => {
             {/* Signal cards */}
             <div className="space-y-2 sm:space-y-3 order-1 lg:order-2">
               <p className="font-body text-xs sm:text-sm text-muted-foreground mb-3 sm:mb-4">
-                Most platforms give you a one-time test result. MyRaaha continuously learns from:
+                Most platforms give you a one-time test result and dip. MyRaaha continuously learns from:
               </p>
               {signals.map((s, i) => (
                 <motion.div
@@ -113,7 +113,7 @@ const EntrepreneurshipSection = () => {
                 className="bg-background-alt rounded-xl sm:rounded-2xl p-4 sm:p-5 border border-border mt-3 sm:mt-4"
               >
                 <p className="font-display text-sm sm:text-base text-foreground italic text-center">
-                  "This becomes your evolving journey graph — not a static resume."
+                  "This becomes your evolving journey graph — not a static resume collecting dust."
                 </p>
               </motion.div>
             </div>

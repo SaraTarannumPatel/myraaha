@@ -31,11 +31,11 @@ const CTASection = () => {
           <h2 className="font-display text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-foreground mb-3 sm:mb-4 leading-tight">
             Start your journey
             <br />
-            with <em className="text-gradient-warm">MyRaaha.</em>
+            with <em className="text-gradient-warm">MyRaaha.</em> let's go 🚀
           </h2>
 
           <p className="font-body text-sm sm:text-base text-muted-foreground mb-6 sm:mb-8">
-            Clarity → Direction → Action → Outcome.
+            Clarity → Direction → Action → Outcome. no cap.
           </p>
 
           <a href="/get-started" className="gradient-warm text-primary-foreground px-8 sm:px-10 py-3.5 sm:py-4 rounded-full font-body font-semibold text-base sm:text-lg shadow-accent hover:opacity-90 transition-opacity inline-flex items-center gap-2 group">

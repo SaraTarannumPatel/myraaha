@@ -11,7 +11,7 @@ const Footer = () => {
               My<span className="text-gradient-warm">Raaha</span>
             </a>
             <p className="font-body text-xs sm:text-sm text-muted-foreground mt-2 max-w-xs leading-relaxed">
-              Career and business decisions — without guesswork. Soft direction. Real outcomes.
+              Career & business decisions — zero guesswork. Lowkey direction. Real outcomes. ✨
             </p>
           </div>
 
@@ -56,7 +56,7 @@ const Footer = () => {
             © {new Date().getFullYear()} MyRaaha. All rights reserved.
           </p>
           <p className="font-body text-[10px] sm:text-xs text-grey-meta">
-            Clarity → Direction → Action → Outcome
+            Clarity → Direction → Action → Outcome ✨
           </p>
         </div>
       </div>

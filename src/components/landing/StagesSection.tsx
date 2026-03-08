@@ -3,10 +3,10 @@ import { useRef } from "react";
 import { Brain, BookmarkPlus, ShieldAlert, Sparkles } from "lucide-react";
 
 const traits = [
-  { icon: Brain, text: "Overthink before choosing", emoji: "🧠" },
-  { icon: BookmarkPlus, text: "Save posts about \"finding purpose\"", emoji: "📌" },
-  { icon: ShieldAlert, text: "Fear choosing wrong", emoji: "😰" },
-  { icon: Sparkles, text: "Want clarity — not pressure", emoji: "✨" },
+  { icon: Brain, text: "Overthink before choosing (it's a whole thing)", emoji: "🧠" },
+  { icon: BookmarkPlus, text: "Save posts about \"finding purpose\" at 3am", emoji: "📌" },
+  { icon: ShieldAlert, text: "Fear choosing wrong and getting stuck", emoji: "😰" },
+  { icon: Sparkles, text: "Want clarity — not toxic positivity pressure", emoji: "✨" },
 ];
 
 const StagesSection = () => {
@@ -37,7 +37,7 @@ const StagesSection = () => {
             >
               Built for{" "}
               <em className="text-gradient-warm">thoughtful</em>
-              <br />decision-makers.
+              <br />decision-makers. like you bestie.
             </motion.h2>
           </div>
 

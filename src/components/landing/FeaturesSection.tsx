@@ -9,28 +9,28 @@ const features = [
     num: "01",
     title: "Personal Intelligence Setup",
     highlights: ["Strength profile", "Work-style analysis", "Risk tolerance score", "Decision-making pattern", "Energy gain vs drain map"],
-    description: "Structured assessments + continuous behavioural learning. A dynamic identity model, not a one-time test.",
+    description: "Structured assessments + continuous behavioural learning. A dynamic identity model that keeps evolving — not some one-time test from 2015.",
   },
   {
     icon: Route,
     num: "02",
     title: "Pathway Narrowing Engine",
     highlights: ["Top aligned paths ranked", "Transition feasibility", "Skills gap breakdown", "Time-to-readiness", "Effort vs reward"],
-    description: "Filters based on your intelligence model, real-time job demand, skill saturation, and income stability.",
+    description: "Filters based on your intelligence model, real-time job demand, skill saturation, and income stability. We do the heavy lifting.",
   },
   {
     icon: Briefcase,
     num: "03",
     title: "Career Execution System",
     highlights: ["Structured skill roadmap", "Learning sequence", "Portfolio requirements", "Market-fit checkpoints", "Interview readiness"],
-    description: "Adjusts if you fall behind, shift interest, or market demand changes. Clear next actions every week.",
+    description: "Adjusts if you fall behind, switch interests, or the market shifts. Clear next moves every week. No random course hopping.",
   },
   {
     icon: Rocket,
     num: "04",
     title: "Startup Validation & Build",
     highlights: ["Validation checklist", "Market signal analysis", "Founder mindset score", "Execution tracker", "Funding readiness"],
-    description: "Idea → Problem validation → Market testing → Build → Launch → Funding readiness. No skipping validation.",
+    description: "Idea → Problem validation → Market testing → Build → Launch → Funding readiness. No skipping the validation era.",
   },
 ];
 
@@ -63,7 +63,7 @@ const FeaturesSection = () => {
               className="font-display text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-foreground leading-tight mb-3 sm:mb-4"
             >
               A system that doesn't make you{" "}
-              <em className="text-gradient-warm">search.</em>
+              <em className="text-gradient-warm">search.</em> periodt.
             </motion.h2>
             <motion.p
               initial={{ opacity: 0 }}
@@ -71,7 +71,7 @@ const FeaturesSection = () => {
               transition={{ delay: 0.2 }}
               className="font-body text-sm sm:text-base text-muted-foreground leading-relaxed"
             >
-              Clarity → Direction → Action → Outcome. The system learns how you think, tracks what you're good at, and connects that to real market data.
+              Clarity → Direction → Action → Outcome. The system learns how you think, tracks what you're cracked at, and connects that to real market data.
             </motion.p>
           </div>
 
