@@ -160,8 +160,8 @@ const Achievements = () => {
       supabase.from("job_applications").select("id", { count: "exact", head: true }).eq("user_id", user.id),
       supabase.from("project_reflections").select("id", { count: "exact", head: true }).eq("user_id", user.id),
       supabase.from("peer_circle_members").select("id", { count: "exact", head: true }).eq("user_id", user.id),
-      supabase.from("mentorship_sessions").select("id", { count: "exact", head: true }).eq("mentee_id", user.id),
-      supabase.from("challenge_enrollments").select("id", { count: "exact", head: true }).eq("user_id", user.id).eq("status", "completed"),
+      supabase.from("mentorship_sessions").select("id", { count: "exact", head: true }).eq("mentee_id", user.id) as any,
+      supabase.from("challenge_enrollments").select("id", { count: "exact", head: true }).eq("user_id", user.id).eq("status", "completed") as any,
     ]);
     const [
       interestsRes, skillsRes, journalRes, projectsRes, roadmapsRes, connectionsRes,
