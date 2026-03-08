@@ -1176,8 +1176,8 @@ const SelfGraph = () => {
                       {decisionActions.slice(0, 15).map((action, i) => (
                         <div key={action.id} className="relative pl-10">
                           <div className={`absolute left-2.5 w-3 h-3 rounded-full border-2 border-background ${
-                            (action.impact_score || 0) >= 7 ? "bg-green-500" :
-                            (action.impact_score || 0) >= 4 ? "bg-yellow-500" : "bg-muted-foreground"
+                            (action.impact_score || 0) >= 7 ? "bg-success" :
+                            (action.impact_score || 0) >= 4 ? "bg-warning" : "bg-muted-foreground"
                           }`} />
                           <div className="p-3 rounded-lg bg-muted/30">
                             <div className="flex items-center justify-between mb-1">
