@@ -32,7 +32,7 @@ const BrowserFrame = ({ children, url }: { children: React.ReactNode; url: strin
       <div className="flex-1 mx-3"><div className="bg-background rounded-md px-3.5 py-1.5 text-[11px] font-body text-muted-foreground truncate border border-border/50">myraaha.app/{url}</div></div>
       <AIBadge />
     </div>
-    <div className="h-[420px] sm:h-[480px] overflow-hidden bg-background">{children}</div>
+    <div className="h-[420px] sm:h-[480px] overflow-hidden bg-background" style={{ transform: 'scale(1.12)', transformOrigin: 'top center' }}>{children}</div>
   </div>
 );
 

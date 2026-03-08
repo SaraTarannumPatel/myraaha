@@ -46,7 +46,7 @@ const PhoneFrame = ({ children, label, icon: Icon }: {
       <span className="font-display text-sm text-foreground">{label}</span>
       <div className="ml-auto"><AIBadge label="For You" /></div>
     </div>
-    <div className="p-4 h-[470px] sm:h-[530px] overflow-hidden">{children}</div>
+    <div className="p-5 h-[470px] sm:h-[530px] overflow-hidden" style={{ transform: 'scale(1.12)', transformOrigin: 'top center' }}>{children}</div>
   </div>
 );
 
