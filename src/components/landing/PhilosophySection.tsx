@@ -6,18 +6,23 @@ const PhilosophySection = () => {
   const isInView = useInView(ref, { once: true, margin: "-80px" });
 
   return (
-    <section ref={ref} className="py-20 md:py-28 bg-muted/50 overflow-hidden">
-      <div className="container mx-auto px-6">
+    <section ref={ref} className="py-20 md:py-28 bg-background overflow-hidden relative">
+      {/* Decorative line */}
+      <div className="absolute top-1/2 left-0 right-0 h-px bg-border/50" />
+
+      <div className="container mx-auto px-6 relative z-10">
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={isInView ? { opacity: 1, scale: 1 } : {}}
           transition={{ duration: 0.7 }}
-          className="max-w-2xl mx-auto text-center"
+          className="max-w-3xl mx-auto text-center bg-background px-8"
         >
-          <blockquote className="font-display text-3xl md:text-4xl lg:text-5xl text-foreground leading-tight italic">
+          <blockquote className="font-display text-3xl md:text-4xl lg:text-5xl text-foreground leading-[1.15] italic">
             "You don't need more{" "}
             <span className="text-gradient-warm">motivation.</span>
-            {" "}You need better navigation."
+          </blockquote>
+          <blockquote className="font-display text-3xl md:text-4xl lg:text-5xl text-foreground leading-[1.15] italic mt-2">
+            You need better <span className="text-gradient-warm">navigation.</span>"
           </blockquote>
         </motion.div>
       </div>
