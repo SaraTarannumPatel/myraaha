@@ -7,8 +7,8 @@ const HeroSection = () => {
     <section className="relative min-h-screen flex items-center overflow-hidden gradient-hero pt-24 sm:pt-28 pb-16 sm:pb-20">
       <div className="absolute inset-0 gradient-glow pointer-events-none" />
       {/* Decorative circles */}
-      <div className="absolute top-32 right-[10%] w-48 sm:w-72 h-48 sm:h-72 rounded-full border border-border/40 opacity-30 hidden sm:block" />
-      <div className="absolute bottom-20 left-[5%] w-32 sm:w-48 h-32 sm:h-48 rounded-full border border-border/30 opacity-20 hidden sm:block" />
+      <div className="absolute top-32 right-[10%] w-48 sm:w-72 h-48 sm:h-72 rounded-full border border-blue/15 opacity-30 hidden sm:block" />
+      <div className="absolute bottom-20 left-[5%] w-32 sm:w-48 h-32 sm:h-48 rounded-full border border-terracotta/12 opacity-20 hidden sm:block" />
 
       <div className="container mx-auto px-5 sm:px-6 relative z-10">
         <div className="grid lg:grid-cols-2 gap-10 lg:gap-8 items-center">
