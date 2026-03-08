@@ -1,5 +1,6 @@
 import Navbar from "@/components/landing/Navbar";
 import HeroSection from "@/components/landing/HeroSection";
+import BrokenSystemSection from "@/components/landing/BrokenSystemSection";
 import ProblemSection from "@/components/landing/ProblemSection";
 import VisionSection from "@/components/landing/VisionSection";
 import FeaturesSection from "@/components/landing/FeaturesSection";
