@@ -714,7 +714,7 @@ export default function CareerInspirations() {
                   <Badge variant="secondary">{selectedStory.category}</Badge>
                   {(selectedStory as any).scope && <Badge variant="outline" className="gap-1"><Globe className="h-3 w-3" /> {(selectedStory as any).scope}</Badge>}
                   {(selectedStory as any).emotion_theme && <Badge className="bg-primary/10 text-primary">{(selectedStory as any).emotion_theme}</Badge>}
-                  {selectedStory.is_featured && <Badge className="bg-amber-500/20 text-amber-700">⭐ Featured</Badge>}
+                  {selectedStory.is_featured && <Badge variant="secondary">⭐ Featured</Badge>}
                 </div>
                 <DialogTitle className="text-xl">{selectedStory.title}</DialogTitle>
                 {selectedStory.author_name && (
