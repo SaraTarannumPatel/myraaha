@@ -512,6 +512,54 @@ export type Database = {
         }
         Relationships: []
       }
+      decision_actions: {
+        Row: {
+          action_description: string | null
+          action_title: string
+          action_type: string
+          created_at: string
+          domains_explored: string[] | null
+          id: string
+          impact_score: number | null
+          mood_at_action: string | null
+          reflection: string | null
+          related_entity_id: string | null
+          related_entity_type: string | null
+          skills_gained: string[] | null
+          user_id: string
+        }
+        Insert: {
+          action_description?: string | null
+          action_title: string
+          action_type: string
+          created_at?: string
+          domains_explored?: string[] | null
+          id?: string
+          impact_score?: number | null
+          mood_at_action?: string | null
+          reflection?: string | null
+          related_entity_id?: string | null
+          related_entity_type?: string | null
+          skills_gained?: string[] | null
+          user_id: string
+        }
+        Update: {
+          action_description?: string | null
+          action_title?: string
+          action_type?: string
+          created_at?: string
+          domains_explored?: string[] | null
+          id?: string
+          impact_score?: number | null
+          mood_at_action?: string | null
+          reflection?: string | null
+          related_entity_id?: string | null
+          related_entity_type?: string | null
+          skills_gained?: string[] | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       domain_recommendations: {
         Row: {
           created_at: string
@@ -1998,6 +2046,60 @@ export type Database = {
         }
         Relationships: []
       }
+      resume_exports: {
+        Row: {
+          achievements_snapshot: Json | null
+          ai_insights: Json | null
+          certifications_snapshot: Json | null
+          created_at: string
+          experiences_snapshot: Json | null
+          id: string
+          is_public: boolean | null
+          projects_snapshot: Json | null
+          share_token: string | null
+          skills_snapshot: Json | null
+          summary: string | null
+          title: string | null
+          updated_at: string
+          user_id: string
+          version: number | null
+        }
+        Insert: {
+          achievements_snapshot?: Json | null
+          ai_insights?: Json | null
+          certifications_snapshot?: Json | null
+          created_at?: string
+          experiences_snapshot?: Json | null
+          id?: string
+          is_public?: boolean | null
+          projects_snapshot?: Json | null
+          share_token?: string | null
+          skills_snapshot?: Json | null
+          summary?: string | null
+          title?: string | null
+          updated_at?: string
+          user_id: string
+          version?: number | null
+        }
+        Update: {
+          achievements_snapshot?: Json | null
+          ai_insights?: Json | null
+          certifications_snapshot?: Json | null
+          created_at?: string
+          experiences_snapshot?: Json | null
+          id?: string
+          is_public?: boolean | null
+          projects_snapshot?: Json | null
+          share_token?: string | null
+          skills_snapshot?: Json | null
+          summary?: string | null
+          title?: string | null
+          updated_at?: string
+          user_id?: string
+          version?: number | null
+        }
+        Relationships: []
+      }
       roadmap_steps: {
         Row: {
           completed_at: string | null
@@ -2288,6 +2390,48 @@ export type Database = {
           project_ideas?: string[] | null
           skill_name?: string
           startup_applications?: string[] | null
+        }
+        Relationships: []
+      }
+      skill_fit_analysis: {
+        Row: {
+          created_at: string
+          id: string
+          is_eligible: boolean | null
+          match_score: number | null
+          recommendations: Json | null
+          role_name: string
+          role_type: string
+          skills_matched: string[] | null
+          skills_missing: string[] | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_eligible?: boolean | null
+          match_score?: number | null
+          recommendations?: Json | null
+          role_name: string
+          role_type: string
+          skills_matched?: string[] | null
+          skills_missing?: string[] | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_eligible?: boolean | null
+          match_score?: number | null
+          recommendations?: Json | null
+          role_name?: string
+          role_type?: string
+          skills_matched?: string[] | null
+          skills_missing?: string[] | null
+          updated_at?: string
+          user_id?: string
         }
         Relationships: []
       }
