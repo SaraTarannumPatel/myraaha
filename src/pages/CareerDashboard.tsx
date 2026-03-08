@@ -470,7 +470,7 @@ const CareerDashboard = () => {
         <Card>
           <CardHeader className="pb-3">
             <CardTitle className="text-lg flex items-center gap-2">
-              <Map className="h-5 w-5 text-primary" />
+              <Map className="h-5 w-5 text-blue" />
               My Journey Snapshot
             </CardTitle>
             <CardDescription>Your current phase in the career development journey</CardDescription>
