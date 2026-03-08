@@ -84,6 +84,7 @@ const App = () => (
               <Route path="peer-circles" element={<PeerCircles />} />
               <Route path="project-playground" element={<ProjectPlayground />} />
               <Route path="job-matching" element={<JobMatching />} />
+              <Route path="skill-stacker" element={<SkillStacker />} />
               <Route path="career-coach" element={<VirtualCareerCoach />} />
               <Route path="career-therapist" element={<AICareerTherapist />} />
               {/* Entrepreneurship */}

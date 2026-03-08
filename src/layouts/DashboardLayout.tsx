@@ -15,6 +15,7 @@ const careerNav = [
   { label: "Curiosity Compass", icon: Compass, path: "/dashboard/curiosity-compass" },
   { label: "AI Roadmap", icon: Map, path: "/dashboard/roadmap" },
   { label: "SelfGraph™", icon: Brain, path: "/dashboard/selfgraph" },
+  { label: "SkillStacker", icon: Zap, path: "/dashboard/skill-stacker" },
   { label: "Content Library", icon: BookOpen, path: "/dashboard/content-library" },
   { label: "Living Resume", icon: FileText, path: "/dashboard/living-resume" },
   { label: "Project Playground", icon: FolderKanban, path: "/dashboard/project-playground" },
