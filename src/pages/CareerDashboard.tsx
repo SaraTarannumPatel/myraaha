@@ -557,8 +557,10 @@ const CareerDashboard = () => {
             </div>
           </div>
 
+          {/* SelfGraph Insights + Domain Affinity */}
           <div className="grid md:grid-cols-2 gap-6">
-            {/* Tasks & Roadmap Steps */}
+            <SelfInsightsPanel />
+            <DomainAffinityWidget />
             <Card>
               <CardHeader className="pb-3">
                 <CardTitle className="text-lg flex items-center gap-2">
