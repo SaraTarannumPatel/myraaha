@@ -5,3 +5,6 @@ verify_jwt = false
 
 [functions.selfgraph-ai]
 verify_jwt = false
+
+[functions.mentor-matchmaking-ai]
+verify_jwt = false
