@@ -14,16 +14,666 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      achievements: {
+        Row: {
+          achievement_type: string
+          description: string | null
+          earned_at: string
+          id: string
+          points: number | null
+          title: string
+          user_id: string
+        }
+        Insert: {
+          achievement_type: string
+          description?: string | null
+          earned_at?: string
+          id?: string
+          points?: number | null
+          title: string
+          user_id: string
+        }
+        Update: {
+          achievement_type?: string
+          description?: string | null
+          earned_at?: string
+          id?: string
+          points?: number | null
+          title?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      connections: {
+        Row: {
+          connection_type: string
+          created_at: string
+          id: string
+          message: string | null
+          receiver_id: string
+          requester_id: string
+          status: Database["public"]["Enums"]["connection_status"] | null
+          updated_at: string
+        }
+        Insert: {
+          connection_type?: string
+          created_at?: string
+          id?: string
+          message?: string | null
+          receiver_id: string
+          requester_id: string
+          status?: Database["public"]["Enums"]["connection_status"] | null
+          updated_at?: string
+        }
+        Update: {
+          connection_type?: string
+          created_at?: string
+          id?: string
+          message?: string | null
+          receiver_id?: string
+          requester_id?: string
+          status?: Database["public"]["Enums"]["connection_status"] | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      experiences: {
+        Row: {
+          created_at: string
+          description: string | null
+          end_date: string | null
+          experience_type: string
+          id: string
+          is_current: boolean | null
+          organization: string | null
+          skills_used: string[] | null
+          start_date: string | null
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          end_date?: string | null
+          experience_type?: string
+          id?: string
+          is_current?: boolean | null
+          organization?: string | null
+          skills_used?: string[] | null
+          start_date?: string | null
+          title: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          end_date?: string | null
+          experience_type?: string
+          id?: string
+          is_current?: boolean | null
+          organization?: string | null
+          skills_used?: string[] | null
+          start_date?: string | null
+          title?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      founder_profiles: {
+        Row: {
+          created_at: string
+          experience_level: string | null
+          founder_type: string | null
+          id: string
+          industries: string[] | null
+          looking_for: string[] | null
+          pitch: string | null
+          strengths: string[] | null
+          updated_at: string
+          user_id: string
+          weaknesses: string[] | null
+        }
+        Insert: {
+          created_at?: string
+          experience_level?: string | null
+          founder_type?: string | null
+          id?: string
+          industries?: string[] | null
+          looking_for?: string[] | null
+          pitch?: string | null
+          strengths?: string[] | null
+          updated_at?: string
+          user_id: string
+          weaknesses?: string[] | null
+        }
+        Update: {
+          created_at?: string
+          experience_level?: string | null
+          founder_type?: string | null
+          id?: string
+          industries?: string[] | null
+          looking_for?: string[] | null
+          pitch?: string | null
+          strengths?: string[] | null
+          updated_at?: string
+          user_id?: string
+          weaknesses?: string[] | null
+        }
+        Relationships: []
+      }
+      interests: {
+        Row: {
+          category: string
+          created_at: string
+          id: string
+          name: string
+          source: string | null
+          strength: number | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          category: string
+          created_at?: string
+          id?: string
+          name: string
+          source?: string | null
+          strength?: number | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          category?: string
+          created_at?: string
+          id?: string
+          name?: string
+          source?: string | null
+          strength?: number | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      journal_entries: {
+        Row: {
+          content: string
+          created_at: string
+          id: string
+          intent: Database["public"]["Enums"]["user_intent"] | null
+          mood: string | null
+          tags: string[] | null
+          title: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          id?: string
+          intent?: Database["public"]["Enums"]["user_intent"] | null
+          mood?: string | null
+          tags?: string[] | null
+          title?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          id?: string
+          intent?: Database["public"]["Enums"]["user_intent"] | null
+          mood?: string | null
+          tags?: string[] | null
+          title?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      mindset_challenges: {
+        Row: {
+          challenge_type: string
+          completed_at: string | null
+          description: string | null
+          id: string
+          reflection: string | null
+          started_at: string
+          status: string | null
+          title: string
+          user_id: string
+        }
+        Insert: {
+          challenge_type: string
+          completed_at?: string | null
+          description?: string | null
+          id?: string
+          reflection?: string | null
+          started_at?: string
+          status?: string | null
+          title: string
+          user_id: string
+        }
+        Update: {
+          challenge_type?: string
+          completed_at?: string | null
+          description?: string | null
+          id?: string
+          reflection?: string | null
+          started_at?: string
+          status?: string | null
+          title?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      notifications: {
+        Row: {
+          action_url: string | null
+          created_at: string
+          id: string
+          is_read: boolean | null
+          message: string | null
+          notification_type: string | null
+          title: string
+          user_id: string
+        }
+        Insert: {
+          action_url?: string | null
+          created_at?: string
+          id?: string
+          is_read?: boolean | null
+          message?: string | null
+          notification_type?: string | null
+          title: string
+          user_id: string
+        }
+        Update: {
+          action_url?: string | null
+          created_at?: string
+          id?: string
+          is_read?: boolean | null
+          message?: string | null
+          notification_type?: string | null
+          title?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          active_intent: Database["public"]["Enums"]["user_intent"] | null
+          age: number | null
+          avatar_url: string | null
+          bio: string | null
+          completion_percentage: number | null
+          created_at: string
+          full_name: string | null
+          id: string
+          onboarding_status:
+            | Database["public"]["Enums"]["onboarding_status"]
+            | null
+          updated_at: string
+          user_id: string
+          user_type: Database["public"]["Enums"]["user_type"] | null
+        }
+        Insert: {
+          active_intent?: Database["public"]["Enums"]["user_intent"] | null
+          age?: number | null
+          avatar_url?: string | null
+          bio?: string | null
+          completion_percentage?: number | null
+          created_at?: string
+          full_name?: string | null
+          id?: string
+          onboarding_status?:
+            | Database["public"]["Enums"]["onboarding_status"]
+            | null
+          updated_at?: string
+          user_id: string
+          user_type?: Database["public"]["Enums"]["user_type"] | null
+        }
+        Update: {
+          active_intent?: Database["public"]["Enums"]["user_intent"] | null
+          age?: number | null
+          avatar_url?: string | null
+          bio?: string | null
+          completion_percentage?: number | null
+          created_at?: string
+          full_name?: string | null
+          id?: string
+          onboarding_status?:
+            | Database["public"]["Enums"]["onboarding_status"]
+            | null
+          updated_at?: string
+          user_id?: string
+          user_type?: Database["public"]["Enums"]["user_type"] | null
+        }
+        Relationships: []
+      }
+      projects: {
+        Row: {
+          created_at: string
+          description: string | null
+          id: string
+          intent: Database["public"]["Enums"]["user_intent"]
+          media_urls: string[] | null
+          metadata: Json | null
+          project_type: string
+          status: Database["public"]["Enums"]["project_status"] | null
+          tags: string[] | null
+          title: string
+          updated_at: string
+          url: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          intent?: Database["public"]["Enums"]["user_intent"]
+          media_urls?: string[] | null
+          metadata?: Json | null
+          project_type?: string
+          status?: Database["public"]["Enums"]["project_status"] | null
+          tags?: string[] | null
+          title: string
+          updated_at?: string
+          url?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          intent?: Database["public"]["Enums"]["user_intent"]
+          media_urls?: string[] | null
+          metadata?: Json | null
+          project_type?: string
+          status?: Database["public"]["Enums"]["project_status"] | null
+          tags?: string[] | null
+          title?: string
+          updated_at?: string
+          url?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      resources: {
+        Row: {
+          category: string | null
+          created_at: string
+          description: string | null
+          difficulty_level: string | null
+          id: string
+          intent: Database["public"]["Enums"]["user_intent"] | null
+          resource_type: string
+          tags: string[] | null
+          title: string
+          url: string | null
+        }
+        Insert: {
+          category?: string | null
+          created_at?: string
+          description?: string | null
+          difficulty_level?: string | null
+          id?: string
+          intent?: Database["public"]["Enums"]["user_intent"] | null
+          resource_type?: string
+          tags?: string[] | null
+          title: string
+          url?: string | null
+        }
+        Update: {
+          category?: string | null
+          created_at?: string
+          description?: string | null
+          difficulty_level?: string | null
+          id?: string
+          intent?: Database["public"]["Enums"]["user_intent"] | null
+          resource_type?: string
+          tags?: string[] | null
+          title?: string
+          url?: string | null
+        }
+        Relationships: []
+      }
+      roadmap_steps: {
+        Row: {
+          completed_at: string | null
+          created_at: string
+          description: string | null
+          due_date: string | null
+          id: string
+          order_index: number
+          roadmap_id: string
+          status: Database["public"]["Enums"]["roadmap_step_status"] | null
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          completed_at?: string | null
+          created_at?: string
+          description?: string | null
+          due_date?: string | null
+          id?: string
+          order_index?: number
+          roadmap_id: string
+          status?: Database["public"]["Enums"]["roadmap_step_status"] | null
+          title: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          completed_at?: string | null
+          created_at?: string
+          description?: string | null
+          due_date?: string | null
+          id?: string
+          order_index?: number
+          roadmap_id?: string
+          status?: Database["public"]["Enums"]["roadmap_step_status"] | null
+          title?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "roadmap_steps_roadmap_id_fkey"
+            columns: ["roadmap_id"]
+            isOneToOne: false
+            referencedRelation: "roadmaps"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      roadmaps: {
+        Row: {
+          created_at: string
+          description: string | null
+          id: string
+          intent: Database["public"]["Enums"]["user_intent"]
+          is_active: boolean | null
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          intent?: Database["public"]["Enums"]["user_intent"]
+          is_active?: boolean | null
+          title: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          intent?: Database["public"]["Enums"]["user_intent"]
+          is_active?: boolean | null
+          title?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      selfgraph_data: {
+        Row: {
+          context: Json | null
+          dimension: string
+          id: string
+          recorded_at: string
+          user_id: string
+          value: number
+        }
+        Insert: {
+          context?: Json | null
+          dimension: string
+          id?: string
+          recorded_at?: string
+          user_id: string
+          value?: number
+        }
+        Update: {
+          context?: Json | null
+          dimension?: string
+          id?: string
+          recorded_at?: string
+          user_id?: string
+          value?: number
+        }
+        Relationships: []
+      }
+      skills: {
+        Row: {
+          category: string | null
+          created_at: string
+          id: string
+          name: string
+          proficiency: number | null
+          source: string | null
+          updated_at: string
+          user_id: string
+          verified: boolean | null
+        }
+        Insert: {
+          category?: string | null
+          created_at?: string
+          id?: string
+          name: string
+          proficiency?: number | null
+          source?: string | null
+          updated_at?: string
+          user_id: string
+          verified?: boolean | null
+        }
+        Update: {
+          category?: string | null
+          created_at?: string
+          id?: string
+          name?: string
+          proficiency?: number | null
+          source?: string | null
+          updated_at?: string
+          user_id?: string
+          verified?: boolean | null
+        }
+        Relationships: []
+      }
+      startup_ideas: {
+        Row: {
+          category: string | null
+          created_at: string
+          id: string
+          is_active: boolean | null
+          notes: string | null
+          problem_statement: string | null
+          solution: string | null
+          target_audience: string | null
+          title: string
+          updated_at: string
+          user_id: string
+          validation_score: number | null
+        }
+        Insert: {
+          category?: string | null
+          created_at?: string
+          id?: string
+          is_active?: boolean | null
+          notes?: string | null
+          problem_statement?: string | null
+          solution?: string | null
+          target_audience?: string | null
+          title: string
+          updated_at?: string
+          user_id: string
+          validation_score?: number | null
+        }
+        Update: {
+          category?: string | null
+          created_at?: string
+          id?: string
+          is_active?: boolean | null
+          notes?: string | null
+          problem_statement?: string | null
+          solution?: string | null
+          target_audience?: string | null
+          title?: string
+          updated_at?: string
+          user_id?: string
+          validation_score?: number | null
+        }
+        Relationships: []
+      }
+      user_roles: {
+        Row: {
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "moderator" | "user"
+      connection_status: "pending" | "accepted" | "declined"
+      onboarding_status: "welcome" | "user_type" | "intent" | "complete"
+      project_status: "idea" | "planning" | "building" | "launched" | "archived"
+      roadmap_step_status:
+        | "not_started"
+        | "in_progress"
+        | "completed"
+        | "skipped"
+      user_intent: "career" | "entrepreneurship"
+      user_type: "school" | "college" | "transitioner"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +800,19 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin", "moderator", "user"],
+      connection_status: ["pending", "accepted", "declined"],
+      onboarding_status: ["welcome", "user_type", "intent", "complete"],
+      project_status: ["idea", "planning", "building", "launched", "archived"],
+      roadmap_step_status: [
+        "not_started",
+        "in_progress",
+        "completed",
+        "skipped",
+      ],
+      user_intent: ["career", "entrepreneurship"],
+      user_type: ["school", "college", "transitioner"],
+    },
   },
 } as const
