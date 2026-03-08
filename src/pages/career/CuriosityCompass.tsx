@@ -918,7 +918,7 @@ const CuriosityCompass = () => {
                         </div>
                       ) : (
                         <div className="text-center py-8">
-                          <Check className="mx-auto text-green-500 mb-3" size={48} />
+                          <Check className="mx-auto text-success mb-3" size={48} />
                           <h3 className="font-display text-xl mb-2">Quest Complete!</h3>
                           <p className="font-body text-muted-foreground">You earned {activeQuest.points} points</p>
                         </div>
