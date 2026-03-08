@@ -4596,6 +4596,56 @@ export type Database = {
         }
         Relationships: []
       }
+      skill_application_tasks: {
+        Row: {
+          completed_at: string | null
+          created_at: string
+          description: string | null
+          id: string
+          outcome: string | null
+          skill_item_id: string
+          status: string | null
+          task_type: string | null
+          time_spent_minutes: number | null
+          title: string
+          user_id: string
+        }
+        Insert: {
+          completed_at?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          outcome?: string | null
+          skill_item_id: string
+          status?: string | null
+          task_type?: string | null
+          time_spent_minutes?: number | null
+          title: string
+          user_id: string
+        }
+        Update: {
+          completed_at?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          outcome?: string | null
+          skill_item_id?: string
+          status?: string | null
+          task_type?: string | null
+          time_spent_minutes?: number | null
+          title?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "skill_application_tasks_skill_item_id_fkey"
+            columns: ["skill_item_id"]
+            isOneToOne: false
+            referencedRelation: "skill_items"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       skill_applications: {
         Row: {
           applicable_domains: string[] | null
@@ -4631,6 +4681,53 @@ export type Database = {
           startup_applications?: string[] | null
         }
         Relationships: []
+      }
+      skill_checkpoints: {
+        Row: {
+          confidence_after: number | null
+          confidence_before: number | null
+          created_at: string
+          energy_level: string | null
+          id: string
+          paused: boolean | null
+          reflection: string | null
+          skill_item_id: string
+          user_id: string
+          went_deeper: boolean | null
+        }
+        Insert: {
+          confidence_after?: number | null
+          confidence_before?: number | null
+          created_at?: string
+          energy_level?: string | null
+          id?: string
+          paused?: boolean | null
+          reflection?: string | null
+          skill_item_id: string
+          user_id: string
+          went_deeper?: boolean | null
+        }
+        Update: {
+          confidence_after?: number | null
+          confidence_before?: number | null
+          created_at?: string
+          energy_level?: string | null
+          id?: string
+          paused?: boolean | null
+          reflection?: string | null
+          skill_item_id?: string
+          user_id?: string
+          went_deeper?: boolean | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "skill_checkpoints_skill_item_id_fkey"
+            columns: ["skill_item_id"]
+            isOneToOne: false
+            referencedRelation: "skill_items"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       skill_fit_analysis: {
         Row: {
@@ -4669,6 +4766,166 @@ export type Database = {
           role_type?: string
           skills_matched?: string[] | null
           skills_missing?: string[] | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      skill_items: {
+        Row: {
+          accepted_at: string | null
+          category: string
+          completed_at: string | null
+          confidence_score: number | null
+          created_at: string
+          effort_level: string | null
+          energy_feedback: string | null
+          id: string
+          learning_capsule_ids: string[] | null
+          order_index: number | null
+          project_ids: string[] | null
+          skill_name: string
+          stack_id: string
+          started_at: string | null
+          status: string
+          updated_at: string
+          user_id: string
+          where_it_applies: string[] | null
+          why_it_matters: string | null
+        }
+        Insert: {
+          accepted_at?: string | null
+          category?: string
+          completed_at?: string | null
+          confidence_score?: number | null
+          created_at?: string
+          effort_level?: string | null
+          energy_feedback?: string | null
+          id?: string
+          learning_capsule_ids?: string[] | null
+          order_index?: number | null
+          project_ids?: string[] | null
+          skill_name: string
+          stack_id: string
+          started_at?: string | null
+          status?: string
+          updated_at?: string
+          user_id: string
+          where_it_applies?: string[] | null
+          why_it_matters?: string | null
+        }
+        Update: {
+          accepted_at?: string | null
+          category?: string
+          completed_at?: string | null
+          confidence_score?: number | null
+          created_at?: string
+          effort_level?: string | null
+          energy_feedback?: string | null
+          id?: string
+          learning_capsule_ids?: string[] | null
+          order_index?: number | null
+          project_ids?: string[] | null
+          skill_name?: string
+          stack_id?: string
+          started_at?: string | null
+          status?: string
+          updated_at?: string
+          user_id?: string
+          where_it_applies?: string[] | null
+          why_it_matters?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "skill_items_stack_id_fkey"
+            columns: ["stack_id"]
+            isOneToOne: false
+            referencedRelation: "skill_stacks"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      skill_opportunity_map: {
+        Row: {
+          created_at: string
+          id: string
+          missing_skills: string[] | null
+          opportunity_title: string
+          opportunity_type: string
+          readiness_score: number | null
+          skill_item_id: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          missing_skills?: string[] | null
+          opportunity_title: string
+          opportunity_type: string
+          readiness_score?: number | null
+          skill_item_id: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          missing_skills?: string[] | null
+          opportunity_title?: string
+          opportunity_type?: string
+          readiness_score?: number | null
+          skill_item_id?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "skill_opportunity_map_skill_item_id_fkey"
+            columns: ["skill_item_id"]
+            isOneToOne: false
+            referencedRelation: "skill_items"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      skill_stacks: {
+        Row: {
+          ai_generated: boolean | null
+          based_on_path: string | null
+          completed_skills: number | null
+          created_at: string
+          domain: string
+          id: string
+          status: string
+          title: string
+          total_skills: number | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          ai_generated?: boolean | null
+          based_on_path?: string | null
+          completed_skills?: number | null
+          created_at?: string
+          domain?: string
+          id?: string
+          status?: string
+          title: string
+          total_skills?: number | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          ai_generated?: boolean | null
+          based_on_path?: string | null
+          completed_skills?: number | null
+          created_at?: string
+          domain?: string
+          id?: string
+          status?: string
+          title?: string
+          total_skills?: number | null
           updated_at?: string
           user_id?: string
         }

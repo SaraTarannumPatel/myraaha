@@ -20,3 +20,6 @@ verify_jwt = false
 
 [functions.achievements-ai]
 verify_jwt = false
+
+[functions.skillstacker-ai]
+verify_jwt = false

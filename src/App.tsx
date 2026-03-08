@@ -29,6 +29,7 @@ import ProjectPlayground from "./pages/career/ProjectPlayground";
 import JobMatching from "./pages/career/JobMatching";
 import VirtualCareerCoach from "./pages/career/VirtualCareerCoach";
 import AICareerTherapist from "./pages/career/AICareerTherapist";
+import SkillStacker from "./pages/career/SkillStacker";
 // Entrepreneurship
 import StartupSparks from "./pages/entrepreneurship/StartupSparks";
 import MVPBuilder from "./pages/entrepreneurship/MVPBuilder";
@@ -83,6 +84,7 @@ const App = () => (
               <Route path="peer-circles" element={<PeerCircles />} />
               <Route path="project-playground" element={<ProjectPlayground />} />
               <Route path="job-matching" element={<JobMatching />} />
+              <Route path="skill-stacker" element={<SkillStacker />} />
               <Route path="career-coach" element={<VirtualCareerCoach />} />
               <Route path="career-therapist" element={<AICareerTherapist />} />
               {/* Entrepreneurship */}
