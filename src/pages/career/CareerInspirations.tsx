@@ -159,34 +159,33 @@ export default function CareerInspirations() {
   const saveToMoodboard = async (story: Story) => {
     if (!user) return;
     try {
-      // Check if moodboard exists
-      let { data: boards } = await supabase
+      const { data: boards } = await (supabase
         .from("moodboards" as any)
         .select("id")
         .eq("user_id", user.id)
         .eq("board_type", "inspiration")
-        .limit(1);
+        .limit(1) as any) as { data: any[] | null };
 
       let boardId: string;
       if (boards && boards.length > 0) {
         boardId = boards[0].id;
       } else {
-        const { data: newBoard } = await supabase
-          .from("moodboards")
-          .insert({ user_id: user.id, title: "Career Inspirations", board_type: "inspiration", intent: "career" })
+        const { data: newBoard } = await (supabase
+          .from("moodboards" as any)
+          .insert({ user_id: user.id, title: "Career Inspirations", board_type: "inspiration", intent: "career" } as any)
           .select("id")
-          .single();
+          .single() as any) as { data: any };
         boardId = newBoard!.id;
       }
 
-      await supabase.from("moodboard_items").insert({
+      await (supabase.from("moodboard_items" as any) as any).insert({
         moodboard_id: boardId,
         user_id: user.id,
         item_type: "quote",
         content: story.title,
         notes: story.summary || story.content.slice(0, 200),
         tags: story.tags || [],
-        emotion_tag: story.emotion_theme || "inspired",
+        emotion_tag: (story as any).emotion_theme || "inspired",
       });
       toast({ title: "Saved to Career Moodboard! 🎨" });
     } catch {
