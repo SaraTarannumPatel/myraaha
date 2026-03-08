@@ -561,6 +561,171 @@ export type Database = {
         }
         Relationships: []
       }
+      inspiration_bookmarks: {
+        Row: {
+          collection_name: string | null
+          created_at: string
+          id: string
+          note: string | null
+          story_id: string
+          user_id: string
+        }
+        Insert: {
+          collection_name?: string | null
+          created_at?: string
+          id?: string
+          note?: string | null
+          story_id: string
+          user_id: string
+        }
+        Update: {
+          collection_name?: string | null
+          created_at?: string
+          id?: string
+          note?: string | null
+          story_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "inspiration_bookmarks_story_id_fkey"
+            columns: ["story_id"]
+            isOneToOne: false
+            referencedRelation: "inspiration_stories"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      inspiration_comments: {
+        Row: {
+          content: string
+          created_at: string
+          id: string
+          story_id: string
+          user_id: string
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          id?: string
+          story_id: string
+          user_id: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          id?: string
+          story_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "inspiration_comments_story_id_fkey"
+            columns: ["story_id"]
+            isOneToOne: false
+            referencedRelation: "inspiration_stories"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      inspiration_reactions: {
+        Row: {
+          created_at: string
+          id: string
+          reaction_type: string
+          story_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          reaction_type?: string
+          story_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          reaction_type?: string
+          story_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "inspiration_reactions_story_id_fkey"
+            columns: ["story_id"]
+            isOneToOne: false
+            referencedRelation: "inspiration_stories"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      inspiration_stories: {
+        Row: {
+          author_name: string | null
+          author_role: string | null
+          bookmarks_count: number | null
+          category: string
+          comments_count: number | null
+          content: string
+          created_at: string
+          domain: string | null
+          id: string
+          is_approved: boolean | null
+          is_featured: boolean | null
+          likes_count: number | null
+          stage: string | null
+          story_type: string
+          summary: string | null
+          tags: string[] | null
+          title: string
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          author_name?: string | null
+          author_role?: string | null
+          bookmarks_count?: number | null
+          category?: string
+          comments_count?: number | null
+          content: string
+          created_at?: string
+          domain?: string | null
+          id?: string
+          is_approved?: boolean | null
+          is_featured?: boolean | null
+          likes_count?: number | null
+          stage?: string | null
+          story_type?: string
+          summary?: string | null
+          tags?: string[] | null
+          title: string
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          author_name?: string | null
+          author_role?: string | null
+          bookmarks_count?: number | null
+          category?: string
+          comments_count?: number | null
+          content?: string
+          created_at?: string
+          domain?: string | null
+          id?: string
+          is_approved?: boolean | null
+          is_featured?: boolean | null
+          likes_count?: number | null
+          stage?: string | null
+          story_type?: string
+          summary?: string | null
+          tags?: string[] | null
+          title?: string
+          updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       interests: {
         Row: {
           category: string
