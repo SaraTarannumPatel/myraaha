@@ -567,6 +567,121 @@ export type Database = {
         }
         Relationships: []
       }
+      mvp_experiments: {
+        Row: {
+          created_at: string
+          feedback: string[] | null
+          hypothesis: string | null
+          id: string
+          iteration_number: number
+          learnings: string | null
+          method: string | null
+          metrics: Json | null
+          project_id: string
+          results: string | null
+          status: string
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          feedback?: string[] | null
+          hypothesis?: string | null
+          id?: string
+          iteration_number?: number
+          learnings?: string | null
+          method?: string | null
+          metrics?: Json | null
+          project_id: string
+          results?: string | null
+          status?: string
+          title: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          feedback?: string[] | null
+          hypothesis?: string | null
+          id?: string
+          iteration_number?: number
+          learnings?: string | null
+          method?: string | null
+          metrics?: Json | null
+          project_id?: string
+          results?: string | null
+          status?: string
+          title?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mvp_experiments_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      mvp_milestones: {
+        Row: {
+          completed_at: string | null
+          created_at: string
+          description: string | null
+          due_date: string | null
+          id: string
+          learning_objectives: string[] | null
+          metrics: Json | null
+          order_index: number
+          project_id: string
+          status: string
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          completed_at?: string | null
+          created_at?: string
+          description?: string | null
+          due_date?: string | null
+          id?: string
+          learning_objectives?: string[] | null
+          metrics?: Json | null
+          order_index?: number
+          project_id: string
+          status?: string
+          title: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          completed_at?: string | null
+          created_at?: string
+          description?: string | null
+          due_date?: string | null
+          id?: string
+          learning_objectives?: string[] | null
+          metrics?: Json | null
+          order_index?: number
+          project_id?: string
+          status?: string
+          title?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mvp_milestones_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       notifications: {
         Row: {
           action_url: string | null
