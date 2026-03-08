@@ -3130,6 +3130,60 @@ export type Database = {
           },
         ]
       }
+      opportunity_reminders: {
+        Row: {
+          company_challenge_id: string | null
+          created_at: string | null
+          id: string
+          is_dismissed: boolean | null
+          is_sent: boolean | null
+          message: string | null
+          opportunity_id: string | null
+          reminder_date: string
+          reminder_type: string
+          user_id: string
+        }
+        Insert: {
+          company_challenge_id?: string | null
+          created_at?: string | null
+          id?: string
+          is_dismissed?: boolean | null
+          is_sent?: boolean | null
+          message?: string | null
+          opportunity_id?: string | null
+          reminder_date: string
+          reminder_type?: string
+          user_id: string
+        }
+        Update: {
+          company_challenge_id?: string | null
+          created_at?: string | null
+          id?: string
+          is_dismissed?: boolean | null
+          is_sent?: boolean | null
+          message?: string | null
+          opportunity_id?: string | null
+          reminder_date?: string
+          reminder_type?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "opportunity_reminders_company_challenge_id_fkey"
+            columns: ["company_challenge_id"]
+            isOneToOne: false
+            referencedRelation: "company_challenges"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "opportunity_reminders_opportunity_id_fkey"
+            columns: ["opportunity_id"]
+            isOneToOne: false
+            referencedRelation: "job_opportunities"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       path_selections: {
         Row: {
           ai_analysis: Json | null
