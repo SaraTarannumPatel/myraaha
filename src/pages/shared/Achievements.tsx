@@ -132,12 +132,7 @@ const Achievements = () => {
   const checkAndAwardBadges = useCallback(async () => {
     if (!user) return;
 
-    const [
-      interestsRes, skillsRes, journalRes, projectsRes, roadmapsRes, connectionsRes,
-      observationsRes, ideasRes, ideaCardsRes, labPlansRes, experimentsRes, validationsRes,
-      checkinsRes, habitsRes, challengesRes, communitiesRes, postsRes, pathsRes, moodboardsRes,
-      learningRes, applicationsRes, reflectionsRes, circlesRes, mentorSessionsRes, challengeCompletesRes,
-    ] = await Promise.all([
+    const queries1 = await Promise.all([
       supabase.from("interests").select("id", { count: "exact", head: true }).eq("user_id", user.id),
       supabase.from("skills").select("id", { count: "exact", head: true }).eq("user_id", user.id),
       supabase.from("journal_entries").select("id", { count: "exact", head: true }).eq("user_id", user.id),
@@ -148,6 +143,8 @@ const Achievements = () => {
       supabase.from("startup_ideas").select("id", { count: "exact", head: true }).eq("user_id", user.id),
       supabase.from("idea_card_interactions").select("id", { count: "exact", head: true }).eq("user_id", user.id),
       supabase.from("lab_plans").select("id", { count: "exact", head: true }).eq("user_id", user.id),
+    ]);
+    const queries2 = await Promise.all([
       supabase.from("mvp_experiments").select("id", { count: "exact", head: true }).eq("user_id", user.id),
       supabase.from("validation_sprints").select("id", { count: "exact", head: true }).eq("user_id", user.id),
       supabase.from("coaching_checkins").select("id", { count: "exact", head: true }).eq("user_id", user.id),
@@ -158,12 +155,25 @@ const Achievements = () => {
       supabase.from("path_selections").select("id", { count: "exact", head: true }).eq("user_id", user.id),
       supabase.from("moodboards").select("id", { count: "exact", head: true }).eq("user_id", user.id),
       supabase.from("learning_track_progress").select("id", { count: "exact", head: true }).eq("user_id", user.id),
+    ]);
+    const queries3 = await Promise.all([
       supabase.from("job_applications").select("id", { count: "exact", head: true }).eq("user_id", user.id),
       supabase.from("project_reflections").select("id", { count: "exact", head: true }).eq("user_id", user.id),
       supabase.from("peer_circle_members").select("id", { count: "exact", head: true }).eq("user_id", user.id),
       supabase.from("mentorship_sessions").select("id", { count: "exact", head: true }).eq("mentee_id", user.id),
       supabase.from("challenge_enrollments").select("id", { count: "exact", head: true }).eq("user_id", user.id).eq("status", "completed"),
     ]);
+    const [
+      interestsRes, skillsRes, journalRes, projectsRes, roadmapsRes, connectionsRes,
+      observationsRes, ideasRes, ideaCardsRes, labPlansRes,
+    ] = queries1;
+    const [
+      experimentsRes, validationsRes, checkinsRes, habitsRes, challengesRes,
+      communitiesRes, postsRes, pathsRes, moodboardsRes, learningRes,
+    ] = queries2;
+    const [
+      applicationsRes, reflectionsRes, circlesRes, mentorSessionsRes, challengeCompletesRes,
+    ] = queries3;
 
     const { data: existing } = await supabase.from("achievements").select("achievement_type").eq("user_id", user.id);
     const earned = new Set((existing || []).map((a: any) => a.achievement_type));
