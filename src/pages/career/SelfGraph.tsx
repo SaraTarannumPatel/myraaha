@@ -1303,7 +1303,7 @@ const SelfGraph = () => {
                           <h4 className="font-body text-sm font-medium text-foreground mb-2">Key Achievements</h4>
                           {digest.key_achievements.map((a: string, i: number) => (
                             <div key={i} className="flex items-center gap-2 mb-1">
-                              <CheckCircle2 size={12} className="text-green-500" />
+                              <CheckCircle2 size={12} className="text-success" />
                               <span className="font-body text-xs text-foreground">{a}</span>
                             </div>
                           ))}
