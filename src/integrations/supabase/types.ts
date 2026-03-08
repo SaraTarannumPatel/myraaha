@@ -197,6 +197,38 @@ export type Database = {
         }
         Relationships: []
       }
+      habit_completions: {
+        Row: {
+          completed_at: string
+          habit_id: string
+          id: string
+          notes: string | null
+          user_id: string
+        }
+        Insert: {
+          completed_at?: string
+          habit_id: string
+          id?: string
+          notes?: string | null
+          user_id: string
+        }
+        Update: {
+          completed_at?: string
+          habit_id?: string
+          id?: string
+          notes?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "habit_completions_habit_id_fkey"
+            columns: ["habit_id"]
+            isOneToOne: false
+            referencedRelation: "mindset_habits"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       idea_card_interactions: {
         Row: {
           created_at: string
@@ -344,6 +376,47 @@ export type Database = {
         }
         Relationships: []
       }
+      learning_track_progress: {
+        Row: {
+          completed_at: string | null
+          current_module: number | null
+          id: string
+          notes: string | null
+          started_at: string | null
+          status: string | null
+          track_id: string
+          user_id: string
+        }
+        Insert: {
+          completed_at?: string | null
+          current_module?: number | null
+          id?: string
+          notes?: string | null
+          started_at?: string | null
+          status?: string | null
+          track_id: string
+          user_id: string
+        }
+        Update: {
+          completed_at?: string | null
+          current_module?: number | null
+          id?: string
+          notes?: string | null
+          started_at?: string | null
+          status?: string | null
+          track_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "learning_track_progress_track_id_fkey"
+            columns: ["track_id"]
+            isOneToOne: false
+            referencedRelation: "mindset_learning_tracks"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       mindset_challenges: {
         Row: {
           challenge_type: string
@@ -377,6 +450,81 @@ export type Database = {
           status?: string | null
           title?: string
           user_id?: string
+        }
+        Relationships: []
+      }
+      mindset_habits: {
+        Row: {
+          best_streak: number | null
+          category: string
+          created_at: string
+          description: string | null
+          frequency: string
+          id: string
+          is_active: boolean | null
+          last_completed_at: string | null
+          streak: number | null
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          best_streak?: number | null
+          category?: string
+          created_at?: string
+          description?: string | null
+          frequency?: string
+          id?: string
+          is_active?: boolean | null
+          last_completed_at?: string | null
+          streak?: number | null
+          title: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          best_streak?: number | null
+          category?: string
+          created_at?: string
+          description?: string | null
+          frequency?: string
+          id?: string
+          is_active?: boolean | null
+          last_completed_at?: string | null
+          streak?: number | null
+          title?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      mindset_learning_tracks: {
+        Row: {
+          category: string
+          created_at: string
+          description: string | null
+          difficulty: string | null
+          id: string
+          modules: Json | null
+          title: string
+        }
+        Insert: {
+          category?: string
+          created_at?: string
+          description?: string | null
+          difficulty?: string | null
+          id?: string
+          modules?: Json | null
+          title: string
+        }
+        Update: {
+          category?: string
+          created_at?: string
+          description?: string | null
+          difficulty?: string | null
+          id?: string
+          modules?: Json | null
+          title?: string
         }
         Relationships: []
       }
