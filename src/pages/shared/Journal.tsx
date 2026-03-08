@@ -143,7 +143,7 @@ const Journal = () => {
     return acc;
   }, {});
 
-  const topMoods = Object.entries(moodFrequency).sort((a, b) => b[1] - a[1]).slice(0, 5);
+  const topMoods = Object.entries(moodFrequency).sort((a, b) => (b[1] as number) - (a[1] as number)).slice(0, 5);
 
   return (
     <div className="space-y-6">
