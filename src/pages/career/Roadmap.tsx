@@ -162,7 +162,7 @@ const Roadmap = () => {
                     {["not_started", "in_progress", "completed", "skipped"].map((s) => (
                       <button
                         key={s}
-                        onClick={() => updateStepStatus(step.id, s)}
+                        onClick={() => updateStepStatus(step.id, s as "not_started" | "in_progress" | "completed" | "skipped")}
                         className={`px-2 py-0.5 rounded text-[10px] font-body transition-colors ${
                           step.status === s ? "bg-accent text-secondary-foreground" : "bg-muted text-muted-foreground hover:bg-accent/20"
                         }`}

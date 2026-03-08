@@ -134,7 +134,7 @@ const MVPBuilder = () => {
                 {statuses.map((s, si) => (
                   <div key={s} className="flex items-center">
                     <button
-                      onClick={() => updateStatus(project.id, s)}
+                      onClick={() => updateStatus(project.id, s as "idea" | "planning" | "building" | "launched" | "archived")}
                       className={`px-3 py-1 rounded-full font-body text-[10px] capitalize transition-all ${
                         project.status === s ? "gradient-warm text-secondary-foreground" : "bg-muted text-muted-foreground hover:bg-accent/10"
                       }`}
