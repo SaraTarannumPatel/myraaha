@@ -62,7 +62,7 @@ const VirtualCareerCoach = () => {
         name: profile?.full_name || "Explorer",
         intent: profile?.active_intent || "career",
         userType: profile?.user_type || "student",
-        industry: profile?.industry_interest || "exploring",
+        industry: profile?.industry || "exploring",
         careerStage: profile?.user_type || "early",
         skills: (skillsRes.data || []).map((s: any) => s.skill_name),
         skillsInProgress: (skillsRes.data || []).filter((s: any) => s.status === "in_progress").map((s: any) => s.skill_name),
