@@ -88,6 +88,7 @@ const App = () => (
               <Route path="skill-stacker" element={<SkillStacker />} />
               <Route path="career-coach" element={<VirtualCareerCoach />} />
               <Route path="career-therapist" element={<AICareerTherapist />} />
+              <Route path="career-moodboard" element={<CareerMoodboard />} />
               {/* Entrepreneurship */}
               <Route path="startup-sparks" element={<StartupSparks />} />
               <Route path="mvp-builder" element={<MVPBuilder />} />
