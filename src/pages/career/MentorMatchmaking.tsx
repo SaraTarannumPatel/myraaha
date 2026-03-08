@@ -617,7 +617,7 @@ const MentorCard = ({
                 </Badge>
               )}
               <div className="flex items-center gap-1 ml-auto">
-                <Star size={14} className="text-amber-500 fill-amber-500" />
+                <Star size={14} className="text-accent fill-accent" />
                 <span className="font-body text-sm text-amber-600">{mentor.rating.toFixed(1)}</span>
               </div>
             </div>
