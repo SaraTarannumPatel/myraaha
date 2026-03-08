@@ -306,15 +306,24 @@ export type Database = {
         Row: {
           active_intent: Database["public"]["Enums"]["user_intent"] | null
           age: number | null
+          areas_of_focus: string[] | null
           avatar_url: string | null
           bio: string | null
+          career_stage: string | null
           completion_percentage: number | null
+          consent_data_usage: boolean | null
+          consent_mentor_sharing: boolean | null
           created_at: string
+          education_level: string | null
           full_name: string | null
           id: string
+          industry: string | null
+          location: string | null
+          long_term_goals: string | null
           onboarding_status:
             | Database["public"]["Enums"]["onboarding_status"]
             | null
+          short_term_goals: string | null
           updated_at: string
           user_id: string
           user_type: Database["public"]["Enums"]["user_type"] | null
@@ -322,15 +331,24 @@ export type Database = {
         Insert: {
           active_intent?: Database["public"]["Enums"]["user_intent"] | null
           age?: number | null
+          areas_of_focus?: string[] | null
           avatar_url?: string | null
           bio?: string | null
+          career_stage?: string | null
           completion_percentage?: number | null
+          consent_data_usage?: boolean | null
+          consent_mentor_sharing?: boolean | null
           created_at?: string
+          education_level?: string | null
           full_name?: string | null
           id?: string
+          industry?: string | null
+          location?: string | null
+          long_term_goals?: string | null
           onboarding_status?:
             | Database["public"]["Enums"]["onboarding_status"]
             | null
+          short_term_goals?: string | null
           updated_at?: string
           user_id: string
           user_type?: Database["public"]["Enums"]["user_type"] | null
@@ -338,15 +356,24 @@ export type Database = {
         Update: {
           active_intent?: Database["public"]["Enums"]["user_intent"] | null
           age?: number | null
+          areas_of_focus?: string[] | null
           avatar_url?: string | null
           bio?: string | null
+          career_stage?: string | null
           completion_percentage?: number | null
+          consent_data_usage?: boolean | null
+          consent_mentor_sharing?: boolean | null
           created_at?: string
+          education_level?: string | null
           full_name?: string | null
           id?: string
+          industry?: string | null
+          location?: string | null
+          long_term_goals?: string | null
           onboarding_status?:
             | Database["public"]["Enums"]["onboarding_status"]
             | null
+          short_term_goals?: string | null
           updated_at?: string
           user_id?: string
           user_type?: Database["public"]["Enums"]["user_type"] | null
@@ -665,15 +692,28 @@ export type Database = {
     Enums: {
       app_role: "admin" | "moderator" | "user"
       connection_status: "pending" | "accepted" | "declined"
-      onboarding_status: "welcome" | "user_type" | "intent" | "complete"
+      onboarding_status:
+        | "welcome"
+        | "user_type"
+        | "intent"
+        | "complete"
+        | "personal_info"
+        | "consent"
       project_status: "idea" | "planning" | "building" | "launched" | "archived"
       roadmap_step_status:
         | "not_started"
         | "in_progress"
         | "completed"
         | "skipped"
-      user_intent: "career" | "entrepreneurship"
-      user_type: "school" | "college" | "transitioner"
+      user_intent: "career" | "entrepreneurship" | "both"
+      user_type:
+        | "school"
+        | "college"
+        | "transitioner"
+        | "working_professional"
+        | "aspiring_entrepreneur"
+        | "freelancer"
+        | "other"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -803,7 +843,14 @@ export const Constants = {
     Enums: {
       app_role: ["admin", "moderator", "user"],
       connection_status: ["pending", "accepted", "declined"],
-      onboarding_status: ["welcome", "user_type", "intent", "complete"],
+      onboarding_status: [
+        "welcome",
+        "user_type",
+        "intent",
+        "complete",
+        "personal_info",
+        "consent",
+      ],
       project_status: ["idea", "planning", "building", "launched", "archived"],
       roadmap_step_status: [
         "not_started",
@@ -811,8 +858,16 @@ export const Constants = {
         "completed",
         "skipped",
       ],
-      user_intent: ["career", "entrepreneurship"],
-      user_type: ["school", "college", "transitioner"],
+      user_intent: ["career", "entrepreneurship", "both"],
+      user_type: [
+        "school",
+        "college",
+        "transitioner",
+        "working_professional",
+        "aspiring_entrepreneur",
+        "freelancer",
+        "other",
+      ],
     },
   },
 } as const
