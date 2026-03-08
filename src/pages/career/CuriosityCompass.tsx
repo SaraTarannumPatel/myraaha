@@ -941,11 +941,11 @@ const CuriosityCompass = () => {
                     const isCompleted = status === "completed";
                     return (
                       <motion.div key={quest.id} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }}>
-                        <Card className={isCompleted ? "border-green-500/30 bg-green-500/5" : ""}>
+                        <Card className={isCompleted ? "border-success/30 bg-success/5" : ""}>
                           <CardContent className="pt-6">
                             <div className="flex items-start gap-3 mb-4">
-                              <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${quest.quest_type === "story" ? "bg-blue-500/10" : quest.quest_type === "challenge" ? "bg-orange-500/10" : "bg-purple-500/10"}`}>
-                                {quest.quest_type === "story" ? <MessageSquare className="text-blue-500" size={18} /> : quest.quest_type === "challenge" ? <Target className="text-orange-500" size={18} /> : <Palette className="text-purple-500" size={18} />}
+                              <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${quest.quest_type === "story" ? "bg-info/10" : quest.quest_type === "challenge" ? "bg-warmth/10" : "bg-indigo/10"}`}>
+                                {quest.quest_type === "story" ? <MessageSquare className="text-info" size={18} /> : quest.quest_type === "challenge" ? <Target className="text-warmth" size={18} /> : <Palette className="text-indigo" size={18} />}
                               </div>
                               <div className="flex-1">
                                 <h3 className="font-display text-lg text-foreground">{quest.title}</h3>
