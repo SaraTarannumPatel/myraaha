@@ -1,1 +1,4 @@
 project_id = "tdweqsszaakxhnzbyqar"
+
+[functions.living-resume-ai]
+verify_jwt = false
