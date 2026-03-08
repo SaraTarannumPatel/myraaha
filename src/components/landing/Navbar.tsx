@@ -6,7 +6,12 @@ import { Link } from "react-router-dom";
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
 
-  const navItems = ["Features", "Journey", "Careers", "Entrepreneurship", "Mission"];
+  const navItems = [
+    { label: "Problem", href: "#problem" },
+    { label: "How It Works", href: "#how-it-works" },
+    { label: "Who It's For", href: "#who" },
+    { label: "Mission", href: "#mission" },
+  ];
 
   return (
     <motion.nav
@@ -17,18 +22,18 @@ const Navbar = () => {
     >
       <div className="container mx-auto px-6 h-16 flex items-center justify-between">
         <a href="/" className="font-display text-2xl tracking-tight text-foreground">
-          Shuttl<span className="text-gradient-warm">Ex</span>
+          My<span className="text-gradient-warm">Raaha</span>
         </a>
 
         {/* Desktop */}
         <div className="hidden md:flex items-center gap-8">
           {navItems.map((item) => (
             <a
-              key={item}
-              href={`#${item.toLowerCase()}`}
+              key={item.label}
+              href={item.href}
               className="text-sm font-body font-medium text-muted-foreground hover:text-foreground transition-colors"
             >
-              {item}
+              {item.label}
             </a>
           ))}
           <Link
@@ -64,12 +69,12 @@ const Navbar = () => {
           <div className="px-6 py-4 flex flex-col gap-4">
             {navItems.map((item) => (
               <a
-                key={item}
-                href={`#${item.toLowerCase()}`}
+                key={item.label}
+                href={item.href}
                 className="text-sm font-body font-medium text-muted-foreground"
                 onClick={() => setIsOpen(false)}
               >
-                {item}
+                {item.label}
               </a>
             ))}
             <Link

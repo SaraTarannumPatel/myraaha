@@ -9,7 +9,6 @@ const HeroSection = () => {
 
       <div className="container mx-auto px-6 relative z-10">
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-6 items-center">
-          {/* Left — Copy (minimal) */}
           <div className="max-w-xl">
             <motion.h1
               initial={{ opacity: 0, y: 30 }}
@@ -17,17 +16,25 @@ const HeroSection = () => {
               transition={{ duration: 0.7 }}
               className="font-display text-5xl sm:text-6xl md:text-7xl leading-[0.95] tracking-tight text-foreground mb-6"
             >
-              Don't stumble into your future.{" "}
-              <span className="text-gradient-warm italic">Design it.</span>
+              <span className="text-gradient-warm italic">MyRaaha</span>
             </motion.h1>
+
+            <motion.h2
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.15 }}
+              className="font-display text-3xl sm:text-4xl text-foreground mb-4 leading-tight"
+            >
+              Career and business decisions — without guesswork.
+            </motion.h2>
 
             <motion.p
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
+              transition={{ duration: 0.6, delay: 0.25 }}
               className="font-body text-lg text-muted-foreground mb-8 leading-relaxed"
             >
-              Your AI-powered career & entrepreneurship co-pilot — from age 13 to beyond.
+              Soft direction. Real outcomes.
             </motion.p>
 
             <motion.div
@@ -46,32 +53,29 @@ const HeroSection = () => {
             </motion.div>
           </div>
 
-          {/* Right — Animated App Mockup */}
           <motion.div
             initial={{ opacity: 0, y: 40, rotateY: -8 }}
             animate={{ opacity: 1, y: 0, rotateY: 0 }}
             transition={{ duration: 1, delay: 0.3, ease: "easeOut" }}
             className="relative flex justify-center lg:justify-end"
           >
-            {/* Glow behind mockup */}
             <div className="absolute inset-0 bg-gradient-to-br from-secondary/20 via-transparent to-transparent rounded-full blur-3xl scale-110" />
             
             <motion.img
               src={appMockup}
-              alt="ShuttlEx app showing career exploration dashboard"
+              alt="MyRaaha app showing career navigation dashboard"
               className="relative w-full max-w-md lg:max-w-lg drop-shadow-2xl"
               animate={{ y: [0, -12, 0] }}
               transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
             />
 
-            {/* Floating badges */}
             <motion.div
               className="absolute top-8 -left-4 bg-card rounded-2xl px-4 py-3 shadow-card border border-border"
               animate={{ y: [0, -8, 0] }}
               transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
             >
-              <p className="font-body text-xs font-semibold text-foreground">13+ Starting Age</p>
-              <p className="font-body text-[10px] text-muted-foreground">Begin your journey early</p>
+              <p className="font-body text-xs font-semibold text-foreground">Clarity → Direction</p>
+              <p className="font-body text-[10px] text-muted-foreground">Not guesswork</p>
             </motion.div>
 
             <motion.div
@@ -79,8 +83,8 @@ const HeroSection = () => {
               animate={{ y: [0, -6, 0] }}
               transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: 1 }}
             >
-              <p className="font-body text-xs font-semibold text-foreground">6 Life Phases</p>
-              <p className="font-body text-[10px] text-muted-foreground">Grows with you</p>
+              <p className="font-body text-xs font-semibold text-foreground">Action → Outcome</p>
+              <p className="font-body text-[10px] text-muted-foreground">One system, full journey</p>
             </motion.div>
           </motion.div>
         </div>

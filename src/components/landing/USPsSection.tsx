@@ -1,55 +1,39 @@
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
 import {
-  Fingerprint, Brain, Gamepad2, Globe, FileText, Sparkles,
-  Heart, BarChart3, Users,
+  Filter, BarChart3, TrendingUp, Brain, RefreshCw, Link2,
 } from "lucide-react";
 
 const usps = [
   {
-    icon: Sparkles,
-    title: "End-to-End Journey",
-    description: "Class 8 to first job — no reset, no confusion, just guided growth.",
-  },
-  {
-    icon: Fingerprint,
-    title: "Identity over Aptitude",
-    description: "Storytelling, creativity & behavior tracking — not boring tests.",
-  },
-  {
-    icon: Gamepad2,
-    title: "Built for Gen Z & Alpha",
-    description: "Gamified, visual, swipe-first UX — not dashboards from 2005.",
-  },
-  {
-    icon: Globe,
-    title: "Inclusive by Design",
-    description: "Tier 3, 4 & rural India — where students are left behind the most.",
-  },
-  {
-    icon: FileText,
-    title: "Living Resume",
-    description: "Every choice & project auto-logged — recruiter-ready from day one.",
-  },
-  {
-    icon: Brain,
-    title: "AI That Knows You",
-    description: "Learns your patterns & gently nudges you toward paths you'd love.",
+    icon: Filter,
+    title: "Filtering Noise",
+    description: "Instead of 200 careers or ideas, MyRaaha narrows options responsibly based on your real data.",
   },
   {
     icon: BarChart3,
-    title: "SelfGraph™ Intelligence",
-    description: "A continuously evolving identity mirror — not a one-time quiz result.",
+    title: "Ranking Options Responsibly",
+    description: "Every path shows required skills, market demand, income realities, effort needed, and risk level.",
   },
   {
-    icon: Heart,
-    title: "AI Career Therapist",
-    description: "Empathetic guidance through confusion — the therapist you always needed.",
+    icon: TrendingUp,
+    title: "Showing Trade-offs Clearly",
+    description: "Time-to-readiness estimates, effort vs reward comparisons, and income-risk analysis — not YouTube-guru optimism.",
   },
   {
-    icon: Users,
-    title: "Domain Demand & Supply",
-    description: "Niche talent pools matched to real-time industry needs — not generic boards.",
+    icon: Brain,
+    title: "Tracking Growth Automatically",
+    description: "Your dynamic identity model evolves continuously — aptitude, attitude, and articulation tracked over time.",
+  },
+  {
+    icon: RefreshCw,
+    title: "Preventing Unnecessary Resets",
+    description: "The system remembers your history. Adjusts if you fall behind, shift interest, or market demand changes.",
+  },
+  {
+    icon: Link2,
+    title: "Skill-Building → Outcome",
+    description: "Connects learning directly to jobs, startup validation, and real opportunities — no random course hopping.",
   },
 ];
 
@@ -58,7 +42,7 @@ const USPsSection = () => {
   const isInView = useInView(ref, { once: true, margin: "-80px" });
 
   return (
-    <section id="usps" ref={ref} className="py-24 md:py-32 bg-muted/30">
+    <section ref={ref} className="py-24 md:py-32 bg-muted/30">
       <div className="container mx-auto px-6">
         <div className="text-center mb-16">
           <motion.p
@@ -66,15 +50,16 @@ const USPsSection = () => {
             animate={isInView ? { opacity: 1 } : {}}
             className="font-body text-xs uppercase tracking-[0.2em] text-secondary font-semibold mb-4"
           >
-            What Makes Us Different
+            What Makes MyRaaha Different
           </motion.p>
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ delay: 0.1 }}
-            className="font-display text-4xl md:text-5xl text-foreground"
+            className="font-display text-4xl md:text-5xl text-foreground max-w-2xl mx-auto"
           >
-            Not just another <em className="text-gradient-warm">career platform</em>
+            Not information. Not courses. A{" "}
+            <em className="text-gradient-warm">decision operating system.</em>
           </motion.h2>
         </div>
 

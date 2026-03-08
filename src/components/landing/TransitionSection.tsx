@@ -1,14 +1,14 @@
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
-import { ScanSearch, RefreshCw, Route, BarChart3, Heart } from "lucide-react";
+import { Cpu, Globe, BarChart3, DollarSign, Heart } from "lucide-react";
 import transitionIllustration from "@/assets/transition-illustration.png";
 
 const features = [
-  { icon: ScanSearch, title: "Profile Reassessment", description: "AI reviews your career, skills & restlessness to find real alignment." },
-  { icon: RefreshCw, title: "Identity Reconstruction", description: "System evolves with your clicks, pauses & reflections — no forms needed." },
-  { icon: Route, title: "Transition Tracks", description: "Domain-specific micro-pathways with training, mentorship & project experience." },
-  { icon: BarChart3, title: "Live Demand-Supply Grid", description: "Real-time demand for roles in new domains connected to your skillset." },
-  { icon: Heart, title: "Emotional Safety Layer", description: "Community for career changers — coaches, not judges. Reinvention needs empathy." },
+  { icon: Cpu, title: "Built Specifically For", description: "Career navigation, entrepreneurship systems, and decision modeling — not generic AI." },
+  { icon: Globe, title: "Proactive, Not Reactive", description: "Anticipates confusion based on behaviour patterns before you even ask." },
+  { icon: BarChart3, title: "Connected Intelligence", description: "Industry data, skill demand signals, startup ecosystem insights, and funding readiness metrics." },
+  { icon: DollarSign, title: "Affordable at Scale", description: "Automated and revenue-sustained. Works in Tier 3, 4 and rural regions — not just metros." },
+  { icon: Heart, title: "Impact-Measured", description: "Every interaction tracked for real outcomes. Not vanity metrics — measurable career and business progress." },
 ];
 
 const TransitionSection = () => {
@@ -24,7 +24,7 @@ const TransitionSection = () => {
             animate={isInView ? { opacity: 1 } : {}}
             className="font-body text-xs uppercase tracking-[0.2em] text-secondary font-semibold mb-4"
           >
-            Career Transitioners — Age 25+
+            Precision, But Still Human
           </motion.p>
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
@@ -32,22 +32,12 @@ const TransitionSection = () => {
             transition={{ delay: 0.1 }}
             className="font-display text-4xl md:text-5xl text-foreground"
           >
-            Redesigning the <em className="text-gradient-warm">journey</em>
+            This is not <em className="text-gradient-warm">generic AI.</em>
           </motion.h2>
         </div>
 
         <div className="grid lg:grid-cols-2 gap-12 items-center max-w-5xl mx-auto">
-          {/* Copy + features */}
           <div>
-            <motion.p
-              initial={{ opacity: 0 }}
-              animate={isInView ? { opacity: 1 } : {}}
-              transition={{ delay: 0.15 }}
-              className="font-body text-sm text-muted-foreground leading-relaxed mb-8"
-            >
-              3–5 years into a job and realize it's not for you? ShuttlEx makes career transitions 
-              graceful, supported, and data-backed — not chaotic.
-            </motion.p>
             <div className="space-y-4">
               {features.map((f, i) => (
                 <motion.div
@@ -58,7 +48,7 @@ const TransitionSection = () => {
                   className="flex items-start gap-3"
                 >
                   <div className="w-9 h-9 rounded-xl bg-muted flex items-center justify-center shrink-0">
-                    <f.icon size={18} className="text-secondary" />
+                    <f.icon size={18} className="text-primary" />
                   </div>
                   <div>
                     <h3 className="font-display text-base text-foreground">{f.title}</h3>
@@ -69,7 +59,6 @@ const TransitionSection = () => {
             </div>
           </div>
 
-          {/* Illustration */}
           <motion.div
             initial={{ opacity: 0, x: 30 }}
             animate={isInView ? { opacity: 1, x: 0 } : {}}
@@ -78,7 +67,7 @@ const TransitionSection = () => {
           >
             <img
               src={transitionIllustration}
-              alt="Person at crossroads — career transition and reinvention"
+              alt="AI precision with human empathy"
               className="w-full max-w-sm"
             />
           </motion.div>
