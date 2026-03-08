@@ -43,6 +43,8 @@ import Journal from "./pages/shared/Journal";
 import Connections from "./pages/shared/Connections";
 import Achievements from "./pages/shared/Achievements";
 import Settings from "./pages/shared/Settings";
+import Notifications from "./pages/shared/Notifications";
+import Leaderboard from "./pages/shared/Leaderboard";
 
 const queryClient = new QueryClient();
 
