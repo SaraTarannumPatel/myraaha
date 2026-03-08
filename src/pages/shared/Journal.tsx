@@ -349,10 +349,10 @@ const Journal = () => {
                         <div className="flex-1 bg-muted rounded-full h-3 overflow-hidden">
                           <div
                             className="h-full gradient-warm rounded-full transition-all"
-                            style={{ width: `${(count / checkins.length) * 100}%` }}
+                            style={{ width: `${((count as number) / checkins.length) * 100}%` }}
                           />
                         </div>
-                        <span className="font-body text-xs text-muted-foreground w-8 text-right">{count}</span>
+                        <span className="font-body text-xs text-muted-foreground w-8 text-right">{count as number}</span>
                       </div>
                     ))}
                   </div>
