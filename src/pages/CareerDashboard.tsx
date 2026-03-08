@@ -9,11 +9,13 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
+import { useCareerInsights } from "@/hooks/useCareerInsights";
 import {
   Compass, Map, Brain, FileText, Sparkles, ArrowRight, TrendingUp,
   Target, Clock, BookOpen, Trophy, Bell, Users, Briefcase, Heart,
   Lightbulb, CheckCircle2, Play, Zap, Star, MessageSquare, Bot,
-  GraduationCap, Flame, Calendar, ChevronRight, UserPlus, Building2
+  GraduationCap, Flame, Calendar, ChevronRight, UserPlus, Building2,
+  AlertCircle, Shield, RefreshCw
 } from "lucide-react";
 
 const JOURNEY_PHASES = [
@@ -34,6 +36,7 @@ const careerQuickActions = [
 
 const CareerDashboard = () => {
   const { user, profile } = useAuth();
+  const { readiness, nudges, recommendations, autoResume, loading: insightsLoading, refresh: refreshInsights } = useCareerInsights();
   const [stats, setStats] = useState({
     skillsCount: 0, goalsCount: 0, streak: 0, achievementsCount: 0,
     interestsCount: 0, journalCount: 0, connectionsCount: 0, projectsCount: 0
@@ -236,7 +239,221 @@ const CareerDashboard = () => {
         </motion.div>
       )}
 
-      {/* Journey Timeline */}
+      {/* AI Nudges / Re-engagement */}
+      {nudges.length > 0 && (
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.03 }} className="space-y-2">
+          {nudges.filter(n => n.priority !== "low").slice(0, 3).map((nudge, i) => (
+            <Link key={i} to={nudge.action_url} className="block">
+              <div className={`rounded-xl border p-4 flex items-start gap-3 transition-all hover:shadow-soft ${
+                nudge.priority === "high" ? "bg-primary/5 border-primary/20" : "bg-muted/30 border-border"
+              }`}>
+                <div className={`p-1.5 rounded-lg ${nudge.priority === "high" ? "bg-primary/10" : "bg-muted"}`}>
+                  {nudge.type === "celebration" ? <Trophy size={16} className="text-primary" /> :
+                   nudge.type === "re_engagement" ? <Bell size={16} className="text-primary" /> :
+                   nudge.type === "contextual" ? <Lightbulb size={16} className="text-primary" /> :
+                   <Target size={16} className="text-primary" />}
+                </div>
+                <div className="flex-1">
+                  <p className="font-body text-sm font-medium text-foreground">{nudge.title}</p>
+                  <p className="font-body text-xs text-muted-foreground mt-0.5">{nudge.message}</p>
+                </div>
+                <ArrowRight size={14} className="text-muted-foreground mt-1" />
+              </div>
+            </Link>
+          ))}
+        </motion.div>
+      )}
+
+      {/* Career Readiness Score */}
+      {readiness && (
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.04 }}>
+          <Card>
+            <CardHeader className="pb-3">
+              <div className="flex items-center justify-between">
+                <CardTitle className="text-lg flex items-center gap-2">
+                  <Shield className="h-5 w-5 text-primary" />
+                  Career Readiness
+                </CardTitle>
+                <div className="flex items-center gap-2">
+                  <Badge variant="secondary" className="text-lg px-3">{readiness.score}%</Badge>
+                  <Button variant="ghost" size="sm" onClick={refreshInsights} disabled={insightsLoading}>
+                    <RefreshCw size={14} className={insightsLoading ? "animate-spin" : ""} />
+                  </Button>
+                </div>
+              </div>
+              <CardDescription>{readiness.level}</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <Progress value={readiness.score} className="h-3 mb-4" />
+              <div className="grid grid-cols-3 sm:grid-cols-6 gap-3">
+                {Object.entries(readiness.breakdown).map(([key, value]) => (
+                  <div key={key} className="text-center">
+                    <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center mx-auto mb-1">
+                      {key === "skills" ? <TrendingUp size={16} className="text-primary" /> :
+                       key === "interests" ? <Compass size={16} className="text-primary" /> :
+                       key === "resume" ? <FileText size={16} className="text-primary" /> :
+                       key === "activity" ? <Flame size={16} className="text-primary" /> :
+                       key === "goals" ? <Target size={16} className="text-primary" /> :
+                       <Map size={16} className="text-primary" />}
+                    </div>
+                    <p className="font-body text-[10px] text-muted-foreground capitalize">{key}</p>
+                    <p className="font-display text-sm text-foreground">{value}</p>
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        </motion.div>
+      )}
+
+      {/* AI Recommendations */}
+      {recommendations && (
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.045 }}>
+          <Card className="border-primary/10 bg-gradient-to-br from-primary/[0.02] to-transparent">
+            <CardHeader className="pb-3">
+              <CardTitle className="text-lg flex items-center gap-2">
+                <Sparkles className="h-5 w-5 text-primary" />
+                AI Career Insights
+              </CardTitle>
+              {recommendations.encouragement && (
+                <CardDescription className="text-primary/80">{recommendations.encouragement}</CardDescription>
+              )}
+            </CardHeader>
+            <CardContent className="space-y-4">
+              {recommendations.career_insight && (
+                <div className="p-3 rounded-lg bg-primary/5 border border-primary/10">
+                  <p className="font-body text-sm text-foreground">{recommendations.career_insight}</p>
+                </div>
+              )}
+
+              {recommendations.next_steps?.length > 0 && (
+                <div>
+                  <h4 className="font-body text-xs text-muted-foreground uppercase tracking-wider mb-2">Recommended Next Steps</h4>
+                  <div className="space-y-2">
+                    {recommendations.next_steps.map((step, i) => (
+                      <Link key={i} to={step.action_url || "/dashboard"} className="block">
+                        <div className="flex items-start gap-3 p-3 rounded-lg bg-card border border-border hover:border-primary/20 transition-all">
+                          <div className={`p-1 rounded ${
+                            step.priority === "high" ? "bg-primary/10" : "bg-muted"
+                          }`}>
+                            {step.category === "learning" ? <BookOpen size={14} className="text-primary" /> :
+                             step.category === "networking" ? <Users size={14} className="text-primary" /> :
+                             step.category === "skills" ? <TrendingUp size={14} className="text-primary" /> :
+                             step.category === "experience" ? <Briefcase size={14} className="text-primary" /> :
+                             <Heart size={14} className="text-primary" />}
+                          </div>
+                          <div className="flex-1">
+                            <p className="font-body text-sm font-medium text-foreground">{step.title}</p>
+                            <p className="font-body text-xs text-muted-foreground mt-0.5">{step.description}</p>
+                          </div>
+                          <Badge variant="outline" className="text-[10px] capitalize">{step.priority}</Badge>
+                        </div>
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              <div className="grid sm:grid-cols-2 gap-3">
+                {recommendations.skill_gaps?.length > 0 && (
+                  <div className="p-3 rounded-lg bg-muted/30">
+                    <h4 className="font-body text-xs text-muted-foreground uppercase tracking-wider mb-2">Skill Gaps to Address</h4>
+                    <div className="flex flex-wrap gap-1.5">
+                      {recommendations.skill_gaps.map((gap, i) => (
+                        <Badge key={i} variant="outline" className="text-xs">{gap}</Badge>
+                      ))}
+                    </div>
+                  </div>
+                )}
+                {recommendations.resume_tips?.length > 0 && (
+                  <div className="p-3 rounded-lg bg-muted/30">
+                    <h4 className="font-body text-xs text-muted-foreground uppercase tracking-wider mb-2">Resume Tips</h4>
+                    <ul className="space-y-1">
+                      {recommendations.resume_tips.map((tip, i) => (
+                        <li key={i} className="font-body text-xs text-muted-foreground flex items-start gap-1.5">
+                          <CheckCircle2 size={10} className="text-primary mt-0.5 shrink-0" />
+                          {tip}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+              </div>
+            </CardContent>
+          </Card>
+        </motion.div>
+      )}
+
+      {/* Auto-Resume Summary */}
+      {autoResume && (autoResume.skills_summary.length > 0 || autoResume.achievements_summary.length > 0) && (
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.048 }}>
+          <Card>
+            <CardHeader className="pb-3">
+              <div className="flex items-center justify-between">
+                <CardTitle className="text-lg flex items-center gap-2">
+                  <FileText className="h-5 w-5 text-primary" />
+                  Living Resume Snapshot
+                </CardTitle>
+                <Link to="/dashboard/living-resume" className="text-xs text-primary hover:underline flex items-center gap-1">
+                  Full Resume <ChevronRight size={12} />
+                </Link>
+              </div>
+              <CardDescription>Auto-updated from your activity and achievements</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="grid sm:grid-cols-3 gap-4">
+                {autoResume.skills_summary.length > 0 && (
+                  <div>
+                    <h4 className="font-body text-xs text-muted-foreground uppercase mb-2">Top Skills</h4>
+                    <div className="space-y-1.5">
+                      {autoResume.skills_summary.slice(0, 5).map((skill, i) => (
+                        <div key={i} className="flex items-center justify-between">
+                          <span className="font-body text-xs text-foreground">{skill.name}</span>
+                          <div className="w-16">
+                            <Progress value={skill.level || 0} className="h-1" />
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+                {autoResume.interests_summary.length > 0 && (
+                  <div>
+                    <h4 className="font-body text-xs text-muted-foreground uppercase mb-2">Interest Areas</h4>
+                    <div className="flex flex-wrap gap-1">
+                      {autoResume.interests_summary.slice(0, 6).map((interest, i) => (
+                        <Badge key={i} variant="secondary" className="text-[10px]">{interest}</Badge>
+                      ))}
+                    </div>
+                  </div>
+                )}
+                {autoResume.achievements_summary.length > 0 && (
+                  <div>
+                    <h4 className="font-body text-xs text-muted-foreground uppercase mb-2">Recent Achievements</h4>
+                    <div className="space-y-1">
+                      {autoResume.achievements_summary.map((ach, i) => (
+                        <div key={i} className="flex items-center gap-1.5">
+                          <Trophy size={10} className="text-primary" />
+                          <span className="font-body text-xs text-foreground">{ach}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+              {autoResume.totalSteps > 0 && (
+                <div className="mt-3 pt-3 border-t border-border flex items-center justify-between">
+                  <span className="font-body text-xs text-muted-foreground">
+                    Roadmap Progress: {autoResume.completedSteps}/{autoResume.totalSteps} steps
+                  </span>
+                  <Progress value={(autoResume.completedSteps / autoResume.totalSteps) * 100} className="h-1.5 w-24" />
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        </motion.div>
+      )}
+
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.05 }}>
         <Card>
           <CardHeader className="pb-3">
