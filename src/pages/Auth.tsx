@@ -106,7 +106,7 @@ const Auth = () => {
               {isLogin ? "Welcome back" : "Create your account"}
             </h2>
             <p className="font-body text-muted-foreground mt-2">
-              {isLogin ? "Sign in to continue your journey" : "Start your ShuttlEx journey today"}
+              {isLogin ? "Sign in to continue your journey" : "Start your MyRaaha journey today"}
             </p>
           </div>
 
