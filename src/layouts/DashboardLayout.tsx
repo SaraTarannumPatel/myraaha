@@ -7,7 +7,7 @@ import {
   Compass, Map, Brain, FileText, Sparkles, Rocket, Lightbulb, Wrench, User,
   Zap, BookOpen, Users, Trophy, Settings, LogOut, Menu, X, ArrowLeftRight,
   LayoutDashboard, Bell, UserCheck, FolderKanban, Briefcase, Bot, Heart,
-  Presentation, Building2, LifeBuoy, Globe, Navigation, Medal
+  Presentation, Building2, LifeBuoy, Globe, Navigation, Medal, Palette
 } from "lucide-react";
 
 const careerNav = [
