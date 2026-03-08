@@ -29,3 +29,6 @@ verify_jwt = false
 
 [functions.career-coach-insights]
 verify_jwt = false
+
+[functions.ai-therapist]
+verify_jwt = false
