@@ -1741,6 +1741,7 @@ export type Database = {
           created_at: string
           id: string
           intent: Database["public"]["Enums"]["user_intent"] | null
+          is_private: boolean | null
           mood: string | null
           tags: string[] | null
           title: string | null
@@ -1752,6 +1753,7 @@ export type Database = {
           created_at?: string
           id?: string
           intent?: Database["public"]["Enums"]["user_intent"] | null
+          is_private?: boolean | null
           mood?: string | null
           tags?: string[] | null
           title?: string | null
@@ -1763,6 +1765,7 @@ export type Database = {
           created_at?: string
           id?: string
           intent?: Database["public"]["Enums"]["user_intent"] | null
+          is_private?: boolean | null
           mood?: string | null
           tags?: string[] | null
           title?: string | null
@@ -1770,6 +1773,77 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      journal_insights: {
+        Row: {
+          ai_narrative: string | null
+          created_at: string
+          id: string
+          insight_type: string
+          mood_summary: Json | null
+          patterns: Json | null
+          period_end: string | null
+          period_start: string | null
+          suggestions: string[] | null
+          user_id: string
+        }
+        Insert: {
+          ai_narrative?: string | null
+          created_at?: string
+          id?: string
+          insight_type?: string
+          mood_summary?: Json | null
+          patterns?: Json | null
+          period_end?: string | null
+          period_start?: string | null
+          suggestions?: string[] | null
+          user_id: string
+        }
+        Update: {
+          ai_narrative?: string | null
+          created_at?: string
+          id?: string
+          insight_type?: string
+          mood_summary?: Json | null
+          patterns?: Json | null
+          period_end?: string | null
+          period_start?: string | null
+          suggestions?: string[] | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      journal_shares: {
+        Row: {
+          entry_id: string
+          id: string
+          shared_at: string
+          shared_with: string
+          user_id: string
+        }
+        Insert: {
+          entry_id: string
+          id?: string
+          shared_at?: string
+          shared_with?: string
+          user_id: string
+        }
+        Update: {
+          entry_id?: string
+          id?: string
+          shared_at?: string
+          shared_with?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "journal_shares_entry_id_fkey"
+            columns: ["entry_id"]
+            isOneToOne: false
+            referencedRelation: "journal_entries"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       lab_milestones: {
         Row: {
@@ -2718,6 +2792,45 @@ export type Database = {
           id?: string
           modules?: Json | null
           title?: string
+        }
+        Relationships: []
+      }
+      mood_checkins: {
+        Row: {
+          challenges: string | null
+          confidence_level: number | null
+          created_at: string
+          energy_level: number | null
+          id: string
+          mood: string
+          notes: string | null
+          triggers: string | null
+          user_id: string
+          wins: string | null
+        }
+        Insert: {
+          challenges?: string | null
+          confidence_level?: number | null
+          created_at?: string
+          energy_level?: number | null
+          id?: string
+          mood: string
+          notes?: string | null
+          triggers?: string | null
+          user_id: string
+          wins?: string | null
+        }
+        Update: {
+          challenges?: string | null
+          confidence_level?: number | null
+          created_at?: string
+          energy_level?: number | null
+          id?: string
+          mood?: string
+          notes?: string | null
+          triggers?: string | null
+          user_id?: string
+          wins?: string | null
         }
         Relationships: []
       }
