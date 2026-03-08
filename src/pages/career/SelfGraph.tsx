@@ -984,8 +984,8 @@ const SelfGraph = () => {
                         </p>
                       </div>
                       <div className={`px-2 py-0.5 rounded text-xs font-body ${
-                        domain.trend === "growing" ? "bg-green-500/10 text-green-600" :
-                        domain.trend === "declining" ? "bg-red-500/10 text-red-600" :
+                        domain.trend === "growing" ? "bg-success/10 text-success" :
+                        domain.trend === "declining" ? "bg-destructive/10 text-destructive" :
                         "bg-muted text-muted-foreground"
                       }`}>{domain.trend || "stable"}</div>
                     </div>
