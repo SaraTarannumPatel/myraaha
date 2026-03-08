@@ -781,33 +781,7 @@ const CareerDashboard = () => {
               </CardContent>
             </Card>
 
-            <Card>
-              <CardHeader className="pb-3">
-                <CardTitle className="text-lg flex items-center gap-2">
-                  <Heart className="h-5 w-5 text-pink-500" />
-                  Reflection & Mood
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="text-center py-4">
-                  <p className="font-body text-sm text-muted-foreground mb-4">Track your mood and reflect on your journey</p>
-                  <div className="flex justify-center gap-2">
-                    <Link to="/dashboard/journal">
-                      <Button variant="outline" size="sm">
-                        <BookOpen size={14} className="mr-2" />
-                        Journal
-                      </Button>
-                    </Link>
-                    <Link to="/dashboard/career-therapist">
-                      <Button variant="outline" size="sm">
-                        <Heart size={14} className="mr-2" />
-                        Therapist
-                      </Button>
-                    </Link>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
+            <MoodCheckIn intent="career" />
           </div>
         </TabsContent>
 
