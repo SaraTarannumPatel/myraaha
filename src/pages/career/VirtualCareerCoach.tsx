@@ -100,11 +100,9 @@ const VirtualCareerCoach = () => {
         journalEntries: journalEntries.length,
         energyZones: energyZones.map((e: any) => ({ domain: e.domain, energy: e.energy_level, engagement: e.engagement_score })),
         moodData: checkins.map((c: any) => ({ mood: c.mood, energy: c.energy, confidence: c.confidence, date: c.created_at })),
-        roadmapMilestonesCompleted: roadmapMilestones.filter((m: any) => m.status === "completed").length,
-        totalRoadmapMilestones: roadmapMilestones.length,
-        roadmapProgress: roadmapMilestones.length > 0 
-          ? Math.round((roadmapMilestones.filter((m: any) => m.status === "completed").length / roadmapMilestones.length) * 100)
-          : 0,
+        roadmapMilestonesCompleted: 0,
+        totalRoadmapMilestones: 0,
+        roadmapProgress: 0,
         skillsCount: skills.length,
         checkins,
       };
