@@ -75,8 +75,10 @@ const Roadmap = () => {
       const active = roadmapsRes.data.find(r => r.is_active) || roadmapsRes.data[0];
       setActiveRoadmap(active);
       fetchSteps(active.id);
-      if (active.short_term_goals || active.long_term_goals) {
-        setGoals({ shortTerm: active.short_term_goals || "", longTerm: active.long_term_goals || "" });
+      // Use any cast for new columns not yet in generated types
+      const activeAny = active as any;
+      if (activeAny.short_term_goals || activeAny.long_term_goals) {
+        setGoals({ shortTerm: activeAny.short_term_goals || "", longTerm: activeAny.long_term_goals || "" });
       }
     }
     setLoading(false);
