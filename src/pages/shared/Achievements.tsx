@@ -8,15 +8,19 @@ import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Progress } from "@/components/ui/progress";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
+import { Link } from "react-router-dom";
 import {
   Trophy, Medal, Star, Sparkles, Award, TrendingUp, Target, Flame,
   BookOpen, Rocket, Users, Brain, Lightbulb, Shield, Heart, Zap,
   Crown, Gift, ArrowRight, ChevronRight, X, Calendar, BarChart3,
-  Share2, MessageSquare
+  Share2, MessageSquare, Send, Copy, CheckCircle2, GraduationCap,
+  Briefcase, UserCheck
 } from "lucide-react";
 
-// ── Shared badge system ──────────────────────────────────────────
+// ── Badge system ──────────────────────────────────────────
 type BadgeCategory = "exploration" | "learning" | "building" | "collaboration" | "resilience" | "funding" | "community" | "leadership";
 
 interface BadgeTemplate {
@@ -26,35 +30,37 @@ interface BadgeTemplate {
   icon: string;
   points: number;
   category: BadgeCategory;
+  linkedFeature?: string;
+  linkedRoute?: string;
 }
 
 const BADGE_TEMPLATES: BadgeTemplate[] = [
   // Exploration
-  { type: "first_interest", title: "Curiosity Spark", description: "Added your first interest", icon: "🧭", points: 10, category: "exploration" },
-  { type: "ten_interests", title: "Explorer", description: "Mapped 10+ interests", icon: "🌟", points: 25, category: "exploration" },
+  { type: "first_interest", title: "Curiosity Spark", description: "Added your first interest", icon: "🧭", points: 10, category: "exploration", linkedFeature: "Curiosity Compass", linkedRoute: "/dashboard/curiosity-compass" },
+  { type: "ten_interests", title: "Explorer", description: "Mapped 10+ interests", icon: "🌟", points: 25, category: "exploration", linkedFeature: "Curiosity Compass", linkedRoute: "/dashboard/curiosity-compass" },
   { type: "first_observation", title: "Problem Spotter", description: "Logged your first problem observation", icon: "🔍", points: 15, category: "exploration" },
   { type: "first_idea_card", title: "Idea Collector", description: "Interacted with your first idea card", icon: "💡", points: 10, category: "exploration" },
   { type: "first_startup_idea", title: "Visionary", description: "Created your first startup idea", icon: "🎯", points: 20, category: "exploration" },
-  { type: "first_application", title: "Go-Getter", description: "Submitted your first job application", icon: "📮", points: 15, category: "exploration" },
+  { type: "first_application", title: "Go-Getter", description: "Submitted your first job application", icon: "📮", points: 15, category: "exploration", linkedFeature: "Job Matching", linkedRoute: "/dashboard/job-matching" },
   // Learning
-  { type: "first_journal", title: "Reflector", description: "Wrote your first journal entry", icon: "📝", points: 10, category: "learning" },
-  { type: "five_journals", title: "Deep Thinker", description: "Wrote 5 journal entries", icon: "📓", points: 30, category: "learning" },
-  { type: "first_learning_track", title: "Student", description: "Started a learning track", icon: "📚", points: 15, category: "learning" },
-  { type: "first_capsule", title: "Knowledge Seeker", description: "Completed a learning capsule", icon: "🎓", points: 15, category: "learning" },
-  { type: "five_skills", title: "Skill Builder", description: "Added 5 skills", icon: "🎯", points: 25, category: "learning" },
-  { type: "ten_skills", title: "Skill Master", description: "Added 10 skills", icon: "🏅", points: 50, category: "learning" },
+  { type: "first_journal", title: "Reflector", description: "Wrote your first journal entry", icon: "📝", points: 10, category: "learning", linkedFeature: "Journal", linkedRoute: "/dashboard/journal" },
+  { type: "five_journals", title: "Deep Thinker", description: "Wrote 5 journal entries", icon: "📓", points: 30, category: "learning", linkedFeature: "Journal", linkedRoute: "/dashboard/journal" },
+  { type: "first_learning_track", title: "Student", description: "Started a learning track", icon: "📚", points: 15, category: "learning", linkedFeature: "Content Library", linkedRoute: "/dashboard/content-library" },
+  { type: "first_capsule", title: "Knowledge Seeker", description: "Completed a learning capsule", icon: "🎓", points: 15, category: "learning", linkedFeature: "Content Library", linkedRoute: "/dashboard/content-library" },
+  { type: "five_skills", title: "Skill Builder", description: "Added 5 skills", icon: "🎯", points: 25, category: "learning", linkedFeature: "SkillStacker", linkedRoute: "/dashboard/skill-stacker" },
+  { type: "ten_skills", title: "Skill Master", description: "Added 10 skills", icon: "🏅", points: 50, category: "learning", linkedFeature: "SkillStacker", linkedRoute: "/dashboard/skill-stacker" },
   { type: "first_reflection", title: "Thoughtful", description: "Wrote your first project reflection", icon: "💭", points: 10, category: "learning" },
   // Building
-  { type: "first_project", title: "Creator", description: "Started your first project", icon: "🚀", points: 20, category: "building" },
+  { type: "first_project", title: "Creator", description: "Started your first project", icon: "🚀", points: 20, category: "building", linkedFeature: "Project Playground", linkedRoute: "/dashboard/project-playground" },
   { type: "first_lab_plan", title: "Lab Scientist", description: "Created your first lab plan", icon: "🧪", points: 20, category: "building" },
   { type: "first_experiment", title: "Experimenter", description: "Ran your first MVP experiment", icon: "⚗️", points: 25, category: "building" },
   { type: "first_milestone", title: "Milestone Maker", description: "Completed your first milestone", icon: "🏁", points: 20, category: "building" },
   { type: "first_validation", title: "Validator", description: "Completed a validation sprint", icon: "✅", points: 30, category: "building" },
-  { type: "first_challenge_complete", title: "Challenge Champion", description: "Completed a project challenge", icon: "🏅", points: 30, category: "building" },
+  { type: "first_challenge_complete", title: "Challenge Champion", description: "Completed a project challenge", icon: "🏅", points: 30, category: "building", linkedFeature: "Project Playground", linkedRoute: "/dashboard/project-playground" },
   // Collaboration
-  { type: "first_connection", title: "Networker", description: "Made your first connection", icon: "🤝", points: 15, category: "collaboration" },
+  { type: "first_connection", title: "Networker", description: "Made your first connection", icon: "🤝", points: 15, category: "collaboration", linkedFeature: "Connections", linkedRoute: "/dashboard/connections" },
   { type: "five_connections", title: "Connector", description: "Made 5 connections", icon: "🌐", points: 35, category: "collaboration" },
-  { type: "first_mentor_session", title: "Guided", description: "Completed your first mentor session", icon: "🎓", points: 20, category: "collaboration" },
+  { type: "first_mentor_session", title: "Guided", description: "Completed your first mentor session", icon: "🎓", points: 20, category: "collaboration", linkedFeature: "Mentor Matchmaking", linkedRoute: "/dashboard/mentor-matchmaking" },
   // Community
   { type: "first_community_join", title: "Community Member", description: "Joined your first community", icon: "👥", points: 10, category: "community" },
   { type: "first_post", title: "Voice Found", description: "Published your first community post", icon: "📢", points: 15, category: "community" },
@@ -70,7 +76,7 @@ const BADGE_TEMPLATES: BadgeTemplate[] = [
   { type: "streak_14", title: "Unstoppable", description: "14-day activity streak", icon: "💎", points: 75, category: "resilience" },
   { type: "streak_30", title: "Iron Will", description: "30-day activity streak", icon: "🏆", points: 100, category: "resilience" },
   // Leadership
-  { type: "first_roadmap", title: "Pathfinder", description: "Created your first roadmap", icon: "🗺️", points: 15, category: "leadership" },
+  { type: "first_roadmap", title: "Pathfinder", description: "Created your first roadmap", icon: "🗺️", points: 15, category: "leadership", linkedFeature: "Roadmap", linkedRoute: "/dashboard/roadmap" },
   { type: "founder_profile", title: "Founder Identity", description: "Completed your founder profile", icon: "👤", points: 20, category: "leadership" },
   { type: "first_path", title: "Direction Set", description: "Selected your first entrepreneurial path", icon: "🧭", points: 20, category: "leadership" },
   { type: "first_moodboard", title: "Vision Architect", description: "Created your first moodboard", icon: "🎨", points: 15, category: "leadership" },
@@ -100,10 +106,11 @@ const LEVEL_TIERS = [
 const getLevel = (pts: number) => LEVEL_TIERS.find(t => pts >= t.min && pts <= t.max) || LEVEL_TIERS[0];
 
 const Achievements = () => {
-  const { user } = useAuth();
+  const { user, profile } = useAuth();
   const [achievements, setAchievements] = useState<any[]>([]);
   const [streaks, setStreaks] = useState<any[]>([]);
   const [endorsements, setEndorsements] = useState<any[]>([]);
+  const [endorserProfiles, setEndorserProfiles] = useState<Record<string, any>>({});
   const [celebrations, setCelebrations] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [tab, setTab] = useState("wall");
@@ -113,12 +120,23 @@ const Achievements = () => {
   const [aiResultType, setAiResultType] = useState<string>("");
   const [showCelebration, setShowCelebration] = useState<any>(null);
 
+  // Endorsement sending
+  const [endorseTarget, setEndorseTarget] = useState<string | null>(null);
+  const [endorseMessage, setEndorseMessage] = useState("");
+  const [endorseAchievementId, setEndorseAchievementId] = useState<string | null>(null);
+
+  // Share state
+  const [shareAchievement, setShareAchievement] = useState<any>(null);
+
+  // Activity counts for progress estimation
+  const [activityCounts, setActivityCounts] = useState<Record<string, number>>({});
+
   const fetchAll = useCallback(async () => {
     if (!user) return;
     const [aRes, sRes, eRes, cRes] = await Promise.all([
       supabase.from("achievements").select("*").eq("user_id", user.id).order("earned_at", { ascending: false }),
       supabase.from("user_streaks").select("*").eq("user_id", user.id),
-      supabase.from("peer_endorsements").select("*").eq("endorsed_id", user.id).order("created_at", { ascending: false }).limit(10),
+      supabase.from("peer_endorsements").select("*").eq("endorsed_id", user.id).order("created_at", { ascending: false }).limit(20),
       supabase.from("milestone_celebrations").select("*").eq("user_id", user.id).eq("is_seen", false).order("created_at", { ascending: false }),
     ]);
     setAchievements(aRes.data || []);
@@ -126,7 +144,37 @@ const Achievements = () => {
     setEndorsements(eRes.data || []);
     setCelebrations(cRes.data || []);
     if ((cRes.data || []).length > 0) setShowCelebration(cRes.data![0]);
+
+    // Fetch endorser profiles
+    const endorserIds = [...new Set((eRes.data || []).map((e: any) => e.endorser_id))];
+    if (endorserIds.length > 0) {
+      const { data: profiles } = await supabase.from("profiles").select("user_id, full_name, avatar_url").in("user_id", endorserIds);
+      const map: Record<string, any> = {};
+      (profiles || []).forEach(p => { map[p.user_id] = p; });
+      setEndorserProfiles(map);
+    }
+
     setLoading(false);
+  }, [user]);
+
+  const fetchActivityCounts = useCallback(async () => {
+    if (!user) return;
+    const [iRes, sRes, jRes, pRes, cRes, checkinRes] = await Promise.all([
+      supabase.from("interests").select("id", { count: "exact", head: true }).eq("user_id", user.id),
+      supabase.from("skills" as any).select("id", { count: "exact", head: true }).eq("user_id", user.id),
+      supabase.from("journal_entries").select("id", { count: "exact", head: true }).eq("user_id", user.id),
+      supabase.from("community_posts").select("id", { count: "exact", head: true }).eq("user_id", user.id),
+      supabase.from("connections").select("id", { count: "exact", head: true }).or(`requester_id.eq.${user.id},receiver_id.eq.${user.id}`),
+      supabase.from("coaching_checkins").select("id", { count: "exact", head: true }).eq("user_id", user.id),
+    ]);
+    setActivityCounts({
+      interests: (iRes as any).count || 0,
+      skills: (sRes as any).count || 0,
+      journals: (jRes as any).count || 0,
+      posts: (pRes as any).count || 0,
+      connections: (cRes as any).count || 0,
+      checkins: (checkinRes as any).count || 0,
+    });
   }, [user]);
 
   const checkAndAwardBadges = useCallback(async () => {
@@ -134,18 +182,18 @@ const Achievements = () => {
 
     const queries1: any[] = await Promise.all([
       supabase.from("interests").select("id", { count: "exact", head: true }).eq("user_id", user.id),
-      supabase.from("skills").select("id", { count: "exact", head: true }).eq("user_id", user.id),
+      supabase.from("skills" as any).select("id", { count: "exact", head: true }).eq("user_id", user.id),
       supabase.from("journal_entries").select("id", { count: "exact", head: true }).eq("user_id", user.id),
-      supabase.from("projects").select("id", { count: "exact", head: true }).eq("user_id", user.id),
-      supabase.from("roadmaps").select("id", { count: "exact", head: true }).eq("user_id", user.id),
+      supabase.from("projects" as any).select("id", { count: "exact", head: true }).eq("user_id", user.id),
+      supabase.from("roadmaps" as any).select("id", { count: "exact", head: true }).eq("user_id", user.id),
       supabase.from("connections").select("id", { count: "exact", head: true }).or(`requester_id.eq.${user.id},receiver_id.eq.${user.id}`),
-      supabase.from("problem_observations").select("id", { count: "exact", head: true }).eq("user_id", user.id),
-      supabase.from("startup_ideas").select("id", { count: "exact", head: true }).eq("user_id", user.id),
+      supabase.from("problem_observations" as any).select("id", { count: "exact", head: true }).eq("user_id", user.id),
+      supabase.from("startup_ideas" as any).select("id", { count: "exact", head: true }).eq("user_id", user.id),
       supabase.from("idea_card_interactions").select("id", { count: "exact", head: true }).eq("user_id", user.id),
       supabase.from("lab_plans").select("id", { count: "exact", head: true }).eq("user_id", user.id),
     ]);
     const queries2: any[] = await Promise.all([
-      supabase.from("mvp_experiments").select("id", { count: "exact", head: true }).eq("user_id", user.id),
+      supabase.from("mvp_experiments" as any).select("id", { count: "exact", head: true }).eq("user_id", user.id),
       supabase.from("validation_sprints").select("id", { count: "exact", head: true }).eq("user_id", user.id),
       supabase.from("coaching_checkins").select("id", { count: "exact", head: true }).eq("user_id", user.id),
       supabase.from("mindset_habits").select("id", { count: "exact", head: true }).eq("user_id", user.id),
@@ -153,24 +201,21 @@ const Achievements = () => {
       supabase.from("community_members").select("id", { count: "exact", head: true }).eq("user_id", user.id),
       supabase.from("community_posts").select("id", { count: "exact", head: true }).eq("user_id", user.id),
       supabase.from("path_selections").select("id", { count: "exact", head: true }).eq("user_id", user.id),
-      supabase.from("moodboards").select("id", { count: "exact", head: true }).eq("user_id", user.id),
-      supabase.from("learning_track_progress").select("id", { count: "exact", head: true }).eq("user_id", user.id),
+      supabase.from("moodboards" as any).select("id", { count: "exact", head: true }).eq("user_id", user.id),
+      supabase.from("learning_track_progress" as any).select("id", { count: "exact", head: true }).eq("user_id", user.id),
     ]);
     const queries3: any[] = await Promise.all([
       supabase.from("job_applications").select("id", { count: "exact", head: true }).eq("user_id", user.id),
-      supabase.from("project_reflections").select("id", { count: "exact", head: true }).eq("user_id", user.id),
-      supabase.from("peer_circle_members").select("id", { count: "exact", head: true }).eq("user_id", user.id),
+      supabase.from("project_reflections" as any).select("id", { count: "exact", head: true }).eq("user_id", user.id),
+      supabase.from("peer_circle_members" as any).select("id", { count: "exact", head: true }).eq("user_id", user.id),
     ]);
     const mentorSessionsRes: any = await (supabase.from("mentorship_sessions") as any).select("id", { count: "exact", head: true }).eq("mentee_id", user.id);
     const challengeCompletesRes: any = await (supabase.from("challenge_enrollments") as any).select("id", { count: "exact", head: true }).eq("user_id", user.id).eq("status", "completed");
-    const [
-      interestsRes, skillsRes, journalRes, projectsRes, roadmapsRes, connectionsRes,
-      observationsRes, ideasRes, ideaCardsRes, labPlansRes,
-    ] = queries1;
-    const [
-      experimentsRes, validationsRes, checkinsRes, habitsRes, challengesRes,
-      communitiesRes, postsRes, pathsRes, moodboardsRes, learningRes,
-    ] = queries2;
+    const milestoneRes: any = await (supabase.from("lab_milestones") as any).select("id", { count: "exact", head: true }).eq("user_id", user.id).eq("status", "completed");
+    const capsuleRes: any = await (supabase.from("capsule_progress" as any) as any).select("id", { count: "exact", head: true }).eq("user_id", user.id).eq("status", "completed");
+
+    const [interestsRes, skillsRes, journalRes, projectsRes, roadmapsRes, connectionsRes, observationsRes, ideasRes, ideaCardsRes, labPlansRes] = queries1;
+    const [experimentsRes, validationsRes, checkinsRes, habitsRes, challengesRes, communitiesRes, postsRes, pathsRes, moodboardsRes, learningRes] = queries2;
     const [applicationsRes, reflectionsRes, circlesRes] = queries3;
 
     const { data: existing } = await supabase.from("achievements").select("achievement_type").eq("user_id", user.id);
@@ -209,12 +254,13 @@ const Achievements = () => {
       ["first_peer_circle", c(circlesRes) >= 1],
       ["first_mentor_session", c(mentorSessionsRes) >= 1],
       ["first_challenge_complete", c(challengeCompletesRes) >= 1],
+      ["first_milestone", c(milestoneRes) >= 1],
+      ["first_capsule", c(capsuleRes) >= 1],
     ];
 
     const { data: fp } = await supabase.from("founder_profiles").select("id").eq("user_id", user.id).maybeSingle();
     if (fp) checks.push(["founder_profile", true]);
 
-    // Check streaks
     const { data: streakData } = await supabase.from("user_streaks").select("*").eq("user_id", user.id).eq("streak_type", "daily_activity").maybeSingle();
     if (streakData) {
       if (streakData.current_streak >= 3) checks.push(["streak_3", true]);
@@ -228,7 +274,6 @@ const Achievements = () => {
       .map(([type]) => BADGE_TEMPLATES.find(b => b.type === type))
       .filter(Boolean) as BadgeTemplate[];
 
-    // Points milestones
     const currentPts = (existing || []).reduce((s: number, a: any) => {
       const tmpl = BADGE_TEMPLATES.find(b => b.type === a.achievement_type);
       return s + (tmpl?.points || 0);
@@ -246,21 +291,18 @@ const Achievements = () => {
       await supabase.from("achievements").insert(
         toAward.map(b => ({ user_id: user.id, achievement_type: b.type, title: b.title, description: b.description, points: b.points }))
       );
-
       for (const b of toAward) {
         await supabase.from("milestone_celebrations").insert({
           user_id: user.id, milestone_type: "badge_earned", title: `🎉 ${b.title} Unlocked!`, description: b.description,
           celebration_data: { badge_type: b.type, icon: b.icon, points: b.points },
         });
       }
-
       const newTotal = currentPts + toAward.reduce((s, b) => s + b.points, 0);
       const newCount = (existing?.length || 0) + toAward.length;
       await supabase.from("leaderboard_entries").upsert({
         user_id: user.id, scope: "global", scope_id: "career",
         total_points: newTotal, badge_count: newCount, updated_at: new Date().toISOString(),
-      }, { onConflict: "user_id,scope,scope_id" });
-
+      }, { onConflict: "user_id,scope,scope_id" } as any);
       fetchAll();
       toAward.forEach(b => toast.success(`🎉 Badge Earned: ${b.title}!`));
     }
@@ -270,9 +312,9 @@ const Achievements = () => {
     if (streakData) {
       if (streakData.last_activity_date !== today) {
         const yesterday = new Date(Date.now() - 86400000).toISOString().split("T")[0];
-        const newStreak = streakData.last_activity_date === yesterday ? streakData.current_streak + 1 : 1;
+        const newStreak = streakData.last_activity_date === yesterday ? (streakData.current_streak || 0) + 1 : 1;
         await supabase.from("user_streaks").update({
-          current_streak: newStreak, longest_streak: Math.max(newStreak, streakData.longest_streak),
+          current_streak: newStreak, longest_streak: Math.max(newStreak, streakData.longest_streak || 0),
           last_activity_date: today, updated_at: new Date().toISOString(),
         }).eq("id", streakData.id);
       }
@@ -285,6 +327,7 @@ const Achievements = () => {
 
   useEffect(() => {
     fetchAll();
+    fetchActivityCounts();
     checkAndAwardBadges();
     const channel = supabase
       .channel("achievements-watch")
@@ -298,6 +341,61 @@ const Achievements = () => {
     setShowCelebration(null);
     const next = celebrations.find(c => c.id !== id && !c.is_seen);
     if (next) setShowCelebration(next);
+  };
+
+  // Endorsement sending
+  const sendEndorsement = async () => {
+    if (!endorseTarget || !user) return;
+    const { error } = await supabase.from("peer_endorsements").insert({
+      endorser_id: user.id,
+      endorsed_id: endorseTarget,
+      achievement_id: endorseAchievementId || null,
+      message: endorseMessage || "Great work! Keep it up! 🎉",
+      endorsement_type: "shout_out",
+    });
+    if (error) { toast.error("Failed to send endorsement"); return; }
+    setEndorseTarget(null);
+    setEndorseMessage("");
+    setEndorseAchievementId(null);
+    toast.success("Endorsement sent! 🎉");
+  };
+
+  // Share badge
+  const shareBadge = (badge: any) => {
+    const text = `🏆 I just earned the "${badge.title}" badge on MyRaaha! ${badge.description} (+${badge.points} pts)`;
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(text);
+      toast.success("Badge info copied to clipboard!");
+    } else {
+      toast.info(text);
+    }
+  };
+
+  // Progress estimation for unearned badges
+  const getBadgeProgress = (badge: BadgeTemplate): number => {
+    if (earnedTypes.has(badge.type)) return 100;
+    const ac = activityCounts;
+    switch (badge.type) {
+      case "first_interest": return ac.interests >= 1 ? 100 : 0;
+      case "ten_interests": return Math.min((ac.interests / 10) * 100, 99);
+      case "five_skills": return Math.min((ac.skills / 5) * 100, 99);
+      case "ten_skills": return Math.min((ac.skills / 10) * 100, 99);
+      case "first_journal": return ac.journals >= 1 ? 100 : 0;
+      case "five_journals": return Math.min((ac.journals / 5) * 100, 99);
+      case "first_post": return ac.posts >= 1 ? 100 : 0;
+      case "five_posts": return Math.min((ac.posts / 5) * 100, 99);
+      case "first_connection": return ac.connections >= 1 ? 100 : 0;
+      case "five_connections": return Math.min((ac.connections / 5) * 100, 99);
+      case "first_checkin": return ac.checkins >= 1 ? 100 : 0;
+      case "five_checkins": return Math.min((ac.checkins / 5) * 100, 99);
+      case "streak_3": return Math.min((currentStreak / 3) * 100, 99);
+      case "streak_7": return Math.min((currentStreak / 7) * 100, 99);
+      case "streak_14": return Math.min((currentStreak / 14) * 100, 99);
+      case "streak_30": return Math.min((currentStreak / 30) * 100, 99);
+      case "hundred_points": return Math.min((totalPoints / 100) * 100, 99);
+      case "five_hundred_points": return Math.min((totalPoints / 500) * 100, 99);
+      default: return 0;
+    }
   };
 
   const totalPoints = useMemo(() => achievements.reduce((s, a) => s + (a.points || 0), 0), [achievements]);
@@ -322,7 +420,14 @@ const Achievements = () => {
     return counts;
   }, [earnedTypes]);
 
-  const nextToUnlock = useMemo(() => BADGE_TEMPLATES.filter(b => !earnedTypes.has(b.type)).slice(0, 5), [earnedTypes]);
+  const nextToUnlock = useMemo(() =>
+    BADGE_TEMPLATES
+      .filter(b => !earnedTypes.has(b.type))
+      .map(b => ({ ...b, progress: getBadgeProgress(b) }))
+      .sort((a, b) => b.progress - a.progress)
+      .slice(0, 6),
+    [earnedTypes, activityCounts, currentStreak, totalPoints]
+  );
 
   const callAI = async (type: string, context: any) => {
     setAiLoading(true);
@@ -351,7 +456,14 @@ const Achievements = () => {
               {(showCelebration.celebration_data as any)?.points && (
                 <Badge className="bg-primary/10 text-primary mb-4">+{(showCelebration.celebration_data as any).points} points</Badge>
               )}
-              <Button onClick={() => dismissCelebration(showCelebration.id)} className="w-full">Awesome! 🎉</Button>
+              <div className="flex gap-2 justify-center">
+                <Button onClick={() => dismissCelebration(showCelebration.id)}>Awesome! 🎉</Button>
+                <Button variant="outline" onClick={() => {
+                  const text = `🎉 I just earned "${showCelebration.title}" on MyRaaha! ${showCelebration.description}`;
+                  navigator.clipboard?.writeText(text);
+                  toast.success("Copied to share!");
+                }}><Share2 size={14} /> Share</Button>
+              </div>
             </motion.div>
           </motion.div>
         )}
@@ -359,14 +471,14 @@ const Achievements = () => {
 
       {/* Hero */}
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
-        className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-primary/20 via-accent/10 to-secondary/20 border border-primary/20 p-8">
+        className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-primary/20 via-accent/10 to-secondary/20 border border-primary/20 p-6 sm:p-8">
         <div className="relative z-10">
           <div className="flex items-center gap-2 mb-2">
             <Trophy className="h-6 w-6 text-primary" />
             <span className="text-sm font-medium text-primary">Badges & Achievements</span>
           </div>
-          <h1 className="text-3xl font-bold text-foreground mb-1">Celebrate your journey.</h1>
-          <p className="text-muted-foreground max-w-2xl">Track your progress, unlock badges, and see how you compare with peers.</p>
+          <h1 className="text-2xl sm:text-3xl font-bold text-foreground mb-1">Celebrate your journey.</h1>
+          <p className="text-sm text-muted-foreground max-w-2xl">Track your progress, unlock badges, and see how you compare with peers.</p>
         </div>
       </motion.div>
 
@@ -411,7 +523,7 @@ const Achievements = () => {
 
         {/* Badge Wall */}
         <TabsContent value="wall" className="space-y-4 mt-4">
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between flex-wrap gap-2">
             <Select value={categoryFilter} onValueChange={setCategoryFilter}>
               <SelectTrigger className="w-48"><SelectValue placeholder="All categories" /></SelectTrigger>
               <SelectContent>
@@ -432,23 +544,42 @@ const Achievements = () => {
               const earnedData = achievements.find(a => a.achievement_type === badge.type);
               const catMeta = CATEGORY_META[badge.category];
               const CatIcon = catMeta.icon;
+              const progress = getBadgeProgress(badge);
               return (
                 <motion.div key={badge.type} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.02 }}>
-                  <Card className={`p-5 transition-all ${isEarned ? "border-primary/30 bg-primary/5 shadow-sm" : "opacity-50 hover:opacity-75"}`}>
+                  <Card className={`p-5 transition-all ${isEarned ? "border-primary/30 bg-primary/5 shadow-sm" : "opacity-60 hover:opacity-90"}`}>
                     <div className="flex items-start gap-3">
                       <span className={`text-3xl ${!isEarned ? "grayscale" : ""}`}>{badge.icon}</span>
-                      <div className="flex-1">
-                        <div className="flex items-center gap-2">
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2 flex-wrap">
                           <h3 className="text-sm font-semibold text-foreground">{badge.title}</h3>
                           {isEarned && <Award className="h-4 w-4 text-primary" />}
                         </div>
                         <p className="text-xs text-muted-foreground">{badge.description}</p>
-                        <div className="flex items-center gap-2 mt-2">
+                        <div className="flex items-center gap-2 mt-2 flex-wrap">
                           <Badge variant="outline" className="text-[10px] gap-1"><CatIcon className={`h-3 w-3 ${catMeta.color}`} />{catMeta.label}</Badge>
                           <span className="text-xs text-primary font-semibold">+{badge.points} pts</span>
                         </div>
                         {isEarned && earnedData && (
-                          <p className="text-[10px] text-muted-foreground mt-1">Earned {new Date(earnedData.earned_at).toLocaleDateString()}</p>
+                          <div className="flex items-center gap-2 mt-2">
+                            <p className="text-[10px] text-muted-foreground">Earned {new Date(earnedData.earned_at).toLocaleDateString()}</p>
+                            <button onClick={() => shareBadge(badge)} className="text-muted-foreground hover:text-primary transition-colors">
+                              <Share2 size={12} />
+                            </button>
+                          </div>
+                        )}
+                        {/* Progress bar for unearned badges */}
+                        {!isEarned && progress > 0 && (
+                          <div className="mt-2">
+                            <Progress value={progress} className="h-1.5" />
+                            <p className="text-[10px] text-muted-foreground mt-0.5">{Math.round(progress)}% complete</p>
+                          </div>
+                        )}
+                        {/* Linked feature */}
+                        {badge.linkedFeature && badge.linkedRoute && !isEarned && (
+                          <Link to={badge.linkedRoute} className="text-[10px] text-primary hover:underline mt-1 inline-flex items-center gap-1">
+                            Go to {badge.linkedFeature} <ArrowRight size={8} />
+                          </Link>
                         )}
                       </div>
                     </div>
@@ -491,12 +622,13 @@ const Achievements = () => {
                       <Card className="p-4 border-primary/20 bg-primary/5">
                         <div className="flex items-start gap-3">
                           <span className="text-3xl">{tmpl?.icon || "🏆"}</span>
-                          <div>
+                          <div className="flex-1">
                             <h3 className="text-sm font-semibold text-foreground">{a.title}</h3>
                             <p className="text-xs text-muted-foreground">{a.description}</p>
                             <div className="flex items-center gap-2 mt-1">
                               <Badge variant="secondary" className="text-[10px]">+{a.points} pts</Badge>
                               <span className="text-[10px] text-muted-foreground">{new Date(a.earned_at).toLocaleDateString()}</span>
+                              <button onClick={() => shareBadge(tmpl || a)} className="text-muted-foreground hover:text-primary ml-auto"><Share2 size={12} /></button>
                             </div>
                           </div>
                         </div>
@@ -508,6 +640,7 @@ const Achievements = () => {
             </div>
           )}
 
+          {/* Next to Unlock with progress */}
           {nextToUnlock.length > 0 && (
             <div>
               <h3 className="text-base font-semibold text-foreground mb-3 flex items-center gap-2"><Target className="h-5 w-5" /> Next to Unlock</h3>
@@ -515,18 +648,30 @@ const Achievements = () => {
                 {nextToUnlock.map(badge => {
                   const catMeta = CATEGORY_META[badge.category];
                   return (
-                    <Card key={badge.type} className="p-4 opacity-75 hover:opacity-100 transition-opacity">
+                    <Card key={badge.type} className="p-4 hover:shadow-sm transition-shadow">
                       <div className="flex items-start gap-3">
                         <span className="text-2xl grayscale">{badge.icon}</span>
                         <div className="flex-1">
-                          <div className="flex items-center gap-2">
+                          <div className="flex items-center gap-2 flex-wrap">
                             <h3 className="text-sm font-medium text-foreground">{badge.title}</h3>
                             <Badge variant="outline" className="text-[10px]">{catMeta.label}</Badge>
                           </div>
                           <p className="text-xs text-muted-foreground">{badge.description}</p>
-                          <span className="text-xs text-primary font-semibold">+{badge.points} pts</span>
+                          <div className="flex items-center gap-2 mt-1">
+                            <span className="text-xs text-primary font-semibold">+{badge.points} pts</span>
+                            {badge.linkedRoute && (
+                              <Link to={badge.linkedRoute} className="text-[10px] text-primary hover:underline flex items-center gap-0.5">
+                                {badge.linkedFeature} <ArrowRight size={8} />
+                              </Link>
+                            )}
+                          </div>
+                          {(badge as any).progress > 0 && (
+                            <div className="mt-2">
+                              <Progress value={(badge as any).progress} className="h-1.5" />
+                              <p className="text-[10px] text-muted-foreground mt-0.5">{Math.round((badge as any).progress)}% there</p>
+                            </div>
+                          )}
                         </div>
-                        <ArrowRight className="h-4 w-4 text-muted-foreground mt-1" />
                       </div>
                     </Card>
                   );
@@ -548,7 +693,7 @@ const Achievements = () => {
         <TabsContent value="streaks" className="space-y-4 mt-4">
           <Card className="p-6">
             <div className="flex items-center gap-4 mb-4">
-              <div className="h-16 w-16 rounded-full gradient-milestone flex items-center justify-center">
+              <div className="h-16 w-16 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center">
                 <Flame className="h-8 w-8 text-primary-foreground" />
               </div>
               <div>
@@ -594,11 +739,12 @@ const Achievements = () => {
 
           <Card className="p-5 border-dashed">
             <div className="flex items-start gap-3">
-              <Calendar className="h-6 w-6 text-muted-foreground" />
+              <Calendar className="h-6 w-6 text-muted-foreground shrink-0" />
               <div>
                 <h3 className="text-sm font-semibold text-foreground">Streak Tips</h3>
                 <p className="text-xs text-muted-foreground mt-1">• Log a journal entry, complete a task, or explore a new interest daily.</p>
                 <p className="text-xs text-muted-foreground">• Even small actions count — the key is consistency!</p>
+                <p className="text-xs text-muted-foreground">• Your streak feeds into your Living Resume visibility.</p>
               </div>
             </div>
           </Card>
@@ -615,8 +761,15 @@ const Achievements = () => {
               </div>
             </div>
             <Progress value={(achievements.length / BADGE_TEMPLATES.length) * 100} className="h-3 mb-2" />
+            {/* Next level info */}
+            {tier.max !== Infinity && (
+              <p className="text-xs text-muted-foreground">
+                {tier.max - totalPoints + 1} more points to reach {LEVEL_TIERS[LEVEL_TIERS.indexOf(tier) + 1]?.name || "next level"}
+              </p>
+            )}
           </Card>
 
+          {/* Level tiers */}
           <div>
             <h2 className="text-base font-semibold text-foreground mb-3">Level Tiers</h2>
             <div className="space-y-2">
@@ -644,10 +797,10 @@ const Achievements = () => {
             <div>
               <h2 className="text-base font-semibold text-foreground mb-3">Achievement Timeline</h2>
               <div className="relative border-l-2 border-primary/20 ml-4 space-y-4">
-                {achievements.slice(0, 12).map((a, i) => {
+                {achievements.slice(0, 15).map((a, i) => {
                   const tmpl = BADGE_TEMPLATES.find(b => b.type === a.achievement_type);
                   return (
-                    <motion.div key={a.id} initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.04 }}
+                    <motion.div key={a.id} initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.03 }}
                       className="relative pl-6">
                       <div className="absolute -left-[9px] top-1 w-4 h-4 rounded-full bg-primary/20 border-2 border-primary flex items-center justify-center">
                         <div className="w-1.5 h-1.5 rounded-full bg-primary" />
@@ -658,6 +811,7 @@ const Achievements = () => {
                           <p className="text-sm font-medium text-foreground">{a.title}</p>
                           <p className="text-[10px] text-muted-foreground">{new Date(a.earned_at).toLocaleDateString()} • +{a.points} pts</p>
                         </div>
+                        <button onClick={() => shareBadge(tmpl || a)} className="text-muted-foreground hover:text-primary ml-auto"><Share2 size={12} /></button>
                       </div>
                     </motion.div>
                   );
@@ -665,6 +819,20 @@ const Achievements = () => {
               </div>
             </div>
           )}
+
+          {/* Profile integration note */}
+          <Card className="p-5 border-dashed border-primary/20 bg-primary/5">
+            <div className="flex items-start gap-3">
+              <UserCheck className="h-6 w-6 text-primary shrink-0" />
+              <div>
+                <h3 className="text-sm font-semibold text-foreground">Living Resume Integration</h3>
+                <p className="text-xs text-muted-foreground mt-1">Your badges and achievements are automatically synced to your Living Resume. Recruiters and mentors can see your verified accomplishments.</p>
+                <Link to="/dashboard/living-resume" className="text-xs text-primary hover:underline inline-flex items-center gap-1 mt-1">
+                  View Living Resume <ArrowRight size={10} />
+                </Link>
+              </div>
+            </div>
+          </Card>
         </TabsContent>
 
         {/* Recognition */}
@@ -680,20 +848,26 @@ const Achievements = () => {
 
             {endorsements.length > 0 ? (
               <div className="space-y-3">
-                {endorsements.map(e => (
-                  <Card key={e.id} className="p-4 bg-muted/30">
-                    <div className="flex items-start gap-3">
-                      <MessageSquare className="h-4 w-4 text-primary mt-1 shrink-0" />
-                      <div>
-                        <p className="text-sm text-foreground">{e.message || "Great work! Keep it up!"}</p>
-                        <div className="flex items-center gap-2 mt-1">
-                          {e.badge_type && <Badge variant="outline" className="text-[10px]">{e.badge_type}</Badge>}
-                          <span className="text-[10px] text-muted-foreground">{new Date(e.created_at).toLocaleDateString()}</span>
+                {endorsements.map(e => {
+                  const endorser = endorserProfiles[e.endorser_id];
+                  return (
+                    <Card key={e.id} className="p-4 bg-muted/30">
+                      <div className="flex items-start gap-3">
+                        <div className="w-8 h-8 rounded-full bg-accent/10 flex items-center justify-center text-sm font-bold shrink-0">
+                          {endorser?.full_name?.charAt(0) || "?"}
+                        </div>
+                        <div className="flex-1">
+                          <p className="text-sm font-medium text-foreground">{endorser?.full_name || "A peer"}</p>
+                          <p className="text-sm text-muted-foreground">{e.message || "Great work! Keep it up!"}</p>
+                          <div className="flex items-center gap-2 mt-1">
+                            {e.endorsement_type && <Badge variant="outline" className="text-[10px] capitalize">{e.endorsement_type.replace("_", " ")}</Badge>}
+                            <span className="text-[10px] text-muted-foreground">{new Date(e.created_at).toLocaleDateString()}</span>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  </Card>
-                ))}
+                    </Card>
+                  );
+                })}
               </div>
             ) : (
               <div className="text-center py-8">
@@ -703,12 +877,26 @@ const Achievements = () => {
             )}
           </Card>
 
+          {/* Send Endorsement */}
+          <Card className="p-5">
+            <h3 className="text-sm font-semibold text-foreground mb-3 flex items-center gap-2"><Send size={14} /> Send an Endorsement</h3>
+            <p className="text-xs text-muted-foreground mb-3">Recognize a peer's achievement or give them a shout-out.</p>
+            <div className="space-y-2">
+              <Input placeholder="Peer's user ID (from Connections)" value={endorseTarget || ""} onChange={e => setEndorseTarget(e.target.value)} className="text-sm" />
+              <Textarea placeholder="Your message (e.g., 'Amazing progress on SkillStacker!')" value={endorseMessage} onChange={e => setEndorseMessage(e.target.value)} rows={2} />
+              <Button size="sm" onClick={sendEndorsement} disabled={!endorseTarget}>
+                <Send size={12} /> Send Endorsement
+              </Button>
+            </div>
+          </Card>
+
+          {/* Share info */}
           <Card className="p-5 border-dashed">
             <div className="flex items-start gap-3">
-              <Share2 className="h-6 w-6 text-muted-foreground" />
+              <Share2 className="h-6 w-6 text-muted-foreground shrink-0" />
               <div>
                 <h3 className="text-sm font-semibold text-foreground">Share & Celebrate</h3>
-                <p className="text-xs text-muted-foreground mt-1">Your badges are visible on your Living Resume, helping recruiters and mentors see your verified accomplishments.</p>
+                <p className="text-xs text-muted-foreground mt-1">Your badges are visible on your Living Resume, helping recruiters and mentors see your verified accomplishments. Click the share icon on any badge to copy it.</p>
               </div>
             </div>
           </Card>
@@ -721,13 +909,13 @@ const Achievements = () => {
             <h2 className="text-xl font-bold text-foreground mb-2">AI Achievement Coach</h2>
             <p className="text-sm text-muted-foreground mb-4">Get personalized suggestions, motivation, and progress analysis.</p>
             <div className="flex flex-wrap gap-3 justify-center">
-              <Button onClick={() => callAI("motivation_nudge", { totalPoints, currentStreak, badgeCount: achievements.length, level: tier.name })} disabled={aiLoading}>
+              <Button onClick={() => callAI("motivation_nudge", { totalPoints, currentStreak, badgeCount: achievements.length, level: tier.name, mood: "neutral" })} disabled={aiLoading}>
                 <Sparkles className="h-4 w-4" /> Motivation Nudge
               </Button>
-              <Button onClick={() => callAI("next_steps", { earned: achievements.map(a => a.achievement_type), totalPoints, badgeCount: achievements.length, totalBadges: BADGE_TEMPLATES.length })} disabled={aiLoading} variant="outline">
+              <Button onClick={() => callAI("next_steps", { earned: achievements.map(a => a.achievement_type), totalPoints, badgeCount: achievements.length, totalBadges: BADGE_TEMPLATES.length, streak: currentStreak })} disabled={aiLoading} variant="outline">
                 <Target className="h-4 w-4" /> Next Steps
               </Button>
-              <Button onClick={() => callAI("progress_analysis", { earned: achievements.map(a => ({ type: a.achievement_type, date: a.earned_at })), totalPoints, categories: categoryCounts })} disabled={aiLoading} variant="outline">
+              <Button onClick={() => callAI("progress_analysis", { earned: achievements.map(a => ({ type: a.achievement_type, date: a.earned_at })), totalPoints, categories: categoryCounts, streak: currentStreak, level: tier.name })} disabled={aiLoading} variant="outline">
                 <Brain className="h-4 w-4" /> Analyze Progress
               </Button>
             </div>
@@ -744,6 +932,7 @@ const Achievements = () => {
                   <p className="text-sm text-foreground mb-2">{aiResult.nudge_message}</p>
                   {aiResult.suggested_activity && <p className="text-xs text-primary">→ {aiResult.suggested_activity}</p>}
                   {aiResult.streak_advice && <p className="text-xs text-muted-foreground mt-2">💡 {aiResult.streak_advice}</p>}
+                  {aiResult.energy_boost && <p className="text-xs text-muted-foreground mt-1">⚡ {aiResult.energy_boost}</p>}
                 </Card>
               </motion.div>
             )}
@@ -777,10 +966,10 @@ const Achievements = () => {
 
             {aiResult && aiResultType === "progress_analysis" && (
               <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
-                <Card className="border-blue-500/30">
+                <Card className="border-primary/30">
                   <CardHeader className="pb-2 flex flex-row items-center justify-between">
                     <div>
-                      <CardTitle className="text-lg flex items-center gap-2"><Brain className="h-5 w-5 text-blue-500" /> Progress Analysis</CardTitle>
+                      <CardTitle className="text-lg flex items-center gap-2"><Brain className="h-5 w-5 text-primary" /> Progress Analysis</CardTitle>
                       {aiResult.celebration_message && <CardDescription>{aiResult.celebration_message}</CardDescription>}
                     </div>
                     <Button size="icon" variant="ghost" onClick={() => setAiResult(null)}><X className="h-4 w-4" /></Button>
@@ -798,8 +987,11 @@ const Achievements = () => {
                         <div className="flex flex-wrap gap-1">{aiResult.growth_areas.map((s: string, i: number) => <Badge key={i} variant="outline" className="text-xs">{s}</Badge>)}</div>
                       </div>
                     )}
+                    {aiResult.achievement_pace && (
+                      <p className="text-xs text-muted-foreground">📊 Pace: {aiResult.achievement_pace}</p>
+                    )}
                     {aiResult.personalized_challenge && (
-                      <div className="p-3 rounded-lg bg-blue-500/5 border border-blue-500/20">
+                      <div className="p-3 rounded-lg bg-primary/5 border border-primary/20">
                         <h4 className="text-sm font-medium mb-1">🎯 Personal Challenge</h4>
                         <p className="text-sm text-muted-foreground">{aiResult.personalized_challenge}</p>
                       </div>
