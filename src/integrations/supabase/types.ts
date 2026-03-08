@@ -1621,6 +1621,131 @@ export type Database = {
         }
         Relationships: []
       }
+      mentor_bookmarks: {
+        Row: {
+          created_at: string
+          id: string
+          mentor_id: string
+          notes: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          mentor_id: string
+          notes?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          mentor_id?: string
+          notes?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mentor_bookmarks_mentor_id_fkey"
+            columns: ["mentor_id"]
+            isOneToOne: false
+            referencedRelation: "mentors"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      mentor_nudges: {
+        Row: {
+          created_at: string
+          id: string
+          is_actioned: boolean | null
+          is_read: boolean | null
+          message: string
+          nudge_type: string
+          reason: string | null
+          suggested_mentor_ids: string[] | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_actioned?: boolean | null
+          is_read?: boolean | null
+          message: string
+          nudge_type: string
+          reason?: string | null
+          suggested_mentor_ids?: string[] | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_actioned?: boolean | null
+          is_read?: boolean | null
+          message?: string
+          nudge_type?: string
+          reason?: string | null
+          suggested_mentor_ids?: string[] | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      mentor_reviews: {
+        Row: {
+          communication_score: number | null
+          created_at: string
+          expertise_score: number | null
+          helpfulness_score: number | null
+          id: string
+          is_anonymous: boolean | null
+          mentor_id: string
+          rating: number
+          review_text: string | null
+          reviewer_id: string
+          session_id: string | null
+        }
+        Insert: {
+          communication_score?: number | null
+          created_at?: string
+          expertise_score?: number | null
+          helpfulness_score?: number | null
+          id?: string
+          is_anonymous?: boolean | null
+          mentor_id: string
+          rating: number
+          review_text?: string | null
+          reviewer_id: string
+          session_id?: string | null
+        }
+        Update: {
+          communication_score?: number | null
+          created_at?: string
+          expertise_score?: number | null
+          helpfulness_score?: number | null
+          id?: string
+          is_anonymous?: boolean | null
+          mentor_id?: string
+          rating?: number
+          review_text?: string | null
+          reviewer_id?: string
+          session_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mentor_reviews_mentor_id_fkey"
+            columns: ["mentor_id"]
+            isOneToOne: false
+            referencedRelation: "mentors"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "mentor_reviews_session_id_fkey"
+            columns: ["session_id"]
+            isOneToOne: false
+            referencedRelation: "mentorship_sessions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       mentor_shares: {
         Row: {
           created_at: string
@@ -1665,6 +1790,309 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      mentors: {
+        Row: {
+          achievements: string[] | null
+          availability: string | null
+          bio: string | null
+          calendar_link: string | null
+          created_at: string
+          experience_years: number | null
+          expertise_areas: string[] | null
+          focus_areas: string[] | null
+          id: string
+          industries: string[] | null
+          is_active: boolean | null
+          is_verified: boolean | null
+          linkedin_url: string | null
+          mentee_focus: string | null
+          name: string
+          past_projects: Json | null
+          profile_image_url: string | null
+          rating: number | null
+          total_reviews: number | null
+          total_sessions: number | null
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          achievements?: string[] | null
+          availability?: string | null
+          bio?: string | null
+          calendar_link?: string | null
+          created_at?: string
+          experience_years?: number | null
+          expertise_areas?: string[] | null
+          focus_areas?: string[] | null
+          id?: string
+          industries?: string[] | null
+          is_active?: boolean | null
+          is_verified?: boolean | null
+          linkedin_url?: string | null
+          mentee_focus?: string | null
+          name: string
+          past_projects?: Json | null
+          profile_image_url?: string | null
+          rating?: number | null
+          total_reviews?: number | null
+          total_sessions?: number | null
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          achievements?: string[] | null
+          availability?: string | null
+          bio?: string | null
+          calendar_link?: string | null
+          created_at?: string
+          experience_years?: number | null
+          expertise_areas?: string[] | null
+          focus_areas?: string[] | null
+          id?: string
+          industries?: string[] | null
+          is_active?: boolean | null
+          is_verified?: boolean | null
+          linkedin_url?: string | null
+          mentee_focus?: string | null
+          name?: string
+          past_projects?: Json | null
+          profile_image_url?: string | null
+          rating?: number | null
+          total_reviews?: number | null
+          total_sessions?: number | null
+          updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      mentorship_interactions: {
+        Row: {
+          ai_insights: Json | null
+          created_at: string
+          id: string
+          interaction_type: string
+          mentor_id: string | null
+          mood_after: string | null
+          mood_before: string | null
+          outcomes: string[] | null
+          reflection: string | null
+          session_id: string | null
+          skills_discussed: string[] | null
+          summary: string | null
+          user_id: string
+        }
+        Insert: {
+          ai_insights?: Json | null
+          created_at?: string
+          id?: string
+          interaction_type: string
+          mentor_id?: string | null
+          mood_after?: string | null
+          mood_before?: string | null
+          outcomes?: string[] | null
+          reflection?: string | null
+          session_id?: string | null
+          skills_discussed?: string[] | null
+          summary?: string | null
+          user_id: string
+        }
+        Update: {
+          ai_insights?: Json | null
+          created_at?: string
+          id?: string
+          interaction_type?: string
+          mentor_id?: string | null
+          mood_after?: string | null
+          mood_before?: string | null
+          outcomes?: string[] | null
+          reflection?: string | null
+          session_id?: string | null
+          skills_discussed?: string[] | null
+          summary?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mentorship_interactions_mentor_id_fkey"
+            columns: ["mentor_id"]
+            isOneToOne: false
+            referencedRelation: "mentors"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "mentorship_interactions_session_id_fkey"
+            columns: ["session_id"]
+            isOneToOne: false
+            referencedRelation: "mentorship_sessions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      mentorship_pods: {
+        Row: {
+          created_at: string
+          description: string | null
+          domain: string | null
+          id: string
+          is_active: boolean | null
+          is_moderated: boolean | null
+          max_members: number | null
+          member_count: number | null
+          mentor_id: string | null
+          name: string
+          topics: string[] | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          domain?: string | null
+          id?: string
+          is_active?: boolean | null
+          is_moderated?: boolean | null
+          max_members?: number | null
+          member_count?: number | null
+          mentor_id?: string | null
+          name: string
+          topics?: string[] | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          domain?: string | null
+          id?: string
+          is_active?: boolean | null
+          is_moderated?: boolean | null
+          max_members?: number | null
+          member_count?: number | null
+          mentor_id?: string | null
+          name?: string
+          topics?: string[] | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mentorship_pods_mentor_id_fkey"
+            columns: ["mentor_id"]
+            isOneToOne: false
+            referencedRelation: "mentors"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      mentorship_requests: {
+        Row: {
+          created_at: string
+          goals: string | null
+          id: string
+          mentee_id: string
+          mentor_id: string
+          message: string | null
+          preferred_topics: string[] | null
+          status: string
+          updated_at: string
+          urgency: string | null
+        }
+        Insert: {
+          created_at?: string
+          goals?: string | null
+          id?: string
+          mentee_id: string
+          mentor_id: string
+          message?: string | null
+          preferred_topics?: string[] | null
+          status?: string
+          updated_at?: string
+          urgency?: string | null
+        }
+        Update: {
+          created_at?: string
+          goals?: string | null
+          id?: string
+          mentee_id?: string
+          mentor_id?: string
+          message?: string | null
+          preferred_topics?: string[] | null
+          status?: string
+          updated_at?: string
+          urgency?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mentorship_requests_mentor_id_fkey"
+            columns: ["mentor_id"]
+            isOneToOne: false
+            referencedRelation: "mentors"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      mentorship_sessions: {
+        Row: {
+          created_at: string
+          current_participants: number | null
+          description: string | null
+          duration_minutes: number | null
+          id: string
+          is_recurring: boolean | null
+          max_participants: number | null
+          meeting_link: string | null
+          mentor_id: string
+          recurrence_pattern: string | null
+          scheduled_at: string | null
+          session_type: string
+          status: string | null
+          title: string
+          topics: string[] | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          current_participants?: number | null
+          description?: string | null
+          duration_minutes?: number | null
+          id?: string
+          is_recurring?: boolean | null
+          max_participants?: number | null
+          meeting_link?: string | null
+          mentor_id: string
+          recurrence_pattern?: string | null
+          scheduled_at?: string | null
+          session_type?: string
+          status?: string | null
+          title: string
+          topics?: string[] | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          current_participants?: number | null
+          description?: string | null
+          duration_minutes?: number | null
+          id?: string
+          is_recurring?: boolean | null
+          max_participants?: number | null
+          meeting_link?: string | null
+          mentor_id?: string
+          recurrence_pattern?: string | null
+          scheduled_at?: string | null
+          session_type?: string
+          status?: string | null
+          title?: string
+          topics?: string[] | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mentorship_sessions_mentor_id_fkey"
+            columns: ["mentor_id"]
+            isOneToOne: false
+            referencedRelation: "mentors"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       mindset_challenges: {
         Row: {
@@ -2073,6 +2501,88 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      pod_discussions: {
+        Row: {
+          content: string
+          created_at: string
+          discussion_type: string | null
+          id: string
+          is_pinned: boolean | null
+          likes_count: number | null
+          pod_id: string
+          replies_count: number | null
+          title: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          discussion_type?: string | null
+          id?: string
+          is_pinned?: boolean | null
+          likes_count?: number | null
+          pod_id: string
+          replies_count?: number | null
+          title?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          discussion_type?: string | null
+          id?: string
+          is_pinned?: boolean | null
+          likes_count?: number | null
+          pod_id?: string
+          replies_count?: number | null
+          title?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "pod_discussions_pod_id_fkey"
+            columns: ["pod_id"]
+            isOneToOne: false
+            referencedRelation: "mentorship_pods"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      pod_members: {
+        Row: {
+          id: string
+          joined_at: string
+          pod_id: string
+          role: string | null
+          user_id: string
+        }
+        Insert: {
+          id?: string
+          joined_at?: string
+          pod_id: string
+          role?: string | null
+          user_id: string
+        }
+        Update: {
+          id?: string
+          joined_at?: string
+          pod_id?: string
+          role?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "pod_members_pod_id_fkey"
+            columns: ["pod_id"]
+            isOneToOne: false
+            referencedRelation: "mentorship_pods"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       problem_observations: {
         Row: {
@@ -2560,6 +3070,41 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      session_participants: {
+        Row: {
+          id: string
+          joined_at: string | null
+          notes: string | null
+          session_id: string
+          status: string | null
+          user_id: string
+        }
+        Insert: {
+          id?: string
+          joined_at?: string | null
+          notes?: string | null
+          session_id: string
+          status?: string | null
+          user_id: string
+        }
+        Update: {
+          id?: string
+          joined_at?: string | null
+          notes?: string | null
+          session_id?: string
+          status?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "session_participants_session_id_fkey"
+            columns: ["session_id"]
+            isOneToOne: false
+            referencedRelation: "mentorship_sessions"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       showcase_collaborations: {
         Row: {
