@@ -36,6 +36,7 @@ const careerQuickActions = [
 
 const CareerDashboard = () => {
   const { user, profile } = useAuth();
+  const { readiness, nudges, recommendations, autoResume, loading: insightsLoading, refresh: refreshInsights } = useCareerInsights();
   const [stats, setStats] = useState({
     skillsCount: 0, goalsCount: 0, streak: 0, achievementsCount: 0,
     interestsCount: 0, journalCount: 0, connectionsCount: 0, projectsCount: 0
