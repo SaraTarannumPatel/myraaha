@@ -618,7 +618,7 @@ const MentorCard = ({
               )}
               <div className="flex items-center gap-1 ml-auto">
                 <Star size={14} className="text-accent fill-accent" />
-                <span className="font-body text-sm text-amber-600">{mentor.rating.toFixed(1)}</span>
+                <span className="font-body text-sm text-accent">{mentor.rating.toFixed(1)}</span>
               </div>
             </div>
             <p className="font-body text-sm text-muted-foreground mt-1 line-clamp-2">{mentor.bio}</p>
