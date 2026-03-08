@@ -4,47 +4,77 @@ import { supabase } from "@/integrations/supabase/client";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { Progress } from "@/components/ui/progress";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { toast } from "sonner";
 import {
   Compass, Map, Brain, FileText, Sparkles, ArrowRight, TrendingUp,
-  Target, Clock, BookOpen, Trophy, Bell
+  Target, Clock, BookOpen, Trophy, Bell, Users, Briefcase, Heart,
+  Lightbulb, CheckCircle2, Play, Zap, Star, MessageSquare, Bot,
+  GraduationCap, Flame, Calendar, ChevronRight, UserPlus, Building2
 } from "lucide-react";
 
+const JOURNEY_PHASES = [
+  { id: "discovery", label: "Discovery", icon: Compass, description: "Exploring interests" },
+  { id: "learning", label: "Learning", icon: BookOpen, description: "Building knowledge" },
+  { id: "development", label: "Development", icon: TrendingUp, description: "Growing skills" },
+  { id: "preparation", label: "Prep", icon: Target, description: "Getting ready" },
+  { id: "opportunities", label: "Opportunities", icon: Briefcase, description: "Finding matches" },
+];
+
 const careerQuickActions = [
-  { label: "Curiosity Compass", icon: Compass, path: "/dashboard/curiosity-compass", color: "bg-accent/10 text-accent" },
-  { label: "AI Roadmap", icon: Map, path: "/dashboard/roadmap", color: "bg-primary/10 text-primary" },
-  { label: "SelfGraph™", icon: Brain, path: "/dashboard/selfgraph", color: "bg-accent/10 text-accent" },
-  { label: "Living Resume", icon: FileText, path: "/dashboard/living-resume", color: "bg-primary/10 text-primary" },
-  { label: "Explore", icon: Sparkles, path: "/dashboard/explore", color: "bg-accent/10 text-accent" },
+  { label: "Curiosity Compass", icon: Compass, path: "/dashboard/curiosity-compass", color: "bg-accent/10 text-accent", desc: "Explore interests" },
+  { label: "AI Roadmap", icon: Map, path: "/dashboard/roadmap", color: "bg-primary/10 text-primary", desc: "Plan your path" },
+  { label: "SelfGraph™", icon: Brain, path: "/dashboard/selfgraph", color: "bg-accent/10 text-accent", desc: "Know yourself" },
+  { label: "Living Resume", icon: FileText, path: "/dashboard/living-resume", color: "bg-primary/10 text-primary", desc: "Track growth" },
+  { label: "Career Coach", icon: Bot, path: "/dashboard/career-coach", color: "bg-accent/10 text-accent", desc: "Get guidance" },
 ];
 
 const CareerDashboard = () => {
   const { user, profile } = useAuth();
-  const [stats, setStats] = useState({ skillsCount: 0, goalsCount: 0, streak: 0, achievementsCount: 0, interestsCount: 0, journalCount: 0 });
+  const [stats, setStats] = useState({
+    skillsCount: 0, goalsCount: 0, streak: 0, achievementsCount: 0,
+    interestsCount: 0, journalCount: 0, connectionsCount: 0, projectsCount: 0
+  });
   const [activity, setActivity] = useState<any[]>([]);
   const [notifications, setNotifications] = useState<any[]>([]);
+  const [skills, setSkills] = useState<any[]>([]);
+  const [mentors, setMentors] = useState<any[]>([]);
+  const [resources, setResources] = useState<any[]>([]);
+  const [roadmapSteps, setRoadmapSteps] = useState<any[]>([]);
+  const [aiSuggestions, setAiSuggestions] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [aiLoading, setAiLoading] = useState(false);
 
   useEffect(() => {
     if (!user) return;
-    fetchStats(); fetchActivity(); fetchNotifications();
+    fetchAll();
     const channel = supabase.channel('career-dashboard')
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'skills', filter: `user_id=eq.${user.id}` }, () => fetchStats())
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'interests', filter: `user_id=eq.${user.id}` }, () => fetchStats())
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'achievements', filter: `user_id=eq.${user.id}` }, () => fetchStats())
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'journal_entries', filter: `user_id=eq.${user.id}` }, () => { fetchStats(); fetchActivity(); })
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'skills', filter: `user_id=eq.${user.id}` }, () => fetchAll())
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'interests', filter: `user_id=eq.${user.id}` }, () => fetchAll())
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'achievements', filter: `user_id=eq.${user.id}` }, () => fetchAll())
       .on('postgres_changes', { event: '*', schema: 'public', table: 'notifications', filter: `user_id=eq.${user.id}` }, () => fetchNotifications())
       .subscribe();
     return () => { supabase.removeChannel(channel); };
   }, [user]);
 
+  const fetchAll = async () => {
+    await Promise.all([fetchStats(), fetchActivity(), fetchNotifications(), fetchSkills(), fetchMentors(), fetchResources(), fetchRoadmapSteps()]);
+    setLoading(false);
+  };
+
   const fetchStats = async () => {
     if (!user) return;
-    const [skillsRes, goalsRes, achievementsRes, interestsRes, journalRes] = await Promise.all([
+    const [skillsRes, goalsRes, achievementsRes, interestsRes, journalRes, connectionsRes, projectsRes] = await Promise.all([
       supabase.from("skills").select("id", { count: "exact", head: true }).eq("user_id", user.id),
       supabase.from("roadmap_steps").select("id", { count: "exact", head: true }).eq("user_id", user.id).eq("status", "completed"),
       supabase.from("achievements").select("id", { count: "exact", head: true }).eq("user_id", user.id),
       supabase.from("interests").select("id", { count: "exact", head: true }).eq("user_id", user.id),
       supabase.from("journal_entries").select("created_at").eq("user_id", user.id).order("created_at", { ascending: false }).limit(30),
+      supabase.from("connections").select("id", { count: "exact", head: true }).or(`requester_id.eq.${user.id},receiver_id.eq.${user.id}`).eq("status", "accepted"),
+      supabase.from("projects").select("id", { count: "exact", head: true }).eq("user_id", user.id),
     ]);
     let streak = 0;
     if (journalRes.data && journalRes.data.length > 0) {
@@ -57,23 +87,33 @@ const CareerDashboard = () => {
         else break;
       }
     }
-    setStats({ skillsCount: skillsRes.count || 0, goalsCount: goalsRes.count || 0, streak, achievementsCount: achievementsRes.count || 0, interestsCount: interestsRes.count || 0, journalCount: journalRes.data?.length || 0 });
-    setLoading(false);
+    setStats({
+      skillsCount: skillsRes.count || 0,
+      goalsCount: goalsRes.count || 0,
+      streak,
+      achievementsCount: achievementsRes.count || 0,
+      interestsCount: interestsRes.count || 0,
+      journalCount: journalRes.data?.length || 0,
+      connectionsCount: connectionsRes.count || 0,
+      projectsCount: projectsRes.count || 0,
+    });
   };
 
   const fetchActivity = async () => {
     if (!user) return;
-    const [journalRes, skillsRes, interestsRes, projectsRes] = await Promise.all([
+    const [journalRes, skillsRes, interestsRes, projectsRes, achievementsRes] = await Promise.all([
       supabase.from("journal_entries").select("id, title, created_at").eq("user_id", user.id).order("created_at", { ascending: false }).limit(3),
       supabase.from("skills").select("id, name, created_at").eq("user_id", user.id).order("created_at", { ascending: false }).limit(3),
       supabase.from("interests").select("id, name, created_at").eq("user_id", user.id).order("created_at", { ascending: false }).limit(3),
       supabase.from("projects").select("id, title, created_at").eq("user_id", user.id).order("created_at", { ascending: false }).limit(3),
+      supabase.from("achievements").select("id, title, earned_at").eq("user_id", user.id).order("earned_at", { ascending: false }).limit(3),
     ]);
     const items = [
       ...(journalRes.data || []).map(e => ({ id: e.id, type: "journal", title: e.title || "Journal entry", timestamp: e.created_at, icon: "📝" })),
       ...(skillsRes.data || []).map(e => ({ id: e.id, type: "skill", title: `Added skill: ${e.name}`, timestamp: e.created_at, icon: "🎯" })),
       ...(interestsRes.data || []).map(e => ({ id: e.id, type: "interest", title: `New interest: ${e.name}`, timestamp: e.created_at, icon: "🧭" })),
       ...(projectsRes.data || []).map(e => ({ id: e.id, type: "project", title: `Project: ${e.title}`, timestamp: e.created_at, icon: "🚀" })),
+      ...(achievementsRes.data || []).map(e => ({ id: e.id, type: "achievement", title: `🏆 ${e.title}`, timestamp: e.earned_at, icon: "🏆" })),
     ].sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()).slice(0, 8);
     setActivity(items);
   };
@@ -82,6 +122,51 @@ const CareerDashboard = () => {
     if (!user) return;
     const { data } = await supabase.from("notifications").select("*").eq("user_id", user.id).eq("is_read", false).order("created_at", { ascending: false }).limit(5);
     setNotifications(data || []);
+  };
+
+  const fetchSkills = async () => {
+    if (!user) return;
+    const { data } = await supabase.from("skills").select("*").eq("user_id", user.id).order("proficiency", { ascending: false }).limit(6);
+    setSkills(data || []);
+  };
+
+  const fetchMentors = async () => {
+    if (!user) return;
+    // Get potential mentors from profiles (users with mentor experience)
+    const { data } = await supabase.from("profiles").select("id, full_name, avatar_url, industry, career_stage").neq("user_id", user.id).limit(4);
+    setMentors(data || []);
+  };
+
+  const fetchResources = async () => {
+    const { data } = await supabase.from("resources").select("*").eq("intent", "career").limit(4);
+    setResources(data || []);
+  };
+
+  const fetchRoadmapSteps = async () => {
+    if (!user) return;
+    const { data } = await supabase.from("roadmap_steps").select("*, roadmaps(title)").eq("user_id", user.id).in("status", ["not_started", "in_progress"]).order("order_index").limit(5);
+    setRoadmapSteps(data || []);
+  };
+
+  const fetchAISuggestions = async () => {
+    if (!user) return;
+    setAiLoading(true);
+    try {
+      const { data, error } = await supabase.functions.invoke("coaching-insights", {
+        body: {
+          type: "dashboard_suggestions",
+          context: { profile, stats, skillsCount: stats.skillsCount, interestsCount: stats.interestsCount }
+        }
+      });
+      if (error) throw error;
+      setAiSuggestions(data?.suggestions || []);
+    } catch (error: any) {
+      if (error?.message?.includes("402") || error?.message?.includes("429")) {
+        toast.error("AI service temporarily unavailable. Try again later.");
+      }
+    } finally {
+      setAiLoading(false);
+    }
   };
 
   const greeting = () => {
@@ -101,101 +186,566 @@ const CareerDashboard = () => {
     return `${Math.floor(hours / 24)}d ago`;
   };
 
+  const determinePhase = () => {
+    const completion = profile?.completion_percentage || 0;
+    if (completion < 20) return 0;
+    if (completion < 40) return 1;
+    if (completion < 60) return 2;
+    if (completion < 80) return 3;
+    return 4;
+  };
+
+  const currentPhase = determinePhase();
+
   const displayStats = [
     { label: "Goals Done", value: stats.goalsCount, icon: Target, color: "bg-accent/10 text-accent" },
     { label: "Skills", value: stats.skillsCount, icon: TrendingUp, color: "bg-primary/10 text-primary" },
-    { label: "Streak", value: `${stats.streak}d`, icon: Clock, color: "bg-accent/10 text-accent" },
+    { label: "Streak", value: `${stats.streak}d`, icon: Flame, color: "bg-orange-500/10 text-orange-500" },
     { label: "Interests", value: stats.interestsCount, icon: Compass, color: "bg-primary/10 text-primary" },
-    { label: "Badges", value: stats.achievementsCount, icon: Trophy, color: "bg-accent/10 text-accent" },
-    { label: "Journals", value: stats.journalCount, icon: BookOpen, color: "bg-primary/10 text-primary" },
+    { label: "Badges", value: stats.achievementsCount, icon: Trophy, color: "bg-yellow-500/10 text-yellow-500" },
+    { label: "Connections", value: stats.connectionsCount, icon: Users, color: "bg-accent/10 text-accent" },
   ];
 
   return (
     <div className="space-y-8">
+      {/* Welcome Header */}
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-1">
         <h1 className="font-display text-3xl md:text-4xl text-foreground">
           {greeting()}, <em className="text-primary">{profile?.full_name || "Explorer"}</em>
         </h1>
-        <p className="font-body text-muted-foreground">Your career journey awaits.</p>
+        <p className="font-body text-muted-foreground">
+          Welcome back! Here's where you're at — let's keep building.
+        </p>
       </motion.div>
 
+      {/* Notifications Banner */}
       {notifications.length > 0 && (
         <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="bg-accent/10 border border-accent/20 rounded-xl p-4">
           <div className="flex items-center justify-between mb-2">
             <div className="flex items-center gap-2">
               <Bell size={16} className="text-accent" />
-              <span className="font-body text-sm font-semibold text-accent">{notifications.length} new</span>
+              <span className="font-body text-sm font-semibold text-accent">{notifications.length} new notifications</span>
             </div>
             <Link to="/dashboard/notifications" className="font-body text-xs text-accent hover:underline">View all</Link>
           </div>
           <div className="space-y-1">
-            {notifications.slice(0, 3).map(n => (
+            {notifications.slice(0, 2).map(n => (
               <p key={n.id} className="font-body text-xs text-foreground">{n.title}: {n.message}</p>
             ))}
           </div>
         </motion.div>
       )}
 
-      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="bg-card rounded-xl border border-border p-6 shadow-soft">
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="font-display text-xl text-foreground">Your Progress</h2>
-          <span className="font-body text-sm text-accent font-semibold">{profile?.completion_percentage || 0}%</span>
-        </div>
-        <Progress value={profile?.completion_percentage || 0} className="h-2" />
-        <div className="grid grid-cols-3 sm:grid-cols-6 gap-4 mt-6">
-          {displayStats.map(s => (
-            <div key={s.label} className="text-center">
-              <div className={`w-10 h-10 rounded-lg ${s.color} flex items-center justify-center mx-auto mb-1`}>
-                <s.icon size={18} />
-              </div>
-              <p className="font-body text-xs text-muted-foreground">{s.label}</p>
-              <p className="font-display text-lg text-foreground">{loading ? "–" : s.value}</p>
+      {/* Journey Timeline */}
+      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.05 }}>
+        <Card>
+          <CardHeader className="pb-3">
+            <CardTitle className="text-lg flex items-center gap-2">
+              <Map className="h-5 w-5 text-primary" />
+              My Journey Snapshot
+            </CardTitle>
+            <CardDescription>Your current phase in the career development journey</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="flex items-center justify-between gap-2 overflow-x-auto pb-2">
+              {JOURNEY_PHASES.map((phase, i) => {
+                const isActive = i === currentPhase;
+                const isCompleted = i < currentPhase;
+                return (
+                  <div key={phase.id} className="flex flex-col items-center min-w-[80px]">
+                    <div className={`w-12 h-12 rounded-full flex items-center justify-center mb-2 transition-all ${
+                      isActive ? "bg-primary text-primary-foreground ring-4 ring-primary/20" :
+                      isCompleted ? "bg-green-500/20 text-green-500" :
+                      "bg-muted text-muted-foreground"
+                    }`}>
+                      {isCompleted ? <CheckCircle2 size={20} /> : <phase.icon size={20} />}
+                    </div>
+                    <span className={`font-body text-xs text-center ${isActive ? "text-primary font-semibold" : "text-muted-foreground"}`}>
+                      {phase.label}
+                    </span>
+                    {i < JOURNEY_PHASES.length - 1 && (
+                      <div className={`absolute h-0.5 w-8 top-6 left-full ${isCompleted ? "bg-green-500" : "bg-muted"}`} />
+                    )}
+                  </div>
+                );
+              })}
             </div>
-          ))}
-        </div>
+            <p className="font-body text-sm text-muted-foreground mt-4 text-center">
+              You're in the <strong className="text-primary">{JOURNEY_PHASES[currentPhase].label}</strong> phase: {JOURNEY_PHASES[currentPhase].description}
+            </p>
+          </CardContent>
+        </Card>
       </motion.div>
 
-      <div>
-        <h2 className="font-display text-xl text-foreground mb-4">Quick Actions</h2>
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
-          {careerQuickActions.map((action, i) => (
-            <motion.div key={action.path} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 + i * 0.05 }}>
-              <Link to={action.path} className="group flex flex-col items-center p-5 bg-card rounded-xl border border-border hover:border-accent/30 hover:shadow-soft transition-all text-center">
-                <div className={`w-12 h-12 rounded-xl flex items-center justify-center mb-3 ${action.color}`}>
-                  <action.icon size={22} />
+      {/* Progress Overview */}
+      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}>
+        <Card>
+          <CardHeader className="pb-3">
+            <div className="flex items-center justify-between">
+              <CardTitle className="text-lg flex items-center gap-2">
+                <TrendingUp className="h-5 w-5 text-primary" />
+                My Progress
+              </CardTitle>
+              <Badge variant="secondary" className="text-lg px-3">{profile?.completion_percentage || 0}%</Badge>
+            </div>
+          </CardHeader>
+          <CardContent>
+            <Progress value={profile?.completion_percentage || 0} className="h-3 mb-6" />
+            <div className="grid grid-cols-3 sm:grid-cols-6 gap-4">
+              {displayStats.map(s => (
+                <div key={s.label} className="text-center">
+                  <div className={`w-10 h-10 rounded-lg ${s.color} flex items-center justify-center mx-auto mb-1`}>
+                    <s.icon size={18} />
+                  </div>
+                  <p className="font-body text-xs text-muted-foreground">{s.label}</p>
+                  <p className="font-display text-lg text-foreground">{loading ? "–" : s.value}</p>
                 </div>
-                <span className="font-body text-sm text-foreground font-medium">{action.label}</span>
-                <ArrowRight size={14} className="text-muted-foreground mt-2 group-hover:text-accent group-hover:translate-x-1 transition-all" />
-              </Link>
-            </motion.div>
-          ))}
-        </div>
-      </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      </motion.div>
 
-      <div className="bg-card rounded-xl border border-border p-6">
-        <h2 className="font-display text-xl text-foreground mb-4">Recent Activity</h2>
-        {activity.length === 0 ? (
-          <div className="text-center py-8">
-            <Sparkles className="mx-auto text-muted-foreground mb-3" size={32} />
-            <p className="font-body text-muted-foreground">Start exploring to see your activity here!</p>
-            <Link to="/dashboard/curiosity-compass" className="inline-flex items-center gap-2 mt-4 font-body text-sm text-accent font-semibold hover:underline">
-              Get Started <ArrowRight size={14} />
-            </Link>
+      {/* Main Content Tabs */}
+      <Tabs defaultValue="overview" className="space-y-6">
+        <TabsList className="grid grid-cols-4 w-full max-w-md">
+          <TabsTrigger value="overview">Overview</TabsTrigger>
+          <TabsTrigger value="learning">Learning</TabsTrigger>
+          <TabsTrigger value="connections">Network</TabsTrigger>
+          <TabsTrigger value="opportunities">Jobs</TabsTrigger>
+        </TabsList>
+
+        {/* Overview Tab */}
+        <TabsContent value="overview" className="space-y-6">
+          {/* Quick Actions */}
+          <div>
+            <h2 className="font-display text-xl text-foreground mb-4">Quick Actions</h2>
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+              {careerQuickActions.map((action, i) => (
+                <motion.div key={action.path} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 + i * 0.05 }}>
+                  <Link to={action.path} className="group flex flex-col items-center p-5 bg-card rounded-xl border border-border hover:border-primary/30 hover:shadow-soft transition-all text-center h-full">
+                    <div className={`w-12 h-12 rounded-xl flex items-center justify-center mb-3 ${action.color}`}>
+                      <action.icon size={22} />
+                    </div>
+                    <span className="font-body text-sm text-foreground font-medium">{action.label}</span>
+                    <span className="font-body text-xs text-muted-foreground mt-1">{action.desc}</span>
+                  </Link>
+                </motion.div>
+              ))}
+            </div>
           </div>
-        ) : (
-          <div className="space-y-3">
-            {activity.map(item => (
-              <motion.div key={item.id} initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex items-center gap-3 p-3 rounded-lg hover:bg-muted/30 transition-colors">
-                <span className="text-lg">{item.icon}</span>
-                <div className="flex-1 min-w-0">
-                  <p className="font-body text-sm text-foreground truncate">{item.title}</p>
+
+          <div className="grid md:grid-cols-2 gap-6">
+            {/* Tasks & Roadmap Steps */}
+            <Card>
+              <CardHeader className="pb-3">
+                <CardTitle className="text-lg flex items-center gap-2">
+                  <Target className="h-5 w-5 text-primary" />
+                  Tasks & Challenges
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                {roadmapSteps.length === 0 ? (
+                  <div className="text-center py-6">
+                    <Calendar className="mx-auto text-muted-foreground mb-3" size={32} />
+                    <p className="font-body text-sm text-muted-foreground">No active tasks</p>
+                    <Link to="/dashboard/roadmap" className="inline-flex items-center gap-1 mt-2 text-sm text-primary hover:underline">
+                      Create a roadmap <ArrowRight size={14} />
+                    </Link>
+                  </div>
+                ) : (
+                  <div className="space-y-3">
+                    {roadmapSteps.map(step => (
+                      <div key={step.id} className="flex items-center gap-3 p-3 rounded-lg bg-muted/30">
+                        <div className={`w-2 h-2 rounded-full ${step.status === "in_progress" ? "bg-primary" : "bg-muted-foreground"}`} />
+                        <div className="flex-1 min-w-0">
+                          <p className="font-body text-sm text-foreground truncate">{step.title}</p>
+                          <p className="font-body text-xs text-muted-foreground">{step.roadmaps?.title}</p>
+                        </div>
+                        {step.due_date && (
+                          <span className="font-body text-xs text-muted-foreground">
+                            {new Date(step.due_date).toLocaleDateString()}
+                          </span>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+
+            {/* AI Suggestions */}
+            <Card>
+              <CardHeader className="pb-3">
+                <div className="flex items-center justify-between">
+                  <CardTitle className="text-lg flex items-center gap-2">
+                    <Lightbulb className="h-5 w-5 text-yellow-500" />
+                    AI Recommendations
+                  </CardTitle>
+                  <Button variant="ghost" size="sm" onClick={fetchAISuggestions} disabled={aiLoading}>
+                    <Sparkles size={14} className={aiLoading ? "animate-spin" : ""} />
+                  </Button>
                 </div>
-                <span className="font-body text-xs text-muted-foreground whitespace-nowrap">{timeAgo(item.timestamp)}</span>
-              </motion.div>
-            ))}
+              </CardHeader>
+              <CardContent>
+                {aiSuggestions.length === 0 ? (
+                  <div className="text-center py-6">
+                    <Bot className="mx-auto text-muted-foreground mb-3" size={32} />
+                    <p className="font-body text-sm text-muted-foreground">Click the sparkle to get AI suggestions</p>
+                    <p className="font-body text-xs text-muted-foreground mt-1">Based on your activity and goals</p>
+                  </div>
+                ) : (
+                  <div className="space-y-3">
+                    {aiSuggestions.map((suggestion, i) => (
+                      <div key={i} className="flex items-start gap-3 p-3 rounded-lg bg-yellow-500/5 border border-yellow-500/10">
+                        <Zap className="text-yellow-500 mt-0.5" size={16} />
+                        <div>
+                          <p className="font-body text-sm text-foreground">{suggestion.title || suggestion}</p>
+                          {suggestion.action && (
+                            <p className="font-body text-xs text-muted-foreground mt-1">{suggestion.action}</p>
+                          )}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </CardContent>
+            </Card>
           </div>
-        )}
-      </div>
+
+          {/* Skills Progress */}
+          <Card>
+            <CardHeader className="pb-3">
+              <div className="flex items-center justify-between">
+                <CardTitle className="text-lg flex items-center gap-2">
+                  <TrendingUp className="h-5 w-5 text-primary" />
+                  Skill Tracker
+                </CardTitle>
+                <Link to="/dashboard/living-resume" className="text-sm text-primary hover:underline flex items-center gap-1">
+                  View all <ChevronRight size={14} />
+                </Link>
+              </div>
+            </CardHeader>
+            <CardContent>
+              {skills.length === 0 ? (
+                <div className="text-center py-6">
+                  <GraduationCap className="mx-auto text-muted-foreground mb-3" size={32} />
+                  <p className="font-body text-sm text-muted-foreground">Add skills to track your growth</p>
+                  <Link to="/dashboard/living-resume" className="inline-flex items-center gap-1 mt-2 text-sm text-primary hover:underline">
+                    Add skills <ArrowRight size={14} />
+                  </Link>
+                </div>
+              ) : (
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                  {skills.map(skill => (
+                    <div key={skill.id} className="p-3 rounded-lg border border-border">
+                      <div className="flex items-center justify-between mb-2">
+                        <span className="font-body text-sm font-medium truncate">{skill.name}</span>
+                        <Badge variant="secondary" className="text-xs">{skill.proficiency || 0}%</Badge>
+                      </div>
+                      <Progress value={skill.proficiency || 0} className="h-1.5" />
+                    </div>
+                  ))}
+                </div>
+              )}
+            </CardContent>
+          </Card>
+
+          {/* Recent Activity */}
+          <Card>
+            <CardHeader className="pb-3">
+              <CardTitle className="text-lg flex items-center gap-2">
+                <Clock className="h-5 w-5 text-primary" />
+                Recent Activity
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              {activity.length === 0 ? (
+                <div className="text-center py-8">
+                  <Sparkles className="mx-auto text-muted-foreground mb-3" size={32} />
+                  <p className="font-body text-muted-foreground">Start exploring to see your activity here!</p>
+                  <Link to="/dashboard/curiosity-compass" className="inline-flex items-center gap-2 mt-4 font-body text-sm text-primary font-semibold hover:underline">
+                    Get Started <ArrowRight size={14} />
+                  </Link>
+                </div>
+              ) : (
+                <div className="space-y-2">
+                  {activity.map(item => (
+                    <motion.div key={item.id} initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex items-center gap-3 p-3 rounded-lg hover:bg-muted/30 transition-colors">
+                      <span className="text-lg">{item.icon}</span>
+                      <div className="flex-1 min-w-0">
+                        <p className="font-body text-sm text-foreground truncate">{item.title}</p>
+                      </div>
+                      <span className="font-body text-xs text-muted-foreground whitespace-nowrap">{timeAgo(item.timestamp)}</span>
+                    </motion.div>
+                  ))}
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        {/* Learning Tab */}
+        <TabsContent value="learning" className="space-y-6">
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <BookOpen className="h-5 w-5 text-primary" />
+                Learning Hub
+              </CardTitle>
+              <CardDescription>Curated courses and content matched to your interests</CardDescription>
+            </CardHeader>
+            <CardContent>
+              {resources.length === 0 ? (
+                <div className="text-center py-8">
+                  <BookOpen className="mx-auto text-muted-foreground mb-3" size={40} />
+                  <p className="font-body text-muted-foreground">No resources available yet</p>
+                  <Link to="/dashboard/content-library" className="inline-flex items-center gap-2 mt-4 text-sm text-primary hover:underline">
+                    Browse Content Library <ArrowRight size={14} />
+                  </Link>
+                </div>
+              ) : (
+                <div className="grid md:grid-cols-2 gap-4">
+                  {resources.map(resource => (
+                    <div key={resource.id} className="p-4 rounded-lg border border-border hover:border-primary/30 transition-colors">
+                      <div className="flex items-start gap-3">
+                        <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
+                          {resource.resource_type === "video" ? <Play size={18} className="text-primary" /> : <BookOpen size={18} className="text-primary" />}
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <h4 className="font-body text-sm font-medium truncate">{resource.title}</h4>
+                          <p className="font-body text-xs text-muted-foreground line-clamp-2 mt-1">{resource.description}</p>
+                          <div className="flex items-center gap-2 mt-2">
+                            <Badge variant="outline" className="text-xs">{resource.category || "General"}</Badge>
+                            <Badge variant="secondary" className="text-xs">{resource.difficulty_level}</Badge>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </CardContent>
+          </Card>
+
+          <div className="grid md:grid-cols-2 gap-6">
+            <Card>
+              <CardHeader className="pb-3">
+                <CardTitle className="text-lg">Goal Tracker</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  <div className="p-4 rounded-lg bg-muted/30">
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="font-body text-sm font-medium">Short-term Goals</span>
+                      <Link to="/dashboard/settings" className="text-xs text-primary hover:underline">Edit</Link>
+                    </div>
+                    <p className="font-body text-sm text-muted-foreground">
+                      {profile?.short_term_goals || "Set your short-term career goals in settings"}
+                    </p>
+                  </div>
+                  <div className="p-4 rounded-lg bg-muted/30">
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="font-body text-sm font-medium">Long-term Vision</span>
+                      <Link to="/dashboard/settings" className="text-xs text-primary hover:underline">Edit</Link>
+                    </div>
+                    <p className="font-body text-sm text-muted-foreground">
+                      {profile?.long_term_goals || "Define your long-term career vision"}
+                    </p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader className="pb-3">
+                <CardTitle className="text-lg flex items-center gap-2">
+                  <Heart className="h-5 w-5 text-pink-500" />
+                  Reflection & Mood
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="text-center py-4">
+                  <p className="font-body text-sm text-muted-foreground mb-4">Track your mood and reflect on your journey</p>
+                  <div className="flex justify-center gap-2">
+                    <Link to="/dashboard/journal">
+                      <Button variant="outline" size="sm">
+                        <BookOpen size={14} className="mr-2" />
+                        Journal
+                      </Button>
+                    </Link>
+                    <Link to="/dashboard/career-therapist">
+                      <Button variant="outline" size="sm">
+                        <Heart size={14} className="mr-2" />
+                        Therapist
+                      </Button>
+                    </Link>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </TabsContent>
+
+        {/* Network Tab */}
+        <TabsContent value="connections" className="space-y-6">
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Users className="h-5 w-5 text-primary" />
+                Mentor Suggestions
+              </CardTitle>
+              <CardDescription>Connect with mentors aligned to your career goals</CardDescription>
+            </CardHeader>
+            <CardContent>
+              {mentors.length === 0 ? (
+                <div className="text-center py-8">
+                  <UserPlus className="mx-auto text-muted-foreground mb-3" size={40} />
+                  <p className="font-body text-muted-foreground">Mentor matching coming soon</p>
+                  <Link to="/dashboard/mentor-matchmaking" className="inline-flex items-center gap-2 mt-4 text-sm text-primary hover:underline">
+                    Explore Mentors <ArrowRight size={14} />
+                  </Link>
+                </div>
+              ) : (
+                <div className="grid md:grid-cols-2 gap-4">
+                  {mentors.map(mentor => (
+                    <div key={mentor.id} className="flex items-center gap-3 p-4 rounded-lg border border-border hover:border-primary/30 transition-colors">
+                      <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
+                        {mentor.avatar_url ? (
+                          <img src={mentor.avatar_url} alt="" className="w-full h-full rounded-full object-cover" />
+                        ) : (
+                          <span className="text-lg">{mentor.full_name?.[0] || "?"}</span>
+                        )}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <h4 className="font-body text-sm font-medium truncate">{mentor.full_name || "Anonymous"}</h4>
+                        <p className="font-body text-xs text-muted-foreground">{mentor.industry || "Various industries"}</p>
+                      </div>
+                      <Button variant="ghost" size="sm">
+                        <UserPlus size={14} />
+                      </Button>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </CardContent>
+          </Card>
+
+          <div className="grid md:grid-cols-2 gap-6">
+            <Card>
+              <CardHeader className="pb-3">
+                <CardTitle className="text-lg flex items-center gap-2">
+                  <MessageSquare className="h-5 w-5 text-primary" />
+                  Peer Circles
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="font-body text-sm text-muted-foreground mb-4">Join peer groups for collaboration and support</p>
+                <Link to="/dashboard/peer-circles">
+                  <Button variant="outline" className="w-full">
+                    <Users size={14} className="mr-2" />
+                    Browse Peer Circles
+                  </Button>
+                </Link>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader className="pb-3">
+                <CardTitle className="text-lg flex items-center gap-2">
+                  <Star className="h-5 w-5 text-yellow-500" />
+                  Community Highlights
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-3">
+                  <div className="flex items-center gap-2 p-2 rounded bg-yellow-500/5">
+                    <Trophy size={14} className="text-yellow-500" />
+                    <span className="font-body text-xs">New achievements this week: {stats.achievementsCount}</span>
+                  </div>
+                  <div className="flex items-center gap-2 p-2 rounded bg-primary/5">
+                    <Users size={14} className="text-primary" />
+                    <span className="font-body text-xs">Active connections: {stats.connectionsCount}</span>
+                  </div>
+                </div>
+                <Link to="/dashboard/connections" className="inline-flex items-center gap-1 mt-4 text-sm text-primary hover:underline">
+                  View all connections <ArrowRight size={14} />
+                </Link>
+              </CardContent>
+            </Card>
+          </div>
+        </TabsContent>
+
+        {/* Jobs Tab */}
+        <TabsContent value="opportunities" className="space-y-6">
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Briefcase className="h-5 w-5 text-primary" />
+                Job Match Highlights
+              </CardTitle>
+              <CardDescription>Best-fit roles based on your skills and interests</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="text-center py-8">
+                <Building2 className="mx-auto text-muted-foreground mb-4" size={48} />
+                <h3 className="font-display text-lg text-foreground mb-2">Job Matching</h3>
+                <p className="font-body text-sm text-muted-foreground mb-4 max-w-md mx-auto">
+                  Complete your profile and add skills to unlock AI-powered job recommendations
+                </p>
+                <Link to="/dashboard/job-matching">
+                  <Button>
+                    <Briefcase size={14} className="mr-2" />
+                    Explore Job Matching
+                  </Button>
+                </Link>
+              </div>
+            </CardContent>
+          </Card>
+
+          <div className="grid md:grid-cols-2 gap-6">
+            <Card>
+              <CardHeader className="pb-3">
+                <CardTitle className="text-lg">Internship Ready</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between">
+                    <span className="font-body text-sm">Profile Completion</span>
+                    <span className="font-body text-sm font-medium">{profile?.completion_percentage || 0}%</span>
+                  </div>
+                  <Progress value={profile?.completion_percentage || 0} className="h-2" />
+                  <p className="font-body text-xs text-muted-foreground">
+                    {(profile?.completion_percentage || 0) >= 70
+                      ? "You're ready to apply for internships!"
+                      : "Complete your profile to unlock more opportunities"}
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader className="pb-3">
+                <CardTitle className="text-lg flex items-center gap-2">
+                  <FileText className="h-5 w-5 text-primary" />
+                  Resume Builder
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="font-body text-sm text-muted-foreground mb-4">
+                  Your Living Resume tracks accomplishments automatically
+                </p>
+                <Link to="/dashboard/living-resume">
+                  <Button variant="outline" className="w-full">
+                    <FileText size={14} className="mr-2" />
+                    View Living Resume
+                  </Button>
+                </Link>
+              </CardContent>
+            </Card>
+          </div>
+        </TabsContent>
+      </Tabs>
     </div>
   );
 };
