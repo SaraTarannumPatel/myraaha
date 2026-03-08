@@ -998,7 +998,7 @@ const CuriosityCompass = () => {
                             {domain.reasons?.length > 0 && (
                               <div className="space-y-1 mb-3">
                                 {domain.reasons.slice(0, 3).map((reason: string, j: number) => (
-                                  <p key={j} className="font-body text-xs text-muted-foreground flex items-center gap-2"><Check size={12} className="text-green-500" /> {reason}</p>
+                                  <p key={j} className="font-body text-xs text-muted-foreground flex items-center gap-2"><Check size={12} className="text-success" /> {reason}</p>
                                 ))}
                               </div>
                             )}
