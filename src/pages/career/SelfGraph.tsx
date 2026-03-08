@@ -803,7 +803,7 @@ const SelfGraph = () => {
                   {energyZones.slice(0, 10).map(zone => (
                     <div key={zone.id} className="flex items-center justify-between p-2 rounded-lg bg-muted/30">
                       <div className="flex items-center gap-2">
-                        <div className={`w-3 h-3 rounded-full ${zone.energy_level >= 7 ? "bg-green-500" : zone.energy_level >= 4 ? "bg-yellow-500" : "bg-red-500"}`} />
+                        <div className={`w-3 h-3 rounded-full ${zone.energy_level >= 7 ? "bg-success" : zone.energy_level >= 4 ? "bg-warning" : "bg-destructive"}`} />
                         <span className="font-body text-sm text-foreground">{zone.domain}</span>
                         {zone.mood_after && <span className="font-body text-xs text-muted-foreground">({zone.mood_after})</span>}
                       </div>
