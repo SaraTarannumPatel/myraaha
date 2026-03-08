@@ -83,7 +83,7 @@ const ConsentStep = () => {
     });
 
     await createWelcomeNotifications();
-    localStorage.removeItem("shuttlex_initial_path");
+    localStorage.removeItem("myraaha_initial_path");
     navigate("/dashboard");
   };
 
