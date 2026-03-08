@@ -848,29 +848,7 @@ const CareerDashboard = () => {
               </CardContent>
             </Card>
 
-            <Card>
-              <CardHeader className="pb-3">
-                <CardTitle className="text-lg flex items-center gap-2">
-                  <Star className="h-5 w-5 text-yellow-500" />
-                  Community Highlights
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-3">
-                  <div className="flex items-center gap-2 p-2 rounded bg-yellow-500/5">
-                    <Trophy size={14} className="text-yellow-500" />
-                    <span className="font-body text-xs">New achievements this week: {stats.achievementsCount}</span>
-                  </div>
-                  <div className="flex items-center gap-2 p-2 rounded bg-primary/5">
-                    <Users size={14} className="text-primary" />
-                    <span className="font-body text-xs">Active connections: {stats.connectionsCount}</span>
-                  </div>
-                </div>
-                <Link to="/dashboard/connections" className="inline-flex items-center gap-1 mt-4 text-sm text-primary hover:underline">
-                  View all connections <ArrowRight size={14} />
-                </Link>
-              </CardContent>
-            </Card>
+            <CommunityFeedPreview />
           </div>
         </TabsContent>
 
