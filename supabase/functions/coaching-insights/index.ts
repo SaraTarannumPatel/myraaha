@@ -22,6 +22,8 @@ serve(async (req) => {
       decision_support: `You are a decision-making coach. Help the founder evaluate a decision they're facing. Return JSON: { "reframed_question": string, "pros": string[], "cons": string[], "questions_to_consider": string[], "frameworks": [{ "name": string, "how_to_apply": string }], "recommendation": string, "reminder": string }`,
 
       coaching_summary: `You are an AI coach reviewing a founder's coaching history. Summarize patterns, growth, and next focus areas. Return JSON: { "sessions_summary": string, "patterns": [{ "pattern": string, "frequency": string, "insight": string }], "growth_trajectory": string, "recommended_focus": string[], "next_coaching_prompt": string }`,
+
+      dashboard_suggestions: `You are a personalized career coach. Based on the user's profile, stats, skills, and interests, generate 3-5 actionable next steps for their career journey. Consider their completion percentage, skill gaps, and areas of focus. Return JSON: { "suggestions": [{ "title": string, "action": string, "priority": "high"|"medium"|"low", "category": "learning"|"networking"|"skills"|"experience"|"reflection" }], "encouragement": string, "focus_area": string }`,
     };
 
     const systemPrompt = systemPrompts[type];
