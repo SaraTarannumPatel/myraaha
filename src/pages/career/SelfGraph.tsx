@@ -1290,7 +1290,7 @@ const SelfGraph = () => {
                           {(digest.domain_shifts as any)?.growing_interest?.length > 0 && (
                             <p className="font-body text-xs text-muted-foreground">
                               Growing: {(digest.domain_shifts as any).growing_interest.map((d: string, i: number) => (
-                                <span key={i} className="text-green-600 mr-1">{d}</span>
+                                <span key={i} className="text-success mr-1">{d}</span>
                               ))}
                             </p>
                           )}
