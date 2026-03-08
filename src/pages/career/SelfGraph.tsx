@@ -1396,7 +1396,7 @@ const SelfGraph = () => {
                           {fit.gaps_to_fill?.length > 0 && (
                             <div className="flex flex-wrap gap-1">
                               {fit.gaps_to_fill.map((g: string, j: number) => (
-                                <span key={j} className="px-1.5 py-0.5 rounded bg-orange-500/10 text-orange-600 font-body text-xs">Gap: {g}</span>
+                                <span key={j} className="px-1.5 py-0.5 rounded bg-warmth/10 text-warmth font-body text-xs">Gap: {g}</span>
                               ))}
                             </div>
                           )}
