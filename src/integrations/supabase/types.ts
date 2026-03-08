@@ -561,6 +561,57 @@ export type Database = {
         }
         Relationships: []
       }
+      path_selections: {
+        Row: {
+          ai_analysis: Json | null
+          confidence_score: number | null
+          created_at: string
+          description: string | null
+          id: string
+          path_type: string
+          roadmap: Json | null
+          signals: Json | null
+          skills_matched: string[] | null
+          skills_required: string[] | null
+          status: string | null
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          ai_analysis?: Json | null
+          confidence_score?: number | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          path_type: string
+          roadmap?: Json | null
+          signals?: Json | null
+          skills_matched?: string[] | null
+          skills_required?: string[] | null
+          status?: string | null
+          title: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          ai_analysis?: Json | null
+          confidence_score?: number | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          path_type?: string
+          roadmap?: Json | null
+          signals?: Json | null
+          skills_matched?: string[] | null
+          skills_required?: string[] | null
+          status?: string | null
+          title?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       problem_observations: {
         Row: {
           ai_analysis: Json | null
