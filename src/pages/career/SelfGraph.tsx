@@ -922,7 +922,7 @@ const SelfGraph = () => {
                         <div className="mt-2">
                           <span className="font-body text-xs text-muted-foreground">Strengths: </span>
                           {getLatestEvaluation().ai_feedback.strengths_shown.map((s: string, i: number) => (
-                            <span key={i} className="px-2 py-0.5 rounded bg-green-500/10 text-green-600 font-body text-xs mr-1">{s}</span>
+                            <span key={i} className="px-2 py-0.5 rounded bg-success/10 text-success font-body text-xs mr-1">{s}</span>
                           ))}
                         </div>
                       )}
