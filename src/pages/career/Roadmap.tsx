@@ -469,7 +469,7 @@ const Roadmap = () => {
                                 {step.priority}
                               </Badge>
                               <div className="flex gap-1 opacity-0 group-hover:opacity-100">
-                                {["not_started", "in_progress", "completed", "skipped"].map(s => (
+                                {(["not_started", "in_progress", "completed", "skipped"] as const).map(s => (
                                   <button
                                     key={s}
                                     onClick={() => updateStepStatus(step.id, s)}
