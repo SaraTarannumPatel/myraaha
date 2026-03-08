@@ -69,7 +69,7 @@ const Roadmap = () => {
     fetchSteps(activeRoadmap.id);
   };
 
-  const updateStepStatus = async (stepId: string, status: string) => {
+  const updateStepStatus = async (stepId: string, status: "not_started" | "in_progress" | "completed" | "skipped") => {
     await supabase.from("roadmap_steps").update({
       status,
       completed_at: status === "completed" ? new Date().toISOString() : null,

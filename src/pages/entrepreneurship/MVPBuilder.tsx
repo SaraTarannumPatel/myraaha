@@ -53,7 +53,7 @@ const MVPBuilder = () => {
     toast.success("MVP project created! 🔨");
   };
 
-  const updateStatus = async (id: string, status: string) => {
+  const updateStatus = async (id: string, status: "idea" | "planning" | "building" | "launched" | "archived") => {
     await supabase.from("projects").update({ status }).eq("id", id);
     fetchProjects();
     toast.success(`Status updated to ${status}`);

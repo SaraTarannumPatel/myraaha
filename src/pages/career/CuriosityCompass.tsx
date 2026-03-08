@@ -145,7 +145,7 @@ const CuriosityCompass = () => {
                 <span className="font-body text-xs text-muted-foreground">({(items as any[]).length})</span>
               </h3>
               <div className="space-y-2">
-                {items.map((interest: any) => (
+                {(items as any[]).map((interest: any) => (
                   <div key={interest.id} className="flex items-center gap-3 group">
                     <div className="flex-1">
                       <p className="font-body text-sm text-foreground">{interest.name}</p>
