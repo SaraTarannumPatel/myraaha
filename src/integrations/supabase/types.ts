@@ -376,6 +376,113 @@ export type Database = {
         }
         Relationships: []
       }
+      lab_milestones: {
+        Row: {
+          category: string | null
+          completed_at: string | null
+          created_at: string
+          description: string | null
+          due_date: string | null
+          id: string
+          order_index: number | null
+          plan_id: string
+          status: string
+          title: string
+          user_id: string
+        }
+        Insert: {
+          category?: string | null
+          completed_at?: string | null
+          created_at?: string
+          description?: string | null
+          due_date?: string | null
+          id?: string
+          order_index?: number | null
+          plan_id: string
+          status?: string
+          title: string
+          user_id: string
+        }
+        Update: {
+          category?: string | null
+          completed_at?: string | null
+          created_at?: string
+          description?: string | null
+          due_date?: string | null
+          id?: string
+          order_index?: number | null
+          plan_id?: string
+          status?: string
+          title?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "lab_milestones_plan_id_fkey"
+            columns: ["plan_id"]
+            isOneToOne: false
+            referencedRelation: "lab_plans"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      lab_plans: {
+        Row: {
+          ai_feedback: Json | null
+          created_at: string
+          customer_segments: Json | null
+          financial_plan: Json | null
+          go_to_market: string | null
+          id: string
+          mission: string | null
+          pitch_notes: string | null
+          problem_statement: string | null
+          revenue_model: string | null
+          status: string
+          title: string
+          updated_at: string
+          user_id: string
+          value_proposition: string | null
+          vision: string | null
+        }
+        Insert: {
+          ai_feedback?: Json | null
+          created_at?: string
+          customer_segments?: Json | null
+          financial_plan?: Json | null
+          go_to_market?: string | null
+          id?: string
+          mission?: string | null
+          pitch_notes?: string | null
+          problem_statement?: string | null
+          revenue_model?: string | null
+          status?: string
+          title: string
+          updated_at?: string
+          user_id: string
+          value_proposition?: string | null
+          vision?: string | null
+        }
+        Update: {
+          ai_feedback?: Json | null
+          created_at?: string
+          customer_segments?: Json | null
+          financial_plan?: Json | null
+          go_to_market?: string | null
+          id?: string
+          mission?: string | null
+          pitch_notes?: string | null
+          problem_statement?: string | null
+          revenue_model?: string | null
+          status?: string
+          title?: string
+          updated_at?: string
+          user_id?: string
+          value_proposition?: string | null
+          vision?: string | null
+        }
+        Relationships: []
+      }
       learning_capsules: {
         Row: {
           category: string
@@ -1333,6 +1440,68 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      validation_sprints: {
+        Row: {
+          actual_responses: number | null
+          completed_at: string | null
+          created_at: string
+          findings: string | null
+          hypothesis: string | null
+          id: string
+          method: string | null
+          plan_id: string
+          sprint_duration_days: number | null
+          started_at: string | null
+          status: string
+          target_responses: number | null
+          title: string
+          user_id: string
+          validated: boolean | null
+        }
+        Insert: {
+          actual_responses?: number | null
+          completed_at?: string | null
+          created_at?: string
+          findings?: string | null
+          hypothesis?: string | null
+          id?: string
+          method?: string | null
+          plan_id: string
+          sprint_duration_days?: number | null
+          started_at?: string | null
+          status?: string
+          target_responses?: number | null
+          title: string
+          user_id: string
+          validated?: boolean | null
+        }
+        Update: {
+          actual_responses?: number | null
+          completed_at?: string | null
+          created_at?: string
+          findings?: string | null
+          hypothesis?: string | null
+          id?: string
+          method?: string | null
+          plan_id?: string
+          sprint_duration_days?: number | null
+          started_at?: string | null
+          status?: string
+          target_responses?: number | null
+          title?: string
+          user_id?: string
+          validated?: boolean | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "validation_sprints_plan_id_fkey"
+            columns: ["plan_id"]
+            isOneToOne: false
+            referencedRelation: "lab_plans"
+            referencedColumns: ["id"]
+          },
+        ]
       }
     }
     Views: {
