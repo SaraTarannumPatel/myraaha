@@ -443,10 +443,10 @@ const EntrepreneurshipDashboard = () => {
           <div className="bg-card rounded-xl border border-border p-5 space-y-4">
             <h3 className="font-display text-sm text-foreground">At a Glance</h3>
             {[
-              { label: "Journal Streak", value: `${stats.streak}d`, icon: Clock, color: "text-accent-foreground" },
+              { label: "Journal Streak", value: `${stats.streak}d`, icon: Clock, color: "text-terracotta" },
               { label: "Achievements", value: stats.achievementsCount, icon: Trophy, color: "text-accent-foreground" },
-              { label: "Connections", value: stats.connectionsCount, icon: Users, color: "text-primary" },
-              { label: "Reflections", value: stats.journalCount, icon: BookOpen, color: "text-primary" },
+              { label: "Connections", value: stats.connectionsCount, icon: Users, color: "text-blue" },
+              { label: "Reflections", value: stats.journalCount, icon: BookOpen, color: "text-indigo" },
             ].map(s => (
               <div key={s.label} className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
