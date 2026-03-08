@@ -206,12 +206,12 @@ const CareerDashboard = () => {
   const currentPhase = determinePhase();
 
   const displayStats = [
-    { label: "Goals Done", value: stats.goalsCount, icon: Target, color: "bg-accent/10 text-accent" },
-    { label: "Skills", value: stats.skillsCount, icon: TrendingUp, color: "bg-primary/10 text-primary" },
-    { label: "Streak", value: `${stats.streak}d`, icon: Flame, color: "bg-orange-500/10 text-orange-500" },
+    { label: "Goals Done", value: stats.goalsCount, icon: Target, color: "bg-maroon/10 text-maroon" },
+    { label: "Skills", value: stats.skillsCount, icon: TrendingUp, color: "bg-blue/10 text-blue" },
+    { label: "Streak", value: `${stats.streak}d`, icon: Flame, color: "bg-terracotta/10 text-terracotta" },
     { label: "Interests", value: stats.interestsCount, icon: Compass, color: "bg-primary/10 text-primary" },
-    { label: "Badges", value: stats.achievementsCount, icon: Trophy, color: "bg-yellow-500/10 text-yellow-500" },
-    { label: "Connections", value: stats.connectionsCount, icon: Users, color: "bg-accent/10 text-accent" },
+    { label: "Badges", value: stats.achievementsCount, icon: Trophy, color: "bg-accent/20 text-accent-foreground" },
+    { label: "Connections", value: stats.connectionsCount, icon: Users, color: "bg-indigo/10 text-indigo" },
   ];
 
   return (

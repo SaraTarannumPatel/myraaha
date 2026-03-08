@@ -84,18 +84,18 @@ const moodOptions = [
 ];
 
 const entrepreneurModules = [
-  { label: "Startup Sparks", icon: Lightbulb, path: "/dashboard/startup-sparks", desc: "Capture & validate ideas", color: "bg-accent/10 text-accent-foreground" },
-  { label: "Mindset Builder", icon: Zap, path: "/dashboard/mindset-builder", desc: "Build resilience", color: "bg-primary/10 text-primary" },
-  { label: "MVP Builder", icon: Wrench, path: "/dashboard/mvp-builder", desc: "Build prototypes", color: "bg-accent/10 text-accent-foreground" },
-  { label: "Path Selector", icon: Navigation, path: "/dashboard/path-selector", desc: "Choose your direction", color: "bg-primary/10 text-primary" },
-  { label: "Startup Lab", icon: Rocket, path: "/dashboard/startup-lab", desc: "Structured learning", color: "bg-accent/10 text-accent-foreground" },
-  { label: "AI Coach", icon: Bot, path: "/dashboard/ai-coach", desc: "Get personalized guidance", color: "bg-primary/10 text-primary" },
-  { label: "Showcase", icon: Presentation, path: "/dashboard/startup-showcase", desc: "Share your work", color: "bg-accent/10 text-accent-foreground" },
+  { label: "Startup Sparks", icon: Lightbulb, path: "/dashboard/startup-sparks", desc: "Capture & validate ideas", color: "bg-accent/20 text-accent-foreground" },
+  { label: "Mindset Builder", icon: Zap, path: "/dashboard/mindset-builder", desc: "Build resilience", color: "bg-terracotta/10 text-terracotta" },
+  { label: "MVP Builder", icon: Wrench, path: "/dashboard/mvp-builder", desc: "Build prototypes", color: "bg-maroon/10 text-maroon" },
+  { label: "Path Selector", icon: Navigation, path: "/dashboard/path-selector", desc: "Choose your direction", color: "bg-blue/10 text-blue" },
+  { label: "Startup Lab", icon: Rocket, path: "/dashboard/startup-lab", desc: "Structured learning", color: "bg-terracotta/10 text-terracotta" },
+  { label: "AI Coach", icon: Bot, path: "/dashboard/ai-coach", desc: "Get personalized guidance", color: "bg-indigo/10 text-indigo" },
+  { label: "Showcase", icon: Presentation, path: "/dashboard/startup-showcase", desc: "Share your work", color: "bg-indigo/10 text-indigo" },
   { label: "Founder Profile", icon: Building2, path: "/dashboard/founder-profile", desc: "Build your identity", color: "bg-primary/10 text-primary" },
-  { label: "Startup Profiling", icon: BarChart3, path: "/dashboard/startup-profiling", desc: "Track startup metrics", color: "bg-accent/10 text-accent-foreground" },
+  { label: "Startup Profiling", icon: BarChart3, path: "/dashboard/startup-profiling", desc: "Track startup metrics", color: "bg-blue/10 text-blue" },
   { label: "Communities", icon: Globe, path: "/dashboard/startup-communities", desc: "Connect with peers", color: "bg-primary/10 text-primary" },
-  { label: "Learning Library", icon: GraduationCap, path: "/dashboard/founders-learning-library", desc: "Curated resources", color: "bg-accent/10 text-accent-foreground" },
-  { label: "Support", icon: LifeBuoy, path: "/dashboard/startup-support", desc: "Get help anytime", color: "bg-primary/10 text-primary" },
+  { label: "Learning Library", icon: GraduationCap, path: "/dashboard/founders-learning-library", desc: "Curated resources", color: "bg-accent/20 text-accent-foreground" },
+  { label: "Support", icon: LifeBuoy, path: "/dashboard/startup-support", desc: "Get help anytime", color: "bg-maroon/10 text-maroon" },
 ];
 
 const modulePathMap: Record<string, string> = {
