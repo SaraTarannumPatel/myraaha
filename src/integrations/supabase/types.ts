@@ -163,6 +163,57 @@ export type Database = {
         }
         Relationships: []
       }
+      career_paths: {
+        Row: {
+          created_at: string | null
+          day_to_day: string | null
+          demand_level: string | null
+          description: string | null
+          difficulty: string | null
+          domain: string
+          growth_trajectory: string | null
+          icon_emoji: string | null
+          id: string
+          industry_trends: string | null
+          related_skills: string[] | null
+          salary_range: string | null
+          title: string
+          tools_certifications: string[] | null
+        }
+        Insert: {
+          created_at?: string | null
+          day_to_day?: string | null
+          demand_level?: string | null
+          description?: string | null
+          difficulty?: string | null
+          domain?: string
+          growth_trajectory?: string | null
+          icon_emoji?: string | null
+          id?: string
+          industry_trends?: string | null
+          related_skills?: string[] | null
+          salary_range?: string | null
+          title: string
+          tools_certifications?: string[] | null
+        }
+        Update: {
+          created_at?: string | null
+          day_to_day?: string | null
+          demand_level?: string | null
+          description?: string | null
+          difficulty?: string | null
+          domain?: string
+          growth_trajectory?: string | null
+          icon_emoji?: string | null
+          id?: string
+          industry_trends?: string | null
+          related_skills?: string[] | null
+          salary_range?: string | null
+          title?: string
+          tools_certifications?: string[] | null
+        }
+        Relationships: []
+      }
       challenge_enrollments: {
         Row: {
           challenge_id: string
@@ -499,6 +550,60 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      company_challenges: {
+        Row: {
+          company_name: string
+          compensation: string | null
+          created_at: string | null
+          current_applicants: number | null
+          deadline: string | null
+          deliverables: string[] | null
+          description: string | null
+          domain: string | null
+          duration: string | null
+          id: string
+          max_applicants: number | null
+          problem_statement: string | null
+          required_skills: string[] | null
+          status: string | null
+          title: string
+        }
+        Insert: {
+          company_name: string
+          compensation?: string | null
+          created_at?: string | null
+          current_applicants?: number | null
+          deadline?: string | null
+          deliverables?: string[] | null
+          description?: string | null
+          domain?: string | null
+          duration?: string | null
+          id?: string
+          max_applicants?: number | null
+          problem_statement?: string | null
+          required_skills?: string[] | null
+          status?: string | null
+          title: string
+        }
+        Update: {
+          company_name?: string
+          compensation?: string | null
+          created_at?: string | null
+          current_applicants?: number | null
+          deadline?: string | null
+          deliverables?: string[] | null
+          description?: string | null
+          domain?: string | null
+          duration?: string | null
+          id?: string
+          max_applicants?: number | null
+          problem_statement?: string | null
+          required_skills?: string[] | null
+          status?: string | null
+          title?: string
+        }
+        Relationships: []
       }
       connections: {
         Row: {
@@ -1453,6 +1558,141 @@ export type Database = {
           strength?: number | null
           updated_at?: string
           user_id?: string
+        }
+        Relationships: []
+      }
+      job_applications: {
+        Row: {
+          application_type: string | null
+          applied_at: string | null
+          company_challenge_id: string | null
+          cover_note: string | null
+          fit_breakdown: Json | null
+          fit_score: number | null
+          id: string
+          notes: string | null
+          opportunity_id: string | null
+          reminder_date: string | null
+          status: string | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          application_type?: string | null
+          applied_at?: string | null
+          company_challenge_id?: string | null
+          cover_note?: string | null
+          fit_breakdown?: Json | null
+          fit_score?: number | null
+          id?: string
+          notes?: string | null
+          opportunity_id?: string | null
+          reminder_date?: string | null
+          status?: string | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          application_type?: string | null
+          applied_at?: string | null
+          company_challenge_id?: string | null
+          cover_note?: string | null
+          fit_breakdown?: Json | null
+          fit_score?: number | null
+          id?: string
+          notes?: string | null
+          opportunity_id?: string | null
+          reminder_date?: string | null
+          status?: string | null
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "job_applications_company_challenge_id_fkey"
+            columns: ["company_challenge_id"]
+            isOneToOne: false
+            referencedRelation: "company_challenges"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "job_applications_opportunity_id_fkey"
+            columns: ["opportunity_id"]
+            isOneToOne: false
+            referencedRelation: "job_opportunities"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      job_opportunities: {
+        Row: {
+          application_deadline: string | null
+          application_url: string | null
+          company_logo_url: string | null
+          company_name: string
+          created_at: string | null
+          description: string | null
+          domain: string | null
+          duration: string | null
+          experience_level: string | null
+          id: string
+          is_active: boolean | null
+          is_featured: boolean | null
+          location: string | null
+          posted_at: string | null
+          preferred_skills: string[] | null
+          required_skills: string[] | null
+          responsibilities: string[] | null
+          role_type: string | null
+          salary_range: string | null
+          title: string
+          work_mode: string | null
+        }
+        Insert: {
+          application_deadline?: string | null
+          application_url?: string | null
+          company_logo_url?: string | null
+          company_name: string
+          created_at?: string | null
+          description?: string | null
+          domain?: string | null
+          duration?: string | null
+          experience_level?: string | null
+          id?: string
+          is_active?: boolean | null
+          is_featured?: boolean | null
+          location?: string | null
+          posted_at?: string | null
+          preferred_skills?: string[] | null
+          required_skills?: string[] | null
+          responsibilities?: string[] | null
+          role_type?: string | null
+          salary_range?: string | null
+          title: string
+          work_mode?: string | null
+        }
+        Update: {
+          application_deadline?: string | null
+          application_url?: string | null
+          company_logo_url?: string | null
+          company_name?: string
+          created_at?: string | null
+          description?: string | null
+          domain?: string | null
+          duration?: string | null
+          experience_level?: string | null
+          id?: string
+          is_active?: boolean | null
+          is_featured?: boolean | null
+          location?: string | null
+          posted_at?: string | null
+          preferred_skills?: string[] | null
+          required_skills?: string[] | null
+          responsibilities?: string[] | null
+          role_type?: string | null
+          salary_range?: string | null
+          title?: string
+          work_mode?: string | null
         }
         Relationships: []
       }
@@ -2612,6 +2852,47 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      opportunity_reflections: {
+        Row: {
+          application_id: string | null
+          content: string
+          created_at: string | null
+          id: string
+          mood: string | null
+          next_steps: string | null
+          skills_to_build: string[] | null
+          user_id: string
+        }
+        Insert: {
+          application_id?: string | null
+          content: string
+          created_at?: string | null
+          id?: string
+          mood?: string | null
+          next_steps?: string | null
+          skills_to_build?: string[] | null
+          user_id: string
+        }
+        Update: {
+          application_id?: string | null
+          content?: string
+          created_at?: string | null
+          id?: string
+          mood?: string | null
+          next_steps?: string | null
+          skills_to_build?: string[] | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "opportunity_reflections_application_id_fkey"
+            columns: ["application_id"]
+            isOneToOne: false
+            referencedRelation: "job_applications"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       path_selections: {
         Row: {
@@ -3859,6 +4140,61 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      saved_opportunities: {
+        Row: {
+          career_path_id: string | null
+          company_challenge_id: string | null
+          created_at: string | null
+          id: string
+          notes: string | null
+          opportunity_id: string | null
+          save_type: string | null
+          user_id: string
+        }
+        Insert: {
+          career_path_id?: string | null
+          company_challenge_id?: string | null
+          created_at?: string | null
+          id?: string
+          notes?: string | null
+          opportunity_id?: string | null
+          save_type?: string | null
+          user_id: string
+        }
+        Update: {
+          career_path_id?: string | null
+          company_challenge_id?: string | null
+          created_at?: string | null
+          id?: string
+          notes?: string | null
+          opportunity_id?: string | null
+          save_type?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "saved_opportunities_career_path_id_fkey"
+            columns: ["career_path_id"]
+            isOneToOne: false
+            referencedRelation: "career_paths"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "saved_opportunities_company_challenge_id_fkey"
+            columns: ["company_challenge_id"]
+            isOneToOne: false
+            referencedRelation: "company_challenges"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "saved_opportunities_opportunity_id_fkey"
+            columns: ["opportunity_id"]
+            isOneToOne: false
+            referencedRelation: "job_opportunities"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       selfgraph_data: {
         Row: {
