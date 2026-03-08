@@ -538,7 +538,7 @@ const ContentLibrary = () => {
                         ))}
                       </div>
                       <div className="flex items-center gap-1 mt-2">
-                        <TrendingUp size={10} className={skill.growth_potential === 'high' || skill.growth_potential === 'very_high' ? 'text-green-500' : 'text-muted-foreground'} />
+                        <TrendingUp size={10} className={skill.growth_potential === 'high' || skill.growth_potential === 'very_high' ? 'text-primary' : 'text-muted-foreground'} />
                         <span className="font-body text-[10px] text-muted-foreground capitalize">{skill.growth_potential} growth</span>
                       </div>
                     </div>
