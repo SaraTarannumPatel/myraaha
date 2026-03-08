@@ -78,7 +78,6 @@ const VirtualCareerCoach = () => {
       const latestCheckin = checkins[0];
       const skills = skillsRes.data || [];
       const energyZones = energyRes.data || [];
-      const roadmapMilestones = roadmapRes.data || [];
       const journalEntries = journalRes.data || [];
 
       const ctx = {
