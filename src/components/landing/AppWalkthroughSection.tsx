@@ -1034,29 +1034,29 @@ const AppWalkthroughSection = () => {
   const ActiveComponent = walkthroughs[active].component;
 
   return (
-    <section ref={ref} className="py-28 md:py-36 bg-muted/20 relative overflow-hidden">
-      <div className="container mx-auto px-6 relative z-10">
-        <div className="text-center mb-16 max-w-2xl mx-auto">
-          <motion.p initial={{ opacity: 0 }} animate={isInView ? { opacity: 1 } : {}} className="font-body text-xs uppercase tracking-[0.25em] text-primary font-semibold mb-3">Inside The App</motion.p>
-          <motion.h2 initial={{ opacity: 0, y: 20 }} animate={isInView ? { opacity: 1, y: 0 } : {}} transition={{ delay: 0.1 }} className="font-display text-4xl md:text-5xl text-foreground leading-tight">
+    <section ref={ref} className="py-20 sm:py-28 md:py-36 bg-background-alt relative overflow-hidden">
+      <div className="container mx-auto px-5 sm:px-6 relative z-10">
+        <div className="text-center mb-12 sm:mb-16 max-w-2xl mx-auto">
+          <motion.p initial={{ opacity: 0 }} animate={isInView ? { opacity: 1 } : {}} className="font-body text-[10px] sm:text-xs uppercase tracking-[0.25em] text-indigo font-semibold mb-3">Inside The App</motion.p>
+          <motion.h2 initial={{ opacity: 0, y: 20 }} animate={isInView ? { opacity: 1, y: 0 } : {}} transition={{ delay: 0.1 }} className="font-display text-3xl sm:text-4xl md:text-5xl text-foreground leading-tight">
             Everything is <em className="text-gradient-warm">personalized, automated</em> & AI-analyzed.
           </motion.h2>
-          <motion.p initial={{ opacity: 0 }} animate={isInView ? { opacity: 1 } : {}} transition={{ delay: 0.2 }} className="font-body text-sm text-muted-foreground mt-4">
+          <motion.p initial={{ opacity: 0 }} animate={isInView ? { opacity: 1 } : {}} transition={{ delay: 0.2 }} className="font-body text-xs sm:text-sm text-muted-foreground mt-3 sm:mt-4">
             Watch each feature's complete journey — from first interaction to AI-powered results. No two users see the same thing.
           </motion.p>
         </div>
 
-        <div className="flex flex-col lg:flex-row gap-8 items-center max-w-6xl mx-auto">
+        <div className="flex flex-col lg:flex-row gap-6 sm:gap-8 items-center max-w-6xl mx-auto">
           <div className="lg:w-[340px] w-full">
-            <div className="grid grid-cols-2 lg:grid-cols-1 gap-2">
+            <div className="grid grid-cols-2 lg:grid-cols-1 gap-1.5 sm:gap-2">
               {walkthroughs.map((w, i) => (
                 <motion.button key={w.id} initial={{ opacity: 0, x: -16 }} animate={isInView ? { opacity: 1, x: 0 } : {}} transition={{ delay: 0.1 + i * 0.04 }}
                   onClick={() => setActive(i)}
-                  className={`flex items-center gap-3 p-3 rounded-xl text-left transition-all duration-300 border ${active === i ? "bg-card border-primary/20 shadow-soft" : "border-transparent hover:bg-muted/50"}`}>
-                  <div className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 transition-colors ${active === i ? "bg-primary/10 text-primary" : "bg-muted text-muted-foreground"}`}><w.icon size={16} /></div>
+                  className={`flex items-center gap-2 sm:gap-3 p-2 sm:p-3 rounded-lg sm:rounded-xl text-left transition-all duration-300 border ${active === i ? "bg-card border-primary/20 shadow-soft" : "border-transparent hover:bg-background-alt"}`}>
+                  <div className={`w-7 sm:w-9 h-7 sm:h-9 rounded-lg sm:rounded-xl flex items-center justify-center shrink-0 transition-colors ${active === i ? "bg-primary/10 text-primary" : "bg-muted text-grey-meta"}`}><w.icon size={14} className="sm:w-4 sm:h-4" /></div>
                   <div className="min-w-0">
-                    <p className={`font-display text-sm truncate ${active === i ? "text-primary" : "text-foreground"}`}>{w.label}</p>
-                    <p className="font-body text-[10px] text-muted-foreground truncate">{w.description}</p>
+                    <p className={`font-display text-[11px] sm:text-sm truncate ${active === i ? "text-primary" : "text-foreground"}`}>{w.label}</p>
+                    <p className="font-body text-[8px] sm:text-[10px] text-grey-meta truncate hidden sm:block">{w.description}</p>
                   </div>
                   {active === i && <motion.div layoutId="walkthrough-indicator" className="w-1 h-6 rounded-full bg-primary ml-auto shrink-0 hidden lg:block" />}
                 </motion.button>
