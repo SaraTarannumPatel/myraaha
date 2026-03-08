@@ -16,17 +16,143 @@ serve(async (req) => {
     let systemPrompt = "";
     let userPrompt = "";
 
-    if (type === "recommend_learning") {
-      systemPrompt = `You are a startup learning advisor. Based on the user's profile, suggest 5 personalized learning recommendations. Return JSON: { "recommendations": [{ "title": string, "type": "capsule"|"playbook"|"resource"|"simulation", "reason": string, "priority": "high"|"medium"|"low" }], "learning_focus": string, "advice": string }`;
-      userPrompt = `User profile: industry=${context.industry}, skills=${JSON.stringify(context.skills)}, interests=${JSON.stringify(context.interests)}, path=${context.selectedPath}, goals=${context.goals}, capsules_completed=${context.capsulesCompleted}, simulations_done=${context.simulationsDone}.`;
-    } else if (type === "skill_mapping") {
-      systemPrompt = `You are a startup skill mapping expert. Map the user's skills to entrepreneurial roles and domains. Return JSON: { "mappings": [{ "skill": string, "applicable_roles": string[], "startup_domains": string[], "growth_potential": "high"|"medium"|"low" }], "gaps": string[], "recommended_learning": string[] }`;
-      userPrompt = `User skills: ${JSON.stringify(context.skills)}. Industry: ${context.industry}. Path: ${context.selectedPath}.`;
-    } else if (type === "quiz") {
-      systemPrompt = `You are a startup educator. Generate a 5-question quiz based on the topic. Return JSON: { "questions": [{ "question": string, "options": string[], "correct_index": number, "explanation": string }] }`;
-      userPrompt = `Topic: "${context.topic}". Difficulty: ${context.difficulty}. Generate a quiz to test understanding.`;
-    } else {
-      throw new Error("Unknown type: " + type);
+    switch (type) {
+      case "recommend_learning":
+        systemPrompt = `You are a personalized learning advisor for career development. Based on the user's profile, interests, and goals, suggest 5 highly relevant learning recommendations. Consider their current skill level, career stage, and exploration patterns.
+
+Return JSON: { 
+  "recommendations": [{ 
+    "title": string, 
+    "type": "track"|"capsule"|"resource"|"challenge", 
+    "reason": string (why this fits them),
+    "priority": "high"|"medium"|"low",
+    "estimated_time": string,
+    "skills_gained": string[]
+  }], 
+  "learning_focus": string (their primary learning direction),
+  "next_milestone": string (what they should aim for),
+  "advice": string (motivational guidance)
+}`;
+        userPrompt = `User profile:
+- Industry interest: ${context.industry || 'exploring'}
+- Skills: ${JSON.stringify(context.skills || [])}
+- Interests: ${JSON.stringify(context.interests || [])}
+- Career stage: ${context.careerStage || 'early'}
+- Short-term goals: ${context.shortTermGoals || 'learn and explore'}
+- Long-term goals: ${context.longTermGoals || 'build a meaningful career'}
+- Tracks completed: ${context.tracksCompleted || 0}
+- Capsules completed: ${context.capsulesCompleted || 0}
+- Recent domains explored: ${JSON.stringify(context.recentDomains || [])}`;
+        break;
+
+      case "skill_mapping":
+        systemPrompt = `You are a career skill mapping expert. Analyze the user's skills and map them to real-world applications, career roles, and growth opportunities.
+
+Return JSON: { 
+  "mappings": [{ 
+    "skill": string, 
+    "applicable_roles": string[] (3-4 job titles),
+    "startup_applications": string[] (2-3 ways to use in entrepreneurship),
+    "project_ideas": string[] (2-3 hands-on projects),
+    "growth_potential": "high"|"medium"|"low"
+  }], 
+  "skill_gaps": string[] (important skills they should develop),
+  "strongest_combination": string (their unique skill blend),
+  "recommended_path": string (suggested career direction)
+}`;
+        userPrompt = `User skills: ${JSON.stringify(context.skills || [])}
+Industry focus: ${context.industry || 'general'}
+Career interests: ${JSON.stringify(context.interests || [])}
+Experience level: ${context.experienceLevel || 'beginner'}`;
+        break;
+
+      case "generate_quiz":
+        systemPrompt = `You are an educational content creator. Generate an engaging 5-question quiz to test and reinforce understanding of the given topic. Questions should be practical and applicable, not just theoretical.
+
+Return JSON: { 
+  "quiz_title": string,
+  "questions": [{ 
+    "question": string, 
+    "options": string[] (4 options),
+    "correct_index": number (0-3),
+    "explanation": string (why this answer is correct),
+    "skill_tested": string
+  }],
+  "passing_score": number,
+  "completion_message": string
+}`;
+        userPrompt = `Topic: "${context.topic}"
+Difficulty: ${context.difficulty || 'beginner'}
+Focus area: ${context.focusArea || 'practical application'}`;
+        break;
+
+      case "learning_path_suggestion":
+        systemPrompt = `You are a learning path architect. Based on the user's goals and current progress, design a personalized 4-week learning plan with specific milestones.
+
+Return JSON: {
+  "path_title": string,
+  "path_description": string,
+  "weeks": [{
+    "week_number": number,
+    "theme": string,
+    "goals": string[],
+    "activities": [{
+      "type": "track"|"capsule"|"project"|"reflection",
+      "title": string,
+      "duration": string,
+      "outcome": string
+    }]
+  }],
+  "expected_outcomes": string[],
+  "success_metrics": string[]
+}`;
+        userPrompt = `User goal: ${context.goal || 'career growth'}
+Current skills: ${JSON.stringify(context.skills || [])}
+Available time per week: ${context.hoursPerWeek || 5} hours
+Focus domain: ${context.domain || 'general'}
+Learning style preference: ${context.learningStyle || 'mixed'}`;
+        break;
+
+      case "content_reflection":
+        systemPrompt = `You are a thoughtful learning coach. Based on the content the user just completed, generate personalized reflection prompts and next-step suggestions.
+
+Return JSON: {
+  "reflection_prompts": string[] (3 thought-provoking questions),
+  "key_takeaways": string[] (3 main learnings),
+  "application_ideas": string[] (2-3 ways to apply this),
+  "next_content": [{
+    "title": string,
+    "reason": string
+  }],
+  "encouragement": string
+}`;
+        userPrompt = `Content completed: "${context.contentTitle}"
+Content type: ${context.contentType || 'track'}
+User's current focus: ${context.currentFocus || 'general learning'}
+Skills being developed: ${JSON.stringify(context.skills || [])}`;
+        break;
+
+      case "challenge_suggestion":
+        systemPrompt = `You are a practical learning facilitator. Suggest a real-world challenge or mini-project that helps the user apply what they've learned.
+
+Return JSON: {
+  "challenge_title": string,
+  "challenge_description": string,
+  "difficulty": "easy"|"medium"|"hard",
+  "estimated_time": string,
+  "steps": string[] (4-6 steps),
+  "deliverables": string[],
+  "skills_applied": string[],
+  "bonus_stretch": string
+}`;
+        userPrompt = `Skills to apply: ${JSON.stringify(context.skills || [])}
+Domain: ${context.domain || 'general'}
+User's experience level: ${context.level || 'beginner'}
+Available time: ${context.availableTime || '2-3 hours'}`;
+        break;
+
+      default:
+        throw new Error("Unknown type: " + type);
     }
 
     const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
@@ -40,8 +166,8 @@ serve(async (req) => {
     });
 
     if (!response.ok) {
-      if (response.status === 429) return new Response(JSON.stringify({ error: "Rate limited." }), { status: 429, headers: { ...corsHeaders, "Content-Type": "application/json" } });
-      if (response.status === 402) return new Response(JSON.stringify({ error: "Credits exhausted." }), { status: 402, headers: { ...corsHeaders, "Content-Type": "application/json" } });
+      if (response.status === 429) return new Response(JSON.stringify({ error: "Rate limited. Please try again later." }), { status: 429, headers: { ...corsHeaders, "Content-Type": "application/json" } });
+      if (response.status === 402) return new Response(JSON.stringify({ error: "Credits exhausted. Please add funds." }), { status: 402, headers: { ...corsHeaders, "Content-Type": "application/json" } });
       throw new Error("AI gateway error");
     }
 

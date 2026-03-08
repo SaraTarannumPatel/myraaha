@@ -402,6 +402,36 @@ export type Database = {
         }
         Relationships: []
       }
+      content_bookmarks: {
+        Row: {
+          collection: string | null
+          content_id: string
+          content_type: string
+          created_at: string
+          id: string
+          notes: string | null
+          user_id: string
+        }
+        Insert: {
+          collection?: string | null
+          content_id: string
+          content_type: string
+          created_at?: string
+          id?: string
+          notes?: string | null
+          user_id: string
+        }
+        Update: {
+          collection?: string | null
+          content_id?: string
+          content_type?: string
+          created_at?: string
+          id?: string
+          notes?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       curiosity_quest_progress: {
         Row: {
           completed_at: string | null
@@ -1170,6 +1200,56 @@ export type Database = {
         }
         Relationships: []
       }
+      learning_track_modules: {
+        Row: {
+          content: string | null
+          created_at: string
+          description: string | null
+          duration_minutes: number | null
+          id: string
+          module_type: string | null
+          order_index: number | null
+          quiz: Json | null
+          resources: Json | null
+          title: string
+          track_id: string
+        }
+        Insert: {
+          content?: string | null
+          created_at?: string
+          description?: string | null
+          duration_minutes?: number | null
+          id?: string
+          module_type?: string | null
+          order_index?: number | null
+          quiz?: Json | null
+          resources?: Json | null
+          title: string
+          track_id: string
+        }
+        Update: {
+          content?: string | null
+          created_at?: string
+          description?: string | null
+          duration_minutes?: number | null
+          id?: string
+          module_type?: string | null
+          order_index?: number | null
+          quiz?: Json | null
+          resources?: Json | null
+          title?: string
+          track_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "learning_track_modules_track_id_fkey"
+            columns: ["track_id"]
+            isOneToOne: false
+            referencedRelation: "learning_tracks"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       learning_track_progress: {
         Row: {
           completed_at: string | null
@@ -1210,6 +1290,60 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      learning_tracks: {
+        Row: {
+          category: string
+          created_at: string
+          description: string | null
+          difficulty: string | null
+          domain: string | null
+          estimated_hours: number | null
+          format: string | null
+          icon_emoji: string | null
+          id: string
+          is_certification: boolean | null
+          is_starter_pack: boolean | null
+          order_index: number | null
+          prerequisites: string[] | null
+          skills_gained: string[] | null
+          title: string
+        }
+        Insert: {
+          category?: string
+          created_at?: string
+          description?: string | null
+          difficulty?: string | null
+          domain?: string | null
+          estimated_hours?: number | null
+          format?: string | null
+          icon_emoji?: string | null
+          id?: string
+          is_certification?: boolean | null
+          is_starter_pack?: boolean | null
+          order_index?: number | null
+          prerequisites?: string[] | null
+          skills_gained?: string[] | null
+          title: string
+        }
+        Update: {
+          category?: string
+          created_at?: string
+          description?: string | null
+          difficulty?: string | null
+          domain?: string | null
+          estimated_hours?: number | null
+          format?: string | null
+          icon_emoji?: string | null
+          id?: string
+          is_certification?: boolean | null
+          is_starter_pack?: boolean | null
+          order_index?: number | null
+          prerequisites?: string[] | null
+          skills_gained?: string[] | null
+          title?: string
+        }
+        Relationships: []
       }
       mindset_challenges: {
         Row: {
@@ -2118,6 +2252,42 @@ export type Database = {
           points?: number | null
           scenario?: string
           title?: string
+        }
+        Relationships: []
+      }
+      skill_applications: {
+        Row: {
+          applicable_domains: string[] | null
+          applicable_roles: string[] | null
+          created_at: string
+          demand_level: string | null
+          growth_potential: string | null
+          id: string
+          project_ideas: string[] | null
+          skill_name: string
+          startup_applications: string[] | null
+        }
+        Insert: {
+          applicable_domains?: string[] | null
+          applicable_roles?: string[] | null
+          created_at?: string
+          demand_level?: string | null
+          growth_potential?: string | null
+          id?: string
+          project_ideas?: string[] | null
+          skill_name: string
+          startup_applications?: string[] | null
+        }
+        Update: {
+          applicable_domains?: string[] | null
+          applicable_roles?: string[] | null
+          created_at?: string
+          demand_level?: string | null
+          growth_potential?: string | null
+          id?: string
+          project_ideas?: string[] | null
+          skill_name?: string
+          startup_applications?: string[] | null
         }
         Relationships: []
       }
