@@ -614,7 +614,7 @@ const CareerDashboard = () => {
               <CardHeader className="pb-3">
                 <div className="flex items-center justify-between">
                   <CardTitle className="text-lg flex items-center gap-2">
-                    <Lightbulb className="h-5 w-5 text-yellow-500" />
+                    <Lightbulb className="h-5 w-5 text-accent-foreground" />
                     AI Recommendations
                   </CardTitle>
                   <Button variant="ghost" size="sm" onClick={fetchAISuggestions} disabled={aiLoading}>
