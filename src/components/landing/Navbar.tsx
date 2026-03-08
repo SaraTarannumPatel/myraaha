@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { Menu, X } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -30,9 +31,18 @@ const Navbar = () => {
               {item}
             </a>
           ))}
-          <button className="gradient-warm text-secondary-foreground px-5 py-2 rounded-full text-sm font-body font-semibold shadow-accent hover:opacity-90 transition-opacity">
-            Get Early Access
-          </button>
+          <Link
+            to="/auth"
+            className="text-sm font-body font-medium text-foreground hover:text-accent transition-colors"
+          >
+            Log In
+          </Link>
+          <Link
+            to="/auth"
+            className="gradient-warm text-secondary-foreground px-5 py-2 rounded-full text-sm font-body font-semibold shadow-accent hover:opacity-90 transition-opacity"
+          >
+            Sign Up
+          </Link>
         </div>
 
         {/* Mobile toggle */}
@@ -62,9 +72,20 @@ const Navbar = () => {
                 {item}
               </a>
             ))}
-            <button className="gradient-warm text-secondary-foreground px-5 py-2.5 rounded-full text-sm font-body font-semibold w-full">
-              Get Early Access
-            </button>
+            <Link
+              to="/auth"
+              className="text-sm font-body font-medium text-foreground"
+              onClick={() => setIsOpen(false)}
+            >
+              Log In
+            </Link>
+            <Link
+              to="/auth"
+              className="gradient-warm text-secondary-foreground px-5 py-2.5 rounded-full text-sm font-body font-semibold w-full text-center"
+              onClick={() => setIsOpen(false)}
+            >
+              Sign Up
+            </Link>
           </div>
         </motion.div>
       )}
