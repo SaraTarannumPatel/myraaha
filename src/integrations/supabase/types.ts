@@ -122,6 +122,39 @@ export type Database = {
         }
         Relationships: []
       }
+      exploration_quests: {
+        Row: {
+          created_at: string
+          description: string | null
+          difficulty: string | null
+          id: string
+          points: number | null
+          quest_type: string
+          sector: string | null
+          title: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          difficulty?: string | null
+          id?: string
+          points?: number | null
+          quest_type?: string
+          sector?: string | null
+          title: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          difficulty?: string | null
+          id?: string
+          points?: number | null
+          quest_type?: string
+          sector?: string | null
+          title?: string
+        }
+        Relationships: []
+      }
       founder_profiles: {
         Row: {
           created_at: string
@@ -161,6 +194,84 @@ export type Database = {
           updated_at?: string
           user_id?: string
           weaknesses?: string[] | null
+        }
+        Relationships: []
+      }
+      idea_card_interactions: {
+        Row: {
+          created_at: string
+          id: string
+          idea_card_id: string | null
+          interaction_type: string
+          notes: string | null
+          startup_idea_id: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          idea_card_id?: string | null
+          interaction_type?: string
+          notes?: string | null
+          startup_idea_id?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          idea_card_id?: string | null
+          interaction_type?: string
+          notes?: string | null
+          startup_idea_id?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "idea_card_interactions_idea_card_id_fkey"
+            columns: ["idea_card_id"]
+            isOneToOne: false
+            referencedRelation: "idea_cards"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "idea_card_interactions_startup_idea_id_fkey"
+            columns: ["startup_idea_id"]
+            isOneToOne: false
+            referencedRelation: "startup_ideas"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      idea_cards: {
+        Row: {
+          created_at: string
+          description: string | null
+          difficulty: string | null
+          id: string
+          sector: string
+          source: string | null
+          tags: string[] | null
+          title: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          difficulty?: string | null
+          id?: string
+          sector?: string
+          source?: string | null
+          tags?: string[] | null
+          title: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          difficulty?: string | null
+          id?: string
+          sector?: string
+          source?: string | null
+          tags?: string[] | null
+          title?: string
         }
         Relationships: []
       }
@@ -302,6 +413,45 @@ export type Database = {
         }
         Relationships: []
       }
+      problem_observations: {
+        Row: {
+          ai_analysis: Json | null
+          category: string | null
+          created_at: string
+          feasibility: string | null
+          id: string
+          observation: string
+          relevance_score: number | null
+          scale: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          ai_analysis?: Json | null
+          category?: string | null
+          created_at?: string
+          feasibility?: string | null
+          id?: string
+          observation: string
+          relevance_score?: number | null
+          scale?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          ai_analysis?: Json | null
+          category?: string | null
+          created_at?: string
+          feasibility?: string | null
+          id?: string
+          observation?: string
+          relevance_score?: number | null
+          scale?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           active_intent: Database["public"]["Enums"]["user_intent"] | null
@@ -427,6 +577,47 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      quest_progress: {
+        Row: {
+          completed_at: string | null
+          created_at: string
+          id: string
+          points_earned: number | null
+          quest_id: string
+          response: string | null
+          status: string | null
+          user_id: string
+        }
+        Insert: {
+          completed_at?: string | null
+          created_at?: string
+          id?: string
+          points_earned?: number | null
+          quest_id: string
+          response?: string | null
+          status?: string | null
+          user_id: string
+        }
+        Update: {
+          completed_at?: string | null
+          created_at?: string
+          id?: string
+          points_earned?: number | null
+          quest_id?: string
+          response?: string | null
+          status?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "quest_progress_quest_id_fkey"
+            columns: ["quest_id"]
+            isOneToOne: false
+            referencedRelation: "exploration_quests"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       resources: {
         Row: {
