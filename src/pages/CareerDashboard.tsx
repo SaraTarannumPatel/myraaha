@@ -891,7 +891,7 @@ const CareerDashboard = () => {
             <Card>
               <CardHeader className="pb-3">
                 <CardTitle className="text-lg flex items-center gap-2">
-                  <FileText className="h-5 w-5 text-primary" />
+                  <FileText className="h-5 w-5 text-maroon" />
                   Resume Builder
                 </CardTitle>
               </CardHeader>
