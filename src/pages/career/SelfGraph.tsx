@@ -841,10 +841,10 @@ const SelfGraph = () => {
                       <div>
                         <div className="flex items-center gap-2 mb-1">
                           <span className={`px-2 py-0.5 rounded text-xs font-body ${
-                            pattern.pattern_type === "habit" ? "bg-blue-500/10 text-blue-600" :
-                            pattern.pattern_type === "preference" ? "bg-purple-500/10 text-purple-600" :
-                            pattern.pattern_type === "tendency" ? "bg-green-500/10 text-green-600" :
-                            "bg-orange-500/10 text-orange-600"
+                            pattern.pattern_type === "habit" ? "bg-info/10 text-info" :
+                            pattern.pattern_type === "preference" ? "bg-indigo/10 text-indigo" :
+                            pattern.pattern_type === "tendency" ? "bg-success/10 text-success" :
+                            "bg-warmth/10 text-warmth"
                           }`}>{pattern.pattern_type}</span>
                           <span className="font-body text-xs text-muted-foreground">{pattern.frequency} • {pattern.occurrences} occurrences</span>
                         </div>
