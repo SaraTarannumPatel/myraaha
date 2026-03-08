@@ -89,7 +89,7 @@ const MissionSection = () => {
               <img
                 src={missionIllustration}
                 alt="Structured navigation for every stage of life"
-                className="relative w-full max-w-sm"
+                className="relative w-full max-w-md"
               />
             </div>
           </motion.div>

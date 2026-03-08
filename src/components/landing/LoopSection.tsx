@@ -73,7 +73,7 @@ const LoopSection = () => {
             <motion.img
               src={loopIllustration}
               alt="Path simulation — explore before you commit"
-              className="w-full max-w-xs"
+              className="w-full max-w-md"
               animate={{ rotate: [0, 1.5, -1.5, 0] }}
               transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
             />

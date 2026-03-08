@@ -83,7 +83,7 @@ const EntrepreneurshipSection = () => {
               <img
                 src={entrepreneurshipIllustration}
                 alt="Behaviour tracking and evolving identity model"
-                className="relative w-full max-w-sm"
+                className="relative w-full max-w-md"
               />
             </motion.div>
 

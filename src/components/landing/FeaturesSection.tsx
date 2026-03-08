@@ -1,7 +1,7 @@
 import { motion, useInView } from "framer-motion";
 import { useRef, useState } from "react";
 import {
-  Brain, Route, Briefcase, Rocket, ArrowRight, Check,
+  Brain, Route, Briefcase, Rocket, Check,
 } from "lucide-react";
 import featuresIllustration from "@/assets/features-illustration.png";
 
@@ -47,44 +47,60 @@ const FeaturesSection = () => {
         <span className="font-display text-[120px] md:text-[180px] text-muted/30 leading-none select-none">03</span>
       </div>
 
-      <div className="container mx-auto px-6 relative z-10">
-        {/* Header */}
-        <div className="max-w-3xl mb-20">
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={isInView ? { opacity: 1 } : {}}
-            className="font-body text-xs uppercase tracking-[0.25em] text-primary font-semibold mb-3"
+      <div className="container mx-auto px-6 relative z-10 max-w-6xl">
+        {/* Header + Illustration side by side */}
+        <div className="grid lg:grid-cols-2 gap-12 items-center mb-20">
+          <div>
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={isInView ? { opacity: 1 } : {}}
+              className="font-body text-xs uppercase tracking-[0.25em] text-primary font-semibold mb-3"
+            >
+              How MyRaaha Works
+            </motion.p>
+            <motion.h2
+              initial={{ opacity: 0, y: 20 }}
+              animate={isInView ? { opacity: 1, y: 0 } : {}}
+              transition={{ delay: 0.1 }}
+              className="font-display text-4xl md:text-5xl lg:text-6xl text-foreground leading-tight mb-4"
+            >
+              A system that doesn't make you{" "}
+              <em className="text-gradient-warm">search.</em>
+            </motion.h2>
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={isInView ? { opacity: 1 } : {}}
+              transition={{ delay: 0.2 }}
+              className="font-body text-base text-muted-foreground leading-relaxed"
+            >
+              Clarity → Direction → Action → Outcome. The system learns how you think, tracks what you're good at, and connects that to real market data.
+            </motion.p>
+          </div>
+
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={isInView ? { opacity: 1, scale: 1 } : {}}
+            transition={{ duration: 0.7, delay: 0.15 }}
+            className="flex justify-center"
           >
-            How MyRaaha Works
-          </motion.p>
-          <motion.h2
-            initial={{ opacity: 0, y: 20 }}
-            animate={isInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ delay: 0.1 }}
-            className="font-display text-4xl md:text-5xl lg:text-6xl text-foreground leading-tight mb-4"
-          >
-            A system that doesn't make you{" "}
-            <em className="text-gradient-warm">search.</em>
-          </motion.h2>
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={isInView ? { opacity: 1 } : {}}
-            transition={{ delay: 0.2 }}
-            className="font-body text-base text-muted-foreground max-w-xl leading-relaxed"
-          >
-            Clarity → Direction → Action → Outcome. The system learns how you think, tracks what you're good at, and connects that to real market data.
-          </motion.p>
+            <img
+              src={featuresIllustration}
+              alt="MyRaaha interconnected system"
+              className="w-full max-w-md"
+            />
+          </motion.div>
         </div>
 
-        <div className="grid lg:grid-cols-12 gap-8 items-start max-w-6xl mx-auto">
-          {/* Feature tabs — left 5 cols */}
-          <div className="lg:col-span-5 space-y-2">
+        {/* Interactive tabs + detail */}
+        <div className="grid lg:grid-cols-5 gap-6 items-start">
+          {/* Tabs — left 2 cols */}
+          <div className="lg:col-span-2 space-y-2">
             {features.map((feature, i) => (
               <motion.div
                 key={feature.title}
                 initial={{ opacity: 0, x: -20 }}
                 animate={isInView ? { opacity: 1, x: 0 } : {}}
-                transition={{ delay: 0.15 + i * 0.06 }}
+                transition={{ delay: 0.25 + i * 0.06 }}
                 className={`p-5 rounded-2xl cursor-pointer transition-all duration-400 border ${
                   activeIndex === i
                     ? "bg-card border-primary/20 shadow-card"
@@ -92,7 +108,7 @@ const FeaturesSection = () => {
                 }`}
                 onClick={() => setActiveIndex(i)}
               >
-                <div className="flex items-center gap-3 mb-2">
+                <div className="flex items-center gap-3 mb-1">
                   <span className={`font-display text-xs transition-colors ${
                     activeIndex === i ? "text-primary" : "text-muted-foreground"
                   }`}>{feature.num}</span>
@@ -102,7 +118,7 @@ const FeaturesSection = () => {
                   <motion.p
                     initial={{ opacity: 0, height: 0 }}
                     animate={{ opacity: 1, height: "auto" }}
-                    className="font-body text-sm text-muted-foreground leading-relaxed pl-8"
+                    className="font-body text-sm text-muted-foreground leading-relaxed pl-8 mt-1"
                   >
                     {feature.description}
                   </motion.p>
@@ -111,8 +127,8 @@ const FeaturesSection = () => {
             ))}
           </div>
 
-          {/* Active feature detail — right 7 cols */}
-          <div className="lg:col-span-7">
+          {/* Detail panel — right 3 cols */}
+          <div className="lg:col-span-3">
             <motion.div
               key={activeIndex}
               initial={{ opacity: 0, y: 16 }}
@@ -145,15 +161,6 @@ const FeaturesSection = () => {
                     <span className="font-body text-sm text-foreground">{h}</span>
                   </div>
                 ))}
-              </div>
-
-              {/* Illustration accent */}
-              <div className="mt-8 flex justify-center">
-                <img
-                  src={featuresIllustration}
-                  alt="MyRaaha feature illustration"
-                  className="w-full max-w-[200px] opacity-60"
-                />
               </div>
             </motion.div>
           </div>
