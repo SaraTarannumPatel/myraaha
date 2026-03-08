@@ -890,7 +890,7 @@ function StoryGrid({ stories, onOpen, onLike, onBookmark, likedIds, bookmarkedId
                       <Badge variant="outline" className="text-xs gap-0.5"><MapPin className="h-2.5 w-2.5" /> {(story as any).scope}</Badge>
                     )}
                   </div>
-                  {story.is_featured && <Star className="h-4 w-4 text-amber-500 fill-amber-500" />}
+                  {story.is_featured && <Star className="h-4 w-4 text-primary fill-primary" />}
                 </div>
                 <CardTitle className="text-base leading-tight group-hover:text-primary transition-colors">{story.title}</CardTitle>
                 {story.author_name && <p className="text-xs text-muted-foreground">{story.author_name}</p>}
