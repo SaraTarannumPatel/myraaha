@@ -854,30 +854,7 @@ const CareerDashboard = () => {
 
         {/* Jobs Tab */}
         <TabsContent value="opportunities" className="space-y-6">
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Briefcase className="h-5 w-5 text-primary" />
-                Job Match Highlights
-              </CardTitle>
-              <CardDescription>Best-fit roles based on your skills and interests</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="text-center py-8">
-                <Building2 className="mx-auto text-muted-foreground mb-4" size={48} />
-                <h3 className="font-display text-lg text-foreground mb-2">Job Matching</h3>
-                <p className="font-body text-sm text-muted-foreground mb-4 max-w-md mx-auto">
-                  Complete your profile and add skills to unlock AI-powered job recommendations
-                </p>
-                <Link to="/dashboard/job-matching">
-                  <Button>
-                    <Briefcase size={14} className="mr-2" />
-                    Explore Job Matching
-                  </Button>
-                </Link>
-              </div>
-            </CardContent>
-          </Card>
+          <JobMatchPreview />
 
           <div className="grid md:grid-cols-2 gap-6">
             <Card>
