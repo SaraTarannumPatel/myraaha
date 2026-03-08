@@ -8,18 +8,30 @@ const pathOptions = [
     icon: Briefcase,
     title: "Explore Career & Jobs",
     description: "For students, professionals, and career transitioners. Discover your ideal career path, build skills, create a Living Resume, and connect with opportunities.",
+    color: "border-blue/30 hover:border-blue/50",
+    iconBg: "bg-blue/10 group-hover:bg-blue",
+    iconColor: "text-blue group-hover:text-primary-foreground",
+    arrowColor: "group-hover:text-blue",
   },
   {
     value: "entrepreneurship",
     icon: Rocket,
     title: "Explore Entrepreneurship & Freelancing",
     description: "For aspiring founders, freelancers, and innovators. Spark startup ideas, validate them, build MVPs, and grow your founder identity.",
+    color: "border-terracotta/30 hover:border-terracotta/50",
+    iconBg: "bg-terracotta/10 group-hover:bg-terracotta",
+    iconColor: "text-terracotta group-hover:text-primary-foreground",
+    arrowColor: "group-hover:text-terracotta",
   },
   {
     value: "both",
     icon: Sparkles,
     title: "Explore Both",
     description: "For users wanting to pursue both simultaneously. Discover how your career skills can fuel a venture, and how entrepreneurial thinking can accelerate your career.",
+    color: "border-indigo/30 hover:border-indigo/50",
+    iconBg: "bg-indigo/10 group-hover:bg-indigo",
+    iconColor: "text-indigo group-hover:text-primary-foreground",
+    arrowColor: "group-hover:text-indigo",
   },
 ];
 
@@ -64,15 +76,15 @@ const GetStarted = () => {
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.4 + i * 0.12 }}
               onClick={() => handleSelect(option.value)}
-              className="w-full text-left p-6 rounded-xl border-2 border-border bg-card hover:border-primary/30 hover:shadow-soft transition-all flex items-start gap-4 group"
+              className={`w-full text-left p-6 rounded-xl border-2 bg-card hover:shadow-soft transition-all flex items-start gap-4 group ${option.color}`}
             >
-              <div className="p-3 rounded-lg bg-muted group-hover:gradient-warm transition-all">
-                <option.icon size={24} className="text-muted-foreground group-hover:text-primary-foreground transition-colors" />
+              <div className={`p-3 rounded-lg transition-all ${option.iconBg}`}>
+                <option.icon size={24} className={`transition-colors ${option.iconColor}`} />
               </div>
               <div className="flex-1">
                 <h3 className="font-display text-xl text-foreground flex items-center gap-2">
                   {option.title}
-                  <ArrowRight size={16} className="text-muted-foreground group-hover:text-primary group-hover:translate-x-1 transition-all" />
+                  <ArrowRight size={16} className={`text-muted-foreground group-hover:translate-x-1 transition-all ${option.arrowColor}`} />
                 </h3>
                 <p className="font-body text-sm text-muted-foreground mt-1">{option.description}</p>
               </div>

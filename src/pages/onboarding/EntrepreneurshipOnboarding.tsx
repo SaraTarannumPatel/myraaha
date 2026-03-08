@@ -54,12 +54,12 @@ const entrepreneurSteps = [
     subtitle: "Based on your profile, here's what we've prepared.",
     type: "preview",
     tools: [
-      { icon: Lightbulb, name: "Startup Sparks", desc: "AI-generated idea cards matched to your sectors and interests", color: "bg-accent/10 text-accent" },
-      { icon: Zap, name: "Mindset Builder", desc: "Daily challenges targeting your specific growth areas", color: "bg-primary/10 text-primary" },
-      { icon: Wrench, name: "MVP Builder", desc: "Experiment templates to rapidly prototype and test your ideas", color: "bg-accent/10 text-accent" },
-      { icon: Rocket, name: "Startup Lab", desc: "Structured validation sprints with AI-guided planning", color: "bg-primary/10 text-primary" },
-      { icon: Building2, name: "Founder Profile", desc: "Your evolving identity as a founder — strengths, projects, growth", color: "bg-accent/10 text-accent" },
-      { icon: Globe, name: "Startup Communities", desc: "Peer groups and expert networks aligned to your sector", color: "bg-primary/10 text-primary" },
+      { icon: Lightbulb, name: "Startup Sparks", desc: "AI-generated idea cards matched to your sectors and interests", color: "bg-accent/20 text-accent-foreground" },
+      { icon: Zap, name: "Mindset Builder", desc: "Daily challenges targeting your specific growth areas", color: "bg-terracotta/10 text-terracotta" },
+      { icon: Wrench, name: "MVP Builder", desc: "Experiment templates to rapidly prototype and test your ideas", color: "bg-maroon/10 text-maroon" },
+      { icon: Rocket, name: "Startup Lab", desc: "Structured validation sprints with AI-guided planning", color: "bg-blue/10 text-blue" },
+      { icon: Building2, name: "Founder Profile", desc: "Your evolving identity as a founder — strengths, projects, growth", color: "bg-primary/10 text-primary" },
+      { icon: Globe, name: "Startup Communities", desc: "Peer groups and expert networks aligned to your sector", color: "bg-indigo/10 text-indigo" },
     ],
   },
 ];

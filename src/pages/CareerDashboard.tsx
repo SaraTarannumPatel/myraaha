@@ -32,11 +32,11 @@ const JOURNEY_PHASES = [
 ];
 
 const careerQuickActions = [
-  { label: "Curiosity Compass", icon: Compass, path: "/dashboard/curiosity-compass", color: "bg-accent/10 text-accent", desc: "Explore interests" },
-  { label: "AI Roadmap", icon: Map, path: "/dashboard/roadmap", color: "bg-primary/10 text-primary", desc: "Plan your path" },
-  { label: "SelfGraph™", icon: Brain, path: "/dashboard/selfgraph", color: "bg-accent/10 text-accent", desc: "Know yourself" },
+  { label: "Curiosity Compass", icon: Compass, path: "/dashboard/curiosity-compass", color: "bg-blue/10 text-blue", desc: "Explore interests" },
+  { label: "AI Roadmap", icon: Map, path: "/dashboard/roadmap", color: "bg-indigo/10 text-indigo", desc: "Plan your path" },
+  { label: "SelfGraph™", icon: Brain, path: "/dashboard/selfgraph", color: "bg-terracotta/10 text-terracotta", desc: "Know yourself" },
   { label: "Living Resume", icon: FileText, path: "/dashboard/living-resume", color: "bg-primary/10 text-primary", desc: "Track growth" },
-  { label: "Career Coach", icon: Bot, path: "/dashboard/career-coach", color: "bg-accent/10 text-accent", desc: "Get guidance" },
+  { label: "Career Coach", icon: Bot, path: "/dashboard/career-coach", color: "bg-maroon/10 text-maroon", desc: "Get guidance" },
 ];
 
 const CareerDashboard = () => {
@@ -206,12 +206,12 @@ const CareerDashboard = () => {
   const currentPhase = determinePhase();
 
   const displayStats = [
-    { label: "Goals Done", value: stats.goalsCount, icon: Target, color: "bg-accent/10 text-accent" },
-    { label: "Skills", value: stats.skillsCount, icon: TrendingUp, color: "bg-primary/10 text-primary" },
-    { label: "Streak", value: `${stats.streak}d`, icon: Flame, color: "bg-orange-500/10 text-orange-500" },
+    { label: "Goals Done", value: stats.goalsCount, icon: Target, color: "bg-maroon/10 text-maroon" },
+    { label: "Skills", value: stats.skillsCount, icon: TrendingUp, color: "bg-blue/10 text-blue" },
+    { label: "Streak", value: `${stats.streak}d`, icon: Flame, color: "bg-terracotta/10 text-terracotta" },
     { label: "Interests", value: stats.interestsCount, icon: Compass, color: "bg-primary/10 text-primary" },
-    { label: "Badges", value: stats.achievementsCount, icon: Trophy, color: "bg-yellow-500/10 text-yellow-500" },
-    { label: "Connections", value: stats.connectionsCount, icon: Users, color: "bg-accent/10 text-accent" },
+    { label: "Badges", value: stats.achievementsCount, icon: Trophy, color: "bg-accent/20 text-accent-foreground" },
+    { label: "Connections", value: stats.connectionsCount, icon: Users, color: "bg-indigo/10 text-indigo" },
   ];
 
   return (
@@ -276,7 +276,7 @@ const CareerDashboard = () => {
             <CardHeader className="pb-3">
               <div className="flex items-center justify-between">
                 <CardTitle className="text-lg flex items-center gap-2">
-                  <Shield className="h-5 w-5 text-primary" />
+                  <Shield className="h-5 w-5 text-blue" />
                   Career Readiness
                 </CardTitle>
                 <div className="flex items-center gap-2">
@@ -291,20 +291,27 @@ const CareerDashboard = () => {
             <CardContent>
               <Progress value={readiness.score} className="h-3 mb-4" />
               <div className="grid grid-cols-3 sm:grid-cols-6 gap-3">
-                {Object.entries(readiness.breakdown).map(([key, value]) => (
-                  <div key={key} className="text-center">
-                    <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center mx-auto mb-1">
-                      {key === "skills" ? <TrendingUp size={16} className="text-primary" /> :
-                       key === "interests" ? <Compass size={16} className="text-primary" /> :
-                       key === "resume" ? <FileText size={16} className="text-primary" /> :
-                       key === "activity" ? <Flame size={16} className="text-primary" /> :
-                       key === "goals" ? <Target size={16} className="text-primary" /> :
-                       <Map size={16} className="text-primary" />}
+                {Object.entries(readiness.breakdown).map(([key, value]) => {
+                  const iconMap: Record<string, { icon: any; color: string; bg: string }> = {
+                    skills: { icon: TrendingUp, color: "text-blue", bg: "bg-blue/10" },
+                    interests: { icon: Compass, color: "text-primary", bg: "bg-primary/10" },
+                    resume: { icon: FileText, color: "text-terracotta", bg: "bg-terracotta/10" },
+                    activity: { icon: Flame, color: "text-maroon", bg: "bg-maroon/10" },
+                    goals: { icon: Target, color: "text-indigo", bg: "bg-indigo/10" },
+                    roadmap: { icon: Map, color: "text-accent-foreground", bg: "bg-accent/20" },
+                  };
+                  const cfg = iconMap[key] || { icon: Map, color: "text-primary", bg: "bg-primary/10" };
+                  const Icon = cfg.icon;
+                  return (
+                    <div key={key} className="text-center">
+                      <div className={`w-10 h-10 rounded-lg ${cfg.bg} flex items-center justify-center mx-auto mb-1`}>
+                        <Icon size={16} className={cfg.color} />
+                      </div>
+                      <p className="font-body text-[10px] text-muted-foreground capitalize">{key}</p>
+                      <p className="font-display text-sm text-foreground">{value}</p>
                     </div>
-                    <p className="font-body text-[10px] text-muted-foreground capitalize">{key}</p>
-                    <p className="font-display text-sm text-foreground">{value}</p>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             </CardContent>
           </Card>
@@ -317,7 +324,7 @@ const CareerDashboard = () => {
           <Card className="border-primary/10 bg-gradient-to-br from-primary/[0.02] to-transparent">
             <CardHeader className="pb-3">
               <CardTitle className="text-lg flex items-center gap-2">
-                <Sparkles className="h-5 w-5 text-primary" />
+                <Sparkles className="h-5 w-5 text-indigo" />
                 AI Career Insights
               </CardTitle>
               {recommendations.encouragement && (
@@ -396,7 +403,7 @@ const CareerDashboard = () => {
             <CardHeader className="pb-3">
               <div className="flex items-center justify-between">
                 <CardTitle className="text-lg flex items-center gap-2">
-                  <FileText className="h-5 w-5 text-primary" />
+                  <FileText className="h-5 w-5 text-terracotta" />
                   Living Resume Snapshot
                 </CardTitle>
                 <Link to="/dashboard/living-resume" className="text-xs text-primary hover:underline flex items-center gap-1">
@@ -463,7 +470,7 @@ const CareerDashboard = () => {
         <Card>
           <CardHeader className="pb-3">
             <CardTitle className="text-lg flex items-center gap-2">
-              <Map className="h-5 w-5 text-primary" />
+              <Map className="h-5 w-5 text-blue" />
               My Journey Snapshot
             </CardTitle>
             <CardDescription>Your current phase in the career development journey</CardDescription>
@@ -505,7 +512,7 @@ const CareerDashboard = () => {
           <CardHeader className="pb-3">
             <div className="flex items-center justify-between">
               <CardTitle className="text-lg flex items-center gap-2">
-                <TrendingUp className="h-5 w-5 text-primary" />
+                <TrendingUp className="h-5 w-5 text-terracotta" />
                 My Progress
               </CardTitle>
               <Badge variant="secondary" className="text-lg px-3">{profile?.completion_percentage || 0}%</Badge>
@@ -568,7 +575,7 @@ const CareerDashboard = () => {
             <Card>
               <CardHeader className="pb-3">
                 <CardTitle className="text-lg flex items-center gap-2">
-                  <Target className="h-5 w-5 text-primary" />
+                  <Target className="h-5 w-5 text-maroon" />
                   Tasks & Challenges
                 </CardTitle>
               </CardHeader>
@@ -607,7 +614,7 @@ const CareerDashboard = () => {
               <CardHeader className="pb-3">
                 <div className="flex items-center justify-between">
                   <CardTitle className="text-lg flex items-center gap-2">
-                    <Lightbulb className="h-5 w-5 text-yellow-500" />
+                    <Lightbulb className="h-5 w-5 text-accent-foreground" />
                     AI Recommendations
                   </CardTitle>
                   <Button variant="ghost" size="sm" onClick={fetchAISuggestions} disabled={aiLoading}>
@@ -646,7 +653,7 @@ const CareerDashboard = () => {
             <CardHeader className="pb-3">
               <div className="flex items-center justify-between">
                 <CardTitle className="text-lg flex items-center gap-2">
-                  <TrendingUp className="h-5 w-5 text-primary" />
+                  <TrendingUp className="h-5 w-5 text-blue" />
                   Skill Tracker
                 </CardTitle>
                 <Link to="/dashboard/living-resume" className="text-sm text-primary hover:underline flex items-center gap-1">
@@ -682,9 +689,9 @@ const CareerDashboard = () => {
           {/* Recent Activity */}
           <Card>
             <CardHeader className="pb-3">
-              <CardTitle className="text-lg flex items-center gap-2">
-                <Clock className="h-5 w-5 text-primary" />
-                Recent Activity
+                <CardTitle className="text-lg flex items-center gap-2">
+                  <Clock className="h-5 w-5 text-terracotta" />
+                  Recent Activity
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -718,7 +725,7 @@ const CareerDashboard = () => {
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <BookOpen className="h-5 w-5 text-primary" />
+                <BookOpen className="h-5 w-5 text-indigo" />
                 Learning Hub
               </CardTitle>
               <CardDescription>Curated courses and content matched to your interests</CardDescription>
@@ -794,7 +801,7 @@ const CareerDashboard = () => {
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <Users className="h-5 w-5 text-primary" />
+                <Users className="h-5 w-5 text-blue" />
                 Mentor Suggestions
               </CardTitle>
               <CardDescription>Connect with mentors aligned to your career goals</CardDescription>
@@ -837,7 +844,7 @@ const CareerDashboard = () => {
             <Card>
               <CardHeader className="pb-3">
                 <CardTitle className="text-lg flex items-center gap-2">
-                  <MessageSquare className="h-5 w-5 text-primary" />
+                  <MessageSquare className="h-5 w-5 text-terracotta" />
                   Peer Circles
                 </CardTitle>
               </CardHeader>
@@ -884,7 +891,7 @@ const CareerDashboard = () => {
             <Card>
               <CardHeader className="pb-3">
                 <CardTitle className="text-lg flex items-center gap-2">
-                  <FileText className="h-5 w-5 text-primary" />
+                  <FileText className="h-5 w-5 text-maroon" />
                   Resume Builder
                 </CardTitle>
               </CardHeader>

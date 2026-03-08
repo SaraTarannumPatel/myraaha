@@ -57,7 +57,7 @@ const PersonalInfo = () => {
         className="max-w-2xl w-full space-y-8"
       >
         <div className="text-center space-y-2">
-          <p className="font-body text-sm text-primary font-semibold uppercase tracking-wider">Step 3 of 4</p>
+          <p className="font-body text-sm text-indigo font-semibold uppercase tracking-wider">Step 3 of 4</p>
           <h1 className="font-display text-4xl text-foreground">Tell us about yourself</h1>
           <p className="font-body text-muted-foreground">This helps personalize your experience. You can skip and fill this in later.</p>
         </div>
@@ -66,7 +66,7 @@ const PersonalInfo = () => {
           <div className="grid sm:grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label className="font-body flex items-center gap-2">
-                <MapPin size={14} className="text-primary" /> Age
+                <MapPin size={14} className="text-blue" /> Age
               </Label>
               <Input
                 type="number"
@@ -79,7 +79,7 @@ const PersonalInfo = () => {
             </div>
             <div className="space-y-2">
               <Label className="font-body flex items-center gap-2">
-                <MapPin size={14} className="text-primary" /> Location
+                <MapPin size={14} className="text-blue" /> Location
               </Label>
               <Input
                 placeholder="City, State"
@@ -91,7 +91,7 @@ const PersonalInfo = () => {
 
           <div className="space-y-2">
             <Label className="font-body flex items-center gap-2">
-              <GraduationCap size={14} className="text-primary" /> Education Level
+              <GraduationCap size={14} className="text-indigo" /> Education Level
             </Label>
             <div className="flex flex-wrap gap-2">
               {educationLevels.map((level) => (
@@ -100,7 +100,7 @@ const PersonalInfo = () => {
                   onClick={() => setForm({ ...form, education_level: level })}
                   className={`px-3 py-1.5 rounded-full font-body text-xs transition-all ${
                     form.education_level === level
-                      ? "gradient-warm text-primary-foreground"
+                      ? "bg-indigo text-primary-foreground"
                       : "bg-muted text-muted-foreground hover:text-foreground"
                   }`}
                 >
@@ -112,7 +112,7 @@ const PersonalInfo = () => {
 
           <div className="space-y-2">
             <Label className="font-body flex items-center gap-2">
-              <Briefcase size={14} className="text-primary" /> Industry / Domain of Interest
+              <Briefcase size={14} className="text-terracotta" /> Industry / Domain of Interest
             </Label>
             <div className="flex flex-wrap gap-2">
               {industries.map((ind) => (
@@ -121,7 +121,7 @@ const PersonalInfo = () => {
                   onClick={() => setForm({ ...form, industry: ind })}
                   className={`px-3 py-1.5 rounded-full font-body text-xs transition-all ${
                     form.industry === ind
-                      ? "gradient-warm text-primary-foreground"
+                      ? "bg-terracotta text-primary-foreground"
                       : "bg-muted text-muted-foreground hover:text-foreground"
                   }`}
                 >
@@ -133,7 +133,7 @@ const PersonalInfo = () => {
 
           <div className="space-y-2">
             <Label className="font-body flex items-center gap-2">
-              <Target size={14} className="text-primary" /> Short-term Goals
+              <Target size={14} className="text-maroon" /> Short-term Goals
             </Label>
             <Textarea
               placeholder="What do you want to achieve in the next 3–6 months?"

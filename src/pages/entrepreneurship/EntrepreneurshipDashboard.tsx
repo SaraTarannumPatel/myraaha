@@ -84,18 +84,18 @@ const moodOptions = [
 ];
 
 const entrepreneurModules = [
-  { label: "Startup Sparks", icon: Lightbulb, path: "/dashboard/startup-sparks", desc: "Capture & validate ideas", color: "bg-accent/10 text-accent-foreground" },
-  { label: "Mindset Builder", icon: Zap, path: "/dashboard/mindset-builder", desc: "Build resilience", color: "bg-primary/10 text-primary" },
-  { label: "MVP Builder", icon: Wrench, path: "/dashboard/mvp-builder", desc: "Build prototypes", color: "bg-accent/10 text-accent-foreground" },
-  { label: "Path Selector", icon: Navigation, path: "/dashboard/path-selector", desc: "Choose your direction", color: "bg-primary/10 text-primary" },
-  { label: "Startup Lab", icon: Rocket, path: "/dashboard/startup-lab", desc: "Structured learning", color: "bg-accent/10 text-accent-foreground" },
-  { label: "AI Coach", icon: Bot, path: "/dashboard/ai-coach", desc: "Get personalized guidance", color: "bg-primary/10 text-primary" },
-  { label: "Showcase", icon: Presentation, path: "/dashboard/startup-showcase", desc: "Share your work", color: "bg-accent/10 text-accent-foreground" },
+  { label: "Startup Sparks", icon: Lightbulb, path: "/dashboard/startup-sparks", desc: "Capture & validate ideas", color: "bg-accent/20 text-accent-foreground" },
+  { label: "Mindset Builder", icon: Zap, path: "/dashboard/mindset-builder", desc: "Build resilience", color: "bg-terracotta/10 text-terracotta" },
+  { label: "MVP Builder", icon: Wrench, path: "/dashboard/mvp-builder", desc: "Build prototypes", color: "bg-maroon/10 text-maroon" },
+  { label: "Path Selector", icon: Navigation, path: "/dashboard/path-selector", desc: "Choose your direction", color: "bg-blue/10 text-blue" },
+  { label: "Startup Lab", icon: Rocket, path: "/dashboard/startup-lab", desc: "Structured learning", color: "bg-terracotta/10 text-terracotta" },
+  { label: "AI Coach", icon: Bot, path: "/dashboard/ai-coach", desc: "Get personalized guidance", color: "bg-indigo/10 text-indigo" },
+  { label: "Showcase", icon: Presentation, path: "/dashboard/startup-showcase", desc: "Share your work", color: "bg-indigo/10 text-indigo" },
   { label: "Founder Profile", icon: Building2, path: "/dashboard/founder-profile", desc: "Build your identity", color: "bg-primary/10 text-primary" },
-  { label: "Startup Profiling", icon: BarChart3, path: "/dashboard/startup-profiling", desc: "Track startup metrics", color: "bg-accent/10 text-accent-foreground" },
+  { label: "Startup Profiling", icon: BarChart3, path: "/dashboard/startup-profiling", desc: "Track startup metrics", color: "bg-blue/10 text-blue" },
   { label: "Communities", icon: Globe, path: "/dashboard/startup-communities", desc: "Connect with peers", color: "bg-primary/10 text-primary" },
-  { label: "Learning Library", icon: GraduationCap, path: "/dashboard/founders-learning-library", desc: "Curated resources", color: "bg-accent/10 text-accent-foreground" },
-  { label: "Support", icon: LifeBuoy, path: "/dashboard/startup-support", desc: "Get help anytime", color: "bg-primary/10 text-primary" },
+  { label: "Learning Library", icon: GraduationCap, path: "/dashboard/founders-learning-library", desc: "Curated resources", color: "bg-accent/20 text-accent-foreground" },
+  { label: "Support", icon: LifeBuoy, path: "/dashboard/startup-support", desc: "Get help anytime", color: "bg-maroon/10 text-maroon" },
 ];
 
 const modulePathMap: Record<string, string> = {
@@ -418,20 +418,20 @@ const EntrepreneurshipDashboard = () => {
                 <p className="font-body text-xs text-muted-foreground uppercase tracking-wider">Current Stage</p>
                 <h2 className="font-display text-xl text-foreground">{getStageLabel()}</h2>
               </div>
-              <div className="px-3 py-1 rounded-full bg-primary/10 font-body text-xs text-primary font-semibold">
+              <div className="px-3 py-1 rounded-full bg-terracotta/10 font-body text-xs text-terracotta font-semibold">
                 {profile?.completion_percentage || 0}% complete
               </div>
             </div>
             <Progress value={profile?.completion_percentage || 0} className="h-2 mb-4" />
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
               {[
-                { label: "Ideas", value: stats.ideasCount, icon: Lightbulb, sub: `${stats.activeIdeas} active` },
-                { label: "MVPs", value: stats.projectsCount, icon: Rocket, sub: "in progress" },
-                { label: "Challenges", value: stats.challengesCompleted, icon: Zap, sub: `${stats.activeChallenges} active` },
-                { label: "Skills", value: stats.skillsCount, icon: TrendingUp, sub: "mapped" },
+                { label: "Ideas", value: stats.ideasCount, icon: Lightbulb, sub: `${stats.activeIdeas} active`, color: "text-accent-foreground" },
+                { label: "MVPs", value: stats.projectsCount, icon: Rocket, sub: "in progress", color: "text-terracotta" },
+                { label: "Challenges", value: stats.challengesCompleted, icon: Zap, sub: `${stats.activeChallenges} active`, color: "text-maroon" },
+                { label: "Skills", value: stats.skillsCount, icon: TrendingUp, sub: "mapped", color: "text-blue" },
               ].map(s => (
                 <div key={s.label} className="bg-muted/30 rounded-lg p-3 text-center">
-                  <s.icon size={16} className="mx-auto text-primary mb-1" />
+                  <s.icon size={16} className={`mx-auto mb-1 ${(s as any).color}`} />
                   <p className="font-display text-lg text-foreground">{loading ? "–" : s.value}</p>
                   <p className="font-body text-[10px] text-muted-foreground">{s.label}</p>
                   <p className="font-body text-[10px] text-muted-foreground">{s.sub}</p>
@@ -443,10 +443,10 @@ const EntrepreneurshipDashboard = () => {
           <div className="bg-card rounded-xl border border-border p-5 space-y-4">
             <h3 className="font-display text-sm text-foreground">At a Glance</h3>
             {[
-              { label: "Journal Streak", value: `${stats.streak}d`, icon: Clock, color: "text-accent-foreground" },
+              { label: "Journal Streak", value: `${stats.streak}d`, icon: Clock, color: "text-terracotta" },
               { label: "Achievements", value: stats.achievementsCount, icon: Trophy, color: "text-accent-foreground" },
-              { label: "Connections", value: stats.connectionsCount, icon: Users, color: "text-primary" },
-              { label: "Reflections", value: stats.journalCount, icon: BookOpen, color: "text-primary" },
+              { label: "Connections", value: stats.connectionsCount, icon: Users, color: "text-blue" },
+              { label: "Reflections", value: stats.journalCount, icon: BookOpen, color: "text-indigo" },
             ].map(s => (
               <div key={s.label} className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
@@ -465,7 +465,7 @@ const EntrepreneurshipDashboard = () => {
         className="bg-card rounded-xl border border-border p-5">
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-2">
-            <Bot size={18} className="text-primary" />
+            <Bot size={18} className="text-indigo" />
             <h2 className="font-display text-lg text-foreground">Personalized Recommendations</h2>
           </div>
           <Button variant="ghost" size="sm" onClick={fetchAIInsights} disabled={aiLoading} className="font-body text-xs">
@@ -512,7 +512,7 @@ const EntrepreneurshipDashboard = () => {
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.14 }}
           className="bg-card rounded-xl border border-border p-5">
           <div className="flex items-center gap-2 mb-4">
-            <Target size={18} className="text-primary" />
+            <Target size={18} className="text-maroon" />
             <h3 className="font-display text-lg text-foreground">Suggested Goals</h3>
           </div>
           {aiInsights?.goal_suggestions && aiInsights.goal_suggestions.length > 0 ? (
@@ -547,7 +547,7 @@ const EntrepreneurshipDashboard = () => {
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.16 }}
           className="bg-card rounded-xl border border-border p-5">
           <div className="flex items-center gap-2 mb-4">
-            <DollarSign size={18} className="text-primary" />
+            <DollarSign size={18} className="text-accent-foreground" />
             <h3 className="font-display text-lg text-foreground">Funding & Validation</h3>
           </div>
           {/* Funding tip from AI */}
@@ -694,7 +694,7 @@ const EntrepreneurshipDashboard = () => {
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}
         className="bg-card rounded-xl border border-border p-5">
         <div className="flex items-center gap-2 mb-3">
-          <PenLine size={16} className="text-primary" />
+          <PenLine size={16} className="text-terracotta" />
           <h3 className="font-display text-lg text-foreground">Quick Reflection</h3>
         </div>
         <p className="font-body text-xs text-muted-foreground mb-3">How are you feeling about your startup journey right now?</p>

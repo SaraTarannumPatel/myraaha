@@ -11,48 +11,57 @@ import {
 } from "lucide-react";
 
 const careerNav = [
-  { label: "Dashboard", icon: LayoutDashboard, path: "/dashboard" },
-  { label: "Curiosity Compass", icon: Compass, path: "/dashboard/curiosity-compass" },
-  { label: "AI Roadmap", icon: Map, path: "/dashboard/roadmap" },
-  { label: "SelfGraph™", icon: Brain, path: "/dashboard/selfgraph" },
-  { label: "SkillStacker", icon: Zap, path: "/dashboard/skill-stacker" },
-  { label: "Content Library", icon: BookOpen, path: "/dashboard/content-library" },
-  { label: "Living Resume", icon: FileText, path: "/dashboard/living-resume" },
-  { label: "Project Playground", icon: FolderKanban, path: "/dashboard/project-playground" },
-  { label: "Job Matching", icon: Briefcase, path: "/dashboard/job-matching" },
-  { label: "Mentor Match", icon: UserCheck, path: "/dashboard/mentor-matchmaking" },
-  { label: "Peer Circles", icon: Users, path: "/dashboard/peer-circles" },
-  { label: "Career Coach", icon: Bot, path: "/dashboard/career-coach" },
-  { label: "Career Therapist", icon: Heart, path: "/dashboard/career-therapist" },
-  { label: "Career Moodboard", icon: Palette, path: "/dashboard/career-moodboard" },
-  { label: "Inspirations", icon: Lightbulb, path: "/dashboard/career-inspirations" },
-  { label: "Transition Planner", icon: RefreshCw, path: "/dashboard/transition-planner" },
-  { label: "Explore", icon: Sparkles, path: "/dashboard/explore" },
+  { label: "Dashboard", icon: LayoutDashboard, path: "/dashboard", color: "blue" },
+  { label: "Curiosity Compass", icon: Compass, path: "/dashboard/curiosity-compass", color: "blue" },
+  { label: "AI Roadmap", icon: Map, path: "/dashboard/roadmap", color: "indigo" },
+  { label: "SelfGraph™", icon: Brain, path: "/dashboard/selfgraph", color: "terracotta" },
+  { label: "SkillStacker", icon: Zap, path: "/dashboard/skill-stacker", color: "blue" },
+  { label: "Content Library", icon: BookOpen, path: "/dashboard/content-library", color: "indigo" },
+  { label: "Living Resume", icon: FileText, path: "/dashboard/living-resume", color: "primary" },
+  { label: "Project Playground", icon: FolderKanban, path: "/dashboard/project-playground", color: "terracotta" },
+  { label: "Job Matching", icon: Briefcase, path: "/dashboard/job-matching", color: "blue" },
+  { label: "Mentor Match", icon: UserCheck, path: "/dashboard/mentor-matchmaking", color: "maroon" },
+  { label: "Peer Circles", icon: Users, path: "/dashboard/peer-circles", color: "primary" },
+  { label: "Career Coach", icon: Bot, path: "/dashboard/career-coach", color: "indigo" },
+  { label: "Career Therapist", icon: Heart, path: "/dashboard/career-therapist", color: "terracotta" },
+  { label: "Career Moodboard", icon: Palette, path: "/dashboard/career-moodboard", color: "accent" },
+  { label: "Inspirations", icon: Lightbulb, path: "/dashboard/career-inspirations", color: "accent" },
+  { label: "Transition Planner", icon: RefreshCw, path: "/dashboard/transition-planner", color: "maroon" },
+  { label: "Explore", icon: Sparkles, path: "/dashboard/explore", color: "primary" },
 ];
 
 const entrepreneurshipNav = [
-  { label: "Dashboard", icon: LayoutDashboard, path: "/dashboard" },
-  { label: "Startup Sparks", icon: Lightbulb, path: "/dashboard/startup-sparks" },
-  { label: "Mindset Builder", icon: Zap, path: "/dashboard/mindset-builder" },
-  { label: "Path Selector", icon: Navigation, path: "/dashboard/path-selector" },
-  { label: "MVP Builder", icon: Wrench, path: "/dashboard/mvp-builder" },
-  { label: "Startup Lab", icon: Rocket, path: "/dashboard/startup-lab" },
-  { label: "Showcase", icon: Presentation, path: "/dashboard/startup-showcase" },
-  { label: "Founder Profile", icon: User, path: "/dashboard/founder-profile" },
-  { label: "Startup Profile", icon: Building2, path: "/dashboard/startup-profiling" },
-  { label: "AI Coach", icon: Bot, path: "/dashboard/ai-coach" },
-  { label: "Support", icon: LifeBuoy, path: "/dashboard/startup-support" },
-  { label: "Communities", icon: Globe, path: "/dashboard/startup-communities" },
+  { label: "Dashboard", icon: LayoutDashboard, path: "/dashboard", color: "terracotta" },
+  { label: "Startup Sparks", icon: Lightbulb, path: "/dashboard/startup-sparks", color: "accent" },
+  { label: "Mindset Builder", icon: Zap, path: "/dashboard/mindset-builder", color: "terracotta" },
+  { label: "Path Selector", icon: Navigation, path: "/dashboard/path-selector", color: "blue" },
+  { label: "MVP Builder", icon: Wrench, path: "/dashboard/mvp-builder", color: "maroon" },
+  { label: "Startup Lab", icon: Rocket, path: "/dashboard/startup-lab", color: "terracotta" },
+  { label: "Showcase", icon: Presentation, path: "/dashboard/startup-showcase", color: "indigo" },
+  { label: "Founder Profile", icon: User, path: "/dashboard/founder-profile", color: "primary" },
+  { label: "Startup Profile", icon: Building2, path: "/dashboard/startup-profiling", color: "blue" },
+  { label: "AI Coach", icon: Bot, path: "/dashboard/ai-coach", color: "indigo" },
+  { label: "Support", icon: LifeBuoy, path: "/dashboard/startup-support", color: "maroon" },
+  { label: "Communities", icon: Globe, path: "/dashboard/startup-communities", color: "primary" },
 ];
 
 const sharedNav = [
-  { label: "Journal", icon: BookOpen, path: "/dashboard/journal" },
-  { label: "Connections", icon: Users, path: "/dashboard/connections" },
-  { label: "Achievements", icon: Trophy, path: "/dashboard/achievements" },
-  { label: "Leaderboard", icon: Medal, path: "/dashboard/leaderboard" },
-  { label: "Notifications", icon: Bell, path: "/dashboard/notifications" },
-  { label: "Settings", icon: Settings, path: "/dashboard/settings" },
+  { label: "Journal", icon: BookOpen, path: "/dashboard/journal", color: "terracotta" },
+  { label: "Connections", icon: Users, path: "/dashboard/connections", color: "blue" },
+  { label: "Achievements", icon: Trophy, path: "/dashboard/achievements", color: "accent" },
+  { label: "Leaderboard", icon: Medal, path: "/dashboard/leaderboard", color: "maroon" },
+  { label: "Notifications", icon: Bell, path: "/dashboard/notifications", color: "indigo" },
+  { label: "Settings", icon: Settings, path: "/dashboard/settings", color: "primary" },
 ];
+
+const colorMap: Record<string, { active: string; icon: string }> = {
+  primary: { active: "bg-primary/10 text-primary", icon: "text-primary" },
+  blue: { active: "bg-blue/10 text-blue", icon: "text-blue" },
+  indigo: { active: "bg-indigo/10 text-indigo", icon: "text-indigo" },
+  terracotta: { active: "bg-terracotta/10 text-terracotta", icon: "text-terracotta" },
+  maroon: { active: "bg-maroon/10 text-maroon", icon: "text-maroon" },
+  accent: { active: "bg-accent/20 text-accent-foreground", icon: "text-accent-foreground" },
+};
 
 const DashboardLayout = () => {
   const { profile, signOut, updateProfile } = useAuth();
@@ -65,7 +74,7 @@ const DashboardLayout = () => {
   const isBoth = profile?.active_intent === "both";
 
   const switchIntent = async () => {
-    if (isBoth) return; // Already has both
+    if (isBoth) return;
     const newIntent = isCareer ? "entrepreneurship" : "career";
     await updateProfile({ active_intent: newIntent } as any);
   };
@@ -73,6 +82,26 @@ const DashboardLayout = () => {
   const handleSignOut = async () => {
     await signOut();
     navigate("/");
+  };
+
+  const renderNavItem = (item: typeof careerNav[0], prefix: string) => {
+    const isActive = location.pathname === item.path;
+    const colors = colorMap[item.color] || colorMap.primary;
+    return (
+      <Link
+        key={`${prefix}-${item.path}`}
+        to={item.path}
+        onClick={() => setMobileOpen(false)}
+        className={`flex items-center gap-3 px-3 py-2 rounded-lg font-body text-sm transition-colors ${
+          isActive
+            ? `${colors.active} font-medium`
+            : "text-muted-foreground hover:text-foreground hover:bg-muted"
+        }`}
+      >
+        <item.icon size={16} className={isActive ? "" : ""} />
+        {item.label}
+      </Link>
+    );
   };
 
   const NavContent = () => (
@@ -87,62 +116,25 @@ const DashboardLayout = () => {
       </div>
 
       <nav className="flex-1 p-3 space-y-0.5 overflow-y-auto">
-        {/* Career section */}
         {(isCareer || isBoth) && (
           <>
-            <p className="font-body text-[10px] uppercase tracking-wider text-muted-foreground px-3 pt-2 pb-1">
+            <p className="font-body text-[10px] uppercase tracking-wider text-blue px-3 pt-2 pb-1 font-semibold">
               Career Tools
             </p>
-            {careerNav.filter(item => !isBoth || item.path !== "/dashboard").map((item) => {
-              const isActive = location.pathname === item.path;
-              return (
-                <Link
-                  key={`career-${item.path}`}
-                  to={item.path}
-                  onClick={() => setMobileOpen(false)}
-                  className={`flex items-center gap-3 px-3 py-2 rounded-lg font-body text-sm transition-colors ${
-                    isActive
-                      ? "bg-primary/10 text-primary font-medium"
-                      : "text-muted-foreground hover:text-foreground hover:bg-muted"
-                  }`}
-                >
-                  <item.icon size={16} />
-                  {item.label}
-                </Link>
-              );
-            })}
+            {careerNav.filter(item => !isBoth || item.path !== "/dashboard").map(item => renderNavItem(item, "career"))}
           </>
         )}
 
-        {/* Entrepreneurship section */}
         {(isEntrepreneurship || isBoth) && (
           <>
             <div className={isBoth ? "h-px bg-border my-2" : ""} />
-            <p className="font-body text-[10px] uppercase tracking-wider text-muted-foreground px-3 pt-2 pb-1">
+            <p className="font-body text-[10px] uppercase tracking-wider text-terracotta px-3 pt-2 pb-1 font-semibold">
               Startup Tools
             </p>
-            {entrepreneurshipNav.filter(item => !isBoth || item.path !== "/dashboard").map((item) => {
-              const isActive = location.pathname === item.path;
-              return (
-                <Link
-                  key={`entre-${item.path}`}
-                  to={item.path}
-                  onClick={() => setMobileOpen(false)}
-                  className={`flex items-center gap-3 px-3 py-2 rounded-lg font-body text-sm transition-colors ${
-                    isActive
-                      ? "bg-primary/10 text-primary font-medium"
-                      : "text-muted-foreground hover:text-foreground hover:bg-muted"
-                  }`}
-                >
-                  <item.icon size={16} />
-                  {item.label}
-                </Link>
-              );
-            })}
+            {entrepreneurshipNav.filter(item => !isBoth || item.path !== "/dashboard").map(item => renderNavItem(item, "entre"))}
           </>
         )}
 
-        {/* Dashboard link for "both" users */}
         {isBoth && (
           <>
             <div className="h-px bg-border my-2" />
@@ -162,25 +154,8 @@ const DashboardLayout = () => {
         )}
 
         <div className="h-px bg-border my-3" />
-        <p className="font-body text-[10px] uppercase tracking-wider text-muted-foreground px-3 pt-2 pb-1">General</p>
-        {sharedNav.map((item) => {
-          const isActive = location.pathname === item.path;
-          return (
-            <Link
-              key={item.path}
-              to={item.path}
-              onClick={() => setMobileOpen(false)}
-              className={`flex items-center gap-3 px-3 py-2 rounded-lg font-body text-sm transition-colors ${
-                isActive
-                  ? "bg-primary/10 text-primary font-medium"
-                  : "text-muted-foreground hover:text-foreground hover:bg-muted"
-              }`}
-            >
-              <item.icon size={16} />
-              {item.label}
-            </Link>
-          );
-        })}
+        <p className="font-body text-[10px] uppercase tracking-wider text-grey-label px-3 pt-2 pb-1 font-semibold">General</p>
+        {sharedNav.map(item => renderNavItem(item, "shared"))}
       </nav>
 
       <div className="p-3 border-t border-border space-y-1">

@@ -45,18 +45,20 @@ const Welcome = () => {
 
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-left">
           {[
-            { icon: Compass, title: "Clarity", desc: "Understand your strengths & direction" },
-            { icon: Rocket, title: "Action", desc: "Build skills & validate paths" },
-            { icon: Sparkles, title: "Outcome", desc: "Real results through AI guidance" },
+            { icon: Compass, title: "Clarity", desc: "Understand your strengths & direction", color: "text-blue", bg: "bg-blue/10", borderColor: "border-blue/20" },
+            { icon: Rocket, title: "Action", desc: "Build skills & validate paths", color: "text-terracotta", bg: "bg-terracotta/10", borderColor: "border-terracotta/20" },
+            { icon: Sparkles, title: "Outcome", desc: "Real results through AI guidance", color: "text-indigo", bg: "bg-indigo/10", borderColor: "border-indigo/20" },
           ].map((item, i) => (
             <motion.div
               key={item.title}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.5 + i * 0.15 }}
-              className="bg-card rounded-xl p-4 shadow-soft border border-border"
+              className={`bg-card rounded-xl p-4 shadow-soft border ${item.borderColor}`}
             >
-              <item.icon size={24} className="text-primary mb-2" />
+              <div className={`w-10 h-10 rounded-lg ${item.bg} flex items-center justify-center mb-2`}>
+                <item.icon size={20} className={item.color} />
+              </div>
               <h3 className="font-display text-lg text-foreground">{item.title}</h3>
               <p className="font-body text-sm text-muted-foreground">{item.desc}</p>
             </motion.div>
