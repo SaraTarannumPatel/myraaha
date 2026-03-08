@@ -163,6 +163,47 @@ export type Database = {
         }
         Relationships: []
       }
+      challenge_enrollments: {
+        Row: {
+          challenge_id: string
+          completed_at: string | null
+          id: string
+          points_earned: number | null
+          reflection: string | null
+          started_at: string | null
+          status: string | null
+          user_id: string
+        }
+        Insert: {
+          challenge_id: string
+          completed_at?: string | null
+          id?: string
+          points_earned?: number | null
+          reflection?: string | null
+          started_at?: string | null
+          status?: string | null
+          user_id: string
+        }
+        Update: {
+          challenge_id?: string
+          completed_at?: string | null
+          id?: string
+          points_earned?: number | null
+          reflection?: string | null
+          started_at?: string | null
+          status?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "challenge_enrollments_challenge_id_fkey"
+            columns: ["challenge_id"]
+            isOneToOne: false
+            referencedRelation: "project_challenges"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       clarity_scores: {
         Row: {
           activity_alignment: number | null
@@ -999,6 +1040,41 @@ export type Database = {
             columns: ["habit_id"]
             isOneToOne: false
             referencedRelation: "mindset_habits"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      hackathon_participants: {
+        Row: {
+          hackathon_id: string
+          id: string
+          joined_at: string | null
+          role: string | null
+          team_name: string | null
+          user_id: string
+        }
+        Insert: {
+          hackathon_id: string
+          id?: string
+          joined_at?: string | null
+          role?: string | null
+          team_name?: string | null
+          user_id: string
+        }
+        Update: {
+          hackathon_id?: string
+          id?: string
+          joined_at?: string | null
+          role?: string | null
+          team_name?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "hackathon_participants_hackathon_id_fkey"
+            columns: ["hackathon_id"]
+            isOneToOne: false
+            referencedRelation: "project_hackathons"
             referencedColumns: ["id"]
           },
         ]
@@ -3142,6 +3218,343 @@ export type Database = {
           user_type?: Database["public"]["Enums"]["user_type"] | null
         }
         Relationships: []
+      }
+      project_challenges: {
+        Row: {
+          created_at: string | null
+          description: string | null
+          difficulty: string | null
+          domain: string
+          duration_estimate: string | null
+          expected_outcomes: string[] | null
+          icon_emoji: string | null
+          id: string
+          is_featured: boolean | null
+          learning_objectives: string[] | null
+          points: number | null
+          tags: string[] | null
+          title: string
+          tools_resources: string[] | null
+        }
+        Insert: {
+          created_at?: string | null
+          description?: string | null
+          difficulty?: string | null
+          domain?: string
+          duration_estimate?: string | null
+          expected_outcomes?: string[] | null
+          icon_emoji?: string | null
+          id?: string
+          is_featured?: boolean | null
+          learning_objectives?: string[] | null
+          points?: number | null
+          tags?: string[] | null
+          title: string
+          tools_resources?: string[] | null
+        }
+        Update: {
+          created_at?: string | null
+          description?: string | null
+          difficulty?: string | null
+          domain?: string
+          duration_estimate?: string | null
+          expected_outcomes?: string[] | null
+          icon_emoji?: string | null
+          id?: string
+          is_featured?: boolean | null
+          learning_objectives?: string[] | null
+          points?: number | null
+          tags?: string[] | null
+          title?: string
+          tools_resources?: string[] | null
+        }
+        Relationships: []
+      }
+      project_collaborators: {
+        Row: {
+          id: string
+          invited_by: string | null
+          joined_at: string | null
+          project_id: string
+          role: string | null
+          status: string | null
+          user_id: string
+        }
+        Insert: {
+          id?: string
+          invited_by?: string | null
+          joined_at?: string | null
+          project_id: string
+          role?: string | null
+          status?: string | null
+          user_id: string
+        }
+        Update: {
+          id?: string
+          invited_by?: string | null
+          joined_at?: string | null
+          project_id?: string
+          role?: string | null
+          status?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "project_collaborators_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      project_feedback: {
+        Row: {
+          comments: string | null
+          created_at: string | null
+          feedback_type: string | null
+          id: string
+          improvements: string | null
+          project_id: string
+          rating: number | null
+          reviewee_id: string
+          reviewer_id: string
+          strengths: string | null
+        }
+        Insert: {
+          comments?: string | null
+          created_at?: string | null
+          feedback_type?: string | null
+          id?: string
+          improvements?: string | null
+          project_id: string
+          rating?: number | null
+          reviewee_id: string
+          reviewer_id: string
+          strengths?: string | null
+        }
+        Update: {
+          comments?: string | null
+          created_at?: string | null
+          feedback_type?: string | null
+          id?: string
+          improvements?: string | null
+          project_id?: string
+          rating?: number | null
+          reviewee_id?: string
+          reviewer_id?: string
+          strengths?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "project_feedback_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      project_hackathons: {
+        Row: {
+          created_at: string | null
+          current_participants: number | null
+          description: string | null
+          difficulty: string | null
+          domain: string | null
+          end_date: string | null
+          id: string
+          is_team_based: boolean | null
+          max_participants: number | null
+          prizes: string[] | null
+          start_date: string | null
+          status: string | null
+          tags: string[] | null
+          title: string
+        }
+        Insert: {
+          created_at?: string | null
+          current_participants?: number | null
+          description?: string | null
+          difficulty?: string | null
+          domain?: string | null
+          end_date?: string | null
+          id?: string
+          is_team_based?: boolean | null
+          max_participants?: number | null
+          prizes?: string[] | null
+          start_date?: string | null
+          status?: string | null
+          tags?: string[] | null
+          title: string
+        }
+        Update: {
+          created_at?: string | null
+          current_participants?: number | null
+          description?: string | null
+          difficulty?: string | null
+          domain?: string | null
+          end_date?: string | null
+          id?: string
+          is_team_based?: boolean | null
+          max_participants?: number | null
+          prizes?: string[] | null
+          start_date?: string | null
+          status?: string | null
+          tags?: string[] | null
+          title?: string
+        }
+        Relationships: []
+      }
+      project_progress_logs: {
+        Row: {
+          created_at: string | null
+          description: string | null
+          energy_level: number | null
+          id: string
+          log_type: string | null
+          mood: string | null
+          project_id: string
+          skills_practiced: string[] | null
+          time_spent_minutes: number | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          description?: string | null
+          energy_level?: number | null
+          id?: string
+          log_type?: string | null
+          mood?: string | null
+          project_id: string
+          skills_practiced?: string[] | null
+          time_spent_minutes?: number | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          description?: string | null
+          energy_level?: number | null
+          id?: string
+          log_type?: string | null
+          mood?: string | null
+          project_id?: string
+          skills_practiced?: string[] | null
+          time_spent_minutes?: number | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "project_progress_logs_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      project_reflections: {
+        Row: {
+          ai_feedback: Json | null
+          challenges_faced: string | null
+          content: string
+          created_at: string | null
+          energy_level: number | null
+          id: string
+          lessons_learned: string | null
+          mood: string | null
+          project_id: string
+          reflection_type: string | null
+          skills_developed: string[] | null
+          user_id: string
+        }
+        Insert: {
+          ai_feedback?: Json | null
+          challenges_faced?: string | null
+          content: string
+          created_at?: string | null
+          energy_level?: number | null
+          id?: string
+          lessons_learned?: string | null
+          mood?: string | null
+          project_id: string
+          reflection_type?: string | null
+          skills_developed?: string[] | null
+          user_id: string
+        }
+        Update: {
+          ai_feedback?: Json | null
+          challenges_faced?: string | null
+          content?: string
+          created_at?: string | null
+          energy_level?: number | null
+          id?: string
+          lessons_learned?: string | null
+          mood?: string | null
+          project_id?: string
+          reflection_type?: string | null
+          skills_developed?: string[] | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "project_reflections_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      project_tasks: {
+        Row: {
+          completed_at: string | null
+          created_at: string | null
+          description: string | null
+          due_date: string | null
+          id: string
+          order_index: number | null
+          priority: string | null
+          project_id: string
+          status: string | null
+          title: string
+          user_id: string
+        }
+        Insert: {
+          completed_at?: string | null
+          created_at?: string | null
+          description?: string | null
+          due_date?: string | null
+          id?: string
+          order_index?: number | null
+          priority?: string | null
+          project_id: string
+          status?: string | null
+          title: string
+          user_id: string
+        }
+        Update: {
+          completed_at?: string | null
+          created_at?: string | null
+          description?: string | null
+          due_date?: string | null
+          id?: string
+          order_index?: number | null
+          priority?: string | null
+          project_id?: string
+          status?: string | null
+          title?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "project_tasks_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       projects: {
         Row: {

@@ -11,3 +11,6 @@ verify_jwt = false
 
 [functions.peer-circles-ai]
 verify_jwt = false
+
+[functions.project-playground-ai]
+verify_jwt = false
