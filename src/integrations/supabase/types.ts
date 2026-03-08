@@ -1495,6 +1495,72 @@ export type Database = {
         }
         Relationships: []
       }
+      support_nudges: {
+        Row: {
+          created_at: string
+          id: string
+          is_read: boolean | null
+          message: string
+          nudge_type: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_read?: boolean | null
+          message: string
+          nudge_type?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_read?: boolean | null
+          message?: string
+          nudge_type?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      support_requests: {
+        Row: {
+          action_plan: Json | null
+          ai_guidance: Json | null
+          category: string
+          challenge: string
+          created_at: string
+          id: string
+          mood: string | null
+          resolved_at: string | null
+          status: string
+          user_id: string
+        }
+        Insert: {
+          action_plan?: Json | null
+          ai_guidance?: Json | null
+          category: string
+          challenge: string
+          created_at?: string
+          id?: string
+          mood?: string | null
+          resolved_at?: string | null
+          status?: string
+          user_id: string
+        }
+        Update: {
+          action_plan?: Json | null
+          ai_guidance?: Json | null
+          category?: string
+          challenge?: string
+          created_at?: string
+          id?: string
+          mood?: string | null
+          resolved_at?: string | null
+          status?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       user_learning_progress: {
         Row: {
           completed_at: string | null
