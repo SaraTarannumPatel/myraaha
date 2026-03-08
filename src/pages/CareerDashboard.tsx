@@ -324,7 +324,7 @@ const CareerDashboard = () => {
           <Card className="border-primary/10 bg-gradient-to-br from-primary/[0.02] to-transparent">
             <CardHeader className="pb-3">
               <CardTitle className="text-lg flex items-center gap-2">
-                <Sparkles className="h-5 w-5 text-primary" />
+                <Sparkles className="h-5 w-5 text-indigo" />
                 AI Career Insights
               </CardTitle>
               {recommendations.encouragement && (
