@@ -548,8 +548,8 @@ const Achievements = () => {
         <TabsContent value="streaks" className="space-y-4 mt-4">
           <Card className="p-6">
             <div className="flex items-center gap-4 mb-4">
-              <div className="h-16 w-16 rounded-full bg-gradient-to-br from-orange-400 to-red-500 flex items-center justify-center">
-                <Flame className="h-8 w-8 text-white" />
+              <div className="h-16 w-16 rounded-full gradient-milestone flex items-center justify-center">
+                <Flame className="h-8 w-8 text-primary-foreground" />
               </div>
               <div>
                 <h2 className="text-2xl font-bold text-foreground">{currentStreak} Day Streak</h2>

@@ -1417,7 +1417,7 @@ const SelfGraph = () => {
                           <Lightbulb size={16} className="text-accent mt-0.5 flex-shrink-0" />
                           <div>
                             <p className="font-body text-sm text-foreground">{nudge.nudge}</p>
-                            <span className={`font-body text-xs ${nudge.priority === "high" ? "text-red-600" : nudge.priority === "medium" ? "text-yellow-600" : "text-green-600"}`}>
+                            <span className={`font-body text-xs ${nudge.priority === "high" ? "text-destructive" : nudge.priority === "medium" ? "text-warning" : "text-success"}`}>
                               {nudge.priority} priority • {nudge.category}
                             </span>
                           </div>
