@@ -1,0 +1,95 @@
+import { motion, useInView } from "framer-motion";
+import { useRef, useState } from "react";
+import {
+  Lightbulb, Eye, Brain, BookOpen, Wrench, Presentation,
+  HeartHandshake, MessageCircleHeart,
+} from "lucide-react";
+import entrepreneurshipIllustration from "@/assets/entrepreneurship-illustration.png";
+
+const features = [
+  { icon: Lightbulb, title: "Startup Sparks", description: "Curiosity-led playground to explore what entrepreneurship really means." },
+  { icon: Eye, title: "Problem Spotting Lens", description: "Learn to identify real-world problems worth solving — locally or globally." },
+  { icon: Brain, title: "Mindset Builder", description: "Build resilience, creative risk-taking, and ownership through challenges." },
+  { icon: BookOpen, title: "Founder's Learning Library", description: "Startup literacy capsules, playbooks & simulation challenges." },
+  { icon: Wrench, title: "MVP Builders", description: "Guided sandbox for building your first Minimum Viable Product." },
+  { icon: Presentation, title: "Startup Showcase", description: "Pitch to mentors, investors & collaborators with Funding Path Navigator." },
+  { icon: HeartHandshake, title: "Founder Circles", description: "Peer-led accountability groups for shared growth & collaboration." },
+  { icon: MessageCircleHeart, title: "AI Entrepreneurship Coach", description: "Your 24/7 digital co-founder — emotionally intelligent & always available." },
+];
+
+const EntrepreneurshipSection = () => {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: "-80px" });
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  return (
+    <section id="entrepreneurship" ref={ref} className="py-24 md:py-32 bg-background">
+      <div className="container mx-auto px-6">
+        <div className="text-center mb-16">
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={isInView ? { opacity: 1 } : {}}
+            className="font-body text-xs uppercase tracking-[0.2em] text-secondary font-semibold mb-4"
+          >
+            Entrepreneurship Edition
+          </motion.p>
+          <motion.h2
+            initial={{ opacity: 0, y: 20 }}
+            animate={isInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ delay: 0.1 }}
+            className="font-display text-4xl md:text-5xl text-foreground max-w-2xl mx-auto"
+          >
+            Don't just chase jobs. <em className="text-gradient-warm">Learn to create them.</em>
+          </motion.h2>
+        </div>
+
+        <div className="grid lg:grid-cols-2 gap-12 items-center max-w-5xl mx-auto">
+          {/* Illustration */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={isInView ? { opacity: 1, scale: 1 } : {}}
+            transition={{ duration: 0.6 }}
+            className="relative flex justify-center"
+          >
+            <div className="absolute inset-0 bg-gradient-to-br from-secondary/10 to-transparent rounded-3xl blur-2xl" />
+            <img
+              src={entrepreneurshipIllustration}
+              alt="Rocket launching from a notebook — startup creation"
+              className="relative w-full max-w-md"
+            />
+          </motion.div>
+
+          {/* Feature list */}
+          <div className="space-y-2">
+            {features.map((feature, i) => (
+              <motion.div
+                key={feature.title}
+                initial={{ opacity: 0, x: 20 }}
+                animate={isInView ? { opacity: 1, x: 0 } : {}}
+                transition={{ delay: 0.15 + i * 0.05 }}
+                className={`flex items-start gap-4 p-4 rounded-2xl cursor-pointer transition-all duration-300 border ${
+                  activeIndex === i
+                    ? "bg-card border-secondary/30 shadow-card"
+                    : "border-transparent hover:bg-muted/50"
+                }`}
+                onClick={() => setActiveIndex(i)}
+              >
+                <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 transition-all duration-300 ${
+                  activeIndex === i ? "gradient-warm text-secondary-foreground" : "bg-muted"
+                }`}>
+                  <feature.icon size={20} />
+                </div>
+                <div>
+                  <h3 className="font-display text-lg text-foreground">{feature.title}</h3>
+                  <p className="font-body text-sm text-muted-foreground leading-relaxed">{feature.description}</p>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+export default EntrepreneurshipSection;
