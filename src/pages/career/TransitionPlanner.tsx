@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -10,10 +10,12 @@ import { Progress } from "@/components/ui/progress";
 import { Slider } from "@/components/ui/slider";
 import { toast } from "@/hooks/use-toast";
 import { motion, AnimatePresence } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 import {
   RefreshCw, Brain, FileText, Zap, GitBranch, BarChart3, Shield, Map,
   Users, Heart, ArrowRight, Loader2, ChevronRight, AlertTriangle,
-  CheckCircle2, Clock, DollarSign, Sparkles, Target, Lightbulb, Pause
+  CheckCircle2, Clock, DollarSign, Sparkles, Target, Lightbulb, Pause,
+  Compass, BookOpen, MessageCircle, Award, TrendingUp, Link2
 } from "lucide-react";
 
 type Plan = {
@@ -52,45 +54,82 @@ const PAIN_PROMPTS = [
   "When did you last feel truly engaged at work?",
 ];
 
+const STEPS = [
+  { key: "reality", label: "Reality Map", icon: Brain },
+  { key: "timeline", label: "Timeline", icon: FileText },
+  { key: "readiness", label: "Readiness", icon: Target },
+  { key: "paths", label: "Paths", icon: GitBranch },
+  { key: "skills", label: "Skill Bridge", icon: Zap },
+  { key: "demand", label: "Demand", icon: BarChart3 },
+  { key: "roadmap", label: "Roadmap", icon: Map },
+  { key: "support", label: "Support", icon: Heart },
+  { key: "connect", label: "Connect", icon: Link2 },
+];
+
 export default function TransitionPlanner() {
   const { user } = useAuth();
+  const navigate = useNavigate();
   const [tab, setTab] = useState("reality");
   const [plan, setPlan] = useState<Plan | null>(null);
   const [paths, setPaths] = useState<ParallelPath[]>([]);
   const [loading, setLoading] = useState(true);
   const [aiLoading, setAiLoading] = useState(false);
 
-  // Reality mapping
   const [painAnswers, setPainAnswers] = useState<string[]>(PAIN_PROMPTS.map(() => ""));
   const [realityResult, setRealityResult] = useState<any>(null);
-
-  // Readiness
   const [readinessInputs, setReadinessInputs] = useState({ time: 50, financial: 50, emotional: 50, learning: 50 });
   const [readinessResult, setReadinessResult] = useState<any>(null);
-
-  // Timeline
   const [timelineResult, setTimelineResult] = useState<any>(null);
-
-  // Parallel paths
   const [pathsResult, setPathsResult] = useState<any>(null);
-
-  // Skill bridge
   const [selectedPathIdx, setSelectedPathIdx] = useState(0);
   const [skillBridgeResult, setSkillBridgeResult] = useState<any>(null);
-
-  // Demand
   const [demandResult, setDemandResult] = useState<any>(null);
-
-  // Roadmap
   const [roadmapResult, setRoadmapResult] = useState<any>(null);
-
-  // Emotional
   const [emotionalResult, setEmotionalResult] = useState<any>(null);
   const [emotionalInput, setEmotionalInput] = useState("");
+  const [communityResult, setCommunityResult] = useState<any>(null);
+  const [progressResult, setProgressResult] = useState<any>(null);
+
+  const completedSteps = useMemo(() => {
+    const done: string[] = [];
+    if (realityResult) done.push("reality");
+    if (timelineResult) done.push("timeline");
+    if (readinessResult) done.push("readiness");
+    if (pathsResult?.paths?.length) done.push("paths");
+    if (skillBridgeResult) done.push("skills");
+    if (demandResult) done.push("demand");
+    if (roadmapResult) done.push("roadmap");
+    if (emotionalResult) done.push("support");
+    return done;
+  }, [realityResult, timelineResult, readinessResult, pathsResult, skillBridgeResult, demandResult, roadmapResult, emotionalResult]);
+
+  const progressPct = Math.round((completedSteps.length / 8) * 100);
 
   useEffect(() => {
     if (user) loadPlan();
   }, [user]);
+
+  // Award badges at milestones
+  useEffect(() => {
+    if (!user || completedSteps.length === 0) return;
+    const milestones: Record<number, string> = {
+      3: "Transition Explorer",
+      5: "Path Navigator",
+      8: "Transition Master",
+    };
+    const badge = milestones[completedSteps.length];
+    if (badge) {
+      supabase.from("achievements").insert({
+        user_id: user.id,
+        title: badge,
+        achievement_type: "transition",
+        description: `Completed ${completedSteps.length} transition planning steps`,
+        points: completedSteps.length * 15,
+      }).then(() => {
+        toast({ title: `🏆 Badge unlocked: ${badge}!` });
+      });
+    }
+  }, [completedSteps.length]);
 
   const loadPlan = async () => {
     setLoading(true);
@@ -106,11 +145,7 @@ export default function TransitionPlanner() {
       if (p.reality_mapping && Object.keys(p.reality_mapping).length > 0) setRealityResult(p.reality_mapping);
       if (p.readiness_assessment && Object.keys(p.readiness_assessment).length > 0) setReadinessResult(p.readiness_assessment);
       if (p.timeline_insights && Object.keys(p.timeline_insights).length > 0) setTimelineResult(p.timeline_insights);
-      // Load paths
-      const { data: pathData } = await supabase
-        .from("transition_paths")
-        .select("*")
-        .eq("plan_id", p.id);
+      const { data: pathData } = await supabase.from("transition_paths").select("*").eq("plan_id", p.id);
       if (pathData) setPaths(pathData as any as ParallelPath[]);
     }
     setLoading(false);
@@ -138,6 +173,17 @@ export default function TransitionPlanner() {
     return data;
   };
 
+  const syncToJournal = async (title: string, content: string, tags: string[]) => {
+    if (!user) return;
+    await supabase.from("journal_entries").insert({
+      user_id: user.id,
+      title,
+      content,
+      tags: ["transition", ...tags],
+      mood: "reflective",
+    });
+  };
+
   // Step 1: Reality Mapping
   const submitRealityMapping = async () => {
     if (painAnswers.every(a => !a.trim())) return toast({ title: "Please answer at least one question", variant: "destructive" });
@@ -153,6 +199,7 @@ export default function TransitionPlanner() {
         reality_mapping: result,
         current_pain_points: painAnswers.filter(a => a.trim()),
       } as any).eq("id", planId);
+      await syncToJournal("Transition: Reality Mapping", `Patterns: ${result.patterns?.map((p: any) => p.observation).join("; ")}`, ["reality-mapping"]);
       toast({ title: "Reality map created ✨" });
     } catch (e: any) {
       toast({ title: e.message || "Failed to analyze", variant: "destructive" });
@@ -223,7 +270,6 @@ export default function TransitionPlanner() {
       };
       const result = await callAI("parallel_paths", context);
       setPathsResult(result);
-      // Save paths to DB
       if (plan && result.paths) {
         for (const p of result.paths) {
           await supabase.from("transition_paths").insert({
@@ -296,6 +342,7 @@ export default function TransitionPlanner() {
       };
       const result = await callAI("transition_roadmap", context);
       setRoadmapResult(result);
+      await syncToJournal("Transition Roadmap Created", `Path: ${targetPath.title}\nTimeline: ${result.total_timeline}\nStages: ${result.stages?.length}`, ["roadmap"]);
       toast({ title: "Transition roadmap created 🗺️" });
     } catch (e: any) {
       toast({ title: e.message || "Failed to create roadmap", variant: "destructive" });
@@ -311,7 +358,6 @@ export default function TransitionPlanner() {
       const context = { feeling: emotionalInput, readiness: readinessResult?.readiness_level, stage: tab };
       const result = await callAI("emotional_support", context);
       setEmotionalResult(result);
-      // Save reflection
       if (plan) {
         await supabase.from("transition_reflections").insert({
           user_id: user!.id,
@@ -322,8 +368,48 @@ export default function TransitionPlanner() {
           mood: "processing",
         });
       }
+      await syncToJournal("Transition: Emotional Reflection", `Feeling: ${emotionalInput}\n\nValidation: ${result.validation}\nReframe: ${result.reframe}`, ["emotional", "support"]);
     } catch (e: any) {
       toast({ title: e.message || "Failed to get support", variant: "destructive" });
+    }
+    setAiLoading(false);
+  };
+
+  // Community Anchoring
+  const getCommunityAnchoring = async () => {
+    setAiLoading(true);
+    try {
+      const context = {
+        pain_points: plan?.current_pain_points || [],
+        target_paths: pathsResult?.paths?.map((p: any) => p.title) || [],
+        transferable_skills: timelineResult?.transferable_strengths?.map((s: any) => s.skill) || [],
+        readiness_level: readinessResult?.readiness_level,
+      };
+      const result = await callAI("community_anchoring", context);
+      setCommunityResult(result);
+    } catch (e: any) {
+      toast({ title: e.message || "Failed to load community suggestions", variant: "destructive" });
+    }
+    setAiLoading(false);
+  };
+
+  // Progress Summary
+  const getProgressSummary = async () => {
+    setAiLoading(true);
+    try {
+      const context = {
+        completed_steps: completedSteps,
+        reality_mapping: realityResult,
+        readiness: readinessResult,
+        paths: pathsResult?.paths,
+        skill_bridge: skillBridgeResult,
+        demand: demandResult,
+        roadmap: roadmapResult,
+      };
+      const result = await callAI("progress_summary", context);
+      setProgressResult(result);
+    } catch (e: any) {
+      toast({ title: e.message || "Failed to get summary", variant: "destructive" });
     }
     setAiLoading(false);
   };
@@ -337,8 +423,8 @@ export default function TransitionPlanner() {
   }
 
   const riskColor = (risk: string) => {
-    if (risk === "low" || risk === "low-risk") return "text-emerald-600 bg-emerald-500/10";
-    if (risk === "medium" || risk === "medium-risk") return "text-amber-600 bg-amber-500/10";
+    if (risk === "low" || risk === "low-risk" || risk === "safe" || risk === "minimal") return "text-emerald-600 bg-emerald-500/10";
+    if (risk === "medium" || risk === "medium-risk" || risk === "moderate") return "text-amber-600 bg-amber-500/10";
     return "text-rose-600 bg-rose-500/10";
   };
 
@@ -355,23 +441,78 @@ export default function TransitionPlanner() {
           <h1 className="text-3xl font-bold text-foreground mb-2">
             You don't have to burn your past to build your future.
           </h1>
-          <p className="text-muted-foreground max-w-2xl">
+          <p className="text-muted-foreground max-w-2xl mb-4">
             Let's redesign your path carefully — without destroying your stability, identity, or confidence.
           </p>
+
+          {/* Progress bar */}
+          <div className="max-w-md">
+            <div className="flex items-center justify-between text-xs text-muted-foreground mb-1">
+              <span>Journey Progress</span>
+              <span>{completedSteps.length}/8 steps · {progressPct}%</span>
+            </div>
+            <Progress value={progressPct} className="h-2" />
+            <div className="flex gap-1 mt-2">
+              {STEPS.slice(0, 8).map(s => (
+                <div key={s.key} className={`h-1.5 flex-1 rounded-full ${completedSteps.includes(s.key) ? "bg-teal-500" : "bg-muted"}`} />
+              ))}
+            </div>
+          </div>
         </div>
       </motion.div>
+
+      {/* Progress Summary Card */}
+      {completedSteps.length >= 3 && (
+        <Card className="border-teal-500/20">
+          <CardContent className="pt-4 pb-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <TrendingUp className="h-5 w-5 text-teal-500" />
+                <div>
+                  <p className="text-sm font-medium">You've completed {completedSteps.length} steps — great progress!</p>
+                  {progressResult?.current_focus && <p className="text-xs text-muted-foreground">{progressResult.current_focus}</p>}
+                </div>
+              </div>
+              <Button variant="outline" size="sm" onClick={getProgressSummary} disabled={aiLoading} className="gap-1">
+                {aiLoading ? <Loader2 className="h-3 w-3 animate-spin" /> : <Sparkles className="h-3 w-3" />}
+                AI Summary
+              </Button>
+            </div>
+            <AnimatePresence>
+              {progressResult && (
+                <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: "auto" }} className="mt-4 space-y-3">
+                  {progressResult.wins?.length > 0 && (
+                    <div className="flex flex-wrap gap-2">
+                      {progressResult.wins.map((w: string, i: number) => <Badge key={i} variant="secondary" className="text-xs">{w}</Badge>)}
+                    </div>
+                  )}
+                  {progressResult.next_priorities?.length > 0 && (
+                    <div className="space-y-1">
+                      {progressResult.next_priorities.slice(0, 3).map((p: any, i: number) => (
+                        <div key={i} className="flex items-center gap-2 text-xs">
+                          <Badge className={p.urgency === "now" ? "bg-teal-500/10 text-teal-700" : "bg-muted text-muted-foreground"}>{p.urgency}</Badge>
+                          <span>{p.action}</span>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                  {progressResult.encouragement && <p className="text-sm italic text-muted-foreground">{progressResult.encouragement}</p>}
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </CardContent>
+        </Card>
+      )}
 
       {/* Tabs */}
       <Tabs value={tab} onValueChange={setTab}>
         <TabsList className="flex-wrap h-auto gap-1">
-          <TabsTrigger value="reality" className="gap-1 text-xs"><Brain className="h-3.5 w-3.5" /> Reality Map</TabsTrigger>
-          <TabsTrigger value="timeline" className="gap-1 text-xs"><FileText className="h-3.5 w-3.5" /> Timeline</TabsTrigger>
-          <TabsTrigger value="readiness" className="gap-1 text-xs"><Target className="h-3.5 w-3.5" /> Readiness</TabsTrigger>
-          <TabsTrigger value="paths" className="gap-1 text-xs"><GitBranch className="h-3.5 w-3.5" /> Paths</TabsTrigger>
-          <TabsTrigger value="skills" className="gap-1 text-xs"><Zap className="h-3.5 w-3.5" /> Skill Bridge</TabsTrigger>
-          <TabsTrigger value="demand" className="gap-1 text-xs"><BarChart3 className="h-3.5 w-3.5" /> Demand</TabsTrigger>
-          <TabsTrigger value="roadmap" className="gap-1 text-xs"><Map className="h-3.5 w-3.5" /> Roadmap</TabsTrigger>
-          <TabsTrigger value="support" className="gap-1 text-xs"><Heart className="h-3.5 w-3.5" /> Support</TabsTrigger>
+          {STEPS.map(s => (
+            <TabsTrigger key={s.key} value={s.key} className="gap-1 text-xs relative">
+              <s.icon className="h-3.5 w-3.5" /> {s.label}
+              {completedSteps.includes(s.key) && <span className="absolute -top-0.5 -right-0.5 h-2 w-2 rounded-full bg-teal-500" />}
+            </TabsTrigger>
+          ))}
         </TabsList>
 
         {/* ===== REALITY MAPPING ===== */}
@@ -885,9 +1026,7 @@ export default function TransitionPlanner() {
             {roadmapResult && (
               <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} className="space-y-4">
                 {roadmapResult.message && <p className="text-sm italic text-muted-foreground">{roadmapResult.message}</p>}
-                {roadmapResult.total_timeline && (
-                  <Badge variant="outline" className="text-sm">{roadmapResult.total_timeline}</Badge>
-                )}
+                {roadmapResult.total_timeline && <Badge variant="outline" className="text-sm">{roadmapResult.total_timeline}</Badge>}
 
                 {roadmapResult.stages?.map((stage: any, i: number) => (
                   <Card key={i} className="relative">
@@ -943,6 +1082,19 @@ export default function TransitionPlanner() {
                           <li key={i} className="text-sm flex items-start gap-2"><CheckCircle2 className="h-3.5 w-3.5 mt-0.5 text-amber-500 shrink-0" /> {p}</li>
                         ))}
                       </ul>
+                    </CardContent>
+                  </Card>
+                )}
+
+                {roadmapResult.success_indicators?.length > 0 && (
+                  <Card className="border-emerald-500/20">
+                    <CardHeader className="pb-2"><CardTitle className="text-sm flex items-center gap-2"><Award className="h-4 w-4 text-emerald-500" /> Success Indicators</CardTitle></CardHeader>
+                    <CardContent>
+                      <div className="flex flex-wrap gap-2">
+                        {roadmapResult.success_indicators.map((s: string, i: number) => (
+                          <Badge key={i} variant="secondary" className="text-xs">{s}</Badge>
+                        ))}
+                      </div>
                     </CardContent>
                   </Card>
                 )}
@@ -1002,7 +1154,7 @@ export default function TransitionPlanner() {
                       )}
                       {emotionalResult.mentor_suggestion && (
                         <div className="p-3 rounded-lg bg-muted text-sm">
-                          <Users className="h-4 w-4 mb-1 text-muted-foreground" />
+                          <MessageCircle className="h-4 w-4 mb-1 text-muted-foreground" />
                           <p>{emotionalResult.mentor_suggestion}</p>
                         </div>
                       )}
@@ -1017,6 +1169,122 @@ export default function TransitionPlanner() {
               </motion.div>
             )}
           </AnimatePresence>
+        </TabsContent>
+
+        {/* ===== CONNECT ===== */}
+        <TabsContent value="connect" className="space-y-4 mt-4">
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2"><Link2 className="h-5 w-5 text-teal-500" /> Community & Mentor Anchoring</CardTitle>
+              <CardDescription>Isolation is the biggest transition killer. Let's connect you with people who get it.</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <Button onClick={getCommunityAnchoring} disabled={aiLoading} className="gap-2">
+                {aiLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Sparkles className="h-4 w-4" />}
+                Find My Community
+              </Button>
+            </CardContent>
+          </Card>
+
+          <AnimatePresence>
+            {communityResult && (
+              <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} className="space-y-4">
+                {communityResult.isolation_breaker && (
+                  <p className="text-sm italic text-muted-foreground">{communityResult.isolation_breaker}</p>
+                )}
+
+                {communityResult.suggested_circles?.length > 0 && (
+                  <Card>
+                    <CardHeader><CardTitle className="text-lg flex items-center gap-2"><Users className="h-5 w-5" /> Suggested Peer Circles</CardTitle></CardHeader>
+                    <CardContent className="space-y-3">
+                      {communityResult.suggested_circles.map((c: any, i: number) => (
+                        <div key={i} className="p-3 rounded-lg bg-muted">
+                          <p className="font-medium text-sm">{c.name}</p>
+                          <p className="text-xs text-muted-foreground mt-1">{c.why}</p>
+                          <Badge variant="outline" className="text-xs mt-1">{c.activity}</Badge>
+                        </div>
+                      ))}
+                    </CardContent>
+                  </Card>
+                )}
+
+                {communityResult.mentor_profiles?.length > 0 && (
+                  <Card>
+                    <CardHeader><CardTitle className="text-lg flex items-center gap-2"><MessageCircle className="h-5 w-5" /> Mentor Types for You</CardTitle></CardHeader>
+                    <CardContent className="space-y-3">
+                      {communityResult.mentor_profiles.map((m: any, i: number) => (
+                        <div key={i} className="p-3 rounded-lg bg-muted">
+                          <p className="font-medium text-sm">{m.type}</p>
+                          <p className="text-xs text-muted-foreground">{m.background}</p>
+                          <p className="text-xs mt-1">{m.how_they_help}</p>
+                        </div>
+                      ))}
+                    </CardContent>
+                  </Card>
+                )}
+
+                {communityResult.case_studies?.length > 0 && (
+                  <Card>
+                    <CardHeader><CardTitle className="text-lg flex items-center gap-2"><BookOpen className="h-5 w-5" /> Similar Transition Stories</CardTitle></CardHeader>
+                    <CardContent className="space-y-3">
+                      {communityResult.case_studies.map((c: any, i: number) => (
+                        <div key={i} className="p-3 rounded-lg bg-muted">
+                          <p className="font-medium text-sm">{c.title}</p>
+                          <p className="text-xs text-muted-foreground mt-1">{c.summary}</p>
+                          <Badge variant="secondary" className="text-xs mt-1">{c.similarity}</Badge>
+                        </div>
+                      ))}
+                    </CardContent>
+                  </Card>
+                )}
+
+                {communityResult.community_actions?.length > 0 && (
+                  <Card className="border-teal-500/20">
+                    <CardHeader className="pb-2"><CardTitle className="text-sm">Next Community Actions</CardTitle></CardHeader>
+                    <CardContent>
+                      <ul className="space-y-1">
+                        {communityResult.community_actions.map((a: string, i: number) => (
+                          <li key={i} className="text-sm flex items-start gap-2"><ChevronRight className="h-3.5 w-3.5 mt-0.5 text-teal-500 shrink-0" /> {a}</li>
+                        ))}
+                      </ul>
+                    </CardContent>
+                  </Card>
+                )}
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          {/* Cross-feature navigation */}
+          <Card>
+            <CardHeader><CardTitle className="text-lg">Connected Features</CardTitle></CardHeader>
+            <CardContent>
+              <div className="grid gap-3 sm:grid-cols-2">
+                {[
+                  { label: "SelfGraph", desc: "Detect misalignment & identity drift", icon: Brain, path: "/career/selfgraph" },
+                  { label: "SkillStacker", desc: "Design bridge-skill learning paths", icon: Zap, path: "/career/skillstacker" },
+                  { label: "Mentor Matchmaking", desc: "Find transition-ready mentors", icon: Users, path: "/career/mentors" },
+                  { label: "Peer Circles", desc: "Join career switcher communities", icon: MessageCircle, path: "/career/peers" },
+                  { label: "AI Career Therapist", desc: "Emotional support during uncertainty", icon: Heart, path: "/career/therapist" },
+                  { label: "AI Roadmaps", desc: "Convert insights into phased plans", icon: Map, path: "/career/roadmap" },
+                  { label: "Living Resume", desc: "Track transferable skills & growth", icon: FileText, path: "/career/resume" },
+                  { label: "Journal", desc: "Reflect on your transition journey", icon: BookOpen, path: "/journal" },
+                ].map((f, i) => (
+                  <button
+                    key={i}
+                    onClick={() => navigate(f.path)}
+                    className="flex items-center gap-3 p-3 rounded-lg bg-muted hover:bg-muted/80 text-left transition-colors"
+                  >
+                    <f.icon className="h-5 w-5 text-teal-500 shrink-0" />
+                    <div>
+                      <p className="text-sm font-medium">{f.label}</p>
+                      <p className="text-xs text-muted-foreground">{f.desc}</p>
+                    </div>
+                    <ArrowRight className="h-4 w-4 ml-auto text-muted-foreground" />
+                  </button>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
         </TabsContent>
       </Tabs>
     </div>

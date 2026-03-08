@@ -110,6 +110,27 @@ Return JSON: {
   "mentor_suggestion": string,
   "gentle_next_step": string
 }`,
+
+      community_anchoring: `You are a community connector for career transitioners. Based on the user's transition context (pain points, target paths, skills), suggest relevant peer circles, mentor types, and community activities that would reduce isolation and provide support.
+Return JSON: {
+  "suggested_circles": [{ "name": string, "why": string, "activity": string }],
+  "mentor_profiles": [{ "type": string, "background": string, "how_they_help": string }],
+  "case_studies": [{ "title": string, "summary": string, "similarity": string }],
+  "community_actions": string[],
+  "isolation_breaker": string
+}`,
+
+      progress_summary: `You are a transition progress analyst. Based on the user's completed steps, reflections, and transition data, provide a holistic progress summary with encouragement and next priorities.
+Return JSON: {
+  "overall_progress": number,
+  "completed_phases": string[],
+  "current_focus": string,
+  "momentum_level": "building"|"steady"|"stalling",
+  "wins": string[],
+  "next_priorities": [{ "action": string, "why": string, "urgency": "now"|"soon"|"later" }],
+  "encouragement": string,
+  "journal_prompt": string
+}`,
     };
 
     const systemPrompt = systemPrompts[type];
@@ -119,7 +140,7 @@ Return JSON: {
       method: "POST",
       headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" },
       body: JSON.stringify({
-        model: "google/gemini-2.5-flash",
+        model: "google/gemini-3-flash-preview",
         messages: [
           { role: "system", content: systemPrompt },
           { role: "user", content: JSON.stringify(context) },
