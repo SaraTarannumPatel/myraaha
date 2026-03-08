@@ -42,6 +42,7 @@ import StartupSupport from "./pages/entrepreneurship/StartupSupport";
 import AIEntrepreneurshipCoach from "./pages/entrepreneurship/AIEntrepreneurshipCoach";
 import StartupCommunities from "./pages/entrepreneurship/StartupCommunities";
 import FoundersLearningLibrary from "./pages/entrepreneurship/FoundersLearningLibrary";
+import EntrepreneurshipMoodboard from "./pages/entrepreneurship/Moodboard";
 // Shared
 import Journal from "./pages/shared/Journal";
 import Connections from "./pages/shared/Connections";
