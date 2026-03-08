@@ -21,7 +21,10 @@ export default {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
-        background: "hsl(var(--background))",
+        background: {
+          DEFAULT: "hsl(var(--background))",
+          alt: "hsl(var(--background-alt))",
+        },
         foreground: "hsl(var(--foreground))",
         primary: {
           DEFAULT: "hsl(var(--primary))",
@@ -61,9 +64,10 @@ export default {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
+
         /* Extended brand palette */
         green: {
-          DEFAULT: "hsl(var(--green-primary))",
+          DEFAULT: "hsl(var(--primary))",
           secondary: "hsl(var(--green-secondary))",
           wash: "hsl(var(--green-wash))",
         },
@@ -73,7 +77,7 @@ export default {
           light: "hsl(var(--blue-light))",
         },
         yellow: {
-          DEFAULT: "hsl(var(--yellow-primary))",
+          DEFAULT: "hsl(var(--accent))",
           highlight: "hsl(var(--yellow-highlight))",
           icon: "hsl(var(--yellow-icon))",
         },
@@ -88,6 +92,40 @@ export default {
         maroon: {
           DEFAULT: "hsl(var(--maroon))",
           light: "hsl(var(--maroon-light))",
+        },
+
+        /* Semantic status colors */
+        success: {
+          DEFAULT: "hsl(var(--success))",
+          foreground: "hsl(var(--success-foreground))",
+        },
+        warning: {
+          DEFAULT: "hsl(var(--warning))",
+          foreground: "hsl(var(--warning-foreground))",
+        },
+        info: {
+          DEFAULT: "hsl(var(--info))",
+          foreground: "hsl(var(--info-foreground))",
+        },
+        ai: {
+          DEFAULT: "hsl(var(--ai))",
+          foreground: "hsl(var(--ai-foreground))",
+        },
+        milestone: {
+          DEFAULT: "hsl(var(--milestone))",
+          foreground: "hsl(var(--milestone-foreground))",
+        },
+        warmth: {
+          DEFAULT: "hsl(var(--warmth))",
+          foreground: "hsl(var(--warmth-foreground))",
+        },
+
+        /* Grey scale for structure */
+        grey: {
+          divider: "hsl(var(--grey-divider))",
+          disabled: "hsl(var(--grey-disabled))",
+          meta: "hsl(var(--grey-meta))",
+          label: "hsl(var(--grey-label))",
         },
       },
       borderRadius: {

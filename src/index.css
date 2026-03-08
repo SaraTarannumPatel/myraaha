@@ -6,35 +6,99 @@
 
 @layer base {
   :root {
-    /* Foundational Neutrals */
-    --background: 60 14% 98%;
-    --foreground: 0 0% 7%;
+    /* ===== 1. FOUNDATIONAL NEUTRALS (70%) ===== */
 
-    --card: 0 0% 100%;
-    --card-foreground: 0 0% 10%;
+    /* Primary White / Off-White (Base) */
+    --background: 60 14% 98%;          /* #FAFAF8 */
+    --background-alt: 80 12% 95%;      /* #F4F5F2 section breaks */
+    --foreground: 0 0% 7%;             /* #111111 primary text */
+
+    --card: 0 0% 100%;                 /* #FFFFFF sparingly */
+    --card-foreground: 0 0% 10%;       /* #1A1A1A headers */
 
     --popover: 0 0% 100%;
     --popover-foreground: 0 0% 7%;
 
+    /* Near-Black (Authority) */
+    --heading: 0 0% 10%;               /* #1A1A1A */
+    --text-secondary: 0 0% 16%;        /* #2A2A2A */
+
+    /* Cool Grey (Structure) */
+    --grey-divider: 75 6% 90%;         /* #E6E7E3 dividers, cards */
+    --grey-disabled: 72 4% 79%;        /* #C9CBC4 disabled states */
+    --grey-meta: 150 2% 63%;           /* #9FA3A0 meta text */
+    --grey-label: 144 2% 45%;          /* #6F7370 labels, hints */
+
+    /* ===== 2. CORE BRAND COLORS (20%) ===== */
+
     /* Calm Green – Trust / Empathy */
-    --primary: 158 17% 37%;
+    --primary: 158 17% 37%;            /* #4F6F64 */
     --primary-foreground: 60 14% 98%;
+    --green-secondary: 158 14% 50%;    /* #6F8F84 */
+    --green-wash: 158 13% 67%;         /* #9FB7AD */
 
     /* Section break neutral */
-    --secondary: 80 12% 96%;
+    --secondary: 80 12% 96%;           /* #F4F5F2 */
     --secondary-foreground: 0 0% 10%;
 
     /* Cool Grey – Structure */
-    --muted: 75 6% 90%;
-    --muted-foreground: 140 2% 45%;
+    --muted: 75 6% 90%;                /* #E6E7E3 */
+    --muted-foreground: 144 2% 45%;    /* #6F7370 */
 
-    /* Soft Yellow – Raaha Signal / Guidance Accent */
-    --accent: 47 58% 73%;
+    /* Muted Blue – Clarity / Direction */
+    --blue-primary: 203 29% 35%;       /* #3F5E73 */
+    --blue-secondary: 203 22% 47%;     /* #5E7C90 */
+    --blue-light: 203 19% 64%;         /* #8FA6B5 */
+
+    /* ===== 3. GUIDANCE ACCENT (7%) ===== */
+
+    /* Soft Yellow – Raaha Signal */
+    --accent: 47 58% 73%;              /* #E6D48F */
     --accent-foreground: 0 0% 7%;
+    --yellow-highlight: 47 62% 83%;    /* #F0E6B8 */
+    --yellow-icon: 47 50% 63%;         /* #D1C06F */
 
+    /* ===== 4. SYSTEM ENHANCERS (≤2%) ===== */
+
+    /* Deep Indigo – Intelligence / AI */
+    --indigo-deep: 220 32% 27%;        /* #2E3A59 */
+    --indigo-analytical: 220 28% 32%;  /* #3A4768 */
+
+    /* ===== 5. HUMAN DEPTH ACCENTS (≤1%) ===== */
+
+    /* Dusty Terracotta – Human Warmth */
+    --terracotta: 22 34% 52%;          /* #B07A5A */
+    --terracotta-light: 22 34% 59%;    /* #C08C6C */
+
+    /* Deep Maroon – Impact / Gravity */
+    --maroon: 343 32% 27%;             /* #5A2E3A */
+    --maroon-light: 343 30% 33%;       /* #6E3B46 */
+
+    /* ===== Semantic mappings ===== */
+
+    /* Status colors mapped to palette */
+    --success: 158 17% 37%;            /* Calm Green */
+    --success-foreground: 60 14% 98%;
+    --warning: 47 58% 73%;             /* Soft Yellow */
+    --warning-foreground: 0 0% 7%;
+    --info: 203 29% 35%;               /* Muted Blue */
+    --info-foreground: 60 14% 98%;
     --destructive: 0 84% 60%;
     --destructive-foreground: 60 14% 98%;
 
+    /* AI / Analytics emphasis */
+    --ai: 220 32% 27%;                 /* Deep Indigo */
+    --ai-foreground: 60 14% 98%;
+
+    /* Milestone / Impact */
+    --milestone: 343 32% 27%;          /* Maroon */
+    --milestone-foreground: 60 14% 98%;
+
+    /* Storytelling / Human warmth */
+    --warmth: 22 34% 52%;              /* Terracotta */
+    --warmth-foreground: 60 14% 98%;
+
+    /* ===== Structural ===== */
     --border: 75 6% 90%;
     --input: 75 6% 90%;
     --ring: 158 17% 37%;
@@ -44,34 +108,13 @@
     --font-display: 'Instrument Serif', serif;
     --font-body: 'Inter', sans-serif;
 
-    /* Extended palette as CSS custom properties */
-    --green-primary: 158 17% 37%;
-    --green-secondary: 158 14% 50%;
-    --green-wash: 158 13% 67%;
-
-    --blue-primary: 203 29% 35%;
-    --blue-secondary: 203 22% 47%;
-    --blue-light: 203 19% 64%;
-
-    --yellow-primary: 47 58% 73%;
-    --yellow-highlight: 47 62% 83%;
-    --yellow-icon: 47 50% 63%;
-
-    --indigo-deep: 220 32% 27%;
-    --indigo-analytical: 220 28% 32%;
-
-    --terracotta: 22 34% 52%;
-    --terracotta-light: 22 34% 59%;
-
-    --maroon: 343 32% 27%;
-    --maroon-light: 343 30% 33%;
-
     /* Gradients */
     --gradient-warm: linear-gradient(135deg, hsl(158 17% 37%), hsl(203 29% 35%));
     --gradient-hero: linear-gradient(180deg, hsl(60 14% 98%) 0%, hsl(80 12% 96%) 100%);
     --gradient-dark: linear-gradient(135deg, hsl(0 0% 7%), hsl(220 32% 27%));
     --gradient-glow: radial-gradient(ellipse at 50% 0%, hsl(47 58% 73% / 0.12) 0%, transparent 60%);
     --gradient-accent: linear-gradient(135deg, hsl(47 58% 73%), hsl(47 50% 63%));
+    --gradient-milestone: linear-gradient(135deg, hsl(22 34% 52%), hsl(343 32% 27%));
 
     /* Shadows */
     --shadow-soft: 0 2px 20px -4px hsl(0 0% 7% / 0.06);
@@ -133,6 +176,10 @@
     background: var(--gradient-accent);
   }
 
+  .gradient-milestone {
+    background: var(--gradient-milestone);
+  }
+
   .shadow-soft {
     box-shadow: var(--shadow-soft);
   }
@@ -154,6 +201,13 @@
 
   .text-gradient-accent {
     background: var(--gradient-accent);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .text-gradient-milestone {
+    background: var(--gradient-milestone);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
