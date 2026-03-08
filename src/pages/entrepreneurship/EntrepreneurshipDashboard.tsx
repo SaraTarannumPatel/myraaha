@@ -418,7 +418,7 @@ const EntrepreneurshipDashboard = () => {
                 <p className="font-body text-xs text-muted-foreground uppercase tracking-wider">Current Stage</p>
                 <h2 className="font-display text-xl text-foreground">{getStageLabel()}</h2>
               </div>
-              <div className="px-3 py-1 rounded-full bg-primary/10 font-body text-xs text-primary font-semibold">
+              <div className="px-3 py-1 rounded-full bg-terracotta/10 font-body text-xs text-terracotta font-semibold">
                 {profile?.completion_percentage || 0}% complete
               </div>
             </div>
