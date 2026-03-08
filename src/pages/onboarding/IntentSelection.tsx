@@ -36,8 +36,8 @@ const IntentSelection = () => {
 
   const handleContinue = async () => {
     if (!selected) return;
-    await updateProfile({ active_intent: selected as any, onboarding_status: "personal_info" as any });
-    navigate("/onboarding/personal-info");
+    await updateProfile({ active_intent: selected as any, onboarding_status: "guided" as any });
+    navigate("/onboarding/guided");
   };
 
   return (

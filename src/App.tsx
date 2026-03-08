@@ -14,6 +14,8 @@ import UserTypeSelection from "./pages/onboarding/UserTypeSelection";
 import IntentSelection from "./pages/onboarding/IntentSelection";
 import PersonalInfo from "./pages/onboarding/PersonalInfo";
 import ConsentStep from "./pages/onboarding/ConsentStep";
+import GuidedOnboarding from "./pages/onboarding/GuidedOnboarding";
+import ResetPassword from "./pages/ResetPassword";
 import DashboardLayout from "./layouts/DashboardLayout";
 import Dashboard from "./pages/Dashboard";
 // Career
@@ -72,6 +74,7 @@ const App = () => (
             <Route path="/onboarding" element={<ProtectedRoute><Welcome /></ProtectedRoute>} />
             <Route path="/onboarding/user-type" element={<ProtectedRoute><UserTypeSelection /></ProtectedRoute>} />
             <Route path="/onboarding/intent" element={<ProtectedRoute><IntentSelection /></ProtectedRoute>} />
+            <Route path="/onboarding/guided" element={<ProtectedRoute><GuidedOnboarding /></ProtectedRoute>} />
             <Route path="/onboarding/personal-info" element={<ProtectedRoute><PersonalInfo /></ProtectedRoute>} />
             <Route path="/onboarding/consent" element={<ProtectedRoute><ConsentStep /></ProtectedRoute>} />
             <Route path="/dashboard" element={<ProtectedRoute><DashboardLayout /></ProtectedRoute>}>
@@ -116,6 +119,7 @@ const App = () => (
               <Route path="notifications" element={<Notifications />} />
               <Route path="settings" element={<Settings />} />
             </Route>
+            <Route path="/reset-password" element={<ResetPassword />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </AuthProvider>

@@ -5,6 +5,7 @@ const onboardingRoutes: Record<string, string> = {
   welcome: "/onboarding",
   user_type: "/onboarding/user-type",
   intent: "/onboarding/intent",
+  guided: "/onboarding/guided",
   personal_info: "/onboarding/personal-info",
   consent: "/onboarding/consent",
 };
