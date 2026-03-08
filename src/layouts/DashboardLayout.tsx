@@ -25,6 +25,7 @@ const careerNav = [
   { label: "Career Coach", icon: Bot, path: "/dashboard/career-coach" },
   { label: "Career Therapist", icon: Heart, path: "/dashboard/career-therapist" },
   { label: "Career Moodboard", icon: Palette, path: "/dashboard/career-moodboard" },
+  { label: "Inspirations", icon: Lightbulb, path: "/dashboard/career-inspirations" },
   { label: "Explore", icon: Sparkles, path: "/dashboard/explore" },
 ];
 

@@ -114,7 +114,6 @@ export default function CareerInspirations() {
     const { data } = await supabase
       .from("inspiration_stories")
       .select("*")
-      .in("intent", ["career", "both"])
       .order("is_featured", { ascending: false })
       .order("created_at", { ascending: false });
     setStories((data as Story[]) || []);

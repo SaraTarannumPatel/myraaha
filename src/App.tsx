@@ -90,6 +90,7 @@ const App = () => (
               <Route path="career-coach" element={<VirtualCareerCoach />} />
               <Route path="career-therapist" element={<AICareerTherapist />} />
               <Route path="career-moodboard" element={<CareerMoodboard />} />
+              <Route path="career-inspirations" element={<CareerInspirations />} />
               {/* Entrepreneurship */}
               <Route path="startup-sparks" element={<StartupSparks />} />
               <Route path="mvp-builder" element={<MVPBuilder />} />
