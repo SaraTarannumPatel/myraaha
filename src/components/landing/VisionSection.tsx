@@ -53,7 +53,7 @@ const VisionSection = () => {
           <img
             src={visionIllustration}
             alt="Fragmented tools failing users"
-            className="w-full max-w-[220px]"
+            className="w-full max-w-sm"
           />
         </motion.div>
 
