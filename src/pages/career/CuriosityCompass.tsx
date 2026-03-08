@@ -567,8 +567,8 @@ const CuriosityCompass = () => {
                   </div>
                 )}
                 {sessionSummary.motivational_note && (
-                  <div className="p-3 rounded-lg bg-green-500/5 border border-green-500/20">
-                    <p className="font-body text-sm text-green-700 dark:text-green-300">{sessionSummary.motivational_note}</p>
+                  <div className="p-3 rounded-lg bg-success/5 border border-success/20">
+                    <p className="font-body text-sm text-success">{sessionSummary.motivational_note}</p>
                   </div>
                 )}
               </CardContent>
