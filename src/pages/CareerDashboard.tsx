@@ -575,7 +575,7 @@ const CareerDashboard = () => {
             <Card>
               <CardHeader className="pb-3">
                 <CardTitle className="text-lg flex items-center gap-2">
-                  <Target className="h-5 w-5 text-primary" />
+                  <Target className="h-5 w-5 text-maroon" />
                   Tasks & Challenges
                 </CardTitle>
               </CardHeader>
