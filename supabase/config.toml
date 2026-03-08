@@ -35,3 +35,6 @@ verify_jwt = false
 
 [functions.journal-ai]
 verify_jwt = false
+
+[functions.transition-planner-ai]
+verify_jwt = false
