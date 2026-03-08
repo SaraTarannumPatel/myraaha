@@ -108,7 +108,7 @@ const DashboardLayout = () => {
     <div className="flex flex-col h-full">
       <div className="p-5 border-b border-border">
         <Link to="/dashboard" className="font-display text-2xl text-foreground">
-          Shuttl<em className="text-gradient-warm">Ex</em>
+          My<span className="text-gradient-warm">Raaha</span>
         </Link>
         <p className="font-body text-xs text-muted-foreground mt-1">
           {isBoth ? "Career & Entrepreneurship" : isCareer ? "Career & Jobs" : "Entrepreneurship"}
