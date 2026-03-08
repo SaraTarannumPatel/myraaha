@@ -80,11 +80,11 @@ const Navbar = () => {
               Log In
             </Link>
             <Link
-              to="/auth"
-              className="gradient-warm text-secondary-foreground px-5 py-2.5 rounded-full text-sm font-body font-semibold w-full text-center"
+              to="/get-started"
+              className="gradient-warm text-primary-foreground px-5 py-2.5 rounded-full text-sm font-body font-semibold w-full text-center"
               onClick={() => setIsOpen(false)}
             >
-              Sign Up
+              Get Started
             </Link>
           </div>
         </motion.div>
