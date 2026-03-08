@@ -17,6 +17,11 @@ import {
   GraduationCap, Flame, Calendar, ChevronRight, UserPlus, Building2,
   AlertCircle, Shield, RefreshCw
 } from "lucide-react";
+import SelfInsightsPanel from "@/components/dashboard/SelfInsightsPanel";
+import CommunityFeedPreview from "@/components/dashboard/CommunityFeedPreview";
+import JobMatchPreview from "@/components/dashboard/JobMatchPreview";
+import MoodCheckIn from "@/components/dashboard/MoodCheckIn";
+import DomainAffinityWidget from "@/components/dashboard/DomainAffinityWidget";
 
 const JOURNEY_PHASES = [
   { id: "discovery", label: "Discovery", icon: Compass, description: "Exploring interests" },
