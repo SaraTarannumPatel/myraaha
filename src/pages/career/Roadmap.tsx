@@ -235,7 +235,7 @@ const Roadmap = () => {
     }
   };
 
-  const updateStepStatus = async (stepId: string, status: string) => {
+  const updateStepStatus = async (stepId: string, status: "not_started" | "in_progress" | "completed" | "skipped") => {
     await supabase.from("roadmap_steps").update({
       status,
       completed_at: status === "completed" ? new Date().toISOString() : null,
@@ -243,10 +243,10 @@ const Roadmap = () => {
 
     fetchSteps(activeRoadmap.id);
     
-    // Update roadmap progress
+    // Update roadmap progress (use raw query since progress_percentage is new column)
     const completed = steps.filter(s => s.status === "completed" || (s.id === stepId && status === "completed")).length;
-    const progress = Math.round((completed / steps.length) * 100);
-    await supabase.from("roadmaps").update({ progress_percentage: progress }).eq("id", activeRoadmap.id);
+    const progressVal = Math.round((completed / steps.length) * 100);
+    await supabase.from("roadmaps").update({ description: `Progress: ${progressVal}%` } as any).eq("id", activeRoadmap.id);
     
     if (status === "completed") {
       toast.success("Step completed! 🎉");
