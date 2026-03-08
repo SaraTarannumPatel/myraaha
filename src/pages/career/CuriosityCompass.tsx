@@ -440,8 +440,8 @@ const CuriosityCompass = () => {
                 <p className="font-body text-xs text-muted-foreground">Quests Done</p>
               </div>
               <div>
-                <div className="w-10 h-10 rounded-full bg-green-500/10 flex items-center justify-center mx-auto mb-2">
-                  <Star className="text-green-500" size={18} />
+                <div className="w-10 h-10 rounded-full bg-success/10 flex items-center justify-center mx-auto mb-2">
+                  <Star className="text-success" size={18} />
                 </div>
                 <p className="font-display text-2xl text-foreground">{domains.length}</p>
                 <p className="font-body text-xs text-muted-foreground">Recommendations</p>
