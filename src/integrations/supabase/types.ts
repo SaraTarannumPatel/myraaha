@@ -5239,6 +5239,151 @@ export type Database = {
         }
         Relationships: []
       }
+      transition_paths: {
+        Row: {
+          bridge_skills: string[] | null
+          created_at: string
+          demand_data: Json | null
+          description: string | null
+          id: string
+          income_risk: string | null
+          is_selected: boolean | null
+          lifestyle_impact: string | null
+          path_type: string
+          plan_id: string
+          roadmap_steps: Json | null
+          skills_needed: string[] | null
+          time_required: string | null
+          title: string
+          user_id: string
+        }
+        Insert: {
+          bridge_skills?: string[] | null
+          created_at?: string
+          demand_data?: Json | null
+          description?: string | null
+          id?: string
+          income_risk?: string | null
+          is_selected?: boolean | null
+          lifestyle_impact?: string | null
+          path_type?: string
+          plan_id: string
+          roadmap_steps?: Json | null
+          skills_needed?: string[] | null
+          time_required?: string | null
+          title: string
+          user_id: string
+        }
+        Update: {
+          bridge_skills?: string[] | null
+          created_at?: string
+          demand_data?: Json | null
+          description?: string | null
+          id?: string
+          income_risk?: string | null
+          is_selected?: boolean | null
+          lifestyle_impact?: string | null
+          path_type?: string
+          plan_id?: string
+          roadmap_steps?: Json | null
+          skills_needed?: string[] | null
+          time_required?: string | null
+          title?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "transition_paths_plan_id_fkey"
+            columns: ["plan_id"]
+            isOneToOne: false
+            referencedRelation: "transition_plans"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      transition_plans: {
+        Row: {
+          created_at: string
+          current_pain_points: string[] | null
+          id: string
+          readiness_assessment: Json | null
+          readiness_level: string | null
+          reality_mapping: Json | null
+          status: string
+          timeline_insights: Json | null
+          transferable_skills: Json | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          current_pain_points?: string[] | null
+          id?: string
+          readiness_assessment?: Json | null
+          readiness_level?: string | null
+          reality_mapping?: Json | null
+          status?: string
+          timeline_insights?: Json | null
+          transferable_skills?: Json | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          current_pain_points?: string[] | null
+          id?: string
+          readiness_assessment?: Json | null
+          readiness_level?: string | null
+          reality_mapping?: Json | null
+          status?: string
+          timeline_insights?: Json | null
+          transferable_skills?: Json | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      transition_reflections: {
+        Row: {
+          ai_response: Json | null
+          content: string
+          created_at: string
+          id: string
+          mood: string | null
+          plan_id: string | null
+          reflection_type: string
+          user_id: string
+        }
+        Insert: {
+          ai_response?: Json | null
+          content: string
+          created_at?: string
+          id?: string
+          mood?: string | null
+          plan_id?: string | null
+          reflection_type?: string
+          user_id: string
+        }
+        Update: {
+          ai_response?: Json | null
+          content?: string
+          created_at?: string
+          id?: string
+          mood?: string | null
+          plan_id?: string | null
+          reflection_type?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "transition_reflections_plan_id_fkey"
+            columns: ["plan_id"]
+            isOneToOne: false
+            referencedRelation: "transition_plans"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       user_learning_progress: {
         Row: {
           completed_at: string | null
