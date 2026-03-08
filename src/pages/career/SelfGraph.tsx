@@ -18,11 +18,12 @@ import {
 } from "lucide-react";
 
 const TRAIT_CATEGORIES = {
-  cognitive: { label: "Cognitive", color: "bg-blue-500" },
-  emotional: { label: "Emotional", color: "bg-pink-500" },
-  social: { label: "Social", color: "bg-green-500" },
-  professional: { label: "Professional", color: "bg-purple-500" },
+  cognitive: { label: "Cognitive", color: "bg-blue" },
+  emotional: { label: "Emotional", color: "bg-terracotta" },
+  social: { label: "Social", color: "bg-green" },
+  professional: { label: "Professional", color: "bg-indigo" },
 };
+
 
 const DOMAINS = ["Technology", "Design", "Business", "Healthcare", "Education", "Finance", "Science", "Arts"];
 
