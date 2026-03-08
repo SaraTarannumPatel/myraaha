@@ -79,12 +79,12 @@ const HeroSection = () => {
               className="flex gap-6 sm:gap-8 mt-10 sm:mt-12 pt-6 sm:pt-8 border-t border-border/50"
             >
               {[
-                { val: "4", label: "Structured stages" },
-                { val: "∞", label: "Evolves with you" },
-                { val: "1", label: "System for everything" },
+                { val: "4", label: "Structured stages", color: "text-blue" },
+                { val: "∞", label: "Evolves with you", color: "text-terracotta" },
+                { val: "1", label: "System for everything", color: "text-primary" },
               ].map((s) => (
                 <div key={s.label}>
-                  <p className="font-display text-xl sm:text-2xl text-gradient-warm">{s.val}</p>
+                  <p className={`font-display text-xl sm:text-2xl ${s.color}`}>{s.val}</p>
                   <p className="font-body text-[9px] sm:text-[10px] text-grey-meta mt-0.5">{s.label}</p>
                 </div>
               ))}
