@@ -36,6 +36,7 @@ import SkillStacker from "./pages/career/SkillStacker";
 import CareerMoodboard from "./pages/career/CareerMoodboard";
 import CareerInspirations from "./pages/career/CareerInspirations";
 import TransitionPlanner from "./pages/career/TransitionPlanner";
+import CareerCardCollections from "./pages/career/CareerCardCollections";
 // Entrepreneurship
 import StartupSparks from "./pages/entrepreneurship/StartupSparks";
 import MVPBuilder from "./pages/entrepreneurship/MVPBuilder";
@@ -98,6 +99,7 @@ const App = () => (
               <Route path="career-moodboard" element={<CareerMoodboard />} />
               <Route path="career-inspirations" element={<CareerInspirations />} />
               <Route path="transition-planner" element={<TransitionPlanner />} />
+              <Route path="career-collections" element={<CareerCardCollections />} />
               {/* Entrepreneurship */}
               <Route path="startup-sparks" element={<StartupSparks />} />
               <Route path="mvp-builder" element={<MVPBuilder />} />
