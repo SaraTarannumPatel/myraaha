@@ -13,8 +13,9 @@ import {
   Compass, Sparkles, Heart, BookmarkPlus, X, ArrowRight, ArrowLeft,
   Trophy, Zap, MessageSquare, Palette, Target, Star, ChevronRight,
   Play, Check, Lightbulb, Brain, Meh, HelpCircle, Bot,
-  PenLine, BookOpen, Users, Goal, TrendingUp, Activity, Eye
+  PenLine, BookOpen, Users, Goal, TrendingUp, Activity, Eye, Layers
 } from "lucide-react";
+import CareerCardDeck from "@/components/career/CareerCardDeck";
 
 const MOODS = [
   { id: "excited", label: "Excited", icon: Zap, color: "text-accent" },
