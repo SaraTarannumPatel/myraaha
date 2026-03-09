@@ -16,6 +16,7 @@ import {
   TrendingUp, MessageSquare, Award, RefreshCw, ArrowRight, Lightbulb,
   PenLine, Meh, HelpCircle, Heart, Link, ExternalLink
 } from "lucide-react";
+import RoadmapStepDetail from "@/components/roadmap/RoadmapStepDetail";
 
 const PHASES = [
   { id: "exploration", label: "Exploration", icon: Compass, color: "bg-blue-500" },
