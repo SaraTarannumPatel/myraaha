@@ -914,6 +914,15 @@ const Roadmap = () => {
           </CardContent>
         </Card>
       )}
+
+      {/* Detailed Step Sheet */}
+      <RoadmapStepDetail
+        open={!!detailStep}
+        onClose={() => setDetailStep(null)}
+        step={detailStep || {}}
+        roadmapTitle={activeRoadmap?.title}
+        userGoals={`${activeRoadmap?.short_term_goals || ""} | ${activeRoadmap?.long_term_goals || ""}`}
+      />
     </div>
   );
 };
