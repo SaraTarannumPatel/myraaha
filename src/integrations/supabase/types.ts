@@ -5814,6 +5814,48 @@ export type Database = {
         }
         Relationships: []
       }
+      suggested_roadmaps: {
+        Row: {
+          created_at: string
+          description: string | null
+          id: string
+          match_score: number | null
+          reasoning: string[] | null
+          roadmap_data: Json | null
+          source_signals: Json | null
+          status: string | null
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          match_score?: number | null
+          reasoning?: string[] | null
+          roadmap_data?: Json | null
+          source_signals?: Json | null
+          status?: string | null
+          title: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          match_score?: number | null
+          reasoning?: string[] | null
+          roadmap_data?: Json | null
+          source_signals?: Json | null
+          status?: string | null
+          title?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       support_nudges: {
         Row: {
           created_at: string

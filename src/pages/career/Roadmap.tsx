@@ -70,7 +70,13 @@ const Roadmap = () => {
   const [expandedStep, setExpandedStep] = useState<string | null>(null);
   const [detailStep, setDetailStep] = useState<any>(null);
 
-  useEffect(() => { if (user) fetchAll(); }, [user]);
+  // Suggested roadmaps state
+  const [suggestedRoadmaps, setSuggestedRoadmaps] = useState<any[]>([]);
+  const [suggestionsLoading, setSuggestionsLoading] = useState(false);
+  const [analysisSummary, setAnalysisSummary] = useState<string>("");
+  const [strongestSignals, setStrongestSignals] = useState<string[]>([]);
+
+  useEffect(() => { if (user) { fetchAll(); fetchSuggestedRoadmaps(); } }, [user]);
 
   const fetchAll = async () => {
     setLoading(true);
@@ -104,6 +110,107 @@ const Roadmap = () => {
       }
     }
     setLoading(false);
+  };
+
+  const fetchSuggestedRoadmaps = async () => {
+    // Load cached suggestions from DB
+    const { data } = await supabase
+      .from("suggested_roadmaps")
+      .select("*")
+      .eq("user_id", user!.id)
+      .order("match_score", { ascending: false });
+    if (data && data.length > 0) setSuggestedRoadmaps(data);
+  };
+
+  const generateSuggestedRoadmaps = async () => {
+    if (!user) return;
+    setSuggestionsLoading(true);
+    try {
+      const { data, error } = await supabase.functions.invoke("roadmap-suggestions", {});
+      if (error) throw error;
+      if (data?.suggestions) {
+        setAnalysisSummary(data.analysis_summary || "");
+        setStrongestSignals(data.strongest_signals || []);
+        // Refresh from DB
+        await fetchSuggestedRoadmaps();
+      }
+      toast.success("AI analyzed your patterns and generated roadmap suggestions!");
+    } catch (error) {
+      console.error("Error generating suggestions:", error);
+      toast.error("Failed to generate suggestions");
+    } finally {
+      setSuggestionsLoading(false);
+    }
+  };
+
+  const acceptSuggestedRoadmap = async (suggestion: any) => {
+    if (!user) return;
+    setGenerating(true);
+    try {
+      // Generate full roadmap from suggestion
+      const { data, error } = await supabase.functions.invoke("roadmap-ai", {
+        body: {
+          type: "generate_roadmap",
+          context: {
+            shortTermGoals: suggestion.roadmap_data?.phases?.[0] || suggestion.title,
+            longTermGoals: suggestion.description,
+            interests: suggestion.roadmap_data?.key_skills || [],
+            skills: suggestion.roadmap_data?.key_skills || [],
+            industry: suggestion.roadmap_data?.target_roles?.[0] || "",
+            careerStage: profile?.career_stage || "exploring",
+            areasOfFocus: suggestion.roadmap_data?.target_roles || [],
+          },
+        },
+      });
+      if (error) throw error;
+
+      const { data: newRoadmap, error: rmErr } = await supabase.from("roadmaps").insert({
+        user_id: user.id,
+        title: suggestion.title || data.title,
+        description: suggestion.description || data.description,
+        intent: "career",
+        skill_gaps: data.skill_gaps || [],
+        ai_suggestions: data,
+        is_active: true,
+      }).select().single();
+      if (rmErr) throw rmErr;
+
+      await supabase.from("roadmaps").update({ is_active: false }).eq("user_id", user.id).neq("id", newRoadmap.id);
+
+      // Insert steps
+      const allSteps: any[] = [];
+      let orderIndex = 0;
+      for (const phase of data.phases || []) {
+        for (const step of phase.steps || []) {
+          allSteps.push({
+            roadmap_id: newRoadmap.id, user_id: user.id, title: step.title, description: step.description,
+            phase: phase.name, category: step.category, skill_tags: step.skill_tags || [],
+            priority: step.priority || "medium", ai_generated: true, order_index: orderIndex++,
+          });
+        }
+      }
+      if (allSteps.length > 0) await supabase.from("roadmap_steps").insert(allSteps);
+
+      // Mark suggestion as accepted
+      await supabase.from("suggested_roadmaps").update({ status: "accepted" }).eq("id", suggestion.id);
+
+      setActiveRoadmap(newRoadmap);
+      fetchSteps(newRoadmap.id);
+      fetchAll();
+      setActiveTab("timeline");
+      toast.success(`Roadmap "${suggestion.title}" created! 🎉`);
+    } catch (error) {
+      console.error("Error accepting suggestion:", error);
+      toast.error("Failed to create roadmap from suggestion");
+    } finally {
+      setGenerating(false);
+    }
+  };
+
+  const dismissSuggestion = async (id: string) => {
+    await supabase.from("suggested_roadmaps").update({ status: "dismissed" }).eq("id", id);
+    setSuggestedRoadmaps(prev => prev.filter(s => s.id !== id));
+    toast.success("Suggestion dismissed");
   };
 
   const fetchSteps = async (roadmapId: string) => {
@@ -424,13 +531,136 @@ const Roadmap = () => {
 
       {/* Main Content */}
       <Tabs value={activeTab} onValueChange={setActiveTab}>
-        <TabsList className="grid w-full grid-cols-5">
+        <TabsList className="grid w-full grid-cols-6">
+          <TabsTrigger value="suggested" className="gap-1"><Sparkles size={14} /> For You</TabsTrigger>
           <TabsTrigger value="timeline">Timeline</TabsTrigger>
           <TabsTrigger value="tasks">Tasks</TabsTrigger>
           <TabsTrigger value="insights">Insights</TabsTrigger>
           <TabsTrigger value="connect">Connect</TabsTrigger>
           <TabsTrigger value="goals">Goals</TabsTrigger>
         </TabsList>
+
+        {/* Suggested Roadmaps Tab */}
+        <TabsContent value="suggested" className="space-y-6">
+          <Card className="border-primary/20 bg-gradient-to-br from-primary/5 to-accent/5">
+            <CardHeader>
+              <div className="flex items-center justify-between">
+                <div>
+                  <CardTitle className="font-display flex items-center gap-2">
+                    <Sparkles className="text-primary" size={20} />
+                    AI-Suggested Roadmaps
+                  </CardTitle>
+                  <CardDescription>
+                    Personalized roadmaps generated from your activity across all modules — skills, interests, explorations, and goals.
+                  </CardDescription>
+                </div>
+                <Button onClick={generateSuggestedRoadmaps} disabled={suggestionsLoading} className="gap-2">
+                  {suggestionsLoading ? <RefreshCw className="animate-spin" size={16} /> : <Brain size={16} />}
+                  {suggestionsLoading ? "Analyzing..." : "Analyze & Suggest"}
+                </Button>
+              </div>
+            </CardHeader>
+            {analysisSummary && (
+              <CardContent className="pt-0 space-y-3">
+                <div className="p-3 rounded-lg bg-background/50 border border-border">
+                  <p className="font-body text-sm text-foreground">{analysisSummary}</p>
+                </div>
+                {strongestSignals.length > 0 && (
+                  <div className="flex flex-wrap gap-2">
+                    <span className="text-xs text-muted-foreground">Key signals:</span>
+                    {strongestSignals.map((signal, i) => (
+                      <Badge key={i} variant="secondary" className="text-[10px]">{signal}</Badge>
+                    ))}
+                  </div>
+                )}
+              </CardContent>
+            )}
+          </Card>
+
+          {suggestedRoadmaps.length > 0 ? (
+            <div className="grid gap-4">
+              {suggestedRoadmaps.filter(s => s.status === "suggested").map((suggestion, i) => (
+                <motion.div key={suggestion.id} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.1 }}>
+                  <Card className="hover:border-primary/30 transition-all">
+                    <CardContent className="pt-6">
+                      <div className="flex items-start gap-4">
+                        <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center shrink-0">
+                          <span className="text-lg font-bold text-primary">{suggestion.match_score || 0}%</span>
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <h3 className="font-display text-lg text-foreground">{suggestion.title}</h3>
+                          <p className="font-body text-sm text-muted-foreground mt-1">{suggestion.description}</p>
+
+                          {suggestion.reasoning?.length > 0 && (
+                            <div className="mt-3 space-y-1">
+                              {suggestion.reasoning.map((reason: string, j: number) => (
+                                <p key={j} className="font-body text-xs text-muted-foreground flex items-start gap-2">
+                                  <Lightbulb size={12} className="text-accent mt-0.5 shrink-0" />
+                                  {reason}
+                                </p>
+                              ))}
+                            </div>
+                          )}
+
+                          <div className="flex flex-wrap gap-2 mt-3">
+                            {suggestion.roadmap_data?.key_skills?.slice(0, 5).map((skill: string) => (
+                              <Badge key={skill} variant="outline" className="text-[10px]">{skill}</Badge>
+                            ))}
+                            {suggestion.roadmap_data?.estimated_timeline && (
+                              <Badge variant="secondary" className="text-[10px]">
+                                <Clock size={10} className="mr-1" />
+                                {suggestion.roadmap_data.estimated_timeline}
+                              </Badge>
+                            )}
+                          </div>
+
+                          {suggestion.roadmap_data?.target_roles?.length > 0 && (
+                            <p className="font-body text-xs text-muted-foreground mt-2">
+                              Target roles: {suggestion.roadmap_data.target_roles.join(", ")}
+                            </p>
+                          )}
+
+                          {suggestion.roadmap_data?.phases?.length > 0 && (
+                            <div className="mt-3 flex flex-wrap gap-1">
+                              {suggestion.roadmap_data.phases.map((phase: string, k: number) => (
+                                <span key={k} className="text-[10px] text-muted-foreground bg-muted px-2 py-0.5 rounded-full">
+                                  {phase}
+                                </span>
+                              ))}
+                            </div>
+                          )}
+                        </div>
+                        <div className="flex flex-col gap-2 shrink-0">
+                          <Button size="sm" onClick={() => acceptSuggestedRoadmap(suggestion)} disabled={generating} className="gap-1">
+                            {generating ? <RefreshCw className="animate-spin" size={14} /> : <ArrowRight size={14} />}
+                            Accept
+                          </Button>
+                          <Button size="sm" variant="ghost" onClick={() => dismissSuggestion(suggestion.id)} className="text-xs">
+                            Dismiss
+                          </Button>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </motion.div>
+              ))}
+            </div>
+          ) : (
+            <Card className="border-dashed">
+              <CardContent className="py-12 text-center">
+                <Brain className="mx-auto text-muted-foreground mb-4" size={48} />
+                <h3 className="font-display text-lg text-foreground mb-2">No Suggestions Yet</h3>
+                <p className="text-muted-foreground mb-4 max-w-md mx-auto">
+                  Click "Analyze & Suggest" to let AI examine your activity across all modules and suggest personalized career roadmaps.
+                </p>
+                <Button onClick={generateSuggestedRoadmaps} disabled={suggestionsLoading} className="gap-2">
+                  {suggestionsLoading ? <RefreshCw className="animate-spin" size={16} /> : <Sparkles size={16} />}
+                  {suggestionsLoading ? "Analyzing your patterns..." : "Generate Suggestions"}
+                </Button>
+              </CardContent>
+            </Card>
+          )}
+        </TabsContent>
 
         {/* Timeline Tab */}
         <TabsContent value="timeline" className="space-y-6">
