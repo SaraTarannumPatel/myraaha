@@ -99,6 +99,7 @@ const App = () => (
               <Route path="career-moodboard" element={<CareerMoodboard />} />
               <Route path="career-inspirations" element={<CareerInspirations />} />
               <Route path="transition-planner" element={<TransitionPlanner />} />
+              <Route path="career-collections" element={<CareerCardCollections />} />
               {/* Entrepreneurship */}
               <Route path="startup-sparks" element={<StartupSparks />} />
               <Route path="mvp-builder" element={<MVPBuilder />} />

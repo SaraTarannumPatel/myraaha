@@ -28,6 +28,7 @@ const careerNav = [
   { label: "Career Moodboard", icon: Palette, path: "/dashboard/career-moodboard", color: "accent" },
   { label: "Inspirations", icon: Lightbulb, path: "/dashboard/career-inspirations", color: "accent" },
   { label: "Transition Planner", icon: RefreshCw, path: "/dashboard/transition-planner", color: "maroon" },
+  { label: "My Collections", icon: Heart, path: "/dashboard/career-collections", color: "terracotta" },
   { label: "Explore", icon: Sparkles, path: "/dashboard/explore", color: "primary" },
 ];
 
