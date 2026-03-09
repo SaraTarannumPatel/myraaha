@@ -3930,6 +3930,8 @@ export type Database = {
           full_name: string | null
           id: string
           industry: string | null
+          journey_responses: Json | null
+          journey_variant: string | null
           location: string | null
           long_term_goals: string | null
           onboarding_status:
@@ -3955,6 +3957,8 @@ export type Database = {
           full_name?: string | null
           id?: string
           industry?: string | null
+          journey_responses?: Json | null
+          journey_variant?: string | null
           location?: string | null
           long_term_goals?: string | null
           onboarding_status?:
@@ -3980,6 +3984,8 @@ export type Database = {
           full_name?: string | null
           id?: string
           industry?: string | null
+          journey_responses?: Json | null
+          journey_variant?: string | null
           location?: string | null
           long_term_goals?: string | null
           onboarding_status?:
