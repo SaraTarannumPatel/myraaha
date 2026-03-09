@@ -27,9 +27,10 @@ const MOODS = [
 ];
 
 const MODES = [
-  { id: "story", label: "Story Mode", icon: MessageSquare, desc: "Guided scenarios and reflections" },
-  { id: "challenge", label: "Challenge Mode", icon: Target, desc: "Quick tasks and prompts" },
+  { id: "story", label: "Story Mode", icon: MessageSquare, desc: "Real career stories told by professionals" },
+  { id: "challenge", label: "Challenge Mode", icon: Target, desc: "Real-world tasks from different careers" },
   { id: "visual", label: "Visual Mode", icon: Palette, desc: "Pick images and icons that resonate" },
+  { id: "career-cards", label: "Career Cards", icon: Layers, desc: "Browse detailed career path cards" },
 ];
 
 const STORY_PROMPTS = [
