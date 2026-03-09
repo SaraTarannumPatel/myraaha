@@ -381,7 +381,7 @@ const RoadmapStepDetail = ({ open, onClose, step, roadmapTitle, userGoals }: Roa
 
               {/* ── Resources Tab ────────────────────────────────────────── */}
               <TabsContent value="resources" className="space-y-3">
-                <p className="font-body text-sm text-muted-foreground">{resourceCount} curated external resources for this step</p>
+                <p className="font-body text-sm text-muted-foreground">{String(resourceCount)} curated external resources for this step</p>
 
                 {RESOURCE_SECTIONS.map((section) => {
                   const items: any[] = details.learning_resources?.[section.key] || [];
