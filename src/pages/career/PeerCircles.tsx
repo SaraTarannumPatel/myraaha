@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
+import ModuleSearchBar from "@/components/search/ModuleSearchBar";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card";
