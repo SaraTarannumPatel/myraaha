@@ -76,7 +76,7 @@ const ModuleSearchBar = ({
   useEffect(() => {
     if (sources.length === 0) return;
     const fetchSources = async () => {
-      const fetches: Promise<any>[] = [];
+      const fetches: PromiseLike<any>[] = [];
       const keys: string[] = [];
 
       if (sources.includes("careers")) {
