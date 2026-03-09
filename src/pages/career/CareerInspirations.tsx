@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import ModuleSearchBar from "@/components/search/ModuleSearchBar";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card";
