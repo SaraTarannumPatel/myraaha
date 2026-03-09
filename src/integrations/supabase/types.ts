@@ -3184,6 +3184,94 @@ export type Database = {
           },
         ]
       }
+      path_community_shares: {
+        Row: {
+          created_at: string
+          feedback_count: number | null
+          id: string
+          likes_count: number | null
+          path_selection_id: string | null
+          share_summary: string
+          share_type: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          feedback_count?: number | null
+          id?: string
+          likes_count?: number | null
+          path_selection_id?: string | null
+          share_summary: string
+          share_type?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          feedback_count?: number | null
+          id?: string
+          likes_count?: number | null
+          path_selection_id?: string | null
+          share_summary?: string
+          share_type?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "path_community_shares_path_selection_id_fkey"
+            columns: ["path_selection_id"]
+            isOneToOne: false
+            referencedRelation: "path_selections"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      path_reflections: {
+        Row: {
+          ai_feedback: Json | null
+          created_at: string
+          id: string
+          mood: string | null
+          path_selection_id: string | null
+          prompt: string
+          reflection_type: string
+          response: string | null
+          user_id: string
+        }
+        Insert: {
+          ai_feedback?: Json | null
+          created_at?: string
+          id?: string
+          mood?: string | null
+          path_selection_id?: string | null
+          prompt: string
+          reflection_type?: string
+          response?: string | null
+          user_id: string
+        }
+        Update: {
+          ai_feedback?: Json | null
+          created_at?: string
+          id?: string
+          mood?: string | null
+          path_selection_id?: string | null
+          prompt?: string
+          reflection_type?: string
+          response?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "path_reflections_path_selection_id_fkey"
+            columns: ["path_selection_id"]
+            isOneToOne: false
+            referencedRelation: "path_selections"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       path_selections: {
         Row: {
           ai_analysis: Json | null
@@ -3234,6 +3322,82 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      path_share_feedback: {
+        Row: {
+          content: string
+          created_at: string
+          feedback_type: string
+          id: string
+          share_id: string
+          user_id: string
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          feedback_type?: string
+          id?: string
+          share_id: string
+          user_id: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          feedback_type?: string
+          id?: string
+          share_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "path_share_feedback_share_id_fkey"
+            columns: ["share_id"]
+            isOneToOne: false
+            referencedRelation: "path_community_shares"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      path_signal_snapshots: {
+        Row: {
+          confidence_delta: number | null
+          created_at: string
+          id: string
+          path_selection_id: string | null
+          signals_data: Json
+          snapshot_type: string
+          top_areas: string[] | null
+          user_id: string
+        }
+        Insert: {
+          confidence_delta?: number | null
+          created_at?: string
+          id?: string
+          path_selection_id?: string | null
+          signals_data?: Json
+          snapshot_type?: string
+          top_areas?: string[] | null
+          user_id: string
+        }
+        Update: {
+          confidence_delta?: number | null
+          created_at?: string
+          id?: string
+          path_selection_id?: string | null
+          signals_data?: Json
+          snapshot_type?: string
+          top_areas?: string[] | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "path_signal_snapshots_path_selection_id_fkey"
+            columns: ["path_selection_id"]
+            isOneToOne: false
+            referencedRelation: "path_selections"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       peer_circle_comments: {
         Row: {
