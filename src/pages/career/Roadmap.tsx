@@ -211,8 +211,9 @@ const Roadmap = () => {
     await supabase.from("suggested_roadmaps").update({ status: "dismissed" }).eq("id", id);
     setSuggestedRoadmaps(prev => prev.filter(s => s.id !== id));
     toast.success("Suggestion dismissed");
+  };
 
-  const fetchSteps = async (roadmapId: string) => {
+
     const { data } = await supabase.from("roadmap_steps").select("*").eq("roadmap_id", roadmapId).order("order_index", { ascending: true });
     setSteps(data || []);
   };
