@@ -516,11 +516,16 @@ export default function CareerInspirations() {
 
         <TabsContent value="explore" className="space-y-4 mt-4">
           {/* Search & Filters */}
-          <div className="flex flex-col sm:flex-row gap-3">
-            <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-              <Input placeholder="Search stories, tags..." value={search} onChange={e => setSearch(e.target.value)} className="pl-10" />
-            </div>
+           <div className="flex flex-col sm:flex-row gap-3">
+             <div className="flex-1">
+               <ModuleSearchBar
+                 placeholder="Search stories, tags..."
+                 sources={["careers", "domains"]}
+                 onSearch={(q) => setSearch(q)}
+                 onSelect={(item) => setSearch(item.title)}
+                 compact
+               />
+             </div>
             <Select value={scope} onValueChange={setScope}>
               <SelectTrigger className="w-full sm:w-44"><Globe className="h-4 w-4 mr-2" /><SelectValue /></SelectTrigger>
               <SelectContent>{SCOPES.map(s => <SelectItem key={s.value} value={s.value}>{s.label}</SelectItem>)}</SelectContent>
