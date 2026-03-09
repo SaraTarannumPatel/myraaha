@@ -16,6 +16,7 @@ import {
   PenLine, BookOpen, Users, Goal, TrendingUp, Activity, Eye, Layers
 } from "lucide-react";
 import CareerCardDeck from "@/components/career/CareerCardDeck";
+import StoryModeCards from "@/components/career/StoryModeCards";
 
 const MOODS = [
   { id: "excited", label: "Excited", icon: Zap, color: "text-accent" },
