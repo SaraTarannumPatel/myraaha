@@ -70,6 +70,12 @@ const Roadmap = () => {
   const [expandedStep, setExpandedStep] = useState<string | null>(null);
   const [detailStep, setDetailStep] = useState<any>(null);
 
+  // Suggested roadmaps state
+  const [suggestedRoadmaps, setSuggestedRoadmaps] = useState<any[]>([]);
+  const [suggestionsLoading, setSuggestionsLoading] = useState(false);
+  const [analysisSummary, setAnalysisSummary] = useState<string>("");
+  const [strongestSignals, setStrongestSignals] = useState<string[]>([]);
+
   useEffect(() => { if (user) fetchAll(); }, [user]);
 
   const fetchAll = async () => {
