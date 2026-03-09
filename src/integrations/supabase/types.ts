@@ -4875,6 +4875,62 @@ export type Database = {
         }
         Relationships: []
       }
+      roadmap_step_details: {
+        Row: {
+          career_context: Json | null
+          created_at: string
+          difficulty_level: string | null
+          generated_at: string
+          guidance: Json | null
+          id: string
+          learning_resources: Json | null
+          overview: string | null
+          step_id: string
+          sub_steps: Json | null
+          time_breakdown: Json | null
+          total_time_estimate: string | null
+          user_id: string
+        }
+        Insert: {
+          career_context?: Json | null
+          created_at?: string
+          difficulty_level?: string | null
+          generated_at?: string
+          guidance?: Json | null
+          id?: string
+          learning_resources?: Json | null
+          overview?: string | null
+          step_id: string
+          sub_steps?: Json | null
+          time_breakdown?: Json | null
+          total_time_estimate?: string | null
+          user_id: string
+        }
+        Update: {
+          career_context?: Json | null
+          created_at?: string
+          difficulty_level?: string | null
+          generated_at?: string
+          guidance?: Json | null
+          id?: string
+          learning_resources?: Json | null
+          overview?: string | null
+          step_id?: string
+          sub_steps?: Json | null
+          time_breakdown?: Json | null
+          total_time_estimate?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "roadmap_step_details_step_id_fkey"
+            columns: ["step_id"]
+            isOneToOne: true
+            referencedRelation: "roadmap_steps"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       roadmap_steps: {
         Row: {
           completed_at: string | null
