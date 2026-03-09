@@ -213,7 +213,7 @@ const Roadmap = () => {
     toast.success("Suggestion dismissed");
   };
 
-
+  const fetchSteps = async (roadmapId: string) => {
     const { data } = await supabase.from("roadmap_steps").select("*").eq("roadmap_id", roadmapId).order("order_index", { ascending: true });
     setSteps(data || []);
   };
