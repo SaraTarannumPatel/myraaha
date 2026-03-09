@@ -44,3 +44,15 @@ verify_jwt = false
 
 [functions.mindset-coach]
 verify_jwt = false
+
+[functions.roadmap-ai]
+verify_jwt = false
+
+[functions.roadmap-suggestions]
+verify_jwt = false
+
+[functions.roadmap-step-details]
+verify_jwt = false
+
+[functions.firecrawl-ingest]
+verify_jwt = false
