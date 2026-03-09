@@ -845,13 +845,26 @@ const JobMatching = () => {
         {/* ===== OPPORTUNITIES TAB ===== */}
         <TabsContent value="opportunities" className="space-y-4">
           <div className="flex flex-col sm:flex-row gap-3">
-            <div className="relative flex-1">
-              <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
-              <Input placeholder="Search roles, companies..." value={search} onChange={e => setSearch(e.target.value)} className="pl-9" />
-            </div>
-            <DirectorySearchDrawer mode="jobs" triggerLabel="Browse Jobs" onSelect={(item) => setSearch(item.title)} />
-          </div>
-
+            <ModuleSearchBar
+              placeholder="Search roles, companies, skills..."
+              sources={["jobs", "careers"]}
+              onSearch={(q) => setSearch(q)}
+              onSelect={(item) => setSearch(item.title)}
+              showAiBadge
+              filterOptions={[
+                { key: "domain", label: "Domain", options: DOMAINS.map(d => ({ value: d, label: d.charAt(0).toUpperCase() + d.slice(1) })) },
+                { key: "type", label: "Role Type", options: ROLE_TYPES.map(t => ({ value: t, label: t.charAt(0).toUpperCase() + t.slice(1) })) },
+                { key: "mode", label: "Work Mode", options: WORK_MODES.map(m => ({ value: m, label: m.charAt(0).toUpperCase() + m.slice(1) })) },
+                { key: "exp", label: "Experience", options: EXP_LEVELS.map(e => ({ value: e, label: e.charAt(0).toUpperCase() + e.slice(1) })) },
+              ]}
+              activeFilters={{ domain: domainFilter, type: typeFilter, mode: modeFilter, exp: expFilter }}
+              onFilterChange={(key, val) => {
+                if (key === "domain") setDomainFilter(val);
+                else if (key === "type") setTypeFilter(val);
+                else if (key === "mode") setModeFilter(val);
+                else if (key === "exp") setExpFilter(val);
+              }}
+            />
           {/* Filters */}
           <div className="space-y-2">
             <div className="flex gap-1 flex-wrap">

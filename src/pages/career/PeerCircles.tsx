@@ -377,10 +377,13 @@ const PeerCircles = () => {
         {/* DISCOVER TAB */}
         <TabsContent value="discover" className="space-y-6">
           <div className="flex flex-wrap gap-3 items-center">
-            <div className="relative flex-1 min-w-[200px]">
-              <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
-              <Input placeholder="Search circles..." value={searchQuery} onChange={e => setSearchQuery(e.target.value)} className="pl-9 font-body text-sm" />
-            </div>
+            <ModuleSearchBar
+              placeholder="Search circles, domains..."
+              sources={["domains"]}
+              onSearch={(q) => setSearchQuery(q)}
+              onSelect={(item) => setSearchQuery(item.title)}
+              compact
+            />
             <select value={domainFilter} onChange={e => setDomainFilter(e.target.value)} className="px-3 py-2 rounded-md border border-input bg-background font-body text-sm">
               <option value="all">All Domains</option>
               {domains.map(d => <option key={d} value={d}>{d}</option>)}
