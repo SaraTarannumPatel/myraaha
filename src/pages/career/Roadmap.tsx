@@ -499,6 +499,7 @@ const Roadmap = () => {
                                 initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.03 }}
                                 className={`flex items-center gap-3 p-3 rounded-lg border transition-all hover:bg-muted/50 cursor-pointer ${step.status === "completed" ? "bg-accent/5 border-accent/20" : "border-border"}`}
                                 onClick={() => setExpandedStep(isExpanded ? null : step.id)}
+                                onDoubleClick={() => setDetailStep(step)}
                               >
                                 <button onClick={(e) => { e.stopPropagation(); updateStepStatus(step.id, step.status === "completed" ? "not_started" : "completed"); }} className="shrink-0">
                                   {statusIcon(step.status)}
