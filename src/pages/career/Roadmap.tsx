@@ -76,7 +76,7 @@ const Roadmap = () => {
   const [analysisSummary, setAnalysisSummary] = useState<string>("");
   const [strongestSignals, setStrongestSignals] = useState<string[]>([]);
 
-  useEffect(() => { if (user) fetchAll(); }, [user]);
+  useEffect(() => { if (user) { fetchAll(); fetchSuggestedRoadmaps(); } }, [user]);
 
   const fetchAll = async () => {
     setLoading(true);
