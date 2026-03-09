@@ -16,17 +16,49 @@ serve(async (req) => {
     let systemPrompt = "";
     let userPrompt = "";
 
-    if (type === "detect_signals") {
-      systemPrompt = `You are an entrepreneurial path advisor. Analyze the user's exploration data and detect signals indicating promising entrepreneurial directions. Return JSON: { "signals": [{ "area": string, "strength": number (0-1), "evidence": string, "suggested_path": string }], "top_recommendation": string, "reasoning": string }`;
-      userPrompt = `User data: Ideas interacted with: ${JSON.stringify(context.ideas)}. Problems observed: ${JSON.stringify(context.problems)}. Skills: ${JSON.stringify(context.skills)}. Interests: ${JSON.stringify(context.interests)}. Challenges completed: ${context.challengesCompleted}. Industry: ${context.industry}. Goals: ${context.goals}.`;
-    } else if (type === "generate_roadmap") {
-      systemPrompt = `You are a startup roadmap generator. Create a detailed, actionable 8-step roadmap for the chosen entrepreneurial path. Each step should be specific and achievable. Return JSON: { "steps": [{ "title": string, "description": string, "duration": string, "category": "learning"|"building"|"networking"|"validating", "resources": string[] }], "estimated_timeline": string, "key_milestones": string[] }`;
-      userPrompt = `Path chosen: ${context.pathType} - "${context.pathTitle}". User skills: ${JSON.stringify(context.skills)}. Industry: ${context.industry}. Experience level: ${context.experienceLevel}.`;
-    } else if (type === "evaluate_alignment") {
-      systemPrompt = `You are a career-path alignment evaluator. Assess how well the user's profile aligns with their chosen path. Return JSON: { "alignment_score": number (0-100), "strengths_match": string[], "gaps": string[], "risk_level": "low"|"medium"|"high", "advice": string, "next_actions": string[] }`;
-      userPrompt = `Path: ${context.pathType} - "${context.pathTitle}". User profile: industry=${context.industry}, skills=${JSON.stringify(context.skills)}, interests=${JSON.stringify(context.interests)}, experience=${context.experienceLevel}, goals=${context.goals}.`;
-    } else {
-      throw new Error("Unknown type: " + type);
+    switch (type) {
+      case "detect_signals":
+        systemPrompt = `You are an entrepreneurial path advisor for MyRaaha. Analyze the user's exploration data and detect signals indicating promising entrepreneurial directions. Return JSON: { "signals": [{ "area": string, "strength": number (0-1), "evidence": string, "suggested_path": string }], "top_recommendation": string, "reasoning": string }`;
+        userPrompt = `User data: Ideas interacted with: ${JSON.stringify(context.ideas)}. Problems observed: ${JSON.stringify(context.problems)}. Skills: ${JSON.stringify(context.skills)}. Interests: ${JSON.stringify(context.interests)}. Challenges completed: ${context.challengesCompleted}. Industry: ${context.industry}. Goals: ${context.goals}.`;
+        break;
+
+      case "generate_roadmap":
+        systemPrompt = `You are a startup roadmap generator for MyRaaha. Create a detailed, actionable 8-step roadmap for the chosen entrepreneurial path. Each step should be specific and achievable. Return JSON: { "steps": [{ "title": string, "description": string, "duration": string, "category": "learning"|"building"|"networking"|"validating", "resources": string[] }], "estimated_timeline": string, "key_milestones": string[] }`;
+        userPrompt = `Path chosen: ${context.pathType} - "${context.pathTitle}". User skills: ${JSON.stringify(context.skills)}. Industry: ${context.industry}. Experience level: ${context.experienceLevel}.`;
+        break;
+
+      case "evaluate_alignment":
+        systemPrompt = `You are a career-path alignment evaluator for MyRaaha. Assess how well the user's profile aligns with their chosen path. Return JSON: { "alignment_score": number (0-100), "strengths_match": string[], "gaps": string[], "risk_level": "low"|"medium"|"high", "advice": string, "next_actions": string[] }`;
+        userPrompt = `Path: ${context.pathType} - "${context.pathTitle}". User profile: industry=${context.industry}, skills=${JSON.stringify(context.skills)}, interests=${JSON.stringify(context.interests)}, experience=${context.experienceLevel}, goals=${context.goals}.`;
+        break;
+
+      case "refine_signals":
+        systemPrompt = `You are a signal refinement engine for MyRaaha. Compare previous signals with current user activity to identify emerging patterns, shifts in interest, and confidence changes. Return JSON: { "evolved_signals": [{ "area": string, "previous_strength": number, "current_strength": number, "trend": "rising"|"stable"|"declining", "insight": string }], "new_discoveries": string[], "recommended_pivots": string[], "confidence_trend": "increasing"|"stable"|"decreasing", "narrative": string }`;
+        userPrompt = `Previous signals: ${JSON.stringify(context.previousSignals)}. Current activity: Ideas=${JSON.stringify(context.ideas)}, Problems=${JSON.stringify(context.problems)}, Skills=${JSON.stringify(context.skills)}, Interests=${JSON.stringify(context.interests)}, Reflections=${JSON.stringify(context.reflections)}, Path history=${JSON.stringify(context.pathHistory)}.`;
+        break;
+
+      case "reflection_prompts":
+        systemPrompt = `You are a reflective coach for MyRaaha. Generate 4 thoughtful reflection prompts tailored to the user's current path and stage. Each prompt should help them evaluate readiness, passion, risk appetite, or alignment. Return JSON: { "prompts": [{ "prompt": string, "category": "readiness"|"passion"|"risk"|"alignment"|"values", "why_this_matters": string }] }`;
+        userPrompt = `Path: ${context.pathType} - "${context.pathTitle}". Stage: ${context.stage}. Skills: ${JSON.stringify(context.skills)}. Recent reflections: ${JSON.stringify(context.recentReflections)}. Alignment score: ${context.alignmentScore}.`;
+        break;
+
+      case "mentor_match":
+        systemPrompt = `You are a mentor matching engine for MyRaaha. Based on the user's chosen path and profile, recommend ideal mentor characteristics and suggest how to find them. Return JSON: { "ideal_mentor_profile": { "expertise_areas": string[], "experience_level": string, "personality_traits": string[] }, "matching_criteria": string[], "outreach_tips": string[], "conversation_starters": string[], "what_to_look_for": string[] }`;
+        userPrompt = `Path: ${context.pathType} - "${context.pathTitle}". User skills: ${JSON.stringify(context.skills)}. Gaps: ${JSON.stringify(context.gaps)}. Industry: ${context.industry}. Experience: ${context.experienceLevel}.`;
+        break;
+
+      case "community_summary":
+        systemPrompt = `You are a storytelling assistant for MyRaaha. Create a compelling, shareable summary of the user's entrepreneurial path journey that they can share with their community for feedback. Return JSON: { "summary": string, "key_highlights": string[], "feedback_questions": string[], "tags": string[] }`;
+        userPrompt = `Path: ${context.pathType} - "${context.pathTitle}". Journey so far: signals=${JSON.stringify(context.signals)}, alignment=${context.alignmentScore}%, roadmap_progress=${context.roadmapProgress}, reflections=${JSON.stringify(context.reflections)}, skills=${JSON.stringify(context.skills)}.`;
+        break;
+
+      case "compare_paths":
+        systemPrompt = `You are a path comparison analyst for MyRaaha. Compare multiple entrepreneurial paths for the user and provide a detailed comparative analysis. Return JSON: { "comparison": [{ "path": string, "fit_score": number (0-100), "pros": string[], "cons": string[], "time_to_first_revenue": string, "skill_gap_count": number }], "recommendation": string, "reasoning": string }`;
+        userPrompt = `Paths to compare: ${JSON.stringify(context.paths)}. User profile: skills=${JSON.stringify(context.skills)}, interests=${JSON.stringify(context.interests)}, industry=${context.industry}, risk_appetite=${context.riskAppetite}, time_commitment=${context.timeCommitment}.`;
+        break;
+
+      default:
+        throw new Error("Unknown type: " + type);
     }
 
     const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
