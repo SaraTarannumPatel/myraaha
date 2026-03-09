@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import ModuleSearchBar from "@/components/search/ModuleSearchBar";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
