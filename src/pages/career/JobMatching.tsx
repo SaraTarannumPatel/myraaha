@@ -18,6 +18,7 @@ import {
   Heart, RefreshCw, X, ChevronDown, ChevronUp
 } from "lucide-react";
 import { Link } from "react-router-dom";
+import DirectorySearchDrawer from "@/components/directory/DirectorySearchDrawer";
 
 const DOMAINS = ["all", "tech", "data", "design", "marketing", "business"];
 const ROLE_TYPES = ["all", "internship", "full-time", "part-time", "fellowship", "freelance"];

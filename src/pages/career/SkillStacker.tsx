@@ -16,6 +16,7 @@ import {
   ArrowRight, CheckCircle, Circle, BarChart3, Lightbulb, Rocket,
   Shield, Eye, Award, Heart, Link2, FileText, Users, Map, MessageCircle, Compass
 } from "lucide-react";
+import DirectorySearchDrawer from "@/components/directory/DirectorySearchDrawer";
 
 const CATEGORY_META: Record<string, { label: string; color: string; icon: any }> = {
   core: { label: "Core", color: "bg-primary text-primary-foreground", icon: Shield },

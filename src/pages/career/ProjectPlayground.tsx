@@ -14,6 +14,7 @@ import {
   Zap, Users, Search, Filter, BookOpen, Target, MessageSquare,
   CheckCircle2, BarChart3, Brain, Lightbulb, Rocket
 } from "lucide-react";
+import DirectorySearchDrawer from "@/components/directory/DirectorySearchDrawer";
 
 const DOMAINS = ["all", "tech", "data", "design", "marketing", "business", "research", "education"];
 const DIFFICULTIES = ["all", "beginner", "intermediate", "advanced"];
