@@ -22,6 +22,8 @@ interface Profile {
   consent_data_usage: boolean;
   consent_mentor_sharing: boolean;
   areas_of_focus: string[];
+  journey_variant: string | null;
+  journey_responses: any;
 }
 
 interface AuthContextType {
