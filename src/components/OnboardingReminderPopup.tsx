@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
-import { X, ArrowRight, User, Compass, FileText, Shield, Sparkles } from "lucide-react";
+import { X, ArrowRight, User, Compass, FileText, Shield, Sparkles, Zap } from "lucide-react";
 
 interface SkippedStep {
   key: string;
