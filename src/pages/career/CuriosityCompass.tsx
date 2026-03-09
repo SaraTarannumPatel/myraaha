@@ -760,10 +760,8 @@ const CuriosityCompass = () => {
             ) : null}
           </TabsContent>
 
-          {/* ===== Career Cards Tab ===== */}
-          <TabsContent value="career-cards" className="space-y-6">
-            <CareerCardDeck />
-          </TabsContent>
+
+
 
           {/* ===== Quests Tab ===== */}
           <TabsContent value="quests" className="space-y-6">
