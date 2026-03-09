@@ -92,8 +92,8 @@ const UserTypeSelection = () => {
 
   const handleContinue = async () => {
     if (!selected) return;
-    await updateProfile({ user_type: selected as any, onboarding_status: "intent" as any });
-    navigate("/onboarding/intent");
+    await updateProfile({ user_type: selected as any, onboarding_status: "journey_discovery" as any });
+    navigate("/onboarding/journey");
   };
 
   return (

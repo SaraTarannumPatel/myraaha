@@ -4,6 +4,7 @@ import { useAuth } from "@/contexts/AuthContext";
 const onboardingRoutes: Record<string, string> = {
   welcome: "/onboarding",
   user_type: "/onboarding/user-type",
+  journey_discovery: "/onboarding/journey",
   intent: "/onboarding/intent",
   guided: "/onboarding/guided",
   personal_info: "/onboarding/personal-info",
