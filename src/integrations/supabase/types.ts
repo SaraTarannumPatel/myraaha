@@ -246,6 +246,8 @@ export type Database = {
           icon_emoji: string | null
           id: string
           industry_trends: string | null
+          job_role_keywords: string[] | null
+          keywords: string[] | null
           related_skills: string[] | null
           salary_range: string | null
           title: string
@@ -262,6 +264,8 @@ export type Database = {
           icon_emoji?: string | null
           id?: string
           industry_trends?: string | null
+          job_role_keywords?: string[] | null
+          keywords?: string[] | null
           related_skills?: string[] | null
           salary_range?: string | null
           title: string
@@ -278,6 +282,8 @@ export type Database = {
           icon_emoji?: string | null
           id?: string
           industry_trends?: string | null
+          job_role_keywords?: string[] | null
+          keywords?: string[] | null
           related_skills?: string[] | null
           salary_range?: string | null
           title?: string
@@ -1148,6 +1154,39 @@ export type Database = {
         }
         Relationships: []
       }
+      domain_directory: {
+        Row: {
+          category: string
+          created_at: string | null
+          description: string | null
+          icon_emoji: string | null
+          id: string
+          keywords: string[] | null
+          name: string
+          parent_domain: string | null
+        }
+        Insert: {
+          category?: string
+          created_at?: string | null
+          description?: string | null
+          icon_emoji?: string | null
+          id?: string
+          keywords?: string[] | null
+          name: string
+          parent_domain?: string | null
+        }
+        Update: {
+          category?: string
+          created_at?: string | null
+          description?: string | null
+          icon_emoji?: string | null
+          id?: string
+          keywords?: string[] | null
+          name?: string
+          parent_domain?: string | null
+        }
+        Relationships: []
+      }
       domain_recommendations: {
         Row: {
           created_at: string
@@ -1973,6 +2012,54 @@ export type Database = {
           salary_range?: string | null
           title?: string
           work_mode?: string | null
+        }
+        Relationships: []
+      }
+      job_roles_directory: {
+        Row: {
+          avg_salary_usd: string | null
+          career_path_keywords: string[] | null
+          certifications: string[] | null
+          created_at: string | null
+          demand_level: string | null
+          description: string | null
+          domain: string
+          education_required: string | null
+          id: string
+          keywords: string[] | null
+          seniority_levels: string[] | null
+          skills_required: string[] | null
+          title: string
+        }
+        Insert: {
+          avg_salary_usd?: string | null
+          career_path_keywords?: string[] | null
+          certifications?: string[] | null
+          created_at?: string | null
+          demand_level?: string | null
+          description?: string | null
+          domain?: string
+          education_required?: string | null
+          id?: string
+          keywords?: string[] | null
+          seniority_levels?: string[] | null
+          skills_required?: string[] | null
+          title: string
+        }
+        Update: {
+          avg_salary_usd?: string | null
+          career_path_keywords?: string[] | null
+          certifications?: string[] | null
+          created_at?: string | null
+          demand_level?: string | null
+          description?: string | null
+          domain?: string
+          education_required?: string | null
+          id?: string
+          keywords?: string[] | null
+          seniority_levels?: string[] | null
+          skills_required?: string[] | null
+          title?: string
         }
         Relationships: []
       }
@@ -5878,6 +5965,95 @@ export type Database = {
             columns: ["plan_id"]
             isOneToOne: false
             referencedRelation: "transition_plans"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      universities_directory: {
+        Row: {
+          city: string | null
+          continent: string | null
+          country: string
+          created_at: string | null
+          id: string
+          keywords: string[] | null
+          name: string
+          ranking_tier: string | null
+          type: string | null
+          website: string | null
+        }
+        Insert: {
+          city?: string | null
+          continent?: string | null
+          country: string
+          created_at?: string | null
+          id?: string
+          keywords?: string[] | null
+          name: string
+          ranking_tier?: string | null
+          type?: string | null
+          website?: string | null
+        }
+        Update: {
+          city?: string | null
+          continent?: string | null
+          country?: string
+          created_at?: string | null
+          id?: string
+          keywords?: string[] | null
+          name?: string
+          ranking_tier?: string | null
+          type?: string | null
+          website?: string | null
+        }
+        Relationships: []
+      }
+      university_programs: {
+        Row: {
+          career_path_keywords: string[] | null
+          created_at: string | null
+          degree_type: string
+          department: string | null
+          domain_keywords: string[] | null
+          duration_years: number | null
+          id: string
+          job_role_keywords: string[] | null
+          keywords: string[] | null
+          program_name: string
+          university_id: string
+        }
+        Insert: {
+          career_path_keywords?: string[] | null
+          created_at?: string | null
+          degree_type?: string
+          department?: string | null
+          domain_keywords?: string[] | null
+          duration_years?: number | null
+          id?: string
+          job_role_keywords?: string[] | null
+          keywords?: string[] | null
+          program_name: string
+          university_id: string
+        }
+        Update: {
+          career_path_keywords?: string[] | null
+          created_at?: string | null
+          degree_type?: string
+          department?: string | null
+          domain_keywords?: string[] | null
+          duration_years?: number | null
+          id?: string
+          job_role_keywords?: string[] | null
+          keywords?: string[] | null
+          program_name?: string
+          university_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "university_programs_university_id_fkey"
+            columns: ["university_id"]
+            isOneToOne: false
+            referencedRelation: "universities_directory"
             referencedColumns: ["id"]
           },
         ]
