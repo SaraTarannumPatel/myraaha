@@ -651,8 +651,9 @@ const CuriosityCompass = () => {
       {/* Main Tabs */}
       {!showNextSteps && (
         <Tabs value={tab} onValueChange={setTab}>
-          <TabsList className="grid grid-cols-5 w-full max-w-2xl">
+          <TabsList className="grid grid-cols-6 w-full max-w-3xl">
             <TabsTrigger value="explore">Explore</TabsTrigger>
+            <TabsTrigger value="career-cards">Career Cards</TabsTrigger>
             <TabsTrigger value="quests">Quests</TabsTrigger>
             <TabsTrigger value="domains">Domains</TabsTrigger>
             <TabsTrigger value="insights">Insights</TabsTrigger>
