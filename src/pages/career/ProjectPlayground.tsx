@@ -14,6 +14,7 @@ import {
   Zap, Users, Search, Filter, BookOpen, Target, MessageSquare,
   CheckCircle2, BarChart3, Brain, Lightbulb, Rocket
 } from "lucide-react";
+import ModuleSearchBar from "@/components/search/ModuleSearchBar";
 import DirectorySearchDrawer from "@/components/directory/DirectorySearchDrawer";
 
 const DOMAINS = ["all", "tech", "data", "design", "marketing", "business", "research", "education"];
@@ -479,23 +480,21 @@ const ProjectPlayground = () => {
 
         {/* Explore Tab */}
         <TabsContent value="explore" className="space-y-6">
-          <div className="flex gap-3 flex-wrap items-center">
-            <div className="relative flex-1 min-w-[200px]">
-              <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
-              <Input placeholder="Search challenges..." value={searchQuery} onChange={e => setSearchQuery(e.target.value)} className="pl-9" />
-            </div>
-            <DirectorySearchDrawer mode="careers" triggerLabel="Browse Careers" onSelect={(item) => setSearchQuery(item.title)} />
-            <div className="flex gap-1">
-              {DOMAINS.map(d => (
-                <button key={d} onClick={() => setDomainFilter(d)} className={`px-3 py-1.5 rounded-full font-body text-xs capitalize transition-all ${domainFilter === d ? "bg-accent text-accent-foreground" : "bg-muted text-muted-foreground hover:bg-accent/10"}`}>{d}</button>
-              ))}
-            </div>
-          </div>
-          <div className="flex gap-1 mb-2">
-            {DIFFICULTIES.map(d => (
-              <button key={d} onClick={() => setDifficultyFilter(d)} className={`px-3 py-1 rounded-full font-body text-xs capitalize transition-all ${difficultyFilter === d ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground hover:bg-primary/10"}`}>{d}</button>
-            ))}
-          </div>
+            <ModuleSearchBar
+              placeholder="Search challenges, projects..."
+              sources={["careers", "domains"]}
+              onSearch={(q) => setSearchQuery(q)}
+              onSelect={(item) => setSearchQuery(item.title)}
+              filterOptions={[
+                { key: "domain", label: "Domain", options: DOMAINS.map(d => ({ value: d, label: d.charAt(0).toUpperCase() + d.slice(1) })) },
+                { key: "difficulty", label: "Difficulty", options: DIFFICULTIES.map(d => ({ value: d, label: d.charAt(0).toUpperCase() + d.slice(1) })) },
+              ]}
+              activeFilters={{ domain: domainFilter, difficulty: difficultyFilter }}
+              onFilterChange={(key, val) => {
+                if (key === "domain") setDomainFilter(val);
+                else if (key === "difficulty") setDifficultyFilter(val);
+              }}
+            />
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
             {filteredChallenges.map((c, i) => (
               <motion.div key={c.id} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }}

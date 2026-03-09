@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import ModuleSearchBar from "@/components/search/ModuleSearchBar";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
@@ -504,10 +505,13 @@ const MentorMatchmaking = () => {
           <Card>
             <CardContent className="pt-6">
               <div className="flex flex-col lg:flex-row gap-4">
-                <div className="relative flex-1">
-                  <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
-                  <Input placeholder="Search by name, expertise, or industry..." value={search} onChange={e => setSearch(e.target.value)} className="pl-9" />
-                </div>
+                <ModuleSearchBar
+                  placeholder="Search by name, expertise, or industry..."
+                  sources={["careers", "domains"]}
+                  onSearch={(q) => setSearch(q)}
+                  onSelect={(item) => setSearch(item.title)}
+                  showAiBadge
+                />
                 <div className="flex flex-wrap gap-2">
                   <select value={filterDomain} onChange={e => setFilterDomain(e.target.value)} className="px-3 py-2 rounded-lg border border-input bg-background text-sm">
                     {domains.map(d => <option key={d} value={d}>{d === "all" ? "All Domains" : d}</option>)}

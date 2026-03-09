@@ -16,6 +16,7 @@ import {
   Zap, CheckCircle, ArrowRight, BookMarked, X,
   Map, Trophy, Users, MessageSquare, Calendar
 } from "lucide-react";
+import ModuleSearchBar from "@/components/search/ModuleSearchBar";
 import DirectorySearchDrawer from "@/components/directory/DirectorySearchDrawer";
 
 const DOMAINS = ["All", "Tech", "Design", "Leadership", "Marketing", "Finance", "Healthcare", "Entrepreneurship"];
@@ -293,13 +294,22 @@ const ContentLibrary = () => {
 
         {/* Search & Filters */}
         <div className="space-y-4">
-          <div className="flex gap-3">
-            <div className="relative flex-1">
-              <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
-              <Input placeholder="Search courses, skills, topics..." value={search} onChange={e => setSearch(e.target.value)} className="pl-9" />
-            </div>
-            <DirectorySearchDrawer mode="domains" triggerLabel="Browse Domains" onSelect={(item) => setSearch(item.name)} />
-          </div>
+          <ModuleSearchBar
+              placeholder="Search courses, skills, topics..."
+              sources={["domains", "skills"]}
+              onSearch={(q) => setSearch(q)}
+              onSelect={(item) => setSearch(item.title)}
+              showAiBadge
+              filterOptions={[
+                { key: "domain", label: "Domain", options: DOMAINS.map(d => ({ value: d, label: d })) },
+                { key: "difficulty", label: "Difficulty", options: DIFFICULTY_LEVELS.map(d => ({ value: d, label: d.charAt(0).toUpperCase() + d.slice(1) })) },
+              ]}
+              activeFilters={{ domain, difficulty }}
+              onFilterChange={(key, val) => {
+                if (key === "domain") setDomain(val);
+                else if (key === "difficulty") setDifficulty(val);
+              }}
+            />
           <div className="flex flex-wrap gap-2">
             {DOMAINS.map(d => (
               <button key={d} onClick={() => setDomain(d)} className={`px-3 py-1.5 rounded-full font-body text-xs transition-all ${domain === d ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground hover:text-foreground"}`}>
