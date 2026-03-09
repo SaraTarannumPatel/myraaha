@@ -17,6 +17,7 @@ import {
 } from "lucide-react";
 import CareerCardDeck from "@/components/career/CareerCardDeck";
 import StoryModeCards from "@/components/career/StoryModeCards";
+import ChallengeModeCards from "@/components/career/ChallengeModeCards";
 
 const MOODS = [
   { id: "excited", label: "Excited", icon: Zap, color: "text-accent" },
@@ -26,9 +27,10 @@ const MOODS = [
 ];
 
 const MODES = [
-  { id: "story", label: "Story Mode", icon: MessageSquare, desc: "Guided scenarios and reflections" },
-  { id: "challenge", label: "Challenge Mode", icon: Target, desc: "Quick tasks and prompts" },
+  { id: "story", label: "Story Mode", icon: MessageSquare, desc: "Real career stories told by professionals" },
+  { id: "challenge", label: "Challenge Mode", icon: Target, desc: "Real-world tasks from different careers" },
   { id: "visual", label: "Visual Mode", icon: Palette, desc: "Pick images and icons that resonate" },
+  { id: "career-cards", label: "Career Cards", icon: Layers, desc: "Browse detailed career path cards" },
 ];
 
 const STORY_PROMPTS = [
@@ -652,9 +654,8 @@ const CuriosityCompass = () => {
       {/* Main Tabs */}
       {!showNextSteps && (
         <Tabs value={tab} onValueChange={setTab}>
-          <TabsList className="grid grid-cols-6 w-full max-w-3xl">
+          <TabsList className="grid grid-cols-5 w-full max-w-2xl">
             <TabsTrigger value="explore">Explore</TabsTrigger>
-            <TabsTrigger value="career-cards">Career Cards</TabsTrigger>
             <TabsTrigger value="quests">Quests</TabsTrigger>
             <TabsTrigger value="domains">Domains</TabsTrigger>
             <TabsTrigger value="insights">Insights</TabsTrigger>
@@ -734,8 +735,8 @@ const CuriosityCompass = () => {
                 </div>
                 <StoryModeCards />
               </>
-            ) : (
-              /* Challenge Mode — guided prompts */
+            ) : mode === "challenge" ? (
+              /* Challenge Mode — real-world task cards */
               <>
                 <div className="flex items-center justify-between">
                   <Button variant="ghost" size="sm" onClick={() => setMode(null)}>
@@ -743,98 +744,24 @@ const CuriosityCompass = () => {
                   </Button>
                   <Badge variant="secondary">Challenge Mode</Badge>
                 </div>
-                <Progress value={((modePromptIndex + 1) / currentModePrompts.length) * 100} className="h-2" />
-
-                <AnimatePresence mode="wait">
-                  {modePromptIndex < currentModePrompts.length ? (
-                    <motion.div key={modePromptIndex} initial={{ opacity: 0, x: 30 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -30 }}>
-                      <Card>
-                        <CardContent className="pt-6 space-y-6">
-                          <p className="font-display text-xl text-foreground">{currentModePrompts[modePromptIndex].question}</p>
-
-                          {currentModePrompts[modePromptIndex].type === "open" && (
-                            <Textarea
-                              placeholder="Share your thoughts…"
-                              value={modeResponses[modePromptIndex] || ""}
-                              onChange={e => handleModeResponse(modePromptIndex, e.target.value)}
-                              rows={4}
-                            />
-                          )}
-                          {currentModePrompts[modePromptIndex].type === "choice" && (
-                            <div className="space-y-2">
-                              {currentModePrompts[modePromptIndex].options?.map(opt => (
-                                <button key={opt} onClick={() => handleModeResponse(modePromptIndex, opt)} className={`w-full p-3 rounded-lg border text-left transition-all ${modeResponses[modePromptIndex] === opt ? "border-primary bg-primary/10" : "border-border hover:border-primary/50"}`}>
-                                  <span className="font-body text-sm">{opt}</span>
-                                </button>
-                              ))}
-                            </div>
-                          )}
-                          {currentModePrompts[modePromptIndex].type === "multi" && (
-                            <div className="flex flex-wrap gap-2">
-                              {currentModePrompts[modePromptIndex].options?.map(opt => {
-                                const sel = (modeResponses[modePromptIndex] || []).includes(opt);
-                                return (
-                                  <button key={opt} onClick={() => {
-                                    const cur = modeResponses[modePromptIndex] || [];
-                                    handleModeResponse(modePromptIndex, sel ? cur.filter((o: string) => o !== opt) : [...cur, opt]);
-                                  }} className={`px-4 py-2 rounded-full border transition-all ${sel ? "border-primary bg-primary text-primary-foreground" : "border-border hover:border-primary/50"}`}>
-                                    <span className="font-body text-sm">{opt}</span>
-                                  </button>
-                                );
-                              })}
-                            </div>
-                          )}
-
-                          {modePromptIndex > 0 && modePromptIndex % 2 === 0 && (
-                            <div className="pt-4 border-t border-border">
-                              <p className="font-body text-xs text-muted-foreground mb-2">Quick check — how are you feeling?</p>
-                              <div className="flex gap-2">
-                                {MOODS.map(m => (
-                                  <button key={m.id} onClick={() => setMoodCheckpoint(m.id)} className={`p-2 rounded-lg border ${moodCheckpoint === m.id ? "border-primary bg-primary/10" : "border-transparent"}`}>
-                                    <m.icon className={m.color} size={16} />
-                                  </button>
-                                ))}
-                              </div>
-                            </div>
-                          )}
-
-                          <div className="flex justify-between pt-2">
-                            <Button variant="outline" onClick={() => setModePromptIndex(Math.max(0, modePromptIndex - 1))} disabled={modePromptIndex === 0}>
-                              <ArrowLeft size={14} className="mr-2" /> Back
-                            </Button>
-                            <Button onClick={() => {
-                              if (modePromptIndex < currentModePrompts.length - 1) { setModePromptIndex(modePromptIndex + 1); }
-                              else { finishModePrompts(); }
-                            }} disabled={!modeResponses[modePromptIndex]}>
-                              {modePromptIndex < currentModePrompts.length - 1 ? "Next" : "Finish"} <ArrowRight size={14} className="ml-2" />
-                            </Button>
-                          </div>
-                        </CardContent>
-                      </Card>
-                    </motion.div>
-                  ) : null}
-                </AnimatePresence>
-
-                {likedCount >= 3 && (
-                  <Card className="border-primary/30 bg-gradient-to-r from-primary/5 to-accent/5">
-                    <CardContent className="pt-6 text-center">
-                      <Sparkles className="mx-auto text-primary mb-3" size={32} />
-                      <h3 className="font-display text-lg mb-2">Ready for AI Recommendations!</h3>
-                      <p className="font-body text-sm text-muted-foreground mb-4">Based on your selections, let's discover career domains that match your interests.</p>
-                      <Button onClick={getAIRecommendations} disabled={aiLoading}>
-                        {aiLoading ? "Analyzing..." : "Get Recommendations"} <ArrowRight size={14} className="ml-2" />
-                      </Button>
-                    </CardContent>
-                  </Card>
-                )}
+                <ChallengeModeCards />
               </>
-            )}
+            ) : mode === "career-cards" ? (
+              /* Career Cards Mode */
+              <>
+                <div className="flex items-center justify-between">
+                  <Button variant="ghost" size="sm" onClick={() => setMode(null)}>
+                    <ArrowLeft size={14} className="mr-2" /> Change Mode
+                  </Button>
+                  <Badge variant="secondary">Career Cards</Badge>
+                </div>
+                <CareerCardDeck />
+              </>
+            ) : null}
           </TabsContent>
 
-          {/* ===== Career Cards Tab ===== */}
-          <TabsContent value="career-cards" className="space-y-6">
-            <CareerCardDeck />
-          </TabsContent>
+
+
 
           {/* ===== Quests Tab ===== */}
           <TabsContent value="quests" className="space-y-6">

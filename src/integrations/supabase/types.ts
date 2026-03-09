@@ -391,6 +391,41 @@ export type Database = {
           },
         ]
       }
+      challenge_card_interactions: {
+        Row: {
+          challenge_id: string
+          created_at: string
+          id: string
+          interaction_type: string
+          time_spent_seconds: number | null
+          user_id: string
+        }
+        Insert: {
+          challenge_id: string
+          created_at?: string
+          id?: string
+          interaction_type: string
+          time_spent_seconds?: number | null
+          user_id: string
+        }
+        Update: {
+          challenge_id?: string
+          created_at?: string
+          id?: string
+          interaction_type?: string
+          time_spent_seconds?: number | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "challenge_card_interactions_challenge_id_fkey"
+            columns: ["challenge_id"]
+            isOneToOne: false
+            referencedRelation: "domain_challenge_cards"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       challenge_enrollments: {
         Row: {
           challenge_id: string
@@ -1014,6 +1049,65 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      domain_challenge_cards: {
+        Row: {
+          career_path_id: string | null
+          challenge_name: string
+          compensation: string | null
+          created_at: string
+          difficulty_level: string
+          domain: string
+          estimated_time: string
+          id: string
+          is_active: boolean | null
+          is_ai_generated: boolean | null
+          skills_needed: string[] | null
+          tags: string[] | null
+          task_description: string
+          tools_used: string[] | null
+        }
+        Insert: {
+          career_path_id?: string | null
+          challenge_name: string
+          compensation?: string | null
+          created_at?: string
+          difficulty_level?: string
+          domain?: string
+          estimated_time?: string
+          id?: string
+          is_active?: boolean | null
+          is_ai_generated?: boolean | null
+          skills_needed?: string[] | null
+          tags?: string[] | null
+          task_description: string
+          tools_used?: string[] | null
+        }
+        Update: {
+          career_path_id?: string | null
+          challenge_name?: string
+          compensation?: string | null
+          created_at?: string
+          difficulty_level?: string
+          domain?: string
+          estimated_time?: string
+          id?: string
+          is_active?: boolean | null
+          is_ai_generated?: boolean | null
+          skills_needed?: string[] | null
+          tags?: string[] | null
+          task_description?: string
+          tools_used?: string[] | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "domain_challenge_cards_career_path_id_fkey"
+            columns: ["career_path_id"]
+            isOneToOne: false
+            referencedRelation: "career_paths"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       domain_clubs: {
         Row: {
