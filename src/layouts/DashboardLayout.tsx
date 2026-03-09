@@ -215,6 +215,9 @@ const DashboardLayout = () => {
           <Outlet />
         </div>
       </main>
+
+      {/* Onboarding reminder popup for skipped steps */}
+      <OnboardingReminderPopup />
     </div>
   );
 };
