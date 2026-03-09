@@ -15,6 +15,7 @@ import IntentSelection from "./pages/onboarding/IntentSelection";
 import PersonalInfo from "./pages/onboarding/PersonalInfo";
 import ConsentStep from "./pages/onboarding/ConsentStep";
 import GuidedOnboarding from "./pages/onboarding/GuidedOnboarding";
+import JourneyDiscovery from "./pages/onboarding/JourneyDiscovery";
 import ResetPassword from "./pages/ResetPassword";
 import DashboardLayout from "./layouts/DashboardLayout";
 import Dashboard from "./pages/Dashboard";
