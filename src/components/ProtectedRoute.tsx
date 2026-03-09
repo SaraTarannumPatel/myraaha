@@ -26,7 +26,13 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
     return <Navigate to="/auth" state={{ from: location }} replace />;
   }
 
-  // Redirect to appropriate onboarding step if not complete
+  // If user has completed onboarding and is on an onboarding route, redirect to dashboard
+  if (profile && profile.onboarding_status === "complete" && location.pathname.startsWith("/onboarding")) {
+    return <Navigate to="/dashboard" replace />;
+  }
+
+  // If user has NOT completed onboarding and is NOT on an onboarding route, redirect to their step
+  // But ONLY if they haven't completed onboarding (new sign-ups)
   if (profile && profile.onboarding_status !== "complete" && !location.pathname.startsWith("/onboarding")) {
     const step = profile.onboarding_status || "welcome";
     const route = onboardingRoutes[step] || "/onboarding";
