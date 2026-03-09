@@ -39,5 +39,8 @@ verify_jwt = false
 [functions.transition-planner-ai]
 verify_jwt = false
 
+[functions.data-ingestion]
+verify_jwt = false
+
 [functions.mindset-coach]
 verify_jwt = false
