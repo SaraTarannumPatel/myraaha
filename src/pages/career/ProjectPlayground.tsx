@@ -480,7 +480,6 @@ const ProjectPlayground = () => {
 
         {/* Explore Tab */}
         <TabsContent value="explore" className="space-y-6">
-          <div className="flex gap-3 flex-wrap items-center">
             <ModuleSearchBar
               placeholder="Search challenges, projects..."
               sources={["careers", "domains"]}
@@ -496,15 +495,6 @@ const ProjectPlayground = () => {
                 else if (key === "difficulty") setDifficultyFilter(val);
               }}
             />
-                <button key={d} onClick={() => setDomainFilter(d)} className={`px-3 py-1.5 rounded-full font-body text-xs capitalize transition-all ${domainFilter === d ? "bg-accent text-accent-foreground" : "bg-muted text-muted-foreground hover:bg-accent/10"}`}>{d}</button>
-              ))}
-            </div>
-          </div>
-          <div className="flex gap-1 mb-2">
-            {DIFFICULTIES.map(d => (
-              <button key={d} onClick={() => setDifficultyFilter(d)} className={`px-3 py-1 rounded-full font-body text-xs capitalize transition-all ${difficultyFilter === d ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground hover:bg-primary/10"}`}>{d}</button>
-            ))}
-          </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
             {filteredChallenges.map((c, i) => (
               <motion.div key={c.id} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }}

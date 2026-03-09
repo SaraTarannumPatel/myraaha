@@ -294,8 +294,7 @@ const ContentLibrary = () => {
 
         {/* Search & Filters */}
         <div className="space-y-4">
-          <div className="flex gap-3">
-            <ModuleSearchBar
+          <ModuleSearchBar
               placeholder="Search courses, skills, topics..."
               sources={["domains", "skills"]}
               onSearch={(q) => setSearch(q)}

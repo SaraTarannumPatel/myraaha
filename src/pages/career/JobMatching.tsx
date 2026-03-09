@@ -844,8 +844,7 @@ const JobMatching = () => {
 
         {/* ===== OPPORTUNITIES TAB ===== */}
         <TabsContent value="opportunities" className="space-y-4">
-          <div className="flex flex-col sm:flex-row gap-3">
-            <ModuleSearchBar
+          <ModuleSearchBar
               placeholder="Search roles, companies, skills..."
               sources={["jobs", "careers"]}
               onSearch={(q) => setSearch(q)}
@@ -865,7 +864,6 @@ const JobMatching = () => {
                 else if (key === "exp") setExpFilter(val);
               }}
             />
-          {/* Filters */}
           <div className="space-y-2">
             <div className="flex gap-1 flex-wrap">
               <span className="font-body text-xs text-muted-foreground mr-1 self-center">Domain:</span>
