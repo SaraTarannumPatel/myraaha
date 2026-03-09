@@ -125,10 +125,10 @@ const RoadmapStepDetail = ({ open, onClose, step, roadmapTitle, userGoals }: Roa
                       <Clock size={12} /> {details.total_time_estimate}
                     </span>
                     <span className="flex items-center gap-1 text-xs text-muted-foreground font-body">
-                      <Target size={12} /> {details.difficulty_level}
+                      <Target size={12} /> {String(details.difficulty_level)}
                     </span>
                     <span className="flex items-center gap-1 text-xs text-muted-foreground font-body">
-                      <BookMarked size={12} /> {resourceCount} resources
+                      <BookMarked size={12} /> {String(resourceCount)} resources
                     </span>
                   </div>
                 )}
