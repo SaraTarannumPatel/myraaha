@@ -68,6 +68,7 @@ const Roadmap = () => {
   const [mentors, setMentors] = useState<any[]>([]);
   const [learningTracks, setLearningTracks] = useState<any[]>([]);
   const [expandedStep, setExpandedStep] = useState<string | null>(null);
+  const [detailStep, setDetailStep] = useState<any>(null);
 
   useEffect(() => { if (user) fetchAll(); }, [user]);
 
