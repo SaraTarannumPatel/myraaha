@@ -529,6 +529,9 @@ const Roadmap = () => {
                                       </div>
                                       {/* Cross-module links */}
                                       <div className="flex flex-wrap gap-2">
+                                        <Button variant="outline" size="sm" className="text-xs gap-1" onClick={(e) => { e.stopPropagation(); setDetailStep(step); }}>
+                                          <Sparkles size={12} /> View Details
+                                        </Button>
                                         {step.category === "learning" && (
                                           <Button variant="outline" size="sm" className="text-xs gap-1" onClick={(e) => { e.stopPropagation(); window.location.href = "/career/content-library"; }}>
                                             <BookOpen size={12} /> Learning Content
