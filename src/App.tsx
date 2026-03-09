@@ -36,6 +36,7 @@ import SkillStacker from "./pages/career/SkillStacker";
 import CareerMoodboard from "./pages/career/CareerMoodboard";
 import CareerInspirations from "./pages/career/CareerInspirations";
 import TransitionPlanner from "./pages/career/TransitionPlanner";
+import CareerCardCollections from "./pages/career/CareerCardCollections";
 // Entrepreneurship
 import StartupSparks from "./pages/entrepreneurship/StartupSparks";
 import MVPBuilder from "./pages/entrepreneurship/MVPBuilder";
