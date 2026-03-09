@@ -285,6 +285,112 @@ export type Database = {
         }
         Relationships: []
       }
+      career_stories: {
+        Row: {
+          advice: string | null
+          career_path_id: string | null
+          cons: string[] | null
+          created_at: string
+          day_in_life: string | null
+          difficulty_level: string | null
+          domain: string
+          id: string
+          is_active: boolean | null
+          is_ai_generated: boolean | null
+          narrator_experience_years: number | null
+          narrator_name: string
+          narrator_role: string
+          pros: string[] | null
+          skills_highlighted: string[] | null
+          story_content: string
+          tags: string[] | null
+          title: string
+        }
+        Insert: {
+          advice?: string | null
+          career_path_id?: string | null
+          cons?: string[] | null
+          created_at?: string
+          day_in_life?: string | null
+          difficulty_level?: string | null
+          domain?: string
+          id?: string
+          is_active?: boolean | null
+          is_ai_generated?: boolean | null
+          narrator_experience_years?: number | null
+          narrator_name: string
+          narrator_role: string
+          pros?: string[] | null
+          skills_highlighted?: string[] | null
+          story_content: string
+          tags?: string[] | null
+          title: string
+        }
+        Update: {
+          advice?: string | null
+          career_path_id?: string | null
+          cons?: string[] | null
+          created_at?: string
+          day_in_life?: string | null
+          difficulty_level?: string | null
+          domain?: string
+          id?: string
+          is_active?: boolean | null
+          is_ai_generated?: boolean | null
+          narrator_experience_years?: number | null
+          narrator_name?: string
+          narrator_role?: string
+          pros?: string[] | null
+          skills_highlighted?: string[] | null
+          story_content?: string
+          tags?: string[] | null
+          title?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "career_stories_career_path_id_fkey"
+            columns: ["career_path_id"]
+            isOneToOne: false
+            referencedRelation: "career_paths"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      career_story_interactions: {
+        Row: {
+          created_at: string
+          id: string
+          interaction_type: string
+          story_id: string
+          time_spent_seconds: number | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          interaction_type: string
+          story_id: string
+          time_spent_seconds?: number | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          interaction_type?: string
+          story_id?: string
+          time_spent_seconds?: number | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "career_story_interactions_story_id_fkey"
+            columns: ["story_id"]
+            isOneToOne: false
+            referencedRelation: "career_stories"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       challenge_enrollments: {
         Row: {
           challenge_id: string
@@ -5426,6 +5532,48 @@ export type Database = {
           steps?: Json | null
           tags?: string[] | null
           title?: string
+        }
+        Relationships: []
+      }
+      story_behavior_analysis: {
+        Row: {
+          ai_summary: string | null
+          analysis_type: string
+          analyzed_at: string
+          career_inclinations: Json | null
+          confidence_score: number | null
+          domains_attracted: string[] | null
+          domains_rejected: string[] | null
+          id: string
+          personality_signals: Json | null
+          skills_resonated: string[] | null
+          user_id: string
+        }
+        Insert: {
+          ai_summary?: string | null
+          analysis_type?: string
+          analyzed_at?: string
+          career_inclinations?: Json | null
+          confidence_score?: number | null
+          domains_attracted?: string[] | null
+          domains_rejected?: string[] | null
+          id?: string
+          personality_signals?: Json | null
+          skills_resonated?: string[] | null
+          user_id: string
+        }
+        Update: {
+          ai_summary?: string | null
+          analysis_type?: string
+          analyzed_at?: string
+          career_inclinations?: Json | null
+          confidence_score?: number | null
+          domains_attracted?: string[] | null
+          domains_rejected?: string[] | null
+          id?: string
+          personality_signals?: Json | null
+          skills_resonated?: string[] | null
+          user_id?: string
         }
         Relationships: []
       }
