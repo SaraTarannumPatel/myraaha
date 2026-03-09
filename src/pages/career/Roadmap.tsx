@@ -16,6 +16,7 @@ import {
   TrendingUp, MessageSquare, Award, RefreshCw, ArrowRight, Lightbulb,
   PenLine, Meh, HelpCircle, Heart, Link, ExternalLink
 } from "lucide-react";
+import RoadmapStepDetail from "@/components/roadmap/RoadmapStepDetail";
 
 const PHASES = [
   { id: "exploration", label: "Exploration", icon: Compass, color: "bg-blue-500" },
@@ -67,6 +68,7 @@ const Roadmap = () => {
   const [mentors, setMentors] = useState<any[]>([]);
   const [learningTracks, setLearningTracks] = useState<any[]>([]);
   const [expandedStep, setExpandedStep] = useState<string | null>(null);
+  const [detailStep, setDetailStep] = useState<any>(null);
 
   useEffect(() => { if (user) fetchAll(); }, [user]);
 
@@ -497,6 +499,7 @@ const Roadmap = () => {
                                 initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.03 }}
                                 className={`flex items-center gap-3 p-3 rounded-lg border transition-all hover:bg-muted/50 cursor-pointer ${step.status === "completed" ? "bg-accent/5 border-accent/20" : "border-border"}`}
                                 onClick={() => setExpandedStep(isExpanded ? null : step.id)}
+                                onDoubleClick={() => setDetailStep(step)}
                               >
                                 <button onClick={(e) => { e.stopPropagation(); updateStepStatus(step.id, step.status === "completed" ? "not_started" : "completed"); }} className="shrink-0">
                                   {statusIcon(step.status)}
@@ -526,6 +529,9 @@ const Roadmap = () => {
                                       </div>
                                       {/* Cross-module links */}
                                       <div className="flex flex-wrap gap-2">
+                                        <Button variant="outline" size="sm" className="text-xs gap-1" onClick={(e) => { e.stopPropagation(); setDetailStep(step); }}>
+                                          <Sparkles size={12} /> View Details
+                                        </Button>
                                         {step.category === "learning" && (
                                           <Button variant="outline" size="sm" className="text-xs gap-1" onClick={(e) => { e.stopPropagation(); window.location.href = "/career/content-library"; }}>
                                             <BookOpen size={12} /> Learning Content
@@ -908,6 +914,15 @@ const Roadmap = () => {
           </CardContent>
         </Card>
       )}
+
+      {/* Detailed Step Sheet */}
+      <RoadmapStepDetail
+        open={!!detailStep}
+        onClose={() => setDetailStep(null)}
+        step={detailStep || {}}
+        roadmapTitle={activeRoadmap?.title}
+        userGoals={`${activeRoadmap?.short_term_goals || ""} | ${activeRoadmap?.long_term_goals || ""}`}
+      />
     </div>
   );
 };
