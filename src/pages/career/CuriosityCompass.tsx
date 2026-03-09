@@ -723,14 +723,25 @@ const CuriosityCompass = () => {
                   </CardContent>
                 </Card>
               </>
-            ) : (
-              /* Story / Challenge Mode — guided prompts */
+            ) : mode === "story" ? (
+              /* Story Mode — career story cards (95% of this section) */
               <>
                 <div className="flex items-center justify-between">
                   <Button variant="ghost" size="sm" onClick={() => setMode(null)}>
                     <ArrowLeft size={14} className="mr-2" /> Change Mode
                   </Button>
-                  <Badge variant="secondary">{mode === "story" ? "Story" : "Challenge"} Mode</Badge>
+                  <Badge variant="secondary">Story Mode</Badge>
+                </div>
+                <StoryModeCards />
+              </>
+            ) : (
+              /* Challenge Mode — guided prompts */
+              <>
+                <div className="flex items-center justify-between">
+                  <Button variant="ghost" size="sm" onClick={() => setMode(null)}>
+                    <ArrowLeft size={14} className="mr-2" /> Change Mode
+                  </Button>
+                  <Badge variant="secondary">Challenge Mode</Badge>
                 </div>
                 <Progress value={((modePromptIndex + 1) / currentModePrompts.length) * 100} className="h-2" />
 
@@ -774,7 +785,6 @@ const CuriosityCompass = () => {
                             </div>
                           )}
 
-                          {/* Emotion checkpoint every 2 prompts */}
                           {modePromptIndex > 0 && modePromptIndex % 2 === 0 && (
                             <div className="pt-4 border-t border-border">
                               <p className="font-body text-xs text-muted-foreground mb-2">Quick check — how are you feeling?</p>
@@ -804,43 +814,6 @@ const CuriosityCompass = () => {
                     </motion.div>
                   ) : null}
                 </AnimatePresence>
-
-                {/* Career Cards below prompts */}
-                {modePromptIndex >= currentModePrompts.length - 1 && !showReflection && (
-                  <div className="space-y-4">
-                    <h3 className="font-display text-lg text-foreground">Also explore these career cards:</h3>
-                    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-                      {careerCards.slice(0, 9).map((card, i) => {
-                        const interaction = interactions[card.id];
-                        return (
-                          <motion.div key={card.id} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.03 }} onViewportEnter={() => handleCardView(card.id)}>
-                            <Card className={`h-full transition-all hover:shadow-lg ${interaction === "like" ? "border-terracotta/50 bg-terracotta/5" : interaction === "save" ? "border-primary/50 bg-primary/5" : interaction === "skip" ? "opacity-50" : ""}`}>
-                              <CardContent className="pt-6">
-                                <div className="flex items-start gap-3 mb-3">
-                                  <span className="text-2xl">{card.icon_emoji}</span>
-                                  <div className="flex-1 min-w-0">
-                                    <h3 className="font-display text-base text-foreground">{card.title}</h3>
-                                    <Badge variant="outline" className="text-xs mt-1">{card.category}</Badge>
-                                  </div>
-                                </div>
-                                <p className="font-body text-sm text-muted-foreground mb-3 line-clamp-2">{card.description}</p>
-                                <div className="flex gap-2">
-                                  <Button variant={interaction === "like" ? "default" : "outline"} size="sm" className="flex-1" onClick={() => handleCardInteraction(card.id, "like")}>
-                                    <Heart size={14} className={interaction === "like" ? "fill-current" : ""} />
-                                  </Button>
-                                  <Button variant={interaction === "save" ? "default" : "outline"} size="sm" className="flex-1" onClick={() => handleCardInteraction(card.id, "save")}>
-                                    <BookmarkPlus size={14} />
-                                  </Button>
-                                  <Button variant="ghost" size="sm" onClick={() => handleCardInteraction(card.id, "skip")}><X size={14} /></Button>
-                                </div>
-                              </CardContent>
-                            </Card>
-                          </motion.div>
-                        );
-                      })}
-                    </div>
-                  </div>
-                )}
 
                 {likedCount >= 3 && (
                   <Card className="border-primary/30 bg-gradient-to-r from-primary/5 to-accent/5">
