@@ -176,10 +176,10 @@ const RoadmapStepDetail = ({ open, onClose, step, roadmapTitle, userGoals }: Roa
               <TabsList className="w-full grid grid-cols-4 mb-4">
                 <TabsTrigger value="overview" className="text-xs">Overview</TabsTrigger>
                 <TabsTrigger value="steps" className="text-xs">
-                  Steps ({details.sub_steps?.length || 0})
+                  Steps ({String(details.sub_steps?.length || 0)})
                 </TabsTrigger>
                 <TabsTrigger value="resources" className="text-xs">
-                  Resources ({resourceCount})
+                  Resources ({String(resourceCount)})
                 </TabsTrigger>
                 <TabsTrigger value="guidance" className="text-xs">Guidance</TabsTrigger>
               </TabsList>
