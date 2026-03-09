@@ -53,19 +53,19 @@ const DirectorySearch = ({
     const keys: string[] = [];
 
     if (mode === "all" || mode === "careers") {
-      queries.push(supabase.from("career_paths").select("*").order("title"));
+      queries.push(supabase.from("career_paths").select("*").order("title").then(r => r));
       keys.push("careers");
     }
     if (mode === "all" || mode === "jobs" || mode === "skills") {
-      queries.push(supabase.from("job_roles_directory").select("*").order("title"));
+      queries.push(supabase.from("job_roles_directory").select("*").order("title").then(r => r));
       keys.push("jobs");
     }
     if (mode === "all" || mode === "domains") {
-      queries.push(supabase.from("domain_directory").select("*").order("name"));
+      queries.push(supabase.from("domain_directory").select("*").order("name").then(r => r));
       keys.push("domains");
     }
     if (mode === "all" || mode === "universities") {
-      queries.push(supabase.from("universities_directory").select("*").order("name"));
+      queries.push(supabase.from("universities_directory").select("*").order("name").then(r => r));
       keys.push("universities");
     }
 
