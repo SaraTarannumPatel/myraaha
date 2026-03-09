@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
+import OnboardingReminderPopup from "@/components/OnboardingReminderPopup";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/sheet";
