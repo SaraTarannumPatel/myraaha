@@ -28,6 +28,16 @@ const onboardingSteps: SkippedStep[] = [
     checkFn: (p) => !p.user_type,
   },
   {
+    key: "journey_discovery",
+    title: "Take the vibe check ⚡",
+    description: "A quick journey to understand your curiosity, energy, and style — so we can personalize everything for you.",
+    icon: Zap,
+    color: "text-terracotta",
+    bgColor: "bg-terracotta/10",
+    route: "/onboarding/journey",
+    checkFn: (p) => !p.journey_variant && !!p.user_type,
+  },
+  {
     key: "intent",
     title: "What's your focus?",
     description: "Career growth, entrepreneurship, or both? This shapes your entire dashboard experience.",
@@ -35,7 +45,7 @@ const onboardingSteps: SkippedStep[] = [
     color: "text-terracotta",
     bgColor: "bg-terracotta/10",
     route: "/onboarding/intent",
-    checkFn: (p) => !p.active_intent || p.active_intent === "career", // default is career, check if explicitly set
+    checkFn: (p) => !p.active_intent || p.active_intent === "career",
   },
   {
     key: "personal_info",
