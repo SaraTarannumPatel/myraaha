@@ -81,19 +81,19 @@ const ModuleSearchBar = ({
 
       if (sources.includes("careers")) {
         keys.push("careers");
-        fetches.push(supabase.from("career_paths").select("id,title,domain,description,icon_emoji,related_skills").order("title").limit(500));
+        fetches.push(supabase.from("career_paths").select("id,title,domain,description,icon_emoji,related_skills").order("title").limit(500).then());
       }
       if (sources.includes("jobs")) {
         keys.push("jobs");
-        fetches.push(supabase.from("job_roles_directory").select("id,title,domain,description,skills_required").order("title").limit(500));
+        fetches.push(supabase.from("job_roles_directory").select("id,title,domain,description,skills_required").order("title").limit(500).then());
       }
       if (sources.includes("domains")) {
         keys.push("domains");
-        fetches.push(supabase.from("domain_directory").select("id,name,category,description,icon_emoji,keywords").order("name").limit(500));
+        fetches.push(supabase.from("domain_directory").select("id,name,category,description,icon_emoji,keywords").order("name").limit(500).then());
       }
       if (sources.includes("universities")) {
         keys.push("universities");
-        fetches.push(supabase.from("universities_directory").select("id,name,country,city,continent").order("name").limit(500));
+        fetches.push(supabase.from("universities_directory").select("id,name,country,city,continent").order("name").limit(500).then());
       }
 
       const results = await Promise.all(fetches);
