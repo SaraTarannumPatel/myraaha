@@ -49,29 +49,19 @@ const DirectorySearch = ({
   }, []);
 
   const fetchData = async () => {
-    const queries: Promise<any>[] = [];
-    const keys: string[] = [];
-
-    if (mode === "all" || mode === "careers") {
-      queries.push(supabase.from("career_paths").select("*").order("title").then(r => r));
-      keys.push("careers");
-    }
-    if (mode === "all" || mode === "jobs" || mode === "skills") {
-      queries.push(supabase.from("job_roles_directory").select("*").order("title").then(r => r));
-      keys.push("jobs");
-    }
-    if (mode === "all" || mode === "domains") {
-      queries.push(supabase.from("domain_directory").select("*").order("name").then(r => r));
-      keys.push("domains");
-    }
-    if (mode === "all" || mode === "universities") {
-      queries.push(supabase.from("universities_directory").select("*").order("name").then(r => r));
-      keys.push("universities");
-    }
-
-    const responses = await Promise.all(queries);
     const data: any = { careers: [], jobs: [], domains: [], universities: [] };
-    keys.forEach((k, i) => { data[k] = responses[i].data || []; });
+
+    const [cp, jr, dd, ud] = await Promise.all([
+      (mode === "all" || mode === "careers") ? supabase.from("career_paths").select("*").order("title") : Promise.resolve({ data: [] }),
+      (mode === "all" || mode === "jobs" || mode === "skills") ? supabase.from("job_roles_directory").select("*").order("title") : Promise.resolve({ data: [] }),
+      (mode === "all" || mode === "domains") ? supabase.from("domain_directory").select("*").order("name") : Promise.resolve({ data: [] }),
+      (mode === "all" || mode === "universities") ? supabase.from("universities_directory").select("*").order("name") : Promise.resolve({ data: [] }),
+    ]);
+
+    data.careers = cp.data || [];
+    data.jobs = jr.data || [];
+    data.domains = dd.data || [];
+    data.universities = ud.data || [];
     setAllData(data);
     setResults(data);
     setLoading(false);
