@@ -18,6 +18,7 @@ import {
   Heart, RefreshCw, X, ChevronDown, ChevronUp
 } from "lucide-react";
 import { Link } from "react-router-dom";
+import DirectorySearchDrawer from "@/components/directory/DirectorySearchDrawer";
 
 const DOMAINS = ["all", "tech", "data", "design", "marketing", "business"];
 const ROLE_TYPES = ["all", "internship", "full-time", "part-time", "fellowship", "freelance"];
@@ -847,6 +848,7 @@ const JobMatching = () => {
               <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
               <Input placeholder="Search roles, companies..." value={search} onChange={e => setSearch(e.target.value)} className="pl-9" />
             </div>
+            <DirectorySearchDrawer mode="jobs" triggerLabel="Browse Jobs" onSelect={(item) => setSearch(item.title)} />
           </div>
 
           {/* Filters */}

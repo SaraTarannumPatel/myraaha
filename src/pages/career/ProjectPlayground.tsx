@@ -14,6 +14,7 @@ import {
   Zap, Users, Search, Filter, BookOpen, Target, MessageSquare,
   CheckCircle2, BarChart3, Brain, Lightbulb, Rocket
 } from "lucide-react";
+import DirectorySearchDrawer from "@/components/directory/DirectorySearchDrawer";
 
 const DOMAINS = ["all", "tech", "data", "design", "marketing", "business", "research", "education"];
 const DIFFICULTIES = ["all", "beginner", "intermediate", "advanced"];
@@ -478,11 +479,12 @@ const ProjectPlayground = () => {
 
         {/* Explore Tab */}
         <TabsContent value="explore" className="space-y-6">
-          <div className="flex gap-3 flex-wrap">
+          <div className="flex gap-3 flex-wrap items-center">
             <div className="relative flex-1 min-w-[200px]">
               <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
               <Input placeholder="Search challenges..." value={searchQuery} onChange={e => setSearchQuery(e.target.value)} className="pl-9" />
             </div>
+            <DirectorySearchDrawer mode="careers" triggerLabel="Browse Careers" onSelect={(item) => setSearchQuery(item.title)} />
             <div className="flex gap-1">
               {DOMAINS.map(d => (
                 <button key={d} onClick={() => setDomainFilter(d)} className={`px-3 py-1.5 rounded-full font-body text-xs capitalize transition-all ${domainFilter === d ? "bg-accent text-accent-foreground" : "bg-muted text-muted-foreground hover:bg-accent/10"}`}>{d}</button>
