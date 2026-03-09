@@ -17,14 +17,20 @@ const Auth = () => {
   const [fullName, setFullName] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [submitting, setSubmitting] = useState(false);
-  const { signIn, signUp, user } = useAuth();
+  const { signIn, signUp, user, profile } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (user) {
-      navigate("/onboarding", { replace: true });
+    if (user && profile) {
+      // If onboarding is complete, go straight to dashboard
+      if (profile.onboarding_status === "complete") {
+        navigate("/dashboard", { replace: true });
+      } else {
+        // Only new/incomplete users go to onboarding
+        navigate("/onboarding", { replace: true });
+      }
     }
-  }, [user, navigate]);
+  }, [user, profile, navigate]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -34,9 +40,8 @@ const Auth = () => {
       const { error } = await signIn(email, password);
       if (error) {
         toast.error(error.message);
-      } else {
-        navigate("/onboarding");
       }
+      // Navigation handled by useEffect above based on profile status
     } else {
       if (!fullName.trim()) {
         toast.error("Please enter your name");
@@ -69,7 +74,6 @@ const Auth = () => {
       {/* Left - Branding */}
       <div className="hidden lg:flex lg:w-1/2 gradient-dark items-center justify-center p-12 relative overflow-hidden">
         <div className="absolute inset-0 gradient-glow opacity-30" />
-        {/* Decorative color accents */}
         <div className="absolute top-20 left-20 w-32 h-32 rounded-full bg-blue/10 blur-3xl" />
         <div className="absolute bottom-32 right-16 w-40 h-40 rounded-full bg-terracotta/10 blur-3xl" />
         <div className="absolute top-1/2 right-1/3 w-24 h-24 rounded-full bg-accent/10 blur-2xl" />
@@ -83,7 +87,6 @@ const Auth = () => {
           <p className="font-body text-primary-foreground/70 text-lg max-w-md">
             Your personal launchpad for careers & entrepreneurship. Discover, build, connect, evolve.
           </p>
-          {/* Color-coded feature pills */}
           <div className="flex flex-wrap gap-2 justify-center mt-8">
             <span className="px-3 py-1 rounded-full bg-blue/20 text-blue-light font-body text-xs">Career Clarity</span>
             <span className="px-3 py-1 rounded-full bg-terracotta/20 text-terracotta-light font-body text-xs">Startup Sparks</span>
