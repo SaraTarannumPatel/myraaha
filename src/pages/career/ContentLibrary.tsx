@@ -16,6 +16,7 @@ import {
   Zap, CheckCircle, ArrowRight, BookMarked, X,
   Map, Trophy, Users, MessageSquare, Calendar
 } from "lucide-react";
+import ModuleSearchBar from "@/components/search/ModuleSearchBar";
 import DirectorySearchDrawer from "@/components/directory/DirectorySearchDrawer";
 
 const DOMAINS = ["All", "Tech", "Design", "Leadership", "Marketing", "Finance", "Healthcare", "Entrepreneurship"];
