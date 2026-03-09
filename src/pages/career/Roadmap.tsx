@@ -112,6 +112,106 @@ const Roadmap = () => {
     setLoading(false);
   };
 
+  const fetchSuggestedRoadmaps = async () => {
+    // Load cached suggestions from DB
+    const { data } = await supabase
+      .from("suggested_roadmaps")
+      .select("*")
+      .eq("user_id", user!.id)
+      .order("match_score", { ascending: false });
+    if (data && data.length > 0) setSuggestedRoadmaps(data);
+  };
+
+  const generateSuggestedRoadmaps = async () => {
+    if (!user) return;
+    setSuggestionsLoading(true);
+    try {
+      const { data, error } = await supabase.functions.invoke("roadmap-suggestions", {});
+      if (error) throw error;
+      if (data?.suggestions) {
+        setAnalysisSummary(data.analysis_summary || "");
+        setStrongestSignals(data.strongest_signals || []);
+        // Refresh from DB
+        await fetchSuggestedRoadmaps();
+      }
+      toast.success("AI analyzed your patterns and generated roadmap suggestions!");
+    } catch (error) {
+      console.error("Error generating suggestions:", error);
+      toast.error("Failed to generate suggestions");
+    } finally {
+      setSuggestionsLoading(false);
+    }
+  };
+
+  const acceptSuggestedRoadmap = async (suggestion: any) => {
+    if (!user) return;
+    setGenerating(true);
+    try {
+      // Generate full roadmap from suggestion
+      const { data, error } = await supabase.functions.invoke("roadmap-ai", {
+        body: {
+          type: "generate_roadmap",
+          context: {
+            shortTermGoals: suggestion.roadmap_data?.phases?.[0] || suggestion.title,
+            longTermGoals: suggestion.description,
+            interests: suggestion.roadmap_data?.key_skills || [],
+            skills: suggestion.roadmap_data?.key_skills || [],
+            industry: suggestion.roadmap_data?.target_roles?.[0] || "",
+            careerStage: profile?.career_stage || "exploring",
+            areasOfFocus: suggestion.roadmap_data?.target_roles || [],
+          },
+        },
+      });
+      if (error) throw error;
+
+      const { data: newRoadmap, error: rmErr } = await supabase.from("roadmaps").insert({
+        user_id: user.id,
+        title: suggestion.title || data.title,
+        description: suggestion.description || data.description,
+        intent: "career",
+        skill_gaps: data.skill_gaps || [],
+        ai_suggestions: data,
+        is_active: true,
+      }).select().single();
+      if (rmErr) throw rmErr;
+
+      await supabase.from("roadmaps").update({ is_active: false }).eq("user_id", user.id).neq("id", newRoadmap.id);
+
+      // Insert steps
+      const allSteps: any[] = [];
+      let orderIndex = 0;
+      for (const phase of data.phases || []) {
+        for (const step of phase.steps || []) {
+          allSteps.push({
+            roadmap_id: newRoadmap.id, user_id: user.id, title: step.title, description: step.description,
+            phase: phase.name, category: step.category, skill_tags: step.skill_tags || [],
+            priority: step.priority || "medium", ai_generated: true, order_index: orderIndex++,
+          });
+        }
+      }
+      if (allSteps.length > 0) await supabase.from("roadmap_steps").insert(allSteps);
+
+      // Mark suggestion as accepted
+      await supabase.from("suggested_roadmaps").update({ status: "accepted" }).eq("id", suggestion.id);
+
+      setActiveRoadmap(newRoadmap);
+      fetchSteps(newRoadmap.id);
+      fetchAll();
+      setActiveTab("timeline");
+      toast.success(`Roadmap "${suggestion.title}" created! 🎉`);
+    } catch (error) {
+      console.error("Error accepting suggestion:", error);
+      toast.error("Failed to create roadmap from suggestion");
+    } finally {
+      setGenerating(false);
+    }
+  };
+
+  const dismissSuggestion = async (id: string) => {
+    await supabase.from("suggested_roadmaps").update({ status: "dismissed" }).eq("id", id);
+    setSuggestedRoadmaps(prev => prev.filter(s => s.id !== id));
+    toast.success("Suggestion dismissed");
+
   const fetchSteps = async (roadmapId: string) => {
     const { data } = await supabase.from("roadmap_steps").select("*").eq("roadmap_id", roadmapId).order("order_index", { ascending: true });
     setSteps(data || []);
