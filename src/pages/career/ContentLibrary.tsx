@@ -293,9 +293,12 @@ const ContentLibrary = () => {
 
         {/* Search & Filters */}
         <div className="space-y-4">
-          <div className="relative">
-            <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
-            <Input placeholder="Search courses, skills, topics..." value={search} onChange={e => setSearch(e.target.value)} className="pl-9" />
+          <div className="flex gap-3">
+            <div className="relative flex-1">
+              <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
+              <Input placeholder="Search courses, skills, topics..." value={search} onChange={e => setSearch(e.target.value)} className="pl-9" />
+            </div>
+            <DirectorySearchDrawer mode="domains" triggerLabel="Browse Domains" onSelect={(item) => setSearch(item.name)} />
           </div>
           <div className="flex flex-wrap gap-2">
             {DOMAINS.map(d => (

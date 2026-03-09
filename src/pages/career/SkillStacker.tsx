@@ -365,10 +365,11 @@ const SkillStacker = () => {
       <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="space-y-2">
         <div className="flex items-center gap-3">
           <div className="p-2.5 rounded-xl bg-primary/10"><Layers className="h-6 w-6 text-primary" /></div>
-          <div>
+          <div className="flex-1">
             <h1 className="text-2xl font-display text-foreground">SkillStacker</h1>
             <p className="text-sm text-muted-foreground font-body">Build capability with clarity, confidence, and context.</p>
           </div>
+          <DirectorySearchDrawer mode="skills" triggerLabel="Browse Skills" />
         </div>
         <p className="text-sm text-muted-foreground/80 italic font-body">
           "Here's what you need to build — based on who you are, what you like, and where you want to go."

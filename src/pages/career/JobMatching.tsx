@@ -848,6 +848,7 @@ const JobMatching = () => {
               <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
               <Input placeholder="Search roles, companies..." value={search} onChange={e => setSearch(e.target.value)} className="pl-9" />
             </div>
+            <DirectorySearchDrawer mode="jobs" triggerLabel="Browse Jobs" onSelect={(item) => setSearch(item.title)} />
           </div>
 
           {/* Filters */}
