@@ -388,6 +388,35 @@ const CuriosityCompass = () => {
 
   const completeQuest = async () => {
     if (!activeQuest) return;
+
+    // Record quest response signals
+    for (const [, value] of Object.entries(questResponses)) {
+      if (typeof value === "string") {
+        await recordTextSignals("quests", value, { quest: activeQuest.title });
+      } else if (Array.isArray(value)) {
+        await recordMultipleSignals("quests", value, "selection", 0.7, { quest: activeQuest.title });
+      }
+    }
+
+    // Get AI analysis of quest responses
+    let analysisResults = null;
+    try {
+      const { data } = await supabase.functions.invoke("curiosity-compass-ai", {
+        body: { type: "quest_feedback", context: { questResponses, questTitle: activeQuest.title, interests, mood } }
+      });
+      if (data) {
+        analysisResults = data;
+        setAiInsights(data);
+        // Record detected strengths and domains as signals
+        if (data.strengths_detected) {
+          await recordMultipleSignals("quests", data.strengths_detected, "skill_interest", 0.7);
+        }
+        if (data.suggested_domains) {
+          await recordMultipleSignals("quests", data.suggested_domains, "domain_interest", 0.6);
+        }
+      }
+    } catch (e) { console.error("Quest analysis error:", e); }
+
     await supabase.from("curiosity_quest_progress").upsert({
       user_id: user!.id,
       quest_id: activeQuest.id,
@@ -396,6 +425,7 @@ const CuriosityCompass = () => {
       points_earned: activeQuest.points || 10,
       mood_checkpoint: mood,
       completed_at: new Date().toISOString(),
+      analysis_results: analysisResults,
     }, { onConflict: "user_id,quest_id" });
     await supabase.from("achievements").insert({
       user_id: user!.id,
@@ -408,7 +438,6 @@ const CuriosityCompass = () => {
     setActiveQuest(null);
     setShowReflection(true);
     fetchQuests();
-    getAIFeedback();
   };
 
   const saveDomain = async (domainId: string) => {
