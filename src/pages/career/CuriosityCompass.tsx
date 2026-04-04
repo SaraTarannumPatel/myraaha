@@ -222,6 +222,15 @@ const CuriosityCompass = () => {
       mood_at_action: moodCheckpoint || mood,
     });
 
+    // Record signals from mode responses
+    for (const [, value] of Object.entries(modeResponses)) {
+      if (typeof value === "string") {
+        await recordTextSignals(mode === "story" ? "story_mode" : "challenge_mode", value);
+      } else if (Array.isArray(value)) {
+        await recordMultipleSignals(mode === "story" ? "story_mode" : "challenge_mode", value, "selection", 0.6);
+      }
+    }
+
     // Trigger reflection
     setShowReflection(true);
   };
