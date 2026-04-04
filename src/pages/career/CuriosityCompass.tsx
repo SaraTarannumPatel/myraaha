@@ -13,11 +13,14 @@ import {
   Compass, Sparkles, Heart, BookmarkPlus, X, ArrowRight, ArrowLeft,
   Trophy, Zap, MessageSquare, Palette, Target, Star, ChevronRight,
   Play, Check, Lightbulb, Brain, Meh, HelpCircle, Bot,
-  PenLine, BookOpen, Users, Goal, TrendingUp, Activity, Eye, Layers
+  PenLine, BookOpen, Users, Goal, TrendingUp, Activity, Eye, Layers,
+  Map, Route
 } from "lucide-react";
 import CareerCardDeck from "@/components/career/CareerCardDeck";
 import StoryModeCards from "@/components/career/StoryModeCards";
 import ChallengeModeCards from "@/components/career/ChallengeModeCards";
+import { useUserSignals } from "@/hooks/useUserSignals";
+import { useNavigate } from "react-router-dom";
 
 const MOODS = [
   { id: "excited", label: "Excited", icon: Zap, color: "text-accent" },
@@ -69,6 +72,8 @@ const VISUAL_ICONS = [
 
 const CuriosityCompass = () => {
   const { user } = useAuth();
+  const navigate = useNavigate();
+  const { recordSignal, recordMultipleSignals, recordTextSignals, getAggregatedSignals } = useUserSignals();
   const [tab, setTab] = useState("explore");
   const [mode, setMode] = useState<string | null>(null);
   const [careerCards, setCareerCards] = useState<any[]>([]);
@@ -186,6 +191,11 @@ const CuriosityCompass = () => {
           source: "curiosity_compass",
           strength: type === "save" ? 0.8 : 0.6,
         }, { onConflict: "user_id,name,category" });
+        // Record signals for cross-module recommendations
+        await recordSignal("career_cards", card.title, "domain_interest", type === "save" ? 0.8 : 0.6, { category: card.category });
+        if (card.category) await recordSignal("career_cards", card.category, "domain_interest", 0.5);
+        const tags = card.tags || [];
+        if (tags.length) await recordMultipleSignals("career_cards", tags, "keyword", 0.4);
       }
     }
     toast.success(type === "like" ? "Added to interests!" : type === "save" ? "Saved for later!" : "Noted!");
@@ -212,6 +222,15 @@ const CuriosityCompass = () => {
       mood_at_action: moodCheckpoint || mood,
     });
 
+    // Record signals from mode responses
+    for (const [, value] of Object.entries(modeResponses)) {
+      if (typeof value === "string") {
+        await recordTextSignals(mode === "story" ? "story_mode" : "challenge_mode", value);
+      } else if (Array.isArray(value)) {
+        await recordMultipleSignals(mode === "story" ? "story_mode" : "challenge_mode", value, "selection", 0.6);
+      }
+    }
+
     // Trigger reflection
     setShowReflection(true);
   };
@@ -233,6 +252,8 @@ const CuriosityCompass = () => {
         strength: 0.7,
       }, { onConflict: "user_id,name,category" });
     }
+    // Record visual mode signals
+    await recordMultipleSignals("visual_mode", selectedLabels, "domain_interest", 0.7);
     setShowReflection(true);
   };
 
@@ -246,6 +267,8 @@ const CuriosityCompass = () => {
       mood: moodCheckpoint || mood,
       tags: ["curiosity-compass", mode || "exploration"],
     });
+    // Record reflection text as signals
+    await recordTextSignals("curiosity_compass", reflectionText);
     toast.success("Reflection saved to your journal! 📝");
     setShowReflection(false);
     setReflectionText("");
@@ -365,6 +388,35 @@ const CuriosityCompass = () => {
 
   const completeQuest = async () => {
     if (!activeQuest) return;
+
+    // Record quest response signals
+    for (const [, value] of Object.entries(questResponses)) {
+      if (typeof value === "string") {
+        await recordTextSignals("quests", value, { quest: activeQuest.title });
+      } else if (Array.isArray(value)) {
+        await recordMultipleSignals("quests", value, "selection", 0.7, { quest: activeQuest.title });
+      }
+    }
+
+    // Get AI analysis of quest responses
+    let analysisResults = null;
+    try {
+      const { data } = await supabase.functions.invoke("curiosity-compass-ai", {
+        body: { type: "quest_feedback", context: { questResponses, questTitle: activeQuest.title, interests, mood } }
+      });
+      if (data) {
+        analysisResults = data;
+        setAiInsights(data);
+        // Record detected strengths and domains as signals
+        if (data.strengths_detected) {
+          await recordMultipleSignals("quests", data.strengths_detected, "skill_interest", 0.7);
+        }
+        if (data.suggested_domains) {
+          await recordMultipleSignals("quests", data.suggested_domains, "domain_interest", 0.6);
+        }
+      }
+    } catch (e) { console.error("Quest analysis error:", e); }
+
     await supabase.from("curiosity_quest_progress").upsert({
       user_id: user!.id,
       quest_id: activeQuest.id,
@@ -373,6 +425,7 @@ const CuriosityCompass = () => {
       points_earned: activeQuest.points || 10,
       mood_checkpoint: mood,
       completed_at: new Date().toISOString(),
+      analysis_results: analysisResults,
     }, { onConflict: "user_id,quest_id" });
     await supabase.from("achievements").insert({
       user_id: user!.id,
@@ -385,7 +438,6 @@ const CuriosityCompass = () => {
     setActiveQuest(null);
     setShowReflection(true);
     fetchQuests();
-    getAIFeedback();
   };
 
   const saveDomain = async (domainId: string) => {
@@ -1059,7 +1111,7 @@ const CuriosityCompass = () => {
                         <div className="space-y-3">
                           {behaviorInsights.behavioral_patterns.map((bp: any, i: number) => (
                             <div key={i} className="flex items-start gap-3 p-3 rounded-lg bg-muted/30">
-                              <div className={`w-2 h-2 rounded-full mt-1.5 shrink-0 ${bp.strength === "strong" ? "bg-green-500" : bp.strength === "moderate" ? "bg-yellow-500" : "bg-blue-500"}`} />
+                              <div className={`w-2 h-2 rounded-full mt-1.5 shrink-0 ${bp.strength === "strong" ? "bg-success" : bp.strength === "moderate" ? "bg-accent" : "bg-primary"}`} />
                               <div>
                                 <p className="font-body text-sm font-medium">{bp.pattern}</p>
                                 <p className="font-body text-xs text-muted-foreground">{bp.interpretation}</p>
@@ -1074,7 +1126,7 @@ const CuriosityCompass = () => {
                     <div className="grid md:grid-cols-2 gap-4">
                       {behaviorInsights.areas_of_resonance?.length > 0 && (
                         <div>
-                          <h4 className="font-display text-sm mb-2 flex items-center gap-2"><TrendingUp size={14} className="text-green-500" /> Areas of Resonance</h4>
+                          <h4 className="font-display text-sm mb-2 flex items-center gap-2"><TrendingUp size={14} className="text-success" /> Areas of Resonance</h4>
                           <div className="flex flex-wrap gap-1.5">
                             {behaviorInsights.areas_of_resonance.map((a: string, i: number) => <Badge key={i} variant="secondary">{a}</Badge>)}
                           </div>
@@ -1082,19 +1134,46 @@ const CuriosityCompass = () => {
                       )}
                       {behaviorInsights.blind_spots?.length > 0 && (
                         <div>
-                          <h4 className="font-display text-sm mb-2 flex items-center gap-2"><Eye size={14} className="text-orange-500" /> Blind Spots</h4>
+                          <h4 className="font-display text-sm mb-2 flex items-center gap-2"><Eye size={14} className="text-warmth" /> Blind Spots</h4>
                           <div className="flex flex-wrap gap-1.5">
                             {behaviorInsights.blind_spots.map((b: string, i: number) => <Badge key={i} variant="outline">{b}</Badge>)}
                           </div>
                         </div>
                       )}
                     </div>
+
+                    {/* ACTION BUTTONS: Generate Insights & Create AI Roadmaps */}
+                    <div className="flex flex-col sm:flex-row gap-3 pt-4 border-t border-border">
+                      <Button
+                        onClick={() => { setTab("insights"); getAIRecommendations(); }}
+                        variant="outline"
+                        className="flex-1 gap-2"
+                      >
+                        <Sparkles size={16} /> Generate Insights
+                      </Button>
+                      <Button
+                        onClick={async () => {
+                          // Record behavior signals, then navigate to roadmap
+                          if (behaviorInsights.areas_of_resonance) {
+                            await recordMultipleSignals("curiosity_compass", behaviorInsights.areas_of_resonance, "domain_interest", 0.8);
+                          }
+                          if (behaviorInsights.career_archetype) {
+                            await recordSignal("curiosity_compass", behaviorInsights.career_archetype, "preference", 0.9);
+                          }
+                          toast.success("Transferring insights to AI Roadmaps...");
+                          navigate("/career/roadmap?source=behavior_analysis");
+                        }}
+                        className="flex-1 gap-2"
+                      >
+                        <Route size={16} /> Create AI Roadmaps
+                      </Button>
+                    </div>
                   </div>
                 ) : (
                   <div className="text-center py-8">
                     <Activity className="mx-auto text-muted-foreground mb-3" size={40} />
                     <p className="font-body text-muted-foreground mb-4">Get a deep behavioral analysis based on your exploration patterns</p>
-                    <Button onClick={getBehaviorInsights} disabled={aiLoading || likedCount < 2}>
+                    <Button onClick={getBehaviorInsights} disabled={aiLoading}>
                       {aiLoading ? "Analyzing..." : "Analyze My Behavior"}
                     </Button>
                   </div>
@@ -1104,6 +1183,43 @@ const CuriosityCompass = () => {
           </TabsContent>
         </Tabs>
       )}
+
+      {/* Persistent Action Buttons — always visible */}
+      <Card className="border-primary/20 bg-gradient-to-r from-primary/5 to-accent/5">
+        <CardContent className="pt-6">
+          <div className="flex items-center gap-3 mb-4">
+            <Compass className="text-primary" size={20} />
+            <div>
+              <h3 className="font-display text-base text-foreground">Ready to take action?</h3>
+              <p className="font-body text-xs text-muted-foreground">Generate insights or create roadmaps from your exploration data at any time</p>
+            </div>
+          </div>
+          <div className="flex flex-col sm:flex-row gap-3">
+            <Button
+              onClick={() => { setTab("insights"); getAIRecommendations(); }}
+              variant="outline"
+              className="flex-1 gap-2"
+              disabled={aiLoading}
+            >
+              <Sparkles size={16} /> {aiLoading ? "Analyzing..." : "Generate Insights"}
+            </Button>
+            <Button
+              onClick={async () => {
+                const signals = await getAggregatedSignals();
+                if (signals.all && signals.all.length > 0) {
+                  toast.success("Transferring all exploration data to AI Roadmaps...");
+                } else {
+                  toast.info("Starting roadmap creation...");
+                }
+                navigate("/career/roadmap?source=curiosity_compass");
+              }}
+              className="flex-1 gap-2"
+            >
+              <Route size={16} /> Create AI Roadmaps
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
     </div>
   );
 };

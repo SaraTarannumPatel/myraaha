@@ -94,12 +94,25 @@ const ContentLibrary = () => {
     if (!user) { toast.error("Please sign in first"); return; }
     setLoadingAI("recommend");
     try {
+      // First get cross-module signals for better recommendations
+      const { data: signals } = await supabase
+        .from("user_signals")
+        .select("signal_value, signal_type, signal_source, strength")
+        .eq("user_id", user.id)
+        .order("created_at", { ascending: false })
+        .limit(100);
+
+      const signalKeywords = (signals || []).map((s: any) => s.signal_value);
+      const signalSources = [...new Set((signals || []).map((s: any) => s.signal_source))];
+
       const data = await invokeAI("recommend_learning", {
         skills: interests.map(i => i.name),
         interests: interests.map(i => i.name),
         tracksCompleted: userProgress.filter(p => p.status === "completed").length,
         capsulesCompleted: 0,
         recentDomains: interests.map(i => i.category).filter((v, i, a) => a.indexOf(v) === i),
+        crossModuleSignals: signalKeywords.slice(0, 30),
+        signalSources,
       });
       setAiRecommendations(data);
     } catch (err: any) { toast.error(err.message || "Failed to get recommendations"); }

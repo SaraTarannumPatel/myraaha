@@ -888,6 +888,7 @@ export type Database = {
       }
       curiosity_quest_progress: {
         Row: {
+          analysis_results: Json | null
           completed_at: string | null
           id: string
           mood_checkpoint: string | null
@@ -899,6 +900,7 @@ export type Database = {
           user_id: string
         }
         Insert: {
+          analysis_results?: Json | null
           completed_at?: string | null
           id?: string
           mood_checkpoint?: string | null
@@ -910,6 +912,7 @@ export type Database = {
           user_id: string
         }
         Update: {
+          analysis_results?: Json | null
           completed_at?: string | null
           id?: string
           mood_checkpoint?: string | null
@@ -5822,6 +5825,7 @@ export type Database = {
           match_score: number | null
           reasoning: string[] | null
           roadmap_data: Json | null
+          source_module: string | null
           source_signals: Json | null
           status: string | null
           title: string
@@ -5835,6 +5839,7 @@ export type Database = {
           match_score?: number | null
           reasoning?: string[] | null
           roadmap_data?: Json | null
+          source_module?: string | null
           source_signals?: Json | null
           status?: string | null
           title: string
@@ -5848,6 +5853,7 @@ export type Database = {
           match_score?: number | null
           reasoning?: string[] | null
           roadmap_data?: Json | null
+          source_module?: string | null
           source_signals?: Json | null
           status?: string | null
           title?: string
@@ -6206,6 +6212,39 @@ export type Database = {
         Update: {
           id?: string
           role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
+      user_signals: {
+        Row: {
+          created_at: string
+          id: string
+          signal_context: Json | null
+          signal_source: string
+          signal_type: string
+          signal_value: string
+          strength: number | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          signal_context?: Json | null
+          signal_source: string
+          signal_type?: string
+          signal_value: string
+          strength?: number | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          signal_context?: Json | null
+          signal_source?: string
+          signal_type?: string
+          signal_value?: string
+          strength?: number | null
           user_id?: string
         }
         Relationships: []
