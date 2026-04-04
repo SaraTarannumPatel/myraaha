@@ -1111,7 +1111,7 @@ const CuriosityCompass = () => {
                         <div className="space-y-3">
                           {behaviorInsights.behavioral_patterns.map((bp: any, i: number) => (
                             <div key={i} className="flex items-start gap-3 p-3 rounded-lg bg-muted/30">
-                              <div className={`w-2 h-2 rounded-full mt-1.5 shrink-0 ${bp.strength === "strong" ? "bg-green-500" : bp.strength === "moderate" ? "bg-yellow-500" : "bg-blue-500"}`} />
+                              <div className={`w-2 h-2 rounded-full mt-1.5 shrink-0 ${bp.strength === "strong" ? "bg-success" : bp.strength === "moderate" ? "bg-accent" : "bg-primary"}`} />
                               <div>
                                 <p className="font-body text-sm font-medium">{bp.pattern}</p>
                                 <p className="font-body text-xs text-muted-foreground">{bp.interpretation}</p>
@@ -1126,7 +1126,7 @@ const CuriosityCompass = () => {
                     <div className="grid md:grid-cols-2 gap-4">
                       {behaviorInsights.areas_of_resonance?.length > 0 && (
                         <div>
-                          <h4 className="font-display text-sm mb-2 flex items-center gap-2"><TrendingUp size={14} className="text-green-500" /> Areas of Resonance</h4>
+                          <h4 className="font-display text-sm mb-2 flex items-center gap-2"><TrendingUp size={14} className="text-success" /> Areas of Resonance</h4>
                           <div className="flex flex-wrap gap-1.5">
                             {behaviorInsights.areas_of_resonance.map((a: string, i: number) => <Badge key={i} variant="secondary">{a}</Badge>)}
                           </div>
@@ -1134,19 +1134,46 @@ const CuriosityCompass = () => {
                       )}
                       {behaviorInsights.blind_spots?.length > 0 && (
                         <div>
-                          <h4 className="font-display text-sm mb-2 flex items-center gap-2"><Eye size={14} className="text-orange-500" /> Blind Spots</h4>
+                          <h4 className="font-display text-sm mb-2 flex items-center gap-2"><Eye size={14} className="text-warmth" /> Blind Spots</h4>
                           <div className="flex flex-wrap gap-1.5">
                             {behaviorInsights.blind_spots.map((b: string, i: number) => <Badge key={i} variant="outline">{b}</Badge>)}
                           </div>
                         </div>
                       )}
                     </div>
+
+                    {/* ACTION BUTTONS: Generate Insights & Create AI Roadmaps */}
+                    <div className="flex flex-col sm:flex-row gap-3 pt-4 border-t border-border">
+                      <Button
+                        onClick={() => { setTab("insights"); getAIRecommendations(); }}
+                        variant="outline"
+                        className="flex-1 gap-2"
+                      >
+                        <Sparkles size={16} /> Generate Insights
+                      </Button>
+                      <Button
+                        onClick={async () => {
+                          // Record behavior signals, then navigate to roadmap
+                          if (behaviorInsights.areas_of_resonance) {
+                            await recordMultipleSignals("curiosity_compass", behaviorInsights.areas_of_resonance, "domain_interest", 0.8);
+                          }
+                          if (behaviorInsights.career_archetype) {
+                            await recordSignal("curiosity_compass", behaviorInsights.career_archetype, "preference", 0.9);
+                          }
+                          toast.success("Transferring insights to AI Roadmaps...");
+                          navigate("/career/roadmap?source=behavior_analysis");
+                        }}
+                        className="flex-1 gap-2"
+                      >
+                        <Route size={16} /> Create AI Roadmaps
+                      </Button>
+                    </div>
                   </div>
                 ) : (
                   <div className="text-center py-8">
                     <Activity className="mx-auto text-muted-foreground mb-3" size={40} />
                     <p className="font-body text-muted-foreground mb-4">Get a deep behavioral analysis based on your exploration patterns</p>
-                    <Button onClick={getBehaviorInsights} disabled={aiLoading || likedCount < 2}>
+                    <Button onClick={getBehaviorInsights} disabled={aiLoading}>
                       {aiLoading ? "Analyzing..." : "Analyze My Behavior"}
                     </Button>
                   </div>
@@ -1156,6 +1183,43 @@ const CuriosityCompass = () => {
           </TabsContent>
         </Tabs>
       )}
+
+      {/* Persistent Action Buttons — always visible */}
+      <Card className="border-primary/20 bg-gradient-to-r from-primary/5 to-accent/5">
+        <CardContent className="pt-6">
+          <div className="flex items-center gap-3 mb-4">
+            <Compass className="text-primary" size={20} />
+            <div>
+              <h3 className="font-display text-base text-foreground">Ready to take action?</h3>
+              <p className="font-body text-xs text-muted-foreground">Generate insights or create roadmaps from your exploration data at any time</p>
+            </div>
+          </div>
+          <div className="flex flex-col sm:flex-row gap-3">
+            <Button
+              onClick={() => { setTab("insights"); getAIRecommendations(); }}
+              variant="outline"
+              className="flex-1 gap-2"
+              disabled={aiLoading}
+            >
+              <Sparkles size={16} /> {aiLoading ? "Analyzing..." : "Generate Insights"}
+            </Button>
+            <Button
+              onClick={async () => {
+                const signals = await getAggregatedSignals();
+                if (signals.all && signals.all.length > 0) {
+                  toast.success("Transferring all exploration data to AI Roadmaps...");
+                } else {
+                  toast.info("Starting roadmap creation...");
+                }
+                navigate("/career/roadmap?source=curiosity_compass");
+              }}
+              className="flex-1 gap-2"
+            >
+              <Route size={16} /> Create AI Roadmaps
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
     </div>
   );
 };
