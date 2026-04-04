@@ -252,6 +252,8 @@ const CuriosityCompass = () => {
         strength: 0.7,
       }, { onConflict: "user_id,name,category" });
     }
+    // Record visual mode signals
+    await recordMultipleSignals("visual_mode", selectedLabels, "domain_interest", 0.7);
     setShowReflection(true);
   };
 
@@ -265,6 +267,8 @@ const CuriosityCompass = () => {
       mood: moodCheckpoint || mood,
       tags: ["curiosity-compass", mode || "exploration"],
     });
+    // Record reflection text as signals
+    await recordTextSignals("curiosity_compass", reflectionText);
     toast.success("Reflection saved to your journal! 📝");
     setShowReflection(false);
     setReflectionText("");
