@@ -72,6 +72,8 @@ const VISUAL_ICONS = [
 
 const CuriosityCompass = () => {
   const { user } = useAuth();
+  const navigate = useNavigate();
+  const { recordSignal, recordMultipleSignals, recordTextSignals, getAggregatedSignals } = useUserSignals();
   const [tab, setTab] = useState("explore");
   const [mode, setMode] = useState<string | null>(null);
   const [careerCards, setCareerCards] = useState<any[]>([]);
