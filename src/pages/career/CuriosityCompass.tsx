@@ -191,6 +191,11 @@ const CuriosityCompass = () => {
           source: "curiosity_compass",
           strength: type === "save" ? 0.8 : 0.6,
         }, { onConflict: "user_id,name,category" });
+        // Record signals for cross-module recommendations
+        await recordSignal("career_cards", card.title, "domain_interest", type === "save" ? 0.8 : 0.6, { category: card.category });
+        if (card.category) await recordSignal("career_cards", card.category, "domain_interest", 0.5);
+        const tags = card.tags || [];
+        if (tags.length) await recordMultipleSignals("career_cards", tags, "keyword", 0.4);
       }
     }
     toast.success(type === "like" ? "Added to interests!" : type === "save" ? "Saved for later!" : "Noted!");
