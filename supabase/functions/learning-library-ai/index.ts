@@ -18,20 +18,28 @@ serve(async (req) => {
 
     switch (type) {
       case "recommend_learning":
-        systemPrompt = `You are a personalized learning advisor for career development. Based on the user's profile, interests, and goals, suggest 5 highly relevant learning recommendations. Consider their current skill level, career stage, and exploration patterns.
+        systemPrompt = `You are a personalized learning advisor for career development. Based on the user's profile, interests, goals, AND their cross-module signals (keywords from other modules like Curiosity Compass, AI Roadmaps, Job Matching, etc.), suggest 8 highly relevant learning recommendations.
+
+CRITICAL: Recommendations must include REAL external learning resources — actual courses from Coursera, Udemy, Khan Academy, YouTube channels, specific books, research papers, blogs, and websites. Include actual URLs when possible. Do NOT make up random suggestions — they must be grounded in real, popular learning content.
+
+All monetary values must be in INR (₹). Convert any USD values to INR.
 
 Return JSON: { 
   "recommendations": [{ 
     "title": string, 
-    "type": "track"|"capsule"|"resource"|"challenge", 
-    "reason": string (why this fits them),
+    "type": "course"|"video"|"article"|"book"|"research_paper"|"website"|"app",
+    "reason": string (why this fits them based on their signals),
     "priority": "high"|"medium"|"low",
     "estimated_time": string,
-    "skills_gained": string[]
+    "skills_gained": string[],
+    "source": string (e.g., "Coursera", "YouTube", "Book"),
+    "url": string (external link to the resource),
+    "cost": string (e.g., "Free", "₹500", "₹3,000")
   }], 
-  "learning_focus": string (their primary learning direction),
+  "learning_focus": string (their primary learning direction derived from ALL module signals),
   "next_milestone": string (what they should aim for),
-  "advice": string (motivational guidance)
+  "advice": string (motivational guidance),
+  "signal_based_insights": string[] (insights derived from their cross-module activity)
 }`;
         userPrompt = `User profile:
 - Industry interest: ${context.industry || 'exploring'}
@@ -42,7 +50,9 @@ Return JSON: {
 - Long-term goals: ${context.longTermGoals || 'build a meaningful career'}
 - Tracks completed: ${context.tracksCompleted || 0}
 - Capsules completed: ${context.capsulesCompleted || 0}
-- Recent domains explored: ${JSON.stringify(context.recentDomains || [])}`;
+- Recent domains explored: ${JSON.stringify(context.recentDomains || [])}
+- Cross-module signals (keywords from Curiosity Compass, Roadmaps, Job Matching, etc.): ${JSON.stringify(context.crossModuleSignals || [])}
+- Active in modules: ${JSON.stringify(context.signalSources || [])}`;
         break;
 
       case "skill_mapping":
