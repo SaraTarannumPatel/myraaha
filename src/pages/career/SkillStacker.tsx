@@ -371,6 +371,25 @@ const SkillStacker = () => {
           </div>
           <DirectorySearchDrawer mode="skills" triggerLabel="Browse Skills" />
         </div>
+        <ModuleSearchBar
+          placeholder="Search skills, domains, career paths..."
+          sources={["skills", "careers", "domains"]}
+          showAiBadge
+          compact
+          onSearch={(q) => {
+            if (q.length > 2) {
+              const lower = q.toLowerCase();
+              const filtered = skillItems.filter(s =>
+                s.skill_name?.toLowerCase().includes(lower) ||
+                s.category?.toLowerCase().includes(lower)
+              );
+              if (filtered.length > 0) setFilterCategory("all");
+            }
+          }}
+          onSelect={(item) => {
+            toast.info(`Selected: ${item.title} — use this to add skills to your stack`);
+          }}
+        />
         <p className="text-sm text-muted-foreground/80 italic font-body">
           "Here's what you need to build — based on who you are, what you like, and where you want to go."
         </p>

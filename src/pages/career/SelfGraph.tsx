@@ -570,6 +570,15 @@ const SelfGraph = () => {
             Generate Insights
           </Button>
         </div>
+        <ModuleSearchBar
+          placeholder="Search traits, domains, skills..."
+          sources={["domains", "skills", "careers"]}
+          compact
+          showAiBadge
+          onSelect={(item) => {
+            toast.info(`"${item.title}" — Explore how this relates to your identity`);
+          }}
+        />
       </motion.div>
 
       {/* Quick Stats */}

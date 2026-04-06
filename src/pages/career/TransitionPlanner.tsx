@@ -459,6 +459,14 @@ export default function TransitionPlanner() {
             </div>
           </div>
         </div>
+        <ModuleSearchBar
+          placeholder="Search career paths, domains to transition into..."
+          sources={["careers", "domains", "jobs"]}
+          showAiBadge
+          onSelect={(item) => {
+            toast.info(`Explore transitioning into "${item.title}"`);
+          }}
+        />
       </motion.div>
 
       {/* Progress Summary Card */}

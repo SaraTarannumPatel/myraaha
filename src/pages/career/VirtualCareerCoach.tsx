@@ -249,6 +249,15 @@ const VirtualCareerCoach = () => {
             <p className="text-sm text-muted-foreground font-body">AI-powered guidance for your unique career journey</p>
           </div>
         </div>
+        <ModuleSearchBar
+          placeholder="Search career topics, domains, roles..."
+          sources={["careers", "domains", "jobs"]}
+          compact
+          showAiBadge
+          onSelect={(item) => {
+            sendMessage(`Tell me about ${item.title} as a career path`);
+          }}
+        />
       </motion.div>
 
       <Tabs value={activeTab} onValueChange={setActiveTab}>

@@ -226,6 +226,15 @@ const LivingResume = () => {
             </Button>
           </div>
         </div>
+        <ModuleSearchBar
+          placeholder="Search experiences, skills, achievements..."
+          sources={["skills", "careers", "domains"]}
+          compact
+          showAiBadge
+          onSelect={(item) => {
+            toast.info(`"${item.title}" — Add this to your resume`);
+          }}
+        />
       </motion.div>
 
       {/* Profile Card */}

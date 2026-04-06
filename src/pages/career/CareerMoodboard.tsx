@@ -470,6 +470,15 @@ const CareerMoodboard = () => {
             <p className="font-body text-sm text-muted-foreground">Your career is more than a checklist. Let your ideas, dreams, and goals come alive.</p>
           </div>
         </div>
+        <ModuleSearchBar
+          placeholder="Search domains, career paths, inspirations..."
+          sources={["careers", "domains"]}
+          compact
+          showAiBadge
+          onSelect={(item) => {
+            toast.info(`Add "${item.title}" to your moodboard`);
+          }}
+        />
       </motion.div>
 
       {/* Tabs */}

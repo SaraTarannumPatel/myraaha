@@ -292,6 +292,15 @@ const AICareerTherapist = () => {
         <p className="text-sm text-muted-foreground/80 italic font-body">
           "You're not alone. Let's work through this together — one step, one thought, one action at a time."
         </p>
+        <ModuleSearchBar
+          placeholder="Search for support topics, career concerns..."
+          sources={["careers", "domains"]}
+          compact
+          showAiBadge
+          onSelect={(item) => {
+            toast.info(`Let's explore your feelings about "${item.title}"`);
+          }}
+        />
       </motion.div>
 
       <Tabs value={activeTab} onValueChange={setActiveTab}>
