@@ -465,7 +465,7 @@ export default function TransitionPlanner() {
           sources={["careers", "domains", "jobs"]}
           showAiBadge
           onSelect={(item) => {
-            toast.info(`Explore transitioning into "${item.title}"`);
+            toast({ title: `Explore transitioning into "${item.title}"` });
           }}
         />
       </motion.div>
