@@ -813,17 +813,6 @@ const CuriosityCompass = () => {
             ) : null}
           </TabsContent>
 
-      {/* Search Bar */}
-      <ModuleSearchBar
-        placeholder="Search career domains, job roles, paths..."
-        sources={["careers", "domains", "jobs"]}
-        showAiBadge
-        onSelect={(item) => {
-          recordSignal("curiosity_compass", item.title, "domain_interest", 0.8, { source: "search" });
-          toast.success(`"${item.title}" added to your exploration signals!`);
-        }}
-      />
-
 
 
 
