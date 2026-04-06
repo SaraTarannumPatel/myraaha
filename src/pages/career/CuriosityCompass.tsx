@@ -21,6 +21,7 @@ import StoryModeCards from "@/components/career/StoryModeCards";
 import ChallengeModeCards from "@/components/career/ChallengeModeCards";
 import { useUserSignals } from "@/hooks/useUserSignals";
 import { useNavigate } from "react-router-dom";
+import ModuleSearchBar from "@/components/search/ModuleSearchBar";
 
 const MOODS = [
   { id: "excited", label: "Excited", icon: Zap, color: "text-accent" },
