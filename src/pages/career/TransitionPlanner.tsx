@@ -17,6 +17,7 @@ import {
   CheckCircle2, Clock, DollarSign, Sparkles, Target, Lightbulb, Pause,
   Compass, BookOpen, MessageCircle, Award, TrendingUp, Link2
 } from "lucide-react";
+import ModuleSearchBar from "@/components/search/ModuleSearchBar";
 
 type Plan = {
   id: string;
