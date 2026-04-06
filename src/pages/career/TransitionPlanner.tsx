@@ -17,6 +17,7 @@ import {
   CheckCircle2, Clock, DollarSign, Sparkles, Target, Lightbulb, Pause,
   Compass, BookOpen, MessageCircle, Award, TrendingUp, Link2
 } from "lucide-react";
+import ModuleSearchBar from "@/components/search/ModuleSearchBar";
 
 type Plan = {
   id: string;
@@ -459,6 +460,14 @@ export default function TransitionPlanner() {
             </div>
           </div>
         </div>
+        <ModuleSearchBar
+          placeholder="Search career paths, domains to transition into..."
+          sources={["careers", "domains", "jobs"]}
+          showAiBadge
+          onSelect={(item) => {
+            toast({ title: `Explore transitioning into "${item.title}"` });
+          }}
+        />
       </motion.div>
 
       {/* Progress Summary Card */}

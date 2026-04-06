@@ -17,6 +17,7 @@ import {
   PenLine, Meh, HelpCircle, Heart, Link, ExternalLink
 } from "lucide-react";
 import RoadmapStepDetail from "@/components/roadmap/RoadmapStepDetail";
+import ModuleSearchBar from "@/components/search/ModuleSearchBar";
 
 const PHASES = [
   { id: "exploration", label: "Exploration", icon: Compass, color: "bg-blue-500" },
@@ -408,6 +409,21 @@ const Roadmap = () => {
             </div>
           )}
         </div>
+        <ModuleSearchBar
+          placeholder="Search career paths, domains, job roles..."
+          sources={["careers", "domains", "jobs"]}
+          showAiBadge
+          onSearch={(q) => {
+            if (q.length > 2 && roadmaps.length > 0) {
+              const lower = q.toLowerCase();
+              const match = roadmaps.find(r => r.title?.toLowerCase().includes(lower) || r.domain?.toLowerCase().includes(lower));
+              if (match) setActiveRoadmap(match);
+            }
+          }}
+          onSelect={(item) => {
+            toast.info(`"${item.title}" — Generate an AI Roadmap for this path!`);
+          }}
+        />
       </motion.div>
 
       {/* Milestone Reflection Modal */}

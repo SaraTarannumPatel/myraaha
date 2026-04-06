@@ -17,6 +17,7 @@ import {
   CheckCircle2, Clock, Star, Lightbulb, ArrowRight, Eye, RefreshCw,
   MessageSquare, Heart, Shield, Copy, ExternalLink
 } from "lucide-react";
+import ModuleSearchBar from "@/components/search/ModuleSearchBar";
 
 const LivingResume = () => {
   const { user, profile } = useAuth();
@@ -226,6 +227,15 @@ const LivingResume = () => {
             </Button>
           </div>
         </div>
+        <ModuleSearchBar
+          placeholder="Search experiences, skills, achievements..."
+          sources={["skills", "careers", "domains"]}
+          compact
+          showAiBadge
+          onSelect={(item) => {
+            toast.info(`"${item.title}" — Add this to your resume`);
+          }}
+        />
       </motion.div>
 
       {/* Profile Card */}

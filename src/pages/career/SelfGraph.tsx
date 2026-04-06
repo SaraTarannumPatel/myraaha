@@ -16,6 +16,7 @@ import {
   Activity, BarChart3, Compass, Clock, CheckCircle2,
   Download, GitBranch, ArrowRight
 } from "lucide-react";
+import ModuleSearchBar from "@/components/search/ModuleSearchBar";
 
 const TRAIT_CATEGORIES = {
   cognitive: { label: "Cognitive", color: "bg-blue" },
@@ -570,6 +571,15 @@ const SelfGraph = () => {
             Generate Insights
           </Button>
         </div>
+        <ModuleSearchBar
+          placeholder="Search traits, domains, skills..."
+          sources={["domains", "skills", "careers"]}
+          compact
+          showAiBadge
+          onSelect={(item) => {
+            toast.info(`"${item.title}" — Explore how this relates to your identity`);
+          }}
+        />
       </motion.div>
 
       {/* Quick Stats */}

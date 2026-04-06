@@ -21,6 +21,7 @@ import StoryModeCards from "@/components/career/StoryModeCards";
 import ChallengeModeCards from "@/components/career/ChallengeModeCards";
 import { useUserSignals } from "@/hooks/useUserSignals";
 import { useNavigate } from "react-router-dom";
+import ModuleSearchBar from "@/components/search/ModuleSearchBar";
 
 const MOODS = [
   { id: "excited", label: "Excited", icon: Zap, color: "text-accent" },
@@ -476,6 +477,17 @@ const CuriosityCompass = () => {
         </div>
       </motion.div>
 
+      {/* Search Bar */}
+      <ModuleSearchBar
+        placeholder="Search career domains, job roles, paths..."
+        sources={["careers", "domains", "jobs"]}
+        showAiBadge
+        onSelect={(item) => {
+          recordSignal("curiosity_compass", item.title, "domain_interest", 0.8, { source: "search" });
+          toast.success(`"${item.title}" added to your exploration signals!`);
+        }}
+      />
+
       {/* Progress Stats */}
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}>
         <Card>
@@ -811,7 +823,6 @@ const CuriosityCompass = () => {
               </>
             ) : null}
           </TabsContent>
-
 
 
 

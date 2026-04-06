@@ -17,6 +17,7 @@ import {
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { PieChart, Pie, Cell, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip } from "recharts";
+import ModuleSearchBar from "@/components/search/ModuleSearchBar";
 
 interface Board {
   id: string;
@@ -470,6 +471,15 @@ const CareerMoodboard = () => {
             <p className="font-body text-sm text-muted-foreground">Your career is more than a checklist. Let your ideas, dreams, and goals come alive.</p>
           </div>
         </div>
+        <ModuleSearchBar
+          placeholder="Search domains, career paths, inspirations..."
+          sources={["careers", "domains"]}
+          compact
+          showAiBadge
+          onSelect={(item) => {
+            toast.info(`Add "${item.title}" to your moodboard`);
+          }}
+        />
       </motion.div>
 
       {/* Tabs */}
