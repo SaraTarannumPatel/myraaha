@@ -18,6 +18,7 @@ import {
   ChevronRight, Compass, Zap, BookOpen, Award
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import ModuleSearchBar from "@/components/search/ModuleSearchBar";
 
 type Msg = { role: "user" | "assistant"; content: string };
 

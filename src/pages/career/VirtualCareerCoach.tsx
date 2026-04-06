@@ -18,6 +18,7 @@ import {
   Lightbulb, CheckCircle, AlertTriangle, Shield, PenLine, GraduationCap,
   Scale, Activity, Flame, Clock, Save, Star, UserPlus
 } from "lucide-react";
+import ModuleSearchBar from "@/components/search/ModuleSearchBar";
 
 type ChatMsg = { role: "user" | "assistant"; content: string };
 

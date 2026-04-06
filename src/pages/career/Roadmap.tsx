@@ -17,6 +17,7 @@ import {
   PenLine, Meh, HelpCircle, Heart, Link, ExternalLink
 } from "lucide-react";
 import RoadmapStepDetail from "@/components/roadmap/RoadmapStepDetail";
+import ModuleSearchBar from "@/components/search/ModuleSearchBar";
 
 const PHASES = [
   { id: "exploration", label: "Exploration", icon: Compass, color: "bg-blue-500" },

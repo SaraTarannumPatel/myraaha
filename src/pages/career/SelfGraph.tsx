@@ -16,6 +16,7 @@ import {
   Activity, BarChart3, Compass, Clock, CheckCircle2,
   Download, GitBranch, ArrowRight
 } from "lucide-react";
+import ModuleSearchBar from "@/components/search/ModuleSearchBar";
 
 const TRAIT_CATEGORIES = {
   cognitive: { label: "Cognitive", color: "bg-blue" },
