@@ -425,11 +425,11 @@ export default function CareerInspirations() {
   const catIcon = (cat: string) => CATEGORIES.find(c => c.value === cat)?.icon || BookOpen;
 
   const ACTION_TYPE_MAP: Record<string, { icon: any; path: string }> = {
-    learning: { icon: BookOpen, path: "/career/content-library" },
-    project: { icon: FolderKanban, path: "/career/project-playground" },
-    explore: { icon: Compass, path: "/career/curiosity-compass" },
-    connect: { icon: Users, path: "/career/peer-circles" },
-    reflect: { icon: Lightbulb, path: "/career/career-coach" },
+    learning: { icon: BookOpen, path: "/dashboard/content-library" },
+    project: { icon: FolderKanban, path: "/dashboard/project-playground" },
+    explore: { icon: Compass, path: "/dashboard/curiosity-compass" },
+    connect: { icon: Users, path: "/dashboard/peer-circles" },
+    reflect: { icon: Lightbulb, path: "/dashboard/career-coach" },
   };
 
   return (
