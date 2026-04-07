@@ -291,14 +291,14 @@ const CareerMoodboard = () => {
   };
 
   const connectLinks = [
-    { label: "Curiosity Compass", desc: "Explore new career domains to fuel your moodboard", icon: Compass, path: "/career/curiosity-compass" },
-    { label: "Project Playground", desc: "Find projects aligned with your aspirations", icon: Zap, path: "/career/project-playground" },
-    { label: "Content Library", desc: "Learn skills linked to your moodboard goals", icon: BookOpen, path: "/career/content-library" },
-    { label: "Roadmaps", desc: "Turn moodboard themes into structured career paths", icon: MapPin, path: "/career/roadmaps" },
-    { label: "Mentor Matchmaking", desc: "Find mentors who match your moodboard interests", icon: Users, path: "/career/mentor-matchmaking" },
-    { label: "Peer Circles", desc: "Share your moodboards for peer feedback", icon: MessageSquare, path: "/career/peer-circles" },
-    { label: "Job Matching", desc: "Discover opportunities that match your aspirations", icon: Target, path: "/career/job-matching" },
-    { label: "SelfGraph", desc: "See how moodboard emotions connect to your identity", icon: Brain, path: "/career/self-graph" },
+    { label: "Curiosity Compass", desc: "Explore new career domains to fuel your moodboard", icon: Compass, path: "/dashboard/curiosity-compass" },
+    { label: "Project Playground", desc: "Find projects aligned with your aspirations", icon: Zap, path: "/dashboard/project-playground" },
+    { label: "Content Library", desc: "Learn skills linked to your moodboard goals", icon: BookOpen, path: "/dashboard/content-library" },
+    { label: "Roadmaps", desc: "Turn moodboard themes into structured career paths", icon: MapPin, path: "/dashboard/roadmap" },
+    { label: "Mentor Matchmaking", desc: "Find mentors who match your moodboard interests", icon: Users, path: "/dashboard/mentor-matchmaking" },
+    { label: "Peer Circles", desc: "Share your moodboards for peer feedback", icon: MessageSquare, path: "/dashboard/peer-circles" },
+    { label: "Job Matching", desc: "Discover opportunities that match your aspirations", icon: Target, path: "/dashboard/job-matching" },
+    { label: "SelfGraph", desc: "See how moodboard emotions connect to your identity", icon: Brain, path: "/dashboard/selfgraph" },
   ];
 
   // =========== BOARD DETAIL VIEW ===========

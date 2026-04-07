@@ -884,16 +884,16 @@ const SkillStacker = () => {
             <CardContent>
               <div className="grid gap-3 sm:grid-cols-2">
                 {[
-                  { label: "Curiosity Compass", desc: "Interest signals fuel your skill suggestions", icon: Compass, path: "/career/curiosity" },
-                  { label: "AI Roadmaps", desc: "Skills sequence into your roadmap goals", icon: Map, path: "/career/roadmap" },
-                  { label: "SelfGraph", desc: "Capability & energy patterns refine your stack", icon: Brain, path: "/career/selfgraph" },
-                  { label: "Content Library", desc: "Learning capsules mapped to each skill", icon: BookOpen, path: "/career/content" },
-                  { label: "Project Playground", desc: "Apply skills through real projects", icon: Rocket, path: "/career/projects" },
-                  { label: "Living Resume", desc: "Skills auto-sync to your career narrative", icon: FileText, path: "/career/resume" },
-                  { label: "Job Matching", desc: "Skill progress unlocks opportunities", icon: Briefcase, path: "/career/jobs" },
-                  { label: "Mentor Matchmaking", desc: "Mentors guide based on your skill gaps", icon: Users, path: "/career/mentors" },
-                  { label: "Virtual Coach", desc: "AI uses skill gaps to suggest next actions", icon: MessageCircle, path: "/career/coach" },
-                  { label: "Journal", desc: "Reflect on your learning journey", icon: Heart, path: "/journal" },
+                  { label: "Curiosity Compass", desc: "Interest signals fuel your skill suggestions", icon: Compass, path: "/dashboard/curiosity-compass" },
+                  { label: "AI Roadmaps", desc: "Skills sequence into your roadmap goals", icon: Map, path: "/dashboard/roadmap" },
+                  { label: "SelfGraph", desc: "Capability & energy patterns refine your stack", icon: Brain, path: "/dashboard/selfgraph" },
+                  { label: "Content Library", desc: "Learning capsules mapped to each skill", icon: BookOpen, path: "/dashboard/content-library" },
+                  { label: "Project Playground", desc: "Apply skills through real projects", icon: Rocket, path: "/dashboard/project-playground" },
+                  { label: "Living Resume", desc: "Skills auto-sync to your career narrative", icon: FileText, path: "/dashboard/living-resume" },
+                  { label: "Job Matching", desc: "Skill progress unlocks opportunities", icon: Briefcase, path: "/dashboard/job-matching" },
+                  { label: "Mentor Matchmaking", desc: "Mentors guide based on your skill gaps", icon: Users, path: "/dashboard/mentor-matchmaking" },
+                  { label: "Virtual Coach", desc: "AI uses skill gaps to suggest next actions", icon: MessageCircle, path: "/dashboard/career-coach" },
+                  { label: "Journal", desc: "Reflect on your learning journey", icon: Heart, path: "/dashboard/journal" },
                 ].map((f, i) => (
                   <button
                     key={i}

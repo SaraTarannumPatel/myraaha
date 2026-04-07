@@ -1222,7 +1222,7 @@ const CuriosityCompass = () => {
                 } else {
                   toast.info("Starting roadmap creation...");
                 }
-                navigate("/career/roadmap?source=curiosity_compass");
+                navigate("/dashboard/roadmap?source=curiosity_compass");
               }}
               className="flex-1 gap-2"
             >

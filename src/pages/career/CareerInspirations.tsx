@@ -79,16 +79,16 @@ type Story = {
 };
 
 const CONNECT_LINKS = [
-  { label: "Curiosity Compass", desc: "Explore domains from stories that inspire you", icon: Compass, path: "/career/curiosity-compass" },
-  { label: "Career Moodboard", desc: "Pin inspiring stories to your vision board", icon: Palette, path: "/career/career-moodboard" },
-  { label: "Project Playground", desc: "Start projects inspired by real success stories", icon: FolderKanban, path: "/career/project-playground" },
-  { label: "Content Library", desc: "Learn skills featured in inspirational journeys", icon: BookOpen, path: "/career/content-library" },
-  { label: "Roadmaps", desc: "Translate inspiration into structured career plans", icon: Map, path: "/career/roadmaps" },
-  { label: "Mentor Matchmaking", desc: "Find mentors from similar backgrounds as story authors", icon: UserCheck, path: "/career/mentor-matchmaking" },
-  { label: "Peer Circles", desc: "Discuss stories with peers for shared learning", icon: Users, path: "/career/peer-circles" },
-  { label: "Career Coach", desc: "Process inspiration into actionable motivation", icon: Bot, path: "/career/career-coach" },
-  { label: "SelfGraph", desc: "See how stories boost your motivation patterns", icon: Brain, path: "/career/self-graph" },
-  { label: "Job Matching", desc: "Find opportunities aligned with stories that resonate", icon: Target, path: "/career/job-matching" },
+  { label: "Curiosity Compass", desc: "Explore domains from stories that inspire you", icon: Compass, path: "/dashboard/curiosity-compass" },
+  { label: "Career Moodboard", desc: "Pin inspiring stories to your vision board", icon: Palette, path: "/dashboard/career-moodboard" },
+  { label: "Project Playground", desc: "Start projects inspired by real success stories", icon: FolderKanban, path: "/dashboard/project-playground" },
+  { label: "Content Library", desc: "Learn skills featured in inspirational journeys", icon: BookOpen, path: "/dashboard/content-library" },
+  { label: "Roadmaps", desc: "Translate inspiration into structured career plans", icon: Map, path: "/dashboard/roadmap" },
+  { label: "Mentor Matchmaking", desc: "Find mentors from similar backgrounds as story authors", icon: UserCheck, path: "/dashboard/mentor-matchmaking" },
+  { label: "Peer Circles", desc: "Discuss stories with peers for shared learning", icon: Users, path: "/dashboard/peer-circles" },
+  { label: "Career Coach", desc: "Process inspiration into actionable motivation", icon: Bot, path: "/dashboard/career-coach" },
+  { label: "SelfGraph", desc: "See how stories boost your motivation patterns", icon: Brain, path: "/dashboard/selfgraph" },
+  { label: "Job Matching", desc: "Find opportunities aligned with stories that resonate", icon: Target, path: "/dashboard/job-matching" },
 ];
 
 export default function CareerInspirations() {

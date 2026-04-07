@@ -1269,14 +1269,14 @@ export default function TransitionPlanner() {
             <CardContent>
               <div className="grid gap-3 sm:grid-cols-2">
                 {[
-                  { label: "SelfGraph", desc: "Detect misalignment & identity drift", icon: Brain, path: "/career/selfgraph" },
-                  { label: "SkillStacker", desc: "Design bridge-skill learning paths", icon: Zap, path: "/career/skillstacker" },
-                  { label: "Mentor Matchmaking", desc: "Find transition-ready mentors", icon: Users, path: "/career/mentors" },
-                  { label: "Peer Circles", desc: "Join career switcher communities", icon: MessageCircle, path: "/career/peers" },
-                  { label: "AI Career Therapist", desc: "Emotional support during uncertainty", icon: Heart, path: "/career/therapist" },
-                  { label: "AI Roadmaps", desc: "Convert insights into phased plans", icon: Map, path: "/career/roadmap" },
-                  { label: "Living Resume", desc: "Track transferable skills & growth", icon: FileText, path: "/career/resume" },
-                  { label: "Journal", desc: "Reflect on your transition journey", icon: BookOpen, path: "/journal" },
+                  { label: "SelfGraph", desc: "Detect misalignment & identity drift", icon: Brain, path: "/dashboard/selfgraph" },
+                  { label: "SkillStacker", desc: "Design bridge-skill learning paths", icon: Zap, path: "/dashboard/skill-stacker" },
+                  { label: "Mentor Matchmaking", desc: "Find transition-ready mentors", icon: Users, path: "/dashboard/mentor-matchmaking" },
+                  { label: "Peer Circles", desc: "Join career switcher communities", icon: MessageCircle, path: "/dashboard/peer-circles" },
+                  { label: "AI Career Therapist", desc: "Emotional support during uncertainty", icon: Heart, path: "/dashboard/career-therapist" },
+                  { label: "AI Roadmaps", desc: "Convert insights into phased plans", icon: Map, path: "/dashboard/roadmap" },
+                  { label: "Living Resume", desc: "Track transferable skills & growth", icon: FileText, path: "/dashboard/living-resume" },
+                  { label: "Journal", desc: "Reflect on your transition journey", icon: BookOpen, path: "/dashboard/journal" },
                 ].map((f, i) => (
                   <button
                     key={i}
