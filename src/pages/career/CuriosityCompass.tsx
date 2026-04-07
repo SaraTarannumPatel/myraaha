@@ -1172,7 +1172,7 @@ const CuriosityCompass = () => {
                             await recordSignal("curiosity_compass", behaviorInsights.career_archetype, "preference", 0.9);
                           }
                           toast.success("Transferring insights to AI Roadmaps...");
-                          navigate("/career/roadmap?source=behavior_analysis");
+                          navigate("/dashboard/roadmap?source=behavior_analysis");
                         }}
                         className="flex-1 gap-2"
                       >
@@ -1222,7 +1222,7 @@ const CuriosityCompass = () => {
                 } else {
                   toast.info("Starting roadmap creation...");
                 }
-                navigate("/career/roadmap?source=curiosity_compass");
+                navigate("/dashboard/roadmap?source=curiosity_compass");
               }}
               className="flex-1 gap-2"
             >
