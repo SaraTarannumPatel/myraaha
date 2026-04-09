@@ -3411,6 +3411,36 @@ export type Database = {
         }
         Relationships: []
       }
+      onboarding_rewards: {
+        Row: {
+          id: string
+          milestone_percent: number
+          reward_description: string | null
+          reward_key: string
+          reward_title: string
+          unlocked_at: string
+          user_id: string
+        }
+        Insert: {
+          id?: string
+          milestone_percent: number
+          reward_description?: string | null
+          reward_key: string
+          reward_title: string
+          unlocked_at?: string
+          user_id: string
+        }
+        Update: {
+          id?: string
+          milestone_percent?: number
+          reward_description?: string | null
+          reward_key?: string
+          reward_title?: string
+          unlocked_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       opportunity_reflections: {
         Row: {
           application_id: string | null
