@@ -26,8 +26,8 @@ const GuestEntry = () => {
       <OnboardingProgressBar progress={5} />
       <OnboardingRewardBanner currentProgress={5} />
 
-      <div className="flex-1 flex flex-col px-6 pb-8 lg:px-16 lg:justify-center max-w-xl mx-auto w-full">
-        <div className="relative mt-4 mb-6 lg:mb-10">
+      <div className="flex-1 flex flex-col items-center justify-center px-6 pb-4 max-w-md mx-auto w-full">
+        <div className="relative mb-4 w-full">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -79,7 +79,7 @@ const GuestEntry = () => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.4, duration: 0.4 }}
-          className="flex items-center justify-between mt-auto pt-12 lg:pt-16"
+          className="flex items-center justify-between mt-6 w-full"
         >
           <button
             onClick={() => navigate("/auth")}

@@ -4268,8 +4268,11 @@ export type Database = {
       }
       profiles: {
         Row: {
+          academic_stream: string | null
           active_intent: Database["public"]["Enums"]["user_intent"] | null
           age: number | null
+          age_group: string | null
+          ai_comfort: string | null
           areas_of_focus: string[] | null
           avatar_url: string | null
           bio: string | null
@@ -4278,25 +4281,38 @@ export type Database = {
           consent_data_usage: boolean | null
           consent_mentor_sharing: boolean | null
           created_at: string
+          digital_comfort: string | null
           education_level: string | null
           full_name: string | null
+          gender_identity: string | null
+          highest_education: string | null
           id: string
           industry: string | null
           journey_responses: Json | null
           journey_variant: string | null
+          life_stage: string | null
           location: string | null
+          location_type: string | null
           long_term_goals: string | null
+          mobile_number: string | null
           onboarding_status:
             | Database["public"]["Enums"]["onboarding_status"]
             | null
+          preferred_language: string | null
+          primary_device: string | null
           short_term_goals: string | null
+          time_commitment: string | null
           updated_at: string
           user_id: string
           user_type: Database["public"]["Enums"]["user_type"] | null
+          weekly_hours: string | null
         }
         Insert: {
+          academic_stream?: string | null
           active_intent?: Database["public"]["Enums"]["user_intent"] | null
           age?: number | null
+          age_group?: string | null
+          ai_comfort?: string | null
           areas_of_focus?: string[] | null
           avatar_url?: string | null
           bio?: string | null
@@ -4305,25 +4321,38 @@ export type Database = {
           consent_data_usage?: boolean | null
           consent_mentor_sharing?: boolean | null
           created_at?: string
+          digital_comfort?: string | null
           education_level?: string | null
           full_name?: string | null
+          gender_identity?: string | null
+          highest_education?: string | null
           id?: string
           industry?: string | null
           journey_responses?: Json | null
           journey_variant?: string | null
+          life_stage?: string | null
           location?: string | null
+          location_type?: string | null
           long_term_goals?: string | null
+          mobile_number?: string | null
           onboarding_status?:
             | Database["public"]["Enums"]["onboarding_status"]
             | null
+          preferred_language?: string | null
+          primary_device?: string | null
           short_term_goals?: string | null
+          time_commitment?: string | null
           updated_at?: string
           user_id: string
           user_type?: Database["public"]["Enums"]["user_type"] | null
+          weekly_hours?: string | null
         }
         Update: {
+          academic_stream?: string | null
           active_intent?: Database["public"]["Enums"]["user_intent"] | null
           age?: number | null
+          age_group?: string | null
+          ai_comfort?: string | null
           areas_of_focus?: string[] | null
           avatar_url?: string | null
           bio?: string | null
@@ -4332,21 +4361,31 @@ export type Database = {
           consent_data_usage?: boolean | null
           consent_mentor_sharing?: boolean | null
           created_at?: string
+          digital_comfort?: string | null
           education_level?: string | null
           full_name?: string | null
+          gender_identity?: string | null
+          highest_education?: string | null
           id?: string
           industry?: string | null
           journey_responses?: Json | null
           journey_variant?: string | null
+          life_stage?: string | null
           location?: string | null
+          location_type?: string | null
           long_term_goals?: string | null
+          mobile_number?: string | null
           onboarding_status?:
             | Database["public"]["Enums"]["onboarding_status"]
             | null
+          preferred_language?: string | null
+          primary_device?: string | null
           short_term_goals?: string | null
+          time_commitment?: string | null
           updated_at?: string
           user_id?: string
           user_type?: Database["public"]["Enums"]["user_type"] | null
+          weekly_hours?: string | null
         }
         Relationships: []
       }

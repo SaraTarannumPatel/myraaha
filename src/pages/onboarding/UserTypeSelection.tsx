@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useAuth } from "@/contexts/AuthContext";
-import { GraduationCap, School, Briefcase, Rocket, Laptop, HelpCircle, ArrowRight, ArrowLeft } from "lucide-react";
+import { GraduationCap, School, Briefcase, ArrowRight, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import OnboardingProgressBar from "@/components/onboarding/OnboardingProgressBar";
@@ -11,10 +11,6 @@ const userTypes = [
   { value: "school", icon: School, title: "Student (School)", description: "Exploring interests, building early skills, and finding your spark.", color: "border-blue/30", selectedColor: "border-blue bg-blue/5", iconBg: "bg-blue/10", iconSelectedBg: "bg-blue", iconColor: "text-blue" },
   { value: "college", icon: GraduationCap, title: "Student (College / Postgrad)", description: "Building expertise, creating projects, and preparing for your career or venture.", color: "border-indigo/30", selectedColor: "border-indigo bg-indigo/5", iconBg: "bg-indigo/10", iconSelectedBg: "bg-indigo", iconColor: "text-indigo" },
   { value: "working_professional", icon: Briefcase, title: "Working Professional", description: "Upskilling, exploring lateral moves, or planning your next big career step.", color: "border-primary/30", selectedColor: "border-primary bg-primary/5", iconBg: "bg-primary/10", iconSelectedBg: "bg-[hsl(158,17%,37%)]", iconColor: "text-primary" },
-  { value: "transitioner", icon: Briefcase, title: "Career Transitioner", description: "Pivoting careers, reskilling, or exploring entirely new directions.", color: "border-terracotta/30", selectedColor: "border-terracotta bg-terracotta/5", iconBg: "bg-terracotta/10", iconSelectedBg: "bg-terracotta", iconColor: "text-terracotta" },
-  { value: "aspiring_entrepreneur", icon: Rocket, title: "Aspiring Entrepreneur", description: "Turning ideas into startups, validating concepts, and building from scratch.", color: "border-maroon/30", selectedColor: "border-maroon bg-maroon/5", iconBg: "bg-maroon/10", iconSelectedBg: "bg-maroon", iconColor: "text-maroon" },
-  { value: "freelancer", icon: Laptop, title: "Freelancer / Consultant", description: "Building a personal brand, finding clients, and growing your independent practice.", color: "border-accent/40", selectedColor: "border-accent bg-accent/10", iconBg: "bg-accent/15", iconSelectedBg: "bg-accent", iconColor: "text-accent-foreground" },
-  { value: "other", icon: HelpCircle, title: "Other", description: "Your path is unique — MyRaaha adapts to however you want to grow.", color: "border-border", selectedColor: "border-primary bg-primary/5", iconBg: "bg-muted", iconSelectedBg: "bg-[hsl(158,17%,37%)]", iconColor: "text-muted-foreground" },
 ];
 
 const UserTypeSelection = () => {

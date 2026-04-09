@@ -14,7 +14,7 @@ import {
   Trophy, Zap, MessageSquare, Palette, Target, Star, ChevronRight,
   Play, Check, Lightbulb, Brain, Meh, HelpCircle, Bot,
   PenLine, BookOpen, Users, Goal, TrendingUp, Activity, Eye, Layers,
-  Map, Route
+  Map, Route, CheckCircle2, ClipboardCheck
 } from "lucide-react";
 import CareerCardDeck from "@/components/career/CareerCardDeck";
 import StoryModeCards from "@/components/career/StoryModeCards";
@@ -22,6 +22,15 @@ import ChallengeModeCards from "@/components/career/ChallengeModeCards";
 import { useUserSignals } from "@/hooks/useUserSignals";
 import { useNavigate } from "react-router-dom";
 import ModuleSearchBar from "@/components/search/ModuleSearchBar";
+import {
+  getVariantQuestions,
+  detectVariant,
+  getJourneyId,
+  getJourneyQuestions,
+  journeyMetas,
+  type VariantQuestion,
+  type JourneyQuestion,
+} from "@/pages/onboarding/journeys/journeyData";
 
 const MOODS = [
   { id: "excited", label: "Excited", icon: Zap, color: "text-accent" },
@@ -70,6 +79,211 @@ const VISUAL_ICONS = [
   { id: "food", emoji: "🍳", label: "Food & Hospitality" },
   { id: "engineering", emoji: "⚙️", label: "Engineering" },
 ];
+
+// ===== Assessment Test Section (moved from onboarding journey) =====
+const AssessmentTestSection = ({ user, recordSignal, recordMultipleSignals }: { user: any; recordSignal: any; recordMultipleSignals: any }) => {
+  const { profile, updateProfile } = useAuth();
+  const userType = profile?.user_type || "school";
+  const variantQs = getVariantQuestions(userType);
+  const [variantAnswers, setVariantAnswers] = useState<Record<string, string>>({});
+  const [variantStep, setVariantStep] = useState(0);
+  const [phase, setPhase] = useState<"variant" | "journey" | "result">("variant");
+  const [variant, setVariant] = useState<"U" | "R">("U");
+  const [journeyId, setJourneyId] = useState("J1");
+  const [journeyStep, setJourneyStep] = useState(0);
+  const [journeyAnswers, setJourneyAnswers] = useState<Record<string, string | string[]>>({});
+  const [completed, setCompleted] = useState(false);
+
+  const journeyQs = getJourneyQuestions(journeyId);
+  const meta = journeyMetas[journeyId];
+
+  // Check if already completed
+  useEffect(() => {
+    if (profile?.journey_responses?.assessment_completed) {
+      setCompleted(true);
+    }
+  }, [profile]);
+
+  const currentVariantQ = variantQs[variantStep];
+  const currentJourneyQ = journeyQs[journeyStep];
+
+  const handleVariantNext = () => {
+    if (variantStep < variantQs.length - 1) {
+      setVariantStep(variantStep + 1);
+    } else {
+      const v = detectVariant(userType, variantAnswers);
+      const jId = getJourneyId(userType, v);
+      setVariant(v);
+      setJourneyId(jId);
+      setPhase("journey");
+    }
+  };
+
+  const handleJourneySelect = (qId: string, value: string, type: "single" | "multi", maxSelect?: number) => {
+    if (type === "single") {
+      setJourneyAnswers({ ...journeyAnswers, [qId]: value });
+    } else {
+      const current = (journeyAnswers[qId] as string[]) || [];
+      let updated: string[];
+      if (current.includes(value)) {
+        updated = current.filter(v => v !== value);
+      } else {
+        updated = maxSelect && current.length >= maxSelect ? [...current.slice(1), value] : [...current, value];
+      }
+      setJourneyAnswers({ ...journeyAnswers, [qId]: updated });
+    }
+  };
+
+  const handleJourneyNext = () => {
+    if (journeyStep < journeyQs.length - 1) {
+      setJourneyStep(journeyStep + 1);
+    } else {
+      handleComplete();
+    }
+  };
+
+  const handleComplete = async () => {
+    // Save assessment results
+    await updateProfile({
+      journey_variant: `${journeyId}_${variant}`,
+      journey_responses: {
+        ...profile?.journey_responses,
+        assessment_completed: true,
+        variant_answers: variantAnswers,
+        journey_answers: journeyAnswers,
+        journey_id: journeyId,
+        variant,
+      },
+    } as any);
+
+    // Record signals for cross-module use
+    for (const [, value] of Object.entries(journeyAnswers)) {
+      if (typeof value === "string") {
+        await recordSignal("assessment", value, "preference", 0.7);
+      } else if (Array.isArray(value)) {
+        await recordMultipleSignals("assessment", value, "preference", 0.6);
+      }
+    }
+
+    setCompleted(true);
+    toast.success("Assessment complete! Your compass is now calibrated 🧭");
+  };
+
+  const totalSteps = variantQs.length + journeyQs.length;
+  const currentTotal = phase === "variant" ? variantStep : variantQs.length + journeyStep;
+
+  if (completed) {
+    return (
+      <Card className="border-primary/20 bg-primary/5">
+        <CardContent className="pt-6 text-center space-y-4">
+          <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center mx-auto">
+            <CheckCircle2 size={32} className="text-primary" />
+          </div>
+          <h3 className="font-display text-xl">Assessment Complete ✨</h3>
+          <p className="font-body text-sm text-muted-foreground">
+            Your Curiosity Compass has been calibrated based on your psychometric signals.
+            Your journey: <Badge variant="secondary">{meta?.title || journeyId}</Badge>
+          </p>
+          <Button variant="outline" onClick={() => { setCompleted(false); setPhase("variant"); setVariantStep(0); setVariantAnswers({}); setJourneyStep(0); setJourneyAnswers({}); }}>
+            Retake Assessment
+          </Button>
+        </CardContent>
+      </Card>
+    );
+  }
+
+  return (
+    <div className="space-y-6">
+      <Card className="border-accent/30 bg-accent/5">
+        <CardHeader className="pb-2">
+          <CardTitle className="flex items-center gap-2 text-lg">
+            <ClipboardCheck size={20} className="text-accent-foreground" />
+            Psychometric Assessment Test
+          </CardTitle>
+          <CardDescription>
+            These questions help calibrate your compass — no right or wrong answers. Your responses shape AI recommendations, roadmaps, and career cards across the app.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <Progress value={(currentTotal / totalSteps) * 100} className="h-1.5" />
+          <p className="font-body text-xs text-muted-foreground mt-2">{currentTotal + 1} / {totalSteps}</p>
+        </CardContent>
+      </Card>
+
+      <AnimatePresence mode="wait">
+        {phase === "variant" && currentVariantQ && (
+          <motion.div key={`v-${variantStep}`} initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-4">
+            <Card>
+              <CardHeader>
+                <Badge variant="outline" className="w-fit mb-2">Vibe Check</Badge>
+                <CardTitle className="text-lg">{currentVariantQ.question}</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-2">
+                {currentVariantQ.options.map((opt) => {
+                  const isSelected = variantAnswers[currentVariantQ.id] === opt.value;
+                  return (
+                    <button key={opt.value} onClick={() => setVariantAnswers({ ...variantAnswers, [currentVariantQ.id]: opt.value })}
+                      className={`w-full text-left p-3 rounded-xl border-2 transition-all font-body text-sm ${isSelected ? "border-primary bg-primary/10 font-semibold" : "border-border hover:border-primary/30"}`}>
+                      {isSelected && <CheckCircle2 size={14} className="inline mr-2 text-primary" />}{opt.label}
+                    </button>
+                  );
+                })}
+              </CardContent>
+            </Card>
+            <div className="flex justify-between">
+              <Button variant="ghost" disabled={variantStep === 0} onClick={() => setVariantStep(variantStep - 1)}>
+                <ArrowLeft size={16} /> Back
+              </Button>
+              <Button onClick={handleVariantNext} disabled={!variantAnswers[currentVariantQ.id]}
+                className="bg-[hsl(230,40%,25%)] text-[hsl(45,80%,65%)] rounded-full px-6">
+                Next <ArrowRight size={16} />
+              </Button>
+            </div>
+          </motion.div>
+        )}
+
+        {phase === "journey" && currentJourneyQ && (
+          <motion.div key={`j-${journeyStep}`} initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-4">
+            <Card>
+              <CardHeader>
+                <Badge variant="outline" className="w-fit mb-2">{meta?.title}</Badge>
+                <CardTitle className="text-lg">{currentJourneyQ.question}</CardTitle>
+                {currentJourneyQ.type === "multi" && (
+                  <CardDescription>Pick {currentJourneyQ.maxSelect ? `up to ${currentJourneyQ.maxSelect}` : "as many as you want"}</CardDescription>
+                )}
+              </CardHeader>
+              <CardContent className={currentJourneyQ.options.length > 5 ? "flex flex-wrap gap-2" : "space-y-2"}>
+                {currentJourneyQ.options.map((opt) => {
+                  const isMulti = currentJourneyQ.type === "multi";
+                  const isSelected = isMulti
+                    ? ((journeyAnswers[currentJourneyQ.id] as string[]) || []).includes(opt.value)
+                    : journeyAnswers[currentJourneyQ.id] === opt.value;
+                  return (
+                    <button key={opt.value}
+                      onClick={() => handleJourneySelect(currentJourneyQ.id, opt.value, currentJourneyQ.type, currentJourneyQ.maxSelect)}
+                      className={`${currentJourneyQ.options.length > 5 ? "px-3 py-2 rounded-xl" : "w-full text-left p-3 rounded-xl"} border-2 transition-all font-body text-sm ${isSelected ? "border-primary bg-primary/10 font-semibold" : "border-border hover:border-primary/30"}`}>
+                      {isSelected && <CheckCircle2 size={14} className="inline mr-1.5 text-primary" />}{opt.label}
+                    </button>
+                  );
+                })}
+              </CardContent>
+            </Card>
+            <div className="flex justify-between">
+              <Button variant="ghost" onClick={() => { if (journeyStep > 0) setJourneyStep(journeyStep - 1); else setPhase("variant"); }}>
+                <ArrowLeft size={16} /> Back
+              </Button>
+              <Button onClick={handleJourneyNext}
+                disabled={currentJourneyQ.type === "single" ? !journeyAnswers[currentJourneyQ.id] : !((journeyAnswers[currentJourneyQ.id] as string[])?.length > 0)}
+                className="bg-[hsl(230,40%,25%)] text-[hsl(45,80%,65%)] rounded-full px-6">
+                {journeyStep === journeyQs.length - 1 ? "Finish" : "Next"} <ArrowRight size={16} />
+              </Button>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+};
 
 const CuriosityCompass = () => {
   const { user } = useAuth();
@@ -718,13 +932,19 @@ const CuriosityCompass = () => {
       {/* Main Tabs */}
       {!showNextSteps && (
         <Tabs value={tab} onValueChange={setTab}>
-          <TabsList className="grid grid-cols-5 w-full max-w-2xl">
+          <TabsList className="grid grid-cols-6 w-full max-w-3xl">
             <TabsTrigger value="explore">Explore</TabsTrigger>
+            <TabsTrigger value="assessment">Assessment</TabsTrigger>
             <TabsTrigger value="quests">Quests</TabsTrigger>
             <TabsTrigger value="domains">Domains</TabsTrigger>
             <TabsTrigger value="insights">Insights</TabsTrigger>
             <TabsTrigger value="behavior">Behavior</TabsTrigger>
           </TabsList>
+
+          {/* ===== Assessment Tab ===== */}
+          <TabsContent value="assessment">
+            <AssessmentTestSection user={user} recordSignal={recordSignal} recordMultipleSignals={recordMultipleSignals} />
+          </TabsContent>
 
           {/* ===== Explore Tab ===== */}
           <TabsContent value="explore" className="space-y-6">
