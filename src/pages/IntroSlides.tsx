@@ -45,118 +45,112 @@ const IntroSlides = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background flex flex-col overflow-hidden">
+    <div className="h-[100dvh] bg-background flex flex-col overflow-hidden">
       {/* Header */}
-      <div className="flex items-center justify-between px-5 sm:px-8 lg:px-16 pt-6 sm:pt-8 relative z-20">
+      <div className="flex items-center justify-between px-6 sm:px-8 lg:px-16 pt-5 sm:pt-6 shrink-0">
         <div className="flex items-center gap-2">
-          <div className="w-7 h-7 sm:w-8 sm:h-8 bg-foreground rounded-md flex items-center justify-center">
-            <span className="text-background font-display text-sm sm:text-base font-bold">M</span>
+          <div className="w-7 h-7 bg-foreground rounded-md flex items-center justify-center">
+            <span className="text-background font-display text-sm font-bold">M</span>
           </div>
-          <span className="font-display text-base sm:text-lg text-foreground">MyRaaha</span>
+          <span className="font-display text-base text-foreground tracking-tight">MyRaaha</span>
         </div>
         <button
           onClick={handleSkip}
-          className="font-body text-sm sm:text-base text-foreground hover:text-muted-foreground transition-colors"
+          className="font-body text-sm text-foreground/70 hover:text-foreground transition-colors"
         >
           Skip
         </button>
       </div>
 
-      {/* Content */}
-      <div className="flex-1 flex flex-col lg:flex-row items-center justify-center px-5 sm:px-8 lg:px-16 pb-8 sm:pb-12 lg:pb-16">
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={current}
-            initial={{ opacity: 0, x: 40 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -40 }}
-            transition={{ duration: 0.4 }}
-            className="flex flex-col lg:flex-row items-center lg:items-center gap-4 sm:gap-6 lg:gap-16 w-full max-w-6xl mx-auto"
-          >
-            {/* Text + Image side by side on desktop, stacked on mobile */}
-            <div className="flex-1 w-full relative">
-              {/* Heading with overlapping illustration */}
-              <div className="relative">
-                <h1 className="font-display text-[3rem] sm:text-[4rem] md:text-[5rem] lg:text-[6rem] xl:text-[7rem] text-foreground leading-[0.95] tracking-tight">
-                  {slide.heading.map((word, i) => (
-                    <span key={i} className="block">{word}</span>
-                  ))}
-                </h1>
-                {/* Illustration overlapping the heading - positioned differently per viewport */}
-                <div className="absolute -right-4 sm:right-0 top-1/2 -translate-y-1/2 w-[55%] sm:w-[50%] md:w-[45%] lg:hidden pointer-events-none">
+      {/* Content wrapper - takes remaining height, split into heading area + bottom area */}
+      <div className="flex-1 flex flex-col px-6 sm:px-8 lg:px-16 max-w-7xl mx-auto w-full min-h-0">
+
+        {/* Heading + Illustration area - takes ~55% on mobile */}
+        <div className="flex-[3] flex items-center min-h-0">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={`heading-${current}`}
+              initial={{ opacity: 0, x: 30 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -30 }}
+              transition={{ duration: 0.35 }}
+              className="w-full"
+            >
+              <div className="relative lg:flex lg:items-center lg:gap-16 xl:gap-24">
+                {/* Heading */}
+                <div className="relative z-10 lg:flex-1">
+                  <h1 className="font-display text-[4.2rem] sm:text-[5rem] md:text-[6rem] lg:text-[7rem] xl:text-[8rem] text-foreground leading-[0.88] tracking-[-0.02em] font-bold">
+                    {slide.heading.map((word, i) => (
+                      <span key={i} className="block">{word}</span>
+                    ))}
+                  </h1>
+                </div>
+
+                {/* Illustration overlapping on mobile/tablet */}
+                <div className="absolute -right-2 top-1/2 -translate-y-[40%] w-[65%] sm:w-[55%] md:w-[48%] lg:static lg:translate-y-0 lg:w-auto lg:flex-1 lg:flex lg:justify-center pointer-events-none z-0 lg:z-10">
                   <img
                     src={slide.image}
                     alt=""
-                    className="w-full h-auto object-contain"
+                    className="w-full lg:w-[90%] xl:w-[80%] h-auto object-contain"
                     width={800}
                     height={800}
                   />
                 </div>
               </div>
-            </div>
+            </motion.div>
+          </AnimatePresence>
+        </div>
 
-            {/* Desktop illustration - separate column */}
-            <div className="hidden lg:flex flex-1 items-center justify-center">
-              <img
-                src={slide.image}
-                alt=""
-                className="w-full max-w-md h-auto object-contain"
-                width={800}
-                height={800}
-              />
-            </div>
-          </motion.div>
-        </AnimatePresence>
-      </div>
-
-      {/* Bottom section */}
-      <AnimatePresence mode="wait">
-        <motion.div
-          key={current}
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: 20 }}
-          transition={{ duration: 0.3, delay: 0.15 }}
-          className="px-5 sm:px-8 lg:px-16 pb-8 sm:pb-12 lg:pb-16 max-w-6xl mx-auto w-full"
-        >
-          {/* Subtitle */}
-          <p className="font-display italic text-lg sm:text-xl md:text-2xl lg:text-3xl text-foreground/80 leading-relaxed max-w-lg mb-6 sm:mb-8">
-            {slide.subtitle}
-          </p>
-
-          {/* CTA pill */}
-          <div className="mb-6 sm:mb-8">
-            <span className="inline-block font-body text-sm sm:text-base text-foreground bg-accent/40 rounded-full px-5 sm:px-6 py-2.5 sm:py-3">
-              {slide.cta}
-            </span>
-          </div>
-
-          {/* Navigation */}
-          <div className="flex items-center justify-between">
-            {/* Dots */}
-            <div className="flex gap-2">
-              {slides.map((_, i) => (
-                <button
-                  key={i}
-                  onClick={() => setCurrent(i)}
-                  className={`w-2 h-2 rounded-full transition-all ${
-                    i === current ? "bg-foreground w-6" : "bg-muted-foreground/30"
-                  }`}
-                />
-              ))}
-            </div>
-
-            {/* Next button */}
-            <button
-              onClick={handleNext}
-              className="flex items-center gap-2 font-display text-sm sm:text-base text-background bg-foreground rounded-full px-5 sm:px-6 py-2.5 sm:py-3 hover:opacity-90 transition-opacity"
+        {/* Bottom section - subtitle, CTA pill, nav */}
+        <div className="flex-[2] flex flex-col justify-end pb-8 sm:pb-10 lg:pb-12 min-h-0">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={`bottom-${current}`}
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 16 }}
+              transition={{ duration: 0.3, delay: 0.1 }}
             >
-              {current === slides.length - 1 ? "Get Started" : "Next"}
-              <ArrowRight size={16} />
-            </button>
-          </div>
-        </motion.div>
-      </AnimatePresence>
+              {/* Subtitle */}
+              <p className="font-display italic text-[1.15rem] sm:text-xl md:text-2xl lg:text-[1.65rem] text-foreground/80 leading-[1.35] max-w-[22rem] sm:max-w-md lg:max-w-lg mb-5 sm:mb-6">
+                {slide.subtitle}
+              </p>
+
+              {/* CTA pill */}
+              <div className="mb-6 sm:mb-8">
+                <span className="inline-block font-body text-[0.8rem] sm:text-sm text-foreground bg-[hsl(45,80%,80%)] rounded-full px-5 sm:px-6 py-2.5 sm:py-3">
+                  {slide.cta}
+                </span>
+              </div>
+
+              {/* Navigation */}
+              <div className="flex items-center justify-between">
+                <div className="flex gap-2">
+                  {slides.map((_, i) => (
+                    <button
+                      key={i}
+                      onClick={() => setCurrent(i)}
+                      className={`h-2 rounded-full transition-all duration-300 ${
+                        i === current
+                          ? "bg-foreground w-6"
+                          : "bg-muted-foreground/25 w-2"
+                      }`}
+                    />
+                  ))}
+                </div>
+
+                <button
+                  onClick={handleNext}
+                  className="flex items-center gap-2 font-display text-sm text-background bg-[hsl(240,50%,20%)] rounded-full px-6 py-3 hover:bg-[hsl(240,50%,25%)] transition-colors"
+                >
+                  {current === slides.length - 1 ? "Get Started" : "Next"}
+                  <ArrowRight size={16} />
+                </button>
+              </div>
+            </motion.div>
+          </AnimatePresence>
+        </div>
+      </div>
     </div>
   );
 };
