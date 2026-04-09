@@ -68,10 +68,10 @@ const Auth = () => {
       <OnboardingProgressBar progress={5} />
       <OnboardingRewardBanner currentProgress={5} />
 
-      <div className="flex-1 flex flex-col lg:flex-row lg:items-center lg:justify-center">
-        <div className="flex-1 flex flex-col px-6 pb-8 lg:px-16 lg:justify-center max-w-xl mx-auto w-full">
+      <div className="flex-1 flex items-center justify-center px-4 py-4">
+        <div className="flex flex-col w-full max-w-md">
           
-          <div className="relative mt-4 mb-4 lg:mb-8">
+          <div className="relative mb-3 lg:mb-4">
             <AnimatePresence mode="wait">
               <motion.div
                 key={isLogin ? "login" : "signup"}
@@ -89,7 +89,7 @@ const Auth = () => {
                       <>Continue<br />your<br />journey!</>
                     )}
                   </h1>
-                  <div className="w-[50%] sm:w-[45%] lg:w-[40%] -mt-2 -mr-2">
+                  <div className="w-[40%] sm:w-[35%] -mt-2 -mr-2">
                     <img
                       src={isLogin ? loginIllustration : signupIllustration}
                       alt=""
@@ -103,7 +103,7 @@ const Auth = () => {
             </AnimatePresence>
           </div>
 
-          <div className="flex items-center gap-2 mb-5 font-body text-sm">
+          <div className="flex items-center gap-2 mb-3 font-body text-sm">
             <button
               onClick={() => setIsLogin(true)}
               className={`transition-colors ${isLogin ? "text-foreground font-semibold" : "text-muted-foreground"}`}
@@ -170,8 +170,8 @@ const Auth = () => {
             )}
           </form>
 
-          <div className="mt-5">
-            <div className="flex items-center gap-3 mb-4">
+          <div className="mt-3">
+            <div className="flex items-center gap-3 mb-3">
               <div className="flex-1 h-px bg-[hsl(0,0%,82%)]" />
               <span className="font-body text-xs text-muted-foreground">
                 Or {isLogin ? "Login" : "Signup"} with
@@ -200,7 +200,7 @@ const Auth = () => {
             </div>
           </div>
 
-          <div className="flex items-center justify-between mt-8">
+          <div className="flex items-center justify-between mt-4">
             {isLogin ? (
               <button
                 onClick={() => navigate("/guest")}

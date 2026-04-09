@@ -24,6 +24,19 @@ interface Profile {
   areas_of_focus: string[];
   journey_variant: string | null;
   journey_responses: any;
+  mobile_number: string | null;
+  gender_identity: string | null;
+  age_group: string | null;
+  life_stage: string | null;
+  academic_stream: string | null;
+  highest_education: string | null;
+  primary_device: string | null;
+  digital_comfort: string | null;
+  ai_comfort: string | null;
+  time_commitment: string | null;
+  weekly_hours: string | null;
+  location_type: string | null;
+  preferred_language: string | null;
 }
 
 interface AuthContextType {
