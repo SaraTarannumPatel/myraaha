@@ -16,7 +16,7 @@ const GuestEntry = () => {
     }
     localStorage.setItem("myraaha_guest_name", name.trim());
     localStorage.setItem("myraaha_is_guest", "true");
-    navigate("/get-started");
+    navigate("/onboarding");
   };
 
   return (
