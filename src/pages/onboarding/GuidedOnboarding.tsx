@@ -6,13 +6,12 @@ import BothOnboarding from "./BothOnboarding";
 
 const GuidedOnboarding = () => {
   const { profile } = useAuth();
-  const intent = profile?.active_intent;
+  const intent = profile?.active_intent || localStorage.getItem("myraaha_guest_intent");
 
   if (intent === "entrepreneurship") return <EntrepreneurshipOnboarding />;
   if (intent === "both") return <BothOnboarding />;
   if (intent === "career") return <CareerOnboarding />;
 
-  // Fallback: redirect to intent selection if no intent set
   return <Navigate to="/onboarding/intent" replace />;
 };
 
