@@ -48,16 +48,6 @@ const onboardingSteps: SkippedStep[] = [
     checkFn: (p) => !p.active_intent || p.active_intent === "career",
   },
   {
-    key: "personal_info",
-    title: "Complete your profile",
-    description: "Add your goals, education, and industry so our AI can give you relevant recommendations.",
-    icon: FileText,
-    color: "text-indigo",
-    bgColor: "bg-indigo/10",
-    route: "/onboarding/personal-info",
-    checkFn: (p) => !p.short_term_goals && !p.industry && !p.education_level,
-  },
-  {
     key: "consent",
     title: "Privacy preferences",
     description: "Control how MyRaaha uses your data for personalization and mentor matching.",
