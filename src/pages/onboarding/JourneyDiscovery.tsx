@@ -351,6 +351,7 @@ const JourneyDiscovery = () => {
           )}
         </AnimatePresence>
       </motion.div>
+      </div>
     </div>
   );
 };
