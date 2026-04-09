@@ -84,7 +84,7 @@ const ConsentStep = () => {
 
     await createWelcomeNotifications();
     localStorage.removeItem("myraaha_initial_path");
-    navigate("/dashboard");
+    navigate("/get-started");
   };
 
   return (
