@@ -77,9 +77,9 @@ const Auth = () => {
       </div>
 
       {/* Main content */}
-      <div className="flex-1 flex flex-col lg:flex-row">
+      <div className="flex-1 flex flex-col lg:flex-row lg:items-center lg:justify-center">
         {/* Mobile/Tablet: stacked | Desktop: side by side */}
-        <div className="flex-1 flex flex-col px-6 pb-8 lg:px-16 lg:justify-center max-w-lg mx-auto w-full lg:max-w-none lg:mx-0">
+        <div className="flex-1 flex flex-col px-6 pb-8 lg:px-16 lg:justify-center max-w-lg mx-auto w-full">
           
           {/* Heading + Illustration */}
           <div className="relative mt-4 mb-4 lg:mb-8">
