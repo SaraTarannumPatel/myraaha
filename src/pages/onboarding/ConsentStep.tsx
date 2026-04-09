@@ -5,6 +5,9 @@ import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, ArrowLeft, Shield, Users, Eye, Lock } from "lucide-react";
+import OnboardingProgressBar from "@/components/onboarding/OnboardingProgressBar";
+import OnboardingRewardBanner from "@/components/onboarding/OnboardingRewardBanner";
+import { ONBOARDING_REWARDS } from "@/components/onboarding/OnboardingRewardBanner";
 
 const ConsentStep = () => {
   const { user, profile, updateProfile } = useAuth();
@@ -82,13 +85,28 @@ const ConsentStep = () => {
       } as any),
     });
 
+    // Insert onboarding rewards for the user
+    if (user) {
+      const rewards = ONBOARDING_REWARDS.map((r) => ({
+        user_id: user.id,
+        milestone_percent: r.percent,
+        reward_key: r.rewardKey,
+        reward_title: r.title,
+        reward_description: r.description,
+      }));
+      await supabase.from("onboarding_rewards").upsert(rewards, { onConflict: "user_id,reward_key" });
+    }
+
     await createWelcomeNotifications();
     localStorage.removeItem("myraaha_initial_path");
     navigate("/get-started");
   };
 
   return (
-    <div className="min-h-screen bg-background flex items-center justify-center p-6">
+    <div className="min-h-screen bg-[hsl(60,14%,98%)] flex flex-col">
+      <OnboardingProgressBar progress={90} />
+      <OnboardingRewardBanner currentProgress={90} />
+      <div className="flex-1 flex items-center justify-center p-6">
       <motion.div
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
@@ -96,7 +114,7 @@ const ConsentStep = () => {
       >
         <div className="text-center space-y-2">
           <p className="font-body text-sm text-primary font-semibold uppercase tracking-wider">Step 4 of 4</p>
-          <h1 className="font-display text-4xl text-foreground">Your Privacy Matters</h1>
+          <h1 className="font-display text-4xl text-[hsl(230,40%,25%)]">Your Privacy Matters</h1>
           <p className="font-body text-muted-foreground">
             Your journey is personal. You control what you share and who sees your progress.
           </p>
@@ -171,6 +189,7 @@ const ConsentStep = () => {
           </Button>
         </div>
       </motion.div>
+      </div>
     </div>
   );
 };

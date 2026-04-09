@@ -6,6 +6,8 @@ import { Button } from "@/components/ui/button";
 import {
   ArrowRight, ArrowLeft, Sparkles, CheckCircle2, Zap, Compass
 } from "lucide-react";
+import OnboardingProgressBar from "@/components/onboarding/OnboardingProgressBar";
+import OnboardingRewardBanner from "@/components/onboarding/OnboardingRewardBanner";
 import {
   getVariantQuestions,
   detectVariant,
@@ -123,7 +125,10 @@ const JourneyDiscovery = () => {
     totalSteps;
 
   return (
-    <div className="min-h-screen bg-background flex items-center justify-center p-4 sm:p-6">
+    <div className="min-h-screen bg-[hsl(60,14%,98%)] flex flex-col">
+      <OnboardingProgressBar progress={30} />
+      <OnboardingRewardBanner currentProgress={30} />
+      <div className="flex-1 flex items-center justify-center p-4 sm:p-6">
       <motion.div
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
@@ -346,6 +351,7 @@ const JourneyDiscovery = () => {
           )}
         </AnimatePresence>
       </motion.div>
+      </div>
     </div>
   );
 };

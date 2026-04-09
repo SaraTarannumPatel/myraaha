@@ -6,6 +6,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable/index";
 import { toast } from "sonner";
 import { ArrowRight } from "lucide-react";
+import OnboardingProgressBar from "@/components/onboarding/OnboardingProgressBar";
+import OnboardingRewardBanner from "@/components/onboarding/OnboardingRewardBanner";
 import loginIllustration from "@/assets/auth-login-illustration.png";
 import signupIllustration from "@/assets/auth-signup-illustration.png";
 
@@ -28,8 +30,8 @@ const Auth = () => {
     }
   }, [user, profile, navigate]);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSubmit = async (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
     setSubmitting(true);
 
     if (isLogin) {
@@ -63,25 +65,12 @@ const Auth = () => {
 
   return (
     <div className="min-h-screen bg-[hsl(60,14%,98%)] flex flex-col">
-      {/* Top bar: Logo + progress */}
-      <div className="px-6 pt-6 pb-2">
-        <div className="flex items-center gap-3">
-          <div className="w-8 h-8 flex items-center justify-center">
-            <span className="font-display text-xl font-bold text-[hsl(230,40%,25%)]">M</span>
-          </div>
-          <span className="text-xs text-muted-foreground font-body">5%</span>
-          <div className="flex-1 h-1.5 rounded-full bg-[hsl(0,0%,88%)]">
-            <div className="h-full w-[5%] rounded-full bg-[hsl(158,17%,37%)]" />
-          </div>
-        </div>
-      </div>
+      <OnboardingProgressBar progress={5} />
+      <OnboardingRewardBanner currentProgress={5} />
 
-      {/* Main content */}
       <div className="flex-1 flex flex-col lg:flex-row lg:items-center lg:justify-center">
-        {/* Mobile/Tablet: stacked | Desktop: side by side */}
-        <div className="flex-1 flex flex-col px-6 pb-8 lg:px-16 lg:justify-center max-w-lg mx-auto w-full">
+        <div className="flex-1 flex flex-col px-6 pb-8 lg:px-16 lg:justify-center max-w-xl mx-auto w-full">
           
-          {/* Heading + Illustration */}
           <div className="relative mt-4 mb-4 lg:mb-8">
             <AnimatePresence mode="wait">
               <motion.div
@@ -93,20 +82,20 @@ const Auth = () => {
                 className="relative"
               >
                 <div className="flex items-start">
-                  <h1 className="font-display text-[2.8rem] sm:text-[3.5rem] lg:text-[4.5rem] leading-[0.92] font-bold text-[hsl(230,40%,25%)] flex-1 z-10">
+                  <h1 className="font-display text-[3.5rem] sm:text-[4.5rem] lg:text-[5.5rem] leading-[0.90] font-bold text-[hsl(230,40%,25%)] flex-1 z-10">
                     {isLogin ? (
                       <>Hey,<br />Login<br />Now</>
                     ) : (
                       <>Continue<br />your<br />journey!</>
                     )}
                   </h1>
-                  <div className="w-[45%] sm:w-[40%] lg:w-[35%] -mt-4 -mr-2">
+                  <div className="w-[50%] sm:w-[45%] lg:w-[40%] -mt-2 -mr-2">
                     <img
                       src={isLogin ? loginIllustration : signupIllustration}
                       alt=""
                       className="w-full h-auto object-contain"
-                      width={512}
-                      height={640}
+                      width={768}
+                      height={896}
                     />
                   </div>
                 </div>
@@ -114,7 +103,6 @@ const Auth = () => {
             </AnimatePresence>
           </div>
 
-          {/* Toggle: Old user / New user */}
           <div className="flex items-center gap-2 mb-5 font-body text-sm">
             <button
               onClick={() => setIsLogin(true)}
@@ -131,7 +119,6 @@ const Auth = () => {
             </button>
           </div>
 
-          {/* Form */}
           <form onSubmit={handleSubmit} className="space-y-3">
             {!isLogin && (
               <input
@@ -161,7 +148,6 @@ const Auth = () => {
               className="w-full h-14 rounded-2xl bg-[hsl(0,0%,85%,0.5)] px-5 font-body text-sm text-foreground placeholder:text-muted-foreground outline-none border-none focus:ring-2 focus:ring-[hsl(158,17%,37%)] transition-all"
             />
 
-            {/* Forgot password (login only) */}
             {isLogin && (
               <div className="flex items-center gap-2 font-body text-sm pt-1">
                 <span className="text-muted-foreground">Forgot Password</span>
@@ -184,7 +170,6 @@ const Auth = () => {
             )}
           </form>
 
-          {/* Divider + Social */}
           <div className="mt-5">
             <div className="flex items-center gap-3 mb-4">
               <div className="flex-1 h-px bg-[hsl(0,0%,82%)]" />
@@ -215,7 +200,6 @@ const Auth = () => {
             </div>
           </div>
 
-          {/* Bottom: Enter as Guest / Login button */}
           <div className="flex items-center justify-between mt-8">
             {isLogin ? (
               <button
@@ -233,7 +217,7 @@ const Auth = () => {
               </div>
             )}
             <button
-              onClick={handleSubmit as any}
+              onClick={() => handleSubmit()}
               disabled={submitting}
               className="flex items-center gap-2 px-8 py-3 rounded-full bg-[hsl(230,40%,25%)] font-body text-sm font-semibold text-[hsl(45,80%,65%)] hover:bg-[hsl(230,40%,20%)] transition-colors disabled:opacity-50"
             >

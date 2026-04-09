@@ -7,6 +7,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { ArrowRight, ArrowLeft, MapPin, GraduationCap, Briefcase, Target } from "lucide-react";
+import OnboardingProgressBar from "@/components/onboarding/OnboardingProgressBar";
+import OnboardingRewardBanner from "@/components/onboarding/OnboardingRewardBanner";
 
 const educationLevels = ["High School", "Undergraduate", "Postgraduate", "Doctorate", "Self-taught", "Other"];
 const industries = [
@@ -50,7 +52,10 @@ const PersonalInfo = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background flex items-center justify-center p-6">
+    <div className="min-h-screen bg-[hsl(60,14%,98%)] flex flex-col">
+      <OnboardingProgressBar progress={75} />
+      <OnboardingRewardBanner currentProgress={75} />
+      <div className="flex-1 flex items-center justify-center p-6">
       <motion.div
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
@@ -58,7 +63,7 @@ const PersonalInfo = () => {
       >
         <div className="text-center space-y-2">
           <p className="font-body text-sm text-indigo font-semibold uppercase tracking-wider">Step 3 of 4</p>
-          <h1 className="font-display text-4xl text-foreground">Tell us about yourself</h1>
+          <h1 className="font-display text-4xl text-[hsl(230,40%,25%)]">Tell us about yourself</h1>
           <p className="font-body text-muted-foreground">This helps personalize your experience. You can skip and fill this in later.</p>
         </div>
 
@@ -173,6 +178,7 @@ const PersonalInfo = () => {
           </div>
         </div>
       </motion.div>
+      </div>
     </div>
   );
 };
