@@ -8,6 +8,7 @@ import ProtectedRoute from "@/components/ProtectedRoute";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import GetStarted from "./pages/GetStarted";
+import IntroSlides from "./pages/IntroSlides";
 import Auth from "./pages/Auth";
 import Welcome from "./pages/onboarding/Welcome";
 import UserTypeSelection from "./pages/onboarding/UserTypeSelection";
