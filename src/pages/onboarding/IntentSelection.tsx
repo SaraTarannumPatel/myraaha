@@ -35,8 +35,14 @@ const IntentSelection = () => {
 
   const handleContinue = async () => {
     if (!selected) return;
-    await updateProfile({ active_intent: selected as any, onboarding_status: "guided" as any });
-    navigate("/onboarding/guided");
+    const isGuest = localStorage.getItem("myraaha_is_guest") === "true";
+    if (isGuest) {
+      localStorage.setItem("myraaha_guest_intent", selected);
+      navigate("/onboarding/guided");
+    } else {
+      await updateProfile({ active_intent: selected as any, onboarding_status: "guided" as any });
+      navigate("/onboarding/guided");
+    }
   };
 
   return (
