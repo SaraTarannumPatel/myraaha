@@ -41,7 +41,7 @@ const IntroSlides = () => {
   };
 
   const handleSkip = () => {
-    navigate("/get-started");
+    navigate("/auth");
   };
 
   return (
