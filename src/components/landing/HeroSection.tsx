@@ -62,7 +62,7 @@ const HeroSection = () => {
               transition={{ duration: 0.6, delay: 0.4 }}
               className="flex flex-col sm:flex-row gap-3 sm:gap-4"
             >
-              <a href="/get-started" className="gradient-warm text-primary-foreground px-6 sm:px-8 py-3.5 sm:py-4 rounded-full font-body font-semibold text-sm sm:text-base shadow-accent hover:opacity-90 transition-opacity flex items-center justify-center gap-2 group">
+              <a href="/intro" className="gradient-warm text-primary-foreground px-6 sm:px-8 py-3.5 sm:py-4 rounded-full font-body font-semibold text-sm sm:text-base shadow-accent hover:opacity-90 transition-opacity flex items-center justify-center gap-2 group">
                 Start Your Journey
                 <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
               </a>

@@ -37,7 +37,7 @@ const Footer = () => {
           <div className="flex flex-col gap-2 sm:gap-3">
             <p className="font-body text-[10px] sm:text-xs uppercase tracking-wider text-primary font-semibold mb-1">Get Started</p>
             <Link
-              to="/get-started"
+              to="/intro"
               className="font-body text-xs sm:text-sm text-muted-foreground hover:text-foreground transition-colors"
             >
               Start Your Journey

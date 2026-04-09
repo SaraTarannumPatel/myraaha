@@ -39,7 +39,7 @@ const CTASection = () => {
             <span className="text-blue">Clarity</span> → <span className="text-primary">Direction</span> → <span className="text-terracotta">Action</span> → <span className="text-maroon">Outcome.</span> no cap.
           </p>
 
-          <a href="/get-started" className="gradient-milestone text-white px-8 sm:px-10 py-3.5 sm:py-4 rounded-full font-body font-semibold text-base sm:text-lg shadow-accent hover:opacity-90 transition-opacity inline-flex items-center gap-2 group">
+          <a href="/intro" className="gradient-milestone text-white px-8 sm:px-10 py-3.5 sm:py-4 rounded-full font-body font-semibold text-base sm:text-lg shadow-accent hover:opacity-90 transition-opacity inline-flex items-center gap-2 group">
             Get Started
             <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform sm:w-5 sm:h-5" />
           </a>

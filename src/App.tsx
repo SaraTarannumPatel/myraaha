@@ -8,6 +8,7 @@ import ProtectedRoute from "@/components/ProtectedRoute";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import GetStarted from "./pages/GetStarted";
+import IntroSlides from "./pages/IntroSlides";
 import Auth from "./pages/Auth";
 import Welcome from "./pages/onboarding/Welcome";
 import UserTypeSelection from "./pages/onboarding/UserTypeSelection";
@@ -71,6 +72,7 @@ const App = () => (
         <AuthProvider>
           <Routes>
             <Route path="/" element={<Index />} />
+            <Route path="/intro" element={<IntroSlides />} />
             <Route path="/get-started" element={<GetStarted />} />
             <Route path="/auth" element={<Auth />} />
             <Route path="/onboarding" element={<ProtectedRoute><Welcome /></ProtectedRoute>} />
