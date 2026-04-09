@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useAuth } from "@/contexts/AuthContext";
-import { GraduationCap, School, Briefcase, Rocket, Laptop, HelpCircle, ArrowRight, ArrowLeft } from "lucide-react";
+import { GraduationCap, School, Briefcase, ArrowRight, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import OnboardingProgressBar from "@/components/onboarding/OnboardingProgressBar";
