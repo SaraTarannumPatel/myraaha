@@ -7,6 +7,8 @@ import {
   ArrowRight, ArrowLeft, Lightbulb, Rocket, Zap, Brain, Users,
   Wrench, Sparkles, CheckCircle2, Globe, Building2
 } from "lucide-react";
+import OnboardingProgressBar from "@/components/onboarding/OnboardingProgressBar";
+import OnboardingRewardBanner from "@/components/onboarding/OnboardingRewardBanner";
 
 const entrepreneurSteps = [
   {

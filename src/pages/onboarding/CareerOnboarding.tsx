@@ -7,6 +7,8 @@ import {
   ArrowRight, ArrowLeft, Compass, Map, Brain, FileText, Users,
   BookOpen, Sparkles, CheckCircle2, ChevronRight
 } from "lucide-react";
+import OnboardingProgressBar from "@/components/onboarding/OnboardingProgressBar";
+import OnboardingRewardBanner from "@/components/onboarding/OnboardingRewardBanner";
 
 const careerSteps = [
   {
