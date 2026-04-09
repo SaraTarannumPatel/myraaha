@@ -209,6 +209,7 @@ const BothOnboarding = () => {
           </Button>
         </div>
       </motion.div>
+      </div>
     </div>
   );
 };

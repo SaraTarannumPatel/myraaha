@@ -206,6 +206,7 @@ const CareerOnboarding = () => {
           </Button>
         </div>
       </motion.div>
+      </div>
     </div>
   );
 };

@@ -206,6 +206,7 @@ const EntrepreneurshipOnboarding = () => {
           </Button>
         </div>
       </motion.div>
+      </div>
     </div>
   );
 };
