@@ -74,8 +74,9 @@ const App = () => (
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/intro" element={<IntroSlides />} />
-            <Route path="/get-started" element={<GetStarted />} />
             <Route path="/auth" element={<Auth />} />
+            <Route path="/guest" element={<GuestEntry />} />
+            <Route path="/onboarding" element={<ProtectedRoute><Welcome /></ProtectedRoute>} />
             <Route path="/onboarding" element={<ProtectedRoute><Welcome /></ProtectedRoute>} />
             <Route path="/onboarding/user-type" element={<ProtectedRoute><UserTypeSelection /></ProtectedRoute>} />
             <Route path="/onboarding/journey" element={<ProtectedRoute><JourneyDiscovery /></ProtectedRoute>} />
