@@ -109,7 +109,10 @@ const CareerOnboarding = () => {
   const canProceed = current.type === "preview" || (selections[current.id]?.length || 0) > 0;
 
   return (
-    <div className="min-h-screen bg-background flex items-center justify-center p-6">
+    <div className="min-h-screen bg-[hsl(60,14%,98%)] flex flex-col">
+      <OnboardingProgressBar progress={50} />
+      <OnboardingRewardBanner currentProgress={50} />
+      <div className="flex-1 flex items-center justify-center p-6">
       <motion.div
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
