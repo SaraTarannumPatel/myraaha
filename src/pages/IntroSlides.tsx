@@ -36,7 +36,7 @@ const IntroSlides = () => {
     if (current < slides.length - 1) {
       setCurrent(current + 1);
     } else {
-      navigate("/get-started");
+      navigate("/auth");
     }
   };
 
