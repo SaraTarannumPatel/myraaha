@@ -86,11 +86,11 @@ const IntroSlides = () => {
               </div>
 
               {/* Illustration - overlaps heading on mobile, separate column on desktop */}
-              <div className="absolute right-0 top-1/2 -translate-y-[45%] w-[60%] sm:w-[50%] md:w-[45%] lg:static lg:translate-y-0 lg:w-auto lg:flex-1 lg:flex lg:justify-center pointer-events-none z-0 lg:z-10">
+              <div className="absolute -right-2 top-1/2 -translate-y-[40%] w-[65%] sm:w-[55%] md:w-[50%] lg:static lg:translate-y-0 lg:w-auto lg:flex-1 lg:flex lg:justify-center pointer-events-none z-0 lg:z-10">
                 <img
                   src={slide.image}
                   alt=""
-                  className="w-full lg:w-[85%] xl:w-[75%] h-auto object-contain max-h-[50vh] lg:max-h-[55vh]"
+                  className="w-full lg:w-[90%] xl:w-[80%] h-auto object-contain"
                   width={800}
                   height={800}
                 />
