@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import { toast } from "sonner";
+import OnboardingProgressBar from "@/components/onboarding/OnboardingProgressBar";
+import OnboardingRewardBanner from "@/components/onboarding/OnboardingRewardBanner";
 import guestIllustration from "@/assets/auth-guest-illustration.png";
 
 const GuestEntry = () => {
@@ -21,22 +23,10 @@ const GuestEntry = () => {
 
   return (
     <div className="min-h-screen bg-[hsl(60,14%,98%)] flex flex-col">
-      {/* Top bar: Logo + progress */}
-      <div className="px-6 pt-6 pb-2">
-        <div className="flex items-center gap-3">
-          <div className="w-8 h-8 flex items-center justify-center">
-            <span className="font-display text-xl font-bold text-[hsl(230,40%,25%)]">M</span>
-          </div>
-          <span className="text-xs text-muted-foreground font-body">5%</span>
-          <div className="flex-1 h-1.5 rounded-full bg-[hsl(0,0%,88%)]">
-            <div className="h-full w-[5%] rounded-full bg-[hsl(158,17%,37%)]" />
-          </div>
-        </div>
-      </div>
+      <OnboardingProgressBar progress={5} />
+      <OnboardingRewardBanner currentProgress={5} />
 
-      {/* Main content */}
-      <div className="flex-1 flex flex-col px-6 pb-8 lg:px-16 lg:justify-center max-w-lg mx-auto w-full lg:max-w-none lg:mx-0">
-        {/* Heading + Illustration */}
+      <div className="flex-1 flex flex-col px-6 pb-8 lg:px-16 lg:justify-center max-w-xl mx-auto w-full">
         <div className="relative mt-4 mb-6 lg:mb-10">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -44,22 +34,21 @@ const GuestEntry = () => {
             transition={{ duration: 0.5 }}
             className="flex items-start"
           >
-            <h1 className="font-display text-[2.8rem] sm:text-[3.5rem] lg:text-[4.5rem] leading-[0.92] font-bold text-[hsl(230,40%,25%)] flex-1 z-10">
+            <h1 className="font-display text-[3.5rem] sm:text-[4.5rem] lg:text-[5.5rem] leading-[0.90] font-bold text-[hsl(230,40%,25%)] flex-1 z-10">
               Find your<br />path, at<br />your<br />pace!
             </h1>
-            <div className="w-[40%] sm:w-[35%] lg:w-[30%] -mt-4 -mr-2">
+            <div className="w-[50%] sm:w-[45%] lg:w-[40%] -mt-2 -mr-2">
               <img
                 src={guestIllustration}
                 alt=""
                 className="w-full h-auto object-contain"
-                width={512}
-                height={640}
+                width={768}
+                height={896}
               />
             </div>
           </motion.div>
         </div>
 
-        {/* Yellow pill */}
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
@@ -71,7 +60,6 @@ const GuestEntry = () => {
           </span>
         </motion.div>
 
-        {/* Name input */}
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
@@ -87,7 +75,6 @@ const GuestEntry = () => {
           />
         </motion.div>
 
-        {/* Bottom: Login/Sign Up link + Enter button */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}

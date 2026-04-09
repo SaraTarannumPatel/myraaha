@@ -3,6 +3,8 @@ import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
 import { ArrowRight, Compass, Rocket, Sparkles } from "lucide-react";
+import OnboardingProgressBar from "@/components/onboarding/OnboardingProgressBar";
+import OnboardingRewardBanner from "@/components/onboarding/OnboardingRewardBanner";
 
 const Welcome = () => {
   const navigate = useNavigate();
@@ -19,59 +21,64 @@ const Welcome = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background flex items-center justify-center p-6">
-      <motion.div
-        initial={{ opacity: 0, y: 30 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.7 }}
-        className="max-w-lg w-full text-center space-y-8"
-      >
-        <div className="space-y-2">
-          <motion.div
-            initial={{ scale: 0 }}
-            animate={{ scale: 1 }}
-            transition={{ delay: 0.3, type: "spring" }}
-            className="w-20 h-20 gradient-warm rounded-2xl mx-auto flex items-center justify-center shadow-accent"
-          >
-            <Sparkles className="text-primary-foreground" size={36} />
-          </motion.div>
-          <h1 className="font-display text-5xl text-foreground mt-6">
-            Welcome to <em className="text-gradient-warm">MyRaaha</em>
-          </h1>
-          <p className="font-body text-muted-foreground text-lg mt-4">
-            Hey{profile?.full_name ? `, ${profile.full_name}` : ""}! Let's set up your personalized journey in just a few steps.
-          </p>
-        </div>
+    <div className="min-h-screen bg-[hsl(60,14%,98%)] flex flex-col">
+      <OnboardingProgressBar progress={10} />
+      <OnboardingRewardBanner currentProgress={10} />
 
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-left">
-          {[
-            { icon: Compass, title: "Clarity", desc: "Understand your strengths & direction", color: "text-blue", bg: "bg-blue/10", borderColor: "border-blue/20" },
-            { icon: Rocket, title: "Action", desc: "Build skills & validate paths", color: "text-terracotta", bg: "bg-terracotta/10", borderColor: "border-terracotta/20" },
-            { icon: Sparkles, title: "Outcome", desc: "Real results through AI guidance", color: "text-indigo", bg: "bg-indigo/10", borderColor: "border-indigo/20" },
-          ].map((item, i) => (
-            <motion.div
-              key={item.title}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.5 + i * 0.15 }}
-              className={`bg-card rounded-xl p-4 shadow-soft border ${item.borderColor}`}
-            >
-              <div className={`w-10 h-10 rounded-lg ${item.bg} flex items-center justify-center mb-2`}>
-                <item.icon size={20} className={item.color} />
-              </div>
-              <h3 className="font-display text-lg text-foreground">{item.title}</h3>
-              <p className="font-body text-sm text-muted-foreground">{item.desc}</p>
-            </motion.div>
-          ))}
-        </div>
-
-        <Button
-          onClick={handleContinue}
-          className="gradient-warm text-primary-foreground rounded-full h-12 px-8 font-body font-semibold text-base shadow-accent"
+      <div className="flex-1 flex items-center justify-center p-6">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7 }}
+          className="max-w-lg w-full text-center space-y-8"
         >
-          Let's Go <ArrowRight size={18} />
-        </Button>
-      </motion.div>
+          <div className="space-y-2">
+            <motion.div
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              transition={{ delay: 0.3, type: "spring" }}
+              className="w-20 h-20 rounded-2xl mx-auto flex items-center justify-center shadow-accent bg-[hsl(158,17%,37%)]"
+            >
+              <Sparkles className="text-[hsl(60,14%,98%)]" size={36} />
+            </motion.div>
+            <h1 className="font-display text-5xl text-[hsl(230,40%,25%)] mt-6">
+              Welcome to <em className="text-[hsl(158,17%,37%)]">MyRaaha</em>
+            </h1>
+            <p className="font-body text-muted-foreground text-lg mt-4">
+              Hey{profile?.full_name ? `, ${profile.full_name}` : ""}! Let's set up your personalized journey in just a few steps.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-left">
+            {[
+              { icon: Compass, title: "Clarity", desc: "Understand your strengths & direction", color: "text-blue", bg: "bg-blue/10", borderColor: "border-blue/20" },
+              { icon: Rocket, title: "Action", desc: "Build skills & validate paths", color: "text-terracotta", bg: "bg-terracotta/10", borderColor: "border-terracotta/20" },
+              { icon: Sparkles, title: "Outcome", desc: "Real results through AI guidance", color: "text-indigo", bg: "bg-indigo/10", borderColor: "border-indigo/20" },
+            ].map((item, i) => (
+              <motion.div
+                key={item.title}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.5 + i * 0.15 }}
+                className={`bg-card rounded-xl p-4 shadow-soft border ${item.borderColor}`}
+              >
+                <div className={`w-10 h-10 rounded-lg ${item.bg} flex items-center justify-center mb-2`}>
+                  <item.icon size={20} className={item.color} />
+                </div>
+                <h3 className="font-display text-lg text-foreground">{item.title}</h3>
+                <p className="font-body text-sm text-muted-foreground">{item.desc}</p>
+              </motion.div>
+            ))}
+          </div>
+
+          <Button
+            onClick={handleContinue}
+            className="bg-[hsl(230,40%,25%)] text-[hsl(45,80%,65%)] rounded-full h-12 px-8 font-body font-semibold text-base hover:bg-[hsl(230,40%,20%)]"
+          >
+            Let's Go <ArrowRight size={18} />
+          </Button>
+        </motion.div>
+      </div>
     </div>
   );
 };
