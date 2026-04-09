@@ -189,6 +189,7 @@ const ConsentStep = () => {
           </Button>
         </div>
       </motion.div>
+      </div>
     </div>
   );
 };
