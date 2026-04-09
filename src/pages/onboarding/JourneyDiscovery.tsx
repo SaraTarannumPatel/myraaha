@@ -216,6 +216,25 @@ const demographicQuestions: DemographicQuestion[] = [
     required: true,
   },
   {
+    id: "age",
+    section: "Geography & Language",
+    question: "How old are you? 🎂",
+    icon: Calendar,
+    iconColor: "text-blue",
+    type: "text",
+    placeholder: "Your age",
+    inputType: "number",
+  },
+  {
+    id: "location",
+    section: "Geography & Language",
+    question: "Where are you located? 📍",
+    icon: MapPin,
+    iconColor: "text-primary",
+    type: "text",
+    placeholder: "City, State",
+  },
+  {
     id: "location_type",
     section: "Geography & Language",
     question: "What type of area do you currently live in? 📍",
@@ -290,6 +309,7 @@ const JourneyDiscovery = () => {
   const handleFinish = async () => {
     await updateProfile({
       full_name: answers.full_name || profile?.full_name || null,
+      age: answers.age ? parseInt(answers.age) : null,
       mobile_number: answers.mobile_number || null,
       gender_identity: answers.gender_identity || null,
       age_group: answers.age_group || null,
@@ -303,6 +323,7 @@ const JourneyDiscovery = () => {
       weekly_hours: answers.weekly_hours || null,
       location_type: answers.location_type || null,
       preferred_language: answers.preferred_language || null,
+      location: answers.location || null,
       journey_responses: {
         demographic_answers: answers,
         user_type: profile?.user_type,

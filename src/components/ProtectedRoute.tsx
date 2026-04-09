@@ -7,7 +7,6 @@ const onboardingRoutes: Record<string, string> = {
   journey_discovery: "/onboarding/journey",
   intent: "/onboarding/intent",
   guided: "/onboarding/guided",
-  personal_info: "/onboarding/personal-info",
   consent: "/onboarding/consent",
 };
 
@@ -17,7 +16,7 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
 
   // Allow guest users through onboarding and get-started routes
   const isGuest = localStorage.getItem("myraaha_is_guest") === "true";
-  const guestAllowedPaths = ["/onboarding", "/get-started"];
+  const guestAllowedPaths = ["/onboarding", "/dashboard"];
   const isGuestAllowedRoute = guestAllowedPaths.some(p => location.pathname.startsWith(p));
 
   if (loading) {

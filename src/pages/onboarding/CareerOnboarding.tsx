@@ -95,9 +95,9 @@ const CareerOnboarding = () => {
     } else {
       await updateProfile({
         areas_of_focus: selections.interests,
-        onboarding_status: "personal_info" as any,
+        onboarding_status: "consent" as any,
       } as any);
-      navigate("/onboarding/personal-info");
+      navigate("/onboarding/consent");
     }
   };
 

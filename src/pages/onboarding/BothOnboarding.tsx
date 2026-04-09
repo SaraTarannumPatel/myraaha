@@ -94,9 +94,9 @@ const BothOnboarding = () => {
           ...(selections.career_interests || []),
           ...(selections.startup_sectors || []),
         ],
-        onboarding_status: "personal_info" as any,
+        onboarding_status: "consent" as any,
       } as any);
-      navigate("/onboarding/personal-info");
+      navigate("/onboarding/consent");
     }
   };
 

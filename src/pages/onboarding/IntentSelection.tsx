@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useAuth } from "@/contexts/AuthContext";
-import { Briefcase, Rocket, Sparkles, ArrowRight, ArrowLeft } from "lucide-react";
+import { Briefcase, Rocket, Sparkles, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import OnboardingProgressBar from "@/components/onboarding/OnboardingProgressBar";
@@ -56,10 +56,21 @@ const IntentSelection = () => {
           animate={{ opacity: 1, y: 0 }}
           className="max-w-3xl w-full space-y-8"
         >
-          <div className="text-center space-y-2">
-            <p className="font-body text-sm text-terracotta font-semibold uppercase tracking-wider">Step 2 of 4</p>
-            <h1 className="font-display text-4xl text-[hsl(230,40%,25%)]">What's your focus?</h1>
-            <p className="font-body text-muted-foreground">You can switch between paths anytime without losing progress.</p>
+          <div className="text-center space-y-4">
+            <motion.div
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              transition={{ delay: 0.3, type: "spring" }}
+              className="w-20 h-20 gradient-warm rounded-2xl mx-auto flex items-center justify-center shadow-accent"
+            >
+              <Sparkles className="text-primary-foreground" size={36} />
+            </motion.div>
+            <h1 className="font-display text-4xl text-[hsl(230,40%,25%)]">
+              Welcome to <em className="text-gradient-warm">MyRaaha</em>
+            </h1>
+            <p className="font-body text-muted-foreground">
+              Where your career growth and startup journey meet. What's your focus?
+            </p>
           </div>
 
           <div className="grid md:grid-cols-3 gap-5">
@@ -91,10 +102,7 @@ const IntentSelection = () => {
             })}
           </div>
 
-          <div className="flex justify-between">
-            <Button variant="ghost" onClick={() => navigate("/onboarding/user-type")} className="font-body">
-              <ArrowLeft size={18} /> Back
-            </Button>
+          <div className="flex justify-center">
             <Button
               onClick={handleContinue}
               disabled={!selected}

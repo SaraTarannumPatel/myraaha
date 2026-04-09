@@ -99,7 +99,7 @@ const ConsentStep = () => {
 
     await createWelcomeNotifications();
     localStorage.removeItem("myraaha_initial_path");
-    navigate("/get-started");
+    navigate("/dashboard");
   };
 
   return (
@@ -180,7 +180,7 @@ const ConsentStep = () => {
         </div>
 
         <div className="flex justify-between">
-          <Button variant="ghost" onClick={() => navigate("/onboarding/personal-info")} className="font-body">
+          <Button variant="ghost" onClick={() => navigate("/onboarding/guided")} className="font-body">
             <ArrowLeft size={18} /> Back
           </Button>
           <Button onClick={handleContinue}
