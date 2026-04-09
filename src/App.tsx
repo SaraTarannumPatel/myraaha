@@ -84,6 +84,7 @@ const App = () => (
             <Route path="/onboarding/guided" element={<ProtectedRoute><GuidedOnboarding /></ProtectedRoute>} />
             <Route path="/onboarding/personal-info" element={<ProtectedRoute><PersonalInfo /></ProtectedRoute>} />
             <Route path="/onboarding/consent" element={<ProtectedRoute><ConsentStep /></ProtectedRoute>} />
+            <Route path="/get-started" element={<ProtectedRoute><GetStarted /></ProtectedRoute>} />
             <Route path="/dashboard" element={<ProtectedRoute><DashboardLayout /></ProtectedRoute>}>
               <Route index element={<Dashboard />} />
               {/* Career */}
