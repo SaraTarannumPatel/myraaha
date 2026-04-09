@@ -77,7 +77,6 @@ const App = () => (
             <Route path="/auth" element={<Auth />} />
             <Route path="/guest" element={<GuestEntry />} />
             <Route path="/onboarding" element={<ProtectedRoute><Welcome /></ProtectedRoute>} />
-            <Route path="/onboarding" element={<ProtectedRoute><Welcome /></ProtectedRoute>} />
             <Route path="/onboarding/user-type" element={<ProtectedRoute><UserTypeSelection /></ProtectedRoute>} />
             <Route path="/onboarding/journey" element={<ProtectedRoute><JourneyDiscovery /></ProtectedRoute>} />
             <Route path="/onboarding/intent" element={<ProtectedRoute><IntentSelection /></ProtectedRoute>} />
