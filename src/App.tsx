@@ -7,14 +7,13 @@ import { AuthProvider } from "@/contexts/AuthContext";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
-import GetStarted from "./pages/GetStarted";
 import IntroSlides from "./pages/IntroSlides";
 import Auth from "./pages/Auth";
 import GuestEntry from "./pages/GuestEntry";
 import Welcome from "./pages/onboarding/Welcome";
 import UserTypeSelection from "./pages/onboarding/UserTypeSelection";
 import IntentSelection from "./pages/onboarding/IntentSelection";
-import PersonalInfo from "./pages/onboarding/PersonalInfo";
+
 import ConsentStep from "./pages/onboarding/ConsentStep";
 import GuidedOnboarding from "./pages/onboarding/GuidedOnboarding";
 import JourneyDiscovery from "./pages/onboarding/JourneyDiscovery";
@@ -81,9 +80,7 @@ const App = () => (
             <Route path="/onboarding/journey" element={<ProtectedRoute><JourneyDiscovery /></ProtectedRoute>} />
             <Route path="/onboarding/intent" element={<ProtectedRoute><IntentSelection /></ProtectedRoute>} />
             <Route path="/onboarding/guided" element={<ProtectedRoute><GuidedOnboarding /></ProtectedRoute>} />
-            <Route path="/onboarding/personal-info" element={<ProtectedRoute><PersonalInfo /></ProtectedRoute>} />
             <Route path="/onboarding/consent" element={<ProtectedRoute><ConsentStep /></ProtectedRoute>} />
-            <Route path="/get-started" element={<ProtectedRoute><GetStarted /></ProtectedRoute>} />
             <Route path="/dashboard" element={<ProtectedRoute><DashboardLayout /></ProtectedRoute>}>
               <Route index element={<Dashboard />} />
               {/* Career */}
