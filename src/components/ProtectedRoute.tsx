@@ -15,6 +15,11 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   const { user, loading, profile } = useAuth();
   const location = useLocation();
 
+  // Allow guest users through onboarding and get-started routes
+  const isGuest = localStorage.getItem("myraaha_is_guest") === "true";
+  const guestAllowedPaths = ["/onboarding", "/get-started"];
+  const isGuestAllowedRoute = guestAllowedPaths.some(p => location.pathname.startsWith(p));
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background">
@@ -24,6 +29,9 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   }
 
   if (!user) {
+    if (isGuest && isGuestAllowedRoute) {
+      return <>{children}</>;
+    }
     return <Navigate to="/auth" state={{ from: location }} replace />;
   }
 
