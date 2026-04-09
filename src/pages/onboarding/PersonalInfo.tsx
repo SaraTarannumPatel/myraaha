@@ -7,6 +7,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { ArrowRight, ArrowLeft, MapPin, GraduationCap, Briefcase, Target } from "lucide-react";
+import OnboardingProgressBar from "@/components/onboarding/OnboardingProgressBar";
+import OnboardingRewardBanner from "@/components/onboarding/OnboardingRewardBanner";
 
 const educationLevels = ["High School", "Undergraduate", "Postgraduate", "Doctorate", "Self-taught", "Other"];
 const industries = [
@@ -176,6 +178,7 @@ const PersonalInfo = () => {
           </div>
         </div>
       </motion.div>
+      </div>
     </div>
   );
 };
