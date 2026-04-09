@@ -10,6 +10,7 @@ import NotFound from "./pages/NotFound";
 import GetStarted from "./pages/GetStarted";
 import IntroSlides from "./pages/IntroSlides";
 import Auth from "./pages/Auth";
+import GuestEntry from "./pages/GuestEntry";
 import Welcome from "./pages/onboarding/Welcome";
 import UserTypeSelection from "./pages/onboarding/UserTypeSelection";
 import IntentSelection from "./pages/onboarding/IntentSelection";
