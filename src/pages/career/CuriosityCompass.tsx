@@ -14,7 +14,7 @@ import {
   Trophy, Zap, MessageSquare, Palette, Target, Star, ChevronRight,
   Play, Check, Lightbulb, Brain, Meh, HelpCircle, Bot,
   PenLine, BookOpen, Users, Goal, TrendingUp, Activity, Eye, Layers,
-  Map, Route
+  Map, Route, CheckCircle2, ClipboardCheck
 } from "lucide-react";
 import CareerCardDeck from "@/components/career/CareerCardDeck";
 import StoryModeCards from "@/components/career/StoryModeCards";
@@ -22,6 +22,15 @@ import ChallengeModeCards from "@/components/career/ChallengeModeCards";
 import { useUserSignals } from "@/hooks/useUserSignals";
 import { useNavigate } from "react-router-dom";
 import ModuleSearchBar from "@/components/search/ModuleSearchBar";
+import {
+  getVariantQuestions,
+  detectVariant,
+  getJourneyId,
+  getJourneyQuestions,
+  journeyMetas,
+  type VariantQuestion,
+  type JourneyQuestion,
+} from "@/pages/onboarding/journeys/journeyData";
 
 const MOODS = [
   { id: "excited", label: "Excited", icon: Zap, color: "text-accent" },
@@ -718,13 +727,19 @@ const CuriosityCompass = () => {
       {/* Main Tabs */}
       {!showNextSteps && (
         <Tabs value={tab} onValueChange={setTab}>
-          <TabsList className="grid grid-cols-5 w-full max-w-2xl">
+          <TabsList className="grid grid-cols-6 w-full max-w-3xl">
             <TabsTrigger value="explore">Explore</TabsTrigger>
+            <TabsTrigger value="assessment">Assessment</TabsTrigger>
             <TabsTrigger value="quests">Quests</TabsTrigger>
             <TabsTrigger value="domains">Domains</TabsTrigger>
             <TabsTrigger value="insights">Insights</TabsTrigger>
             <TabsTrigger value="behavior">Behavior</TabsTrigger>
           </TabsList>
+
+          {/* ===== Assessment Tab ===== */}
+          <TabsContent value="assessment">
+            <AssessmentTestSection user={user} recordSignal={recordSignal} recordMultipleSignals={recordMultipleSignals} />
+          </TabsContent>
 
           {/* ===== Explore Tab ===== */}
           <TabsContent value="explore" className="space-y-6">
