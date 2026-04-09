@@ -40,7 +40,7 @@ const GetStarted = () => {
 
   const handleSelect = (path: string) => {
     localStorage.setItem("myraaha_initial_path", path);
-    navigate("/auth");
+    navigate("/dashboard");
   };
 
   return (
