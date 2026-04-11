@@ -583,7 +583,7 @@ const SelfGraph = () => {
       </motion.div>
 
       {/* Quick Stats */}
-      <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
         {[
           { label: "Clarity Score", value: `${Math.round(getLatestClarity().overall_clarity * 100)}%` },
           { label: "Traits Mapped", value: traits.length },

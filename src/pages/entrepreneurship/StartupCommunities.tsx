@@ -352,7 +352,7 @@ const StartupCommunities = () => {
       </motion.div>
 
       <Tabs defaultValue="explore" className="space-y-4">
-        <TabsList className="grid grid-cols-4 w-full">
+        <TabsList className="grid grid-cols-2 sm:grid-cols-4 w-full">
           <TabsTrigger value="explore"><Search size={14} className="mr-1" />Explore</TabsTrigger>
           <TabsTrigger value="my"><Users size={14} className="mr-1" />My Groups</TabsTrigger>
           <TabsTrigger value="ai"><Sparkles size={14} className="mr-1" />For You</TabsTrigger>

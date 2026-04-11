@@ -398,7 +398,7 @@ const SkillStacker = () => {
 
       {/* Quick Stats */}
       {activeStack && (
-        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.1 }} className="grid grid-cols-2 md:grid-cols-5 gap-3">
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.1 }} className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
           {[
             { label: "Total Skills", value: skillItems.length, icon: Layers },
             { label: "Core", value: coreCount, icon: Shield },

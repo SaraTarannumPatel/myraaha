@@ -213,3 +213,25 @@
     background-clip: text;
   }
 }
+
+/* ===== Mobile Responsive Utilities ===== */
+@layer utilities {
+  /* Scrollable tabs for mobile */
+  .tabs-scroll {
+    @apply flex overflow-x-auto gap-1 pb-1 -mx-1 px-1 scrollbar-hide;
+    scroll-snap-type: x mandatory;
+  }
+  .tabs-scroll > * {
+    @apply flex-shrink-0;
+    scroll-snap-align: start;
+  }
+}
+
+/* Hide scrollbar for tabs */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}

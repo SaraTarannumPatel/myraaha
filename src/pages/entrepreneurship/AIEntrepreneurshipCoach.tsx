@@ -247,7 +247,7 @@ const AIEntrepreneurshipCoach = () => {
       </motion.div>
 
       {/* Stats row */}
-      <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
         {[
           { label: "Ideas", value: stats.ideas, icon: Lightbulb },
           { label: "Projects", value: stats.projects, icon: Target },

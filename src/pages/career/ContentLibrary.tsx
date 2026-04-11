@@ -296,7 +296,7 @@ const ContentLibrary = () => {
 
       {/* Tabs */}
       <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-        <TabsList className="grid grid-cols-6 w-full max-w-3xl">
+        <TabsList className="flex overflow-x-auto w-full max-w-3xl gap-1">
           <TabsTrigger value="discover" className="gap-1 text-xs"><Compass size={14} /> Discover</TabsTrigger>
           <TabsTrigger value="tracks" className="gap-1 text-xs"><GraduationCap size={14} /> Tracks</TabsTrigger>
           <TabsTrigger value="capsules" className="gap-1 text-xs"><Zap size={14} /> Capsules</TabsTrigger>

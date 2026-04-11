@@ -262,7 +262,7 @@ const VirtualCareerCoach = () => {
       </motion.div>
 
       <Tabs value={activeTab} onValueChange={setActiveTab}>
-        <TabsList className="grid grid-cols-3 sm:grid-cols-7 w-full">
+        <TabsList className="flex overflow-x-auto w-full gap-1">
           <TabsTrigger value="coach" className="text-xs">💬 Coach</TabsTrigger>
           <TabsTrigger value="alignment" className="text-xs">🎯 Alignment</TabsTrigger>
           <TabsTrigger value="progress" className="text-xs">📊 Progress</TabsTrigger>
@@ -284,7 +284,7 @@ const VirtualCareerCoach = () => {
           </div>
 
           <Card className="border-border/50">
-            <div ref={chatContainerRef} className="h-[450px] overflow-y-auto p-4 space-y-4">
+            <div ref={chatContainerRef} className="h-[300px] sm:h-[450px] overflow-y-auto p-4 space-y-4">
               <AnimatePresence initial={false}>
                 {messages.map((msg, i) => (
                   <motion.div key={i} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
@@ -332,7 +332,7 @@ const VirtualCareerCoach = () => {
               </Button>
             )}
           </div>
-          <div className="grid grid-cols-2 md:grid-cols-5 gap-2">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2">
             {[
               { label: "SkillStacker", icon: Zap, path: "/dashboard/skill-stacker" },
               { label: "Roadmap", icon: Map, path: "/dashboard/roadmap" },
