@@ -590,7 +590,7 @@ const FounderProfileMock = () => {
             <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center"><User size={16} className="text-primary" /></div>
             <div><p className="font-display text-xs text-foreground">Founder Dashboard</p><p className="text-[7px] font-body text-muted-foreground">Auto-aggregated from all modules</p></div>
           </div>
-          <div className="grid grid-cols-4 gap-2">{[{ v: "12", l: "Ideas", i: Lightbulb }, { v: "8", l: "Challenges", i: Shield }, { v: "3", l: "Projects", i: Rocket }, { v: "15", l: "Skills", i: Zap }].map((s, i) => (
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">{[{ v: "12", l: "Ideas", i: Lightbulb }, { v: "8", l: "Challenges", i: Shield }, { v: "3", l: "Projects", i: Rocket }, { v: "15", l: "Skills", i: Zap }].map((s, i) => (
             <motion.div key={s.l} initial={{ scale: 0.8, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} transition={{ delay: i * 0.08 }} className="p-2 rounded-lg bg-muted/30 text-center border border-border">
               <s.i size={10} className="mx-auto text-primary mb-0.5" /><p className="text-sm font-display text-foreground">{s.v}</p><p className="text-[6px] font-body text-muted-foreground">{s.l}</p>
             </motion.div>
