@@ -364,7 +364,7 @@ const Journal = () => {
                   <CardDescription>No judgment. Just honesty with yourself.</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-5">
-                  <div className="grid grid-cols-4 gap-2">
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
                     {moods.map(m => (
                       <button key={m.label} onClick={() => setCheckinForm({ ...checkinForm, mood: `${m.emoji} ${m.label}` })}
                         className={`flex flex-col items-center gap-1 p-3 rounded-xl font-body text-xs transition-all ${checkinForm.mood === `${m.emoji} ${m.label}` ? m.color + " ring-2 ring-current scale-105" : "bg-muted/50 text-muted-foreground hover:bg-muted"}`}>
