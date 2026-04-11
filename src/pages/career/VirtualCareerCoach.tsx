@@ -284,7 +284,7 @@ const VirtualCareerCoach = () => {
           </div>
 
           <Card className="border-border/50">
-            <div ref={chatContainerRef} className="h-[450px] overflow-y-auto p-4 space-y-4">
+            <div ref={chatContainerRef} className="h-[300px] sm:h-[450px] overflow-y-auto p-4 space-y-4">
               <AnimatePresence initial={false}>
                 {messages.map((msg, i) => (
                   <motion.div key={i} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
