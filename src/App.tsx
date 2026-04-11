@@ -17,6 +17,7 @@ import IntentSelection from "./pages/onboarding/IntentSelection";
 import ConsentStep from "./pages/onboarding/ConsentStep";
 import GuidedOnboarding from "./pages/onboarding/GuidedOnboarding";
 import JourneyDiscovery from "./pages/onboarding/JourneyDiscovery";
+import OTPVerification from "./pages/OTPVerification";
 import ResetPassword from "./pages/ResetPassword";
 import DashboardLayout from "./layouts/DashboardLayout";
 import Dashboard from "./pages/Dashboard";
@@ -75,6 +76,7 @@ const App = () => (
             <Route path="/intro" element={<IntroSlides />} />
             <Route path="/auth" element={<Auth />} />
             <Route path="/guest" element={<GuestEntry />} />
+            <Route path="/verify-otp" element={<OTPVerification />} />
             <Route path="/onboarding" element={<ProtectedRoute><Welcome /></ProtectedRoute>} />
             <Route path="/onboarding/user-type" element={<ProtectedRoute><UserTypeSelection /></ProtectedRoute>} />
             <Route path="/onboarding/journey" element={<ProtectedRoute><JourneyDiscovery /></ProtectedRoute>} />
