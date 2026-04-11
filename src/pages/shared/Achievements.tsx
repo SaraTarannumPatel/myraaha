@@ -483,7 +483,7 @@ const Achievements = () => {
       </motion.div>
 
       {/* Stats Row */}
-      <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
         {[
           { icon: Medal, label: "Points", value: totalPoints, accent: true },
           { icon: Award, label: "Badges", value: `${achievements.length}/${BADGE_TEMPLATES.length}` },

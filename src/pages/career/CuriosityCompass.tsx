@@ -983,7 +983,7 @@ const CuriosityCompass = () => {
                     <CardDescription>Select as many as you like — trust your instincts</CardDescription>
                   </CardHeader>
                   <CardContent>
-                    <div className="grid grid-cols-4 md:grid-cols-8 gap-3">
+                    <div className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 gap-3">
                       {VISUAL_ICONS.map(icon => {
                         const selected = visualSelections.includes(icon.id);
                         return (

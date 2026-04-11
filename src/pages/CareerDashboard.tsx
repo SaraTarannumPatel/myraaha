@@ -520,7 +520,7 @@ const CareerDashboard = () => {
           </CardHeader>
           <CardContent>
             <Progress value={profile?.completion_percentage || 0} className="h-3 mb-6" />
-            <div className="grid grid-cols-3 sm:grid-cols-6 gap-4">
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3">
               {displayStats.map(s => (
                 <div key={s.label} className="text-center">
                   <div className={`w-10 h-10 rounded-lg ${s.color} flex items-center justify-center mx-auto mb-1`}>
@@ -549,7 +549,7 @@ const CareerDashboard = () => {
           {/* Quick Actions */}
           <div>
             <h2 className="font-display text-xl text-foreground mb-4">Quick Actions</h2>
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
               {careerQuickActions.map((action, i) => (
                 <motion.div key={action.path} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 + i * 0.05 }}>
                   <Link to={action.path} className="group flex flex-col items-center p-5 bg-card rounded-xl border border-border hover:border-primary/30 hover:shadow-soft transition-all text-center h-full">
