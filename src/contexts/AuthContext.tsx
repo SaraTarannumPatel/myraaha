@@ -44,6 +44,7 @@ interface AuthContextType {
   session: Session | null;
   profile: Profile | null;
   loading: boolean;
+  isReady: boolean;
   signUp: (email: string, password: string, fullName: string) => Promise<{ error: any }>;
   signIn: (email: string, password: string) => Promise<{ error: any }>;
   signOut: () => Promise<void>;
@@ -64,6 +65,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [session, setSession] = useState<Session | null>(null);
   const [profile, setProfile] = useState<Profile | null>(null);
   const [loading, setLoading] = useState(true);
+  const [isReady, setIsReady] = useState(false);
 
   const fetchProfile = async (userId: string) => {
     const { data } = await supabase
@@ -79,26 +81,33 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   useEffect(() => {
+    // Set up listener FIRST
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      async (event, session) => {
+      (_event, session) => {
         setSession(session);
         setUser(session?.user ?? null);
         if (session?.user) {
+          // Use setTimeout to avoid deadlock in onAuthStateChange
           setTimeout(() => fetchProfile(session.user.id), 0);
         } else {
           setProfile(null);
         }
-        setLoading(false);
       }
     );
 
+    // THEN check current session
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
       setUser(session?.user ?? null);
       if (session?.user) {
-        fetchProfile(session.user.id);
+        fetchProfile(session.user.id).finally(() => {
+          setLoading(false);
+          setIsReady(true);
+        });
+      } else {
+        setLoading(false);
+        setIsReady(true);
       }
-      setLoading(false);
     });
 
     return () => subscription.unsubscribe();
@@ -136,7 +145,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, session, profile, loading, signUp, signIn, signOut, updateProfile, refreshProfile }}>
+    <AuthContext.Provider value={{ user, session, profile, loading, isReady, signUp, signIn, signOut, updateProfile, refreshProfile }}>
       {children}
     </AuthContext.Provider>
   );

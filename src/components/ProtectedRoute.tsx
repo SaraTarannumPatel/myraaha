@@ -11,18 +11,26 @@ const onboardingRoutes: Record<string, string> = {
 };
 
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
-  const { user, loading, profile } = useAuth();
+  const { user, loading, isReady, profile } = useAuth();
   const location = useLocation();
 
-  // Allow guest users through onboarding and get-started routes
+  // Allow guest users through onboarding and dashboard routes
   const isGuest = localStorage.getItem("myraaha_is_guest") === "true";
   const guestAllowedPaths = ["/onboarding", "/dashboard"];
   const isGuestAllowedRoute = guestAllowedPaths.some(p => location.pathname.startsWith(p));
 
-  if (loading) {
+  // Show loading only briefly while auth initializes
+  if (!isReady || loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-background">
-        <div className="animate-pulse font-display text-2xl text-foreground">Loading...</div>
+      <div className="h-[100dvh] flex items-center justify-center bg-[hsl(60,14%,98%)]">
+        <div className="flex flex-col items-center gap-3">
+          <div className="w-10 h-10 bg-[hsl(230,40%,25%)] rounded-lg flex items-center justify-center">
+            <span className="text-[hsl(45,80%,65%)] font-display text-lg font-bold">M</span>
+          </div>
+          <div className="w-32 h-1 bg-[hsl(0,0%,85%,0.5)] rounded-full overflow-hidden">
+            <div className="h-full bg-[hsl(230,40%,25%)] rounded-full animate-pulse w-1/2" />
+          </div>
+        </div>
       </div>
     );
   }
@@ -40,7 +48,6 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   }
 
   // If user has NOT completed onboarding and is NOT on an onboarding route, redirect to their step
-  // But ONLY if they haven't completed onboarding (new sign-ups)
   if (profile && profile.onboarding_status !== "complete" && !location.pathname.startsWith("/onboarding")) {
     const step = profile.onboarding_status || "welcome";
     const route = onboardingRoutes[step] || "/onboarding";

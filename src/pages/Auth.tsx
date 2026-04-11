@@ -15,7 +15,6 @@ const Auth = () => {
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [fullName, setFullName] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const { signIn, signUp, user, profile } = useAuth();
   const navigate = useNavigate();
@@ -38,12 +37,7 @@ const Auth = () => {
       const { error } = await signIn(email, password);
       if (error) toast.error(error.message);
     } else {
-      if (!fullName.trim()) {
-        toast.error("Please enter your name");
-        setSubmitting(false);
-        return;
-      }
-      const { error } = await signUp(email, password, fullName);
+      const { error } = await signUp(email, password, email.split("@")[0]);
       if (error) toast.error(error.message);
       else toast.success("Check your email to confirm your account!");
     }
@@ -64,14 +58,14 @@ const Auth = () => {
   if (user) return null;
 
   return (
-    <div className="min-h-screen bg-[hsl(60,14%,98%)] flex flex-col">
+    <div className="h-[100dvh] bg-[hsl(60,14%,98%)] flex flex-col overflow-hidden">
       <OnboardingProgressBar progress={5} />
       <OnboardingRewardBanner currentProgress={5} />
 
-      <div className="flex-1 flex items-center justify-center px-4 py-4">
+      <div className="flex-1 flex items-center justify-center px-4">
         <div className="flex flex-col w-full max-w-md">
           
-          <div className="relative mb-3 lg:mb-4">
+          <div className="relative mb-3">
             <AnimatePresence mode="wait">
               <motion.div
                 key={isLogin ? "login" : "signup"}
@@ -120,16 +114,6 @@ const Auth = () => {
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-3">
-            {!isLogin && (
-              <input
-                type="text"
-                value={fullName}
-                onChange={(e) => setFullName(e.target.value)}
-                placeholder="Your Full Name"
-                required
-                className="w-full h-14 rounded-2xl bg-[hsl(0,0%,85%,0.5)] px-5 font-body text-sm text-foreground placeholder:text-muted-foreground outline-none border-none focus:ring-2 focus:ring-[hsl(158,17%,37%)] transition-all"
-              />
-            )}
             <input
               type="email"
               value={email}

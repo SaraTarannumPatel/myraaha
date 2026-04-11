@@ -45,27 +45,27 @@ const IntroSlides = () => {
   };
 
   return (
-    <div className="h-[100dvh] bg-background flex flex-col overflow-hidden">
+    <div className="h-[100dvh] bg-[hsl(60,14%,98%)] flex flex-col overflow-hidden">
       {/* Header */}
       <div className="flex items-center justify-between px-6 sm:px-8 lg:px-16 pt-5 sm:pt-6 shrink-0">
         <div className="flex items-center gap-2">
-          <div className="w-7 h-7 bg-foreground rounded-md flex items-center justify-center">
-            <span className="text-background font-display text-sm font-bold">M</span>
+          <div className="w-7 h-7 bg-[hsl(230,40%,25%)] rounded-md flex items-center justify-center">
+            <span className="text-[hsl(45,80%,65%)] font-display text-sm font-bold">M</span>
           </div>
-          <span className="font-display text-base text-foreground tracking-tight">MyRaaha</span>
+          <span className="font-display text-base text-[hsl(230,40%,25%)] tracking-tight">MyRaaha</span>
         </div>
         <button
           onClick={handleSkip}
-          className="font-body text-sm text-foreground/70 hover:text-foreground transition-colors"
+          className="font-body text-sm text-[hsl(230,40%,25%,0.7)] hover:text-[hsl(230,40%,25%)] transition-colors"
         >
           Skip
         </button>
       </div>
 
-      {/* Content wrapper - takes remaining height, split into heading area + bottom area */}
+      {/* Content wrapper */}
       <div className="flex-1 flex flex-col px-6 sm:px-8 lg:px-16 max-w-7xl mx-auto w-full min-h-0">
 
-        {/* Heading + Illustration area - takes ~55% on mobile */}
+        {/* Heading + Illustration area */}
         <div className="flex-[3] flex items-center min-h-0">
           <AnimatePresence mode="wait">
             <motion.div
@@ -79,14 +79,14 @@ const IntroSlides = () => {
               <div className="relative lg:flex lg:items-center lg:gap-16 xl:gap-24">
                 {/* Heading */}
                 <div className="relative z-10 lg:flex-1">
-                  <h1 className="font-display text-[4.2rem] sm:text-[5rem] md:text-[6rem] lg:text-[7rem] xl:text-[8rem] text-foreground leading-[0.88] tracking-[-0.02em] font-bold">
+                  <h1 className="font-display text-[4.2rem] sm:text-[5rem] md:text-[6rem] lg:text-[7rem] xl:text-[8rem] text-[hsl(230,40%,25%)] leading-[0.88] tracking-[-0.02em] font-bold">
                     {slide.heading.map((word, i) => (
                       <span key={i} className="block">{word}</span>
                     ))}
                   </h1>
                 </div>
 
-                {/* Illustration overlapping on mobile/tablet */}
+                {/* Illustration */}
                 <div className="absolute -right-2 top-1/2 -translate-y-[40%] w-[65%] sm:w-[55%] md:w-[48%] lg:static lg:translate-y-0 lg:w-auto lg:flex-1 lg:flex lg:justify-center pointer-events-none z-0 lg:z-10">
                   <img
                     src={slide.image}
@@ -101,7 +101,7 @@ const IntroSlides = () => {
           </AnimatePresence>
         </div>
 
-        {/* Bottom section - subtitle, CTA pill, nav */}
+        {/* Bottom section */}
         <div className="flex-[2] flex flex-col justify-end pb-8 sm:pb-10 lg:pb-12 min-h-0">
           <AnimatePresence mode="wait">
             <motion.div
@@ -112,13 +112,13 @@ const IntroSlides = () => {
               transition={{ duration: 0.3, delay: 0.1 }}
             >
               {/* Subtitle */}
-              <p className="font-display italic text-[1.15rem] sm:text-xl md:text-2xl lg:text-[1.65rem] text-foreground/80 leading-[1.35] max-w-[22rem] sm:max-w-md lg:max-w-lg mb-5 sm:mb-6">
+              <p className="font-display italic text-[1.15rem] sm:text-xl md:text-2xl lg:text-[1.65rem] text-[hsl(230,40%,25%,0.8)] leading-[1.35] max-w-[22rem] sm:max-w-md lg:max-w-lg mb-5 sm:mb-6">
                 {slide.subtitle}
               </p>
 
               {/* CTA pill */}
               <div className="mb-6 sm:mb-8">
-                <span className="inline-block font-body text-[0.8rem] sm:text-sm text-foreground bg-[hsl(45,80%,80%)] rounded-full px-5 sm:px-6 py-2.5 sm:py-3">
+                <span className="inline-block font-body text-[0.8rem] sm:text-sm text-[hsl(230,40%,25%)] bg-[hsl(45,80%,80%)] rounded-full px-5 sm:px-6 py-2.5 sm:py-3">
                   {slide.cta}
                 </span>
               </div>
@@ -132,8 +132,8 @@ const IntroSlides = () => {
                       onClick={() => setCurrent(i)}
                       className={`h-2 rounded-full transition-all duration-300 ${
                         i === current
-                          ? "bg-foreground w-6"
-                          : "bg-muted-foreground/25 w-2"
+                          ? "bg-[hsl(230,40%,25%)] w-6"
+                          : "bg-[hsl(230,40%,25%,0.2)] w-2"
                       }`}
                     />
                   ))}
@@ -141,7 +141,7 @@ const IntroSlides = () => {
 
                 <button
                   onClick={handleNext}
-                  className="flex items-center gap-2 font-display text-sm text-background bg-[hsl(240,50%,20%)] rounded-full px-6 py-3 hover:bg-[hsl(240,50%,25%)] transition-colors"
+                  className="flex items-center gap-2 font-display text-sm text-[hsl(45,80%,65%)] bg-[hsl(230,40%,25%)] rounded-full px-6 py-3 hover:bg-[hsl(230,40%,20%)] transition-colors"
                 >
                   {current === slides.length - 1 ? "Get Started" : "Next"}
                   <ArrowRight size={16} />
