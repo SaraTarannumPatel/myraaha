@@ -164,7 +164,7 @@ const OTPVerification = () => {
               value={digit}
               onChange={(e) => handleChange(i, e.target.value)}
               onKeyDown={(e) => handleKeyDown(i, e)}
-              className="w-16 h-20 rounded-2xl bg-[hsl(230,40%,25%)] text-center font-display text-3xl text-[hsl(45,80%,65%)] outline-none focus:ring-2 focus:ring-[hsl(158,17%,37%)] transition-all"
+              className="w-14 h-16 sm:w-16 sm:h-20 rounded-2xl bg-[hsl(230,40%,25%)] text-center font-display text-2xl sm:text-3xl text-[hsl(45,80%,65%)] outline-none focus:ring-2 focus:ring-[hsl(158,17%,37%)] transition-all"
             />
           ))}
         </motion.div>
