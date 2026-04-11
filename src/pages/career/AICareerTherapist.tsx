@@ -327,7 +327,7 @@ const AICareerTherapist = () => {
           </div>
 
           <Card className="border-border/50">
-            <div className="h-[420px] overflow-y-auto p-4 space-y-4">
+            <div className="h-[300px] sm:h-[420px] overflow-y-auto p-4 space-y-4">
               {messages.length === 0 && (
                 <div className="text-center py-12 space-y-3">
                   <Heart className="h-10 w-10 mx-auto text-pink-500/50" />
