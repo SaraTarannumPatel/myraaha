@@ -212,7 +212,7 @@ const DashboardLayout = () => {
       </div>
 
       <main className="flex-1 md:ml-64 mt-14 md:mt-0">
-        <div className="p-6 md:p-8 max-w-6xl mx-auto">
+        <div className="px-4 py-4 sm:p-6 md:p-8 max-w-6xl mx-auto">
           <Outlet />
         </div>
       </main>
