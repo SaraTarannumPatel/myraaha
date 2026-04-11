@@ -305,7 +305,7 @@ const AICareerTherapist = () => {
       </motion.div>
 
       <Tabs value={activeTab} onValueChange={setActiveTab}>
-        <TabsList className="grid grid-cols-7 w-full">
+        <TabsList className="flex overflow-x-auto w-full gap-1">
           <TabsTrigger value="chat" className="text-xs">💬 Talk</TabsTrigger>
           <TabsTrigger value="tools" className="text-xs">🧘 Tools</TabsTrigger>
           <TabsTrigger value="checkin" className="text-xs">💓 Check-in</TabsTrigger>

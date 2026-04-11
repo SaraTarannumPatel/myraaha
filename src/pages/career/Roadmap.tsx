@@ -547,7 +547,7 @@ const Roadmap = () => {
 
       {/* Main Content */}
       <Tabs value={activeTab} onValueChange={setActiveTab}>
-        <TabsList className="grid w-full grid-cols-6">
+        <TabsList className="flex overflow-x-auto w-full gap-1">
           <TabsTrigger value="suggested" className="gap-1"><Sparkles size={14} /> For You</TabsTrigger>
           <TabsTrigger value="timeline">Timeline</TabsTrigger>
           <TabsTrigger value="tasks">Tasks</TabsTrigger>

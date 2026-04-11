@@ -262,7 +262,7 @@ const VirtualCareerCoach = () => {
       </motion.div>
 
       <Tabs value={activeTab} onValueChange={setActiveTab}>
-        <TabsList className="grid grid-cols-3 sm:grid-cols-7 w-full">
+        <TabsList className="flex overflow-x-auto w-full gap-1">
           <TabsTrigger value="coach" className="text-xs">💬 Coach</TabsTrigger>
           <TabsTrigger value="alignment" className="text-xs">🎯 Alignment</TabsTrigger>
           <TabsTrigger value="progress" className="text-xs">📊 Progress</TabsTrigger>

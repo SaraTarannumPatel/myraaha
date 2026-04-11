@@ -107,7 +107,7 @@ const CareerCardCollections = () => {
       </div>
 
       <Tabs value={activeTab} onValueChange={v => setActiveTab(v as InteractionType)}>
-        <TabsList className="grid grid-cols-4 w-full max-w-lg">
+        <TabsList className="grid grid-cols-2 sm:grid-cols-4 w-full max-w-lg">
           {TAB_CONFIG.map(t => (
             <TabsTrigger key={t.key} value={t.key} className="flex items-center gap-1.5">
               <t.icon size={14} /> {t.label}

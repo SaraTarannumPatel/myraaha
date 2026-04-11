@@ -932,7 +932,7 @@ const CuriosityCompass = () => {
       {/* Main Tabs */}
       {!showNextSteps && (
         <Tabs value={tab} onValueChange={setTab}>
-          <TabsList className="grid grid-cols-6 w-full max-w-3xl">
+          <TabsList className="flex overflow-x-auto w-full max-w-3xl gap-1">
             <TabsTrigger value="explore">Explore</TabsTrigger>
             <TabsTrigger value="assessment">Assessment</TabsTrigger>
             <TabsTrigger value="quests">Quests</TabsTrigger>
