@@ -117,6 +117,14 @@ const ConsentStep = () => {
     <div className="min-h-screen bg-[hsl(60,14%,98%)] flex flex-col">
       <OnboardingProgressBar progress={90} />
       <OnboardingRewardBanner currentProgress={90} />
+      {showReward && (
+        <OnboardingRewardCelebration
+          emoji={showReward.emoji}
+          title={showReward.title}
+          description={showReward.description}
+          onContinue={() => setShowReward(null)}
+        />
+      )}
       <div className="flex-1 flex items-center justify-center p-6">
       <motion.div
         initial={{ opacity: 0, y: 30 }}
