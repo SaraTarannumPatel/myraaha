@@ -289,10 +289,16 @@ const AssessmentTestSection = ({ user, recordSignal, recordMultipleSignals }: { 
 };
 
 const CuriosityCompass = () => {
-  const { user } = useAuth();
+  const { user, profile } = useAuth();
   const navigate = useNavigate();
   const { recordSignal, recordMultipleSignals, recordTextSignals, getAggregatedSignals } = useUserSignals();
-  const [tab, setTab] = useState("explore");
+  const [tab, setTab] = useState("assessment");
+  const [showCelebration, setShowCelebration] = useState(true);
+
+  // Check if both assessments are completed
+  const discoveryDone = !!profile?.journey_responses?.assessment_completed;
+  const psychometricDone = !!profile?.journey_responses?.psychometric_completed;
+  const bothAssessmentsDone = discoveryDone && psychometricDone;
   const [mode, setMode] = useState<string | null>(null);
   const [careerCards, setCareerCards] = useState<any[]>([]);
   const [interactions, setInteractions] = useState<Record<string, string>>({});
