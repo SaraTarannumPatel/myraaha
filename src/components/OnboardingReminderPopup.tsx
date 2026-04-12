@@ -115,7 +115,7 @@ const OnboardingReminderPopup = () => {
 
   const handleAction = () => {
     if (currentStep) {
-      navigate(currentStep.route);
+      navigate(currentStep.route, { state: { fromReminder: true } });
     }
     setVisible(false);
   };
