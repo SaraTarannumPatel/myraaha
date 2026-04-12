@@ -198,7 +198,7 @@ const AssessmentTestSection = ({ user, recordSignal, recordMultipleSignals }: { 
         <CardHeader className="pb-2">
           <CardTitle className="flex items-center gap-2 text-lg">
             <ClipboardCheck size={20} className="text-accent-foreground" />
-            Psychometric Assessment Test
+            Discover Yourself Deeply
           </CardTitle>
           <CardDescription>
             These questions help calibrate your compass — no right or wrong answers. Your responses shape AI recommendations, roadmaps, and career cards across the app.
