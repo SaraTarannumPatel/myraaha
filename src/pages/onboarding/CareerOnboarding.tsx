@@ -127,8 +127,22 @@ const CareerOnboarding = () => {
 
   return (
     <div className="min-h-screen bg-[hsl(60,14%,98%)] flex flex-col">
-      <OnboardingProgressBar progress={50} />
-      <OnboardingRewardBanner currentProgress={50} />
+      <OnboardingProgressBar progress={progress} />
+      <OnboardingRewardBanner currentProgress={progress} />
+
+      {/* Reward Celebration */}
+      {showReward && (
+        <OnboardingRewardCelebration
+          emoji={showReward.emoji}
+          title={showReward.title}
+          description={showReward.description}
+          onContinue={() => {
+            setShownRewards([...shownRewards, showReward.rewardKey]);
+            setShowReward(null);
+          }}
+        />
+      )}
+
       <div className="flex-1 flex items-center justify-center p-6">
       <motion.div
         initial={{ opacity: 0, y: 30 }}
