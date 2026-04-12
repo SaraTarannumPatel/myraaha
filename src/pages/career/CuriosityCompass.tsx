@@ -942,19 +942,57 @@ const CuriosityCompass = () => {
 
       {/* Main Tabs */}
       {!showNextSteps && (
-        <Tabs value={tab} onValueChange={setTab}>
+        <Tabs value={tab} onValueChange={(v) => {
+          // Block locked tabs
+          if (!bothAssessmentsDone && !["assessment", "psychometric"].includes(v)) {
+            toast.info("Complete both assessments first to unlock this section.");
+            return;
+          }
+          setTab(v);
+        }}>
           <TabsList className="flex overflow-x-auto w-full max-w-3xl gap-1">
-            <TabsTrigger value="explore">Explore</TabsTrigger>
-            <TabsTrigger value="assessment">Assessment</TabsTrigger>
-            <TabsTrigger value="quests">Quests</TabsTrigger>
-            <TabsTrigger value="domains">Domains</TabsTrigger>
-            <TabsTrigger value="insights">Insights</TabsTrigger>
-            <TabsTrigger value="behavior">Behavior</TabsTrigger>
+            <TabsTrigger value="assessment">Discover Yourself</TabsTrigger>
+            <TabsTrigger value="psychometric">Psychometric</TabsTrigger>
+            <TabsTrigger value="explore" disabled={!bothAssessmentsDone} className={!bothAssessmentsDone ? "opacity-50" : ""}>
+              {!bothAssessmentsDone && <Lock size={12} className="mr-1" />}Explore
+            </TabsTrigger>
+            <TabsTrigger value="quests" disabled={!bothAssessmentsDone} className={!bothAssessmentsDone ? "opacity-50" : ""}>
+              {!bothAssessmentsDone && <Lock size={12} className="mr-1" />}Quests
+            </TabsTrigger>
+            <TabsTrigger value="domains" disabled={!bothAssessmentsDone} className={!bothAssessmentsDone ? "opacity-50" : ""}>
+              {!bothAssessmentsDone && <Lock size={12} className="mr-1" />}Domains
+            </TabsTrigger>
+            <TabsTrigger value="insights" disabled={!bothAssessmentsDone} className={!bothAssessmentsDone ? "opacity-50" : ""}>
+              {!bothAssessmentsDone && <Lock size={12} className="mr-1" />}Insights
+            </TabsTrigger>
+            <TabsTrigger value="behavior" disabled={!bothAssessmentsDone} className={!bothAssessmentsDone ? "opacity-50" : ""}>
+              {!bothAssessmentsDone && <Lock size={12} className="mr-1" />}Behavior
+            </TabsTrigger>
           </TabsList>
 
-          {/* ===== Assessment Tab ===== */}
+          {/* Assessment Gate - shown on locked tabs */}
+          {!bothAssessmentsDone && !["assessment", "psychometric"].includes(tab) && (
+            <div className="mt-6">
+              <AssessmentGate onGoToAssessment={(t) => setTab(t === "discovery" ? "assessment" : "psychometric")} />
+            </div>
+          )}
+
+          {/* ===== Discovery Assessment Tab (renamed from Psychometric Assessment Test) ===== */}
           <TabsContent value="assessment">
             <AssessmentTestSection user={user} recordSignal={recordSignal} recordMultipleSignals={recordMultipleSignals} />
+          </TabsContent>
+
+          {/* ===== Psychometric Test Tab (new 22-question test) ===== */}
+          <TabsContent value="psychometric">
+            <PsychometricTest
+              userId={user!.id}
+              onComplete={() => {
+                if (discoveryDone) {
+                  toast.success("Both assessments complete! All sections unlocked 🎉");
+                }
+              }}
+              recordSignal={recordSignal}
+            />
           </TabsContent>
 
           {/* ===== Explore Tab ===== */}
