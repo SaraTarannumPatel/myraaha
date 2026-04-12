@@ -74,9 +74,24 @@ const CareerOnboarding = () => {
     learning: [],
     strengths: [],
   });
+  const [showReward, setShowReward] = useState<typeof ONBOARDING_REWARDS[0] | null>(null);
+  const [shownRewards, setShownRewards] = useState<string[]>([]);
   const { updateProfile } = useAuth();
   const navigate = useNavigate();
   const current = careerSteps[step];
+
+  // Calculate progress based on step — career onboarding is 50-80% range
+  const progress = 50 + (step / careerSteps.length) * 30;
+
+  // Check for reward unlocks at each step change
+  useEffect(() => {
+    const reward = ONBOARDING_REWARDS.find(
+      (r) => r.percent <= progress && !shownRewards.includes(r.rewardKey)
+    );
+    if (reward) {
+      setShowReward(reward);
+    }
+  }, [step, progress]);
 
   const toggleOption = (option: string) => {
     const key = current.id;
