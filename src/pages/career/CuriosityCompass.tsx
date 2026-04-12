@@ -14,7 +14,7 @@ import {
   Trophy, Zap, MessageSquare, Palette, Target, Star, ChevronRight,
   Play, Check, Lightbulb, Brain, Meh, HelpCircle, Bot,
   PenLine, BookOpen, Users, Goal, TrendingUp, Activity, Eye, Layers,
-  Map, Route, CheckCircle2, ClipboardCheck
+  Map, Route, CheckCircle2, ClipboardCheck, Lock
 } from "lucide-react";
 import CareerCardDeck from "@/components/career/CareerCardDeck";
 import StoryModeCards from "@/components/career/StoryModeCards";
@@ -22,6 +22,9 @@ import ChallengeModeCards from "@/components/career/ChallengeModeCards";
 import { useUserSignals } from "@/hooks/useUserSignals";
 import { useNavigate } from "react-router-dom";
 import ModuleSearchBar from "@/components/search/ModuleSearchBar";
+import PsychometricTest from "@/components/curiositycompass/PsychometricTest";
+import AssessmentGate from "@/components/curiositycompass/AssessmentGate";
+import OnboardingCelebration from "@/components/curiositycompass/OnboardingCelebration";
 import {
   getVariantQuestions,
   detectVariant,
