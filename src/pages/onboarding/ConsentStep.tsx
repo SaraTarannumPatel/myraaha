@@ -15,6 +15,16 @@ const ConsentStep = () => {
   const navigate = useNavigate();
   const [consentData, setConsentData] = useState(false);
   const [consentMentor, setConsentMentor] = useState(false);
+  const [showReward, setShowReward] = useState<typeof ONBOARDING_REWARDS[0] | null>(null);
+
+  // Show 90% reward on mount
+  useEffect(() => {
+    const reward = ONBOARDING_REWARDS.find((r) => r.percent === 90);
+    if (reward) {
+      const timer = setTimeout(() => setShowReward(reward), 500);
+      return () => clearTimeout(timer);
+    }
+  }, []);
 
   const createWelcomeNotifications = async () => {
     if (!user) return;
