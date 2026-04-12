@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useAuth } from "@/contexts/AuthContext";
@@ -8,12 +8,23 @@ import { ArrowRight, ArrowLeft, Shield, Users, Eye, Lock } from "lucide-react";
 import OnboardingProgressBar from "@/components/onboarding/OnboardingProgressBar";
 import OnboardingRewardBanner from "@/components/onboarding/OnboardingRewardBanner";
 import { ONBOARDING_REWARDS } from "@/components/onboarding/OnboardingRewardBanner";
+import OnboardingRewardCelebration from "@/components/onboarding/OnboardingRewardCelebration";
 
 const ConsentStep = () => {
   const { user, profile, updateProfile } = useAuth();
   const navigate = useNavigate();
   const [consentData, setConsentData] = useState(false);
   const [consentMentor, setConsentMentor] = useState(false);
+  const [showReward, setShowReward] = useState<typeof ONBOARDING_REWARDS[0] | null>(null);
+
+  // Show 90% reward on mount
+  useEffect(() => {
+    const reward = ONBOARDING_REWARDS.find((r) => r.percent === 90);
+    if (reward) {
+      const timer = setTimeout(() => setShowReward(reward), 500);
+      return () => clearTimeout(timer);
+    }
+  }, []);
 
   const createWelcomeNotifications = async () => {
     if (!user) return;
@@ -106,6 +117,14 @@ const ConsentStep = () => {
     <div className="min-h-screen bg-[hsl(60,14%,98%)] flex flex-col">
       <OnboardingProgressBar progress={90} />
       <OnboardingRewardBanner currentProgress={90} />
+      {showReward && (
+        <OnboardingRewardCelebration
+          emoji={showReward.emoji}
+          title={showReward.title}
+          description={showReward.description}
+          onContinue={() => setShowReward(null)}
+        />
+      )}
       <div className="flex-1 flex items-center justify-center p-6">
       <motion.div
         initial={{ opacity: 0, y: 30 }}

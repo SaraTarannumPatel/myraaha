@@ -16,8 +16,20 @@ const Auth = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [submitting, setSubmitting] = useState(false);
+  const [emailVerified, setEmailVerified] = useState(false);
   const { signIn, signUp, user, profile } = useAuth();
   const navigate = useNavigate();
+
+  // Detect email verification from URL hash
+  useEffect(() => {
+    const hash = window.location.hash;
+    if (hash && (hash.includes("type=signup") || hash.includes("type=email"))) {
+      setEmailVerified(true);
+      setIsLogin(true);
+      // Clean the hash from URL
+      window.history.replaceState(null, "", window.location.pathname);
+    }
+  }, []);
 
   useEffect(() => {
     if (user && profile) {
@@ -64,6 +76,29 @@ const Auth = () => {
 
       <div className="flex-1 flex items-center justify-center px-4">
         <div className="flex flex-col w-full max-w-md">
+
+          {/* Email verification banner */}
+          <AnimatePresence>
+            {emailVerified && (
+              <motion.div
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                className="mb-4 p-4 rounded-xl bg-[hsl(158,40%,90%)] border border-[hsl(158,30%,70%)]"
+              >
+                <div className="flex items-start gap-3">
+                  <span className="text-xl">✅</span>
+                  <div>
+                    <p className="font-display text-sm font-bold text-[hsl(158,30%,25%)]">Email verified successfully!</p>
+                    <p className="font-body text-xs text-[hsl(158,20%,35%)] mt-0.5">
+                      Please login with the same email and password you used during sign up.
+                    </p>
+                  </div>
+                  <button onClick={() => setEmailVerified(false)} className="text-[hsl(158,20%,45%)] ml-auto shrink-0">✕</button>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
           
           <div className="relative mb-3">
             <AnimatePresence mode="wait">

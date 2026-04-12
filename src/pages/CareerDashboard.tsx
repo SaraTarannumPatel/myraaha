@@ -216,6 +216,46 @@ const CareerDashboard = () => {
 
   return (
     <div className="space-y-8">
+      {/* Incomplete Onboarding Banner */}
+      {profile && profile.onboarding_status === "complete" && (
+        (!profile.user_type || !profile.journey_variant || !profile.active_intent || (!profile.consent_data_usage && !profile.consent_mentor_sharing)) && (
+          <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }}>
+            <Card className="border-[hsl(45,70%,65%)]/40 bg-gradient-to-r from-[hsl(45,80%,92%)] to-[hsl(45,60%,96%)]">
+              <CardContent className="pt-5 pb-5">
+                <div className="flex items-start gap-4">
+                  <div className="w-10 h-10 rounded-xl bg-[hsl(45,80%,75%)] flex items-center justify-center shrink-0">
+                    <AlertCircle size={20} className="text-[hsl(230,40%,25%)]" />
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="font-display text-base text-foreground">Complete your onboarding for free rewards!</h3>
+                    <p className="font-body text-sm text-muted-foreground mt-1">
+                      You skipped some steps. Complete them to unlock free assessments worth ₹5,000–10,000 in the Curiosity Compass.
+                    </p>
+                    <div className="flex gap-2 mt-3">
+                      {!profile.user_type && (
+                        <Link to="/onboarding/user-type" state={{ fromReminder: true }}>
+                          <Button size="sm" variant="outline" className="text-xs">Tell us about you</Button>
+                        </Link>
+                      )}
+                      {!profile.journey_variant && profile.user_type && (
+                        <Link to="/onboarding/journey" state={{ fromReminder: true }}>
+                          <Button size="sm" variant="outline" className="text-xs">Demographics</Button>
+                        </Link>
+                      )}
+                      {!profile.consent_data_usage && !profile.consent_mentor_sharing && (
+                        <Link to="/onboarding/consent" state={{ fromReminder: true }}>
+                          <Button size="sm" variant="outline" className="text-xs">Privacy settings</Button>
+                        </Link>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </motion.div>
+        )
+      )}
+
       {/* Welcome Header */}
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-1">
         <h1 className="font-display text-3xl md:text-4xl text-foreground">

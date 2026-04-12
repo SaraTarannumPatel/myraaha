@@ -43,8 +43,11 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   }
 
   // If user has completed onboarding and is on an onboarding route, redirect to dashboard
+  // UNLESS they were sent here explicitly from a reminder popup (via state)
   if (profile && profile.onboarding_status === "complete" && location.pathname.startsWith("/onboarding")) {
-    return <Navigate to="/dashboard" replace />;
+    if (!location.state?.fromReminder) {
+      return <Navigate to="/dashboard" replace />;
+    }
   }
 
   // If user has NOT completed onboarding and is NOT on an onboarding route, redirect to their step

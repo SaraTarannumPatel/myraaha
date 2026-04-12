@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "@/contexts/AuthContext";
@@ -9,6 +9,8 @@ import {
 } from "lucide-react";
 import OnboardingProgressBar from "@/components/onboarding/OnboardingProgressBar";
 import OnboardingRewardBanner from "@/components/onboarding/OnboardingRewardBanner";
+import OnboardingRewardCelebration from "@/components/onboarding/OnboardingRewardCelebration";
+import { ONBOARDING_REWARDS } from "@/components/onboarding/OnboardingRewardBanner";
 
 const careerSteps = [
   {
@@ -72,9 +74,24 @@ const CareerOnboarding = () => {
     learning: [],
     strengths: [],
   });
+  const [showReward, setShowReward] = useState<typeof ONBOARDING_REWARDS[0] | null>(null);
+  const [shownRewards, setShownRewards] = useState<string[]>([]);
   const { updateProfile } = useAuth();
   const navigate = useNavigate();
   const current = careerSteps[step];
+
+  // Calculate progress based on step — career onboarding is 50-80% range
+  const progress = 50 + (step / careerSteps.length) * 30;
+
+  // Check for reward unlocks at each step change
+  useEffect(() => {
+    const reward = ONBOARDING_REWARDS.find(
+      (r) => r.percent <= progress && !shownRewards.includes(r.rewardKey)
+    );
+    if (reward) {
+      setShowReward(reward);
+    }
+  }, [step, progress]);
 
   const toggleOption = (option: string) => {
     const key = current.id;
@@ -110,8 +127,22 @@ const CareerOnboarding = () => {
 
   return (
     <div className="min-h-screen bg-[hsl(60,14%,98%)] flex flex-col">
-      <OnboardingProgressBar progress={50} />
-      <OnboardingRewardBanner currentProgress={50} />
+      <OnboardingProgressBar progress={progress} />
+      <OnboardingRewardBanner currentProgress={progress} />
+
+      {/* Reward Celebration */}
+      {showReward && (
+        <OnboardingRewardCelebration
+          emoji={showReward.emoji}
+          title={showReward.title}
+          description={showReward.description}
+          onContinue={() => {
+            setShownRewards([...shownRewards, showReward.rewardKey]);
+            setShowReward(null);
+          }}
+        />
+      )}
+
       <div className="flex-1 flex items-center justify-center p-6">
       <motion.div
         initial={{ opacity: 0, y: 30 }}

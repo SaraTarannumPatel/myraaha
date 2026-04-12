@@ -14,7 +14,7 @@ import {
   Trophy, Zap, MessageSquare, Palette, Target, Star, ChevronRight,
   Play, Check, Lightbulb, Brain, Meh, HelpCircle, Bot,
   PenLine, BookOpen, Users, Goal, TrendingUp, Activity, Eye, Layers,
-  Map, Route, CheckCircle2, ClipboardCheck
+  Map, Route, CheckCircle2, ClipboardCheck, Lock
 } from "lucide-react";
 import CareerCardDeck from "@/components/career/CareerCardDeck";
 import StoryModeCards from "@/components/career/StoryModeCards";
@@ -22,6 +22,9 @@ import ChallengeModeCards from "@/components/career/ChallengeModeCards";
 import { useUserSignals } from "@/hooks/useUserSignals";
 import { useNavigate } from "react-router-dom";
 import ModuleSearchBar from "@/components/search/ModuleSearchBar";
+import PsychometricTest from "@/components/curiositycompass/PsychometricTest";
+import AssessmentGate from "@/components/curiositycompass/AssessmentGate";
+import OnboardingCelebration from "@/components/curiositycompass/OnboardingCelebration";
 import {
   getVariantQuestions,
   detectVariant,
@@ -198,7 +201,7 @@ const AssessmentTestSection = ({ user, recordSignal, recordMultipleSignals }: { 
         <CardHeader className="pb-2">
           <CardTitle className="flex items-center gap-2 text-lg">
             <ClipboardCheck size={20} className="text-accent-foreground" />
-            Psychometric Assessment Test
+            Discover Yourself Deeply
           </CardTitle>
           <CardDescription>
             These questions help calibrate your compass — no right or wrong answers. Your responses shape AI recommendations, roadmaps, and career cards across the app.
@@ -286,10 +289,16 @@ const AssessmentTestSection = ({ user, recordSignal, recordMultipleSignals }: { 
 };
 
 const CuriosityCompass = () => {
-  const { user } = useAuth();
+  const { user, profile } = useAuth();
   const navigate = useNavigate();
   const { recordSignal, recordMultipleSignals, recordTextSignals, getAggregatedSignals } = useUserSignals();
-  const [tab, setTab] = useState("explore");
+  const [tab, setTab] = useState("assessment");
+  const [showCelebration, setShowCelebration] = useState(true);
+
+  // Check if both assessments are completed
+  const discoveryDone = !!profile?.journey_responses?.assessment_completed;
+  const psychometricDone = !!profile?.journey_responses?.psychometric_completed;
+  const bothAssessmentsDone = discoveryDone && psychometricDone;
   const [mode, setMode] = useState<string | null>(null);
   const [careerCards, setCareerCards] = useState<any[]>([]);
   const [interactions, setInteractions] = useState<Record<string, string>>({});
@@ -678,6 +687,8 @@ const CuriosityCompass = () => {
 
   return (
     <div className="space-y-8">
+      {/* Onboarding celebration for fully completed users */}
+      <OnboardingCelebration onDismiss={() => { setShowCelebration(false); setTab("assessment"); }} />
       {/* Header */}
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
         <div className="flex items-center gap-3 mb-2">
@@ -931,19 +942,57 @@ const CuriosityCompass = () => {
 
       {/* Main Tabs */}
       {!showNextSteps && (
-        <Tabs value={tab} onValueChange={setTab}>
+        <Tabs value={tab} onValueChange={(v) => {
+          // Block locked tabs
+          if (!bothAssessmentsDone && !["assessment", "psychometric"].includes(v)) {
+            toast.info("Complete both assessments first to unlock this section.");
+            return;
+          }
+          setTab(v);
+        }}>
           <TabsList className="flex overflow-x-auto w-full max-w-3xl gap-1">
-            <TabsTrigger value="explore">Explore</TabsTrigger>
-            <TabsTrigger value="assessment">Assessment</TabsTrigger>
-            <TabsTrigger value="quests">Quests</TabsTrigger>
-            <TabsTrigger value="domains">Domains</TabsTrigger>
-            <TabsTrigger value="insights">Insights</TabsTrigger>
-            <TabsTrigger value="behavior">Behavior</TabsTrigger>
+            <TabsTrigger value="assessment">Discover Yourself</TabsTrigger>
+            <TabsTrigger value="psychometric">Psychometric</TabsTrigger>
+            <TabsTrigger value="explore" disabled={!bothAssessmentsDone} className={!bothAssessmentsDone ? "opacity-50" : ""}>
+              {!bothAssessmentsDone && <Lock size={12} className="mr-1" />}Explore
+            </TabsTrigger>
+            <TabsTrigger value="quests" disabled={!bothAssessmentsDone} className={!bothAssessmentsDone ? "opacity-50" : ""}>
+              {!bothAssessmentsDone && <Lock size={12} className="mr-1" />}Quests
+            </TabsTrigger>
+            <TabsTrigger value="domains" disabled={!bothAssessmentsDone} className={!bothAssessmentsDone ? "opacity-50" : ""}>
+              {!bothAssessmentsDone && <Lock size={12} className="mr-1" />}Domains
+            </TabsTrigger>
+            <TabsTrigger value="insights" disabled={!bothAssessmentsDone} className={!bothAssessmentsDone ? "opacity-50" : ""}>
+              {!bothAssessmentsDone && <Lock size={12} className="mr-1" />}Insights
+            </TabsTrigger>
+            <TabsTrigger value="behavior" disabled={!bothAssessmentsDone} className={!bothAssessmentsDone ? "opacity-50" : ""}>
+              {!bothAssessmentsDone && <Lock size={12} className="mr-1" />}Behavior
+            </TabsTrigger>
           </TabsList>
 
-          {/* ===== Assessment Tab ===== */}
+          {/* Assessment Gate - shown on locked tabs */}
+          {!bothAssessmentsDone && !["assessment", "psychometric"].includes(tab) && (
+            <div className="mt-6">
+              <AssessmentGate onGoToAssessment={(t) => setTab(t === "discovery" ? "assessment" : "psychometric")} />
+            </div>
+          )}
+
+          {/* ===== Discovery Assessment Tab (renamed from Psychometric Assessment Test) ===== */}
           <TabsContent value="assessment">
             <AssessmentTestSection user={user} recordSignal={recordSignal} recordMultipleSignals={recordMultipleSignals} />
+          </TabsContent>
+
+          {/* ===== Psychometric Test Tab (new 22-question test) ===== */}
+          <TabsContent value="psychometric">
+            <PsychometricTest
+              userId={user!.id}
+              onComplete={() => {
+                if (discoveryDone) {
+                  toast.success("Both assessments complete! All sections unlocked 🎉");
+                }
+              }}
+              recordSignal={recordSignal}
+            />
           </TabsContent>
 
           {/* ===== Explore Tab ===== */}
