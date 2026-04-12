@@ -687,6 +687,8 @@ const CuriosityCompass = () => {
 
   return (
     <div className="space-y-8">
+      {/* Onboarding celebration for fully completed users */}
+      <OnboardingCelebration onDismiss={() => { setShowCelebration(false); setTab("assessment"); }} />
       {/* Header */}
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
         <div className="flex items-center gap-3 mb-2">
