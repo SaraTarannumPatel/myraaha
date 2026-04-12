@@ -9,7 +9,6 @@ import OnboardingProgressBar from "@/components/onboarding/OnboardingProgressBar
 import OnboardingRewardBanner from "@/components/onboarding/OnboardingRewardBanner";
 import { ONBOARDING_REWARDS } from "@/components/onboarding/OnboardingRewardBanner";
 import OnboardingRewardCelebration from "@/components/onboarding/OnboardingRewardCelebration";
-import { ONBOARDING_REWARDS } from "@/components/onboarding/OnboardingRewardBanner";
 
 const ConsentStep = () => {
   const { user, profile, updateProfile } = useAuth();
