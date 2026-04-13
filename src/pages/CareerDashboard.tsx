@@ -216,9 +216,20 @@ const CareerDashboard = () => {
 
   return (
     <div className="space-y-8">
-      {/* Incomplete Onboarding Banner */}
-      {profile && profile.onboarding_status === "complete" && (
-        (!profile.user_type || !profile.journey_variant || !profile.active_intent || (!profile.consent_data_usage && !profile.consent_mentor_sharing)) && (
+      {/* Incomplete Onboarding Banner - only show if there are actually incomplete steps */}
+      {profile && profile.onboarding_status === "complete" && (() => {
+        const skippedSteps: { label: string; route: string }[] = [];
+        if (!profile.user_type) skippedSteps.push({ label: "Tell us about you", route: "/onboarding/user-type" });
+        if (!profile.journey_variant && profile.user_type) skippedSteps.push({ label: "Demographics", route: "/onboarding/journey" });
+        if (!profile.active_intent || profile.active_intent === "career") {
+          // Don't flag intent as incomplete if they chose career - that's a valid choice
+        }
+        if (profile.consent_data_usage === false && profile.consent_mentor_sharing === false) {
+          skippedSteps.push({ label: "Privacy settings", route: "/onboarding/consent" });
+        }
+        // Only show banner if there are genuinely skipped steps
+        if (skippedSteps.length === 0) return null;
+        return (
           <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }}>
             <Card className="border-[hsl(45,70%,65%)]/40 bg-gradient-to-r from-[hsl(45,80%,92%)] to-[hsl(45,60%,96%)]">
               <CardContent className="pt-5 pb-5">
@@ -231,30 +242,20 @@ const CareerDashboard = () => {
                     <p className="font-body text-sm text-muted-foreground mt-1">
                       You skipped some steps. Complete them to unlock free assessments worth ₹5,000–10,000 in the Curiosity Compass.
                     </p>
-                    <div className="flex gap-2 mt-3">
-                      {!profile.user_type && (
-                        <Link to="/onboarding/user-type" state={{ fromReminder: true }}>
-                          <Button size="sm" variant="outline" className="text-xs">Tell us about you</Button>
+                    <div className="flex flex-wrap gap-2 mt-3">
+                      {skippedSteps.map((step) => (
+                        <Link key={step.route} to={step.route} state={{ fromReminder: true }}>
+                          <Button size="sm" variant="outline" className="text-xs">{step.label}</Button>
                         </Link>
-                      )}
-                      {!profile.journey_variant && profile.user_type && (
-                        <Link to="/onboarding/journey" state={{ fromReminder: true }}>
-                          <Button size="sm" variant="outline" className="text-xs">Demographics</Button>
-                        </Link>
-                      )}
-                      {!profile.consent_data_usage && !profile.consent_mentor_sharing && (
-                        <Link to="/onboarding/consent" state={{ fromReminder: true }}>
-                          <Button size="sm" variant="outline" className="text-xs">Privacy settings</Button>
-                        </Link>
-                      )}
+                      ))}
                     </div>
                   </div>
                 </div>
               </CardContent>
             </Card>
           </motion.div>
-        )
-      )}
+        );
+      })()}
 
       {/* Welcome Header */}
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-1">
