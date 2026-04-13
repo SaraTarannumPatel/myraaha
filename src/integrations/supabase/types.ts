@@ -245,11 +245,15 @@ export type Database = {
           growth_trajectory: string | null
           icon_emoji: string | null
           id: string
+          industry: string | null
           industry_trends: string | null
           job_role_keywords: string[] | null
           keywords: string[] | null
           related_skills: string[] | null
+          related_subjects: string[] | null
+          related_universities: string[] | null
           salary_range: string | null
+          sector: string | null
           title: string
           tools_certifications: string[] | null
         }
@@ -263,11 +267,15 @@ export type Database = {
           growth_trajectory?: string | null
           icon_emoji?: string | null
           id?: string
+          industry?: string | null
           industry_trends?: string | null
           job_role_keywords?: string[] | null
           keywords?: string[] | null
           related_skills?: string[] | null
+          related_subjects?: string[] | null
+          related_universities?: string[] | null
           salary_range?: string | null
+          sector?: string | null
           title: string
           tools_certifications?: string[] | null
         }
@@ -281,11 +289,15 @@ export type Database = {
           growth_trajectory?: string | null
           icon_emoji?: string | null
           id?: string
+          industry?: string | null
           industry_trends?: string | null
           job_role_keywords?: string[] | null
           keywords?: string[] | null
           related_skills?: string[] | null
+          related_subjects?: string[] | null
+          related_universities?: string[] | null
           salary_range?: string | null
+          sector?: string | null
           title?: string
           tools_certifications?: string[] | null
         }
@@ -1164,9 +1176,16 @@ export type Database = {
           description: string | null
           icon_emoji: string | null
           id: string
+          industry: string | null
           keywords: string[] | null
           name: string
           parent_domain: string | null
+          related_careers: string[] | null
+          related_job_roles: string[] | null
+          related_skills: string[] | null
+          related_subjects: string[] | null
+          related_universities: string[] | null
+          sector: string | null
         }
         Insert: {
           category?: string
@@ -1174,9 +1193,16 @@ export type Database = {
           description?: string | null
           icon_emoji?: string | null
           id?: string
+          industry?: string | null
           keywords?: string[] | null
           name: string
           parent_domain?: string | null
+          related_careers?: string[] | null
+          related_job_roles?: string[] | null
+          related_skills?: string[] | null
+          related_subjects?: string[] | null
+          related_universities?: string[] | null
+          sector?: string | null
         }
         Update: {
           category?: string
@@ -1184,9 +1210,16 @@ export type Database = {
           description?: string | null
           icon_emoji?: string | null
           id?: string
+          industry?: string | null
           keywords?: string[] | null
           name?: string
           parent_domain?: string | null
+          related_careers?: string[] | null
+          related_job_roles?: string[] | null
+          related_skills?: string[] | null
+          related_subjects?: string[] | null
+          related_universities?: string[] | null
+          sector?: string | null
         }
         Relationships: []
       }
@@ -1629,6 +1662,33 @@ export type Database = {
         }
         Relationships: []
       }
+      industry_directory: {
+        Row: {
+          created_at: string | null
+          description: string | null
+          icon_emoji: string | null
+          id: string
+          keywords: string[] | null
+          name: string
+        }
+        Insert: {
+          created_at?: string | null
+          description?: string | null
+          icon_emoji?: string | null
+          id?: string
+          keywords?: string[] | null
+          name: string
+        }
+        Update: {
+          created_at?: string | null
+          description?: string | null
+          icon_emoji?: string | null
+          id?: string
+          keywords?: string[] | null
+          name?: string
+        }
+        Relationships: []
+      }
       inspiration_bookmarks: {
         Row: {
           collection_name: string | null
@@ -2029,7 +2089,12 @@ export type Database = {
           domain: string
           education_required: string | null
           id: string
+          industry: string | null
           keywords: string[] | null
+          related_domains: string[] | null
+          related_subjects: string[] | null
+          related_universities: string[] | null
+          sector: string | null
           seniority_levels: string[] | null
           skills_required: string[] | null
           title: string
@@ -2044,7 +2109,12 @@ export type Database = {
           domain?: string
           education_required?: string | null
           id?: string
+          industry?: string | null
           keywords?: string[] | null
+          related_domains?: string[] | null
+          related_subjects?: string[] | null
+          related_universities?: string[] | null
+          sector?: string | null
           seniority_levels?: string[] | null
           skills_required?: string[] | null
           title: string
@@ -2059,7 +2129,12 @@ export type Database = {
           domain?: string
           education_required?: string | null
           id?: string
+          industry?: string | null
           keywords?: string[] | null
+          related_domains?: string[] | null
+          related_subjects?: string[] | null
+          related_universities?: string[] | null
+          sector?: string | null
           seniority_levels?: string[] | null
           skills_required?: string[] | null
           title?: string
@@ -5141,6 +5216,47 @@ export type Database = {
           },
         ]
       }
+      sector_directory: {
+        Row: {
+          created_at: string | null
+          description: string | null
+          icon_emoji: string | null
+          id: string
+          industry_id: string | null
+          industry_name: string | null
+          keywords: string[] | null
+          name: string
+        }
+        Insert: {
+          created_at?: string | null
+          description?: string | null
+          icon_emoji?: string | null
+          id?: string
+          industry_id?: string | null
+          industry_name?: string | null
+          keywords?: string[] | null
+          name: string
+        }
+        Update: {
+          created_at?: string | null
+          description?: string | null
+          icon_emoji?: string | null
+          id?: string
+          industry_id?: string | null
+          industry_name?: string | null
+          keywords?: string[] | null
+          name?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "sector_directory_industry_id_fkey"
+            columns: ["industry_id"]
+            isOneToOne: false
+            referencedRelation: "industry_directory"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       selfgraph_data: {
         Row: {
           context: Json | null
@@ -5760,6 +5876,45 @@ export type Database = {
         }
         Relationships: []
       }
+      skills_directory: {
+        Row: {
+          category: string | null
+          created_at: string | null
+          description: string | null
+          domain: string | null
+          id: string
+          keywords: string[] | null
+          name: string
+          related_domains: string[] | null
+          related_job_roles: string[] | null
+          related_sectors: string[] | null
+        }
+        Insert: {
+          category?: string | null
+          created_at?: string | null
+          description?: string | null
+          domain?: string | null
+          id?: string
+          keywords?: string[] | null
+          name: string
+          related_domains?: string[] | null
+          related_job_roles?: string[] | null
+          related_sectors?: string[] | null
+        }
+        Update: {
+          category?: string | null
+          created_at?: string | null
+          description?: string | null
+          domain?: string | null
+          id?: string
+          keywords?: string[] | null
+          name?: string
+          related_domains?: string[] | null
+          related_job_roles?: string[] | null
+          related_sectors?: string[] | null
+        }
+        Relationships: []
+      }
       startup_ideas: {
         Row: {
           category: string | null
@@ -5883,6 +6038,42 @@ export type Database = {
           personality_signals?: Json | null
           skills_resonated?: string[] | null
           user_id?: string
+        }
+        Relationships: []
+      }
+      subjects_directory: {
+        Row: {
+          created_at: string | null
+          description: string | null
+          domain: string | null
+          id: string
+          keywords: string[] | null
+          name: string
+          related_domains: string[] | null
+          related_skills: string[] | null
+          related_universities: string[] | null
+        }
+        Insert: {
+          created_at?: string | null
+          description?: string | null
+          domain?: string | null
+          id?: string
+          keywords?: string[] | null
+          name: string
+          related_domains?: string[] | null
+          related_skills?: string[] | null
+          related_universities?: string[] | null
+        }
+        Update: {
+          created_at?: string | null
+          description?: string | null
+          domain?: string | null
+          id?: string
+          keywords?: string[] | null
+          name?: string
+          related_domains?: string[] | null
+          related_skills?: string[] | null
+          related_universities?: string[] | null
         }
         Relationships: []
       }
@@ -6152,6 +6343,11 @@ export type Database = {
           keywords: string[] | null
           name: string
           ranking_tier: string | null
+          related_careers: string[] | null
+          related_domains: string[] | null
+          related_sectors: string[] | null
+          related_skills: string[] | null
+          related_subjects: string[] | null
           type: string | null
           website: string | null
         }
@@ -6164,6 +6360,11 @@ export type Database = {
           keywords?: string[] | null
           name: string
           ranking_tier?: string | null
+          related_careers?: string[] | null
+          related_domains?: string[] | null
+          related_sectors?: string[] | null
+          related_skills?: string[] | null
+          related_subjects?: string[] | null
           type?: string | null
           website?: string | null
         }
@@ -6176,6 +6377,11 @@ export type Database = {
           keywords?: string[] | null
           name?: string
           ranking_tier?: string | null
+          related_careers?: string[] | null
+          related_domains?: string[] | null
+          related_sectors?: string[] | null
+          related_skills?: string[] | null
+          related_subjects?: string[] | null
           type?: string | null
           website?: string | null
         }
