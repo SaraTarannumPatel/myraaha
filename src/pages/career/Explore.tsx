@@ -1,24 +1,45 @@
 import { useState, useEffect, useMemo, useCallback, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { supabase } from "@/integrations/supabase/client";
-import { Globe, Search, X, Briefcase, Layers, GraduationCap, Zap, BookOpen, Building2, Factory, LayoutGrid, Table2 } from "lucide-react";
+import { Globe, Search, X, Briefcase, Layers, GraduationCap, Zap, BookOpen, Building2, Factory, MapPin, Monitor } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import ExploreDetailDialog from "@/components/directory/ExploreDetailDialog";
 
-type FilterTab = "careers" | "jobs" | "domains" | "universities" | "industries" | "sectors" | "skills" | "subjects";
+type FilterTab = "careers" | "jobs" | "domains" | "universities" | "industries" | "sectors" | "skills" | "subjects" | "courses" | "countries";
 
 const TAB_CONFIG: { key: FilterTab; label: string; icon: any; emoji: string }[] = [
-  { key: "careers", label: "Careers", icon: Briefcase, emoji: "💼" },
-  { key: "jobs", label: "Jobs", icon: Layers, emoji: "👔" },
-  { key: "domains", label: "Domains", icon: Globe, emoji: "🌐" },
-  { key: "universities", label: "Universities", icon: GraduationCap, emoji: "🎓" },
   { key: "industries", label: "Industries", icon: Factory, emoji: "🏭" },
   { key: "sectors", label: "Sectors", icon: Building2, emoji: "📊" },
+  { key: "domains", label: "Domains", icon: Globe, emoji: "🌐" },
+  { key: "careers", label: "Careers", icon: Briefcase, emoji: "💼" },
+  { key: "jobs", label: "Job Roles", icon: Layers, emoji: "👔" },
   { key: "skills", label: "Skills", icon: Zap, emoji: "🎯" },
   { key: "subjects", label: "Subjects", icon: BookOpen, emoji: "📚" },
+  { key: "universities", label: "Universities", icon: GraduationCap, emoji: "🎓" },
+  { key: "courses", label: "Online Courses", icon: Monitor, emoji: "💻" },
+  { key: "countries", label: "Countries", icon: MapPin, emoji: "🌍" },
 ];
+
+const TABLE_MAP: Record<FilterTab, string> = {
+  careers: "career_paths",
+  jobs: "job_roles_directory",
+  domains: "domain_directory",
+  universities: "universities_directory",
+  industries: "industry_directory",
+  sectors: "sector_directory",
+  skills: "skills_directory",
+  subjects: "subjects_directory",
+  courses: "online_courses_directory",
+  countries: "countries_directory",
+};
+
+const TYPE_MAP: Record<FilterTab, string> = {
+  careers: "career", jobs: "job", domains: "domain", universities: "university",
+  industries: "industry", sectors: "sector", skills: "skill", subjects: "subject",
+  courses: "course", countries: "country",
+};
 
 const PAGE_SIZE = 30;
 
@@ -30,14 +51,15 @@ const Explore = () => {
   const [allData, setAllData] = useState<Record<FilterTab, any[]>>({
     careers: [], jobs: [], domains: [], universities: [],
     industries: [], sectors: [], skills: [], subjects: [],
+    courses: [], countries: [],
   });
   const [loading, setLoading] = useState(true);
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
   const scrollRef = useRef<HTMLDivElement>(null);
 
-  // Industry/Sector filter state
-  const [filterIndustry, setFilterIndustry] = useState<string>("");
-  const [filterSector, setFilterSector] = useState<string>("");
+  // Multi-select filter state
+  const [filterIndustries, setFilterIndustries] = useState<string[]>([]);
+  const [filterSectors, setFilterSectors] = useState<string[]>([]);
 
   useEffect(() => {
     fetchAllData();
@@ -45,26 +67,15 @@ const Explore = () => {
 
   const fetchAllData = async () => {
     setLoading(true);
-    const [careers, jobs, domains, universities, industries, sectors, skills, subjects] = await Promise.all([
-      supabase.from("career_paths").select("*").order("title"),
-      supabase.from("job_roles_directory").select("*").order("title"),
-      supabase.from("domain_directory").select("*").order("name"),
-      supabase.from("universities_directory").select("*").order("name"),
-      supabase.from("industry_directory").select("*").order("name"),
-      supabase.from("sector_directory").select("*").order("name"),
-      supabase.from("skills_directory").select("*").order("name"),
-      supabase.from("subjects_directory").select("*").order("name"),
-    ]);
-    setAllData({
-      careers: careers.data || [],
-      jobs: jobs.data || [],
-      domains: domains.data || [],
-      universities: universities.data || [],
-      industries: industries.data || [],
-      sectors: sectors.data || [],
-      skills: skills.data || [],
-      subjects: subjects.data || [],
-    });
+    const results = await Promise.all(
+      TAB_CONFIG.map(t => {
+        const orderCol = ["universities", "domains", "industries", "sectors", "skills", "subjects", "courses", "countries"].includes(t.key) ? "name" : "title";
+        return supabase.from(TABLE_MAP[t.key] as any).select("*").order(orderCol).limit(1000);
+      })
+    );
+    const newData: Record<string, any[]> = {};
+    TAB_CONFIG.forEach((t, i) => { newData[t.key] = results[i].data || []; });
+    setAllData(newData as any);
     setLoading(false);
   };
 
@@ -72,43 +83,34 @@ const Explore = () => {
     const s = query.toLowerCase().trim();
     let items = allData[activeTab] || [];
 
-    // Apply industry/sector filters
-    if (filterIndustry) {
-      items = items.filter((item: any) => 
-        item.industry === filterIndustry || 
-        item.industry_name === filterIndustry ||
-        item.name === filterIndustry
+    // Apply multi-select industry filter
+    if (filterIndustries.length > 0) {
+      items = items.filter((item: any) =>
+        filterIndustries.some(f =>
+          item.industry === f || item.industry_name === f || item.name === f ||
+          item.related_industries?.includes(f) || item.top_industries?.includes(f)
+        )
       );
     }
-    if (filterSector) {
+    if (filterSectors.length > 0) {
       items = items.filter((item: any) =>
-        item.sector === filterSector ||
-        item.name === filterSector
+        filterSectors.some(f =>
+          item.sector === f || item.name === f ||
+          item.related_sectors?.includes(f) || item.top_sectors?.includes(f)
+        )
       );
     }
 
     if (!s) return items;
 
     return items.filter((item: any) => {
-      const searchFields = [
-        item.title, item.name, item.domain, item.category, item.description,
-        item.industry, item.sector, item.industry_name, item.country, item.city, item.continent,
-      ].filter(Boolean);
-      const arrayFields = [
-        item.keywords, item.related_skills, item.skills_required, item.related_domains,
-        item.related_job_roles, item.related_subjects, item.related_universities,
-        item.related_careers, item.related_sectors,
-      ].filter(Boolean);
-
-      return searchFields.some(f => f.toLowerCase().includes(s)) ||
-        arrayFields.some(arr => arr.some((v: string) => v.toLowerCase().includes(s)));
+      const fields = [item.title, item.name, item.domain, item.category, item.description, item.industry, item.sector, item.platform, item.continent, item.country, item.city].filter(Boolean);
+      const arrays = [item.keywords, item.related_skills, item.skills_required, item.related_domains, item.related_job_roles, item.related_subjects, item.related_universities, item.related_careers, item.related_sectors, item.related_industries, item.top_industries, item.top_careers].filter(Boolean);
+      return fields.some(f => f.toLowerCase().includes(s)) || arrays.some(arr => arr.some((v: string) => v.toLowerCase().includes(s)));
     });
-  }, [query, allData, activeTab, filterIndustry, filterSector]);
+  }, [query, allData, activeTab, filterIndustries, filterSectors]);
 
-  // Reset visible count when filter changes
-  useEffect(() => {
-    setVisibleCount(PAGE_SIZE);
-  }, [activeTab, query, filterIndustry, filterSector]);
+  useEffect(() => { setVisibleCount(PAGE_SIZE); }, [activeTab, query, filterIndustries, filterSectors]);
 
   const visibleItems = filtered.slice(0, visibleCount);
   const hasMore = visibleCount < filtered.length;
@@ -121,27 +123,18 @@ const Explore = () => {
     }
   }, [hasMore]);
 
-  const handleSelect = (item: any, type: string) => {
-    setSelectedItem(item);
-    setSelectedType(type);
-  };
+  const handleSelect = (item: any, type: string) => { setSelectedItem(item); setSelectedType(type); };
 
   const handleNavigateFromDetail = (targetType: string, name: string) => {
-    // Map detail type to tab key
     const tabMap: Record<string, FilterTab> = {
       careers: "careers", jobs: "jobs", domains: "domains", universities: "universities",
       industries: "industries", sectors: "sectors", skills: "skills", subjects: "subjects",
+      courses: "courses", countries: "countries",
     };
     const tab = tabMap[targetType];
-    if (tab) {
-      setActiveTab(tab);
-      setQuery(name);
-      setFilterIndustry("");
-      setFilterSector("");
-    }
+    if (tab) { setActiveTab(tab); setQuery(name); setFilterIndustries([]); setFilterSectors([]); }
   };
 
-  // Unique industries/sectors for filter dropdowns
   const uniqueIndustries = useMemo(() => {
     const set = new Set<string>();
     allData.industries.forEach(i => set.add(i.name));
@@ -162,11 +155,13 @@ const Explore = () => {
 
   const tabCounts = useMemo(() => {
     const counts: Record<FilterTab, number> = {} as any;
-    for (const tab of TAB_CONFIG) {
-      counts[tab.key] = allData[tab.key]?.length || 0;
-    }
+    TAB_CONFIG.forEach(t => { counts[t.key] = allData[t.key]?.length || 0; });
     return counts;
   }, [allData]);
+
+  const toggleFilter = (list: string[], item: string, setter: (v: string[]) => void) => {
+    setter(list.includes(item) ? list.filter(x => x !== item) : [...list, item]);
+  };
 
   return (
     <div className="space-y-4">
@@ -176,9 +171,9 @@ const Explore = () => {
             <Globe size={20} className="text-secondary-foreground" />
           </div>
           <div>
-            <h1 className="font-display text-2xl sm:text-3xl text-foreground">Explore Directory</h1>
-            <p className="font-body text-sm text-muted-foreground">
-              Search careers, jobs, domains, universities, industries, sectors, skills & subjects
+            <h1 className="font-display text-xl sm:text-2xl text-foreground">Explore Directory</h1>
+            <p className="font-body text-xs text-muted-foreground">
+              Discover careers, jobs, industries, sectors, domains, skills, subjects, universities, courses & countries
             </p>
           </div>
         </div>
@@ -187,12 +182,7 @@ const Explore = () => {
       {/* Search */}
       <div className="relative">
         <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
-        <Input
-          placeholder="Search across all directories..."
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          className="pl-9 pr-9 text-base bg-card border-border"
-        />
+        <Input placeholder="Search across all directories..." value={query} onChange={(e) => setQuery(e.target.value)} className="pl-9 pr-9 text-sm bg-card border-border" />
         {query && (
           <button onClick={() => setQuery("")} className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground">
             <X size={14} />
@@ -205,79 +195,70 @@ const Explore = () => {
         {TAB_CONFIG.map((t) => (
           <button
             key={t.key}
-            onClick={() => { setActiveTab(t.key); setFilterIndustry(""); setFilterSector(""); }}
-            className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium transition-all whitespace-nowrap ${
-              activeTab === t.key
-                ? "bg-primary text-primary-foreground shadow-sm"
-                : "bg-muted text-muted-foreground hover:bg-accent"
+            onClick={() => { setActiveTab(t.key); setFilterIndustries([]); setFilterSectors([]); }}
+            className={`inline-flex items-center gap-1 px-2.5 py-1.5 rounded-full text-[11px] font-medium transition-all whitespace-nowrap ${
+              activeTab === t.key ? "bg-primary text-primary-foreground shadow-sm" : "bg-muted text-muted-foreground hover:bg-accent"
             }`}
           >
-            <t.icon size={12} />
+            <t.icon size={11} />
             {t.label}
             <span className="opacity-70">({tabCounts[t.key]})</span>
           </button>
         ))}
       </div>
 
-      {/* Industry & Sector Filters */}
-      {(activeTab === "careers" || activeTab === "jobs" || activeTab === "domains") && (
-        <div className="flex flex-wrap gap-2">
-          <select
-            value={filterIndustry}
-            onChange={(e) => setFilterIndustry(e.target.value)}
-            className="text-xs px-3 py-1.5 rounded-lg border border-border bg-card font-body text-foreground"
-          >
-            <option value="">All Industries</option>
-            {uniqueIndustries.map(i => <option key={i} value={i}>{i}</option>)}
-          </select>
-          <select
-            value={filterSector}
-            onChange={(e) => setFilterSector(e.target.value)}
-            className="text-xs px-3 py-1.5 rounded-lg border border-border bg-card font-body text-foreground"
-          >
-            <option value="">All Sectors</option>
-            {uniqueSectors.map(s => <option key={s} value={s}>{s}</option>)}
-          </select>
-        </div>
-      )}
+      {/* Industry & Sector Filters - always visible */}
+      <div className="flex flex-wrap gap-2">
+        <select
+          value=""
+          onChange={(e) => e.target.value && toggleFilter(filterIndustries, e.target.value, setFilterIndustries)}
+          className="text-xs px-2.5 py-1.5 rounded-lg border border-border bg-card font-body text-foreground"
+        >
+          <option value="">+ Industry Filter</option>
+          {uniqueIndustries.filter(i => !filterIndustries.includes(i)).map(i => <option key={i} value={i}>{i}</option>)}
+        </select>
+        <select
+          value=""
+          onChange={(e) => e.target.value && toggleFilter(filterSectors, e.target.value, setFilterSectors)}
+          className="text-xs px-2.5 py-1.5 rounded-lg border border-border bg-card font-body text-foreground"
+        >
+          <option value="">+ Sector Filter</option>
+          {uniqueSectors.filter(s => !filterSectors.includes(s)).map(s => <option key={s} value={s}>{s}</option>)}
+        </select>
+        {filterIndustries.map(f => (
+          <Badge key={f} variant="secondary" className="text-[10px] cursor-pointer gap-1" onClick={() => toggleFilter(filterIndustries, f, setFilterIndustries)}>
+            🏭 {f} <X size={10} />
+          </Badge>
+        ))}
+        {filterSectors.map(f => (
+          <Badge key={f} variant="secondary" className="text-[10px] cursor-pointer gap-1" onClick={() => toggleFilter(filterSectors, f, setFilterSectors)}>
+            📊 {f} <X size={10} />
+          </Badge>
+        ))}
+      </div>
 
       {/* Result count */}
       <p className="text-xs text-muted-foreground font-body">
-        Showing {visibleItems.length} of {filtered.length} results
-        {query && ` for "${query}"`}
+        Showing {visibleItems.length} of {filtered.length} results{query && ` for "${query}"`}
       </p>
 
-      {/* Cards grid with scroll loading */}
+      {/* Cards grid */}
       {loading ? (
         <div className="text-center py-8">
           <div className="animate-pulse font-body text-sm text-muted-foreground">Loading directory...</div>
         </div>
       ) : (
-        <div
-          ref={scrollRef}
-          onScroll={handleScroll}
-          className="max-h-[calc(100vh-320px)] overflow-y-auto pr-1"
-        >
+        <div ref={scrollRef} onScroll={handleScroll} className="max-h-[calc(100vh-380px)] overflow-y-auto pr-1">
           <div className="grid gap-3 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
             <AnimatePresence mode="popLayout">
               {visibleItems.map((item: any, i: number) => (
-                <motion.div
-                  key={item.id || `${activeTab}-${i}`}
-                  initial={{ opacity: 0, y: 8 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, scale: 0.95 }}
-                  transition={{ delay: Math.min(i * 0.01, 0.3) }}
-                >
+                <motion.div key={item.id || `${activeTab}-${i}`} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95 }} transition={{ delay: Math.min(i * 0.01, 0.3) }}>
                   <ExploreCard item={item} type={activeTab} onSelect={handleSelect} />
                 </motion.div>
               ))}
             </AnimatePresence>
           </div>
-          {hasMore && (
-            <div className="text-center py-4">
-              <p className="font-body text-xs text-muted-foreground animate-pulse">Scroll for more...</p>
-            </div>
-          )}
+          {hasMore && <div className="text-center py-4"><p className="font-body text-xs text-muted-foreground animate-pulse">Scroll for more...</p></div>}
           {!loading && filtered.length === 0 && (
             <div className="text-center py-10 bg-card rounded-xl border border-border">
               <Search className="mx-auto text-muted-foreground mb-2" size={32} />
@@ -288,52 +269,33 @@ const Explore = () => {
         </div>
       )}
 
-      {/* Center popup detail view */}
-      <ExploreDetailDialog
-        open={!!selectedItem}
-        onClose={() => setSelectedItem(null)}
-        item={selectedItem}
-        type={selectedType}
-        onNavigate={handleNavigateFromDetail}
-      />
+      <ExploreDetailDialog open={!!selectedItem} onClose={() => setSelectedItem(null)} item={selectedItem} type={selectedType} onNavigate={handleNavigateFromDetail} />
     </div>
   );
 };
 
-// Universal card component for all types
 const ExploreCard = ({ item, type, onSelect }: { item: any; type: FilterTab; onSelect: (item: any, type: string) => void }) => {
-  const typeMap: Record<FilterTab, string> = {
-    careers: "career", jobs: "job", domains: "domain", universities: "university",
-    industries: "industry", sectors: "sector", skills: "skill", subjects: "subject",
-  };
-
   const title = item.title || item.name;
-  const description = item.description || item.task_description || "";
-  const emoji = item.icon_emoji || {
-    careers: "💼", jobs: "👔", domains: "🌐", universities: "🎓",
-    industries: "🏭", sectors: "📊", skills: "🎯", subjects: "📚",
-  }[type] || "📄";
+  const description = item.description || "";
+  const emoji = item.icon_emoji || { careers: "💼", jobs: "👔", domains: "🌐", universities: "🎓", industries: "🏭", sectors: "📊", skills: "🎯", subjects: "📚", courses: "💻", countries: "🌍" }[type] || "📄";
 
   return (
-    <Card
-      className="hover:shadow-md transition-all cursor-pointer h-full border-border"
-      onClick={() => onSelect(item, typeMap[type])}
-    >
+    <Card className="hover:shadow-md transition-all cursor-pointer h-full border-border" onClick={() => onSelect(item, TYPE_MAP[type])}>
       <CardContent className="pt-4 pb-4 space-y-2">
         <div className="flex items-start gap-2.5">
           <span className="text-xl flex-shrink-0">{emoji}</span>
           <div className="min-w-0 flex-1">
             <h3 className="font-display text-sm text-foreground leading-tight line-clamp-2">{title}</h3>
-            <div className="flex items-center gap-1.5 mt-1 flex-wrap">
+            <div className="flex items-center gap-1 mt-1 flex-wrap">
               {item.domain && <Badge variant="secondary" className="text-[10px]">{item.domain}</Badge>}
               {item.category && <Badge variant="outline" className="text-[10px]">{item.category}</Badge>}
-              {item.industry && <Badge variant="secondary" className="text-[10px]">🏭 {item.industry}</Badge>}
-              {item.sector && <Badge variant="outline" className="text-[10px]">📊 {item.sector}</Badge>}
-              {item.industry_name && <Badge variant="secondary" className="text-[10px]">🏭 {item.industry_name}</Badge>}
+              {item.industry && type !== "industries" && <Badge variant="secondary" className="text-[10px]">🏭 {item.industry}</Badge>}
+              {item.sector && type !== "sectors" && <Badge variant="outline" className="text-[10px]">📊 {item.sector}</Badge>}
+              {item.platform && <Badge variant="secondary" className="text-[10px]">{item.platform}</Badge>}
+              {item.continent && <Badge variant="outline" className="text-[10px]">{item.continent}</Badge>}
               {item.difficulty && <Badge variant="outline" className="text-[10px]">{item.difficulty}</Badge>}
               {item.ranking_tier && <Badge variant="secondary" className="text-[10px]">{item.ranking_tier}</Badge>}
-              {item.continent && <Badge variant="outline" className="text-[10px]">{item.continent}</Badge>}
-              {item.country && <Badge variant="outline" className="text-[10px]">{item.country}</Badge>}
+              {item.demand_level && <Badge variant="outline" className="text-[10px]">📈 {item.demand_level}</Badge>}
             </div>
           </div>
         </div>
@@ -341,12 +303,12 @@ const ExploreCard = ({ item, type, onSelect }: { item: any; type: FilterTab; onS
         <div className="flex items-center gap-3 text-[10px] text-muted-foreground">
           {item.salary_range && <span>💰 {item.salary_range}</span>}
           {item.avg_salary_usd && <span>💰 {item.avg_salary_usd}</span>}
-          {item.demand_level && <span>📈 {item.demand_level}</span>}
+          {item.price_range && <span>💰 {item.price_range}</span>}
+          {item.growth_trajectory && <span>📈 {item.growth_trajectory}</span>}
         </div>
-        {/* Show related tags preview */}
-        {(item.related_skills || item.skills_required || item.keywords)?.length > 0 && (
+        {(item.related_skills || item.skills_required || item.keywords || item.top_skills)?.length > 0 && (
           <div className="flex flex-wrap gap-1">
-            {(item.related_skills || item.skills_required || item.keywords || []).slice(0, 4).map((s: string) => (
+            {(item.related_skills || item.skills_required || item.keywords || item.top_skills || []).slice(0, 4).map((s: string) => (
               <span key={s} className="px-1.5 py-0.5 rounded bg-muted text-muted-foreground font-body text-[10px]">{s}</span>
             ))}
           </div>

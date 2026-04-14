@@ -236,6 +236,8 @@ export type Database = {
       }
       career_paths: {
         Row: {
+          avg_salary_usd: string | null
+          countries_in_demand: string[] | null
           created_at: string | null
           day_to_day: string | null
           demand_level: string | null
@@ -243,21 +245,33 @@ export type Database = {
           difficulty: string | null
           domain: string
           growth_trajectory: string | null
+          growth_trajectory_detail: string | null
           icon_emoji: string | null
           id: string
           industry: string | null
           industry_trends: string | null
+          interests: string[] | null
           job_role_keywords: string[] | null
           keywords: string[] | null
+          related_careers: string[] | null
+          related_countries: string[] | null
+          related_courses: string[] | null
+          related_domains: string[] | null
+          related_industries: string[] | null
+          related_job_roles: string[] | null
+          related_sectors: string[] | null
           related_skills: string[] | null
           related_subjects: string[] | null
           related_universities: string[] | null
           salary_range: string | null
           sector: string | null
+          soft_skills: string[] | null
           title: string
           tools_certifications: string[] | null
         }
         Insert: {
+          avg_salary_usd?: string | null
+          countries_in_demand?: string[] | null
           created_at?: string | null
           day_to_day?: string | null
           demand_level?: string | null
@@ -265,21 +279,33 @@ export type Database = {
           difficulty?: string | null
           domain?: string
           growth_trajectory?: string | null
+          growth_trajectory_detail?: string | null
           icon_emoji?: string | null
           id?: string
           industry?: string | null
           industry_trends?: string | null
+          interests?: string[] | null
           job_role_keywords?: string[] | null
           keywords?: string[] | null
+          related_careers?: string[] | null
+          related_countries?: string[] | null
+          related_courses?: string[] | null
+          related_domains?: string[] | null
+          related_industries?: string[] | null
+          related_job_roles?: string[] | null
+          related_sectors?: string[] | null
           related_skills?: string[] | null
           related_subjects?: string[] | null
           related_universities?: string[] | null
           salary_range?: string | null
           sector?: string | null
+          soft_skills?: string[] | null
           title: string
           tools_certifications?: string[] | null
         }
         Update: {
+          avg_salary_usd?: string | null
+          countries_in_demand?: string[] | null
           created_at?: string | null
           day_to_day?: string | null
           demand_level?: string | null
@@ -287,17 +313,27 @@ export type Database = {
           difficulty?: string | null
           domain?: string
           growth_trajectory?: string | null
+          growth_trajectory_detail?: string | null
           icon_emoji?: string | null
           id?: string
           industry?: string | null
           industry_trends?: string | null
+          interests?: string[] | null
           job_role_keywords?: string[] | null
           keywords?: string[] | null
+          related_careers?: string[] | null
+          related_countries?: string[] | null
+          related_courses?: string[] | null
+          related_domains?: string[] | null
+          related_industries?: string[] | null
+          related_job_roles?: string[] | null
+          related_sectors?: string[] | null
           related_skills?: string[] | null
           related_subjects?: string[] | null
           related_universities?: string[] | null
           salary_range?: string | null
           sector?: string | null
+          soft_skills?: string[] | null
           title?: string
           tools_certifications?: string[] | null
         }
@@ -898,6 +934,87 @@ export type Database = {
         }
         Relationships: []
       }
+      countries_directory: {
+        Row: {
+          avg_salary_usd: string | null
+          continent: string | null
+          created_at: string | null
+          demand_level: string | null
+          description: string | null
+          gdp_rank: string | null
+          growth_trajectory: string | null
+          icon_emoji: string | null
+          id: string
+          interests: string[] | null
+          keywords: string[] | null
+          name: string
+          official_languages: string[] | null
+          population: string | null
+          soft_skills_in_demand: string[] | null
+          top_careers: string[] | null
+          top_courses: string[] | null
+          top_domains: string[] | null
+          top_industries: string[] | null
+          top_job_roles: string[] | null
+          top_sectors: string[] | null
+          top_skills: string[] | null
+          top_subjects: string[] | null
+          top_universities: string[] | null
+        }
+        Insert: {
+          avg_salary_usd?: string | null
+          continent?: string | null
+          created_at?: string | null
+          demand_level?: string | null
+          description?: string | null
+          gdp_rank?: string | null
+          growth_trajectory?: string | null
+          icon_emoji?: string | null
+          id?: string
+          interests?: string[] | null
+          keywords?: string[] | null
+          name: string
+          official_languages?: string[] | null
+          population?: string | null
+          soft_skills_in_demand?: string[] | null
+          top_careers?: string[] | null
+          top_courses?: string[] | null
+          top_domains?: string[] | null
+          top_industries?: string[] | null
+          top_job_roles?: string[] | null
+          top_sectors?: string[] | null
+          top_skills?: string[] | null
+          top_subjects?: string[] | null
+          top_universities?: string[] | null
+        }
+        Update: {
+          avg_salary_usd?: string | null
+          continent?: string | null
+          created_at?: string | null
+          demand_level?: string | null
+          description?: string | null
+          gdp_rank?: string | null
+          growth_trajectory?: string | null
+          icon_emoji?: string | null
+          id?: string
+          interests?: string[] | null
+          keywords?: string[] | null
+          name?: string
+          official_languages?: string[] | null
+          population?: string | null
+          soft_skills_in_demand?: string[] | null
+          top_careers?: string[] | null
+          top_courses?: string[] | null
+          top_domains?: string[] | null
+          top_industries?: string[] | null
+          top_job_roles?: string[] | null
+          top_sectors?: string[] | null
+          top_skills?: string[] | null
+          top_subjects?: string[] | null
+          top_universities?: string[] | null
+        }
+        Relationships: []
+      }
       curiosity_quest_progress: {
         Row: {
           analysis_results: Json | null
@@ -1171,55 +1288,85 @@ export type Database = {
       }
       domain_directory: {
         Row: {
+          avg_salary_usd: string | null
           category: string
+          countries_in_demand: string[] | null
           created_at: string | null
+          demand_level: string | null
           description: string | null
+          growth_trajectory: string | null
           icon_emoji: string | null
           id: string
           industry: string | null
+          interests: string[] | null
           keywords: string[] | null
           name: string
           parent_domain: string | null
           related_careers: string[] | null
+          related_countries: string[] | null
+          related_courses: string[] | null
+          related_industries: string[] | null
           related_job_roles: string[] | null
+          related_sectors: string[] | null
           related_skills: string[] | null
           related_subjects: string[] | null
           related_universities: string[] | null
           sector: string | null
+          soft_skills: string[] | null
         }
         Insert: {
+          avg_salary_usd?: string | null
           category?: string
+          countries_in_demand?: string[] | null
           created_at?: string | null
+          demand_level?: string | null
           description?: string | null
+          growth_trajectory?: string | null
           icon_emoji?: string | null
           id?: string
           industry?: string | null
+          interests?: string[] | null
           keywords?: string[] | null
           name: string
           parent_domain?: string | null
           related_careers?: string[] | null
+          related_countries?: string[] | null
+          related_courses?: string[] | null
+          related_industries?: string[] | null
           related_job_roles?: string[] | null
+          related_sectors?: string[] | null
           related_skills?: string[] | null
           related_subjects?: string[] | null
           related_universities?: string[] | null
           sector?: string | null
+          soft_skills?: string[] | null
         }
         Update: {
+          avg_salary_usd?: string | null
           category?: string
+          countries_in_demand?: string[] | null
           created_at?: string | null
+          demand_level?: string | null
           description?: string | null
+          growth_trajectory?: string | null
           icon_emoji?: string | null
           id?: string
           industry?: string | null
+          interests?: string[] | null
           keywords?: string[] | null
           name?: string
           parent_domain?: string | null
           related_careers?: string[] | null
+          related_countries?: string[] | null
+          related_courses?: string[] | null
+          related_industries?: string[] | null
           related_job_roles?: string[] | null
+          related_sectors?: string[] | null
           related_skills?: string[] | null
           related_subjects?: string[] | null
           related_universities?: string[] | null
           sector?: string | null
+          soft_skills?: string[] | null
         }
         Relationships: []
       }
@@ -1664,28 +1811,73 @@ export type Database = {
       }
       industry_directory: {
         Row: {
+          avg_salary_usd: string | null
+          countries_in_demand: string[] | null
           created_at: string | null
+          demand_level: string | null
           description: string | null
+          growth_trajectory: string | null
           icon_emoji: string | null
           id: string
+          interests: string[] | null
           keywords: string[] | null
           name: string
+          related_careers: string[] | null
+          related_countries: string[] | null
+          related_courses: string[] | null
+          related_domains: string[] | null
+          related_job_roles: string[] | null
+          related_sectors: string[] | null
+          related_skills: string[] | null
+          related_subjects: string[] | null
+          related_universities: string[] | null
+          soft_skills: string[] | null
         }
         Insert: {
+          avg_salary_usd?: string | null
+          countries_in_demand?: string[] | null
           created_at?: string | null
+          demand_level?: string | null
           description?: string | null
+          growth_trajectory?: string | null
           icon_emoji?: string | null
           id?: string
+          interests?: string[] | null
           keywords?: string[] | null
           name: string
+          related_careers?: string[] | null
+          related_countries?: string[] | null
+          related_courses?: string[] | null
+          related_domains?: string[] | null
+          related_job_roles?: string[] | null
+          related_sectors?: string[] | null
+          related_skills?: string[] | null
+          related_subjects?: string[] | null
+          related_universities?: string[] | null
+          soft_skills?: string[] | null
         }
         Update: {
+          avg_salary_usd?: string | null
+          countries_in_demand?: string[] | null
           created_at?: string | null
+          demand_level?: string | null
           description?: string | null
+          growth_trajectory?: string | null
           icon_emoji?: string | null
           id?: string
+          interests?: string[] | null
           keywords?: string[] | null
           name?: string
+          related_careers?: string[] | null
+          related_countries?: string[] | null
+          related_courses?: string[] | null
+          related_domains?: string[] | null
+          related_job_roles?: string[] | null
+          related_sectors?: string[] | null
+          related_skills?: string[] | null
+          related_subjects?: string[] | null
+          related_universities?: string[] | null
+          soft_skills?: string[] | null
         }
         Relationships: []
       }
@@ -2083,60 +2275,90 @@ export type Database = {
           avg_salary_usd: string | null
           career_path_keywords: string[] | null
           certifications: string[] | null
+          countries_in_demand: string[] | null
           created_at: string | null
           demand_level: string | null
           description: string | null
           domain: string
           education_required: string | null
+          growth_trajectory: string | null
           id: string
           industry: string | null
+          interests: string[] | null
           keywords: string[] | null
+          related_careers: string[] | null
+          related_countries: string[] | null
+          related_courses: string[] | null
           related_domains: string[] | null
+          related_industries: string[] | null
+          related_sectors: string[] | null
+          related_skills: string[] | null
           related_subjects: string[] | null
           related_universities: string[] | null
           sector: string | null
           seniority_levels: string[] | null
           skills_required: string[] | null
+          soft_skills: string[] | null
           title: string
         }
         Insert: {
           avg_salary_usd?: string | null
           career_path_keywords?: string[] | null
           certifications?: string[] | null
+          countries_in_demand?: string[] | null
           created_at?: string | null
           demand_level?: string | null
           description?: string | null
           domain?: string
           education_required?: string | null
+          growth_trajectory?: string | null
           id?: string
           industry?: string | null
+          interests?: string[] | null
           keywords?: string[] | null
+          related_careers?: string[] | null
+          related_countries?: string[] | null
+          related_courses?: string[] | null
           related_domains?: string[] | null
+          related_industries?: string[] | null
+          related_sectors?: string[] | null
+          related_skills?: string[] | null
           related_subjects?: string[] | null
           related_universities?: string[] | null
           sector?: string | null
           seniority_levels?: string[] | null
           skills_required?: string[] | null
+          soft_skills?: string[] | null
           title: string
         }
         Update: {
           avg_salary_usd?: string | null
           career_path_keywords?: string[] | null
           certifications?: string[] | null
+          countries_in_demand?: string[] | null
           created_at?: string | null
           demand_level?: string | null
           description?: string | null
           domain?: string
           education_required?: string | null
+          growth_trajectory?: string | null
           id?: string
           industry?: string | null
+          interests?: string[] | null
           keywords?: string[] | null
+          related_careers?: string[] | null
+          related_countries?: string[] | null
+          related_courses?: string[] | null
           related_domains?: string[] | null
+          related_industries?: string[] | null
+          related_sectors?: string[] | null
+          related_skills?: string[] | null
           related_subjects?: string[] | null
           related_universities?: string[] | null
           sector?: string | null
           seniority_levels?: string[] | null
           skills_required?: string[] | null
+          soft_skills?: string[] | null
           title?: string
         }
         Relationships: []
@@ -3513,6 +3735,102 @@ export type Database = {
           reward_title?: string
           unlocked_at?: string
           user_id?: string
+        }
+        Relationships: []
+      }
+      online_courses_directory: {
+        Row: {
+          avg_rating: string | null
+          avg_salary_usd: string | null
+          countries_in_demand: string[] | null
+          created_at: string | null
+          demand_level: string | null
+          description: string | null
+          difficulty: string | null
+          domain: string | null
+          duration: string | null
+          growth_trajectory: string | null
+          icon_emoji: string | null
+          id: string
+          interests: string[] | null
+          keywords: string[] | null
+          name: string
+          platform: string | null
+          price_range: string | null
+          related_careers: string[] | null
+          related_countries: string[] | null
+          related_courses: string[] | null
+          related_domains: string[] | null
+          related_industries: string[] | null
+          related_job_roles: string[] | null
+          related_sectors: string[] | null
+          related_skills: string[] | null
+          related_subjects: string[] | null
+          related_universities: string[] | null
+          soft_skills: string[] | null
+          url: string | null
+        }
+        Insert: {
+          avg_rating?: string | null
+          avg_salary_usd?: string | null
+          countries_in_demand?: string[] | null
+          created_at?: string | null
+          demand_level?: string | null
+          description?: string | null
+          difficulty?: string | null
+          domain?: string | null
+          duration?: string | null
+          growth_trajectory?: string | null
+          icon_emoji?: string | null
+          id?: string
+          interests?: string[] | null
+          keywords?: string[] | null
+          name: string
+          platform?: string | null
+          price_range?: string | null
+          related_careers?: string[] | null
+          related_countries?: string[] | null
+          related_courses?: string[] | null
+          related_domains?: string[] | null
+          related_industries?: string[] | null
+          related_job_roles?: string[] | null
+          related_sectors?: string[] | null
+          related_skills?: string[] | null
+          related_subjects?: string[] | null
+          related_universities?: string[] | null
+          soft_skills?: string[] | null
+          url?: string | null
+        }
+        Update: {
+          avg_rating?: string | null
+          avg_salary_usd?: string | null
+          countries_in_demand?: string[] | null
+          created_at?: string | null
+          demand_level?: string | null
+          description?: string | null
+          difficulty?: string | null
+          domain?: string | null
+          duration?: string | null
+          growth_trajectory?: string | null
+          icon_emoji?: string | null
+          id?: string
+          interests?: string[] | null
+          keywords?: string[] | null
+          name?: string
+          platform?: string | null
+          price_range?: string | null
+          related_careers?: string[] | null
+          related_countries?: string[] | null
+          related_courses?: string[] | null
+          related_domains?: string[] | null
+          related_industries?: string[] | null
+          related_job_roles?: string[] | null
+          related_sectors?: string[] | null
+          related_skills?: string[] | null
+          related_subjects?: string[] | null
+          related_universities?: string[] | null
+          soft_skills?: string[] | null
+          url?: string | null
         }
         Relationships: []
       }
@@ -5218,34 +5536,79 @@ export type Database = {
       }
       sector_directory: {
         Row: {
+          avg_salary_usd: string | null
+          countries_in_demand: string[] | null
           created_at: string | null
+          demand_level: string | null
           description: string | null
+          growth_trajectory: string | null
           icon_emoji: string | null
           id: string
           industry_id: string | null
           industry_name: string | null
+          interests: string[] | null
           keywords: string[] | null
           name: string
+          related_careers: string[] | null
+          related_countries: string[] | null
+          related_courses: string[] | null
+          related_domains: string[] | null
+          related_job_roles: string[] | null
+          related_sectors: string[] | null
+          related_skills: string[] | null
+          related_subjects: string[] | null
+          related_universities: string[] | null
+          soft_skills: string[] | null
         }
         Insert: {
+          avg_salary_usd?: string | null
+          countries_in_demand?: string[] | null
           created_at?: string | null
+          demand_level?: string | null
           description?: string | null
+          growth_trajectory?: string | null
           icon_emoji?: string | null
           id?: string
           industry_id?: string | null
           industry_name?: string | null
+          interests?: string[] | null
           keywords?: string[] | null
           name: string
+          related_careers?: string[] | null
+          related_countries?: string[] | null
+          related_courses?: string[] | null
+          related_domains?: string[] | null
+          related_job_roles?: string[] | null
+          related_sectors?: string[] | null
+          related_skills?: string[] | null
+          related_subjects?: string[] | null
+          related_universities?: string[] | null
+          soft_skills?: string[] | null
         }
         Update: {
+          avg_salary_usd?: string | null
+          countries_in_demand?: string[] | null
           created_at?: string | null
+          demand_level?: string | null
           description?: string | null
+          growth_trajectory?: string | null
           icon_emoji?: string | null
           id?: string
           industry_id?: string | null
           industry_name?: string | null
+          interests?: string[] | null
           keywords?: string[] | null
           name?: string
+          related_careers?: string[] | null
+          related_countries?: string[] | null
+          related_courses?: string[] | null
+          related_domains?: string[] | null
+          related_job_roles?: string[] | null
+          related_sectors?: string[] | null
+          related_skills?: string[] | null
+          related_subjects?: string[] | null
+          related_universities?: string[] | null
+          soft_skills?: string[] | null
         }
         Relationships: [
           {
@@ -5878,40 +6241,76 @@ export type Database = {
       }
       skills_directory: {
         Row: {
+          avg_salary_usd: string | null
           category: string | null
+          countries_in_demand: string[] | null
           created_at: string | null
+          demand_level: string | null
           description: string | null
           domain: string | null
+          growth_trajectory: string | null
           id: string
+          interests: string[] | null
           keywords: string[] | null
           name: string
+          related_careers: string[] | null
+          related_countries: string[] | null
+          related_courses: string[] | null
           related_domains: string[] | null
+          related_industries: string[] | null
           related_job_roles: string[] | null
           related_sectors: string[] | null
+          related_skills: string[] | null
+          related_universities: string[] | null
+          soft_skills: string[] | null
         }
         Insert: {
+          avg_salary_usd?: string | null
           category?: string | null
+          countries_in_demand?: string[] | null
           created_at?: string | null
+          demand_level?: string | null
           description?: string | null
           domain?: string | null
+          growth_trajectory?: string | null
           id?: string
+          interests?: string[] | null
           keywords?: string[] | null
           name: string
+          related_careers?: string[] | null
+          related_countries?: string[] | null
+          related_courses?: string[] | null
           related_domains?: string[] | null
+          related_industries?: string[] | null
           related_job_roles?: string[] | null
           related_sectors?: string[] | null
+          related_skills?: string[] | null
+          related_universities?: string[] | null
+          soft_skills?: string[] | null
         }
         Update: {
+          avg_salary_usd?: string | null
           category?: string | null
+          countries_in_demand?: string[] | null
           created_at?: string | null
+          demand_level?: string | null
           description?: string | null
           domain?: string | null
+          growth_trajectory?: string | null
           id?: string
+          interests?: string[] | null
           keywords?: string[] | null
           name?: string
+          related_careers?: string[] | null
+          related_countries?: string[] | null
+          related_courses?: string[] | null
           related_domains?: string[] | null
+          related_industries?: string[] | null
           related_job_roles?: string[] | null
           related_sectors?: string[] | null
+          related_skills?: string[] | null
+          related_universities?: string[] | null
+          soft_skills?: string[] | null
         }
         Relationships: []
       }
@@ -6043,37 +6442,76 @@ export type Database = {
       }
       subjects_directory: {
         Row: {
+          avg_salary_usd: string | null
+          countries_in_demand: string[] | null
           created_at: string | null
+          demand_level: string | null
           description: string | null
           domain: string | null
+          growth_trajectory: string | null
           id: string
+          interests: string[] | null
           keywords: string[] | null
           name: string
+          related_careers: string[] | null
+          related_countries: string[] | null
+          related_courses: string[] | null
           related_domains: string[] | null
+          related_industries: string[] | null
+          related_job_roles: string[] | null
+          related_sectors: string[] | null
           related_skills: string[] | null
+          related_subjects: string[] | null
           related_universities: string[] | null
+          soft_skills: string[] | null
         }
         Insert: {
+          avg_salary_usd?: string | null
+          countries_in_demand?: string[] | null
           created_at?: string | null
+          demand_level?: string | null
           description?: string | null
           domain?: string | null
+          growth_trajectory?: string | null
           id?: string
+          interests?: string[] | null
           keywords?: string[] | null
           name: string
+          related_careers?: string[] | null
+          related_countries?: string[] | null
+          related_courses?: string[] | null
           related_domains?: string[] | null
+          related_industries?: string[] | null
+          related_job_roles?: string[] | null
+          related_sectors?: string[] | null
           related_skills?: string[] | null
+          related_subjects?: string[] | null
           related_universities?: string[] | null
+          soft_skills?: string[] | null
         }
         Update: {
+          avg_salary_usd?: string | null
+          countries_in_demand?: string[] | null
           created_at?: string | null
+          demand_level?: string | null
           description?: string | null
           domain?: string | null
+          growth_trajectory?: string | null
           id?: string
+          interests?: string[] | null
           keywords?: string[] | null
           name?: string
+          related_careers?: string[] | null
+          related_countries?: string[] | null
+          related_courses?: string[] | null
           related_domains?: string[] | null
+          related_industries?: string[] | null
+          related_job_roles?: string[] | null
+          related_sectors?: string[] | null
           related_skills?: string[] | null
+          related_subjects?: string[] | null
           related_universities?: string[] | null
+          soft_skills?: string[] | null
         }
         Relationships: []
       }
@@ -6335,53 +6773,83 @@ export type Database = {
       }
       universities_directory: {
         Row: {
+          avg_salary_usd: string | null
           city: string | null
           continent: string | null
           country: string
           created_at: string | null
+          demand_level: string | null
+          description: string | null
+          growth_trajectory: string | null
           id: string
+          interests: string[] | null
           keywords: string[] | null
           name: string
           ranking_tier: string | null
           related_careers: string[] | null
+          related_countries: string[] | null
+          related_courses: string[] | null
           related_domains: string[] | null
+          related_industries: string[] | null
+          related_job_roles: string[] | null
           related_sectors: string[] | null
           related_skills: string[] | null
           related_subjects: string[] | null
+          soft_skills: string[] | null
           type: string | null
           website: string | null
         }
         Insert: {
+          avg_salary_usd?: string | null
           city?: string | null
           continent?: string | null
           country: string
           created_at?: string | null
+          demand_level?: string | null
+          description?: string | null
+          growth_trajectory?: string | null
           id?: string
+          interests?: string[] | null
           keywords?: string[] | null
           name: string
           ranking_tier?: string | null
           related_careers?: string[] | null
+          related_countries?: string[] | null
+          related_courses?: string[] | null
           related_domains?: string[] | null
+          related_industries?: string[] | null
+          related_job_roles?: string[] | null
           related_sectors?: string[] | null
           related_skills?: string[] | null
           related_subjects?: string[] | null
+          soft_skills?: string[] | null
           type?: string | null
           website?: string | null
         }
         Update: {
+          avg_salary_usd?: string | null
           city?: string | null
           continent?: string | null
           country?: string
           created_at?: string | null
+          demand_level?: string | null
+          description?: string | null
+          growth_trajectory?: string | null
           id?: string
+          interests?: string[] | null
           keywords?: string[] | null
           name?: string
           ranking_tier?: string | null
           related_careers?: string[] | null
+          related_countries?: string[] | null
+          related_courses?: string[] | null
           related_domains?: string[] | null
+          related_industries?: string[] | null
+          related_job_roles?: string[] | null
           related_sectors?: string[] | null
           related_skills?: string[] | null
           related_subjects?: string[] | null
+          soft_skills?: string[] | null
           type?: string | null
           website?: string | null
         }
