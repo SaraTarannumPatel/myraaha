@@ -70,7 +70,7 @@ const Explore = () => {
     const results = await Promise.all(
       TAB_CONFIG.map(t => {
         const orderCol = ["universities", "domains", "industries", "sectors", "skills", "subjects", "courses", "countries"].includes(t.key) ? "name" : "title";
-        return supabase.from(TABLE_MAP[t.key]).select("*").order(orderCol).limit(1000);
+        return supabase.from(TABLE_MAP[t.key] as any).select("*").order(orderCol).limit(1000);
       })
     );
     const newData: Record<string, any[]> = {};
