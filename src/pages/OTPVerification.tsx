@@ -184,7 +184,7 @@ const OTPVerification = () => {
 
         {/* Step label */}
         <div className="flex items-center gap-2 mb-2">
-          {<stepIcon size={18} className="text-[hsl(230,40%,25%)]" />}
+          {step === "email" ? <Mail size={18} className="text-[hsl(230,40%,25%)]" /> : <Phone size={18} className="text-[hsl(230,40%,25%)]" />}
           <span className="font-display text-lg text-[hsl(230,40%,25%)]">Verify {stepLabel}</span>
         </div>
         <p className="font-body text-xs text-muted-foreground mb-6 text-center">
