@@ -5,7 +5,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
-  ArrowRight, ArrowLeft, User, Mail, Phone, Users,
+  ArrowRight, ArrowLeft, User, Users,
   Calendar, GraduationCap, BookOpen, Monitor, Zap,
   Bot, Clock, Timer, MapPin, Languages, CheckCircle2
 } from "lucide-react";
@@ -22,7 +22,7 @@ interface DemographicQuestion {
   placeholder?: string;
   options?: { label: string; value: string }[];
   maxSelect?: number;
-  required?: boolean;
+  required: boolean;
   inputType?: string;
 }
 
@@ -38,28 +38,9 @@ const demographicQuestions: DemographicQuestion[] = [
     required: true,
   },
   {
-    id: "email",
-    section: "Basic Identification",
-    question: "Your email (for login & important updates) 📧",
-    icon: Mail,
-    iconColor: "text-indigo",
-    type: "text",
-    placeholder: "your@email.com",
-    inputType: "email",
-  },
-  {
-    id: "mobile_number",
-    section: "Basic Identification",
-    question: "Your mobile number (for reminders & mentor coordination) 📱",
-    icon: Phone,
-    iconColor: "text-primary",
-    type: "text",
-    placeholder: "+91 XXXXX XXXXX",
-  },
-  {
     id: "gender_identity",
     section: "Basic Identification",
-    question: "How do you identify? (Optional) 🌈",
+    question: "How do you identify? 🌈",
     icon: Users,
     iconColor: "text-accent-foreground",
     type: "single",
@@ -69,6 +50,7 @@ const demographicQuestions: DemographicQuestion[] = [
       { label: "Non-binary", value: "non_binary" },
       { label: "Prefer not to say", value: "prefer_not_to_say" },
     ],
+    required: true,
   },
   {
     id: "age_group",
@@ -78,13 +60,9 @@ const demographicQuestions: DemographicQuestion[] = [
     iconColor: "text-blue",
     type: "single",
     options: [
-      { label: "13–14", value: "13-14" },
       { label: "15–16", value: "15-16" },
       { label: "17–18", value: "17-18" },
       { label: "19–22", value: "19-22" },
-      { label: "23–25", value: "23-25" },
-      { label: "26–30", value: "26-30" },
-      { label: "30+", value: "30+" },
     ],
     required: true,
   },
@@ -121,6 +99,7 @@ const demographicQuestions: DemographicQuestion[] = [
       { label: "Multidisciplinary", value: "multidisciplinary" },
       { label: "Not applicable / unsure", value: "not_applicable" },
     ],
+    required: true,
   },
   {
     id: "highest_education",
@@ -138,6 +117,7 @@ const demographicQuestions: DemographicQuestion[] = [
       { label: "Postgraduate", value: "postgraduate" },
       { label: "Doctoral / Research", value: "doctoral" },
     ],
+    required: true,
   },
   {
     id: "primary_device",
@@ -183,6 +163,7 @@ const demographicQuestions: DemographicQuestion[] = [
       { label: "Curious but unsure", value: "curious_unsure" },
       { label: "Uncomfortable", value: "uncomfortable" },
     ],
+    required: true,
   },
   {
     id: "time_commitment",
@@ -224,6 +205,7 @@ const demographicQuestions: DemographicQuestion[] = [
     type: "text",
     placeholder: "Your age",
     inputType: "number",
+    required: true,
   },
   {
     id: "location",
@@ -233,6 +215,7 @@ const demographicQuestions: DemographicQuestion[] = [
     iconColor: "text-primary",
     type: "text",
     placeholder: "City, State",
+    required: true,
   },
   {
     id: "location_type",
@@ -248,6 +231,7 @@ const demographicQuestions: DemographicQuestion[] = [
       { label: "Tier 3 city", value: "tier_3" },
       { label: "Rural area", value: "rural" },
     ],
+    required: true,
   },
   {
     id: "preferred_language",
@@ -262,6 +246,7 @@ const demographicQuestions: DemographicQuestion[] = [
       { label: "Hinglish", value: "hinglish" },
       { label: "Regional language", value: "regional" },
     ],
+    required: true,
   },
 ];
 
@@ -272,18 +257,14 @@ const JourneyDiscovery = () => {
   const [answers, setAnswers] = useState<Record<string, string>>(() => {
     const initial: Record<string, string> = {};
     if (profile?.full_name) initial.full_name = profile.full_name;
-    if (user?.email) initial.email = user.email;
-    if (profile?.mobile_number) initial.mobile_number = profile.mobile_number;
     return initial;
   });
 
   const currentQ = demographicQuestions[step];
   const totalSteps = demographicQuestions.length;
-  const progressPercent = 25 + Math.round((step / totalSteps) * 20); // 25-45% of overall onboarding
+  const progressPercent = 25 + Math.round((step / totalSteps) * 40);
 
-  const canNext = currentQ.required
-    ? !!answers[currentQ.id]?.trim()
-    : true;
+  const canNext = !!answers[currentQ.id]?.trim();
 
   const handleTextChange = (value: string) => {
     setAnswers(prev => ({ ...prev, [currentQ.id]: value }));
@@ -294,6 +275,7 @@ const JourneyDiscovery = () => {
   };
 
   const handleNext = () => {
+    if (!canNext) return;
     if (step < totalSteps - 1) {
       setStep(step + 1);
     } else {
@@ -310,7 +292,6 @@ const JourneyDiscovery = () => {
     await updateProfile({
       full_name: answers.full_name || profile?.full_name || null,
       age: answers.age ? parseInt(answers.age) : null,
-      mobile_number: answers.mobile_number || null,
       gender_identity: answers.gender_identity || null,
       age_group: answers.age_group || null,
       life_stage: answers.life_stage || null,
@@ -328,9 +309,9 @@ const JourneyDiscovery = () => {
         demographic_answers: answers,
         user_type: profile?.user_type,
       },
-      onboarding_status: "intent" as any,
+      onboarding_status: "consent" as any,
     } as any);
-    navigate("/onboarding/intent");
+    navigate("/onboarding/consent");
   };
 
   const sectionLabel = currentQ.section;
@@ -345,7 +326,6 @@ const JourneyDiscovery = () => {
           animate={{ opacity: 1, y: 0 }}
           className="max-w-xl w-full space-y-6"
         >
-          {/* Progress */}
           <div className="space-y-2">
             <div className="flex items-center justify-between">
               <span className="font-body text-xs text-muted-foreground uppercase tracking-wider">
@@ -383,12 +363,8 @@ const JourneyDiscovery = () => {
                 <h1 className="font-display text-2xl sm:text-3xl text-[hsl(230,40%,25%)]">
                   {currentQ.question}
                 </h1>
-                {!currentQ.required && currentQ.type !== "text" && (
-                  <p className="font-body text-xs text-muted-foreground">optional — skip if you'd like</p>
-                )}
               </div>
 
-              {/* Text input */}
               {currentQ.type === "text" && (
                 <div className="max-w-md mx-auto">
                   <Input
@@ -402,7 +378,6 @@ const JourneyDiscovery = () => {
                 </div>
               )}
 
-              {/* Single select */}
               {currentQ.type === "single" && currentQ.options && (
                 <div className={`${
                   currentQ.options.length > 5
@@ -442,24 +417,13 @@ const JourneyDiscovery = () => {
             <Button variant="ghost" onClick={handleBack} className="font-body">
               <ArrowLeft size={18} /> Back
             </Button>
-            <div className="flex gap-2">
-              {!currentQ.required && (
-                <Button
-                  variant="ghost"
-                  onClick={handleNext}
-                  className="font-body text-muted-foreground"
-                >
-                  Skip
-                </Button>
-              )}
-              <Button
-                onClick={handleNext}
-                disabled={currentQ.required && !canNext}
-                className="bg-[hsl(230,40%,25%)] text-[hsl(45,80%,65%)] rounded-full px-8 font-body font-semibold hover:bg-[hsl(230,40%,20%)] disabled:opacity-50"
-              >
-                {step === totalSteps - 1 ? "Finish" : "Next"} <ArrowRight size={18} />
-              </Button>
-            </div>
+            <Button
+              onClick={handleNext}
+              disabled={!canNext}
+              className="bg-[hsl(230,40%,25%)] text-[hsl(45,80%,65%)] rounded-full px-8 font-body font-semibold hover:bg-[hsl(230,40%,20%)] disabled:opacity-50"
+            >
+              {step === totalSteps - 1 ? "Finish" : "Next"} <ArrowRight size={18} />
+            </Button>
           </div>
         </motion.div>
       </div>
