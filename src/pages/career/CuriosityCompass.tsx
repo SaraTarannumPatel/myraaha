@@ -288,12 +288,145 @@ const AssessmentTestSection = ({ user, recordSignal, recordMultipleSignals }: { 
   );
 };
 
+// ===== Intro Pages Component =====
+const CompassIntro = ({ onComplete }: { onComplete: () => void }) => {
+  const [introStep, setIntroStep] = useState(0);
+
+  const introPages = [
+    {
+      icon: Compass,
+      title: "Welcome to Curiosity Compass 🧭",
+      description: "This is your personal exploration hub. Here, you'll discover what truly excites you — through assessments, career stories, challenges, and interactive cards.",
+      features: [
+        "Discover your interests through guided assessments",
+        "Explore career paths through story-based narratives",
+        "Get AI-powered recommendations based on your signals",
+        "Build your unique Work DNA profile over time",
+      ],
+    },
+    {
+      icon: ClipboardCheck,
+      title: "Three Assessments Await You ✨",
+      description: "To calibrate your compass, we'll guide you through three different assessments. Each one helps us understand you better.",
+      tests: [
+        { name: "Discovery Assessment", desc: "Understand your mindset, confidence, and career readiness through a series of guided questions.", icon: Brain, color: "text-blue" },
+        { name: "Psychometric Assessment", desc: "A 22-question deep dive into your cognitive patterns, behavioral tendencies, and emotional intelligence.", icon: ClipboardCheck, color: "text-indigo" },
+        { name: "Interests Assessment", desc: "Explore career cards, stories, challenges, and visual icons to discover what resonates with you.", icon: Heart, color: "text-terracotta" },
+      ],
+    },
+  ];
+
+  const page = introPages[introStep];
+
+  return (
+    <AnimatePresence mode="wait">
+      <motion.div
+        key={introStep}
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: -20 }}
+        className="fixed inset-0 z-50 bg-background/95 backdrop-blur-sm flex items-center justify-center p-4"
+      >
+        <div className="max-w-lg w-full bg-card rounded-2xl border border-border shadow-2xl p-8 space-y-6">
+          <div className="text-center space-y-4">
+            <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-primary to-accent flex items-center justify-center mx-auto">
+              <page.icon size={36} className="text-primary-foreground" />
+            </div>
+            <h2 className="font-display text-2xl text-foreground">{page.title}</h2>
+            <p className="font-body text-sm text-muted-foreground">{page.description}</p>
+          </div>
+
+          {page.features && (
+            <div className="space-y-2">
+              {page.features.map((f, i) => (
+                <motion.div key={i} initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.1 }}
+                  className="flex items-center gap-3 p-3 rounded-lg bg-muted/30">
+                  <CheckCircle2 size={16} className="text-primary shrink-0" />
+                  <span className="font-body text-sm">{f}</span>
+                </motion.div>
+              ))}
+            </div>
+          )}
+
+          {page.tests && (
+            <div className="space-y-3">
+              {page.tests.map((t, i) => (
+                <motion.div key={i} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.15 }}
+                  className="flex items-start gap-3 p-4 rounded-xl border border-border">
+                  <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
+                    <t.icon size={20} className={t.color} />
+                  </div>
+                  <div>
+                    <h4 className="font-display text-sm text-foreground">{t.name}</h4>
+                    <p className="font-body text-xs text-muted-foreground mt-0.5">{t.desc}</p>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          )}
+
+          <div className="flex items-center justify-between pt-2">
+            <div className="flex gap-1.5">
+              {introPages.map((_, i) => (
+                <div key={i} className={`w-2 h-2 rounded-full transition-all ${i === introStep ? "bg-primary w-6" : "bg-muted"}`} />
+              ))}
+            </div>
+            <Button
+              onClick={() => {
+                if (introStep < introPages.length - 1) setIntroStep(introStep + 1);
+                else onComplete();
+              }}
+              className="bg-[hsl(230,40%,25%)] text-[hsl(45,80%,65%)] rounded-full px-8 font-body font-semibold"
+            >
+              {introStep < introPages.length - 1 ? "Next" : "Let's Begin"} <ArrowRight size={16} className="ml-2" />
+            </Button>
+          </div>
+        </div>
+      </motion.div>
+    </AnimatePresence>
+  );
+};
+
+// ===== Popup Card Assessment Wrapper =====
+const PopupAssessmentCard = ({ children, title, subtitle, progress, total, onSkip }: {
+  children: React.ReactNode; title: string; subtitle?: string; progress: number; total: number; onSkip?: () => void;
+}) => (
+  <div className="fixed inset-0 z-40 bg-background/80 backdrop-blur-sm flex items-center justify-center p-4">
+    <motion.div
+      initial={{ opacity: 0, scale: 0.9 }}
+      animate={{ opacity: 1, scale: 1 }}
+      className="max-w-xl w-full bg-card rounded-2xl border border-border shadow-2xl overflow-hidden"
+    >
+      <div className="p-6 border-b border-border">
+        <div className="flex items-center justify-between mb-3">
+          <Badge variant="outline" className="text-xs">{title}</Badge>
+          <span className="font-body text-xs text-muted-foreground">{progress} / {total}</span>
+        </div>
+        <Progress value={(progress / total) * 100} className="h-1.5" />
+        {subtitle && <p className="font-body text-xs text-muted-foreground mt-2">{subtitle}</p>}
+      </div>
+      <div className="p-6 max-h-[60vh] overflow-y-auto">{children}</div>
+      {onSkip && (
+        <div className="p-4 border-t border-border flex justify-end">
+          <Button variant="ghost" size="sm" onClick={onSkip} className="text-muted-foreground text-xs">
+            Skip this question
+          </Button>
+        </div>
+      )}
+    </motion.div>
+  </div>
+);
+
 const CuriosityCompass = () => {
   const { user, profile } = useAuth();
   const navigate = useNavigate();
   const { recordSignal, recordMultipleSignals, recordTextSignals, getAggregatedSignals } = useUserSignals();
   const [tab, setTab] = useState("assessment");
   const [showCelebration, setShowCelebration] = useState(true);
+  const [showIntro, setShowIntro] = useState(() => {
+    // Show intro only if user hasn't seen it
+    return !localStorage.getItem("myraaha_compass_intro_seen");
+  });
 
   // Check if both assessments are completed
   const discoveryDone = !!profile?.journey_responses?.assessment_completed;
