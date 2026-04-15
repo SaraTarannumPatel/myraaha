@@ -14,10 +14,11 @@ import signupIllustration from "@/assets/auth-signup-illustration.png";
 const Auth = () => {
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [emailVerified, setEmailVerified] = useState(false);
-  const { signIn, signUp, user, profile } = useAuth();
+  const { signIn, user, profile } = useAuth();
   const navigate = useNavigate();
 
   // Detect email verification from URL hash
@@ -26,7 +27,6 @@ const Auth = () => {
     if (hash && (hash.includes("type=signup") || hash.includes("type=email"))) {
       setEmailVerified(true);
       setIsLogin(true);
-      // Clean the hash from URL
       window.history.replaceState(null, "", window.location.pathname);
     }
   }, []);
@@ -41,6 +41,27 @@ const Auth = () => {
     }
   }, [user, profile, navigate]);
 
+  const formatPhone = (value: string) => {
+    // Only allow digits after +91
+    const digits = value.replace(/\D/g, "");
+    if (digits.length <= 2) return "+91 ";
+    const remaining = digits.slice(2, 12);
+    if (remaining.length <= 5) return `+91 ${remaining}`;
+    return `+91 ${remaining.slice(0, 5)} ${remaining.slice(5)}`;
+  };
+
+  const handlePhoneChange = (value: string) => {
+    if (!value.startsWith("+91")) {
+      setPhone("+91 ");
+      return;
+    }
+    setPhone(formatPhone(value));
+  };
+
+  const getCleanPhone = () => {
+    return "+" + phone.replace(/\D/g, "");
+  };
+
   const handleSubmit = async (e?: React.FormEvent) => {
     if (e) e.preventDefault();
     setSubmitting(true);
@@ -49,9 +70,31 @@ const Auth = () => {
       const { error } = await signIn(email, password);
       if (error) toast.error(error.message);
     } else {
-      const { error } = await signUp(email, password, email.split("@")[0]);
-      if (error) toast.error(error.message);
-      else toast.success("Check your email to confirm your account!");
+      // Validate phone
+      const cleanPhone = getCleanPhone();
+      if (cleanPhone.length < 13) {
+        toast.error("Please enter a valid 10-digit Indian mobile number");
+        setSubmitting(false);
+        return;
+      }
+
+      // Sign up with email
+      const { error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          data: { full_name: email.split("@")[0], phone: cleanPhone },
+          emailRedirectTo: window.location.origin,
+        },
+      });
+      if (error) {
+        toast.error(error.message);
+      } else {
+        // Navigate to OTP verification for both email and phone
+        navigate("/verify-otp", {
+          state: { email, phone: cleanPhone, type: "dual" },
+        });
+      }
     }
     setSubmitting(false);
   };
@@ -153,10 +196,23 @@ const Auth = () => {
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder={isLogin ? "Name/Mobile Number/Email" : "Email/Mobile Number"}
+              placeholder={isLogin ? "Email" : "Email"}
               required
               className="w-full h-14 rounded-2xl bg-[hsl(0,0%,85%,0.5)] px-5 font-body text-sm text-foreground placeholder:text-muted-foreground outline-none border-none focus:ring-2 focus:ring-[hsl(158,17%,37%)] transition-all"
             />
+
+            {!isLogin && (
+              <input
+                type="tel"
+                value={phone}
+                onChange={(e) => handlePhoneChange(e.target.value)}
+                placeholder="+91 XXXXX XXXXX"
+                required
+                className="w-full h-14 rounded-2xl bg-[hsl(0,0%,85%,0.5)] px-5 font-body text-sm text-foreground placeholder:text-muted-foreground outline-none border-none focus:ring-2 focus:ring-[hsl(158,17%,37%)] transition-all"
+                onFocus={() => !phone && setPhone("+91 ")}
+              />
+            )}
+
             <input
               type="password"
               value={password}
