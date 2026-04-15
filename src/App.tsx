@@ -12,10 +12,7 @@ import Auth from "./pages/Auth";
 import GuestEntry from "./pages/GuestEntry";
 import Welcome from "./pages/onboarding/Welcome";
 import UserTypeSelection from "./pages/onboarding/UserTypeSelection";
-import IntentSelection from "./pages/onboarding/IntentSelection";
-
 import ConsentStep from "./pages/onboarding/ConsentStep";
-import GuidedOnboarding from "./pages/onboarding/GuidedOnboarding";
 import JourneyDiscovery from "./pages/onboarding/JourneyDiscovery";
 import OTPVerification from "./pages/OTPVerification";
 import ResetPassword from "./pages/ResetPassword";
@@ -80,8 +77,6 @@ const App = () => (
             <Route path="/onboarding" element={<ProtectedRoute><Welcome /></ProtectedRoute>} />
             <Route path="/onboarding/user-type" element={<ProtectedRoute><UserTypeSelection /></ProtectedRoute>} />
             <Route path="/onboarding/journey" element={<ProtectedRoute><JourneyDiscovery /></ProtectedRoute>} />
-            <Route path="/onboarding/intent" element={<ProtectedRoute><IntentSelection /></ProtectedRoute>} />
-            <Route path="/onboarding/guided" element={<ProtectedRoute><GuidedOnboarding /></ProtectedRoute>} />
             <Route path="/onboarding/consent" element={<ProtectedRoute><ConsentStep /></ProtectedRoute>} />
             <Route path="/dashboard" element={<ProtectedRoute><DashboardLayout /></ProtectedRoute>}>
               <Route index element={<Dashboard />} />
