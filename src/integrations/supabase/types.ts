@@ -4693,6 +4693,7 @@ export type Database = {
             | null
           preferred_language: string | null
           primary_device: string | null
+          public_uid: string | null
           short_term_goals: string | null
           time_commitment: string | null
           updated_at: string
@@ -4733,6 +4734,7 @@ export type Database = {
             | null
           preferred_language?: string | null
           primary_device?: string | null
+          public_uid?: string | null
           short_term_goals?: string | null
           time_commitment?: string | null
           updated_at?: string
@@ -4773,6 +4775,7 @@ export type Database = {
             | null
           preferred_language?: string | null
           primary_device?: string | null
+          public_uid?: string | null
           short_term_goals?: string | null
           time_commitment?: string | null
           updated_at?: string
