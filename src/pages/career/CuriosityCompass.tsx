@@ -820,6 +820,14 @@ const CuriosityCompass = () => {
 
   return (
     <div className="space-y-8">
+      {/* Intro pages for first-time visitors */}
+      {showIntro && (
+        <CompassIntro onComplete={() => {
+          setShowIntro(false);
+          localStorage.setItem("myraaha_compass_intro_seen", "true");
+        }} />
+      )}
+
       {/* Onboarding celebration for fully completed users */}
       <OnboardingCelebration onDismiss={() => { setShowCelebration(false); setTab("assessment"); }} />
       {/* Header */}
