@@ -5556,6 +5556,7 @@ export type Database = {
           related_countries: string[] | null
           related_courses: string[] | null
           related_domains: string[] | null
+          related_industries: string[] | null
           related_job_roles: string[] | null
           related_sectors: string[] | null
           related_skills: string[] | null
@@ -5581,6 +5582,7 @@ export type Database = {
           related_countries?: string[] | null
           related_courses?: string[] | null
           related_domains?: string[] | null
+          related_industries?: string[] | null
           related_job_roles?: string[] | null
           related_sectors?: string[] | null
           related_skills?: string[] | null
@@ -5606,6 +5608,7 @@ export type Database = {
           related_countries?: string[] | null
           related_courses?: string[] | null
           related_domains?: string[] | null
+          related_industries?: string[] | null
           related_job_roles?: string[] | null
           related_sectors?: string[] | null
           related_skills?: string[] | null
