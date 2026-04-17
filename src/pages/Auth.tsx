@@ -90,9 +90,9 @@ const Auth = () => {
       if (error) {
         toast.error(error.message);
       } else {
-        // Navigate to OTP verification for both email and phone
+        // Phone is stored as metadata only — email is the only verified channel
         navigate("/verify-otp", {
-          state: { email, phone: cleanPhone, type: "dual" },
+          state: { email },
         });
       }
     }
