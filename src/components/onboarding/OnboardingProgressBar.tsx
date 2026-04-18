@@ -7,7 +7,7 @@ interface OnboardingProgressBarProps {
   nextRewardAt?: number; // e.g. 30, 50, 70, 90
 }
 
-const MILESTONES = [30, 50, 70, 90];
+const MILESTONES = [30, 60, 90];
 
 const OnboardingProgressBar = ({ progress, showRewardHint = true, nextRewardAt }: OnboardingProgressBarProps) => {
   const nextMilestone = nextRewardAt || MILESTONES.find((m) => m > progress) || 100;

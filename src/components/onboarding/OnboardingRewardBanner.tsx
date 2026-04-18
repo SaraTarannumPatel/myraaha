@@ -13,31 +13,24 @@ export interface RewardMilestone {
 export const ONBOARDING_REWARDS: RewardMilestone[] = [
   {
     percent: 30,
+    rewardKey: "free_discovery_test",
+    title: "Free Discovery Test",
+    emoji: "🔍",
+    description: "Unlock the full Discovery Test (worth ₹2,999) for free!",
+  },
+  {
+    percent: 60,
     rewardKey: "free_psychometric_test",
-    title: "Free Curiosity Compass Test",
+    title: "Free Psychometric Test",
     emoji: "🧭",
-    description: "Unlock the full psychometric assessment (worth ₹2,999) for free!",
-  },
-  {
-    percent: 50,
-    rewardKey: "free_ai_roadmaps",
-    title: "5 Free AI Roadmap Creations",
-    emoji: "🗺️",
-    description: "Get 5 personalized AI-powered career roadmaps through Curiosity Compass.",
-  },
-  {
-    percent: 70,
-    rewardKey: "free_career_therapist",
-    title: "Free AI Career Therapist Session",
-    emoji: "🧠",
-    description: "Unlimited AI career therapist chats for your first month.",
+    description: "Unlock the full Psychometric Assessment (worth ₹2,999) for free!",
   },
   {
     percent: 90,
-    rewardKey: "free_mentor_session",
-    title: "Free Mentor Session",
-    emoji: "🎓",
-    description: "One free 1-on-1 mentor session with an industry expert.",
+    rewardKey: "free_interests_assessment",
+    title: "Free Interests Assessment",
+    emoji: "🎯",
+    description: "Unlock the full Interests Assessment Test (worth ₹2,999) for free!",
   },
 ];
 
