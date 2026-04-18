@@ -9,13 +9,16 @@ import OnboardingProgressBar from "@/components/onboarding/OnboardingProgressBar
 import OnboardingRewardBanner from "@/components/onboarding/OnboardingRewardBanner";
 import { ONBOARDING_REWARDS } from "@/components/onboarding/OnboardingRewardBanner";
 import OnboardingRewardCelebration from "@/components/onboarding/OnboardingRewardCelebration";
+import UIDRevealCard from "@/components/onboarding/UIDRevealCard";
 
 const ConsentStep = () => {
-  const { user, profile, updateProfile } = useAuth();
+  const { user, profile, updateProfile, refreshProfile } = useAuth();
   const navigate = useNavigate();
   const [consentData, setConsentData] = useState(false);
   const [consentMentor, setConsentMentor] = useState(false);
   const [showReward, setShowReward] = useState<typeof ONBOARDING_REWARDS[0] | null>(null);
+  const [showUID, setShowUID] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
     const reward = ONBOARDING_REWARDS.find((r) => r.percent === 90);
@@ -47,6 +50,8 @@ const ConsentStep = () => {
   };
 
   const handleContinue = async () => {
+    if (submitting) return;
+    setSubmitting(true);
     await updateProfile({
       onboarding_status: "complete",
       ...({
@@ -68,7 +73,13 @@ const ConsentStep = () => {
 
     await createWelcomeNotifications();
     localStorage.removeItem("myraaha_initial_path");
-    // Navigate to Curiosity Compass instead of Dashboard
+    await refreshProfile();
+    setShowUID(true);
+    setSubmitting(false);
+  };
+
+  const handleEnterApp = () => {
+    setShowUID(false);
     navigate("/dashboard/curiosity-compass");
   };
 
