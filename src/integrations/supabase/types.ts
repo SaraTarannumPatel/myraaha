@@ -4674,6 +4674,7 @@ export type Database = {
           consent_data_usage: boolean | null
           consent_mentor_sharing: boolean | null
           created_at: string
+          date_of_birth: string | null
           digital_comfort: string | null
           education_level: string | null
           full_name: string | null
@@ -4715,6 +4716,7 @@ export type Database = {
           consent_data_usage?: boolean | null
           consent_mentor_sharing?: boolean | null
           created_at?: string
+          date_of_birth?: string | null
           digital_comfort?: string | null
           education_level?: string | null
           full_name?: string | null
@@ -4756,6 +4758,7 @@ export type Database = {
           consent_data_usage?: boolean | null
           consent_mentor_sharing?: boolean | null
           created_at?: string
+          date_of_birth?: string | null
           digital_comfort?: string | null
           education_level?: string | null
           full_name?: string | null

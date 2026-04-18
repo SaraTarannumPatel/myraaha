@@ -9,13 +9,16 @@ import OnboardingProgressBar from "@/components/onboarding/OnboardingProgressBar
 import OnboardingRewardBanner from "@/components/onboarding/OnboardingRewardBanner";
 import { ONBOARDING_REWARDS } from "@/components/onboarding/OnboardingRewardBanner";
 import OnboardingRewardCelebration from "@/components/onboarding/OnboardingRewardCelebration";
+import UIDRevealCard from "@/components/onboarding/UIDRevealCard";
 
 const ConsentStep = () => {
-  const { user, profile, updateProfile } = useAuth();
+  const { user, profile, updateProfile, refreshProfile } = useAuth();
   const navigate = useNavigate();
   const [consentData, setConsentData] = useState(false);
   const [consentMentor, setConsentMentor] = useState(false);
   const [showReward, setShowReward] = useState<typeof ONBOARDING_REWARDS[0] | null>(null);
+  const [showUID, setShowUID] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
     const reward = ONBOARDING_REWARDS.find((r) => r.percent === 90);
@@ -47,6 +50,8 @@ const ConsentStep = () => {
   };
 
   const handleContinue = async () => {
+    if (submitting) return;
+    setSubmitting(true);
     await updateProfile({
       onboarding_status: "complete",
       ...({
@@ -68,7 +73,13 @@ const ConsentStep = () => {
 
     await createWelcomeNotifications();
     localStorage.removeItem("myraaha_initial_path");
-    // Navigate to Curiosity Compass instead of Dashboard
+    await refreshProfile();
+    setShowUID(true);
+    setSubmitting(false);
+  };
+
+  const handleEnterApp = () => {
+    setShowUID(false);
     navigate("/dashboard/curiosity-compass");
   };
 
@@ -76,12 +87,19 @@ const ConsentStep = () => {
     <div className="min-h-screen bg-[hsl(60,14%,98%)] flex flex-col">
       <OnboardingProgressBar progress={90} />
       <OnboardingRewardBanner currentProgress={90} />
-      {showReward && (
+      {showReward && !showUID && (
         <OnboardingRewardCelebration
           emoji={showReward.emoji}
           title={showReward.title}
           description={showReward.description}
           onContinue={() => setShowReward(null)}
+        />
+      )}
+      {showUID && profile && (
+        <UIDRevealCard
+          fullName={profile.full_name || "Explorer"}
+          uid={profile.public_uid || "MR-XXXXXX"}
+          onContinue={handleEnterApp}
         />
       )}
       <div className="flex-1 flex items-center justify-center p-6">
@@ -161,9 +179,9 @@ const ConsentStep = () => {
             <Button variant="ghost" onClick={() => navigate("/onboarding/journey")} className="font-body">
               <ArrowLeft size={18} /> Back
             </Button>
-            <Button onClick={handleContinue}
-              className="bg-primary text-primary-foreground rounded-full px-8 font-body font-semibold">
-              Enter Curiosity Compass <ArrowRight size={18} />
+            <Button onClick={handleContinue} disabled={submitting}
+              className="bg-primary text-primary-foreground rounded-full px-8 font-body font-semibold disabled:opacity-50">
+              {submitting ? "Finalizing..." : "Generate My UID"} <ArrowRight size={18} />
             </Button>
           </div>
         </motion.div>
