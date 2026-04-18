@@ -6267,6 +6267,7 @@ export type Database = {
           related_job_roles: string[] | null
           related_sectors: string[] | null
           related_skills: string[] | null
+          related_subjects: string[] | null
           related_universities: string[] | null
           soft_skills: string[] | null
         }
@@ -6291,6 +6292,7 @@ export type Database = {
           related_job_roles?: string[] | null
           related_sectors?: string[] | null
           related_skills?: string[] | null
+          related_subjects?: string[] | null
           related_universities?: string[] | null
           soft_skills?: string[] | null
         }
@@ -6315,6 +6317,7 @@ export type Database = {
           related_job_roles?: string[] | null
           related_sectors?: string[] | null
           related_skills?: string[] | null
+          related_subjects?: string[] | null
           related_universities?: string[] | null
           soft_skills?: string[] | null
         }
@@ -6791,6 +6794,7 @@ export type Database = {
           interests: string[] | null
           keywords: string[] | null
           name: string
+          popular_courses: string[] | null
           ranking_tier: string | null
           related_careers: string[] | null
           related_countries: string[] | null
@@ -6818,6 +6822,7 @@ export type Database = {
           interests?: string[] | null
           keywords?: string[] | null
           name: string
+          popular_courses?: string[] | null
           ranking_tier?: string | null
           related_careers?: string[] | null
           related_countries?: string[] | null
@@ -6845,6 +6850,7 @@ export type Database = {
           interests?: string[] | null
           keywords?: string[] | null
           name?: string
+          popular_courses?: string[] | null
           ranking_tier?: string | null
           related_careers?: string[] | null
           related_countries?: string[] | null
