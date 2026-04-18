@@ -38,6 +38,7 @@ interface Profile {
   location_type: string | null;
   preferred_language: string | null;
   public_uid: string | null;
+  date_of_birth: string | null;
 }
 
 interface AuthContextType {
