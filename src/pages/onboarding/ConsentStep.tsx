@@ -179,9 +179,9 @@ const ConsentStep = () => {
             <Button variant="ghost" onClick={() => navigate("/onboarding/journey")} className="font-body">
               <ArrowLeft size={18} /> Back
             </Button>
-            <Button onClick={handleContinue}
-              className="bg-primary text-primary-foreground rounded-full px-8 font-body font-semibold">
-              Enter Curiosity Compass <ArrowRight size={18} />
+            <Button onClick={handleContinue} disabled={submitting}
+              className="bg-primary text-primary-foreground rounded-full px-8 font-body font-semibold disabled:opacity-50">
+              {submitting ? "Finalizing..." : "Generate My UID"} <ArrowRight size={18} />
             </Button>
           </div>
         </motion.div>
