@@ -192,14 +192,14 @@ const demographicQuestions: DemographicQuestion[] = [
     required: true,
   },
   {
-    id: "age",
+    id: "date_of_birth",
     section: "Geography & Language",
-    question: "How old are you? 🎂",
+    question: "When were you born? 🎂",
     icon: Calendar,
     iconColor: "text-blue",
     type: "text",
-    placeholder: "Your age",
-    inputType: "number",
+    placeholder: "YYYY-MM-DD",
+    inputType: "date",
     required: true,
   },
   {
@@ -284,9 +284,19 @@ const JourneyDiscovery = () => {
   };
 
   const handleFinish = async () => {
+    const dob = answers.date_of_birth || null;
+    let computedAge: number | null = null;
+    if (dob) {
+      const d = new Date(dob);
+      if (!isNaN(d.getTime())) {
+        const diff = Date.now() - d.getTime();
+        computedAge = Math.floor(diff / (365.25 * 24 * 60 * 60 * 1000));
+      }
+    }
     await updateProfile({
       full_name: answers.full_name || profile?.full_name || null,
-      age: answers.age ? parseInt(answers.age) : null,
+      age: computedAge,
+      ...({ date_of_birth: dob } as any),
       gender_identity: answers.gender_identity || null,
       age_group: answers.age_group || null,
       life_stage: answers.life_stage || null,
