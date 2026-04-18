@@ -87,12 +87,19 @@ const ConsentStep = () => {
     <div className="min-h-screen bg-[hsl(60,14%,98%)] flex flex-col">
       <OnboardingProgressBar progress={90} />
       <OnboardingRewardBanner currentProgress={90} />
-      {showReward && (
+      {showReward && !showUID && (
         <OnboardingRewardCelebration
           emoji={showReward.emoji}
           title={showReward.title}
           description={showReward.description}
           onContinue={() => setShowReward(null)}
+        />
+      )}
+      {showUID && profile && (
+        <UIDRevealCard
+          fullName={profile.full_name || "Explorer"}
+          uid={profile.public_uid || "MR-XXXXXX"}
+          onContinue={handleEnterApp}
         />
       )}
       <div className="flex-1 flex items-center justify-center p-6">
