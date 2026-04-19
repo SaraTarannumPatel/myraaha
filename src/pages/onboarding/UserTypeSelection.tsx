@@ -10,7 +10,7 @@ import OnboardingRewardBanner from "@/components/onboarding/OnboardingRewardBann
 const userTypes = [
   { value: "school", icon: School, title: "Student (School)", description: "Exploring interests, building early skills, and finding your spark.", color: "border-blue/30", selectedColor: "border-blue bg-blue/5", iconBg: "bg-blue/10", iconSelectedBg: "bg-blue", iconColor: "text-blue" },
   { value: "college", icon: GraduationCap, title: "Student (College / Postgrad)", description: "Building expertise, creating projects, and preparing for your career or venture.", color: "border-indigo/30", selectedColor: "border-indigo bg-indigo/5", iconBg: "bg-indigo/10", iconSelectedBg: "bg-indigo", iconColor: "text-indigo" },
-  { value: "working_professional", icon: Briefcase, title: "Working Professional", description: "Upskilling, exploring lateral moves, or planning your next big career step.", color: "border-primary/30", selectedColor: "border-primary bg-primary/5", iconBg: "bg-primary/10", iconSelectedBg: "bg-[hsl(158,17%,37%)]", iconColor: "text-primary" },
+  { value: "working_professional", icon: Briefcase, title: "Working Professional", description: "Upskilling, exploring lateral moves, or planning your next big career step.", color: "border-primary/30", selectedColor: "border-primary bg-primary/5", iconBg: "bg-primary/10", iconSelectedBg: "bg-primary", iconColor: "text-primary" },
 ];
 
 const UserTypeSelection = () => {
@@ -25,7 +25,7 @@ const UserTypeSelection = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[hsl(60,14%,98%)] flex flex-col">
+    <div className="min-h-screen bg-background flex flex-col">
       <OnboardingProgressBar progress={20} />
       <OnboardingRewardBanner currentProgress={20} />
 
@@ -37,7 +37,7 @@ const UserTypeSelection = () => {
         >
           <div className="text-center space-y-2">
             <p className="font-body text-sm text-blue font-semibold uppercase tracking-wider">Step 1 of 4</p>
-            <h1 className="font-display text-4xl text-[hsl(230,40%,25%)]">Where are you in your journey?</h1>
+            <h1 className="font-display text-4xl text-primary">Where are you in your journey?</h1>
             <p className="font-body text-muted-foreground">This helps us calibrate your experience.</p>
           </div>
 
@@ -74,7 +74,7 @@ const UserTypeSelection = () => {
             <Button
               onClick={handleContinue}
               disabled={!selected}
-              className="bg-[hsl(230,40%,25%)] text-[hsl(45,80%,65%)] rounded-full px-8 font-body font-semibold hover:bg-[hsl(230,40%,20%)] disabled:opacity-50"
+              className="bg-primary text-accent rounded-full px-8 font-body font-semibold hover:bg-primary disabled:opacity-50"
             >
               Continue <ArrowRight size={18} />
             </Button>

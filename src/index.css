@@ -6,130 +6,119 @@
 
 @layer base {
   :root {
-    /* ===== 1. FOUNDATIONAL NEUTRALS (70%) ===== */
+    /* ===== MyRaaha Brand Palette =====
+       Primary  : #8305F2  → buttons, titles, icons
+       BG       : #FFFFFF
+       Text     : #000000  → secondary text, subtitles, body
+       Accent   : #F9DF77  → highlight backgrounds, button text
+       Neutral  : #6F7370  → meta, labels, hints
+    */
 
-    /* Primary White / Off-White (Base) */
-    --background: 60 14% 98%;          /* #FAFAF8 */
-    --background-alt: 80 12% 95%;      /* #F4F5F2 section breaks */
-    --foreground: 0 0% 7%;             /* #111111 primary text */
+    /* Foundational neutrals */
+    --background: 0 0% 100%;            /* #FFFFFF */
+    --background-alt: 0 0% 98%;         /* near-white section break */
+    --foreground: 0 0% 0%;              /* #000000 body / secondary */
 
-    --card: 0 0% 100%;                 /* #FFFFFF sparingly */
-    --card-foreground: 0 0% 10%;       /* #1A1A1A headers */
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 0%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 7%;
+    --popover-foreground: 0 0% 0%;
 
-    /* Near-Black (Authority) */
-    --heading: 0 0% 10%;               /* #1A1A1A */
-    --text-secondary: 0 0% 16%;        /* #2A2A2A */
+    --heading: 270 96% 48%;             /* primary purple — titles use this */
+    --text-secondary: 0 0% 0%;
 
-    /* Cool Grey (Structure) */
-    --grey-divider: 75 6% 90%;         /* #E6E7E3 dividers, cards */
-    --grey-disabled: 72 4% 79%;        /* #C9CBC4 disabled states */
-    --grey-meta: 150 2% 63%;           /* #9FA3A0 meta text */
-    --grey-label: 144 2% 45%;          /* #6F7370 labels, hints */
+    /* Greyscale (uses #6F7370 family) */
+    --grey-divider: 144 2% 88%;
+    --grey-disabled: 144 2% 75%;
+    --grey-meta: 144 2% 60%;
+    --grey-label: 144 2% 45%;           /* #6F7370 */
 
-    /* ===== 2. CORE BRAND COLORS (20%) ===== */
+    /* ===== Brand ===== */
+    /* Primary — Vivid Purple #8305F2 */
+    --primary: 270 96% 48%;
+    --primary-foreground: 48 92% 72%;   /* yellow text on purple buttons */
+    --green-secondary: 270 96% 60%;     /* legacy alias → lighter purple */
+    --green-wash: 270 90% 92%;          /* legacy alias → purple wash */
 
-    /* Calm Green – Trust / Empathy */
-    --primary: 158 17% 37%;            /* #4F6F64 */
-    --primary-foreground: 60 14% 98%;
-    --green-secondary: 158 14% 50%;    /* #6F8F84 */
-    --green-wash: 158 13% 67%;         /* #9FB7AD */
+    --secondary: 48 92% 96%;            /* very light yellow surface */
+    --secondary-foreground: 0 0% 0%;
 
-    /* Section break neutral */
-    --secondary: 80 12% 96%;           /* #F4F5F2 */
-    --secondary-foreground: 0 0% 10%;
+    --muted: 144 2% 95%;
+    --muted-foreground: 144 2% 45%;     /* #6F7370 */
 
-    /* Cool Grey – Structure */
-    --muted: 75 6% 90%;                /* #E6E7E3 */
-    --muted-foreground: 144 2% 45%;    /* #6F7370 */
+    /* Legacy blue tokens remapped to purple family */
+    --blue-primary: 270 96% 48%;
+    --blue-secondary: 270 80% 60%;
+    --blue-light: 270 70% 80%;
 
-    /* Muted Blue – Clarity / Direction */
-    --blue-primary: 203 29% 35%;       /* #3F5E73 */
-    --blue-secondary: 203 22% 47%;     /* #5E7C90 */
-    --blue-light: 203 19% 64%;         /* #8FA6B5 */
+    /* ===== Accent — Warm Yellow #F9DF77 ===== */
+    --accent: 48 92% 72%;               /* #F9DF77 */
+    --accent-foreground: 270 96% 30%;   /* deep purple text on yellow */
+    --yellow-highlight: 48 92% 80%;
+    --yellow-icon: 48 80% 60%;
 
-    /* ===== 3. GUIDANCE ACCENT (7%) ===== */
+    /* AI / Indigo enhancers → purple variants */
+    --indigo-deep: 270 96% 30%;
+    --indigo-analytical: 270 80% 40%;
 
-    /* Soft Yellow – Raaha Signal */
-    --accent: 47 58% 73%;              /* #E6D48F */
-    --accent-foreground: 0 0% 7%;
-    --yellow-highlight: 47 62% 83%;    /* #F0E6B8 */
-    --yellow-icon: 47 50% 63%;         /* #D1C06F */
+    /* Human-warmth accents (kept for legacy) */
+    --terracotta: 270 96% 48%;
+    --terracotta-light: 48 92% 72%;
+    --maroon: 270 96% 30%;
+    --maroon-light: 270 80% 40%;
 
-    /* ===== 4. SYSTEM ENHANCERS (≤2%) ===== */
-
-    /* Deep Indigo – Intelligence / AI */
-    --indigo-deep: 220 32% 27%;        /* #2E3A59 */
-    --indigo-analytical: 220 28% 32%;  /* #3A4768 */
-
-    /* ===== 5. HUMAN DEPTH ACCENTS (≤1%) ===== */
-
-    /* Dusty Terracotta – Human Warmth */
-    --terracotta: 22 34% 52%;          /* #B07A5A */
-    --terracotta-light: 22 34% 59%;    /* #C08C6C */
-
-    /* Deep Maroon – Impact / Gravity */
-    --maroon: 343 32% 27%;             /* #5A2E3A */
-    --maroon-light: 343 30% 33%;       /* #6E3B46 */
-
-    /* ===== Semantic mappings ===== */
-
-    /* Status colors mapped to palette */
-    --success: 158 17% 37%;            /* Calm Green */
-    --success-foreground: 60 14% 98%;
-    --warning: 47 58% 73%;             /* Soft Yellow */
-    --warning-foreground: 0 0% 7%;
-    --info: 203 29% 35%;               /* Muted Blue */
-    --info-foreground: 60 14% 98%;
+    /* Status */
+    --success: 142 70% 38%;
+    --success-foreground: 0 0% 100%;
+    --warning: 48 92% 72%;
+    --warning-foreground: 0 0% 0%;
+    --info: 270 96% 48%;
+    --info-foreground: 48 92% 72%;
     --destructive: 0 84% 60%;
-    --destructive-foreground: 60 14% 98%;
+    --destructive-foreground: 0 0% 100%;
 
-    /* AI / Analytics emphasis */
-    --ai: 220 32% 27%;                 /* Deep Indigo */
-    --ai-foreground: 60 14% 98%;
+    --ai: 270 96% 48%;
+    --ai-foreground: 48 92% 72%;
 
-    /* Milestone / Impact */
-    --milestone: 343 32% 27%;          /* Maroon */
-    --milestone-foreground: 60 14% 98%;
+    --milestone: 270 96% 30%;
+    --milestone-foreground: 48 92% 72%;
 
-    /* Storytelling / Human warmth */
-    --warmth: 22 34% 52%;              /* Terracotta */
-    --warmth-foreground: 60 14% 98%;
+    --warmth: 48 92% 72%;
+    --warmth-foreground: 0 0% 0%;
 
-    /* ===== Structural ===== */
-    --border: 75 6% 90%;
-    --input: 75 6% 90%;
-    --ring: 158 17% 37%;
+    /* Structural */
+    --border: 144 2% 90%;
+    --input: 144 2% 90%;
+    --ring: 270 96% 48%;
 
-    --radius: 0.75rem;
+    --radius: 0.875rem;
 
     --font-display: 'Instrument Serif', serif;
     --font-body: 'Inter', sans-serif;
 
     /* Gradients */
-    --gradient-warm: linear-gradient(135deg, hsl(158 17% 37%), hsl(203 29% 35%));
-    --gradient-hero: linear-gradient(180deg, hsl(60 14% 98%) 0%, hsl(80 12% 96%) 100%);
-    --gradient-dark: linear-gradient(135deg, hsl(0 0% 7%), hsl(220 32% 27%));
-    --gradient-glow: radial-gradient(ellipse at 50% 0%, hsl(47 58% 73% / 0.12) 0%, transparent 60%);
-    --gradient-accent: linear-gradient(135deg, hsl(47 58% 73%), hsl(47 50% 63%));
-    --gradient-milestone: linear-gradient(135deg, hsl(22 34% 52%), hsl(343 32% 27%));
+    --gradient-warm: linear-gradient(135deg, hsl(270 96% 48%), hsl(270 80% 60%));
+    --gradient-hero: linear-gradient(180deg, hsl(0 0% 100%) 0%, hsl(48 92% 96%) 100%);
+    --gradient-dark: linear-gradient(135deg, hsl(270 96% 30%), hsl(270 96% 18%));
+    --gradient-glow: radial-gradient(ellipse at 50% 0%, hsl(48 92% 72% / 0.35) 0%, transparent 60%);
+    --gradient-accent: linear-gradient(135deg, hsl(48 92% 72%), hsl(48 92% 80%));
+    --gradient-milestone: linear-gradient(135deg, hsl(270 96% 48%), hsl(270 96% 30%));
 
     /* Shadows */
-    --shadow-soft: 0 2px 20px -4px hsl(0 0% 7% / 0.06);
-    --shadow-card: 0 4px 32px -8px hsl(0 0% 7% / 0.08);
-    --shadow-accent: 0 8px 30px -6px hsl(158 17% 37% / 0.2);
+    --shadow-soft: 0 2px 20px -4px hsl(270 96% 30% / 0.08);
+    --shadow-card: 0 6px 32px -8px hsl(270 96% 30% / 0.12);
+    --shadow-accent: 0 10px 30px -6px hsl(270 96% 48% / 0.25);
 
     /* Sidebar */
-    --sidebar-background: 60 14% 98%;
-    --sidebar-foreground: 0 0% 16%;
-    --sidebar-primary: 158 17% 37%;
-    --sidebar-primary-foreground: 60 14% 98%;
-    --sidebar-accent: 75 6% 90%;
-    --sidebar-accent-foreground: 0 0% 10%;
-    --sidebar-border: 75 6% 90%;
-    --sidebar-ring: 158 17% 37%;
+    --sidebar-background: 0 0% 100%;
+    --sidebar-foreground: 0 0% 0%;
+    --sidebar-primary: 270 96% 48%;
+    --sidebar-primary-foreground: 48 92% 72%;
+    --sidebar-accent: 48 92% 92%;
+    --sidebar-accent-foreground: 270 96% 30%;
+    --sidebar-border: 144 2% 90%;
+    --sidebar-ring: 270 96% 48%;
   }
 }
 
@@ -144,6 +133,23 @@
 
   h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-display);
+    color: hsl(var(--primary));
+  }
+}
+
+@layer components {
+  /* Inline highlighter — paints a yellow marker behind a phrase */
+  .highlight-mark {
+    background: linear-gradient(180deg, transparent 55%, hsl(var(--accent)) 55%);
+    padding: 0 0.15em;
+    color: hsl(var(--primary));
+  }
+
+  /* Pill chip — for tags / CTAs */
+  .pill-chip {
+    @apply inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-medium;
+    background: hsl(var(--accent));
+    color: hsl(var(--primary));
   }
 }
 

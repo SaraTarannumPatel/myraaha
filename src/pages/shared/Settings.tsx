@@ -77,16 +77,16 @@ const Settings = () => {
         animate={{ opacity: 1, y: 0 }}
         className="rounded-2xl overflow-hidden border border-border shadow-sm"
       >
-        <div className="bg-gradient-to-br from-[hsl(230,40%,25%)] to-[hsl(230,40%,18%)] p-6 relative">
-          <div className="absolute top-3 right-3 inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-[hsl(45,80%,65%)]/20">
-            <Sparkles size={10} className="text-[hsl(45,80%,65%)]" />
-            <span className="font-body text-[10px] uppercase tracking-wider font-bold text-[hsl(45,80%,65%)]">
+        <div className="bg-gradient-to-br from-[hsl(270 96% 30%)] to-[hsl(270 96% 18%)] p-6 relative">
+          <div className="absolute top-3 right-3 inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-accent/20">
+            <Sparkles size={10} className="text-accent" />
+            <span className="font-body text-[10px] uppercase tracking-wider font-bold text-accent">
               MyRaaha ID
             </span>
           </div>
 
           <div className="flex items-center gap-4">
-            <div className="w-20 h-20 rounded-2xl bg-[hsl(45,80%,65%)] flex items-center justify-center text-[hsl(230,40%,25%)] font-display text-3xl font-bold border-4 border-white/20">
+            <div className="w-20 h-20 rounded-2xl bg-accent flex items-center justify-center text-primary font-display text-3xl font-bold border-4 border-white/20">
               {initials}
             </div>
             <div className="flex-1">
@@ -95,9 +95,9 @@ const Settings = () => {
                 onClick={copyUID}
                 className="mt-1.5 inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 hover:bg-white/20 transition-colors"
               >
-                <code className="font-mono text-sm font-bold text-[hsl(45,80%,65%)] tracking-wider">{uid}</code>
+                <code className="font-mono text-sm font-bold text-accent tracking-wider">{uid}</code>
                 {copied ? (
-                  <Check size={14} className="text-[hsl(45,80%,65%)]" />
+                  <Check size={14} className="text-accent" />
                 ) : (
                   <Copy size={14} className="text-white/70" />
                 )}

@@ -49,7 +49,7 @@ const OnboardingCelebration = ({ onDismiss }: OnboardingCelebrationProps) => {
           transition={{ type: "spring", damping: 15, stiffness: 200 }}
           className="bg-card rounded-3xl border border-border shadow-2xl p-8 max-w-md mx-6 text-center relative overflow-hidden"
         >
-          <div className="absolute inset-0 bg-gradient-to-b from-[hsl(45,80%,90%)] to-transparent opacity-60 pointer-events-none" />
+          <div className="absolute inset-0 bg-gradient-to-b from-[hsl(48 92% 88%)] to-transparent opacity-60 pointer-events-none" />
           <div className="relative z-10 space-y-5">
             <motion.div
               animate={{ scale: [1, 1.3, 1] }}
@@ -58,7 +58,7 @@ const OnboardingCelebration = ({ onDismiss }: OnboardingCelebrationProps) => {
             >
               🎉
             </motion.div>
-            <div className="flex items-center justify-center gap-2 text-[hsl(45,80%,45%)]">
+            <div className="flex items-center justify-center gap-2 text-accent">
               <PartyPopper size={16} />
               <span className="font-body text-xs uppercase tracking-wider font-bold">Congratulations!</span>
               <PartyPopper size={16} />
@@ -83,7 +83,7 @@ const OnboardingCelebration = ({ onDismiss }: OnboardingCelebrationProps) => {
             </div>
             <Button
               onClick={() => { setShow(false); onDismiss(); }}
-              className="bg-[hsl(230,40%,25%)] text-[hsl(45,80%,65%)] rounded-full px-8 font-body font-semibold"
+              className="bg-primary text-accent rounded-full px-8 font-body font-semibold"
             >
               Start Assessments <ArrowRight size={16} />
             </Button>

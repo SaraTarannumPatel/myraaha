@@ -19,7 +19,7 @@ const UIDRevealCard = ({ fullName, uid, onContinue }: UIDRevealCardProps) => {
       id: i,
       x: Math.random() * 100,
       delay: Math.random() * 0.5,
-      color: ["hsl(45,80%,65%)", "hsl(230,40%,25%)", "hsl(158,17%,37%)", "hsl(10,60%,50%)"][Math.floor(Math.random() * 4)],
+      color: ["hsl(48 92% 72%)", "hsl(270 96% 30%)", "hsl(270 96% 48%)", "hsl(48 92% 72%)"][Math.floor(Math.random() * 4)],
     }));
     setConfetti(items);
   }, []);
@@ -57,15 +57,15 @@ const UIDRevealCard = ({ fullName, uid, onContinue }: UIDRevealCardProps) => {
           className="bg-card rounded-3xl border border-border shadow-2xl max-w-md w-full overflow-hidden"
         >
           {/* Header */}
-          <div className="bg-gradient-to-br from-[hsl(230,40%,25%)] to-[hsl(230,40%,18%)] px-6 py-5 text-center relative overflow-hidden">
+          <div className="bg-gradient-to-br from-[hsl(270 96% 30%)] to-[hsl(270 96% 18%)] px-6 py-5 text-center relative overflow-hidden">
             <div className="absolute inset-0 opacity-10">
-              <div className="absolute -top-4 -right-4 w-24 h-24 rounded-full bg-[hsl(45,80%,65%)]" />
-              <div className="absolute -bottom-6 -left-6 w-20 h-20 rounded-full bg-[hsl(45,80%,65%)]" />
+              <div className="absolute -top-4 -right-4 w-24 h-24 rounded-full bg-accent" />
+              <div className="absolute -bottom-6 -left-6 w-20 h-20 rounded-full bg-accent" />
             </div>
             <div className="relative">
-              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[hsl(45,80%,65%)]/20 mb-2">
-                <Sparkles size={12} className="text-[hsl(45,80%,65%)]" />
-                <span className="font-body text-[10px] uppercase tracking-wider font-bold text-[hsl(45,80%,65%)]">
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-accent/20 mb-2">
+                <Sparkles size={12} className="text-accent" />
+                <span className="font-body text-[10px] uppercase tracking-wider font-bold text-accent">
                   Identity Created
                 </span>
               </div>
@@ -78,32 +78,32 @@ const UIDRevealCard = ({ fullName, uid, onContinue }: UIDRevealCardProps) => {
 
           {/* UID Card */}
           <div className="p-6 space-y-5">
-            <div className="bg-gradient-to-br from-[hsl(45,80%,92%)] to-[hsl(45,80%,85%)] rounded-2xl p-5 border-2 border-[hsl(45,70%,70%)] relative">
+            <div className="bg-gradient-to-br from-[hsl(48 92% 88%)] to-[hsl(48 92% 88%)] rounded-2xl p-5 border-2 border-[hsl(48 92% 82%)] relative">
               <div className="flex items-start justify-between mb-3">
                 <div>
-                  <p className="font-body text-[10px] uppercase tracking-wider text-[hsl(230,40%,35%)] font-bold">
+                  <p className="font-body text-[10px] uppercase tracking-wider text-primary/80 font-bold">
                     Your MyRaaha UID
                   </p>
-                  <p className="font-body text-[10px] text-[hsl(230,30%,45%)] mt-0.5">
+                  <p className="font-body text-[10px] text-primary/70 mt-0.5">
                     Use this everywhere — keep it safe
                   </p>
                 </div>
-                <ShieldCheck size={20} className="text-[hsl(158,17%,37%)]" />
+                <ShieldCheck size={20} className="text-primary" />
               </div>
               <div className="flex items-center gap-2">
-                <code className="flex-1 font-mono text-2xl font-bold text-[hsl(230,40%,25%)] tracking-wider">
+                <code className="flex-1 font-mono text-2xl font-bold text-primary tracking-wider">
                   {uid}
                 </code>
                 <button
                   onClick={handleCopy}
-                  className="p-2 rounded-lg bg-[hsl(230,40%,25%)] text-[hsl(45,80%,65%)] hover:bg-[hsl(230,40%,20%)] transition-colors"
+                  className="p-2 rounded-lg bg-primary text-accent hover:bg-primary transition-colors"
                   aria-label="Copy UID"
                 >
                   {copied ? <Check size={16} /> : <Copy size={16} />}
                 </button>
               </div>
-              <div className="mt-3 pt-3 border-t border-[hsl(45,60%,70%)]">
-                <p className="font-body text-[11px] text-[hsl(230,30%,35%)]">
+              <div className="mt-3 pt-3 border-t border-[hsl(48 92% 90%)]">
+                <p className="font-body text-[11px] text-primary/80">
                   <strong>Display Name:</strong> {fullName}
                 </p>
               </div>
@@ -121,7 +121,7 @@ const UIDRevealCard = ({ fullName, uid, onContinue }: UIDRevealCardProps) => {
 
             <Button
               onClick={onContinue}
-              className="w-full bg-[hsl(230,40%,25%)] text-[hsl(45,80%,65%)] rounded-full py-6 font-body font-semibold hover:bg-[hsl(230,40%,20%)]"
+              className="w-full bg-primary text-accent rounded-full py-6 font-body font-semibold hover:bg-primary"
             >
               Enter Curiosity Compass <ArrowRight size={16} />
             </Button>

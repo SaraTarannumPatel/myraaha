@@ -113,7 +113,7 @@ const Auth = () => {
   if (user) return null;
 
   return (
-    <div className="h-[100dvh] bg-[hsl(60,14%,98%)] flex flex-col overflow-hidden">
+    <div className="h-[100dvh] bg-background flex flex-col overflow-hidden">
       <OnboardingProgressBar progress={5} />
       <OnboardingRewardBanner currentProgress={5} />
 
@@ -127,17 +127,17 @@ const Auth = () => {
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -10 }}
-                className="mb-4 p-4 rounded-xl bg-[hsl(158,40%,90%)] border border-[hsl(158,30%,70%)]"
+                className="mb-4 p-4 rounded-xl bg-[hsl(270 80% 95%)] border border-[hsl(270 60% 80%)]"
               >
                 <div className="flex items-start gap-3">
                   <span className="text-xl">✅</span>
                   <div>
-                    <p className="font-display text-sm font-bold text-[hsl(158,30%,25%)]">Email verified successfully!</p>
-                    <p className="font-body text-xs text-[hsl(158,20%,35%)] mt-0.5">
+                    <p className="font-display text-sm font-bold text-primary">Email verified successfully!</p>
+                    <p className="font-body text-xs text-primary/70 mt-0.5">
                       Please login with the same email and password you used during sign up.
                     </p>
                   </div>
-                  <button onClick={() => setEmailVerified(false)} className="text-[hsl(158,20%,45%)] ml-auto shrink-0">✕</button>
+                  <button onClick={() => setEmailVerified(false)} className="text-primary/70 ml-auto shrink-0">✕</button>
                 </div>
               </motion.div>
             )}
@@ -154,7 +154,7 @@ const Auth = () => {
                 className="relative"
               >
                 <div className="flex items-start">
-                  <h1 className="font-display text-[3.5rem] sm:text-[4.5rem] lg:text-[5.5rem] leading-[0.90] font-bold text-[hsl(230,40%,25%)] flex-1 z-10">
+                  <h1 className="font-display text-[3.5rem] sm:text-[4.5rem] lg:text-[5.5rem] leading-[0.90] font-bold text-primary flex-1 z-10">
                     {isLogin ? (
                       <>Hey,<br />Login<br />Now</>
                     ) : (
@@ -198,7 +198,7 @@ const Auth = () => {
               onChange={(e) => setEmail(e.target.value)}
               placeholder={isLogin ? "Email" : "Email"}
               required
-              className="w-full h-14 rounded-2xl bg-[hsl(0,0%,85%,0.5)] px-5 font-body text-sm text-foreground placeholder:text-muted-foreground outline-none border-none focus:ring-2 focus:ring-[hsl(158,17%,37%)] transition-all"
+              className="w-full h-14 rounded-2xl bg-[hsl(0,0%,85%,0.5)] px-5 font-body text-sm text-foreground placeholder:text-muted-foreground outline-none border-none focus:ring-2 focus:ring-[hsl(270 96% 48%)] transition-all"
             />
 
             {!isLogin && (
@@ -208,7 +208,7 @@ const Auth = () => {
                 onChange={(e) => handlePhoneChange(e.target.value)}
                 placeholder="+91 XXXXX XXXXX"
                 required
-                className="w-full h-14 rounded-2xl bg-[hsl(0,0%,85%,0.5)] px-5 font-body text-sm text-foreground placeholder:text-muted-foreground outline-none border-none focus:ring-2 focus:ring-[hsl(158,17%,37%)] transition-all"
+                className="w-full h-14 rounded-2xl bg-[hsl(0,0%,85%,0.5)] px-5 font-body text-sm text-foreground placeholder:text-muted-foreground outline-none border-none focus:ring-2 focus:ring-[hsl(270 96% 48%)] transition-all"
                 onFocus={() => !phone && setPhone("+91 ")}
               />
             )}
@@ -220,7 +220,7 @@ const Auth = () => {
               placeholder="Password"
               required
               minLength={6}
-              className="w-full h-14 rounded-2xl bg-[hsl(0,0%,85%,0.5)] px-5 font-body text-sm text-foreground placeholder:text-muted-foreground outline-none border-none focus:ring-2 focus:ring-[hsl(158,17%,37%)] transition-all"
+              className="w-full h-14 rounded-2xl bg-[hsl(0,0%,85%,0.5)] px-5 font-body text-sm text-foreground placeholder:text-muted-foreground outline-none border-none focus:ring-2 focus:ring-[hsl(270 96% 48%)] transition-all"
             />
 
             {isLogin && (
@@ -294,7 +294,7 @@ const Auth = () => {
             <button
               onClick={() => handleSubmit()}
               disabled={submitting}
-              className="flex items-center gap-2 px-8 py-3 rounded-full bg-[hsl(230,40%,25%)] font-body text-sm font-semibold text-[hsl(45,80%,65%)] hover:bg-[hsl(230,40%,20%)] transition-colors disabled:opacity-50"
+              className="flex items-center gap-2 px-8 py-3 rounded-full bg-primary font-body text-sm font-semibold text-accent hover:bg-primary transition-colors disabled:opacity-50"
             >
               {submitting ? "Please wait..." : isLogin ? "Login" : "Sign Up"}
               <ArrowRight size={16} />

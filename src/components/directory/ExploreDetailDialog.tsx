@@ -30,7 +30,7 @@ const ExploreDetailDialog = ({ open, onClose, item, type, onNavigate }: ExploreD
 
   return (
     <Dialog open={open} onOpenChange={(o) => !o && onClose()}>
-      <DialogContent className="max-w-2xl max-h-[85vh] p-0 overflow-hidden">
+      <DialogContent className="w-[calc(100vw-1.5rem)] max-w-2xl max-h-[90vh] sm:max-h-[85vh] p-0 overflow-hidden rounded-2xl">
         <ScrollArea className="max-h-[85vh]">
           <div className="p-5 sm:p-6 space-y-4">
             <DialogHeader>
