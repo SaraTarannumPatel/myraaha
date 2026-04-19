@@ -7,6 +7,20 @@ import { AuthProvider } from "@/contexts/AuthContext";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
+// Landing site sub-pages
+import WhyWeExist from "./pages/landing/WhyWeExist";
+import HowWeThink from "./pages/landing/HowWeThink";
+import RaahaMarg from "./pages/landing/RaahaMarg";
+import Experience from "./pages/landing/Experience";
+import WhenHelps from "./pages/landing/WhenHelps";
+import Principles from "./pages/landing/Principles";
+import Research from "./pages/landing/Research";
+import Solutions from "./pages/landing/Solutions";
+import Begin from "./pages/landing/Begin";
+import About from "./pages/landing/About";
+import Writing from "./pages/landing/Writing";
+import LandingCareers from "./pages/landing/Careers";
+import Contact from "./pages/landing/Contact";
 import IntroSlides from "./pages/IntroSlides";
 import Auth from "./pages/Auth";
 import GuestEntry from "./pages/GuestEntry";
@@ -70,6 +84,20 @@ const App = () => (
         <AuthProvider>
           <Routes>
             <Route path="/" element={<Index />} />
+            {/* Landing site */}
+            <Route path="/why" element={<WhyWeExist />} />
+            <Route path="/how" element={<HowWeThink />} />
+            <Route path="/raaha-marg" element={<RaahaMarg />} />
+            <Route path="/experience" element={<Experience />} />
+            <Route path="/when" element={<WhenHelps />} />
+            <Route path="/principles" element={<Principles />} />
+            <Route path="/research" element={<Research />} />
+            <Route path="/solutions" element={<Solutions />} />
+            <Route path="/begin" element={<Begin />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/writing" element={<Writing />} />
+            <Route path="/careers-info" element={<LandingCareers />} />
+            <Route path="/contact" element={<Contact />} />
             <Route path="/intro" element={<IntroSlides />} />
             <Route path="/auth" element={<Auth />} />
             <Route path="/guest" element={<GuestEntry />} />
