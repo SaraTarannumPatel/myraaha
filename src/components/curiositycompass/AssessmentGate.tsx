@@ -16,10 +16,10 @@ const AssessmentGate = ({ onGoToAssessment }: AssessmentGateProps) => {
   if (discoveryDone && psychometricDone) return null;
 
   return (
-    <Card className="border-[hsl(45,70%,65%)]/40 bg-gradient-to-br from-[hsl(45,80%,92%)] to-[hsl(45,60%,96%)]">
+    <Card className="border-[hsl(48 92% 82%)]/40 bg-gradient-to-br from-[hsl(48 92% 88%)] to-[hsl(48 92% 90%)]">
       <CardContent className="pt-6 space-y-4">
         <div className="flex items-center gap-3">
-          <Lock size={20} className="text-[hsl(230,40%,25%)]" />
+          <Lock size={20} className="text-[hsl(270 96% 30%)]" />
           <h3 className="font-display text-lg text-foreground">Complete Both Assessments to Unlock</h3>
         </div>
         <p className="font-body text-sm text-muted-foreground">

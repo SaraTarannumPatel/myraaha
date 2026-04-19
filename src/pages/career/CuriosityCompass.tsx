@@ -238,7 +238,7 @@ const AssessmentTestSection = ({ user, recordSignal, recordMultipleSignals }: { 
                 <ArrowLeft size={16} /> Back
               </Button>
               <Button onClick={handleVariantNext} disabled={!variantAnswers[currentVariantQ.id]}
-                className="bg-[hsl(230,40%,25%)] text-[hsl(45,80%,65%)] rounded-full px-6">
+                className="bg-[hsl(270 96% 30%)] text-[hsl(48 92% 72%)] rounded-full px-6">
                 Next <ArrowRight size={16} />
               </Button>
             </div>
@@ -277,7 +277,7 @@ const AssessmentTestSection = ({ user, recordSignal, recordMultipleSignals }: { 
               </Button>
               <Button onClick={handleJourneyNext}
                 disabled={currentJourneyQ.type === "single" ? !journeyAnswers[currentJourneyQ.id] : !((journeyAnswers[currentJourneyQ.id] as string[])?.length > 0)}
-                className="bg-[hsl(230,40%,25%)] text-[hsl(45,80%,65%)] rounded-full px-6">
+                className="bg-[hsl(270 96% 30%)] text-[hsl(48 92% 72%)] rounded-full px-6">
                 {journeyStep === journeyQs.length - 1 ? "Finish" : "Next"} <ArrowRight size={16} />
               </Button>
             </div>
@@ -376,7 +376,7 @@ const CompassIntro = ({ onComplete }: { onComplete: () => void }) => {
                 if (introStep < introPages.length - 1) setIntroStep(introStep + 1);
                 else onComplete();
               }}
-              className="bg-[hsl(230,40%,25%)] text-[hsl(45,80%,65%)] rounded-full px-8 font-body font-semibold"
+              className="bg-[hsl(270 96% 30%)] text-[hsl(48 92% 72%)] rounded-full px-8 font-body font-semibold"
             >
               {introStep < introPages.length - 1 ? "Next" : "Let's Begin"} <ArrowRight size={16} className="ml-2" />
             </Button>

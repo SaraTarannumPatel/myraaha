@@ -21,7 +21,7 @@ const Welcome = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[hsl(60,14%,98%)] flex flex-col">
+    <div className="min-h-screen bg-[hsl(0 0% 100%)] flex flex-col">
       <OnboardingProgressBar progress={10} />
       <OnboardingRewardBanner currentProgress={10} />
 
@@ -37,12 +37,12 @@ const Welcome = () => {
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
               transition={{ delay: 0.3, type: "spring" }}
-              className="w-20 h-20 rounded-2xl mx-auto flex items-center justify-center shadow-accent bg-[hsl(158,17%,37%)]"
+              className="w-20 h-20 rounded-2xl mx-auto flex items-center justify-center shadow-accent bg-[hsl(270 96% 48%)]"
             >
-              <Sparkles className="text-[hsl(60,14%,98%)]" size={36} />
+              <Sparkles className="text-[hsl(0 0% 100%)]" size={36} />
             </motion.div>
-            <h1 className="font-display text-5xl text-[hsl(230,40%,25%)] mt-6">
-              Welcome to <em className="text-[hsl(158,17%,37%)]">MyRaaha</em>
+            <h1 className="font-display text-5xl text-[hsl(270 96% 30%)] mt-6">
+              Welcome to <em className="text-[hsl(270 96% 48%)]">MyRaaha</em>
             </h1>
             <p className="font-body text-muted-foreground text-lg mt-4">
               Hey{profile?.full_name ? `, ${profile.full_name}` : ""}! Let's set up your personalized journey in just a few steps.
@@ -73,7 +73,7 @@ const Welcome = () => {
 
           <Button
             onClick={handleContinue}
-            className="bg-[hsl(230,40%,25%)] text-[hsl(45,80%,65%)] rounded-full h-12 px-8 font-body font-semibold text-base hover:bg-[hsl(230,40%,20%)]"
+            className="bg-[hsl(270 96% 30%)] text-[hsl(48 92% 72%)] rounded-full h-12 px-8 font-body font-semibold text-base hover:bg-[hsl(270 96% 18%)]"
           >
             Let's Go <ArrowRight size={18} />
           </Button>

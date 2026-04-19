@@ -110,7 +110,7 @@ const EntrepreneurshipOnboarding = () => {
   const canProceed = current.type === "preview" || (selections[current.id]?.length || 0) > 0;
 
   return (
-    <div className="min-h-screen bg-[hsl(60,14%,98%)] flex flex-col">
+    <div className="min-h-screen bg-[hsl(0 0% 100%)] flex flex-col">
       <OnboardingProgressBar progress={50} />
       <OnboardingRewardBanner currentProgress={50} />
       <div className="flex-1 flex items-center justify-center p-6">

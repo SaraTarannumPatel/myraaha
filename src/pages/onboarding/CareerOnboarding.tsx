@@ -126,7 +126,7 @@ const CareerOnboarding = () => {
   const canProceed = current.type === "preview" || (selections[current.id]?.length || 0) > 0;
 
   return (
-    <div className="min-h-screen bg-[hsl(60,14%,98%)] flex flex-col">
+    <div className="min-h-screen bg-[hsl(0 0% 100%)] flex flex-col">
       <OnboardingProgressBar progress={progress} />
       <OnboardingRewardBanner currentProgress={progress} />
 

@@ -322,7 +322,7 @@ const JourneyDiscovery = () => {
   const sectionLabel = currentQ.section;
 
   return (
-    <div className="min-h-screen bg-[hsl(60,14%,98%)] flex flex-col">
+    <div className="min-h-screen bg-[hsl(0 0% 100%)] flex flex-col">
       <OnboardingProgressBar progress={progressPercent} />
       <OnboardingRewardBanner currentProgress={progressPercent} />
       <div className="flex-1 flex items-center justify-center p-4 sm:p-6">
@@ -365,7 +365,7 @@ const JourneyDiscovery = () => {
                 <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-primary/10">
                   <currentQ.icon size={22} className={currentQ.iconColor} />
                 </div>
-                <h1 className="font-display text-2xl sm:text-3xl text-[hsl(230,40%,25%)]">
+                <h1 className="font-display text-2xl sm:text-3xl text-[hsl(270 96% 30%)]">
                   {currentQ.question}
                 </h1>
               </div>
@@ -425,7 +425,7 @@ const JourneyDiscovery = () => {
             <Button
               onClick={handleNext}
               disabled={!canNext}
-              className="bg-[hsl(230,40%,25%)] text-[hsl(45,80%,65%)] rounded-full px-8 font-body font-semibold hover:bg-[hsl(230,40%,20%)] disabled:opacity-50"
+              className="bg-[hsl(270 96% 30%)] text-[hsl(48 92% 72%)] rounded-full px-8 font-body font-semibold hover:bg-[hsl(270 96% 18%)] disabled:opacity-50"
             >
               {step === totalSteps - 1 ? "Finish" : "Next"} <ArrowRight size={18} />
             </Button>

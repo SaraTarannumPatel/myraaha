@@ -231,11 +231,11 @@ const CareerDashboard = () => {
         if (skippedSteps.length === 0) return null;
         return (
           <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }}>
-            <Card className="border-[hsl(45,70%,65%)]/40 bg-gradient-to-r from-[hsl(45,80%,92%)] to-[hsl(45,60%,96%)]">
+            <Card className="border-[hsl(48 92% 82%)]/40 bg-gradient-to-r from-[hsl(48 92% 88%)] to-[hsl(48 92% 90%)]">
               <CardContent className="pt-5 pb-5">
                 <div className="flex items-start gap-4">
-                  <div className="w-10 h-10 rounded-xl bg-[hsl(45,80%,75%)] flex items-center justify-center shrink-0">
-                    <AlertCircle size={20} className="text-[hsl(230,40%,25%)]" />
+                  <div className="w-10 h-10 rounded-xl bg-[hsl(48 92% 88%)] flex items-center justify-center shrink-0">
+                    <AlertCircle size={20} className="text-[hsl(270 96% 30%)]" />
                   </div>
                   <div className="flex-1">
                     <h3 className="font-display text-base text-foreground">Complete your onboarding for free rewards!</h3>

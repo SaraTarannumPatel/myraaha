@@ -59,25 +59,25 @@ const OnboardingRewardBanner = ({ currentProgress, unlockedRewards = [] }: Onboa
           initial={{ opacity: 0, y: -20, scale: 0.95 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
           exit={{ opacity: 0, y: -20 }}
-          className="mx-6 mt-2 p-4 rounded-xl bg-gradient-to-r from-[hsl(45,80%,75%)] to-[hsl(45,90%,85%)] border border-[hsl(45,70%,65%)]"
+          className="mx-6 mt-2 p-4 rounded-xl bg-gradient-to-r from-[hsl(48 92% 88%)] to-[hsl(48 92% 88%)] border border-[hsl(48 92% 82%)]"
         >
           <div className="flex items-start gap-3">
             <div className="text-2xl">{justUnlocked.emoji}</div>
             <div className="flex-1">
               <div className="flex items-center gap-2">
-                <Star size={14} className="text-[hsl(45,80%,40%)]" />
-                <span className="font-display text-sm font-bold text-[hsl(230,40%,25%)]">
+                <Star size={14} className="text-[hsl(48 80% 45%)]" />
+                <span className="font-display text-sm font-bold text-[hsl(270 96% 30%)]">
                   Reward Unlocked!
                 </span>
               </div>
-              <p className="font-display text-base font-bold text-[hsl(230,40%,25%)] mt-1">
+              <p className="font-display text-base font-bold text-[hsl(270 96% 30%)] mt-1">
                 {justUnlocked.title}
               </p>
-              <p className="font-body text-xs text-[hsl(230,30%,35%)] mt-0.5">
+              <p className="font-body text-xs text-[hsl(270 80% 40%)] mt-0.5">
                 {justUnlocked.description}
               </p>
             </div>
-            <button onClick={() => setDismissed(true)} className="text-[hsl(230,30%,45%)]">
+            <button onClick={() => setDismissed(true)} className="text-[hsl(270 60% 50%)]">
               <X size={16} />
             </button>
           </div>
@@ -91,11 +91,11 @@ const OnboardingRewardBanner = ({ currentProgress, unlockedRewards = [] }: Onboa
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      className="mx-6 mt-2 p-3 rounded-xl bg-[hsl(45,80%,92%)] border border-[hsl(45,60%,82%)]"
+      className="mx-6 mt-2 p-3 rounded-xl bg-[hsl(48 92% 88%)] border border-[hsl(48 92% 90%)]"
     >
       <div className="flex items-center gap-3">
-        <Gift size={16} className="text-[hsl(45,70%,45%)] shrink-0" />
-        <p className="font-body text-xs text-[hsl(230,30%,35%)]">
+        <Gift size={16} className="text-[hsl(48 80% 45%)] shrink-0" />
+        <p className="font-body text-xs text-[hsl(270 80% 40%)]">
           <span className="font-semibold">Complete {nextReward!.percent}%</span> to unlock:{" "}
           <span className="font-medium">{nextReward!.emoji} {nextReward!.title}</span>
         </p>

@@ -72,7 +72,7 @@ const OTPVerification = () => {
   };
 
   return (
-    <div className="h-[100dvh] bg-[hsl(60,14%,98%)] flex flex-col overflow-hidden">
+    <div className="h-[100dvh] bg-[hsl(0 0% 100%)] flex flex-col overflow-hidden">
       <OnboardingProgressBar progress={8} />
       <OnboardingRewardBanner currentProgress={8} />
 
@@ -82,7 +82,7 @@ const OTPVerification = () => {
             onClick={() => navigate(-1)}
             className="w-10 h-10 rounded-full bg-[hsl(0,0%,85%,0.4)] flex items-center justify-center"
           >
-            <ArrowLeft size={18} className="text-[hsl(230,40%,25%)]" />
+            <ArrowLeft size={18} className="text-[hsl(270 96% 30%)]" />
           </button>
         </div>
 
@@ -96,14 +96,14 @@ const OTPVerification = () => {
         </motion.div>
 
         <div className="flex items-center gap-2 mb-2">
-          <Mail size={20} className="text-[hsl(230,40%,25%)]" />
-          <h1 className="font-display text-2xl text-[hsl(230,40%,25%)]">Verify your email</h1>
+          <Mail size={20} className="text-[hsl(270 96% 30%)]" />
+          <h1 className="font-display text-2xl text-[hsl(270 96% 30%)]">Verify your email</h1>
         </div>
 
         <p className="font-body text-sm text-muted-foreground mb-1 text-center">
           We sent a verification link to
         </p>
-        <p className="font-body text-sm font-semibold text-[hsl(230,40%,25%)] mb-6 text-center break-all">
+        <p className="font-body text-sm font-semibold text-[hsl(270 96% 30%)] mb-6 text-center break-all">
           {email}
         </p>
 
@@ -116,7 +116,7 @@ const OTPVerification = () => {
           <div className="flex items-start gap-3">
             <CheckCircle2 size={20} className="text-[hsl(158,30%,35%)] shrink-0 mt-0.5" />
             <div className="space-y-1">
-              <p className="font-display text-sm font-bold text-[hsl(230,40%,25%)]">
+              <p className="font-display text-sm font-bold text-[hsl(270 96% 30%)]">
                 Check your inbox
               </p>
               <p className="font-body text-xs text-muted-foreground leading-relaxed">
@@ -132,7 +132,7 @@ const OTPVerification = () => {
         <button
           onClick={handleICheckedIt}
           disabled={checking}
-          className="w-full py-4 rounded-full bg-[hsl(230,40%,25%)] font-body text-base font-semibold text-[hsl(45,80%,65%)] hover:bg-[hsl(230,40%,20%)] transition-colors disabled:opacity-50 mb-3"
+          className="w-full py-4 rounded-full bg-[hsl(270 96% 30%)] font-body text-base font-semibold text-[hsl(48 92% 72%)] hover:bg-[hsl(270 96% 18%)] transition-colors disabled:opacity-50 mb-3"
         >
           {checking ? "Checking..." : "I've verified my email"}
         </button>
@@ -145,7 +145,7 @@ const OTPVerification = () => {
             className={`font-semibold flex items-center gap-1 ${
               resendTimer > 0 || resending
                 ? "text-muted-foreground"
-                : "text-[hsl(230,40%,25%)] underline underline-offset-2"
+                : "text-[hsl(270 96% 30%)] underline underline-offset-2"
             }`}
           >
             <RefreshCw size={12} className={resending ? "animate-spin" : ""} />
