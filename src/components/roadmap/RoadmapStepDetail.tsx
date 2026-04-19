@@ -354,7 +354,7 @@ const RoadmapStepDetail = ({ open, onClose, step, roadmapTitle, userGoals }: Roa
                                     <ul className="space-y-1">
                                       {subStep.tips.map((t: string, ti: number) => (
                                         <li key={ti} className="flex items-start gap-1.5 font-body text-xs text-muted-foreground">
-                                          <Lightbulb size={11} className="text-amber-500 shrink-0 mt-0.5" />
+                                          <Lightbulb size={11} className="text-accent shrink-0 mt-0.5" />
                                           {t}
                                         </li>
                                       ))}
@@ -437,9 +437,9 @@ const RoadmapStepDetail = ({ open, onClose, step, roadmapTitle, userGoals }: Roa
                 {details.guidance?.best_practices?.length > 0 && (
                   <GuidanceSection
                     title="Best Practices"
-                    icon={<CheckCircle size={16} className="text-emerald-500" />}
+                    icon={<CheckCircle size={16} className="text-primary" />}
                     items={details.guidance.best_practices}
-                    itemColor="text-emerald-600"
+                    itemColor="text-primary"
                     itemIcon={<CheckCircle size={12} />}
                   />
                 )}
@@ -447,9 +447,9 @@ const RoadmapStepDetail = ({ open, onClose, step, roadmapTitle, userGoals }: Roa
                 {details.guidance?.common_mistakes?.length > 0 && (
                   <GuidanceSection
                     title="Common Mistakes to Avoid"
-                    icon={<AlertTriangle size={16} className="text-amber-500" />}
+                    icon={<AlertTriangle size={16} className="text-accent" />}
                     items={details.guidance.common_mistakes}
-                    itemColor="text-amber-600"
+                    itemColor="text-primary"
                     itemIcon={<AlertTriangle size={12} />}
                   />
                 )}
@@ -457,9 +457,9 @@ const RoadmapStepDetail = ({ open, onClose, step, roadmapTitle, userGoals }: Roa
                 {details.guidance?.success_indicators?.length > 0 && (
                   <GuidanceSection
                     title="Success Indicators"
-                    icon={<Target size={16} className="text-blue-500" />}
+                    icon={<Target size={16} className="text-primary" />}
                     items={details.guidance.success_indicators}
-                    itemColor="text-blue-600"
+                    itemColor="text-primary"
                     itemIcon={<Zap size={12} />}
                   />
                 )}
@@ -467,12 +467,12 @@ const RoadmapStepDetail = ({ open, onClose, step, roadmapTitle, userGoals }: Roa
                 {details.guidance?.portfolio_ideas?.length > 0 && (
                   <div>
                     <h3 className="font-display text-sm text-foreground flex items-center gap-2 mb-2">
-                      <Star size={16} className="text-amber-500" /> Portfolio Ideas
+                      <Star size={16} className="text-accent" /> Portfolio Ideas
                     </h3>
                     <div className="space-y-2">
                       {details.guidance.portfolio_ideas.map((idea: string, i: number) => (
                         <div key={i} className="flex items-start gap-2 p-2.5 rounded-lg bg-muted/40 border border-border">
-                          <span className="shrink-0 w-5 h-5 rounded-full bg-amber-500/10 flex items-center justify-center text-[10px] font-bold text-amber-600">{i + 1}</span>
+                          <span className="shrink-0 w-5 h-5 rounded-full bg-accent/30 flex items-center justify-center text-[10px] font-bold text-primary">{i + 1}</span>
                           <p className="font-body text-xs text-foreground">{idea}</p>
                         </div>
                       ))}
