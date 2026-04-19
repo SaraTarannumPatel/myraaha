@@ -14,7 +14,7 @@ const DirectoryDetailSheet = ({ open, onClose, item, type }: DirectoryDetailShee
 
   return (
     <Sheet open={open} onOpenChange={(o) => !o && onClose()}>
-      <SheetContent className="overflow-y-auto">
+      <SheetContent className="w-full sm:max-w-md overflow-y-auto px-4 sm:px-6">
         <SheetHeader>
           <SheetTitle className="font-display text-lg flex items-center gap-2">
             {type === "career" && <><span className="text-xl">{item.icon_emoji || "💼"}</span>{item.title}</>}

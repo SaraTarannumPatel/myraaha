@@ -32,27 +32,27 @@ interface RoadmapStepDetailProps {
 }
 
 const RESOURCE_SECTIONS = [
-  { key: "free_courses", label: "Free Courses", icon: GraduationCap, color: "text-emerald-600" },
-  { key: "youtube", label: "YouTube", icon: Youtube, color: "text-red-500" },
-  { key: "paid_courses", label: "Paid Courses", icon: Star, color: "text-amber-500" },
-  { key: "books", label: "Books", icon: BookOpen, color: "text-blue-600" },
-  { key: "articles_blogs", label: "Articles & Blogs", icon: FileText, color: "text-purple-500" },
-  { key: "documentation_official", label: "Official Docs", icon: Globe, color: "text-cyan-600" },
-  { key: "practice_platforms", label: "Practice Platforms", icon: FlaskConical, color: "text-orange-500" },
-  { key: "tools_apps", label: "Tools & Apps", icon: Wrench, color: "text-gray-600" },
-  { key: "communities", label: "Communities", icon: Users, color: "text-pink-500" },
-  { key: "podcasts", label: "Podcasts", icon: Mic, color: "text-indigo-500" },
-  { key: "github_repos", label: "GitHub Repos", icon: Code, color: "text-gray-700" },
-  { key: "research_papers", label: "Research Papers", icon: Brain, color: "text-violet-600" },
+  { key: "free_courses", label: "Free Courses", icon: GraduationCap, color: "text-primary" },
+  { key: "youtube", label: "YouTube", icon: Youtube, color: "text-primary" },
+  { key: "paid_courses", label: "Paid Courses", icon: Star, color: "text-primary" },
+  { key: "books", label: "Books", icon: BookOpen, color: "text-primary" },
+  { key: "articles_blogs", label: "Articles & Blogs", icon: FileText, color: "text-primary" },
+  { key: "documentation_official", label: "Official Docs", icon: Globe, color: "text-primary" },
+  { key: "practice_platforms", label: "Practice Platforms", icon: FlaskConical, color: "text-primary" },
+  { key: "tools_apps", label: "Tools & Apps", icon: Wrench, color: "text-primary" },
+  { key: "communities", label: "Communities", icon: Users, color: "text-primary" },
+  { key: "podcasts", label: "Podcasts", icon: Mic, color: "text-primary" },
+  { key: "github_repos", label: "GitHub Repos", icon: Code, color: "text-primary" },
+  { key: "research_papers", label: "Research Papers", icon: Brain, color: "text-primary" },
 ];
 
 const STEP_TYPE_META: Record<string, { color: string; label: string }> = {
-  learn: { color: "bg-blue-500/10 text-blue-700 border-blue-200", label: "Learn" },
-  practice: { color: "bg-amber-500/10 text-amber-700 border-amber-200", label: "Practice" },
-  build: { color: "bg-emerald-500/10 text-emerald-700 border-emerald-200", label: "Build" },
-  research: { color: "bg-purple-500/10 text-purple-700 border-purple-200", label: "Research" },
-  network: { color: "bg-pink-500/10 text-pink-700 border-pink-200", label: "Network" },
-  reflect: { color: "bg-cyan-500/10 text-cyan-700 border-cyan-200", label: "Reflect" },
+  learn: { color: "bg-primary/10 text-primary border-primary/20", label: "Learn" },
+  practice: { color: "bg-accent text-primary border-accent", label: "Practice" },
+  build: { color: "bg-primary/15 text-primary border-primary/30", label: "Build" },
+  research: { color: "bg-accent/60 text-primary border-accent", label: "Research" },
+  network: { color: "bg-primary/10 text-primary border-primary/20", label: "Network" },
+  reflect: { color: "bg-accent/40 text-primary border-accent/60", label: "Reflect" },
 };
 
 const RoadmapStepDetail = ({ open, onClose, step, roadmapTitle, userGoals }: RoadmapStepDetailProps) => {
