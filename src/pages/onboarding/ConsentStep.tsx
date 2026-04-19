@@ -84,7 +84,7 @@ const ConsentStep = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[hsl(0 0% 100%)] flex flex-col">
+    <div className="min-h-screen bg-background flex flex-col">
       <OnboardingProgressBar progress={90} />
       <OnboardingRewardBanner currentProgress={90} />
       {showReward && !showUID && (
@@ -110,7 +110,7 @@ const ConsentStep = () => {
         >
           <div className="text-center space-y-2">
             <p className="font-body text-sm text-primary font-semibold uppercase tracking-wider">Almost There!</p>
-            <h1 className="font-display text-4xl text-[hsl(270 96% 30%)]">Your Privacy Matters</h1>
+            <h1 className="font-display text-4xl text-primary">Your Privacy Matters</h1>
             <p className="font-body text-muted-foreground">
               Your journey is personal. You control what you share and who sees your progress.
             </p>

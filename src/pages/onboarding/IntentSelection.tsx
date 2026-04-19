@@ -46,7 +46,7 @@ const IntentSelection = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[hsl(0 0% 100%)] flex flex-col">
+    <div className="min-h-screen bg-background flex flex-col">
       <OnboardingProgressBar progress={35} />
       <OnboardingRewardBanner currentProgress={35} />
 
@@ -65,7 +65,7 @@ const IntentSelection = () => {
             >
               <Sparkles className="text-primary-foreground" size={36} />
             </motion.div>
-            <h1 className="font-display text-4xl text-[hsl(270 96% 30%)]">
+            <h1 className="font-display text-4xl text-primary">
               Welcome to <em className="text-gradient-warm">MyRaaha</em>
             </h1>
             <p className="font-body text-muted-foreground">
@@ -106,7 +106,7 @@ const IntentSelection = () => {
             <Button
               onClick={handleContinue}
               disabled={!selected}
-              className="bg-[hsl(270 96% 30%)] text-[hsl(48 92% 72%)] rounded-full px-8 font-body font-semibold hover:bg-[hsl(270 96% 18%)] disabled:opacity-50"
+              className="bg-primary text-accent rounded-full px-8 font-body font-semibold hover:bg-primary disabled:opacity-50"
             >
               Continue <ArrowRight size={18} />
             </Button>

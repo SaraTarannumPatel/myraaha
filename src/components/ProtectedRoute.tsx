@@ -22,13 +22,13 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   // Show loading only briefly while auth initializes
   if (!isReady || loading) {
     return (
-      <div className="h-[100dvh] flex items-center justify-center bg-[hsl(0 0% 100%)]">
+      <div className="h-[100dvh] flex items-center justify-center bg-background">
         <div className="flex flex-col items-center gap-3">
-          <div className="w-10 h-10 bg-[hsl(270 96% 30%)] rounded-lg flex items-center justify-center">
-            <span className="text-[hsl(48 92% 72%)] font-display text-lg font-bold">M</span>
+          <div className="w-10 h-10 bg-primary rounded-lg flex items-center justify-center">
+            <span className="text-accent font-display text-lg font-bold">M</span>
           </div>
           <div className="w-32 h-1 bg-[hsl(0,0%,85%,0.5)] rounded-full overflow-hidden">
-            <div className="h-full bg-[hsl(270 96% 30%)] rounded-full animate-pulse w-1/2" />
+            <div className="h-full bg-primary rounded-full animate-pulse w-1/2" />
           </div>
         </div>
       </div>

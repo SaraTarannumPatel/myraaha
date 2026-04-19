@@ -19,7 +19,7 @@ const AssessmentGate = ({ onGoToAssessment }: AssessmentGateProps) => {
     <Card className="border-[hsl(48 92% 82%)]/40 bg-gradient-to-br from-[hsl(48 92% 88%)] to-[hsl(48 92% 90%)]">
       <CardContent className="pt-6 space-y-4">
         <div className="flex items-center gap-3">
-          <Lock size={20} className="text-[hsl(270 96% 30%)]" />
+          <Lock size={20} className="text-primary" />
           <h3 className="font-display text-lg text-foreground">Complete Both Assessments to Unlock</h3>
         </div>
         <p className="font-body text-sm text-muted-foreground">

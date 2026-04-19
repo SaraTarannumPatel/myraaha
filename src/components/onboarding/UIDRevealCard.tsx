@@ -59,13 +59,13 @@ const UIDRevealCard = ({ fullName, uid, onContinue }: UIDRevealCardProps) => {
           {/* Header */}
           <div className="bg-gradient-to-br from-[hsl(270 96% 30%)] to-[hsl(270 96% 18%)] px-6 py-5 text-center relative overflow-hidden">
             <div className="absolute inset-0 opacity-10">
-              <div className="absolute -top-4 -right-4 w-24 h-24 rounded-full bg-[hsl(48 92% 72%)]" />
-              <div className="absolute -bottom-6 -left-6 w-20 h-20 rounded-full bg-[hsl(48 92% 72%)]" />
+              <div className="absolute -top-4 -right-4 w-24 h-24 rounded-full bg-accent" />
+              <div className="absolute -bottom-6 -left-6 w-20 h-20 rounded-full bg-accent" />
             </div>
             <div className="relative">
-              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[hsl(48 92% 72%)]/20 mb-2">
-                <Sparkles size={12} className="text-[hsl(48 92% 72%)]" />
-                <span className="font-body text-[10px] uppercase tracking-wider font-bold text-[hsl(48 92% 72%)]">
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-accent/20 mb-2">
+                <Sparkles size={12} className="text-accent" />
+                <span className="font-body text-[10px] uppercase tracking-wider font-bold text-accent">
                   Identity Created
                 </span>
               </div>
@@ -81,29 +81,29 @@ const UIDRevealCard = ({ fullName, uid, onContinue }: UIDRevealCardProps) => {
             <div className="bg-gradient-to-br from-[hsl(48 92% 88%)] to-[hsl(48 92% 88%)] rounded-2xl p-5 border-2 border-[hsl(48 92% 82%)] relative">
               <div className="flex items-start justify-between mb-3">
                 <div>
-                  <p className="font-body text-[10px] uppercase tracking-wider text-[hsl(270 80% 40%)] font-bold">
+                  <p className="font-body text-[10px] uppercase tracking-wider text-primary/80 font-bold">
                     Your MyRaaha UID
                   </p>
-                  <p className="font-body text-[10px] text-[hsl(270 60% 50%)] mt-0.5">
+                  <p className="font-body text-[10px] text-primary/70 mt-0.5">
                     Use this everywhere — keep it safe
                   </p>
                 </div>
-                <ShieldCheck size={20} className="text-[hsl(270 96% 48%)]" />
+                <ShieldCheck size={20} className="text-primary" />
               </div>
               <div className="flex items-center gap-2">
-                <code className="flex-1 font-mono text-2xl font-bold text-[hsl(270 96% 30%)] tracking-wider">
+                <code className="flex-1 font-mono text-2xl font-bold text-primary tracking-wider">
                   {uid}
                 </code>
                 <button
                   onClick={handleCopy}
-                  className="p-2 rounded-lg bg-[hsl(270 96% 30%)] text-[hsl(48 92% 72%)] hover:bg-[hsl(270 96% 18%)] transition-colors"
+                  className="p-2 rounded-lg bg-primary text-accent hover:bg-primary transition-colors"
                   aria-label="Copy UID"
                 >
                   {copied ? <Check size={16} /> : <Copy size={16} />}
                 </button>
               </div>
               <div className="mt-3 pt-3 border-t border-[hsl(48 92% 90%)]">
-                <p className="font-body text-[11px] text-[hsl(270 80% 40%)]">
+                <p className="font-body text-[11px] text-primary/80">
                   <strong>Display Name:</strong> {fullName}
                 </p>
               </div>
@@ -121,7 +121,7 @@ const UIDRevealCard = ({ fullName, uid, onContinue }: UIDRevealCardProps) => {
 
             <Button
               onClick={onContinue}
-              className="w-full bg-[hsl(270 96% 30%)] text-[hsl(48 92% 72%)] rounded-full py-6 font-body font-semibold hover:bg-[hsl(270 96% 18%)]"
+              className="w-full bg-primary text-accent rounded-full py-6 font-body font-semibold hover:bg-primary"
             >
               Enter Curiosity Compass <ArrowRight size={16} />
             </Button>

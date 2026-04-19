@@ -58,7 +58,7 @@ const OnboardingCelebration = ({ onDismiss }: OnboardingCelebrationProps) => {
             >
               🎉
             </motion.div>
-            <div className="flex items-center justify-center gap-2 text-[hsl(48 80% 45%)]">
+            <div className="flex items-center justify-center gap-2 text-accent">
               <PartyPopper size={16} />
               <span className="font-body text-xs uppercase tracking-wider font-bold">Congratulations!</span>
               <PartyPopper size={16} />
@@ -83,7 +83,7 @@ const OnboardingCelebration = ({ onDismiss }: OnboardingCelebrationProps) => {
             </div>
             <Button
               onClick={() => { setShow(false); onDismiss(); }}
-              className="bg-[hsl(270 96% 30%)] text-[hsl(48 92% 72%)] rounded-full px-8 font-body font-semibold"
+              className="bg-primary text-accent rounded-full px-8 font-body font-semibold"
             >
               Start Assessments <ArrowRight size={16} />
             </Button>

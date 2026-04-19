@@ -305,7 +305,7 @@ const PsychometricTest = ({ userId, onComplete, recordSignal }: PsychometricTest
             <Button
               onClick={handleNext}
               disabled={!answers[current.id]}
-              className="bg-[hsl(270 96% 30%)] text-[hsl(48 92% 72%)] rounded-full px-6"
+              className="bg-primary text-accent rounded-full px-6"
             >
               {step === PSYCHOMETRIC_QUESTIONS.length - 1 ? "Finish" : "Next"} <ArrowRight size={16} />
             </Button>

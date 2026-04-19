@@ -65,19 +65,19 @@ const OnboardingRewardBanner = ({ currentProgress, unlockedRewards = [] }: Onboa
             <div className="text-2xl">{justUnlocked.emoji}</div>
             <div className="flex-1">
               <div className="flex items-center gap-2">
-                <Star size={14} className="text-[hsl(48 80% 45%)]" />
-                <span className="font-display text-sm font-bold text-[hsl(270 96% 30%)]">
+                <Star size={14} className="text-accent" />
+                <span className="font-display text-sm font-bold text-primary">
                   Reward Unlocked!
                 </span>
               </div>
-              <p className="font-display text-base font-bold text-[hsl(270 96% 30%)] mt-1">
+              <p className="font-display text-base font-bold text-primary mt-1">
                 {justUnlocked.title}
               </p>
-              <p className="font-body text-xs text-[hsl(270 80% 40%)] mt-0.5">
+              <p className="font-body text-xs text-primary/80 mt-0.5">
                 {justUnlocked.description}
               </p>
             </div>
-            <button onClick={() => setDismissed(true)} className="text-[hsl(270 60% 50%)]">
+            <button onClick={() => setDismissed(true)} className="text-primary/70">
               <X size={16} />
             </button>
           </div>
@@ -91,11 +91,11 @@ const OnboardingRewardBanner = ({ currentProgress, unlockedRewards = [] }: Onboa
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      className="mx-6 mt-2 p-3 rounded-xl bg-[hsl(48 92% 88%)] border border-[hsl(48 92% 90%)]"
+      className="mx-6 mt-2 p-3 rounded-xl bg-accent/40 border border-[hsl(48 92% 90%)]"
     >
       <div className="flex items-center gap-3">
-        <Gift size={16} className="text-[hsl(48 80% 45%)] shrink-0" />
-        <p className="font-body text-xs text-[hsl(270 80% 40%)]">
+        <Gift size={16} className="text-accent shrink-0" />
+        <p className="font-body text-xs text-primary/80">
           <span className="font-semibold">Complete {nextReward!.percent}%</span> to unlock:{" "}
           <span className="font-medium">{nextReward!.emoji} {nextReward!.title}</span>
         </p>

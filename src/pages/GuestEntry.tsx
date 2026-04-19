@@ -22,7 +22,7 @@ const GuestEntry = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[hsl(0 0% 100%)] flex flex-col">
+    <div className="min-h-screen bg-background flex flex-col">
       <OnboardingProgressBar progress={5} />
       <OnboardingRewardBanner currentProgress={5} />
 
@@ -34,7 +34,7 @@ const GuestEntry = () => {
             transition={{ duration: 0.5 }}
             className="flex items-start"
           >
-            <h1 className="font-display text-[3.5rem] sm:text-[4.5rem] lg:text-[5.5rem] leading-[0.90] font-bold text-[hsl(270 96% 30%)] flex-1 z-10">
+            <h1 className="font-display text-[3.5rem] sm:text-[4.5rem] lg:text-[5.5rem] leading-[0.90] font-bold text-primary flex-1 z-10">
               Find your<br />path, at<br />your<br />pace!
             </h1>
             <div className="w-[50%] sm:w-[45%] lg:w-[40%] -mt-2 -mr-2">
@@ -55,7 +55,7 @@ const GuestEntry = () => {
           transition={{ delay: 0.2, duration: 0.4 }}
           className="mb-8"
         >
-          <span className="inline-block px-5 py-2 rounded-full bg-[hsl(48 92% 88%)] font-body text-sm italic text-[hsl(270 96% 30%)]">
+          <span className="inline-block px-5 py-2 rounded-full bg-accent/40 font-body text-sm italic text-primary">
             No sign-up needed to try this
           </span>
         </motion.div>
@@ -89,7 +89,7 @@ const GuestEntry = () => {
           </button>
           <button
             onClick={handleEnter}
-            className="flex items-center gap-2 px-8 py-3 rounded-full bg-[hsl(270 96% 30%)] font-body text-sm font-semibold text-[hsl(48 92% 72%)] hover:bg-[hsl(270 96% 18%)] transition-colors"
+            className="flex items-center gap-2 px-8 py-3 rounded-full bg-primary font-body text-sm font-semibold text-accent hover:bg-primary transition-colors"
           >
             Enter
             <ArrowRight size={16} />
