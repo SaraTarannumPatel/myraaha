@@ -164,16 +164,16 @@ const Explore = () => {
   };
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 px-1 sm:px-0">
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
-        <div className="flex items-center gap-3 mb-2">
-          <div className="w-10 h-10 rounded-xl gradient-warm flex items-center justify-center">
-            <Globe size={20} className="text-secondary-foreground" />
+        <div className="flex items-center gap-2.5 sm:gap-3 mb-2">
+          <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-primary flex items-center justify-center shrink-0">
+            <Globe size={18} className="text-accent" />
           </div>
-          <div>
-            <h1 className="font-display text-xl sm:text-2xl text-foreground">Explore Directory</h1>
-            <p className="font-body text-xs text-muted-foreground">
-              Discover careers, jobs, industries, sectors, domains, skills, subjects, universities, courses & countries
+          <div className="min-w-0">
+            <h1 className="font-display text-lg sm:text-xl md:text-2xl text-primary truncate">Explore Directory</h1>
+            <p className="font-body text-[11px] sm:text-xs text-muted-foreground line-clamp-2">
+              Careers, jobs, industries, sectors, domains, skills, subjects, universities, courses & countries
             </p>
           </div>
         </div>
