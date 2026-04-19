@@ -111,10 +111,10 @@ const OTPVerification = () => {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className="w-full p-5 rounded-2xl bg-[hsl(45,80%,95%)] border border-[hsl(45,60%,80%)] mb-6"
+          className="w-full p-5 rounded-2xl bg-[hsl(48 92% 95%)] border border-[hsl(48 92% 82%)] mb-6"
         >
           <div className="flex items-start gap-3">
-            <CheckCircle2 size={20} className="text-[hsl(158,30%,35%)] shrink-0 mt-0.5" />
+            <CheckCircle2 size={20} className="text-[hsl(270 96% 30%)] shrink-0 mt-0.5" />
             <div className="space-y-1">
               <p className="font-display text-sm font-bold text-[hsl(270 96% 30%)]">
                 Check your inbox
