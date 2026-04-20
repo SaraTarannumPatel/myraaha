@@ -3,6 +3,7 @@ import PageHero from "@/components/landing/shared/PageHero";
 import Section from "@/components/landing/shared/Section";
 import CTABand from "@/components/landing/shared/CTABand";
 import { Check, X } from "lucide-react";
+import heroPrinciples from "@/assets/landing/hero-principles.jpg";
 
 const commitments = [
   ["We will always treat you as a participant, not a beneficiary.", "You are someone who is navigating — and we are the system that makes that navigation better."],
