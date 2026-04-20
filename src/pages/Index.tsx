@@ -8,6 +8,10 @@ import CTABand from "@/components/landing/shared/CTABand";
 import raahaJourney from "@/assets/landing/raaha-journey.jpg";
 import raahaMarg from "@/assets/landing/raaha-marg.jpg";
 import appFrame from "@/assets/landing/app-frame.jpg";
+import heroArrival from "@/assets/landing/hero-arrival.jpg";
+import heroIdentification from "@/assets/landing/hero-identification.jpg";
+import heroBicycle from "@/assets/landing/hero-bicycle.jpg";
+import heroPaths from "@/assets/landing/hero-paths.jpg";
 
 const fadeUp = {
   initial: { opacity: 0, y: 24 },
@@ -83,10 +87,12 @@ const Index = () => {
               className="lg:col-span-5"
             >
               <div className="relative">
-                <img
-                  src={raahaJourney}
-                  alt="A traveler walking a soft winding path holding a glowing compass — the MyRaaha journey"
-                  className="w-full max-w-md mx-auto"
+                <motion.img
+                  animate={{ y: [0, -10, 0] }}
+                  transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+                  src={heroArrival}
+                  alt="A young person sitting cross-legged on a cloud, journaling with thought bubbles of a compass, leaf and star"
+                  className="w-full max-w-md mx-auto rounded-3xl"
                   width={1024}
                   height={1024}
                 />
@@ -124,6 +130,15 @@ const Index = () => {
       >
         <div className="grid lg:grid-cols-12 gap-10 items-start">
           <div className="lg:col-span-7 space-y-5">
+            <motion.img
+              {...fadeUp}
+              src={heroIdentification}
+              alt="A young person at 2 AM with browser tabs floating around their head, tea cup nearby"
+              className="w-full max-w-sm rounded-3xl mb-2"
+              loading="lazy"
+              width={1024}
+              height={1024}
+            />
             {/* Mock browser */}
             <motion.div {...fadeUp} className="rounded-2xl border border-border shadow-soft overflow-hidden bg-background">
               <div className="flex items-center gap-2 px-4 py-3 border-b border-border bg-secondary/40">
@@ -397,14 +412,26 @@ const Index = () => {
             </p>
           </div>
           <div className="lg:col-span-5">
-            <div className="rounded-2xl bg-background border border-border p-7 shadow-soft">
-              <Bike size={28} className="text-primary mb-4" />
-              <p className="font-display text-2xl text-primary leading-snug">
-                MyRaaha is that elder for your career.
-              </p>
-              <p className="font-body text-sm text-foreground/75 mt-3 leading-relaxed">
-                Someone who understands your pace.
-              </p>
+            <div className="relative">
+              <motion.img
+                animate={{ y: [0, -8, 0] }}
+                transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+                src={heroBicycle}
+                alt="A grandparent steadying a young person learning to ride a bicycle on a sunlit path"
+                className="w-full max-w-sm mx-auto rounded-3xl"
+                loading="lazy"
+                width={1024}
+                height={1024}
+              />
+              <motion.div
+                initial={{ opacity: 0, y: 8 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                className="absolute -bottom-4 left-1/2 -translate-x-1/2 rounded-2xl bg-background border border-border shadow-soft px-4 py-3 flex items-center gap-2"
+              >
+                <Bike size={16} className="text-primary" />
+                <p className="font-display text-sm text-primary">MyRaaha holds the seat.</p>
+              </motion.div>
             </div>
           </div>
         </div>

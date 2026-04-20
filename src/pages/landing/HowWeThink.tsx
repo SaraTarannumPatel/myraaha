@@ -1,17 +1,42 @@
 import LandingLayout from "@/components/landing/shared/LandingLayout";
-import PageHero from "@/components/landing/shared/PageHero";
 import Section from "@/components/landing/shared/Section";
 import Quote from "@/components/landing/shared/Quote";
 import CTABand from "@/components/landing/shared/CTABand";
 import { Brain, Compass, MessageSquare } from "lucide-react";
+import { motion } from "framer-motion";
+import heroHow from "@/assets/landing/hero-how.jpg";
 
 const HowWeThink = () => (
   <LandingLayout>
-    <PageHero
-      eyebrow="How We Think"
-      title={<>MyRaaha doesn't start with answers. <span className="highlight-mark italic">It starts with listening.</span></>}
-      intro="Most career platforms give you a result. The test ends. The platform moves on. You're left with a label and no path. MyRaaha is built differently."
-    />
+    <section className="relative overflow-hidden bg-background">
+      <div className="absolute -top-20 -left-20 w-96 h-96 rounded-full bg-accent/40 blur-3xl pointer-events-none" />
+      <div className="container mx-auto px-5 sm:px-8 pt-16 sm:pt-24 pb-16 sm:pb-20 relative">
+        <div className="grid lg:grid-cols-12 gap-10 items-center">
+          <div className="lg:col-span-7 order-2 lg:order-1">
+            <p className="font-body text-xs uppercase tracking-[0.28em] text-grey-label mb-5">How We Think</p>
+            <h1 className="font-display text-[2.4rem] sm:text-5xl md:text-6xl text-primary leading-[1.05] tracking-tight">
+              MyRaaha doesn't start with answers. <span className="highlight-mark italic">It starts with listening.</span>
+            </h1>
+            <p className="font-body text-base sm:text-lg text-foreground/75 mt-6 leading-relaxed max-w-xl">
+              Most career platforms give you a result. The test ends. The platform moves on. You're left with a label and no path.
+              MyRaaha is built differently.
+            </p>
+          </div>
+          <div className="lg:col-span-5 order-1 lg:order-2">
+            <motion.img
+              animate={{ y: [0, -8, 0] }}
+              transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+              src={heroHow}
+              alt="A young person assembling a puzzle that flows like a river"
+              className="w-full max-w-sm mx-auto rounded-3xl"
+              loading="lazy"
+              width={1024}
+              height={1024}
+            />
+          </div>
+        </div>
+      </div>
+    </section>
 
     <Section title="Your confusion is not a weakness. It's information.">
       <p className="font-body text-base sm:text-lg text-foreground/80 max-w-3xl leading-relaxed">

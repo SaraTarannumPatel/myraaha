@@ -1,9 +1,10 @@
 import LandingLayout from "@/components/landing/shared/LandingLayout";
-import PageHero from "@/components/landing/shared/PageHero";
 import Section from "@/components/landing/shared/Section";
 import Quote from "@/components/landing/shared/Quote";
 import CTABand from "@/components/landing/shared/CTABand";
+import { motion } from "framer-motion";
 import appFrame from "@/assets/landing/app-frame.jpg";
+import heroExperience from "@/assets/landing/hero-experience.jpg";
 
 const phases = [
   ["It begins quietly.", "Your first experience isn't an overwhelming dashboard. Not a list of tasks. Not a form that makes you summarize your career in three fields. It begins with a few simple questions — not about what you want to do, but about who you are right now."],
@@ -16,11 +17,35 @@ const phases = [
 
 const Experience = () => (
   <LandingLayout>
-    <PageHero
-      eyebrow="The Experience"
-      title={<>This is not a product tour. It's what it <span className="highlight-mark italic">feels like.</span></>}
-      intro="We're not going to walk you through screens or list features. What we want to describe is something harder to capture — what it actually feels like to use a system built for your journey, not against it."
-    />
+    <section className="relative overflow-hidden bg-background">
+      <div className="absolute -top-24 right-0 w-[28rem] h-[28rem] rounded-full bg-accent/40 blur-3xl pointer-events-none" />
+      <div className="container mx-auto px-5 sm:px-8 pt-16 sm:pt-24 pb-12 sm:pb-16 relative">
+        <div className="grid lg:grid-cols-12 gap-10 items-center">
+          <div className="lg:col-span-7">
+            <p className="font-body text-xs uppercase tracking-[0.28em] text-grey-label mb-5">The Experience</p>
+            <h1 className="font-display text-[2.4rem] sm:text-5xl md:text-6xl text-primary leading-[1.05] tracking-tight">
+              This is not a product tour. It's what it <span className="highlight-mark italic">feels like.</span>
+            </h1>
+            <p className="font-body text-base sm:text-lg text-foreground/75 mt-6 leading-relaxed max-w-xl">
+              We're not going to walk you through screens or list features. What we want to describe is something harder to capture —
+              what it actually feels like to use a system built for your journey, not against it.
+            </p>
+          </div>
+          <div className="lg:col-span-5">
+            <motion.img
+              animate={{ y: [0, -10, 0] }}
+              transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+              src={heroExperience}
+              alt="A hand holding a glowing phone showing a winding map with a compass and sapling"
+              className="w-full max-w-sm mx-auto rounded-3xl"
+              loading="lazy"
+              width={1024}
+              height={1024}
+            />
+          </div>
+        </div>
+      </div>
+    </section>
 
     <Section>
       <div className="grid lg:grid-cols-12 gap-10 items-start">
