@@ -2,6 +2,7 @@ import LandingLayout from "@/components/landing/shared/LandingLayout";
 import PageHero from "@/components/landing/shared/PageHero";
 import Section from "@/components/landing/shared/Section";
 import CTABand from "@/components/landing/shared/CTABand";
+import heroSolutions from "@/assets/landing/hero-solutions.jpg";
 
 const careerPhases = [
   ["Phase 1 — Discovery", "Curiosity Compass", "A gamified, pressure-free exploration of your interests, strengths, and learning styles. No wrong answers. No ticking clock."],
@@ -42,6 +43,8 @@ const Solutions = () => (
       eyebrow="Solutions"
       title={<>Everything you need to navigate. <span className="highlight-mark italic">Nothing you don't.</span></>}
       intro="Not a course marketplace. Not a job portal. Not a collection of tools you have to figure out. A structured navigation system — with two interconnected paths — that moves you from wherever you are to wherever you're ready to go."
+      illustration={heroSolutions}
+      illustrationAlt="A modular toolkit of compass, roadmap, graph, notebook and phone connected as one system"
     />
 
     <Section eyebrow="Choose your journey" title="Or explore both.">

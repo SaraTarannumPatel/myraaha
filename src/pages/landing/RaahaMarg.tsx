@@ -11,10 +11,12 @@ const RaahaMarg = () => (
       eyebrow="Raaha × Marg"
       title={<>Two principles. <span className="highlight-mark italic">One system.</span></>}
       intro="Most guidance systems collapse into one of two failures — too soft (all empathy, no structure) or too rigid (all structure, no empathy). MyRaaha holds both."
+      illustration={raahaMarg}
+      illustrationAlt="A hand cradling a glowing seed beside a staircase rising into morning light"
     />
 
     <Section>
-      <img src={raahaMarg} alt="A hand cradling a glowing seed (Raaha) beside a staircase rising into light (Marg)" className="w-full max-w-5xl mx-auto rounded-3xl" loading="lazy" width={1600} height={900} />
+      <img src={raahaMarg} alt="Raaha and Marg dual symbol illustration" className="w-full max-w-5xl mx-auto rounded-3xl" loading="lazy" width={1600} height={900} />
     </Section>
 
     <Section eyebrow="Raaha — रास्ता" title={<>The hand that <span className="highlight-mark italic">steadies you.</span></>}>

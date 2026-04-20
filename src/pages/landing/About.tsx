@@ -3,6 +3,7 @@ import PageHero from "@/components/landing/shared/PageHero";
 import Section from "@/components/landing/shared/Section";
 import Quote from "@/components/landing/shared/Quote";
 import CTABand from "@/components/landing/shared/CTABand";
+import heroAbout from "@/assets/landing/hero-about.jpg";
 
 const About = () => (
   <LandingLayout>
@@ -10,6 +11,8 @@ const About = () => (
       eyebrow="About Us"
       title={<>MyRaaha is not a career app. It is a <span className="highlight-mark italic">navigation infrastructure.</span></>}
       intro="A technology-first, emotionally intelligent system that delivers personalized, continuous career and entrepreneurship guidance — through automation, behavioral data, and human judgment working together."
+      illustration={heroAbout}
+      illustrationAlt="A hand cradling a glowing seedling growing from soil that holds the MyRaaha name"
     />
 
     <Section eyebrow="The name" title={<>MyRaaha — <span className="italic">my journey, at my pace.</span></>}>

@@ -2,6 +2,7 @@ import LandingLayout from "@/components/landing/shared/LandingLayout";
 import PageHero from "@/components/landing/shared/PageHero";
 import Section from "@/components/landing/shared/Section";
 import CTABand from "@/components/landing/shared/CTABand";
+import heroWhenHelps from "@/assets/landing/hero-when-helps.jpg";
 
 const fits = [
   { tag: "If you're still studying", h: "And the question of what comes next is louder than you expected.", b: "You thought you'd have it figured out by now. You consume a lot of information. You take tests. Nothing sticks. Nothing feels like you. MyRaaha is built for this moment — not to decide for you, but to help you understand yourself well enough to decide well." },
@@ -23,6 +24,8 @@ const WhenHelps = () => (
       eyebrow="When MyRaaha Helps Most"
       title={<>This page is about <span className="highlight-mark italic">honest self-recognition.</span></>}
       intro="MyRaaha works best for specific people at specific moments. Not everyone. Not every situation. Read through what follows. If something lands, you'll know."
+      illustration={heroWhenHelps}
+      illustrationAlt="A person at a crossroads under dawn light, considering multiple winding paths"
     />
 
     <Section>

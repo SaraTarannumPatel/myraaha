@@ -30,15 +30,57 @@ const OTPVerification = () => {
     }
   }, [resendTimer]);
 
-  // Poll for verification: when user clicks the email link, the session is updated
+  // Detect verification across windows. The email may be verified in another browser tab,
+  // a different browser, or even on the user's phone — in all cases, this page should detect it.
   useEffect(() => {
+    let cancelled = false;
+
+    const checkVerified = async (): Promise<boolean> => {
+      try {
+        // refreshSession forces Supabase to re-fetch the latest auth state from the server,
+        // which is essential when the verification happened in a different window/device.
+        const { data: refreshed } = await supabase.auth.refreshSession();
+        const confirmedAt =
+          refreshed?.user?.email_confirmed_at ??
+          (await supabase.auth.getUser()).data?.user?.email_confirmed_at;
+        if (confirmedAt && !cancelled) {
+          toast.success("Email verified! 🎉");
+          setTimeout(() => navigate("/auth", { replace: true }), 1200);
+          return true;
+        }
+      } catch {
+        /* ignore network errors during polling */
+      }
+      return false;
+    };
+
+    // 1. React to in-window auth state changes (same-tab verification)
     const { data: sub } = supabase.auth.onAuthStateChange((_event, session) => {
-      if (session?.user?.email_confirmed_at) {
+      if (session?.user?.email_confirmed_at && !cancelled) {
         toast.success("Email verified! 🎉");
-        setTimeout(() => navigate("/auth", { replace: true }), 1500);
+        setTimeout(() => navigate("/auth", { replace: true }), 1200);
       }
     });
-    return () => sub.subscription.unsubscribe();
+
+    // 2. Poll the server every 4s — catches verification done on another device/window
+    const pollInterval = setInterval(checkVerified, 4000);
+
+    // 3. Re-check immediately when the user returns focus / tab becomes visible
+    const onFocus = () => { void checkVerified(); };
+    const onVisibility = () => { if (document.visibilityState === "visible") void checkVerified(); };
+    window.addEventListener("focus", onFocus);
+    document.addEventListener("visibilitychange", onVisibility);
+
+    // 4. Initial check on mount
+    void checkVerified();
+
+    return () => {
+      cancelled = true;
+      sub.subscription.unsubscribe();
+      clearInterval(pollInterval);
+      window.removeEventListener("focus", onFocus);
+      document.removeEventListener("visibilitychange", onVisibility);
+    };
   }, [navigate]);
 
   const handleResend = async () => {
@@ -59,6 +101,8 @@ const OTPVerification = () => {
   const handleICheckedIt = async () => {
     setChecking(true);
     try {
+      // Force a session refresh first so we pick up verification done in another window/device
+      await supabase.auth.refreshSession();
       const { data } = await supabase.auth.getUser();
       if (data?.user?.email_confirmed_at) {
         toast.success("Email verified! 🎉");

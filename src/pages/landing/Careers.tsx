@@ -2,6 +2,7 @@ import LandingLayout from "@/components/landing/shared/LandingLayout";
 import PageHero from "@/components/landing/shared/PageHero";
 import Section from "@/components/landing/shared/Section";
 import { ArrowRight } from "lucide-react";
+import heroCareers from "@/assets/landing/hero-careers.jpg";
 
 const values = [
   ["The Problem", "Structural, not superficial. Career and entrepreneurship confusion affects hundreds of millions. The work here has stakes."],
@@ -24,6 +25,8 @@ const Careers = () => (
       eyebrow="Careers at MyRaaha"
       title={<>We're building something <span className="highlight-mark italic">that matters.</span> We'd like to build it with you.</>}
       intro="MyRaaha is a small, serious team working on a problem that has been unsolved for too long. We don't move fast and break things. We think carefully and build durably."
+      illustration={heroCareers}
+      illustrationAlt="A small diverse team collaborating warmly at a wooden table with plants and laptops"
     />
 
     <Section eyebrow="Why join" title="Five things to know.">
