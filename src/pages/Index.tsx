@@ -403,14 +403,26 @@ const Index = () => {
             </p>
           </div>
           <div className="lg:col-span-5">
-            <div className="rounded-2xl bg-background border border-border p-7 shadow-soft">
-              <Bike size={28} className="text-primary mb-4" />
-              <p className="font-display text-2xl text-primary leading-snug">
-                MyRaaha is that elder for your career.
-              </p>
-              <p className="font-body text-sm text-foreground/75 mt-3 leading-relaxed">
-                Someone who understands your pace.
-              </p>
+            <div className="relative">
+              <motion.img
+                animate={{ y: [0, -8, 0] }}
+                transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+                src={heroBicycle}
+                alt="A grandparent steadying a young person learning to ride a bicycle on a sunlit path"
+                className="w-full max-w-sm mx-auto rounded-3xl"
+                loading="lazy"
+                width={1024}
+                height={1024}
+              />
+              <motion.div
+                initial={{ opacity: 0, y: 8 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                className="absolute -bottom-4 left-1/2 -translate-x-1/2 rounded-2xl bg-background border border-border shadow-soft px-4 py-3 flex items-center gap-2"
+              >
+                <Bike size={16} className="text-primary" />
+                <p className="font-display text-sm text-primary">MyRaaha holds the seat.</p>
+              </motion.div>
             </div>
           </div>
         </div>
