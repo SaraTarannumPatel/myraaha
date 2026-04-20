@@ -130,6 +130,15 @@ const Index = () => {
       >
         <div className="grid lg:grid-cols-12 gap-10 items-start">
           <div className="lg:col-span-7 space-y-5">
+            <motion.img
+              {...fadeUp}
+              src={heroIdentification}
+              alt="A young person at 2 AM with browser tabs floating around their head, tea cup nearby"
+              className="w-full max-w-sm rounded-3xl mb-2"
+              loading="lazy"
+              width={1024}
+              height={1024}
+            />
             {/* Mock browser */}
             <motion.div {...fadeUp} className="rounded-2xl border border-border shadow-soft overflow-hidden bg-background">
               <div className="flex items-center gap-2 px-4 py-3 border-b border-border bg-secondary/40">
