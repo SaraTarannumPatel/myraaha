@@ -16,17 +16,8 @@ const ConsentStep = () => {
   const navigate = useNavigate();
   const [consentData, setConsentData] = useState(false);
   const [consentMentor, setConsentMentor] = useState(false);
-  const [showReward, setShowReward] = useState<typeof ONBOARDING_REWARDS[0] | null>(null);
   const [showUID, setShowUID] = useState(false);
   const [submitting, setSubmitting] = useState(false);
-
-  useEffect(() => {
-    const reward = ONBOARDING_REWARDS.find((r) => r.percent === 90);
-    if (reward) {
-      const timer = setTimeout(() => setShowReward(reward), 500);
-      return () => clearTimeout(timer);
-    }
-  }, []);
 
   const createWelcomeNotifications = async () => {
     if (!user) return;
@@ -86,15 +77,7 @@ const ConsentStep = () => {
   return (
     <div className="min-h-screen bg-background flex flex-col">
       <OnboardingProgressBar progress={90} />
-      <OnboardingRewardBanner currentProgress={90} />
-      {showReward && !showUID && (
-        <OnboardingRewardCelebration
-          emoji={showReward.emoji}
-          title={showReward.title}
-          description={showReward.description}
-          onContinue={() => setShowReward(null)}
-        />
-      )}
+      <OnboardingRewardBanner currentProgress={90} showCelebration={!showUID} />
       {showUID && profile && (
         <UIDRevealCard
           fullName={profile.full_name || "Explorer"}
