@@ -3,6 +3,7 @@ import PageHero from "@/components/landing/shared/PageHero";
 import Section from "@/components/landing/shared/Section";
 import CTABand from "@/components/landing/shared/CTABand";
 import Quote from "@/components/landing/shared/Quote";
+import heroResearch from "@/assets/landing/hero-research.jpg";
 
 const Research = () => (
   <LandingLayout>
@@ -10,6 +11,8 @@ const Research = () => (
       eyebrow="Research, Systems & Ethics"
       title={<>There is real thinking <span className="highlight-mark italic">underneath this.</span></>}
       intro="MyRaaha is not a chatbot with a career-focused prompt. Not a personality quiz with better branding. Not an LLM wrapper. What sits underneath is domain-specific behavioral intelligence — built for career and entrepreneurship guidance, and only that."
+      illustration={heroResearch}
+      illustrationAlt="A research desk with floating data visualizations and behavioral pattern nodes"
     />
 
     <Section eyebrow="Behavioral data, not generic LLMs" title="The intelligence is built on what you do — not what you describe.">

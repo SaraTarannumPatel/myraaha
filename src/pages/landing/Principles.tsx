@@ -31,6 +31,8 @@ const Principles = () => (
       eyebrow="Our Principles & Boundaries"
       title={<>Before trust, there must be <span className="highlight-mark italic">transparency.</span></>}
       intro="Most platforms tell you what they offer. We want to tell you something harder to say: what we refuse to do. Trust isn't built through promises — it's built through demonstrated restraint."
+      illustration={heroPrinciples}
+      illustrationAlt="Balance scale weighing commitments and refusals equally"
     />
 
     <Section eyebrow="Our commitments" title="What you can always count on us to do.">

@@ -2,6 +2,7 @@ import LandingLayout from "@/components/landing/shared/LandingLayout";
 import PageHero from "@/components/landing/shared/PageHero";
 import Section from "@/components/landing/shared/Section";
 import { ArrowRight } from "lucide-react";
+import heroWriting from "@/assets/landing/hero-writing.jpg";
 
 const articles = [
   ["Why career confusion is an infrastructure problem — not a personal failure", "Career Navigation", "8 min", "Every year, millions blame themselves for not knowing what they want. But the system was never designed to help them figure it out."],
@@ -27,6 +28,8 @@ const Writing = () => (
       eyebrow="Writing & Reflections"
       title={<>Thinking, <span className="highlight-mark italic">carefully done.</span></>}
       intro="On careers, clarity, and the navigation of uncertainty. We write occasionally — when we have something worth saying."
+      illustration={heroWriting}
+      illustrationAlt="An open journal with fountain pen, steaming mug and warm reading lamp on a wooden desk"
     />
 
     <Section eyebrow="Essays" title="Articles.">

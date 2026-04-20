@@ -2,6 +2,7 @@ import LandingLayout from "@/components/landing/shared/LandingLayout";
 import PageHero from "@/components/landing/shared/PageHero";
 import Section from "@/components/landing/shared/Section";
 import { Mail } from "lucide-react";
+import heroContact from "@/assets/landing/hero-contact.jpg";
 
 const faqs = [
   ["Is MyRaaha free to use?", "We're building toward an accessible pricing model that doesn't price out the people who need it most. During our early phase, access is limited and invite-based."],
@@ -17,6 +18,8 @@ const Contact = () => (
       eyebrow="Contact"
       title={<>We're here. Reach out <span className="highlight-mark italic">when you're ready.</span></>}
       intro="This is not a support ticket system. This is a human contact. We typically respond within 2–3 working days. We read everything. We reply to everything that deserves a reply."
+      illustration={heroContact}
+      illustrationAlt="An open envelope releasing a glowing letter, surrounded by message bubbles and a phone"
     />
 
     <Section>

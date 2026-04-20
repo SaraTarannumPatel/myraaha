@@ -2,6 +2,7 @@ import LandingLayout from "@/components/landing/shared/LandingLayout";
 import PageHero from "@/components/landing/shared/PageHero";
 import Section from "@/components/landing/shared/Section";
 import { ArrowRight } from "lucide-react";
+import heroCareers from "@/assets/landing/hero-careers.jpg";
 
 const values = [
   ["The Problem", "Structural, not superficial. Career and entrepreneurship confusion affects hundreds of millions. The work here has stakes."],
