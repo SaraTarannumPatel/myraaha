@@ -8,6 +8,10 @@ import CTABand from "@/components/landing/shared/CTABand";
 import raahaJourney from "@/assets/landing/raaha-journey.jpg";
 import raahaMarg from "@/assets/landing/raaha-marg.jpg";
 import appFrame from "@/assets/landing/app-frame.jpg";
+import heroArrival from "@/assets/landing/hero-arrival.jpg";
+import heroIdentification from "@/assets/landing/hero-identification.jpg";
+import heroBicycle from "@/assets/landing/hero-bicycle.jpg";
+import heroPaths from "@/assets/landing/hero-paths.jpg";
 
 const fadeUp = {
   initial: { opacity: 0, y: 24 },
@@ -83,10 +87,12 @@ const Index = () => {
               className="lg:col-span-5"
             >
               <div className="relative">
-                <img
-                  src={raahaJourney}
-                  alt="A traveler walking a soft winding path holding a glowing compass — the MyRaaha journey"
-                  className="w-full max-w-md mx-auto"
+                <motion.img
+                  animate={{ y: [0, -10, 0] }}
+                  transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+                  src={heroArrival}
+                  alt="A young person sitting cross-legged on a cloud, journaling with thought bubbles of a compass, leaf and star"
+                  className="w-full max-w-md mx-auto rounded-3xl"
                   width={1024}
                   height={1024}
                 />
