@@ -16,7 +16,7 @@ const RaahaMarg = () => (
     />
 
     <Section>
-      <img src={raahaMarg} alt="A hand cradling a glowing seed (Raaha) beside a staircase rising into light (Marg)" className="w-full max-w-5xl mx-auto rounded-3xl" loading="lazy" width={1600} height={900} />
+      <img src={raahaMarg} alt="Raaha and Marg dual symbol illustration" className="w-full max-w-5xl mx-auto rounded-3xl" loading="lazy" width={1600} height={900} />
     </Section>
 
     <Section eyebrow="Raaha — रास्ता" title={<>The hand that <span className="highlight-mark italic">steadies you.</span></>}>
