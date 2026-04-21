@@ -34,7 +34,7 @@ const Auth = () => {
   useEffect(() => {
     if (user && profile) {
       if (profile.onboarding_status === "complete") {
-        navigate("/dashboard", { replace: true });
+        navigate("/dashboard/curiosity-compass", { replace: true });
       } else {
         navigate("/onboarding", { replace: true });
       }
@@ -127,7 +127,7 @@ const Auth = () => {
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -10 }}
-                className="mb-4 p-4 rounded-xl bg-[hsl(270 80% 95%)] border border-[hsl(270 60% 80%)]"
+                className="mb-4 p-4 rounded-xl bg-primary/10 border border-primary/20"
               >
                 <div className="flex items-start gap-3">
                   <span className="text-xl">✅</span>
@@ -198,7 +198,7 @@ const Auth = () => {
               onChange={(e) => setEmail(e.target.value)}
               placeholder={isLogin ? "Email" : "Email"}
               required
-              className="w-full h-14 rounded-2xl bg-[hsl(0,0%,85%,0.5)] px-5 font-body text-sm text-foreground placeholder:text-muted-foreground outline-none border-none focus:ring-2 focus:ring-[hsl(270 96% 48%)] transition-all"
+              className="w-full h-14 rounded-2xl bg-muted px-5 font-body text-sm text-foreground placeholder:text-muted-foreground outline-none border-none focus:ring-2 focus:ring-primary transition-all"
             />
 
             {!isLogin && (
@@ -208,7 +208,7 @@ const Auth = () => {
                 onChange={(e) => handlePhoneChange(e.target.value)}
                 placeholder="+91 XXXXX XXXXX"
                 required
-                className="w-full h-14 rounded-2xl bg-[hsl(0,0%,85%,0.5)] px-5 font-body text-sm text-foreground placeholder:text-muted-foreground outline-none border-none focus:ring-2 focus:ring-[hsl(270 96% 48%)] transition-all"
+                className="w-full h-14 rounded-2xl bg-muted px-5 font-body text-sm text-foreground placeholder:text-muted-foreground outline-none border-none focus:ring-2 focus:ring-primary transition-all"
                 onFocus={() => !phone && setPhone("+91 ")}
               />
             )}
@@ -220,7 +220,7 @@ const Auth = () => {
               placeholder="Password"
               required
               minLength={6}
-              className="w-full h-14 rounded-2xl bg-[hsl(0,0%,85%,0.5)] px-5 font-body text-sm text-foreground placeholder:text-muted-foreground outline-none border-none focus:ring-2 focus:ring-[hsl(270 96% 48%)] transition-all"
+              className="w-full h-14 rounded-2xl bg-muted px-5 font-body text-sm text-foreground placeholder:text-muted-foreground outline-none border-none focus:ring-2 focus:ring-primary transition-all"
             />
 
             {isLogin && (
@@ -247,11 +247,11 @@ const Auth = () => {
 
           <div className="mt-3">
             <div className="flex items-center gap-3 mb-3">
-              <div className="flex-1 h-px bg-[hsl(0,0%,82%)]" />
+              <div className="flex-1 h-px bg-border" />
               <span className="font-body text-xs text-muted-foreground">
                 Or {isLogin ? "Login" : "Signup"} with
               </span>
-              <div className="flex-1 h-px bg-[hsl(0,0%,82%)]" />
+              <div className="flex-1 h-px bg-border" />
             </div>
             <div className="flex items-center justify-center gap-8">
               <button onClick={handleGoogleSignIn} className="w-8 h-8 flex items-center justify-center" aria-label="Google">
