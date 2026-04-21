@@ -7,10 +7,11 @@ import { toast } from "sonner";
 interface UIDRevealCardProps {
   fullName: string;
   uid: string;
+  rewards?: string[];
   onContinue: () => void;
 }
 
-const UIDRevealCard = ({ fullName, uid, onContinue }: UIDRevealCardProps) => {
+const UIDRevealCard = ({ fullName, uid, rewards = [], onContinue }: UIDRevealCardProps) => {
   const [copied, setCopied] = useState(false);
   const [confetti, setConfetti] = useState<{ id: number; x: number; delay: number; color: string }[]>([]);
 
@@ -37,7 +38,7 @@ const UIDRevealCard = ({ fullName, uid, onContinue }: UIDRevealCardProps) => {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4"
+        className="fixed inset-0 z-50 flex items-center justify-center bg-foreground/50 backdrop-blur-sm p-4"
       >
         {confetti.map((c) => (
           <motion.div
@@ -57,7 +58,7 @@ const UIDRevealCard = ({ fullName, uid, onContinue }: UIDRevealCardProps) => {
           className="bg-card rounded-3xl border border-border shadow-2xl max-w-md w-full overflow-hidden"
         >
           {/* Header */}
-          <div className="bg-gradient-to-br from-[hsl(270 96% 30%)] to-[hsl(270 96% 18%)] px-6 py-5 text-center relative overflow-hidden">
+          <div className="gradient-dark px-6 py-5 text-center relative overflow-hidden">
             <div className="absolute inset-0 opacity-10">
               <div className="absolute -top-4 -right-4 w-24 h-24 rounded-full bg-accent" />
               <div className="absolute -bottom-6 -left-6 w-20 h-20 rounded-full bg-accent" />
@@ -69,8 +70,8 @@ const UIDRevealCard = ({ fullName, uid, onContinue }: UIDRevealCardProps) => {
                   Identity Created
                 </span>
               </div>
-              <h2 className="font-display text-2xl text-white">Welcome, {fullName.split(" ")[0]}!</h2>
-              <p className="font-body text-xs text-white/70 mt-1">
+              <h2 className="font-display text-2xl text-background">Welcome, {fullName.split(" ")[0]}!</h2>
+              <p className="font-body text-xs text-background/70 mt-1">
                 Your unique MyRaaha identity is ready
               </p>
             </div>
@@ -78,7 +79,7 @@ const UIDRevealCard = ({ fullName, uid, onContinue }: UIDRevealCardProps) => {
 
           {/* UID Card */}
           <div className="p-6 space-y-5">
-            <div className="bg-gradient-to-br from-[hsl(48 92% 88%)] to-[hsl(48 92% 88%)] rounded-2xl p-5 border-2 border-[hsl(48 92% 82%)] relative">
+            <div className="bg-secondary rounded-2xl p-5 border-2 border-accent/60 relative">
               <div className="flex items-start justify-between mb-3">
                 <div>
                   <p className="font-body text-[10px] uppercase tracking-wider text-primary/80 font-bold">
@@ -102,12 +103,27 @@ const UIDRevealCard = ({ fullName, uid, onContinue }: UIDRevealCardProps) => {
                   {copied ? <Check size={16} /> : <Copy size={16} />}
                 </button>
               </div>
-              <div className="mt-3 pt-3 border-t border-[hsl(48 92% 90%)]">
+              <div className="mt-3 pt-3 border-t border-accent/40">
                 <p className="font-body text-[11px] text-primary/80">
                   <strong>Display Name:</strong> {fullName}
                 </p>
               </div>
             </div>
+
+            {rewards.length > 0 && (
+              <div className="bg-accent/20 rounded-xl p-3 space-y-2 border border-accent/40">
+                <p className="font-body text-[11px] text-foreground font-semibold flex items-center gap-1.5">
+                  <Sparkles size={12} className="text-primary" /> Rewards unlocked
+                </p>
+                <div className="flex flex-wrap gap-1.5">
+                  {rewards.map((reward) => (
+                    <span key={reward} className="rounded-full bg-background px-2.5 py-1 font-body text-[10px] font-semibold text-primary border border-border">
+                      {reward}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
 
             <div className="bg-muted/40 rounded-xl p-3 space-y-1.5">
               <p className="font-body text-[11px] text-foreground font-semibold">
