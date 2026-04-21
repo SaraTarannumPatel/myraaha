@@ -7155,6 +7155,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      ensure_profile_public_uid: { Args: never; Returns: string }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
@@ -7162,6 +7163,7 @@ export type Database = {
         }
         Returns: boolean
       }
+      is_email_verified: { Args: { _email: string }; Returns: boolean }
     }
     Enums: {
       app_role: "admin" | "moderator" | "user"
