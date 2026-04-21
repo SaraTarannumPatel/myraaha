@@ -43,6 +43,7 @@ const LandingNav = ({ alwaysVisible = false }: { alwaysVisible?: boolean }) => {
   const [revealed, setRevealed] = useState(alwaysVisible);
   const [scrolled, setScrolled] = useState(false);
   const [activeGroup, setActiveGroup] = useState<string | null>(null);
+  const [mobileGroup, setMobileGroup] = useState<string | null>(null);
   const { pathname } = useLocation();
 
   useEffect(() => {
@@ -60,18 +61,15 @@ const LandingNav = ({ alwaysVisible = false }: { alwaysVisible?: boolean }) => {
     if (pathname !== "/") setRevealed(true);
     setOpen(false);
     setActiveGroup(null);
+    setMobileGroup(null);
   }, [pathname]);
 
   return (
     <motion.header
       initial={false}
-      animate={{ opacity: revealed ? 1 : 0.35 }}
+      animate={{ opacity: 1 }}
       transition={{ duration: 0.6 }}
-      className={`fixed top-0 inset-x-0 z-50 transition-colors ${
-        scrolled || pathname !== "/"
-          ? "bg-background/90 backdrop-blur-xl border-b border-border"
-          : "bg-transparent"
-      }`}
+      className="fixed top-0 inset-x-0 z-50 bg-background/95 backdrop-blur-xl border-b border-border shadow-soft transition-colors"
     >
       <div className="container mx-auto px-5 sm:px-8 h-16 sm:h-20 flex items-center justify-between">
         <Link to="/" className="font-display text-2xl sm:text-3xl text-primary tracking-tight shrink-0">
@@ -186,26 +184,43 @@ const LandingNav = ({ alwaysVisible = false }: { alwaysVisible?: boolean }) => {
                 Home
               </Link>
               {groups.map((g) => (
-                <div key={g.label}>
-                  <p className="font-body text-[11px] uppercase tracking-[0.22em] text-grey-label mb-2">{g.label}</p>
-                  <div className="flex flex-col gap-1">
-                    {g.children.map((c) => (
-                      <Link
-                        key={c.to}
-                        to={c.to}
-                        onClick={() => setOpen(false)}
-                        className="flex items-start gap-3 rounded-xl py-2.5 px-1"
+                <div key={g.label} className="rounded-2xl border border-border bg-card overflow-hidden">
+                  <button
+                    onClick={() => setMobileGroup(mobileGroup === g.label ? null : g.label)}
+                    className="w-full flex items-center justify-between px-4 py-3 text-left"
+                  >
+                    <span className="font-body text-[11px] uppercase tracking-[0.22em] text-grey-label">{g.label}</span>
+                    <ChevronDown size={15} className={`text-primary transition-transform ${mobileGroup === g.label ? "rotate-180" : ""}`} />
+                  </button>
+                  <AnimatePresence initial={false}>
+                    {mobileGroup === g.label && (
+                      <motion.div
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: "auto", opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        className="overflow-hidden"
                       >
-                        <span className="w-8 h-8 rounded-lg bg-accent/40 flex items-center justify-center text-primary shrink-0">
-                          <c.icon size={15} />
-                        </span>
-                        <span className="min-w-0">
-                          <p className="font-body text-sm text-foreground">{c.label}</p>
-                          <p className="font-body text-[11px] text-foreground/55 leading-snug">{c.desc}</p>
-                        </span>
-                      </Link>
-                    ))}
-                  </div>
+                        <div className="flex flex-col gap-1 px-3 pb-3">
+                          {g.children.map((c) => (
+                            <Link
+                              key={c.to}
+                              to={c.to}
+                              onClick={() => setOpen(false)}
+                              className="flex items-start gap-3 rounded-xl py-2.5 px-1 hover:bg-secondary/60 transition-colors"
+                            >
+                              <span className="w-8 h-8 rounded-lg bg-accent/40 flex items-center justify-center text-primary shrink-0">
+                                <c.icon size={15} />
+                              </span>
+                              <span className="min-w-0">
+                                <p className="font-body text-sm text-foreground">{c.label}</p>
+                                <p className="font-body text-[11px] text-foreground/55 leading-snug">{c.desc}</p>
+                              </span>
+                            </Link>
+                          ))}
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
                 </div>
               ))}
               <div className="pt-3 border-t border-border flex flex-col gap-2">

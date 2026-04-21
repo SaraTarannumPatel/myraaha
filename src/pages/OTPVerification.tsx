@@ -39,11 +39,14 @@ const OTPVerification = () => {
       try {
         // refreshSession forces Supabase to re-fetch the latest auth state from the server,
         // which is essential when the verification happened in a different window/device.
-        const { data: refreshed } = await supabase.auth.refreshSession();
+        const [{ data: refreshed }, { data: rpcVerified }] = await Promise.all([
+          supabase.auth.refreshSession(),
+          email ? (supabase as any).rpc("is_email_verified", { _email: email }) : Promise.resolve({ data: false }),
+        ]);
         const confirmedAt =
           refreshed?.user?.email_confirmed_at ??
           (await supabase.auth.getUser()).data?.user?.email_confirmed_at;
-        if (confirmedAt && !cancelled) {
+        if ((confirmedAt || rpcVerified === true) && !cancelled) {
           toast.success("Email verified! 🎉");
           setTimeout(() => navigate("/auth", { replace: true }), 1200);
           return true;
@@ -81,7 +84,7 @@ const OTPVerification = () => {
       window.removeEventListener("focus", onFocus);
       document.removeEventListener("visibilitychange", onVisibility);
     };
-  }, [navigate]);
+  }, [email, navigate]);
 
   const handleResend = async () => {
     if (resendTimer > 0 || !email) return;
@@ -102,9 +105,12 @@ const OTPVerification = () => {
     setChecking(true);
     try {
       // Force a session refresh first so we pick up verification done in another window/device
+      const [{ data }, { data: rpcVerified }] = await Promise.all([
+        supabase.auth.getUser(),
+        email ? (supabase as any).rpc("is_email_verified", { _email: email }) : Promise.resolve({ data: false }),
+      ]);
       await supabase.auth.refreshSession();
-      const { data } = await supabase.auth.getUser();
-      if (data?.user?.email_confirmed_at) {
+      if (data?.user?.email_confirmed_at || rpcVerified === true) {
         toast.success("Email verified! 🎉");
         navigate("/auth", { replace: true });
       } else {
@@ -124,7 +130,7 @@ const OTPVerification = () => {
         <div className="w-full mb-4 flex items-center">
           <button
             onClick={() => navigate(-1)}
-            className="w-10 h-10 rounded-full bg-[hsl(0,0%,85%,0.4)] flex items-center justify-center"
+            className="w-10 h-10 rounded-full bg-muted flex items-center justify-center"
           >
             <ArrowLeft size={18} className="text-primary" />
           </button>
@@ -155,7 +161,7 @@ const OTPVerification = () => {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className="w-full p-5 rounded-2xl bg-accent/20 border border-[hsl(48 92% 82%)] mb-6"
+          className="w-full p-5 rounded-2xl bg-accent/20 border border-accent/60 mb-6"
         >
           <div className="flex items-start gap-3">
             <CheckCircle2 size={20} className="text-primary shrink-0 mt-0.5" />

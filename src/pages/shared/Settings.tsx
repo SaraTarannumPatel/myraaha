@@ -58,9 +58,9 @@ const Settings = () => {
   };
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6 sm:space-y-8 responsive-page">
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
-        <div className="flex items-center gap-3 mb-2">
+        <div className="flex items-center gap-3 mb-2 min-w-0">
           <div className="w-10 h-10 rounded-xl gradient-warm flex items-center justify-center">
             <SettingsIcon size={20} className="text-primary-foreground" />
           </div>
@@ -77,7 +77,7 @@ const Settings = () => {
         animate={{ opacity: 1, y: 0 }}
         className="rounded-2xl overflow-hidden border border-border shadow-sm"
       >
-        <div className="bg-gradient-to-br from-[hsl(270 96% 30%)] to-[hsl(270 96% 18%)] p-6 relative">
+        <div className="gradient-dark p-4 sm:p-6 relative">
           <div className="absolute top-3 right-3 inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-accent/20">
             <Sparkles size={10} className="text-accent" />
             <span className="font-body text-[10px] uppercase tracking-wider font-bold text-accent">
@@ -85,21 +85,21 @@ const Settings = () => {
             </span>
           </div>
 
-          <div className="flex items-center gap-4">
-            <div className="w-20 h-20 rounded-2xl bg-accent flex items-center justify-center text-primary font-display text-3xl font-bold border-4 border-white/20">
+          <div className="flex flex-col sm:flex-row sm:items-center gap-4 min-w-0">
+            <div className="w-20 h-20 rounded-2xl bg-accent flex items-center justify-center text-primary font-display text-3xl font-bold border-4 border-background/20 shrink-0">
               {initials}
             </div>
-            <div className="flex-1">
-              <p className="font-display text-2xl text-white">{profile?.full_name || "Your Name"}</p>
+            <div className="flex-1 min-w-0">
+              <p className="font-display text-2xl text-background break-words pr-20 sm:pr-0">{profile?.full_name || "Your Name"}</p>
               <button
                 onClick={copyUID}
-                className="mt-1.5 inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 hover:bg-white/20 transition-colors"
+                className="mt-1.5 inline-flex max-w-full items-center gap-2 px-3 py-1.5 rounded-full bg-background/10 hover:bg-background/20 transition-colors"
               >
-                <code className="font-mono text-sm font-bold text-accent tracking-wider">{uid}</code>
+                <code className="font-mono text-sm font-bold text-accent tracking-wider break-all">{uid}</code>
                 {copied ? (
                   <Check size={14} className="text-accent" />
                 ) : (
-                  <Copy size={14} className="text-white/70" />
+                  <Copy size={14} className="text-background/70 shrink-0" />
                 )}
               </button>
             </div>
@@ -182,9 +182,9 @@ const Settings = () => {
             { label: "Password", value: "••••••••" },
             { label: "Gender Identity", value: "Hidden" },
           ].map((item) => (
-            <div key={item.label} className="flex items-center justify-between p-3 rounded-lg bg-muted/40">
+            <div key={item.label} className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1 p-3 rounded-lg bg-muted/40 min-w-0">
               <span className="font-body text-xs text-muted-foreground">{item.label}</span>
-              <span className="font-mono text-xs text-foreground font-semibold">{item.value}</span>
+              <span className="font-mono text-xs text-foreground font-semibold break-all">{item.value}</span>
             </div>
           ))}
         </div>
@@ -222,8 +222,8 @@ const Settings = () => {
           <Shield size={18} className="text-primary" /> Privacy & Data
         </h2>
         <div className="space-y-4">
-          <div className="flex items-center justify-between">
-            <div>
+          <div className="flex items-center justify-between gap-4">
+            <div className="min-w-0">
               <p className="font-body text-sm font-medium text-foreground">Personalized Recommendations</p>
               <p className="font-body text-xs text-muted-foreground">Use your data for AI insights</p>
             </div>
@@ -234,8 +234,8 @@ const Settings = () => {
               <div className={`w-5 h-5 rounded-full bg-card shadow-sm transition-transform ${consentData ? "translate-x-6" : "translate-x-0.5"}`} />
             </button>
           </div>
-          <div className="flex items-center justify-between">
-            <div>
+          <div className="flex items-center justify-between gap-4">
+            <div className="min-w-0">
               <p className="font-body text-sm font-medium text-foreground">Mentor & Community Sharing</p>
               <p className="font-body text-xs text-muted-foreground">Share profile with mentors and groups</p>
             </div>
