@@ -1116,7 +1116,7 @@ const CuriosityCompass = () => {
             <TabsTrigger value="assessment">Discover Yourself</TabsTrigger>
             <TabsTrigger value="psychometric">Psychometric</TabsTrigger>
             <TabsTrigger value="explore" disabled={!bothAssessmentsDone} className={!bothAssessmentsDone ? "opacity-50" : ""}>
-              {!bothAssessmentsDone && <Lock size={12} className="mr-1" />}Explore
+              {!bothAssessmentsDone && <Lock size={12} className="mr-1" />}Interests
             </TabsTrigger>
             <TabsTrigger value="quests" disabled={!bothAssessmentsDone} className={!bothAssessmentsDone ? "opacity-50" : ""}>
               {!bothAssessmentsDone && <Lock size={12} className="mr-1" />}Quests
