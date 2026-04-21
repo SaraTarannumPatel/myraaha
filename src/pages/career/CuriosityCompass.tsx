@@ -1157,13 +1157,13 @@ const CuriosityCompass = () => {
             />
           </TabsContent>
 
-          {/* ===== Explore Tab ===== */}
+          {/* ===== Interests Assessment Tab (4 modes: Career Cards, Story, Challenge, Visual) ===== */}
           <TabsContent value="explore" className="space-y-6">
             {!mode ? (
               <Card>
                 <CardHeader>
-                  <CardTitle>Choose Your Exploration Mode</CardTitle>
-                  <CardDescription>Pick a style that feels comfortable</CardDescription>
+                  <CardTitle className="flex items-center gap-2"><Heart size={20} className="text-terracotta" /> Interests Assessment</CardTitle>
+                  <CardDescription>Pick any mode to explore your interests at your own comfort. You can switch modes anytime.</CardDescription>
                 </CardHeader>
                 <CardContent>
                   <div className="grid md:grid-cols-3 gap-4">
