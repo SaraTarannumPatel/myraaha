@@ -17,6 +17,7 @@ const ConsentStep = () => {
   const [consentData, setConsentData] = useState(false);
   const [consentMentor, setConsentMentor] = useState(false);
   const [showUID, setShowUID] = useState(false);
+  const [generatedUid, setGeneratedUid] = useState(profile?.public_uid || "");
   const [submitting, setSubmitting] = useState(false);
 
   const createWelcomeNotifications = async () => {
@@ -43,6 +44,15 @@ const ConsentStep = () => {
   const handleContinue = async () => {
     if (submitting) return;
     setSubmitting(true);
+    localStorage.setItem("myraaha_uid_reveal_pending", "true");
+
+    let uid = profile?.public_uid || "";
+    if (user && !uid) {
+      const { data, error } = await (supabase as any).rpc("ensure_profile_public_uid");
+      if (!error && data) uid = data;
+    }
+    setGeneratedUid(uid || "MR-XXXXXX");
+
     await updateProfile({
       onboarding_status: "complete",
       ...({
@@ -71,7 +81,8 @@ const ConsentStep = () => {
 
   const handleEnterApp = () => {
     setShowUID(false);
-    navigate("/dashboard/curiosity-compass");
+    localStorage.removeItem("myraaha_uid_reveal_pending");
+    navigate("/dashboard/curiosity-compass", { replace: true });
   };
 
   return (
@@ -81,7 +92,8 @@ const ConsentStep = () => {
       {showUID && profile && (
         <UIDRevealCard
           fullName={profile.full_name || "Explorer"}
-          uid={profile.public_uid || "MR-XXXXXX"}
+          uid={generatedUid || profile.public_uid || "MR-XXXXXX"}
+          rewards={ONBOARDING_REWARDS.map((reward) => reward.title)}
           onContinue={handleEnterApp}
         />
       )}
