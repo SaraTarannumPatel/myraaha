@@ -182,12 +182,12 @@ const DashboardLayout = () => {
   );
 
   return (
-    <div className="min-h-screen bg-background flex">
-      <aside className="hidden md:flex w-64 border-r border-border bg-card flex-col fixed h-screen">
+    <div className="min-h-screen bg-background flex overflow-x-hidden">
+      <aside className="hidden lg:flex w-64 border-r border-border bg-card flex-col fixed h-screen">
         <NavContent />
       </aside>
 
-      <div className="md:hidden fixed top-0 left-0 right-0 z-50 bg-card/80 backdrop-blur-md border-b border-border">
+      <div className="lg:hidden fixed top-0 left-0 right-0 z-50 bg-card/95 backdrop-blur-md border-b border-border">
         <div className="flex items-center justify-between px-4 h-14">
           <Link to="/dashboard" className="font-display text-xl text-foreground">
             My<span className="text-gradient-warm">Raaha</span>
@@ -211,8 +211,8 @@ const DashboardLayout = () => {
         </div>
       </div>
 
-      <main className="flex-1 md:ml-64 mt-14 md:mt-0">
-        <div className="px-4 py-4 sm:p-6 md:p-8 max-w-6xl mx-auto">
+      <main className="flex-1 min-w-0 lg:ml-64 mt-14 lg:mt-0">
+        <div className="px-4 py-4 sm:p-6 md:p-8 max-w-6xl mx-auto min-w-0 overflow-x-hidden">
           <Outlet />
         </div>
       </main>
