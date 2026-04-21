@@ -199,6 +199,14 @@ const PsychometricTest = ({ userId, onComplete, recordSignal }: PsychometricTest
     }
   };
 
+  const handleSkip = () => {
+    if (step < PSYCHOMETRIC_QUESTIONS.length - 1) {
+      setStep(step + 1);
+    } else {
+      handleComplete();
+    }
+  };
+
   const handleComplete = async () => {
     // Save to profile
     await updateProfile({
