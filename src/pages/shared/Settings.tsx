@@ -182,7 +182,7 @@ const Settings = () => {
             { label: "Password", value: "••••••••" },
             { label: "Gender Identity", value: "Hidden" },
           ].map((item) => (
-            <div key={item.label} className="flex flex-col xs:flex-row xs:items-center xs:justify-between gap-1 p-3 rounded-lg bg-muted/40 min-w-0">
+            <div key={item.label} className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1 p-3 rounded-lg bg-muted/40 min-w-0">
               <span className="font-body text-xs text-muted-foreground">{item.label}</span>
               <span className="font-mono text-xs text-foreground font-semibold break-all">{item.value}</span>
             </div>
