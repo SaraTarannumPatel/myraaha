@@ -195,95 +195,116 @@ const AssessmentTestSection = ({ user, recordSignal, recordMultipleSignals }: { 
     );
   }
 
+  const handleSkipVariant = () => {
+    if (variantStep < variantQs.length - 1) setVariantStep(variantStep + 1);
+    else {
+      const v = detectVariant(userType, variantAnswers);
+      const jId = getJourneyId(userType, v);
+      setVariant(v);
+      setJourneyId(jId);
+      setPhase("journey");
+    }
+  };
+
+  const handleSkipJourney = () => {
+    if (journeyStep < journeyQs.length - 1) setJourneyStep(journeyStep + 1);
+    else handleComplete();
+  };
+
   return (
-    <div className="space-y-6">
-      <Card className="border-accent/30 bg-accent/5">
-        <CardHeader className="pb-2">
-          <CardTitle className="flex items-center gap-2 text-lg">
-            <ClipboardCheck size={20} className="text-accent-foreground" />
-            Discover Yourself Deeply
-          </CardTitle>
-          <CardDescription>
-            These questions help calibrate your compass — no right or wrong answers. Your responses shape AI recommendations, roadmaps, and career cards across the app.
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <Progress value={(currentTotal / totalSteps) * 100} className="h-1.5" />
-          <p className="font-body text-xs text-muted-foreground mt-2">{currentTotal + 1} / {totalSteps}</p>
-        </CardContent>
-      </Card>
-
-      <AnimatePresence mode="wait">
-        {phase === "variant" && currentVariantQ && (
-          <motion.div key={`v-${variantStep}`} initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-4">
-            <Card>
-              <CardHeader>
-                <Badge variant="outline" className="w-fit mb-2">Vibe Check</Badge>
-                <CardTitle className="text-lg">{currentVariantQ.question}</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-2">
-                {currentVariantQ.options.map((opt) => {
-                  const isSelected = variantAnswers[currentVariantQ.id] === opt.value;
-                  return (
-                    <button key={opt.value} onClick={() => setVariantAnswers({ ...variantAnswers, [currentVariantQ.id]: opt.value })}
-                      className={`w-full text-left p-3 rounded-xl border-2 transition-all font-body text-sm ${isSelected ? "border-primary bg-primary/10 font-semibold" : "border-border hover:border-primary/30"}`}>
-                      {isSelected && <CheckCircle2 size={14} className="inline mr-2 text-primary" />}{opt.label}
-                    </button>
-                  );
-                })}
-              </CardContent>
-            </Card>
-            <div className="flex justify-between">
-              <Button variant="ghost" disabled={variantStep === 0} onClick={() => setVariantStep(variantStep - 1)}>
-                <ArrowLeft size={16} /> Back
-              </Button>
-              <Button onClick={handleVariantNext} disabled={!variantAnswers[currentVariantQ.id]}
-                className="bg-primary text-accent rounded-full px-6">
-                Next <ArrowRight size={16} />
-              </Button>
+    <div className="fixed inset-0 z-40 bg-background/80 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
+      <motion.div
+        initial={{ opacity: 0, scale: 0.92, y: 20 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        className="max-w-xl w-full bg-card rounded-2xl border border-border shadow-2xl overflow-hidden my-4"
+      >
+        {/* Popup Header */}
+        <div className="p-5 sm:p-6 border-b border-border bg-gradient-to-r from-primary/5 to-accent/5">
+          <div className="flex items-center justify-between mb-3">
+            <div className="flex items-center gap-2">
+              <ClipboardCheck size={18} className="text-primary" />
+              <span className="font-display text-sm sm:text-base">Discovery Assessment</span>
             </div>
-          </motion.div>
-        )}
+            <span className="font-body text-xs text-muted-foreground">{currentTotal + 1} / {totalSteps}</span>
+          </div>
+          <Progress value={((currentTotal + 1) / totalSteps) * 100} className="h-1.5" />
+          <p className="font-body text-xs text-muted-foreground mt-2">
+            {phase === "variant" ? "Vibe Check — quick calibration" : meta?.title}
+          </p>
+        </div>
 
-        {phase === "journey" && currentJourneyQ && (
-          <motion.div key={`j-${journeyStep}`} initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-4">
-            <Card>
-              <CardHeader>
-                <Badge variant="outline" className="w-fit mb-2">{meta?.title}</Badge>
-                <CardTitle className="text-lg">{currentJourneyQ.question}</CardTitle>
+        {/* Question Body */}
+        <div className="p-5 sm:p-6 max-h-[55vh] overflow-y-auto">
+          <AnimatePresence mode="wait">
+            {phase === "variant" && currentVariantQ && (
+              <motion.div key={`v-${variantStep}`} initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-4">
+                <h3 className="font-display text-base sm:text-lg text-foreground">{currentVariantQ.question}</h3>
+                <div className="space-y-2">
+                  {currentVariantQ.options.map((opt) => {
+                    const isSelected = variantAnswers[currentVariantQ.id] === opt.value;
+                    return (
+                      <button key={opt.value} onClick={() => setVariantAnswers({ ...variantAnswers, [currentVariantQ.id]: opt.value })}
+                        className={`w-full text-left p-3 rounded-xl border-2 transition-all font-body text-sm ${isSelected ? "border-primary bg-primary/10 font-semibold" : "border-border hover:border-primary/30"}`}>
+                        {isSelected && <CheckCircle2 size={14} className="inline mr-2 text-primary" />}{opt.label}
+                      </button>
+                    );
+                  })}
+                </div>
+              </motion.div>
+            )}
+
+            {phase === "journey" && currentJourneyQ && (
+              <motion.div key={`j-${journeyStep}`} initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-4">
+                <h3 className="font-display text-base sm:text-lg text-foreground">{currentJourneyQ.question}</h3>
                 {currentJourneyQ.type === "multi" && (
-                  <CardDescription>Pick {currentJourneyQ.maxSelect ? `up to ${currentJourneyQ.maxSelect}` : "as many as you want"}</CardDescription>
+                  <p className="font-body text-xs text-muted-foreground">Pick {currentJourneyQ.maxSelect ? `up to ${currentJourneyQ.maxSelect}` : "as many as you want"}</p>
                 )}
-              </CardHeader>
-              <CardContent className={currentJourneyQ.options.length > 5 ? "flex flex-wrap gap-2" : "space-y-2"}>
-                {currentJourneyQ.options.map((opt) => {
-                  const isMulti = currentJourneyQ.type === "multi";
-                  const isSelected = isMulti
-                    ? ((journeyAnswers[currentJourneyQ.id] as string[]) || []).includes(opt.value)
-                    : journeyAnswers[currentJourneyQ.id] === opt.value;
-                  return (
-                    <button key={opt.value}
-                      onClick={() => handleJourneySelect(currentJourneyQ.id, opt.value, currentJourneyQ.type, currentJourneyQ.maxSelect)}
-                      className={`${currentJourneyQ.options.length > 5 ? "px-3 py-2 rounded-xl" : "w-full text-left p-3 rounded-xl"} border-2 transition-all font-body text-sm ${isSelected ? "border-primary bg-primary/10 font-semibold" : "border-border hover:border-primary/30"}`}>
-                      {isSelected && <CheckCircle2 size={14} className="inline mr-1.5 text-primary" />}{opt.label}
-                    </button>
-                  );
-                })}
-              </CardContent>
-            </Card>
-            <div className="flex justify-between">
-              <Button variant="ghost" onClick={() => { if (journeyStep > 0) setJourneyStep(journeyStep - 1); else setPhase("variant"); }}>
-                <ArrowLeft size={16} /> Back
+                <div className={currentJourneyQ.options.length > 5 ? "flex flex-wrap gap-2" : "space-y-2"}>
+                  {currentJourneyQ.options.map((opt) => {
+                    const isMulti = currentJourneyQ.type === "multi";
+                    const isSelected = isMulti
+                      ? ((journeyAnswers[currentJourneyQ.id] as string[]) || []).includes(opt.value)
+                      : journeyAnswers[currentJourneyQ.id] === opt.value;
+                    return (
+                      <button key={opt.value}
+                        onClick={() => handleJourneySelect(currentJourneyQ.id, opt.value, currentJourneyQ.type, currentJourneyQ.maxSelect)}
+                        className={`${currentJourneyQ.options.length > 5 ? "px-3 py-2 rounded-xl" : "w-full text-left p-3 rounded-xl"} border-2 transition-all font-body text-sm ${isSelected ? "border-primary bg-primary/10 font-semibold" : "border-border hover:border-primary/30"}`}>
+                        {isSelected && <CheckCircle2 size={14} className="inline mr-1.5 text-primary" />}{opt.label}
+                      </button>
+                    );
+                  })}
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+
+        {/* Footer */}
+        <div className="p-4 sm:p-5 border-t border-border bg-muted/20 flex items-center justify-between gap-2">
+          <Button variant="ghost" size="sm" onClick={() => {
+            if (phase === "variant") { if (variantStep > 0) setVariantStep(variantStep - 1); }
+            else { if (journeyStep > 0) setJourneyStep(journeyStep - 1); else setPhase("variant"); }
+          }} disabled={phase === "variant" && variantStep === 0}>
+            <ArrowLeft size={14} className="mr-1" /> Back
+          </Button>
+          <div className="flex items-center gap-2">
+            <Button variant="ghost" size="sm" onClick={phase === "variant" ? handleSkipVariant : handleSkipJourney} className="text-muted-foreground text-xs">
+              Skip
+            </Button>
+            {phase === "variant" ? (
+              <Button onClick={handleVariantNext} disabled={!variantAnswers[currentVariantQ?.id]} size="sm" className="bg-primary text-accent rounded-full px-5">
+                Next <ArrowRight size={14} className="ml-1" />
               </Button>
+            ) : (
               <Button onClick={handleJourneyNext}
-                disabled={currentJourneyQ.type === "single" ? !journeyAnswers[currentJourneyQ.id] : !((journeyAnswers[currentJourneyQ.id] as string[])?.length > 0)}
-                className="bg-primary text-accent rounded-full px-6">
-                {journeyStep === journeyQs.length - 1 ? "Finish" : "Next"} <ArrowRight size={16} />
+                disabled={currentJourneyQ?.type === "single" ? !journeyAnswers[currentJourneyQ.id] : !((journeyAnswers[currentJourneyQ?.id] as string[])?.length > 0)}
+                size="sm" className="bg-primary text-accent rounded-full px-5">
+                {journeyStep === journeyQs.length - 1 ? "Finish" : "Next"} <ArrowRight size={14} className="ml-1" />
               </Button>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+            )}
+          </div>
+        </div>
+      </motion.div>
     </div>
   );
 };
