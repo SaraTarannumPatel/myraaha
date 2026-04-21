@@ -254,72 +254,80 @@ const PsychometricTest = ({ userId, onComplete, recordSignal }: PsychometricTest
   }
 
   return (
-    <div className="space-y-6">
-      <Card className="border-accent/30 bg-accent/5">
-        <CardHeader className="pb-2">
-          <CardTitle className="flex items-center gap-2 text-lg">
-            <Brain size={20} className="text-accent-foreground" />
-            Find Out How You Function
-          </CardTitle>
-          <CardDescription>
-            22 questions across cognitive style, emotional regulation, values, and growth orientation. Your answers calibrate AI recommendations across the entire platform.
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
+    <div className="fixed inset-0 z-40 bg-background/80 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
+      <motion.div
+        initial={{ opacity: 0, scale: 0.92, y: 20 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        className="max-w-xl w-full bg-card rounded-2xl border border-border shadow-2xl overflow-hidden my-4"
+      >
+        {/* Popup Header */}
+        <div className="p-5 sm:p-6 border-b border-border bg-gradient-to-r from-primary/5 to-accent/5">
+          <div className="flex items-center justify-between mb-3">
+            <div className="flex items-center gap-2">
+              <Brain size={18} className="text-primary" />
+              <span className="font-display text-sm sm:text-base">Psychometric Assessment</span>
+            </div>
+            <span className="font-body text-xs text-muted-foreground">{step + 1} / {PSYCHOMETRIC_QUESTIONS.length}</span>
+          </div>
           <Progress value={progress} className="h-1.5" />
           <div className="flex items-center justify-between mt-2">
-            <p className="font-body text-xs text-muted-foreground">{step + 1} / {PSYCHOMETRIC_QUESTIONS.length}</p>
-            <Badge variant="outline" className="text-xs">Section {current.section} — {current.sectionLabel}</Badge>
+            <Badge variant="outline" className="text-[10px]">Section {current.section} — {current.sectionLabel}</Badge>
           </div>
-        </CardContent>
-      </Card>
+        </div>
 
-      <AnimatePresence mode="wait">
-        <motion.div key={step} initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-4">
-          <Card>
-            <CardHeader>
-              <Badge variant="outline" className="w-fit mb-2">{current.sectionLabel}</Badge>
-              <CardTitle className="text-lg">{current.question}</CardTitle>
+        {/* Question Body */}
+        <div className="p-5 sm:p-6 max-h-[55vh] overflow-y-auto">
+          <AnimatePresence mode="wait">
+            <motion.div key={step} initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-4">
+              <h3 className="font-display text-base sm:text-lg text-foreground">{current.question}</h3>
               {current.usedFor.length > 0 && (
-                <CardDescription className="flex flex-wrap gap-1 mt-2">
-                  {current.usedFor.map((u) => (
+                <div className="flex flex-wrap gap-1">
+                  {current.usedFor.slice(0, 3).map((u) => (
                     <Badge key={u} variant="secondary" className="text-[10px]">{u}</Badge>
                   ))}
-                </CardDescription>
+                </div>
               )}
-            </CardHeader>
-            <CardContent className="space-y-2">
-              {current.options.map((opt) => {
-                const isSelected = answers[current.id] === opt;
-                return (
-                  <button
-                    key={opt}
-                    onClick={() => handleSelect(opt)}
-                    className={`w-full text-left p-3 rounded-xl border-2 transition-all font-body text-sm ${
-                      isSelected ? "border-primary bg-primary/10 font-semibold" : "border-border hover:border-primary/30"
-                    }`}
-                  >
-                    {isSelected && <CheckCircle2 size={14} className="inline mr-2 text-primary" />}
-                    {opt}
-                  </button>
-                );
-              })}
-            </CardContent>
-          </Card>
-          <div className="flex justify-between">
-            <Button variant="ghost" disabled={step === 0} onClick={() => setStep(step - 1)}>
-              <ArrowLeft size={16} /> Back
+              <div className="space-y-2">
+                {current.options.map((opt) => {
+                  const isSelected = answers[current.id] === opt;
+                  return (
+                    <button
+                      key={opt}
+                      onClick={() => handleSelect(opt)}
+                      className={`w-full text-left p-3 rounded-xl border-2 transition-all font-body text-sm ${
+                        isSelected ? "border-primary bg-primary/10 font-semibold" : "border-border hover:border-primary/30"
+                      }`}
+                    >
+                      {isSelected && <CheckCircle2 size={14} className="inline mr-2 text-primary" />}
+                      {opt}
+                    </button>
+                  );
+                })}
+              </div>
+            </motion.div>
+          </AnimatePresence>
+        </div>
+
+        {/* Footer */}
+        <div className="p-4 sm:p-5 border-t border-border bg-muted/20 flex items-center justify-between gap-2">
+          <Button variant="ghost" size="sm" disabled={step === 0} onClick={() => setStep(step - 1)}>
+            <ArrowLeft size={14} className="mr-1" /> Back
+          </Button>
+          <div className="flex items-center gap-2">
+            <Button variant="ghost" size="sm" onClick={handleSkip} className="text-muted-foreground text-xs">
+              Skip
             </Button>
             <Button
               onClick={handleNext}
               disabled={!answers[current.id]}
-              className="bg-primary text-accent rounded-full px-6"
+              size="sm"
+              className="bg-primary text-accent rounded-full px-5"
             >
-              {step === PSYCHOMETRIC_QUESTIONS.length - 1 ? "Finish" : "Next"} <ArrowRight size={16} />
+              {step === PSYCHOMETRIC_QUESTIONS.length - 1 ? "Finish" : "Next"} <ArrowRight size={14} className="ml-1" />
             </Button>
           </div>
-        </motion.div>
-      </AnimatePresence>
+        </div>
+      </motion.div>
     </div>
   );
 };
