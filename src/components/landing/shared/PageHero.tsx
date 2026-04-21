@@ -16,11 +16,11 @@ const PageHero = ({ eyebrow, title, intro, align = "left", illustration, illustr
 
   return (
     <section className="relative overflow-hidden border-b border-border/60">
-      <div className="absolute -top-32 -right-20 h-80 w-80 rounded-full bg-accent/30 blur-3xl pointer-events-none" />
-      <div className="absolute -bottom-24 -left-20 h-72 w-72 rounded-full bg-primary/10 blur-3xl pointer-events-none" />
+      <div className="absolute -top-32 -right-20 h-80 w-80 rounded-full bg-accent/30 blur-3xl pointer-events-none hidden sm:block" />
+      <div className="absolute -bottom-24 -left-20 h-72 w-72 rounded-full bg-primary/10 blur-3xl pointer-events-none hidden sm:block" />
 
       {/* Decorative SVG dots pattern */}
-      <svg className="absolute top-10 right-10 w-32 h-32 opacity-20 pointer-events-none" viewBox="0 0 100 100" fill="none">
+      <svg className="absolute top-10 right-10 w-32 h-32 opacity-20 pointer-events-none hidden sm:block" viewBox="0 0 100 100" fill="none">
         <pattern id="hero-dots" x="0" y="0" width="10" height="10" patternUnits="userSpaceOnUse">
           <circle cx="2" cy="2" r="1" className="fill-primary" />
         </pattern>
@@ -42,7 +42,7 @@ const PageHero = ({ eyebrow, title, intro, align = "left", illustration, illustr
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.05 }}
-              className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-primary leading-[1.05] tracking-tight"
+              className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-primary leading-[1.05] tracking-tight break-words"
             >
               {title}
             </motion.h1>
@@ -75,7 +75,7 @@ const PageHero = ({ eyebrow, title, intro, align = "left", illustration, illustr
                   <img
                     src={illustration}
                     alt={illustrationAlt || ""}
-                    className="relative w-full max-w-md mx-auto rounded-3xl shadow-soft"
+                    className="relative w-full max-w-md mx-auto rounded-3xl shadow-soft object-cover"
                     width={1280}
                     height={896}
                     loading="eager"

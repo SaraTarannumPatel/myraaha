@@ -16,9 +16,9 @@ const LandingLayout = ({
   }, [pathname]);
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
+    <div className="min-h-screen bg-background text-foreground overflow-x-hidden">
       <LandingNav alwaysVisible={navAlwaysVisible} />
-      <main className="pt-16 sm:pt-20">{children}</main>
+      <main className="pt-16 sm:pt-20 responsive-page">{children}</main>
       <LandingFooter />
     </div>
   );
