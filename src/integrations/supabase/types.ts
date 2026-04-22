@@ -44,6 +44,156 @@ export type Database = {
         }
         Relationships: []
       }
+      assessment_conclusions: {
+        Row: {
+          archetype: string | null
+          archetype_description: string | null
+          cognitive_style: string | null
+          confidence_score: number | null
+          generated_at: string
+          growth_areas: string[] | null
+          id: string
+          ideal_environment: string | null
+          motivation_type: string | null
+          raw_signals: Json | null
+          recommended_career_paths: string[] | null
+          recommended_modules: Json | null
+          strengths: string[] | null
+          test_type: string
+          top_domains: string[] | null
+          top_skills: string[] | null
+          updated_at: string
+          user_id: string
+          work_style: string | null
+        }
+        Insert: {
+          archetype?: string | null
+          archetype_description?: string | null
+          cognitive_style?: string | null
+          confidence_score?: number | null
+          generated_at?: string
+          growth_areas?: string[] | null
+          id?: string
+          ideal_environment?: string | null
+          motivation_type?: string | null
+          raw_signals?: Json | null
+          recommended_career_paths?: string[] | null
+          recommended_modules?: Json | null
+          strengths?: string[] | null
+          test_type: string
+          top_domains?: string[] | null
+          top_skills?: string[] | null
+          updated_at?: string
+          user_id: string
+          work_style?: string | null
+        }
+        Update: {
+          archetype?: string | null
+          archetype_description?: string | null
+          cognitive_style?: string | null
+          confidence_score?: number | null
+          generated_at?: string
+          growth_areas?: string[] | null
+          id?: string
+          ideal_environment?: string | null
+          motivation_type?: string | null
+          raw_signals?: Json | null
+          recommended_career_paths?: string[] | null
+          recommended_modules?: Json | null
+          strengths?: string[] | null
+          test_type?: string
+          top_domains?: string[] | null
+          top_skills?: string[] | null
+          updated_at?: string
+          user_id?: string
+          work_style?: string | null
+        }
+        Relationships: []
+      }
+      assessment_progress: {
+        Row: {
+          completed_at: string | null
+          created_at: string
+          highest_milestone_reached: number
+          id: string
+          last_question_at: string | null
+          progress_percentage: number
+          questions_completed: number
+          questions_total: number
+          test_type: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          completed_at?: string | null
+          created_at?: string
+          highest_milestone_reached?: number
+          id?: string
+          last_question_at?: string | null
+          progress_percentage?: number
+          questions_completed?: number
+          questions_total?: number
+          test_type: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          completed_at?: string | null
+          created_at?: string
+          highest_milestone_reached?: number
+          id?: string
+          last_question_at?: string | null
+          progress_percentage?: number
+          questions_completed?: number
+          questions_total?: number
+          test_type?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      assessment_question_signals: {
+        Row: {
+          answer_label: string | null
+          answer_value: string | null
+          created_at: string
+          id: string
+          question_id: string
+          question_text: string | null
+          signal_tags: string[] | null
+          target_modules: string[] | null
+          test_type: string
+          user_id: string
+          weight: number | null
+        }
+        Insert: {
+          answer_label?: string | null
+          answer_value?: string | null
+          created_at?: string
+          id?: string
+          question_id: string
+          question_text?: string | null
+          signal_tags?: string[] | null
+          target_modules?: string[] | null
+          test_type: string
+          user_id: string
+          weight?: number | null
+        }
+        Update: {
+          answer_label?: string | null
+          answer_value?: string | null
+          created_at?: string
+          id?: string
+          question_id?: string
+          question_text?: string | null
+          signal_tags?: string[] | null
+          target_modules?: string[] | null
+          test_type?: string
+          user_id?: string
+          weight?: number | null
+        }
+        Relationships: []
+      }
       badge_templates: {
         Row: {
           category: string
@@ -5346,6 +5496,93 @@ export type Database = {
         }
         Relationships: []
       }
+      reward_milestones: {
+        Row: {
+          created_at: string
+          description: string | null
+          duration_hours: number | null
+          entitlement_key: string
+          entitlement_type: string
+          id: string
+          is_active: boolean | null
+          milestone_key: string
+          milestone_percent: number
+          reward_emoji: string | null
+          test_type: string
+          title: string
+          usage_limit: number | null
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          duration_hours?: number | null
+          entitlement_key: string
+          entitlement_type: string
+          id?: string
+          is_active?: boolean | null
+          milestone_key: string
+          milestone_percent: number
+          reward_emoji?: string | null
+          test_type: string
+          title: string
+          usage_limit?: number | null
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          duration_hours?: number | null
+          entitlement_key?: string
+          entitlement_type?: string
+          id?: string
+          is_active?: boolean | null
+          milestone_key?: string
+          milestone_percent?: number
+          reward_emoji?: string | null
+          test_type?: string
+          title?: string
+          usage_limit?: number | null
+        }
+        Relationships: []
+      }
+      reward_unlock_events: {
+        Row: {
+          acknowledged: boolean | null
+          description: string | null
+          id: string
+          milestone_key: string
+          milestone_percent: number | null
+          reward_emoji: string | null
+          test_type: string | null
+          title: string | null
+          unlocked_at: string
+          user_id: string
+        }
+        Insert: {
+          acknowledged?: boolean | null
+          description?: string | null
+          id?: string
+          milestone_key: string
+          milestone_percent?: number | null
+          reward_emoji?: string | null
+          test_type?: string | null
+          title?: string | null
+          unlocked_at?: string
+          user_id: string
+        }
+        Update: {
+          acknowledged?: boolean | null
+          description?: string | null
+          id?: string
+          milestone_key?: string
+          milestone_percent?: number | null
+          reward_emoji?: string | null
+          test_type?: string | null
+          title?: string | null
+          unlocked_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       roadmap_step_details: {
         Row: {
           career_context: Json | null
@@ -6920,6 +7157,51 @@ export type Database = {
           },
         ]
       }
+      user_entitlements: {
+        Row: {
+          entitlement_key: string
+          entitlement_type: string
+          expires_at: string | null
+          id: string
+          is_active: boolean | null
+          metadata: Json | null
+          source: string | null
+          source_milestone_key: string | null
+          unlocked_at: string
+          usage_count: number | null
+          usage_limit: number | null
+          user_id: string
+        }
+        Insert: {
+          entitlement_key: string
+          entitlement_type: string
+          expires_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          metadata?: Json | null
+          source?: string | null
+          source_milestone_key?: string | null
+          unlocked_at?: string
+          usage_count?: number | null
+          usage_limit?: number | null
+          user_id: string
+        }
+        Update: {
+          entitlement_key?: string
+          entitlement_type?: string
+          expires_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          metadata?: Json | null
+          source?: string | null
+          source_milestone_key?: string | null
+          unlocked_at?: string
+          usage_count?: number | null
+          usage_limit?: number | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       user_learning_progress: {
         Row: {
           completed_at: string | null
@@ -7155,7 +7437,15 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      consume_entitlement: {
+        Args: { _entitlement_key: string }
+        Returns: boolean
+      }
       ensure_profile_public_uid: { Args: never; Returns: string }
+      has_active_entitlement: {
+        Args: { _entitlement_key: string }
+        Returns: boolean
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
@@ -7164,6 +7454,11 @@ export type Database = {
         Returns: boolean
       }
       is_email_verified: { Args: { _email: string }; Returns: boolean }
+      unlock_reward: { Args: { _milestone_key: string }; Returns: Json }
+      update_assessment_progress: {
+        Args: { _completed: number; _test_type: string; _total: number }
+        Returns: Json
+      }
     }
     Enums: {
       app_role: "admin" | "moderator" | "user"
