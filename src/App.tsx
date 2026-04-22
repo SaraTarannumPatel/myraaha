@@ -32,6 +32,7 @@ import OTPVerification from "./pages/OTPVerification";
 import ResetPassword from "./pages/ResetPassword";
 import DashboardLayout from "./layouts/DashboardLayout";
 import Dashboard from "./pages/Dashboard";
+import Insights from "./pages/Insights";
 // Career
 import CuriosityCompass from "./pages/career/CuriosityCompass";
 import Roadmap from "./pages/career/Roadmap";
@@ -108,6 +109,7 @@ const App = () => (
             <Route path="/onboarding/consent" element={<ProtectedRoute><ConsentStep /></ProtectedRoute>} />
             <Route path="/dashboard" element={<ProtectedRoute><DashboardLayout /></ProtectedRoute>}>
               <Route index element={<Dashboard />} />
+              <Route path="insights" element={<Insights />} />
               {/* Career */}
               <Route path="curiosity-compass" element={<CuriosityCompass />} />
               <Route path="roadmap" element={<Roadmap />} />

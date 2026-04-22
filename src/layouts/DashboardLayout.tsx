@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import OnboardingReminderPopup from "@/components/OnboardingReminderPopup";
+import RewardCelebrationManager from "@/components/curiositycompass/RewardCelebrationManager";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/sheet";
@@ -14,6 +15,7 @@ import {
 const careerNav = [
   { label: "Dashboard", icon: LayoutDashboard, path: "/dashboard", color: "blue" },
   { label: "Curiosity Compass", icon: Compass, path: "/dashboard/curiosity-compass", color: "blue" },
+  { label: "Your Insights", icon: Sparkles, path: "/dashboard/insights", color: "primary" },
   { label: "AI Roadmap", icon: Map, path: "/dashboard/roadmap", color: "indigo" },
   { label: "SelfGraph™", icon: Brain, path: "/dashboard/selfgraph", color: "terracotta" },
   { label: "SkillStacker", icon: Zap, path: "/dashboard/skill-stacker", color: "blue" },
@@ -219,6 +221,8 @@ const DashboardLayout = () => {
 
       {/* Onboarding reminder popup for skipped steps */}
       <OnboardingReminderPopup />
+      {/* Real-time reward unlock celebration popups */}
+      <RewardCelebrationManager />
     </div>
   );
 };
