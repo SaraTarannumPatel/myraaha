@@ -93,6 +93,7 @@ async function streamTherapist({ messages, context, onDelta, onDone, onError }: 
 const AICareerTherapist = () => {
   const { user, profile } = useAuth();
   const navigate = useNavigate();
+  const { active: therapistUnlimited } = useEntitlement("ai_therapist_unlimited_24h");
   const [activeTab, setActiveTab] = useState("chat");
   const [messages, setMessages] = useState<Msg[]>([]);
   const [input, setInput] = useState("");
@@ -171,6 +172,14 @@ const AICareerTherapist = () => {
   const sendMessage = async (text?: string) => {
     const msg = text || input.trim();
     if (!msg || isLoading) return;
+    // Soft rate limit: when entitlement isn't active, cap to 6 user messages per session
+    if (!therapistUnlimited) {
+      const userMsgCount = messages.filter((m) => m.role === "user").length;
+      if (userMsgCount >= 6) {
+        toast.info("You've hit the free limit. Unlock unlimited chats from Curiosity Compass rewards.");
+        return;
+      }
+    }
     const userMsg: Msg = { role: "user", content: msg };
     setMessages(prev => [...prev, userMsg]);
     setInput("");

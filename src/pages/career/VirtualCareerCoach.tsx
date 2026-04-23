@@ -36,6 +36,7 @@ const QUICK_TOPICS = [
 
 const VirtualCareerCoach = () => {
   const { user, profile } = useAuth();
+  const { active: coachUnlimited } = useEntitlement("ai_coach_unlimited_24h");
   const [activeTab, setActiveTab] = useState("coach");
   const [messages, setMessages] = useState<ChatMsg[]>([]);
   const [input, setInput] = useState("");
@@ -142,6 +143,13 @@ const VirtualCareerCoach = () => {
   const sendMessage = async (text?: string) => {
     const msg = text || input.trim();
     if (!msg || isStreaming) return;
+    if (!coachUnlimited) {
+      const userMsgCount = messages.filter((m) => m.role === "user").length;
+      if (userMsgCount >= 6) {
+        toast.info("You've hit the free limit. Unlock unlimited coach chats from Curiosity Compass rewards.");
+        return;
+      }
+    }
     setInput("");
     setSessionSaved(false);
 

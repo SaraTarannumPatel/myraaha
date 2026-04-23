@@ -47,6 +47,7 @@ const MOODS = [
 
 const Roadmap = () => {
   const { user } = useAuth();
+  const { active: bonusRoadmaps, consume: consumeRoadmap } = useEntitlement("roadmap_generations_5");
   const [roadmaps, setRoadmaps] = useState<any[]>([]);
   const [activeRoadmap, setActiveRoadmap] = useState<any>(null);
   const [steps, setSteps] = useState<any[]>([]);
@@ -223,6 +224,10 @@ const Roadmap = () => {
 
   const generateAIRoadmap = async () => {
     if (!user) return;
+    // If user has bonus roadmap credits unlocked, consume one per generation
+    if (bonusRoadmaps) {
+      await consumeRoadmap();
+    }
     setGenerating(true);
     try {
       const { data, error } = await supabase.functions.invoke("roadmap-ai", {
