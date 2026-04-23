@@ -1555,6 +1555,11 @@ const CuriosityCompass = () => {
             )}
           </TabsContent>
 
+          {/* ===== Your Profile Tab — synthesized insights + reward trackers ===== */}
+          <TabsContent value="profile" className="space-y-6">
+            <InsightsView />
+          </TabsContent>
+
           {/* ===== Behavior Tab ===== */}
           <TabsContent value="behavior" className="space-y-6">
             <Card>
