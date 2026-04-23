@@ -96,23 +96,30 @@ const Explore = () => {
     const s = query.toLowerCase().trim();
     let items = allData[activeTab] || [];
 
-    // Apply multi-select industry filter
-    if (filterIndustries.length > 0) {
-      items = items.filter((item: any) =>
-        filterIndustries.some(f =>
-          item.industry === f || item.industry_name === f || item.name === f ||
-          item.related_industries?.includes(f) || item.top_industries?.includes(f)
-        )
+    const matchesAny = (item: any, keys: string[], filters: string[]) => {
+      if (filters.length === 0) return true;
+      return filters.some(f =>
+        keys.some(k => {
+          const v = item[k];
+          if (!v) return false;
+          if (Array.isArray(v)) return v.includes(f);
+          return v === f;
+        })
       );
-    }
-    if (filterSectors.length > 0) {
-      items = items.filter((item: any) =>
-        filterSectors.some(f =>
-          item.sector === f || item.name === f ||
-          item.related_sectors?.includes(f) || item.top_sectors?.includes(f)
-        )
-      );
-    }
+    };
+
+    items = items.filter((item: any) =>
+      matchesAny(item, ["industry", "industry_name", "name", "related_industries", "top_industries"], filterIndustries) &&
+      matchesAny(item, ["sector", "name", "related_sectors", "top_sectors"], filterSectors) &&
+      matchesAny(item, ["domain", "name", "related_domains", "top_domains"], filterDomains) &&
+      matchesAny(item, ["title", "name", "related_careers", "top_careers"], filterCareers) &&
+      matchesAny(item, ["title", "name", "related_job_roles", "top_job_roles", "job_role_keywords"], filterJobs) &&
+      matchesAny(item, ["name", "related_skills", "skills_required", "top_skills", "soft_skills"], filterSkills) &&
+      matchesAny(item, ["name", "related_subjects", "top_subjects"], filterSubjects) &&
+      matchesAny(item, ["name", "related_universities", "top_universities"], filterUnis) &&
+      matchesAny(item, ["name", "title", "related_courses", "top_courses"], filterCourses) &&
+      matchesAny(item, ["name", "country", "countries_in_demand", "related_countries", "top_countries"], filterCountries)
+    );
 
     if (!s) return items;
 
@@ -121,9 +128,9 @@ const Explore = () => {
       const arrays = [item.keywords, item.related_skills, item.skills_required, item.related_domains, item.related_job_roles, item.related_subjects, item.related_universities, item.related_careers, item.related_sectors, item.related_industries, item.top_industries, item.top_careers].filter(Boolean);
       return fields.some(f => f.toLowerCase().includes(s)) || arrays.some(arr => arr.some((v: string) => v.toLowerCase().includes(s)));
     });
-  }, [query, allData, activeTab, filterIndustries, filterSectors]);
+  }, [query, allData, activeTab, filterIndustries, filterSectors, filterDomains, filterCareers, filterJobs, filterSkills, filterSubjects, filterUnis, filterCourses, filterCountries]);
 
-  useEffect(() => { setVisibleCount(PAGE_SIZE); }, [activeTab, query, filterIndustries, filterSectors]);
+  useEffect(() => { setVisibleCount(PAGE_SIZE); }, [activeTab, query, filterIndustries, filterSectors, filterDomains, filterCareers, filterJobs, filterSkills, filterSubjects, filterUnis, filterCourses, filterCountries]);
 
   const visibleItems = filtered.slice(0, visibleCount);
   const hasMore = visibleCount < filtered.length;
@@ -145,26 +152,30 @@ const Explore = () => {
       courses: "courses", countries: "countries",
     };
     const tab = tabMap[targetType];
-    if (tab) { setActiveTab(tab); setQuery(name); setFilterIndustries([]); setFilterSectors([]); }
+    if (tab) { setActiveTab(tab); setQuery(name); clearAllFilters(); }
   };
 
-  const uniqueIndustries = useMemo(() => {
-    const set = new Set<string>();
-    allData.industries.forEach(i => set.add(i.name));
-    allData.careers.forEach(c => c.industry && set.add(c.industry));
-    allData.jobs.forEach(j => j.industry && set.add(j.industry));
-    allData.domains.forEach(d => d.industry && set.add(d.industry));
-    return Array.from(set).sort();
-  }, [allData]);
+  const dedupSort = (arr: string[]) => Array.from(new Set(arr.filter(Boolean))).sort();
+  const collect = (rows: any[], keys: string[]) => {
+    const out: string[] = [];
+    rows.forEach(r => keys.forEach(k => {
+      const v = r[k];
+      if (Array.isArray(v)) v.forEach(x => x && out.push(x));
+      else if (v) out.push(v);
+    }));
+    return out;
+  };
 
-  const uniqueSectors = useMemo(() => {
-    const set = new Set<string>();
-    allData.sectors.forEach(s => set.add(s.name));
-    allData.careers.forEach(c => c.sector && set.add(c.sector));
-    allData.jobs.forEach(j => j.sector && set.add(j.sector));
-    allData.domains.forEach(d => d.sector && set.add(d.sector));
-    return Array.from(set).sort();
-  }, [allData]);
+  const uniqueIndustries = useMemo(() => dedupSort(collect([...allData.industries, ...allData.careers, ...allData.jobs, ...allData.domains], ["name", "industry"])), [allData]);
+  const uniqueSectors = useMemo(() => dedupSort(collect([...allData.sectors, ...allData.careers, ...allData.jobs, ...allData.domains], ["name", "sector"])), [allData]);
+  const uniqueDomains = useMemo(() => dedupSort(collect([...allData.domains, ...allData.careers], ["name", "domain"])), [allData]);
+  const uniqueCareers = useMemo(() => dedupSort(allData.careers.map(c => c.title)), [allData]);
+  const uniqueJobs = useMemo(() => dedupSort(allData.jobs.map(j => j.title)), [allData]);
+  const uniqueSkills = useMemo(() => dedupSort(allData.skills.map(s => s.name)), [allData]);
+  const uniqueSubjects = useMemo(() => dedupSort(allData.subjects.map(s => s.name)), [allData]);
+  const uniqueUnis = useMemo(() => dedupSort(allData.universities.map(u => u.name)), [allData]);
+  const uniqueCourses = useMemo(() => dedupSort(collect(allData.courses, ["title", "name"])), [allData]);
+  const uniqueCountries = useMemo(() => dedupSort(allData.countries.map(c => c.name)), [allData]);
 
   const tabCounts = useMemo(() => {
     const counts: Record<FilterTab, number> = {} as any;
@@ -175,6 +186,11 @@ const Explore = () => {
   const toggleFilter = (list: string[], item: string, setter: (v: string[]) => void) => {
     setter(list.includes(item) ? list.filter(x => x !== item) : [...list, item]);
   };
+
+  const totalActiveFilters =
+    filterIndustries.length + filterSectors.length + filterDomains.length + filterCareers.length +
+    filterJobs.length + filterSkills.length + filterSubjects.length + filterUnis.length +
+    filterCourses.length + filterCountries.length;
 
   return (
     <div className="space-y-4 px-1 sm:px-0">
@@ -208,7 +224,7 @@ const Explore = () => {
         {TAB_CONFIG.map((t) => (
           <button
             key={t.key}
-            onClick={() => { setActiveTab(t.key); setFilterIndustries([]); setFilterSectors([]); }}
+            onClick={() => { setActiveTab(t.key); clearAllFilters(); }}
             className={`inline-flex items-center gap-1 px-2.5 py-1.5 rounded-full text-[11px] font-medium transition-all whitespace-nowrap ${
               activeTab === t.key ? "bg-primary text-primary-foreground shadow-sm" : "bg-muted text-muted-foreground hover:bg-accent"
             }`}
@@ -220,34 +236,61 @@ const Explore = () => {
         ))}
       </div>
 
-      {/* Industry & Sector Filters - always visible */}
-      <div className="flex flex-wrap gap-2">
-        <select
-          value=""
-          onChange={(e) => e.target.value && toggleFilter(filterIndustries, e.target.value, setFilterIndustries)}
-          className="text-xs px-2.5 py-1.5 rounded-lg border border-border bg-card font-body text-foreground"
-        >
-          <option value="">+ Industry Filter</option>
-          {uniqueIndustries.filter(i => !filterIndustries.includes(i)).map(i => <option key={i} value={i}>{i}</option>)}
-        </select>
-        <select
-          value=""
-          onChange={(e) => e.target.value && toggleFilter(filterSectors, e.target.value, setFilterSectors)}
-          className="text-xs px-2.5 py-1.5 rounded-lg border border-border bg-card font-body text-foreground"
-        >
-          <option value="">+ Sector Filter</option>
-          {uniqueSectors.filter(s => !filterSectors.includes(s)).map(s => <option key={s} value={s}>{s}</option>)}
-        </select>
-        {filterIndustries.map(f => (
-          <Badge key={f} variant="secondary" className="text-[10px] cursor-pointer gap-1" onClick={() => toggleFilter(filterIndustries, f, setFilterIndustries)}>
-            🏭 {f} <X size={10} />
-          </Badge>
-        ))}
-        {filterSectors.map(f => (
-          <Badge key={f} variant="secondary" className="text-[10px] cursor-pointer gap-1" onClick={() => toggleFilter(filterSectors, f, setFilterSectors)}>
-            📊 {f} <X size={10} />
-          </Badge>
-        ))}
+      {/* 8 Facet Filter Dropdowns - always visible */}
+      <div className="space-y-2">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2">
+          {[
+            { label: "Industry", emoji: "🏭", list: uniqueIndustries, sel: filterIndustries, setter: setFilterIndustries },
+            { label: "Sector", emoji: "📊", list: uniqueSectors, sel: filterSectors, setter: setFilterSectors },
+            { label: "Domain", emoji: "🌐", list: uniqueDomains, sel: filterDomains, setter: setFilterDomains },
+            { label: "Career", emoji: "💼", list: uniqueCareers, sel: filterCareers, setter: setFilterCareers },
+            { label: "Job Role", emoji: "👔", list: uniqueJobs, sel: filterJobs, setter: setFilterJobs },
+            { label: "Skill", emoji: "🎯", list: uniqueSkills, sel: filterSkills, setter: setFilterSkills },
+            { label: "Subject", emoji: "📚", list: uniqueSubjects, sel: filterSubjects, setter: setFilterSubjects },
+            { label: "University", emoji: "🎓", list: uniqueUnis, sel: filterUnis, setter: setFilterUnis },
+            { label: "Course", emoji: "💻", list: uniqueCourses, sel: filterCourses, setter: setFilterCourses },
+            { label: "Country", emoji: "🌍", list: uniqueCountries, sel: filterCountries, setter: setFilterCountries },
+          ].map((f) => (
+            <select
+              key={f.label}
+              value=""
+              onChange={(e) => e.target.value && toggleFilter(f.sel, e.target.value, f.setter)}
+              className="text-[11px] px-2 py-1.5 rounded-lg border border-border bg-card font-body text-foreground truncate"
+              title={`Filter by ${f.label}`}
+            >
+              <option value="">{f.emoji} + {f.label}</option>
+              {f.list.filter(x => !f.sel.includes(x)).slice(0, 200).map(x => <option key={x} value={x}>{x}</option>)}
+            </select>
+          ))}
+        </div>
+        {totalActiveFilters > 0 && (
+          <div className="flex flex-wrap items-center gap-1.5">
+            {[
+              { emoji: "🏭", sel: filterIndustries, setter: setFilterIndustries },
+              { emoji: "📊", sel: filterSectors, setter: setFilterSectors },
+              { emoji: "🌐", sel: filterDomains, setter: setFilterDomains },
+              { emoji: "💼", sel: filterCareers, setter: setFilterCareers },
+              { emoji: "👔", sel: filterJobs, setter: setFilterJobs },
+              { emoji: "🎯", sel: filterSkills, setter: setFilterSkills },
+              { emoji: "📚", sel: filterSubjects, setter: setFilterSubjects },
+              { emoji: "🎓", sel: filterUnis, setter: setFilterUnis },
+              { emoji: "💻", sel: filterCourses, setter: setFilterCourses },
+              { emoji: "🌍", sel: filterCountries, setter: setFilterCountries },
+            ].flatMap((f) =>
+              f.sel.map((v) => (
+                <Badge key={`${f.emoji}-${v}`} variant="secondary" className="text-[10px] cursor-pointer gap-1" onClick={() => toggleFilter(f.sel, v, f.setter)}>
+                  {f.emoji} {v} <X size={10} />
+                </Badge>
+              ))
+            )}
+            <button
+              onClick={clearAllFilters}
+              className="text-[10px] px-2 py-0.5 rounded-full border border-border text-muted-foreground hover:bg-muted"
+            >
+              Clear all ({totalActiveFilters})
+            </button>
+          </div>
+        )}
       </div>
 
       {/* Result count */}

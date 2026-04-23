@@ -322,6 +322,53 @@
   }
 }
 
+/* ===========================================================
+   Mobile responsiveness pass — applies inside dashboard pages
+   without touching every page file. Keeps desktop unchanged.
+   =========================================================== */
+@media (max-width: 639px) {
+  /* Tighten oversized vertical rhythm on mobile */
+  main .space-y-8 > :not([hidden]) ~ :not([hidden]) {
+    margin-top: 1.25rem !important;
+  }
+  main .space-y-6 > :not([hidden]) ~ :not([hidden]) {
+    margin-top: 1rem !important;
+  }
+  /* Cap oversized display headings */
+  main h1.text-3xl, main h1.text-4xl, main h1.text-5xl {
+    font-size: 1.5rem !important;
+    line-height: 1.85rem !important;
+  }
+  main h2.text-3xl, main h2.text-4xl {
+    font-size: 1.35rem !important;
+    line-height: 1.7rem !important;
+  }
+  main h3.text-2xl, main h3.text-xl {
+    font-size: 1.05rem !important;
+    line-height: 1.45rem !important;
+  }
+  /* Force 3-col + 4-col module grids to single col on phones */
+  main .grid.grid-cols-3:not([class*="sm:grid-cols"]):not([class*="md:grid-cols"]),
+  main .grid.grid-cols-4:not([class*="sm:grid-cols"]):not([class*="md:grid-cols"]) {
+    grid-template-columns: 1fr !important;
+  }
+  /* Soften large card paddings on mobile */
+  main .p-8 { padding: 1rem !important; }
+  main .p-6 { padding: 0.875rem !important; }
+  main .px-8 { padding-left: 1rem !important; padding-right: 1rem !important; }
+  main .py-8 { padding-top: 1rem !important; padding-bottom: 1rem !important; }
+  /* Prevent fixed-width icon tiles from blowing the layout */
+  main .w-16.h-16 { width: 3rem !important; height: 3rem !important; }
+  main .w-14.h-14 { width: 2.75rem !important; height: 2.75rem !important; }
+  main .w-12.h-12 { width: 2.5rem !important; height: 2.5rem !important; }
+  /* Dashboard tab triggers: ensure they wrap or scroll */
+  main [role="tablist"] {
+    flex-wrap: wrap;
+  }
+  /* Ensure long tag/badge rows wrap */
+  main .flex.items-center.gap-3 { gap: 0.5rem !important; }
+}
+
 /* Hide scrollbar for tabs */
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
