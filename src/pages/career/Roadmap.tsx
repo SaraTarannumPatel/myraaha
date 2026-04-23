@@ -18,6 +18,8 @@ import {
 } from "lucide-react";
 import RoadmapStepDetail from "@/components/roadmap/RoadmapStepDetail";
 import ModuleSearchBar from "@/components/search/ModuleSearchBar";
+import EntitlementBanner from "@/components/curiositycompass/EntitlementBanner";
+import { useEntitlement } from "@/hooks/useAssessmentRewards";
 
 const PHASES = [
   { id: "exploration", label: "Exploration", icon: Compass, color: "bg-blue-500" },

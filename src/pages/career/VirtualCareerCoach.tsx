@@ -19,6 +19,8 @@ import {
   Scale, Activity, Flame, Clock, Save, Star, UserPlus
 } from "lucide-react";
 import ModuleSearchBar from "@/components/search/ModuleSearchBar";
+import EntitlementBanner from "@/components/curiositycompass/EntitlementBanner";
+import { useEntitlement } from "@/hooks/useAssessmentRewards";
 
 type ChatMsg = { role: "user" | "assistant"; content: string };
 

@@ -19,6 +19,8 @@ import {
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import ModuleSearchBar from "@/components/search/ModuleSearchBar";
+import EntitlementBanner from "@/components/curiositycompass/EntitlementBanner";
+import { useEntitlement } from "@/hooks/useAssessmentRewards";
 
 type Msg = { role: "user" | "assistant"; content: string };
 
