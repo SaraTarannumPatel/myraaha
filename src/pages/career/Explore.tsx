@@ -224,7 +224,7 @@ const Explore = () => {
         {TAB_CONFIG.map((t) => (
           <button
             key={t.key}
-            onClick={() => { setActiveTab(t.key); setFilterIndustries([]); setFilterSectors([]); }}
+            onClick={() => { setActiveTab(t.key); clearAllFilters(); }}
             className={`inline-flex items-center gap-1 px-2.5 py-1.5 rounded-full text-[11px] font-medium transition-all whitespace-nowrap ${
               activeTab === t.key ? "bg-primary text-primary-foreground shadow-sm" : "bg-muted text-muted-foreground hover:bg-accent"
             }`}
