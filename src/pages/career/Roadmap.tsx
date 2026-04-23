@@ -431,6 +431,13 @@ const Roadmap = () => {
             toast.info(`"${item.title}" — Generate an AI Roadmap for this path!`);
           }}
         />
+        <div className="mt-3">
+          <EntitlementBanner
+            entitlementKey="roadmap_generations_5"
+            rewardLabel="5 Bonus AI Roadmaps"
+            unlockedMessage="You have bonus AI Roadmap generations available — they'll be consumed automatically when you generate."
+          />
+        </div>
       </motion.div>
 
       {/* Milestone Reflection Modal */}
