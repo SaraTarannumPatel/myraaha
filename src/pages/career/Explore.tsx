@@ -236,34 +236,61 @@ const Explore = () => {
         ))}
       </div>
 
-      {/* Industry & Sector Filters - always visible */}
-      <div className="flex flex-wrap gap-2">
-        <select
-          value=""
-          onChange={(e) => e.target.value && toggleFilter(filterIndustries, e.target.value, setFilterIndustries)}
-          className="text-xs px-2.5 py-1.5 rounded-lg border border-border bg-card font-body text-foreground"
-        >
-          <option value="">+ Industry Filter</option>
-          {uniqueIndustries.filter(i => !filterIndustries.includes(i)).map(i => <option key={i} value={i}>{i}</option>)}
-        </select>
-        <select
-          value=""
-          onChange={(e) => e.target.value && toggleFilter(filterSectors, e.target.value, setFilterSectors)}
-          className="text-xs px-2.5 py-1.5 rounded-lg border border-border bg-card font-body text-foreground"
-        >
-          <option value="">+ Sector Filter</option>
-          {uniqueSectors.filter(s => !filterSectors.includes(s)).map(s => <option key={s} value={s}>{s}</option>)}
-        </select>
-        {filterIndustries.map(f => (
-          <Badge key={f} variant="secondary" className="text-[10px] cursor-pointer gap-1" onClick={() => toggleFilter(filterIndustries, f, setFilterIndustries)}>
-            🏭 {f} <X size={10} />
-          </Badge>
-        ))}
-        {filterSectors.map(f => (
-          <Badge key={f} variant="secondary" className="text-[10px] cursor-pointer gap-1" onClick={() => toggleFilter(filterSectors, f, setFilterSectors)}>
-            📊 {f} <X size={10} />
-          </Badge>
-        ))}
+      {/* 8 Facet Filter Dropdowns - always visible */}
+      <div className="space-y-2">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2">
+          {[
+            { label: "Industry", emoji: "🏭", list: uniqueIndustries, sel: filterIndustries, setter: setFilterIndustries },
+            { label: "Sector", emoji: "📊", list: uniqueSectors, sel: filterSectors, setter: setFilterSectors },
+            { label: "Domain", emoji: "🌐", list: uniqueDomains, sel: filterDomains, setter: setFilterDomains },
+            { label: "Career", emoji: "💼", list: uniqueCareers, sel: filterCareers, setter: setFilterCareers },
+            { label: "Job Role", emoji: "👔", list: uniqueJobs, sel: filterJobs, setter: setFilterJobs },
+            { label: "Skill", emoji: "🎯", list: uniqueSkills, sel: filterSkills, setter: setFilterSkills },
+            { label: "Subject", emoji: "📚", list: uniqueSubjects, sel: filterSubjects, setter: setFilterSubjects },
+            { label: "University", emoji: "🎓", list: uniqueUnis, sel: filterUnis, setter: setFilterUnis },
+            { label: "Course", emoji: "💻", list: uniqueCourses, sel: filterCourses, setter: setFilterCourses },
+            { label: "Country", emoji: "🌍", list: uniqueCountries, sel: filterCountries, setter: setFilterCountries },
+          ].map((f) => (
+            <select
+              key={f.label}
+              value=""
+              onChange={(e) => e.target.value && toggleFilter(f.sel, e.target.value, f.setter)}
+              className="text-[11px] px-2 py-1.5 rounded-lg border border-border bg-card font-body text-foreground truncate"
+              title={`Filter by ${f.label}`}
+            >
+              <option value="">{f.emoji} + {f.label}</option>
+              {f.list.filter(x => !f.sel.includes(x)).slice(0, 200).map(x => <option key={x} value={x}>{x}</option>)}
+            </select>
+          ))}
+        </div>
+        {totalActiveFilters > 0 && (
+          <div className="flex flex-wrap items-center gap-1.5">
+            {[
+              { emoji: "🏭", sel: filterIndustries, setter: setFilterIndustries },
+              { emoji: "📊", sel: filterSectors, setter: setFilterSectors },
+              { emoji: "🌐", sel: filterDomains, setter: setFilterDomains },
+              { emoji: "💼", sel: filterCareers, setter: setFilterCareers },
+              { emoji: "👔", sel: filterJobs, setter: setFilterJobs },
+              { emoji: "🎯", sel: filterSkills, setter: setFilterSkills },
+              { emoji: "📚", sel: filterSubjects, setter: setFilterSubjects },
+              { emoji: "🎓", sel: filterUnis, setter: setFilterUnis },
+              { emoji: "💻", sel: filterCourses, setter: setFilterCourses },
+              { emoji: "🌍", sel: filterCountries, setter: setFilterCountries },
+            ].flatMap((f) =>
+              f.sel.map((v) => (
+                <Badge key={`${f.emoji}-${v}`} variant="secondary" className="text-[10px] cursor-pointer gap-1" onClick={() => toggleFilter(f.sel, v, f.setter)}>
+                  {f.emoji} {v} <X size={10} />
+                </Badge>
+              ))
+            )}
+            <button
+              onClick={clearAllFilters}
+              className="text-[10px] px-2 py-0.5 rounded-full border border-border text-muted-foreground hover:bg-muted"
+            >
+              Clear all ({totalActiveFilters})
+            </button>
+          </div>
+        )}
       </div>
 
       {/* Result count */}
