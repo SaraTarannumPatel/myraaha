@@ -18,6 +18,8 @@ import {
 } from "lucide-react";
 import RoadmapStepDetail from "@/components/roadmap/RoadmapStepDetail";
 import ModuleSearchBar from "@/components/search/ModuleSearchBar";
+import EntitlementBanner from "@/components/curiositycompass/EntitlementBanner";
+import { useEntitlement } from "@/hooks/useAssessmentRewards";
 
 const PHASES = [
   { id: "exploration", label: "Exploration", icon: Compass, color: "bg-blue-500" },
@@ -45,6 +47,7 @@ const MOODS = [
 
 const Roadmap = () => {
   const { user } = useAuth();
+  const { active: bonusRoadmaps, consume: consumeRoadmap } = useEntitlement("roadmap_generations_5");
   const [roadmaps, setRoadmaps] = useState<any[]>([]);
   const [activeRoadmap, setActiveRoadmap] = useState<any>(null);
   const [steps, setSteps] = useState<any[]>([]);
@@ -221,6 +224,10 @@ const Roadmap = () => {
 
   const generateAIRoadmap = async () => {
     if (!user) return;
+    // If user has bonus roadmap credits unlocked, consume one per generation
+    if (bonusRoadmaps) {
+      await consumeRoadmap();
+    }
     setGenerating(true);
     try {
       const { data, error } = await supabase.functions.invoke("roadmap-ai", {

@@ -25,6 +25,9 @@ import ModuleSearchBar from "@/components/search/ModuleSearchBar";
 import PsychometricTest from "@/components/curiositycompass/PsychometricTest";
 import AssessmentGate from "@/components/curiositycompass/AssessmentGate";
 import OnboardingCelebration from "@/components/curiositycompass/OnboardingCelebration";
+import InsightsView from "@/components/curiositycompass/InsightsView";
+import { useAssessmentRewards } from "@/hooks/useAssessmentRewards";
+import { buildDiscoverySignal } from "@/lib/assessmentSignalMap";
 import {
   getVariantQuestions,
   detectVariant,
@@ -86,6 +89,7 @@ const VISUAL_ICONS = [
 // ===== Assessment Test Section (moved from onboarding journey) =====
 const AssessmentTestSection = ({ user, recordSignal, recordMultipleSignals }: { user: any; recordSignal: any; recordMultipleSignals: any }) => {
   const { profile, updateProfile } = useAuth();
+  const { updateProgress } = useAssessmentRewards();
   const userType = profile?.user_type || "school";
   const variantQs = getVariantQuestions(userType);
   const [variantAnswers, setVariantAnswers] = useState<Record<string, string>>({});
@@ -100,6 +104,27 @@ const AssessmentTestSection = ({ user, recordSignal, recordMultipleSignals }: { 
   const journeyQs = getJourneyQuestions(journeyId);
   const meta = journeyMetas[journeyId];
 
+  // Total discovery questions and progress write helper
+  const totalDiscoveryQs = variantQs.length + journeyQs.length;
+  const writeDiscoverySignal = async (qId: string, qText: string, answer: string | string[]) => {
+    if (!user?.id) return;
+    const sig = buildDiscoverySignal(qId, answer);
+    await supabase.from("assessment_question_signals" as any).insert({
+      user_id: user.id,
+      test_type: "discovery",
+      question_id: qId,
+      question_text: qText,
+      answer_value: Array.isArray(answer) ? answer.join(",") : answer,
+      answer_label: Array.isArray(answer) ? answer.join(", ") : answer,
+      target_modules: sig.target_modules,
+      signal_tags: sig.signal_tags,
+      weight: 0.7,
+    });
+  };
+  const pushDiscoveryProgress = async (completedCount: number) => {
+    await updateProgress("discovery", Math.min(completedCount, totalDiscoveryQs), totalDiscoveryQs);
+  };
+
   // Check if already completed
   useEffect(() => {
     if (profile?.journey_responses?.assessment_completed) {
@@ -111,6 +136,13 @@ const AssessmentTestSection = ({ user, recordSignal, recordMultipleSignals }: { 
   const currentJourneyQ = journeyQs[journeyStep];
 
   const handleVariantNext = () => {
+    // Persist signal for current variant question before moving on
+    const cur = variantQs[variantStep];
+    const ans = variantAnswers[cur?.id];
+    if (cur && ans) {
+      writeDiscoverySignal(cur.id, cur.question, ans);
+      pushDiscoveryProgress(Object.keys(variantAnswers).length + Object.keys(journeyAnswers).length);
+    }
     if (variantStep < variantQs.length - 1) {
       setVariantStep(variantStep + 1);
     } else {
@@ -138,6 +170,13 @@ const AssessmentTestSection = ({ user, recordSignal, recordMultipleSignals }: { 
   };
 
   const handleJourneyNext = () => {
+    // Persist signal for current journey question before moving on
+    const cur = journeyQs[journeyStep];
+    const ans = journeyAnswers[cur?.id];
+    if (cur && ans && (typeof ans === "string" || (Array.isArray(ans) && ans.length))) {
+      writeDiscoverySignal(cur.id, cur.question, ans);
+      pushDiscoveryProgress(Object.keys(variantAnswers).length + Object.keys(journeyAnswers).length);
+    }
     if (journeyStep < journeyQs.length - 1) {
       setJourneyStep(journeyStep + 1);
     } else {
@@ -166,6 +205,15 @@ const AssessmentTestSection = ({ user, recordSignal, recordMultipleSignals }: { 
       } else if (Array.isArray(value)) {
         await recordMultipleSignals("assessment", value, "preference", 0.6);
       }
+    }
+
+    // Mark discovery test as 100% complete and trigger reward unlocks + synthesizer
+    await pushDiscoveryProgress(totalDiscoveryQs);
+    try {
+      await supabase.functions.invoke("assessment-synthesizer", { body: { test_type: "discovery" } });
+      await supabase.functions.invoke("assessment-synthesizer", { body: { test_type: "combined" } });
+    } catch (e) {
+      console.warn("Discovery synthesis failed", e);
     }
 
     setCompleted(true);
@@ -1127,6 +1175,9 @@ const CuriosityCompass = () => {
             <TabsTrigger value="insights" disabled={!bothAssessmentsDone} className={!bothAssessmentsDone ? "opacity-50" : ""}>
               {!bothAssessmentsDone && <Lock size={12} className="mr-1" />}Insights
             </TabsTrigger>
+            <TabsTrigger value="profile" disabled={!bothAssessmentsDone} className={!bothAssessmentsDone ? "opacity-50" : ""}>
+              {!bothAssessmentsDone && <Lock size={12} className="mr-1" />}Your Profile
+            </TabsTrigger>
             <TabsTrigger value="behavior" disabled={!bothAssessmentsDone} className={!bothAssessmentsDone ? "opacity-50" : ""}>
               {!bothAssessmentsDone && <Lock size={12} className="mr-1" />}Behavior
             </TabsTrigger>
@@ -1502,6 +1553,11 @@ const CuriosityCompass = () => {
                 </CardContent>
               </Card>
             )}
+          </TabsContent>
+
+          {/* ===== Your Profile Tab — synthesized insights + reward trackers ===== */}
+          <TabsContent value="profile" className="space-y-6">
+            <InsightsView />
           </TabsContent>
 
           {/* ===== Behavior Tab ===== */}

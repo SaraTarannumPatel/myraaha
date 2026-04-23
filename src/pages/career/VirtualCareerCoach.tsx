@@ -19,6 +19,8 @@ import {
   Scale, Activity, Flame, Clock, Save, Star, UserPlus
 } from "lucide-react";
 import ModuleSearchBar from "@/components/search/ModuleSearchBar";
+import EntitlementBanner from "@/components/curiositycompass/EntitlementBanner";
+import { useEntitlement } from "@/hooks/useAssessmentRewards";
 
 type ChatMsg = { role: "user" | "assistant"; content: string };
 
@@ -34,6 +36,7 @@ const QUICK_TOPICS = [
 
 const VirtualCareerCoach = () => {
   const { user, profile } = useAuth();
+  const { active: coachUnlimited } = useEntitlement("ai_coach_unlimited_24h");
   const [activeTab, setActiveTab] = useState("coach");
   const [messages, setMessages] = useState<ChatMsg[]>([]);
   const [input, setInput] = useState("");
@@ -140,6 +143,13 @@ const VirtualCareerCoach = () => {
   const sendMessage = async (text?: string) => {
     const msg = text || input.trim();
     if (!msg || isStreaming) return;
+    if (!coachUnlimited) {
+      const userMsgCount = messages.filter((m) => m.role === "user").length;
+      if (userMsgCount >= 6) {
+        toast.info("You've hit the free limit. Unlock unlimited coach chats from Curiosity Compass rewards.");
+        return;
+      }
+    }
     setInput("");
     setSessionSaved(false);
 
@@ -274,6 +284,7 @@ const VirtualCareerCoach = () => {
 
         {/* === COACH CHAT TAB === */}
         <TabsContent value="coach" className="space-y-4">
+          <EntitlementBanner entitlementKey="ai_coach_unlimited_24h" rewardLabel="Unlimited AI Career Coach (24h)" unlockedMessage="Unlimited AI Career Coach is active." />
           <div className="flex flex-wrap gap-2">
             {QUICK_TOPICS.map(topic => (
               <button key={topic.label} onClick={() => sendMessage(topic.label)} disabled={isStreaming}
