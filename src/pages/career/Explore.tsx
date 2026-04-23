@@ -57,9 +57,22 @@ const Explore = () => {
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
   const scrollRef = useRef<HTMLDivElement>(null);
 
-  // Multi-select filter state
+  // Multi-select filter state — 8 facets w/ AND logic
   const [filterIndustries, setFilterIndustries] = useState<string[]>([]);
   const [filterSectors, setFilterSectors] = useState<string[]>([]);
+  const [filterDomains, setFilterDomains] = useState<string[]>([]);
+  const [filterCareers, setFilterCareers] = useState<string[]>([]);
+  const [filterJobs, setFilterJobs] = useState<string[]>([]);
+  const [filterSkills, setFilterSkills] = useState<string[]>([]);
+  const [filterSubjects, setFilterSubjects] = useState<string[]>([]);
+  const [filterUnis, setFilterUnis] = useState<string[]>([]);
+  const [filterCourses, setFilterCourses] = useState<string[]>([]);
+  const [filterCountries, setFilterCountries] = useState<string[]>([]);
+  const clearAllFilters = () => {
+    setFilterIndustries([]); setFilterSectors([]); setFilterDomains([]); setFilterCareers([]);
+    setFilterJobs([]); setFilterSkills([]); setFilterSubjects([]); setFilterUnis([]);
+    setFilterCourses([]); setFilterCountries([]);
+  };
 
   useEffect(() => {
     fetchAllData();

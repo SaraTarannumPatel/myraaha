@@ -328,6 +328,7 @@ const AICareerTherapist = () => {
 
         {/* CHAT TAB */}
         <TabsContent value="chat" className="space-y-4">
+          <EntitlementBanner entitlementKey="ai_therapist_unlimited_24h" rewardLabel="Unlimited AI Therapist (24h)" unlockedMessage="Unlimited AI Therapist chat is active." />
           <div className="flex flex-wrap gap-2">
             {emotionStarters.map(e => (
               <button key={e.label} onClick={() => sendMessage(e.label)} disabled={isLoading}

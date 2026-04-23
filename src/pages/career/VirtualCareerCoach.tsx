@@ -284,6 +284,7 @@ const VirtualCareerCoach = () => {
 
         {/* === COACH CHAT TAB === */}
         <TabsContent value="coach" className="space-y-4">
+          <EntitlementBanner entitlementKey="ai_coach_unlimited_24h" rewardLabel="Unlimited AI Career Coach (24h)" unlockedMessage="Unlimited AI Career Coach is active." />
           <div className="flex flex-wrap gap-2">
             {QUICK_TOPICS.map(topic => (
               <button key={topic.label} onClick={() => sendMessage(topic.label)} disabled={isStreaming}
