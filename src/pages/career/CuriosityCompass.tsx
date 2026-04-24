@@ -1470,10 +1470,49 @@ const CuriosityCompass = () => {
 
           {/* ===== Insights Tab ===== */}
           <TabsContent value="insights" className="space-y-6">
+            {/* Synthesized profile from assessments — replaces former "Your Profile" tab */}
+            <InsightsView />
+
+            {/* Real-time interest map grouped by source */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2"><Sparkles className="text-primary" size={18} /> Your Interest Map</CardTitle>
+                <CardDescription>Built live from your selections across cards, stories, challenges, visuals, and quests.</CardDescription>
+              </CardHeader>
+              <CardContent>
+                {interests.length === 0 ? (
+                  <p className="text-center text-muted-foreground py-4">Start exploring to build your interest map.</p>
+                ) : (
+                  <div className="space-y-4">
+                    {Object.entries(
+                      interests.reduce((acc: Record<string, any[]>, it) => {
+                        const key = it.category || it.source || "general";
+                        (acc[key] ||= []).push(it);
+                        return acc;
+                      }, {})
+                    ).map(([cat, items]) => (
+                      <div key={cat}>
+                        <p className="font-body text-xs uppercase tracking-wider text-muted-foreground mb-2">{cat}</p>
+                        <div className="flex flex-wrap gap-1.5">
+                          {items.map((it: any) => (
+                            <Badge key={it.id} variant="outline" className="px-2.5 py-1 text-xs">
+                              {it.name}
+                              <span className="ml-1 opacity-50 text-[10px]">{Math.round((it.strength || 0.5) * 100)}%</span>
+                            </Badge>
+                          ))}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+
+            {/* AI-generated insights from real Compass interactions */}
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2"><Bot className="text-primary" size={20} /> AI Insights</CardTitle>
-                <CardDescription>Personalized analysis based on your exploration</CardDescription>
+                <CardDescription>Personalized analysis based on your real exploration data.</CardDescription>
               </CardHeader>
               <CardContent>
                 {aiInsights ? (
@@ -1484,7 +1523,7 @@ const CuriosityCompass = () => {
                       </div>
                     )}
                     {aiInsights.insights?.map((insight: string, i: number) => (
-                      <div key={i} className="flex items-start gap-3"><Lightbulb className="text-yellow-500 mt-0.5" size={16} /><p className="font-body text-sm">{insight}</p></div>
+                      <div key={i} className="flex items-start gap-3"><Lightbulb className="text-accent mt-0.5" size={16} /><p className="font-body text-sm">{insight}</p></div>
                     ))}
                     {aiInsights.strengths_detected && (
                       <div>
@@ -1493,7 +1532,7 @@ const CuriosityCompass = () => {
                       </div>
                     )}
                     {aiInsights.encouragement && (
-                      <div className="p-4 rounded-lg bg-green-500/5 border border-green-500/20"><p className="font-body text-sm text-green-700 dark:text-green-300">{aiInsights.encouragement}</p></div>
+                      <div className="p-4 rounded-lg bg-success/5 border border-success/20"><p className="font-body text-sm text-success">{aiInsights.encouragement}</p></div>
                     )}
                     {aiInsights.reflection_prompt && (
                       <div className="p-4 rounded-lg bg-accent/5 border border-accent/20">
@@ -1505,27 +1544,8 @@ const CuriosityCompass = () => {
                 ) : (
                   <div className="text-center py-8">
                     <Sparkles className="mx-auto text-muted-foreground mb-3" size={40} />
-                    <p className="font-body text-muted-foreground mb-4">Complete explorations to unlock AI insights</p>
-                    <Button variant="outline" onClick={getAIRecommendations} disabled={aiLoading || likedCount < 3}>{aiLoading ? "Analyzing..." : "Generate Insights"}</Button>
-                  </div>
-                )}
-              </CardContent>
-            </Card>
-
-            {/* Interest Map */}
-            <Card>
-              <CardHeader><CardTitle>Your Interest Map</CardTitle></CardHeader>
-              <CardContent>
-                {interests.length === 0 ? (
-                  <p className="text-center text-muted-foreground py-4">Start exploring to build your interest map</p>
-                ) : (
-                  <div className="flex flex-wrap gap-2">
-                    {interests.map(interest => (
-                      <Badge key={interest.id} variant="outline" className="px-3 py-1">
-                        {interest.name}
-                        <span className="ml-1 opacity-50">({Math.round((interest.strength || 0.5) * 100)}%)</span>
-                      </Badge>
-                    ))}
+                    <p className="font-body text-muted-foreground mb-4">Generate fresh insights from your latest Compass data.</p>
+                    <Button variant="outline" onClick={getAIRecommendations} disabled={aiLoading}>{aiLoading ? "Analyzing..." : "Generate Insights"}</Button>
                   </div>
                 )}
               </CardContent>
@@ -1535,7 +1555,7 @@ const CuriosityCompass = () => {
             {adaptivePrompts && (
               <Card>
                 <CardHeader>
-                  <CardTitle className="flex items-center gap-2"><Zap className="text-yellow-500" size={18} /> Suggested Prompts</CardTitle>
+                  <CardTitle className="flex items-center gap-2"><Zap className="text-accent" size={18} /> Suggested Prompts</CardTitle>
                   <CardDescription>AI-generated prompts based on your engagement</CardDescription>
                 </CardHeader>
                 <CardContent>
@@ -1550,11 +1570,6 @@ const CuriosityCompass = () => {
                 </CardContent>
               </Card>
             )}
-          </TabsContent>
-
-          {/* ===== Your Profile Tab — synthesized insights + reward trackers ===== */}
-          <TabsContent value="profile" className="space-y-6">
-            <InsightsView />
           </TabsContent>
 
           {/* ===== Behavior Tab ===== */}
