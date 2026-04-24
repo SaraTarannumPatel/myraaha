@@ -5691,31 +5691,46 @@ export type Database = {
       }
       roadmaps: {
         Row: {
+          ai_suggestions: Json | null
           created_at: string
+          current_phase: string | null
           description: string | null
           id: string
           intent: Database["public"]["Enums"]["user_intent"]
           is_active: boolean | null
+          long_term_goals: string | null
+          short_term_goals: string | null
+          skill_gaps: Json | null
           title: string
           updated_at: string
           user_id: string
         }
         Insert: {
+          ai_suggestions?: Json | null
           created_at?: string
+          current_phase?: string | null
           description?: string | null
           id?: string
           intent?: Database["public"]["Enums"]["user_intent"]
           is_active?: boolean | null
+          long_term_goals?: string | null
+          short_term_goals?: string | null
+          skill_gaps?: Json | null
           title: string
           updated_at?: string
           user_id: string
         }
         Update: {
+          ai_suggestions?: Json | null
           created_at?: string
+          current_phase?: string | null
           description?: string | null
           id?: string
           intent?: Database["public"]["Enums"]["user_intent"]
           is_active?: boolean | null
+          long_term_goals?: string | null
+          short_term_goals?: string | null
+          skill_gaps?: Json | null
           title?: string
           updated_at?: string
           user_id?: string
