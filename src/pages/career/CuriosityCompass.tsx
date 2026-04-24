@@ -1485,7 +1485,7 @@ const CuriosityCompass = () => {
                 ) : (
                   <div className="space-y-4">
                     {Object.entries(
-                      interests.reduce((acc: Record<string, any[]>, it) => {
+                      interests.reduce<Record<string, any[]>>((acc, it) => {
                         const key = it.category || it.source || "general";
                         (acc[key] ||= []).push(it);
                         return acc;
