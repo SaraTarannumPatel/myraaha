@@ -1694,42 +1694,7 @@ const CuriosityCompass = () => {
         </Tabs>
       )}
 
-      {/* Persistent Action Buttons — always visible */}
-      <Card className="border-primary/20 bg-gradient-to-r from-primary/5 to-accent/5">
-        <CardContent className="pt-6">
-          <div className="flex items-center gap-3 mb-4">
-            <Compass className="text-primary" size={20} />
-            <div>
-              <h3 className="font-display text-base text-foreground">Ready to take action?</h3>
-              <p className="font-body text-xs text-muted-foreground">Generate insights or create roadmaps from your exploration data at any time</p>
-            </div>
-          </div>
-          <div className="flex flex-col sm:flex-row gap-3">
-            <Button
-              onClick={() => { setTab("insights"); getAIRecommendations(); }}
-              variant="outline"
-              className="flex-1 gap-2"
-              disabled={aiLoading}
-            >
-              <Sparkles size={16} /> {aiLoading ? "Analyzing..." : "Generate Insights"}
-            </Button>
-            <Button
-              onClick={async () => {
-                const signals = await getAggregatedSignals();
-                if (signals.all && signals.all.length > 0) {
-                  toast.success("Transferring all exploration data to AI Roadmaps...");
-                } else {
-                  toast.info("Starting roadmap creation...");
-                }
-                navigate("/dashboard/roadmap?source=curiosity_compass");
-              }}
-              className="flex-1 gap-2"
-            >
-              <Route size={16} /> Create AI Roadmaps
-            </Button>
-          </div>
-        </CardContent>
-      </Card>
+      {/* Global persistent action card removed — actions now live inside each Compass sub-page (Story/Challenge/Visual/Cards) and the Insights & Behavior tabs. */}
     </div>
   );
 };
