@@ -15,7 +15,6 @@ import {
 const careerNav = [
   { label: "Dashboard", icon: LayoutDashboard, path: "/dashboard", color: "blue" },
   { label: "Curiosity Compass", icon: Compass, path: "/dashboard/curiosity-compass", color: "blue" },
-  { label: "Your Insights", icon: Sparkles, path: "/dashboard/insights", color: "primary" },
   { label: "AI Roadmap", icon: Map, path: "/dashboard/roadmap", color: "indigo" },
   { label: "SelfGraph™", icon: Brain, path: "/dashboard/selfgraph", color: "terracotta" },
   { label: "SkillStacker", icon: Zap, path: "/dashboard/skill-stacker", color: "blue" },
