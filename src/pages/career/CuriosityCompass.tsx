@@ -1173,10 +1173,7 @@ const CuriosityCompass = () => {
               {!bothAssessmentsDone && <Lock size={12} className="mr-1" />}Domains
             </TabsTrigger>
             <TabsTrigger value="insights" disabled={!bothAssessmentsDone} className={!bothAssessmentsDone ? "opacity-50" : ""}>
-              {!bothAssessmentsDone && <Lock size={12} className="mr-1" />}Insights
-            </TabsTrigger>
-            <TabsTrigger value="profile" disabled={!bothAssessmentsDone} className={!bothAssessmentsDone ? "opacity-50" : ""}>
-              {!bothAssessmentsDone && <Lock size={12} className="mr-1" />}Your Profile
+              {!bothAssessmentsDone && <Lock size={12} className="mr-1" />}Insights & Profile
             </TabsTrigger>
             <TabsTrigger value="behavior" disabled={!bothAssessmentsDone} className={!bothAssessmentsDone ? "opacity-50" : ""}>
               {!bothAssessmentsDone && <Lock size={12} className="mr-1" />}Behavior
