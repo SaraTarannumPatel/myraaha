@@ -894,7 +894,7 @@ const Roadmap = () => {
           </Card>
 
           {/* AI Suggestions inline */}
-          {aiSuggestions?.suggestions?.length > 0 && (
+          {Array.isArray(aiSuggestions?.suggestions) && aiSuggestions.suggestions.length > 0 && (
             <Card className="border-primary/20">
               <CardHeader><CardTitle className="font-display text-base flex items-center gap-2"><Sparkles className="text-primary" size={18} /> AI Suggested Steps</CardTitle></CardHeader>
               <CardContent className="space-y-2">
