@@ -923,7 +923,7 @@ const Roadmap = () => {
               <Card>
                 <CardHeader><CardTitle className="font-display">AI Recommended Next Steps</CardTitle></CardHeader>
                 <CardContent className="space-y-3">
-                  {aiSuggestions.suggestions?.map((suggestion: any, i: number) => (
+                  {(Array.isArray(aiSuggestions.suggestions) ? aiSuggestions.suggestions : []).map((suggestion: any, i: number) => (
                     <div key={i} className="p-4 rounded-lg border border-border bg-card hover:bg-muted/50 transition-colors">
                       <div className="flex items-start gap-3">
                         <div className="w-8 h-8 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center text-sm font-bold text-primary-foreground">{i + 1}</div>
