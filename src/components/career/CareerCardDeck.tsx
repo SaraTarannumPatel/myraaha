@@ -54,7 +54,7 @@ const CareerCardDeck = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [expanded, setExpanded] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [filterDomain, setFilterDomain] = useState<string | null>(null);
+  const [filterDomains, setFilterDomains] = useState<string[]>([]);
 
   useEffect(() => {
     if (user) fetchData();
