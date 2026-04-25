@@ -49,6 +49,9 @@ interface BehaviorAnalysis {
   roadmap_seeds: { domain: string; reason: string; entry_point: string }[];
 }
 
+const PAGE_SIZE = 20;
+const PREFETCH_THRESHOLD = 5; // when N cards left, fetch next batch
+
 const StoryModeCards = () => {
   const { user } = useAuth();
   const [stories, setStories] = useState<CareerStory[]>([]);
@@ -61,20 +64,34 @@ const StoryModeCards = () => {
   const [analysis, setAnalysis] = useState<BehaviorAnalysis | null>(null);
   const [showAnalysis, setShowAnalysis] = useState(false);
   const [filterDomain, setFilterDomain] = useState<string | null>(null);
+  const [page, setPage] = useState(0);
+  const [hasMore, setHasMore] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
+  const [allDomains, setAllDomains] = useState<string[]>([]);
   const startTimeRef = useRef<number>(Date.now());
 
   useEffect(() => {
-    if (user) fetchData();
+    if (user) fetchInitial();
   }, [user]);
 
-  const fetchData = async () => {
-    const [storiesRes, intRes, analysisRes] = await Promise.all([
-      supabase.from("career_stories").select("*").eq("is_active", true).order("created_at"),
+  const fetchInitial = async () => {
+    setLoading(true);
+    // Parallel: first page of stories + interactions + analysis + domain list
+    const [storiesRes, intRes, analysisRes, domainsRes] = await Promise.all([
+      supabase
+        .from("career_stories")
+        .select("*")
+        .eq("is_active", true)
+        .order("created_at", { ascending: false })
+        .range(0, PAGE_SIZE - 1),
       supabase.from("career_story_interactions").select("*").eq("user_id", user!.id),
       supabase.from("story_behavior_analysis").select("*").eq("user_id", user!.id).eq("analysis_type", "story_preferences").maybeSingle(),
+      supabase.from("career_stories").select("domain").eq("is_active", true),
     ]);
     const fetchedStories = (storiesRes.data as unknown as CareerStory[]) || [];
     setStories(fetchedStories);
+    setHasMore(fetchedStories.length === PAGE_SIZE);
+    setPage(1);
 
     const map: Record<string, InteractionType> = {};
     (intRes.data || []).forEach((i: any) => { map[i.story_id] = i.interaction_type; });
@@ -93,13 +110,72 @@ const StoryModeCards = () => {
       });
     }
 
-    // Auto-generate stories if none exist
+    // Build the full domain list from a lightweight query (no story_content)
+    const uniqueDomains = [...new Set(((domainsRes.data as any[]) || []).map((r) => r.domain).filter(Boolean))].sort() as string[];
+    setAllDomains(uniqueDomains);
+
+    // Auto-generate stories only if completely empty
     if (fetchedStories.length === 0) {
       generateStories();
     }
 
     setLoading(false);
   };
+
+  const fetchMore = useCallback(async () => {
+    if (loadingMore || !hasMore) return;
+    setLoadingMore(true);
+    const from = page * PAGE_SIZE;
+    const to = from + PAGE_SIZE - 1;
+    let query = supabase
+      .from("career_stories")
+      .select("*")
+      .eq("is_active", true)
+      .order("created_at", { ascending: false })
+      .range(from, to);
+    if (filterDomain) query = query.eq("domain", filterDomain);
+    const { data } = await query;
+    const next = (data as unknown as CareerStory[]) || [];
+    setStories((prev) => {
+      // Dedupe by id
+      const seen = new Set(prev.map((s) => s.id));
+      return [...prev, ...next.filter((s) => !seen.has(s.id))];
+    });
+    setHasMore(next.length === PAGE_SIZE);
+    setPage((p) => p + 1);
+    setLoadingMore(false);
+  }, [loadingMore, hasMore, page, filterDomain]);
+
+  // Prefetch next page when user nears the end of loaded cards
+  useEffect(() => {
+    if (!loading && hasMore && stories.length - currentIndex <= PREFETCH_THRESHOLD) {
+      fetchMore();
+    }
+  }, [currentIndex, stories.length, hasMore, loading, fetchMore]);
+
+  // When user changes domain filter, refetch from page 0 in that domain
+  useEffect(() => {
+    if (loading) return;
+    const refetchForFilter = async () => {
+      setLoadingMore(true);
+      let query = supabase
+        .from("career_stories")
+        .select("*")
+        .eq("is_active", true)
+        .order("created_at", { ascending: false })
+        .range(0, PAGE_SIZE - 1);
+      if (filterDomain) query = query.eq("domain", filterDomain);
+      const { data } = await query;
+      const next = (data as unknown as CareerStory[]) || [];
+      setStories(next);
+      setHasMore(next.length === PAGE_SIZE);
+      setPage(1);
+      setCurrentIndex(0);
+      setLoadingMore(false);
+    };
+    refetchForFilter();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [filterDomain]);
 
   const generateStories = async () => {
     setGenerating(true);
@@ -110,7 +186,7 @@ const StoryModeCards = () => {
       if (error) throw error;
       if (data?.generated?.length > 0) {
         toast.success(`Generated ${data.generated.length} new career stories!`);
-        await fetchData();
+        await fetchInitial();
       }
       if (data?.remaining > 0) {
         // Generate more in background
@@ -179,8 +255,8 @@ const StoryModeCards = () => {
     }
   };
 
-  const domains = [...new Set(stories.map(s => s.domain))].sort();
-  const filtered = filterDomain ? stories.filter(s => s.domain === filterDomain) : stories;
+  const domains = allDomains;
+  const filtered = stories; // server already filtered when filterDomain set
   const current = filtered[currentIndex];
 
   const interactionCount = Object.keys(interactions).length;
@@ -242,7 +318,7 @@ const StoryModeCards = () => {
       {/* Domain Filter */}
       <div className="flex gap-2 flex-wrap">
         <Button variant={filterDomain === null ? "default" : "outline"} size="sm" onClick={() => { setFilterDomain(null); setCurrentIndex(0); }}>
-          All ({stories.length})
+          All
         </Button>
         {domains.map(d => (
           <Button key={d} variant={filterDomain === d ? "default" : "outline"} size="sm" onClick={() => { setFilterDomain(d); setCurrentIndex(0); }}>
@@ -254,10 +330,10 @@ const StoryModeCards = () => {
       {/* Progress */}
       <div className="space-y-2">
         <div className="flex justify-between text-xs font-body text-muted-foreground">
-          <span>Story {currentIndex + 1} of {filtered.length}</span>
+          <span>Story {currentIndex + 1}{hasMore ? "+" : ` of ${filtered.length}`}</span>
           <span>{interactionCount} stories explored</span>
         </div>
-        <Progress value={((currentIndex + 1) / filtered.length) * 100} className="h-1.5" />
+        <Progress value={hasMore ? Math.min(95, ((currentIndex + 1) / Math.max(filtered.length, 1)) * 100) : ((currentIndex + 1) / Math.max(filtered.length, 1)) * 100} className="h-1.5" />
       </div>
 
       {/* Story Card */}
