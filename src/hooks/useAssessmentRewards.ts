@@ -108,8 +108,23 @@ export const useAssessmentRewards = () => {
         console.error("Update assessment progress error", error);
         return null;
       }
-      await fetchAll();
-      return data as { progress: number; unlocked: any[] };
+
+      // Refetch any newly persisted unlock events so the celebration manager
+      // can pop them up instantly (don't wait for realtime).
+      const result = data as { progress: number; unlocked: any[] };
+      if (Array.isArray(result?.unlocked) && result.unlocked.length > 0) {
+        const { data: events } = await supabase
+          .from("reward_unlock_events" as any)
+          .select("*")
+          .eq("user_id", user.id)
+          .eq("acknowledged", false)
+          .order("unlocked_at", { ascending: false });
+        setPendingUnlocks(((events as any[]) || []) as UnlockEvent[]);
+      } else {
+        // Light refresh to keep progress bars in sync
+        await fetchAll();
+      }
+      return result;
     },
     [user, fetchAll]
   );
