@@ -284,6 +284,76 @@ const CareerCardDeck = () => {
                           <p className="font-body text-sm text-muted-foreground">{current.industry_trends}</p>
                         </div>
                       )}
+
+                      {/* Soft Skills */}
+                      {current.soft_skills && current.soft_skills.length > 0 && (
+                        <div>
+                          <h4 className="font-display text-sm mb-2">💬 Soft Skills</h4>
+                          <div className="flex flex-wrap gap-1.5">
+                            {current.soft_skills.map(s => <Badge key={s} variant="outline" className="text-xs">{s}</Badge>)}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Interests */}
+                      {current.interests && current.interests.length > 0 && (
+                        <div>
+                          <h4 className="font-display text-sm mb-2">✨ You'll love this if you're interested in</h4>
+                          <div className="flex flex-wrap gap-1.5">
+                            {current.interests.map(s => <Badge key={s} variant="secondary" className="text-xs">{s}</Badge>)}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Countries in demand */}
+                      {current.countries_in_demand && current.countries_in_demand.length > 0 && (
+                        <div>
+                          <h4 className="font-display text-sm mb-2">🌍 Countries in Demand</h4>
+                          <div className="flex flex-wrap gap-1.5">
+                            {current.countries_in_demand.map(c => <Badge key={c} variant="outline" className="text-xs">{c}</Badge>)}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Related job roles */}
+                      {current.related_job_roles && current.related_job_roles.length > 0 && (
+                        <div>
+                          <h4 className="font-display text-sm mb-2">👔 Related Job Roles</h4>
+                          <div className="flex flex-wrap gap-1.5">
+                            {current.related_job_roles.map(r => <Badge key={r} variant="outline" className="text-xs">{r}</Badge>)}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Related subjects */}
+                      {current.related_subjects && current.related_subjects.length > 0 && (
+                        <div>
+                          <h4 className="font-display text-sm mb-2">📚 Related Subjects</h4>
+                          <div className="flex flex-wrap gap-1.5">
+                            {current.related_subjects.map(s => <Badge key={s} variant="outline" className="text-xs">{s}</Badge>)}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Related universities */}
+                      {current.related_universities && current.related_universities.length > 0 && (
+                        <div>
+                          <h4 className="font-display text-sm mb-2">🎓 Related Universities</h4>
+                          <div className="flex flex-wrap gap-1.5">
+                            {current.related_universities.slice(0, 12).map(u => <Badge key={u} variant="outline" className="text-xs">{u}</Badge>)}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Related courses */}
+                      {current.related_courses && current.related_courses.length > 0 && (
+                        <div>
+                          <h4 className="font-display text-sm mb-2">💻 Related Courses</h4>
+                          <div className="flex flex-wrap gap-1.5">
+                            {current.related_courses.slice(0, 12).map(c => <Badge key={c} variant="outline" className="text-xs">{c}</Badge>)}
+                          </div>
+                        </div>
+                      )}
                     </motion.div>
                   )}
                 </AnimatePresence>
