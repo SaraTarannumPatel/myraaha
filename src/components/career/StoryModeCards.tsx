@@ -168,7 +168,7 @@ const StoryModeCards = () => {
         .eq("is_active", true)
         .order("created_at", { ascending: false })
         .range(0, PAGE_SIZE - 1);
-      if (filterDomain) query = query.eq("domain", filterDomain);
+      if (filterDomains.length > 0) query = query.in("domain", filterDomains);
       const { data } = await query;
       const next = (data as unknown as CareerStory[]) || [];
       setStories(next);
@@ -179,7 +179,7 @@ const StoryModeCards = () => {
     };
     refetchForFilter();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [filterDomain]);
+  }, [filterDomains]);
 
   const generateStories = async () => {
     setGenerating(true);
