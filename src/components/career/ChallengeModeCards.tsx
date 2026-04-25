@@ -200,12 +200,17 @@ const ChallengeModeCards = () => {
         )}
       </div>
 
-      {/* Domain Filter */}
-      <div className="flex gap-2 flex-wrap">
-        <Button variant={filterDomain === null ? "default" : "outline"} size="sm" onClick={() => { setFilterDomain(null); setCurrentIndex(0); }}>All ({challenges.length})</Button>
-        {domains.map(d => (
-          <Button key={d} variant={filterDomain === d ? "default" : "outline"} size="sm" onClick={() => { setFilterDomain(d); setCurrentIndex(0); }}>{d}</Button>
-        ))}
+      {/* Domain Filter (multi-select dropdown) */}
+      <div className="flex items-center gap-2 flex-wrap">
+        <span className="font-body text-xs text-muted-foreground">Filter by domain:</span>
+        <MultiSelect
+          options={domains}
+          selected={filterDomains}
+          onChange={(next) => { setFilterDomains(next); setCurrentIndex(0); }}
+          label="domains"
+          placeholder="All domains"
+          totalCount={challenges.length}
+        />
       </div>
 
       {/* Progress */}
