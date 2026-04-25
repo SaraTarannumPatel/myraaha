@@ -654,8 +654,19 @@ const StoryModeCards = () => {
                   </div>
                 )}
 
-                <Button className="w-full" onClick={() => setShowAnalysis(false)}>
-                  Keep Exploring Stories <ArrowRight size={14} className="ml-2" />
+                <Button
+                  className="w-full"
+                  onClick={generatePersonalizedRoadmap}
+                  disabled={generatingRoadmap}
+                >
+                  {generatingRoadmap ? (
+                    <><Loader2 size={14} className="mr-2 animate-spin" /> Generating your roadmap...</>
+                  ) : (
+                    <><Sparkles size={14} className="mr-2" /> Generate Your Personalized AI Roadmap <ArrowRight size={14} className="ml-2" /></>
+                  )}
+                </Button>
+                <Button variant="ghost" className="w-full" onClick={() => setShowAnalysis(false)}>
+                  Keep Exploring Stories
                 </Button>
               </CardContent>
             </Card>
