@@ -6,6 +6,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
+import MultiSelect from "@/components/ui/multi-select";
 import { toast } from "sonner";
 import {
   Heart, ThumbsUp, Bookmark, XCircle, ChevronLeft, ChevronRight,
@@ -64,7 +65,7 @@ const ChallengeModeCards = () => {
   const [analyzing, setAnalyzing] = useState(false);
   const [analysis, setAnalysis] = useState<ChallengeAnalysis | null>(null);
   const [showAnalysis, setShowAnalysis] = useState(false);
-  const [filterDomain, setFilterDomain] = useState<string | null>(null);
+  const [filterDomains, setFilterDomains] = useState<string[]>([]);
   const startTimeRef = useRef<number>(Date.now());
 
   useEffect(() => {
@@ -147,7 +148,7 @@ const ChallengeModeCards = () => {
   };
 
   const domains = [...new Set(challenges.map(c => c.domain))].sort();
-  const filtered = filterDomain ? challenges.filter(c => c.domain === filterDomain) : challenges;
+  const filtered = filterDomains.length > 0 ? challenges.filter(c => filterDomains.includes(c.domain)) : challenges;
   const current = filtered[currentIndex];
   const interactionCount = Object.keys(interactions).length;
   const stats = {
@@ -199,12 +200,17 @@ const ChallengeModeCards = () => {
         )}
       </div>
 
-      {/* Domain Filter */}
-      <div className="flex gap-2 flex-wrap">
-        <Button variant={filterDomain === null ? "default" : "outline"} size="sm" onClick={() => { setFilterDomain(null); setCurrentIndex(0); }}>All ({challenges.length})</Button>
-        {domains.map(d => (
-          <Button key={d} variant={filterDomain === d ? "default" : "outline"} size="sm" onClick={() => { setFilterDomain(d); setCurrentIndex(0); }}>{d}</Button>
-        ))}
+      {/* Domain Filter (multi-select dropdown) */}
+      <div className="flex items-center gap-2 flex-wrap">
+        <span className="font-body text-xs text-muted-foreground">Filter by domain:</span>
+        <MultiSelect
+          options={domains}
+          selected={filterDomains}
+          onChange={(next) => { setFilterDomains(next); setCurrentIndex(0); }}
+          label="domains"
+          placeholder="All domains"
+          totalCount={challenges.length}
+        />
       </div>
 
       {/* Progress */}

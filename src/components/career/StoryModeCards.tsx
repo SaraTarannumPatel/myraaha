@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from "react";
+import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
@@ -6,6 +7,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
+import MultiSelect from "@/components/ui/multi-select";
 import { toast } from "sonner";
 import {
   Heart, ThumbsUp, Bookmark, XCircle, ChevronLeft, ChevronRight,
@@ -54,6 +56,7 @@ const PREFETCH_THRESHOLD = 5; // when N cards left, fetch next batch
 
 const StoryModeCards = () => {
   const { user } = useAuth();
+  const navigate = useNavigate();
   const [stories, setStories] = useState<CareerStory[]>([]);
   const [interactions, setInteractions] = useState<Record<string, InteractionType>>({});
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -63,11 +66,12 @@ const StoryModeCards = () => {
   const [analyzing, setAnalyzing] = useState(false);
   const [analysis, setAnalysis] = useState<BehaviorAnalysis | null>(null);
   const [showAnalysis, setShowAnalysis] = useState(false);
-  const [filterDomain, setFilterDomain] = useState<string | null>(null);
+  const [filterDomains, setFilterDomains] = useState<string[]>([]);
   const [page, setPage] = useState(0);
   const [hasMore, setHasMore] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
   const [allDomains, setAllDomains] = useState<string[]>([]);
+  const [generatingRoadmap, setGeneratingRoadmap] = useState(false);
   const startTimeRef = useRef<number>(Date.now());
 
   useEffect(() => {
@@ -133,7 +137,7 @@ const StoryModeCards = () => {
       .eq("is_active", true)
       .order("created_at", { ascending: false })
       .range(from, to);
-    if (filterDomain) query = query.eq("domain", filterDomain);
+    if (filterDomains.length > 0) query = query.in("domain", filterDomains);
     const { data } = await query;
     const next = (data as unknown as CareerStory[]) || [];
     setStories((prev) => {
@@ -144,7 +148,7 @@ const StoryModeCards = () => {
     setHasMore(next.length === PAGE_SIZE);
     setPage((p) => p + 1);
     setLoadingMore(false);
-  }, [loadingMore, hasMore, page, filterDomain]);
+  }, [loadingMore, hasMore, page, filterDomains]);
 
   // Prefetch next page when user nears the end of loaded cards
   useEffect(() => {
@@ -164,7 +168,7 @@ const StoryModeCards = () => {
         .eq("is_active", true)
         .order("created_at", { ascending: false })
         .range(0, PAGE_SIZE - 1);
-      if (filterDomain) query = query.eq("domain", filterDomain);
+      if (filterDomains.length > 0) query = query.in("domain", filterDomains);
       const { data } = await query;
       const next = (data as unknown as CareerStory[]) || [];
       setStories(next);
@@ -175,7 +179,7 @@ const StoryModeCards = () => {
     };
     refetchForFilter();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [filterDomain]);
+  }, [filterDomains]);
 
   const generateStories = async () => {
     setGenerating(true);
@@ -255,8 +259,63 @@ const StoryModeCards = () => {
     }
   };
 
+  const generatePersonalizedRoadmap = async () => {
+    if (!user || !analysis) return;
+    setGeneratingRoadmap(true);
+    try {
+      const topPaths = analysis.career_inclinations?.top_3_paths || [];
+      const emerging = analysis.career_inclinations?.emerging_interests || [];
+      const blindSpots = analysis.career_inclinations?.blind_spots || [];
+      const ctx = {
+        shortTermGoals: topPaths[0] || analysis.domains_attracted?.[0] || "Explore my strongest career inclinations",
+        longTermGoals: analysis.ai_summary || `Build a career around ${topPaths.slice(0, 2).join(" & ") || "my top interests"}`,
+        interests: [...(analysis.domains_attracted || []), ...emerging].filter(Boolean).slice(0, 12),
+        skills: analysis.skills_resonated || [],
+        industry: topPaths[0] || analysis.domains_attracted?.[0] || "",
+        careerStage: "exploring",
+        areasOfFocus: [...topPaths, ...blindSpots].filter(Boolean).slice(0, 8),
+        sourceContext: "story_mode_behavioral_blueprint",
+      };
+      const { data, error } = await supabase.functions.invoke("roadmap-ai", { body: { type: "generate_roadmap", context: ctx } });
+      if (error) throw error;
+      const { data: newRoadmap, error: rmErr } = await supabase.from("roadmaps").insert({
+        user_id: user.id,
+        title: data?.title || `Personalized Roadmap — ${topPaths[0] || "Your Path"}`,
+        description: data?.description || analysis.ai_summary,
+        intent: "career",
+        short_term_goals: ctx.shortTermGoals,
+        long_term_goals: ctx.longTermGoals,
+        skill_gaps: data?.skill_gaps || [],
+        ai_suggestions: { ...data, source: "story_mode_blueprint" },
+        is_active: true,
+      }).select().single();
+      if (rmErr) throw rmErr;
+      await supabase.from("roadmaps").update({ is_active: false }).eq("user_id", user.id).neq("id", newRoadmap.id);
+      const allSteps: any[] = [];
+      let orderIndex = 0;
+      for (const phase of data?.phases || []) {
+        for (const step of phase.steps || []) {
+          allSteps.push({
+            roadmap_id: newRoadmap.id, user_id: user.id, title: step.title, description: step.description,
+            phase: phase.name, category: step.category, skill_tags: step.skill_tags || [],
+            priority: step.priority || "medium", ai_generated: true, order_index: orderIndex++,
+          });
+        }
+      }
+      if (allSteps.length > 0) await supabase.from("roadmap_steps").insert(allSteps);
+      toast.success("Personalized roadmap created from your blueprint! 🗺️");
+      navigate("/career/roadmap?tab=suggested", { state: { context: ctx, source: "story_mode_blueprint", roadmapId: newRoadmap.id } });
+    } catch (e: any) {
+      console.error(e);
+      toast.error("Could not generate roadmap. Please try again.");
+    } finally {
+      setGeneratingRoadmap(false);
+    }
+  };
+
+
   const domains = allDomains;
-  const filtered = stories; // server already filtered when filterDomain set
+  const filtered = stories; // server already filtered when filterDomains set
   const current = filtered[currentIndex];
 
   const interactionCount = Object.keys(interactions).length;
@@ -315,16 +374,17 @@ const StoryModeCards = () => {
         )}
       </div>
 
-      {/* Domain Filter */}
-      <div className="flex gap-2 flex-wrap">
-        <Button variant={filterDomain === null ? "default" : "outline"} size="sm" onClick={() => { setFilterDomain(null); setCurrentIndex(0); }}>
-          All
-        </Button>
-        {domains.map(d => (
-          <Button key={d} variant={filterDomain === d ? "default" : "outline"} size="sm" onClick={() => { setFilterDomain(d); setCurrentIndex(0); }}>
-            {d}
-          </Button>
-        ))}
+      {/* Domain Filter (multi-select dropdown) */}
+      <div className="flex items-center gap-2 flex-wrap">
+        <span className="font-body text-xs text-muted-foreground">Filter by domain:</span>
+        <MultiSelect
+          options={domains}
+          selected={filterDomains}
+          onChange={(next) => { setFilterDomains(next); setCurrentIndex(0); }}
+          label="domains"
+          placeholder="All domains"
+          totalCount={domains.length}
+        />
       </div>
 
       {/* Progress */}
@@ -594,8 +654,19 @@ const StoryModeCards = () => {
                   </div>
                 )}
 
-                <Button className="w-full" onClick={() => setShowAnalysis(false)}>
-                  Keep Exploring Stories <ArrowRight size={14} className="ml-2" />
+                <Button
+                  className="w-full"
+                  onClick={generatePersonalizedRoadmap}
+                  disabled={generatingRoadmap}
+                >
+                  {generatingRoadmap ? (
+                    <><Loader2 size={14} className="mr-2 animate-spin" /> Generating your roadmap...</>
+                  ) : (
+                    <><Sparkles size={14} className="mr-2" /> Generate Your Personalized AI Roadmap <ArrowRight size={14} className="ml-2" /></>
+                  )}
+                </Button>
+                <Button variant="ghost" className="w-full" onClick={() => setShowAnalysis(false)}>
+                  Keep Exploring Stories
                 </Button>
               </CardContent>
             </Card>

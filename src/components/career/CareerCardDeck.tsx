@@ -5,6 +5,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import MultiSelect from "@/components/ui/multi-select";
 import { toast } from "sonner";
 import {
   Heart, Sparkles, Bookmark, XCircle, ChevronLeft, ChevronRight,
@@ -17,15 +18,31 @@ interface CareerPath {
   title: string;
   description: string | null;
   domain: string;
+  industry: string | null;
+  sector: string | null;
   day_to_day: string | null;
   salary_range: string | null;
+  avg_salary_usd: string | null;
   demand_level: string | null;
   difficulty: string | null;
   growth_trajectory: string | null;
+  growth_trajectory_detail: string | null;
   related_skills: string[] | null;
+  soft_skills: string[] | null;
   tools_certifications: string[] | null;
   industry_trends: string | null;
   icon_emoji: string | null;
+  interests: string[] | null;
+  countries_in_demand: string[] | null;
+  related_industries: string[] | null;
+  related_sectors: string[] | null;
+  related_domains: string[] | null;
+  related_job_roles: string[] | null;
+  related_subjects: string[] | null;
+  related_universities: string[] | null;
+  related_courses: string[] | null;
+  related_countries: string[] | null;
+  keywords: string[] | null;
 }
 
 type InteractionType = "like" | "love" | "bookmark" | "not_for_me";
@@ -37,7 +54,7 @@ const CareerCardDeck = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [expanded, setExpanded] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [filterDomain, setFilterDomain] = useState<string | null>(null);
+  const [filterDomains, setFilterDomains] = useState<string[]>([]);
 
   useEffect(() => {
     if (user) fetchData();
@@ -77,7 +94,7 @@ const CareerCardDeck = () => {
   };
 
   const domains = [...new Set(paths.map(p => p.domain))].sort();
-  const filtered = filterDomain ? paths.filter(p => p.domain === filterDomain) : paths;
+  const filtered = filterDomains.length > 0 ? paths.filter(p => filterDomains.includes(p.domain)) : paths;
   const current = filtered[currentIndex];
 
   const stats = {
@@ -129,16 +146,17 @@ const CareerCardDeck = () => {
         </div>
       </div>
 
-      {/* Domain Filter */}
-      <div className="flex gap-2 flex-wrap">
-        <Button variant={filterDomain === null ? "default" : "outline"} size="sm" onClick={() => { setFilterDomain(null); setCurrentIndex(0); }}>
-          All ({paths.length})
-        </Button>
-        {domains.map(d => (
-          <Button key={d} variant={filterDomain === d ? "default" : "outline"} size="sm" onClick={() => { setFilterDomain(d); setCurrentIndex(0); }}>
-            {d}
-          </Button>
-        ))}
+      {/* Domain Filter (multi-select dropdown) */}
+      <div className="flex items-center gap-2 flex-wrap">
+        <span className="font-body text-xs text-muted-foreground">Filter by domain:</span>
+        <MultiSelect
+          options={domains}
+          selected={filterDomains}
+          onChange={(next) => { setFilterDomains(next); setCurrentIndex(0); }}
+          label="domains"
+          placeholder="All domains"
+          totalCount={paths.length}
+        />
       </div>
 
       {/* Progress */}
@@ -168,8 +186,14 @@ const CareerCardDeck = () => {
                   <span className="text-4xl">{current.icon_emoji || "💼"}</span>
                   <div className="flex-1 min-w-0">
                     <h2 className="font-display text-2xl text-foreground">{current.title}</h2>
-                    <Badge variant="secondary" className="mt-1">{current.domain}</Badge>
-                    {current.difficulty && <Badge variant="outline" className="ml-2 mt-1">{current.difficulty}</Badge>}
+                    <div className="flex flex-wrap gap-1.5 mt-1.5">
+                      <Badge variant="secondary">🌐 {current.domain}</Badge>
+                      {current.industry && <Badge variant="secondary">🏭 {current.industry}</Badge>}
+                      {current.sector && <Badge variant="secondary">📊 {current.sector}</Badge>}
+                      {current.difficulty && <Badge variant="outline">{current.difficulty}</Badge>}
+                      {current.demand_level && <Badge variant="outline">📈 {current.demand_level}</Badge>}
+                      {current.avg_salary_usd && <Badge variant="outline">💰 {current.avg_salary_usd}</Badge>}
+                    </div>
                   </div>
                 </div>
               </div>
@@ -258,6 +282,76 @@ const CareerCardDeck = () => {
                             <span className="font-display text-sm text-foreground">Industry Trends</span>
                           </div>
                           <p className="font-body text-sm text-muted-foreground">{current.industry_trends}</p>
+                        </div>
+                      )}
+
+                      {/* Soft Skills */}
+                      {current.soft_skills && current.soft_skills.length > 0 && (
+                        <div>
+                          <h4 className="font-display text-sm mb-2">💬 Soft Skills</h4>
+                          <div className="flex flex-wrap gap-1.5">
+                            {current.soft_skills.map(s => <Badge key={s} variant="outline" className="text-xs">{s}</Badge>)}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Interests */}
+                      {current.interests && current.interests.length > 0 && (
+                        <div>
+                          <h4 className="font-display text-sm mb-2">✨ You'll love this if you're interested in</h4>
+                          <div className="flex flex-wrap gap-1.5">
+                            {current.interests.map(s => <Badge key={s} variant="secondary" className="text-xs">{s}</Badge>)}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Countries in demand */}
+                      {current.countries_in_demand && current.countries_in_demand.length > 0 && (
+                        <div>
+                          <h4 className="font-display text-sm mb-2">🌍 Countries in Demand</h4>
+                          <div className="flex flex-wrap gap-1.5">
+                            {current.countries_in_demand.map(c => <Badge key={c} variant="outline" className="text-xs">{c}</Badge>)}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Related job roles */}
+                      {current.related_job_roles && current.related_job_roles.length > 0 && (
+                        <div>
+                          <h4 className="font-display text-sm mb-2">👔 Related Job Roles</h4>
+                          <div className="flex flex-wrap gap-1.5">
+                            {current.related_job_roles.map(r => <Badge key={r} variant="outline" className="text-xs">{r}</Badge>)}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Related subjects */}
+                      {current.related_subjects && current.related_subjects.length > 0 && (
+                        <div>
+                          <h4 className="font-display text-sm mb-2">📚 Related Subjects</h4>
+                          <div className="flex flex-wrap gap-1.5">
+                            {current.related_subjects.map(s => <Badge key={s} variant="outline" className="text-xs">{s}</Badge>)}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Related universities */}
+                      {current.related_universities && current.related_universities.length > 0 && (
+                        <div>
+                          <h4 className="font-display text-sm mb-2">🎓 Related Universities</h4>
+                          <div className="flex flex-wrap gap-1.5">
+                            {current.related_universities.slice(0, 12).map(u => <Badge key={u} variant="outline" className="text-xs">{u}</Badge>)}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Related courses */}
+                      {current.related_courses && current.related_courses.length > 0 && (
+                        <div>
+                          <h4 className="font-display text-sm mb-2">💻 Related Courses</h4>
+                          <div className="flex flex-wrap gap-1.5">
+                            {current.related_courses.slice(0, 12).map(c => <Badge key={c} variant="outline" className="text-xs">{c}</Badge>)}
+                          </div>
                         </div>
                       )}
                     </motion.div>
