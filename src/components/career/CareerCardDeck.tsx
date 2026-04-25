@@ -5,6 +5,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import MultiSelect from "@/components/ui/multi-select";
 import { toast } from "sonner";
 import {
   Heart, Sparkles, Bookmark, XCircle, ChevronLeft, ChevronRight,
