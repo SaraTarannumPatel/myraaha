@@ -186,7 +186,7 @@ const StoryModeCards = () => {
       if (error) throw error;
       if (data?.generated?.length > 0) {
         toast.success(`Generated ${data.generated.length} new career stories!`);
-        await fetchData();
+        await fetchInitial();
       }
       if (data?.remaining > 0) {
         // Generate more in background
