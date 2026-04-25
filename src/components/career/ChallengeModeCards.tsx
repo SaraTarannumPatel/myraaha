@@ -65,7 +65,7 @@ const ChallengeModeCards = () => {
   const [analyzing, setAnalyzing] = useState(false);
   const [analysis, setAnalysis] = useState<ChallengeAnalysis | null>(null);
   const [showAnalysis, setShowAnalysis] = useState(false);
-  const [filterDomain, setFilterDomain] = useState<string | null>(null);
+  const [filterDomains, setFilterDomains] = useState<string[]>([]);
   const startTimeRef = useRef<number>(Date.now());
 
   useEffect(() => {
