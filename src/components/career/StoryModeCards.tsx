@@ -255,8 +255,8 @@ const StoryModeCards = () => {
     }
   };
 
-  const domains = [...new Set(stories.map(s => s.domain))].sort();
-  const filtered = filterDomain ? stories.filter(s => s.domain === filterDomain) : stories;
+  const domains = allDomains;
+  const filtered = stories; // server already filtered when filterDomain set
   const current = filtered[currentIndex];
 
   const interactionCount = Object.keys(interactions).length;
