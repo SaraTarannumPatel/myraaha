@@ -18,15 +18,31 @@ interface CareerPath {
   title: string;
   description: string | null;
   domain: string;
+  industry: string | null;
+  sector: string | null;
   day_to_day: string | null;
   salary_range: string | null;
+  avg_salary_usd: string | null;
   demand_level: string | null;
   difficulty: string | null;
   growth_trajectory: string | null;
+  growth_trajectory_detail: string | null;
   related_skills: string[] | null;
+  soft_skills: string[] | null;
   tools_certifications: string[] | null;
   industry_trends: string | null;
   icon_emoji: string | null;
+  interests: string[] | null;
+  countries_in_demand: string[] | null;
+  related_industries: string[] | null;
+  related_sectors: string[] | null;
+  related_domains: string[] | null;
+  related_job_roles: string[] | null;
+  related_subjects: string[] | null;
+  related_universities: string[] | null;
+  related_courses: string[] | null;
+  related_countries: string[] | null;
+  keywords: string[] | null;
 }
 
 type InteractionType = "like" | "love" | "bookmark" | "not_for_me";
