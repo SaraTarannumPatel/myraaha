@@ -318,7 +318,7 @@ const StoryModeCards = () => {
       {/* Domain Filter */}
       <div className="flex gap-2 flex-wrap">
         <Button variant={filterDomain === null ? "default" : "outline"} size="sm" onClick={() => { setFilterDomain(null); setCurrentIndex(0); }}>
-          All ({stories.length})
+          All
         </Button>
         {domains.map(d => (
           <Button key={d} variant={filterDomain === d ? "default" : "outline"} size="sm" onClick={() => { setFilterDomain(d); setCurrentIndex(0); }}>
@@ -330,10 +330,10 @@ const StoryModeCards = () => {
       {/* Progress */}
       <div className="space-y-2">
         <div className="flex justify-between text-xs font-body text-muted-foreground">
-          <span>Story {currentIndex + 1} of {filtered.length}</span>
+          <span>Story {currentIndex + 1}{hasMore ? "+" : ` of ${filtered.length}`}</span>
           <span>{interactionCount} stories explored</span>
         </div>
-        <Progress value={((currentIndex + 1) / filtered.length) * 100} className="h-1.5" />
+        <Progress value={hasMore ? Math.min(95, ((currentIndex + 1) / Math.max(filtered.length, 1)) * 100) : ((currentIndex + 1) / Math.max(filtered.length, 1)) * 100} className="h-1.5" />
       </div>
 
       {/* Story Card */}
