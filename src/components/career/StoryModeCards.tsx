@@ -137,7 +137,7 @@ const StoryModeCards = () => {
       .eq("is_active", true)
       .order("created_at", { ascending: false })
       .range(from, to);
-    if (filterDomain) query = query.eq("domain", filterDomain);
+    if (filterDomains.length > 0) query = query.in("domain", filterDomains);
     const { data } = await query;
     const next = (data as unknown as CareerStory[]) || [];
     setStories((prev) => {
@@ -148,7 +148,7 @@ const StoryModeCards = () => {
     setHasMore(next.length === PAGE_SIZE);
     setPage((p) => p + 1);
     setLoadingMore(false);
-  }, [loadingMore, hasMore, page, filterDomain]);
+  }, [loadingMore, hasMore, page, filterDomains]);
 
   // Prefetch next page when user nears the end of loaded cards
   useEffect(() => {
