@@ -148,7 +148,7 @@ const ChallengeModeCards = () => {
   };
 
   const domains = [...new Set(challenges.map(c => c.domain))].sort();
-  const filtered = filterDomain ? challenges.filter(c => c.domain === filterDomain) : challenges;
+  const filtered = filterDomains.length > 0 ? challenges.filter(c => filterDomains.includes(c.domain)) : challenges;
   const current = filtered[currentIndex];
   const interactionCount = Object.keys(interactions).length;
   const stats = {
