@@ -186,8 +186,14 @@ const CareerCardDeck = () => {
                   <span className="text-4xl">{current.icon_emoji || "💼"}</span>
                   <div className="flex-1 min-w-0">
                     <h2 className="font-display text-2xl text-foreground">{current.title}</h2>
-                    <Badge variant="secondary" className="mt-1">{current.domain}</Badge>
-                    {current.difficulty && <Badge variant="outline" className="ml-2 mt-1">{current.difficulty}</Badge>}
+                    <div className="flex flex-wrap gap-1.5 mt-1.5">
+                      <Badge variant="secondary">🌐 {current.domain}</Badge>
+                      {current.industry && <Badge variant="secondary">🏭 {current.industry}</Badge>}
+                      {current.sector && <Badge variant="secondary">📊 {current.sector}</Badge>}
+                      {current.difficulty && <Badge variant="outline">{current.difficulty}</Badge>}
+                      {current.demand_level && <Badge variant="outline">📈 {current.demand_level}</Badge>}
+                      {current.avg_salary_usd && <Badge variant="outline">💰 {current.avg_salary_usd}</Badge>}
+                    </div>
                   </div>
                 </div>
               </div>
