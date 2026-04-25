@@ -56,6 +56,7 @@ const PREFETCH_THRESHOLD = 5; // when N cards left, fetch next batch
 
 const StoryModeCards = () => {
   const { user } = useAuth();
+  const navigate = useNavigate();
   const [stories, setStories] = useState<CareerStory[]>([]);
   const [interactions, setInteractions] = useState<Record<string, InteractionType>>({});
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -65,11 +66,12 @@ const StoryModeCards = () => {
   const [analyzing, setAnalyzing] = useState(false);
   const [analysis, setAnalysis] = useState<BehaviorAnalysis | null>(null);
   const [showAnalysis, setShowAnalysis] = useState(false);
-  const [filterDomain, setFilterDomain] = useState<string | null>(null);
+  const [filterDomains, setFilterDomains] = useState<string[]>([]);
   const [page, setPage] = useState(0);
   const [hasMore, setHasMore] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
   const [allDomains, setAllDomains] = useState<string[]>([]);
+  const [generatingRoadmap, setGeneratingRoadmap] = useState(false);
   const startTimeRef = useRef<number>(Date.now());
 
   useEffect(() => {
