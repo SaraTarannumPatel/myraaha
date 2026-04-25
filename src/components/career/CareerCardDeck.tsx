@@ -94,7 +94,7 @@ const CareerCardDeck = () => {
   };
 
   const domains = [...new Set(paths.map(p => p.domain))].sort();
-  const filtered = filterDomain ? paths.filter(p => p.domain === filterDomain) : paths;
+  const filtered = filterDomains.length > 0 ? paths.filter(p => filterDomains.includes(p.domain)) : paths;
   const current = filtered[currentIndex];
 
   const stats = {
