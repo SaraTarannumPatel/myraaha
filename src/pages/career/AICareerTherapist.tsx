@@ -17,7 +17,7 @@ import {
   CloudRain, Flame, Plus, Trash2, Eye, Target, Users, Map,
   ChevronRight, Compass, Zap, BookOpen, Award
 } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import ModuleSearchBar from "@/components/search/ModuleSearchBar";
 import EntitlementBanner from "@/components/curiositycompass/EntitlementBanner";
 import { useEntitlement } from "@/hooks/useAssessmentRewards";
