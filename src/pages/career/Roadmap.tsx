@@ -81,7 +81,84 @@ const Roadmap = () => {
   const [analysisSummary, setAnalysisSummary] = useState<string>("");
   const [strongestSignals, setStrongestSignals] = useState<string[]>([]);
 
+  const location = useLocation();
+  const [searchParams] = useSearchParams();
+  const exploreContext = (location.state as any)?.exploreContext;
+  const storyContext = (location.state as any)?.context; // legacy from story mode
+  const autoGenTriggered = useRef(false);
+
   useEffect(() => { if (user) { fetchAll(); fetchSuggestedRoadmaps(); } }, [user]);
+
+  // Switch to suggested tab when navigated with ?tab=suggested
+  useEffect(() => {
+    const t = searchParams.get("tab");
+    if (t === "suggested") setActiveTab("suggested");
+  }, [searchParams]);
+
+  // Auto-generate a focused roadmap when arriving from an Explore card
+  useEffect(() => {
+    if (!user || !exploreContext || autoGenTriggered.current) return;
+    autoGenTriggered.current = true;
+    setActiveTab("suggested");
+    (async () => {
+      setGenerating(true);
+      try {
+        const item = exploreContext.item || {};
+        const focusTitle = exploreContext.context || item.title;
+        toast.info(`Generating personalized roadmap for "${focusTitle}"…`);
+        const { data, error } = await supabase.functions.invoke("roadmap-ai", {
+          body: {
+            type: "generate_roadmap",
+            context: {
+              shortTermGoals: `Explore and build skills for ${focusTitle}`,
+              longTermGoals: `Grow into a thriving path connected to ${focusTitle}`,
+              interests: [...(item.interests || []), focusTitle].filter(Boolean).slice(0, 12),
+              skills: [...(item.related_skills || []), ...(item.soft_skills || [])].filter(Boolean).slice(0, 20),
+              industry: item.industry || item.sector || focusTitle,
+              careerStage: "exploring",
+              areasOfFocus: [...(item.related_careers || []), ...(item.related_job_roles || [])].filter(Boolean).slice(0, 10),
+              sourceContext: `explore_${exploreContext.type || "card"}`,
+            },
+          },
+        });
+        if (error) throw error;
+        const { data: newRoadmap, error: rmErr } = await supabase.from("roadmaps").insert({
+          user_id: user.id,
+          title: data.title || `Roadmap: ${focusTitle}`,
+          description: data.description || `Personalized path inspired by ${focusTitle}`,
+          intent: "career",
+          skill_gaps: data.skill_gaps || [],
+          ai_suggestions: data,
+          is_active: true,
+        }).select().single();
+        if (rmErr) throw rmErr;
+        await supabase.from("roadmaps").update({ is_active: false }).eq("user_id", user.id).neq("id", newRoadmap.id);
+
+        const allSteps: any[] = [];
+        let orderIndex = 0;
+        for (const phase of data.phases || []) {
+          for (const step of phase.steps || []) {
+            allSteps.push({
+              roadmap_id: newRoadmap.id, user_id: user.id, title: step.title, description: step.description,
+              phase: phase.name, category: step.category, skill_tags: step.skill_tags || [],
+              priority: step.priority || "medium", ai_generated: true, order_index: orderIndex++,
+            });
+          }
+        }
+        if (allSteps.length > 0) await supabase.from("roadmap_steps").insert(allSteps);
+        setActiveRoadmap(newRoadmap);
+        fetchSteps(newRoadmap.id);
+        fetchAll();
+        setActiveTab("timeline");
+        toast.success(`Roadmap for "${focusTitle}" created! 🎉`);
+      } catch (e) {
+        console.error("Auto-roadmap error:", e);
+        toast.error("Couldn't auto-generate roadmap. Try again from the For You tab.");
+      } finally {
+        setGenerating(false);
+      }
+    })();
+  }, [user, exploreContext]);
 
   const fetchAll = async () => {
     setLoading(true);
