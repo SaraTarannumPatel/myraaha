@@ -274,37 +274,15 @@ const StoryModeCards = () => {
         industry: topPaths[0] || analysis.domains_attracted?.[0] || "",
         careerStage: "exploring",
         areasOfFocus: [...topPaths, ...blindSpots].filter(Boolean).slice(0, 8),
-        sourceContext: "story_mode_behavioral_blueprint",
+        sourceContext: "story_mode_blueprint",
       };
-      const { data, error } = await supabase.functions.invoke("roadmap-ai", { body: { type: "generate_roadmap", context: ctx } });
-      if (error) throw error;
-      const { data: newRoadmap, error: rmErr } = await supabase.from("roadmaps").insert({
-        user_id: user.id,
-        title: data?.title || `Personalized Roadmap — ${topPaths[0] || "Your Path"}`,
-        description: data?.description || analysis.ai_summary,
-        intent: "career",
-        short_term_goals: ctx.shortTermGoals,
-        long_term_goals: ctx.longTermGoals,
-        skill_gaps: data?.skill_gaps || [],
-        ai_suggestions: { ...data, source: "story_mode_blueprint" },
-        is_active: true,
-      }).select().single();
-      if (rmErr) throw rmErr;
-      await supabase.from("roadmaps").update({ is_active: false }).eq("user_id", user.id).neq("id", newRoadmap.id);
-      const allSteps: any[] = [];
-      let orderIndex = 0;
-      for (const phase of data?.phases || []) {
-        for (const step of phase.steps || []) {
-          allSteps.push({
-            roadmap_id: newRoadmap.id, user_id: user.id, title: step.title, description: step.description,
-            phase: phase.name, category: step.category, skill_tags: step.skill_tags || [],
-            priority: step.priority || "medium", ai_generated: true, order_index: orderIndex++,
-          });
-        }
-      }
-      if (allSteps.length > 0) await supabase.from("roadmap_steps").insert(allSteps);
-      toast.success("Personalized roadmap created from your blueprint! 🗺️");
-      navigate("/career/roadmap?tab=suggested", { state: { context: ctx, source: "story_mode_blueprint", roadmapId: newRoadmap.id } });
+      const { generateBlueprintRoadmap } = await import("@/lib/blueprintRoadmap");
+      await generateBlueprintRoadmap(
+        user.id,
+        ctx,
+        `Personalized Roadmap — ${topPaths[0] || "Your Path"}`,
+        navigate,
+      );
     } catch (e: any) {
       console.error(e);
       toast.error("Could not generate roadmap. Please try again.");

@@ -60,7 +60,7 @@ const MultiSelect = ({
           <Button
             variant="outline"
             size="sm"
-            className="gap-2 min-w-[180px] justify-between"
+            className="gap-2 w-full sm:w-auto sm:min-w-[180px] max-w-[260px] justify-between"
             aria-expanded={open}
           >
             <span className="truncate font-body text-sm">
@@ -74,7 +74,9 @@ const MultiSelect = ({
         </PopoverTrigger>
         <PopoverContent
           align="start"
-          className="w-[280px] p-0"
+          sideOffset={6}
+          collisionPadding={12}
+          className="w-[min(92vw,340px)] p-0 z-[60]"
           onOpenAutoFocus={(e) => e.preventDefault()}
         >
           <div className="p-2 border-b border-border">
@@ -104,7 +106,7 @@ const MultiSelect = ({
               </button>
             </div>
           </div>
-          <ScrollArea className="max-h-64">
+          <ScrollArea className="h-[min(60vh,360px)]">
             <div className="p-1">
               {filtered.length === 0 ? (
                 <div className="py-6 text-center font-body text-xs text-muted-foreground">
