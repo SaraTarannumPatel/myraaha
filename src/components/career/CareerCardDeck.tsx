@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
@@ -6,11 +7,14 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import MultiSelect from "@/components/ui/multi-select";
+import BlueprintCard, { type Blueprint } from "@/components/career/BlueprintCard";
+import { buildBlueprintFromInteractions } from "@/lib/buildBlueprint";
+import { generateBlueprintRoadmap } from "@/lib/blueprintRoadmap";
 import { toast } from "sonner";
 import {
   Heart, Sparkles, Bookmark, XCircle, ChevronLeft, ChevronRight,
   TrendingUp, Clock, DollarSign, Users, Zap, Brain, Star,
-  ThumbsUp, ThumbsDown, Eye, Filter
+  ThumbsUp, ThumbsDown, Eye, Filter, Loader2, ArrowRight
 } from "lucide-react";
 
 interface CareerPath {
@@ -49,12 +53,61 @@ type InteractionType = "like" | "love" | "bookmark" | "not_for_me";
 
 const CareerCardDeck = () => {
   const { user } = useAuth();
+  const navigate = useNavigate();
   const [paths, setPaths] = useState<CareerPath[]>([]);
   const [interactions, setInteractions] = useState<Record<string, InteractionType>>({});
   const [currentIndex, setCurrentIndex] = useState(0);
   const [expanded, setExpanded] = useState(false);
   const [loading, setLoading] = useState(true);
   const [filterDomains, setFilterDomains] = useState<string[]>([]);
+  const [blueprint, setBlueprint] = useState<Blueprint | null>(null);
+  const [showBlueprint, setShowBlueprint] = useState(false);
+  const [analyzing, setAnalyzing] = useState(false);
+  const [generatingRoadmap, setGeneratingRoadmap] = useState(false);
+
+  const interactionCount = Object.keys(interactions).length;
+
+  const runAnalysis = async () => {
+    setAnalyzing(true);
+    try {
+      const bp = buildBlueprintFromInteractions(
+        paths.map((p) => ({
+          id: p.id, domain: p.domain, related_skills: p.related_skills,
+          soft_skills: p.soft_skills, difficulty: p.difficulty, title: p.title,
+        })),
+        interactions,
+        "career-cards",
+      );
+      setBlueprint(bp);
+      setShowBlueprint(true);
+      toast.success("Career blueprint ready! 🧬");
+    } finally { setAnalyzing(false); }
+  };
+
+  const onGenerateRoadmap = async () => {
+    if (!user || !blueprint) return;
+    setGeneratingRoadmap(true);
+    try {
+      await generateBlueprintRoadmap(
+        user.id,
+        {
+          shortTermGoals: blueprint.top_paths[0] || blueprint.domains_attracted[0] || "Explore my career inclinations",
+          longTermGoals: blueprint.ai_summary,
+          interests: [...blueprint.domains_attracted, ...blueprint.blind_spots].slice(0, 12),
+          skills: blueprint.skills_resonated,
+          industry: blueprint.domains_attracted[0] || "",
+          careerStage: "exploring",
+          areasOfFocus: blueprint.top_paths.slice(0, 8),
+          sourceContext: "career_cards_blueprint",
+        },
+        `Personalized Roadmap — ${blueprint.top_paths[0] || "Your Path"}`,
+        navigate,
+      );
+    } catch (e) {
+      console.error(e);
+      toast.error("Could not generate roadmap.");
+    } finally { setGeneratingRoadmap(false); }
+  };
 
   useEffect(() => {
     if (user) fetchData();
