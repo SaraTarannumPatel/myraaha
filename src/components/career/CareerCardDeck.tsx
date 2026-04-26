@@ -184,19 +184,26 @@ const CareerCardDeck = () => {
   return (
     <div className="space-y-6">
       {/* Stats Bar */}
-      <div className="flex items-center gap-4 flex-wrap">
-        <div className="flex items-center gap-1.5 text-sm">
-          <ThumbsUp size={14} className="text-primary" /> <span className="font-body text-muted-foreground">{stats.liked} Liked</span>
+      <div className="flex items-center justify-between flex-wrap gap-3">
+        <div className="flex items-center gap-3 sm:gap-4 flex-wrap">
+          <div className="flex items-center gap-1.5 text-sm">
+            <ThumbsUp size={14} className="text-primary" /> <span className="font-body text-muted-foreground">{stats.liked}</span>
+          </div>
+          <div className="flex items-center gap-1.5 text-sm">
+            <Heart size={14} className="text-terracotta" /> <span className="font-body text-muted-foreground">{stats.loved}</span>
+          </div>
+          <div className="flex items-center gap-1.5 text-sm">
+            <Bookmark size={14} className="text-blue-primary" /> <span className="font-body text-muted-foreground">{stats.bookmarked}</span>
+          </div>
+          <div className="flex items-center gap-1.5 text-sm">
+            <XCircle size={14} className="text-grey-meta" /> <span className="font-body text-muted-foreground">{stats.skipped}</span>
+          </div>
         </div>
-        <div className="flex items-center gap-1.5 text-sm">
-          <Heart size={14} className="text-terracotta" /> <span className="font-body text-muted-foreground">{stats.loved} Loved</span>
-        </div>
-        <div className="flex items-center gap-1.5 text-sm">
-          <Bookmark size={14} className="text-blue-primary" /> <span className="font-body text-muted-foreground">{stats.bookmarked} Saved</span>
-        </div>
-        <div className="flex items-center gap-1.5 text-sm">
-          <XCircle size={14} className="text-grey-meta" /> <span className="font-body text-muted-foreground">{stats.skipped} Skipped</span>
-        </div>
+        {interactionCount >= 3 && !showBlueprint && (
+          <Button size="sm" variant="outline" onClick={runAnalysis} disabled={analyzing}>
+            {analyzing ? <><Loader2 size={14} className="mr-2 animate-spin" /> Analyzing...</> : <><Brain size={14} className="mr-2" /> Analyze My Choices</>}
+          </Button>
+        )}
       </div>
 
       {/* Domain Filter (multi-select dropdown) */}
