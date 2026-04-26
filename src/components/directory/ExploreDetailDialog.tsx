@@ -45,7 +45,7 @@ const ExploreDetailDialog = ({ open, onClose, item, type, onNavigate }: ExploreD
   };
   const handleMentor = () => { onClose(); navigate("/career/mentor-matchmaking", { state: { exploreContext } }); };
   const handleTherapist = () => { onClose(); navigate("/career/ai-career-therapist", { state: { exploreContext } }); };
-  const handleRoadmap = () => { onClose(); navigate("/career/roadmap?tab=suggested&from=explore", { state: { exploreContext } }); };
+  const handleRoadmap = () => { onClose(); navigate("/dashboard/roadmap?tab=suggested&from=explore", { state: { exploreContext } }); };
 
   return (
     <Dialog open={open} onOpenChange={(o) => !o && onClose()}>
