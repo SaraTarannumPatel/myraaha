@@ -153,6 +153,26 @@ const AICareerTherapist = () => {
 
   useEffect(() => { loadData(); }, [loadData]);
 
+  // Auto-start a contextual session when navigated from an Explore card
+  const location = useLocation();
+  const exploreCtxRef = useRef<any>((location.state as any)?.exploreContext || null);
+  const exploreSeededRef = useRef(false);
+  useEffect(() => {
+    if (exploreSeededRef.current || !exploreCtxRef.current || loading) return;
+    exploreSeededRef.current = true;
+    const ctx = exploreCtxRef.current;
+    const focus = ctx.context || ctx.item?.title;
+    if (!focus) return;
+    setActiveTab("chat");
+    setMessages([]);
+    setCurrentSessionId(null);
+    const seed = `I just explored "${focus}" on my Explore page and I'd love to talk through how it fits me. Can you help me reflect on whether this path aligns with my interests, strengths, and goals — and what feelings or doubts come up for me when I picture pursuing it?`;
+    // Defer to next tick to ensure context loaders have settled
+    setTimeout(() => sendMessage(seed), 100);
+    // clear navigation state so refresh doesn't re-trigger
+    window.history.replaceState({}, document.title);
+  }, [loading]);
+
   const getContext = useCallback(() => ({
     name: profile?.full_name || "friend",
     intent: profile?.active_intent || "career",
