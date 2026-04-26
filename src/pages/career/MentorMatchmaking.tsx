@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import ModuleSearchBar from "@/components/search/ModuleSearchBar";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "@/contexts/AuthContext";
@@ -127,6 +128,21 @@ const MentorMatchmaking = () => {
   useEffect(() => {
     if (user) fetchData();
   }, [user]);
+
+  // Pre-fill search/filter when arriving from an Explore card
+  const location = useLocation();
+  useEffect(() => {
+    const ec = (location.state as any)?.exploreContext;
+    if (!ec) return;
+    const focus = ec.context || ec.item?.title;
+    if (focus) {
+      setSearch(focus);
+      setActiveTab("discover");
+      toast.info(`Showing mentors related to "${focus}"`);
+    }
+    if (ec.item?.domain) setFilterDomain(ec.item.domain);
+    window.history.replaceState({}, document.title);
+  }, [location.state]);
 
   const fetchData = async () => {
     setLoading(true);
