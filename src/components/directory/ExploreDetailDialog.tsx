@@ -24,9 +24,28 @@ const ExploreDetailDialog = ({ open, onClose, item, type, onNavigate }: ExploreD
     onClose();
   };
 
-  const handleMentor = () => { onClose(); navigate("/career/mentor-matchmaking", { state: { context: title, type } }); };
-  const handleTherapist = () => { onClose(); navigate("/career/ai-career-therapist", { state: { context: title, type } }); };
-  const handleRoadmap = () => { onClose(); navigate("/career/roadmap", { state: { context: title, type } }); };
+  const exploreContext = {
+    context: title,
+    type,
+    item: {
+      title,
+      domain: item.domain,
+      industry: item.industry,
+      sector: item.sector,
+      description: item.description,
+      related_skills: item.related_skills || item.skills_required || item.top_skills,
+      related_careers: item.related_careers || item.top_careers,
+      related_job_roles: item.related_job_roles || item.job_role_keywords || item.top_job_roles,
+      related_domains: item.related_domains || item.top_domains,
+      related_industries: item.related_industries || item.top_industries,
+      soft_skills: item.soft_skills || item.soft_skills_in_demand,
+      interests: item.interests,
+      keywords: item.keywords,
+    },
+  };
+  const handleMentor = () => { onClose(); navigate("/career/mentor-matchmaking", { state: { exploreContext } }); };
+  const handleTherapist = () => { onClose(); navigate("/career/ai-career-therapist", { state: { exploreContext } }); };
+  const handleRoadmap = () => { onClose(); navigate("/career/roadmap?tab=suggested&from=explore", { state: { exploreContext } }); };
 
   return (
     <Dialog open={open} onOpenChange={(o) => !o && onClose()}>
