@@ -19,6 +19,9 @@ import {
 import CareerCardDeck from "@/components/career/CareerCardDeck";
 import StoryModeCards from "@/components/career/StoryModeCards";
 import ChallengeModeCards from "@/components/career/ChallengeModeCards";
+import BlueprintCard from "@/components/career/BlueprintCard";
+import { buildBlueprintFromInteractions } from "@/lib/buildBlueprint";
+import { generateBlueprintRoadmap } from "@/lib/blueprintRoadmap";
 import { useUserSignals } from "@/hooks/useUserSignals";
 import { useNavigate } from "react-router-dom";
 import ModuleSearchBar from "@/components/search/ModuleSearchBar";
