@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
@@ -7,6 +8,9 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import MultiSelect from "@/components/ui/multi-select";
+import BlueprintCard, { type Blueprint } from "@/components/career/BlueprintCard";
+import { buildBlueprintFromInteractions } from "@/lib/buildBlueprint";
+import { generateBlueprintRoadmap } from "@/lib/blueprintRoadmap";
 import { toast } from "sonner";
 import {
   Heart, ThumbsUp, Bookmark, XCircle, ChevronLeft, ChevronRight,
@@ -57,6 +61,7 @@ const difficultyConfig: Record<string, { color: string; icon: typeof Shield; bg:
 
 const ChallengeModeCards = () => {
   const { user } = useAuth();
+  const navigate = useNavigate();
   const [challenges, setChallenges] = useState<ChallengeCard[]>([]);
   const [interactions, setInteractions] = useState<Record<string, InteractionType>>({});
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -66,6 +71,9 @@ const ChallengeModeCards = () => {
   const [analysis, setAnalysis] = useState<ChallengeAnalysis | null>(null);
   const [showAnalysis, setShowAnalysis] = useState(false);
   const [filterDomains, setFilterDomains] = useState<string[]>([]);
+  const [blueprint, setBlueprint] = useState<Blueprint | null>(null);
+  const [showBlueprint, setShowBlueprint] = useState(false);
+  const [generatingRoadmap, setGeneratingRoadmap] = useState(false);
   const startTimeRef = useRef<number>(Date.now());
 
   useEffect(() => {
@@ -135,16 +143,60 @@ const ChallengeModeCards = () => {
   const runAnalysis = async () => {
     setAnalyzing(true);
     try {
-      const { data, error } = await supabase.functions.invoke("challenge-cards-ai", {
-        body: { type: "analyze_challenge_behavior", context: { user_id: user!.id } },
-      });
-      if (error) throw error;
-      if (data?.error) { toast.error(data.message || data.error); return; }
-      setAnalysis(data);
-      setShowAnalysis(true);
+      // Always compute a client-side blueprint so the user sees output immediately
+      const bp = buildBlueprintFromInteractions(
+        challenges.map((c) => ({
+          id: c.id,
+          domain: c.domain,
+          skills_needed: c.skills_needed,
+          tools_used: c.tools_used,
+          difficulty_level: c.difficulty_level,
+          challenge_name: c.challenge_name,
+        })),
+        interactions,
+        "challenge",
+      );
+      setBlueprint(bp);
+      setShowBlueprint(true);
+
+      // Best-effort: enrich with AI analysis (non-blocking)
+      try {
+        const { data, error } = await supabase.functions.invoke("challenge-cards-ai", {
+          body: { type: "analyze_challenge_behavior", context: { user_id: user!.id } },
+        });
+        if (!error && data && !data.error) {
+          setAnalysis(data);
+          setShowAnalysis(true);
+        }
+      } catch { /* AI optional */ }
+
       toast.success("Challenge analysis complete! 🎯");
-    } catch { toast.error("Keep exploring more challenges first!"); }
-    finally { setAnalyzing(false); }
+    } finally { setAnalyzing(false); }
+  };
+
+  const onGenerateRoadmap = async () => {
+    if (!user || !blueprint) return;
+    setGeneratingRoadmap(true);
+    try {
+      await generateBlueprintRoadmap(
+        user.id,
+        {
+          shortTermGoals: blueprint.top_paths[0] || blueprint.domains_attracted[0] || "Build the kind of work I'd actually enjoy",
+          longTermGoals: blueprint.ai_summary,
+          interests: [...blueprint.domains_attracted, ...blueprint.blind_spots].slice(0, 12),
+          skills: blueprint.skills_resonated,
+          industry: blueprint.domains_attracted[0] || "",
+          careerStage: "exploring",
+          areasOfFocus: blueprint.top_paths.slice(0, 8),
+          sourceContext: "challenge_mode_blueprint",
+        },
+        `Personalized Roadmap — ${blueprint.top_paths[0] || "Your Work Style"}`,
+        navigate,
+      );
+    } catch (e) {
+      console.error(e);
+      toast.error("Could not generate roadmap.");
+    } finally { setGeneratingRoadmap(false); }
   };
 
   const domains = [...new Set(challenges.map(c => c.domain))].sort();
