@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { Gift } from "lucide-react";
+import Logo from "@/components/Logo";
 
 interface OnboardingProgressBarProps {
   progress: number; // 0-100
@@ -13,11 +14,9 @@ const OnboardingProgressBar = ({ progress, showRewardHint = true, nextRewardAt }
   const nextMilestone = nextRewardAt || MILESTONES.find((m) => m > progress) || 100;
 
   return (
-    <div className="px-6 pt-5 pb-2">
-      <div className="flex items-center gap-3">
-        <div className="w-8 h-8 flex items-center justify-center">
-          <span className="font-display text-xl font-bold text-primary">M</span>
-        </div>
+    <div className="px-4 sm:px-6 pt-4 sm:pt-5 pb-2">
+      <div className="flex items-center gap-2 sm:gap-3">
+        <Logo to="/" size="xs" showWordmark={false} className="shrink-0" />
         <span className="text-xs text-muted-foreground font-body font-medium">{progress}%</span>
         <div className="flex-1 relative">
           <div className="h-2 rounded-full bg-[hsl(0,0%,88%)]">
