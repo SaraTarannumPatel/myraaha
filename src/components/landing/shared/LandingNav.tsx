@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, NavLink, useLocation } from "react-router-dom";
 import { Menu, X, ChevronDown, Sparkles, Compass, Map as MapIcon, Layers, Heart, BookOpen, Microscope, Briefcase, Mail, Users, Lightbulb, FileText, GraduationCap } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import Logo from "@/components/Logo";
 
 type NavChild = { to: string; label: string; desc: string; icon: typeof Sparkles };
 type NavGroup = { label: string; children: NavChild[] };
@@ -72,9 +73,8 @@ const LandingNav = ({ alwaysVisible = false }: { alwaysVisible?: boolean }) => {
       className="fixed top-0 inset-x-0 z-50 bg-background/95 backdrop-blur-xl border-b border-border shadow-soft transition-colors"
     >
       <div className="container mx-auto px-5 sm:px-8 h-16 sm:h-20 flex items-center justify-between">
-        <Link to="/" className="font-display text-2xl sm:text-3xl text-primary tracking-tight shrink-0">
-          MyRaaha
-        </Link>
+        <Logo to="/" size="md" />
+
 
         {/* Desktop */}
         <nav

@@ -11,6 +11,7 @@ import {
   LayoutDashboard, Bell, UserCheck, FolderKanban, Briefcase, Bot, Heart,
   Presentation, Building2, LifeBuoy, Globe, Navigation, Medal, Palette, RefreshCw
 } from "lucide-react";
+import Logo from "@/components/Logo";
 
 const careerNav = [
   { label: "Dashboard", icon: LayoutDashboard, path: "/dashboard", color: "blue" },
@@ -110,10 +111,8 @@ const DashboardLayout = () => {
   const NavContent = () => (
     <div className="flex flex-col h-full">
       <div className="p-5 border-b border-border">
-        <Link to="/dashboard" className="font-display text-2xl text-foreground">
-          My<span className="text-gradient-warm">Raaha</span>
-        </Link>
-        <p className="font-body text-xs text-muted-foreground mt-1">
+        <Logo to="/dashboard" size="sm" />
+        <p className="font-body text-xs text-muted-foreground mt-2">
           {isBoth ? "Career & Entrepreneurship" : isCareer ? "Career & Jobs" : "Entrepreneurship"}
         </p>
       </div>
@@ -190,9 +189,7 @@ const DashboardLayout = () => {
 
       <div className="lg:hidden fixed top-0 left-0 right-0 z-50 bg-card/95 backdrop-blur-md border-b border-border">
         <div className="flex items-center justify-between px-4 h-14">
-          <Link to="/dashboard" className="font-display text-xl text-foreground">
-            My<span className="text-gradient-warm">Raaha</span>
-          </Link>
+          <Logo to="/dashboard" size="xs" />
           <div className="flex items-center gap-2">
             <Button variant="ghost" size="icon" onClick={() => navigate("/dashboard/notifications")}>
               <Bell size={18} />

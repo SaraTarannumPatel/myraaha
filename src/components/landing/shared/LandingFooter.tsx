@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { useState } from "react";
+import Logo from "@/components/Logo";
 
 const cols = [
   {
@@ -84,7 +85,7 @@ const LandingFooter = () => {
 
       <div className="container mx-auto px-5 sm:px-8 py-14 grid sm:grid-cols-2 lg:grid-cols-5 gap-10">
         <div className="lg:col-span-2">
-          <Link to="/" className="font-display text-3xl text-primary">MyRaaha</Link>
+          <Logo to="/" size="lg" />
           <p className="font-body text-sm text-foreground/70 mt-4 max-w-xs leading-relaxed">
             Your journey. At your pace.
           </p>
