@@ -1302,15 +1302,25 @@ const CuriosityCompass = () => {
                         );
                       })}
                     </div>
-                    {visualSelections.length >= 3 && (
-                      <div className="mt-6 text-center">
-                        <Button onClick={finishVisualMode}>
-                          Continue with {visualSelections.length} selections <ArrowRight size={14} className="ml-2" />
+                    {visualSelections.length >= 3 && !showVisualBlueprint && (
+                      <div className="mt-6 flex flex-col sm:flex-row items-center justify-center gap-2">
+                        <Button onClick={finishVisualMode} className="w-full sm:w-auto">
+                          <Brain size={14} className="mr-2" /> Analyze My Choices ({visualSelections.length})
                         </Button>
                       </div>
                     )}
                   </CardContent>
                 </Card>
+
+                {showVisualBlueprint && visualBlueprint && (
+                  <BlueprintCard
+                    blueprint={visualBlueprint}
+                    variant="visual"
+                    onGenerateRoadmap={generateVisualRoadmap}
+                    generatingRoadmap={generatingVisualRoadmap}
+                    onClose={() => setShowVisualBlueprint(false)}
+                  />
+                )}
               </>
             ) : mode === "story" ? (
               /* Story Mode — career story cards (95% of this section) */
