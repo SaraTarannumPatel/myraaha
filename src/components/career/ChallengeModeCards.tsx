@@ -520,6 +520,17 @@ const ChallengeModeCards = () => {
         )}
       </AnimatePresence>
 
+      {/* Behavioral Blueprint */}
+      {showBlueprint && blueprint && (
+        <BlueprintCard
+          blueprint={blueprint}
+          variant="challenge"
+          onGenerateRoadmap={onGenerateRoadmap}
+          generatingRoadmap={generatingRoadmap}
+          onClose={() => setShowBlueprint(false)}
+        />
+      )}
+
       {/* Generate More */}
       {generating && (
         <div className="text-center py-4">
