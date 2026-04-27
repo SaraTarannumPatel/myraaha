@@ -5,6 +5,7 @@ import { ArrowRight, Compass, Heart, Users, Sparkles } from "lucide-react";
 import introSlide1 from "@/assets/intro-slide-1.png";
 import introSlide2 from "@/assets/intro-slide-2.png";
 import introSlide3 from "@/assets/intro-slide-3.png";
+import Logo from "@/components/Logo";
 
 type Slide = {
   eyebrow: string;
