@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { ArrowRight, Eye, EyeOff, Lock } from "lucide-react";
+import Logo from "@/components/Logo";
 
 const ResetPassword = () => {
   const [password, setPassword] = useState("");
@@ -52,19 +53,23 @@ const ResetPassword = () => {
   if (!isRecovery) return null;
 
   return (
-    <div className="min-h-screen bg-background flex items-center justify-center p-6">
-      <motion.div
-        initial={{ opacity: 0, y: 30 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="max-w-md w-full space-y-8"
-      >
-        <div className="text-center space-y-2">
-          <div className="w-16 h-16 gradient-warm rounded-2xl mx-auto flex items-center justify-center shadow-accent">
-            <Lock className="text-primary-foreground" size={28} />
+    <div className="min-h-screen bg-background flex flex-col">
+      <div className="px-4 sm:px-6 pt-4 sm:pt-6">
+        <Logo to="/" size="sm" />
+      </div>
+      <div className="flex-1 flex items-center justify-center p-4 sm:p-6">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="max-w-md w-full space-y-6 sm:space-y-8"
+        >
+          <div className="text-center space-y-2">
+            <div className="w-14 h-14 sm:w-16 sm:h-16 gradient-warm rounded-2xl mx-auto flex items-center justify-center shadow-accent">
+              <Lock className="text-primary-foreground" size={26} />
+            </div>
+            <h1 className="font-display text-2xl sm:text-3xl text-foreground mt-4">Set New Password</h1>
+            <p className="font-body text-sm sm:text-base text-muted-foreground">Choose a strong password for your account.</p>
           </div>
-          <h1 className="font-display text-3xl text-foreground mt-4">Set New Password</h1>
-          <p className="font-body text-muted-foreground">Choose a strong password for your account.</p>
-        </div>
 
         <form onSubmit={handleReset} className="space-y-5">
           <div className="space-y-2">
