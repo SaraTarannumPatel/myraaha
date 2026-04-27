@@ -468,6 +468,17 @@ const CareerCardDeck = () => {
           </motion.div>
         )}
       </AnimatePresence>
+
+      {/* Behavioral Blueprint */}
+      {showBlueprint && blueprint && (
+        <BlueprintCard
+          blueprint={blueprint}
+          variant="career-cards"
+          onGenerateRoadmap={onGenerateRoadmap}
+          generatingRoadmap={generatingRoadmap}
+          onClose={() => setShowBlueprint(false)}
+        />
+      )}
     </div>
   );
 };

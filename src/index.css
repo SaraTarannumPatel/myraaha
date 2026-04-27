@@ -377,3 +377,45 @@
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
+
+/* ===========================================================
+   Extra mobile pass — compass / roadmap / explore / mentor /
+   therapist / skill-stacker / project-playground / intro /
+   onboarding / landing all share these utilities.
+   =========================================================== */
+@media (max-width: 639px) {
+  /* Card content padding tightening for dense modules */
+  main [class*="CardContent"], main .pt-6 { padding-top: 1rem !important; }
+  /* Ensure interaction buttons row fits 4-up on phones */
+  main .grid.grid-cols-4 > button {
+    padding-left: 0.25rem !important;
+    padding-right: 0.25rem !important;
+    font-size: 0.7rem;
+  }
+  main .grid.grid-cols-4 > button .text-xs { font-size: 0.65rem; }
+  /* Wrap badges sensibly */
+  main .flex.flex-wrap.gap-1\.5 > * { max-width: 100%; }
+  /* Fixed/absolute popups must stay within viewport on mobile */
+  .fixed.inset-0 > div[class*="max-w-xl"],
+  .fixed.inset-0 > div[class*="max-w-2xl"],
+  .fixed.inset-0 > div[class*="max-w-3xl"] {
+    max-height: 92vh;
+    overflow-y: auto;
+  }
+  /* Landing-style hero headlines */
+  main h1.font-display, main h2.font-display { word-break: break-word; }
+  /* Tab triggers — ensure horizontal scroll instead of overflow */
+  main [role="tablist"] {
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    scrollbar-width: none;
+  }
+  main [role="tablist"]::-webkit-scrollbar { display: none; }
+  main [role="tablist"] > [role="tab"] { flex-shrink: 0; }
+}
+
+/* Tablet portrait extra polish */
+@media (min-width: 640px) and (max-width: 767px) {
+  main h1.text-4xl, main h1.text-5xl { font-size: 2rem !important; line-height: 2.4rem !important; }
+  main .grid.grid-cols-3 { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+}

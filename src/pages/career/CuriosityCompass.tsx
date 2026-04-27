@@ -19,6 +19,9 @@ import {
 import CareerCardDeck from "@/components/career/CareerCardDeck";
 import StoryModeCards from "@/components/career/StoryModeCards";
 import ChallengeModeCards from "@/components/career/ChallengeModeCards";
+import BlueprintCard from "@/components/career/BlueprintCard";
+import { buildBlueprintFromInteractions } from "@/lib/buildBlueprint";
+import { generateBlueprintRoadmap } from "@/lib/blueprintRoadmap";
 import { useUserSignals } from "@/hooks/useUserSignals";
 import { useNavigate } from "react-router-dom";
 import ModuleSearchBar from "@/components/search/ModuleSearchBar";
@@ -532,6 +535,11 @@ const CuriosityCompass = () => {
   const [peerCircles, setPeerCircles] = useState<any[]>([]);
   const [adaptivePrompts, setAdaptivePrompts] = useState<any>(null);
 
+  // Visual-mode blueprint + roadmap
+  const [visualBlueprint, setVisualBlueprint] = useState<import("@/components/career/BlueprintCard").Blueprint | null>(null);
+  const [showVisualBlueprint, setShowVisualBlueprint] = useState(false);
+  const [generatingVisualRoadmap, setGeneratingVisualRoadmap] = useState(false);
+
   useEffect(() => {
     if (user) fetchAll();
   }, [user]);
@@ -680,7 +688,44 @@ const CuriosityCompass = () => {
     }
     // Record visual mode signals
     await recordMultipleSignals("visual_mode", selectedLabels, "domain_interest", 0.7);
-    setShowReflection(true);
+
+    // Build a behavioural blueprint from the visual selections
+    const synthCards = VISUAL_ICONS.map(v => ({
+      id: v.id,
+      domain: v.label,
+      title: v.label,
+    }));
+    const synthInteractions: Record<string, "love"> = {};
+    for (const id of visualSelections) synthInteractions[id] = "love";
+    const bp = buildBlueprintFromInteractions(synthCards, synthInteractions, "visual");
+    setVisualBlueprint(bp);
+    setShowVisualBlueprint(true);
+    toast.success("Visual blueprint ready! 🎨");
+  };
+
+  const generateVisualRoadmap = async () => {
+    if (!user || !visualBlueprint) return;
+    setGeneratingVisualRoadmap(true);
+    try {
+      await generateBlueprintRoadmap(
+        user.id,
+        {
+          shortTermGoals: visualBlueprint.top_paths[0] || visualBlueprint.domains_attracted[0] || "Explore visual interests",
+          longTermGoals: visualBlueprint.ai_summary,
+          interests: [...visualBlueprint.domains_attracted, ...visualBlueprint.blind_spots].slice(0, 12),
+          skills: visualBlueprint.skills_resonated,
+          industry: visualBlueprint.domains_attracted[0] || "",
+          careerStage: "exploring",
+          areasOfFocus: visualBlueprint.top_paths.slice(0, 8),
+          sourceContext: "visual_mode_blueprint",
+        },
+        `Personalized Roadmap — ${visualBlueprint.top_paths[0] || "Your Visual Path"}`,
+        navigate,
+      );
+    } catch (e) {
+      console.error(e);
+      toast.error("Could not generate roadmap.");
+    } finally { setGeneratingVisualRoadmap(false); }
   };
 
   // --- Reflection / Journal ---
@@ -1257,15 +1302,25 @@ const CuriosityCompass = () => {
                         );
                       })}
                     </div>
-                    {visualSelections.length >= 3 && (
-                      <div className="mt-6 text-center">
-                        <Button onClick={finishVisualMode}>
-                          Continue with {visualSelections.length} selections <ArrowRight size={14} className="ml-2" />
+                    {visualSelections.length >= 3 && !showVisualBlueprint && (
+                      <div className="mt-6 flex flex-col sm:flex-row items-center justify-center gap-2">
+                        <Button onClick={finishVisualMode} className="w-full sm:w-auto">
+                          <Brain size={14} className="mr-2" /> Analyze My Choices ({visualSelections.length})
                         </Button>
                       </div>
                     )}
                   </CardContent>
                 </Card>
+
+                {showVisualBlueprint && visualBlueprint && (
+                  <BlueprintCard
+                    blueprint={visualBlueprint}
+                    variant="visual"
+                    onGenerateRoadmap={generateVisualRoadmap}
+                    generatingRoadmap={generatingVisualRoadmap}
+                    onClose={() => setShowVisualBlueprint(false)}
+                  />
+                )}
               </>
             ) : mode === "story" ? (
               /* Story Mode — career story cards (95% of this section) */
