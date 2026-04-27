@@ -114,6 +114,7 @@ const ResetPassword = () => {
           </Button>
         </form>
       </motion.div>
+      </div>
     </div>
   );
 };
