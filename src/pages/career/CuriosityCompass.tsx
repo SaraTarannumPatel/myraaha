@@ -688,7 +688,44 @@ const CuriosityCompass = () => {
     }
     // Record visual mode signals
     await recordMultipleSignals("visual_mode", selectedLabels, "domain_interest", 0.7);
-    setShowReflection(true);
+
+    // Build a behavioural blueprint from the visual selections
+    const synthCards = VISUAL_ICONS.map(v => ({
+      id: v.id,
+      domain: v.label,
+      title: v.label,
+    }));
+    const synthInteractions: Record<string, "love"> = {};
+    for (const id of visualSelections) synthInteractions[id] = "love";
+    const bp = buildBlueprintFromInteractions(synthCards, synthInteractions, "visual");
+    setVisualBlueprint(bp);
+    setShowVisualBlueprint(true);
+    toast.success("Visual blueprint ready! 🎨");
+  };
+
+  const generateVisualRoadmap = async () => {
+    if (!user || !visualBlueprint) return;
+    setGeneratingVisualRoadmap(true);
+    try {
+      await generateBlueprintRoadmap(
+        user.id,
+        {
+          shortTermGoals: visualBlueprint.top_paths[0] || visualBlueprint.domains_attracted[0] || "Explore visual interests",
+          longTermGoals: visualBlueprint.ai_summary,
+          interests: [...visualBlueprint.domains_attracted, ...visualBlueprint.blind_spots].slice(0, 12),
+          skills: visualBlueprint.skills_resonated,
+          industry: visualBlueprint.domains_attracted[0] || "",
+          careerStage: "exploring",
+          areasOfFocus: visualBlueprint.top_paths.slice(0, 8),
+          sourceContext: "visual_mode_blueprint",
+        },
+        `Personalized Roadmap — ${visualBlueprint.top_paths[0] || "Your Visual Path"}`,
+        navigate,
+      );
+    } catch (e) {
+      console.error(e);
+      toast.error("Could not generate roadmap.");
+    } finally { setGeneratingVisualRoadmap(false); }
   };
 
   // --- Reflection / Journal ---
