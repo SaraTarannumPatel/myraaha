@@ -532,6 +532,11 @@ const CuriosityCompass = () => {
   const [peerCircles, setPeerCircles] = useState<any[]>([]);
   const [adaptivePrompts, setAdaptivePrompts] = useState<any>(null);
 
+  // Visual-mode blueprint + roadmap
+  const [visualBlueprint, setVisualBlueprint] = useState<import("@/components/career/BlueprintCard").Blueprint | null>(null);
+  const [showVisualBlueprint, setShowVisualBlueprint] = useState(false);
+  const [generatingVisualRoadmap, setGeneratingVisualRoadmap] = useState(false);
+
   useEffect(() => {
     if (user) fetchAll();
   }, [user]);
