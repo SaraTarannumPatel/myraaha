@@ -97,12 +97,8 @@ const IntroSlides = () => {
 
       {/* Header */}
       <header className="relative z-10 flex items-center justify-between px-5 sm:px-8 lg:px-14 pt-5 sm:pt-6">
-        <div className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-xl bg-primary flex items-center justify-center shadow-soft">
-            <Sparkles className="w-4 h-4 text-accent" />
-          </div>
-          <span className="font-display text-lg text-primary tracking-tight">MyRaaha</span>
-        </div>
+        <Logo to={null} size="sm" />
+
         <button
           onClick={handleSkip}
           className="font-body text-sm text-foreground/70 hover:text-primary transition-colors px-3 py-1.5 rounded-full hover:bg-accent/40"
