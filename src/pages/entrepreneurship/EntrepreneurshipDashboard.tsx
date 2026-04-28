@@ -7,6 +7,7 @@ import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
+import StreakBadge from "@/components/shared/StreakBadge";
 import {
   Lightbulb, Wrench, Zap, Rocket, Bot, Globe, Users, ArrowRight, TrendingUp,
   Target, Clock, BookOpen, Trophy, Bell, Brain, Heart, Sparkles, LifeBuoy,
