@@ -44,6 +44,39 @@ export type Database = {
         }
         Relationships: []
       }
+      ai_cache: {
+        Row: {
+          cache_key: string
+          created_at: string
+          id: string
+          inputs_hash: string | null
+          module: string
+          payload: Json
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          cache_key: string
+          created_at?: string
+          id?: string
+          inputs_hash?: string | null
+          module: string
+          payload?: Json
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          cache_key?: string
+          created_at?: string
+          id?: string
+          inputs_hash?: string | null
+          module?: string
+          payload?: Json
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       assessment_conclusions: {
         Row: {
           archetype: string | null
