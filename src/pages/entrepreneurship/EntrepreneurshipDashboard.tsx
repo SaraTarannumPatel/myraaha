@@ -7,6 +7,7 @@ import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
+import StreakBadge from "@/components/shared/StreakBadge";
 import {
   Lightbulb, Wrench, Zap, Rocket, Bot, Globe, Users, ArrowRight, TrendingUp,
   Target, Clock, BookOpen, Trophy, Bell, Brain, Heart, Sparkles, LifeBuoy,
@@ -376,9 +377,12 @@ const EntrepreneurshipDashboard = () => {
     <div className="space-y-6">
       {/* Hero Greeting + AI Nudge */}
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-2">
-        <h1 className="font-display text-3xl md:text-4xl text-foreground">
-          {greeting()}, <em className="text-primary">{profile?.full_name || "Founder"}</em>
-        </h1>
+        <div className="flex items-start justify-between gap-3 flex-wrap">
+          <h1 className="font-display text-3xl md:text-4xl text-foreground">
+            {greeting()}, <em className="text-primary">{profile?.full_name || "Founder"}</em>
+          </h1>
+          <StreakBadge />
+        </div>
         <p className="font-body text-muted-foreground">
           Here's where your startup journey takes shape. Let's see where you're headed and what's next.
         </p>
