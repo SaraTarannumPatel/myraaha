@@ -13,6 +13,27 @@ import {
 } from "lucide-react";
 import Logo from "@/components/Logo";
 
+// Paths surfaced as the mobile bottom navbar — also kept in the side nav on desktop.
+const MOBILE_BOTTOM_NAV_PATHS = new Set([
+  "/dashboard/curiosity-compass",
+  "/dashboard/roadmap",
+  "/dashboard/explore",
+  "/dashboard/project-playground",
+  "/dashboard/job-matching",
+  "/dashboard/peer-circles",
+  "/dashboard/career-therapist",
+]);
+
+const mobileBottomNav = [
+  { label: "Compass", icon: Compass, path: "/dashboard/curiosity-compass" },
+  { label: "Roadmap", icon: Map, path: "/dashboard/roadmap" },
+  { label: "Explore", icon: Sparkles, path: "/dashboard/explore" },
+  { label: "Projects", icon: FolderKanban, path: "/dashboard/project-playground" },
+  { label: "Jobs", icon: Briefcase, path: "/dashboard/job-matching" },
+  { label: "Peers", icon: Users, path: "/dashboard/peer-circles" },
+  { label: "Therapy", icon: Heart, path: "/dashboard/career-therapist" },
+];
+
 const careerNav = [
   { label: "Dashboard", icon: LayoutDashboard, path: "/dashboard", color: "blue" },
   { label: "Curiosity Compass", icon: Compass, path: "/dashboard/curiosity-compass", color: "blue" },
