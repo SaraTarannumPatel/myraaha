@@ -22,6 +22,7 @@ import CommunityFeedPreview from "@/components/dashboard/CommunityFeedPreview";
 import JobMatchPreview from "@/components/dashboard/JobMatchPreview";
 import MoodCheckIn from "@/components/dashboard/MoodCheckIn";
 import DomainAffinityWidget from "@/components/dashboard/DomainAffinityWidget";
+import StreakBadge from "@/components/shared/StreakBadge";
 
 const JOURNEY_PHASES = [
   { id: "discovery", label: "Discovery", icon: Compass, description: "Exploring interests" },
@@ -34,6 +35,8 @@ const JOURNEY_PHASES = [
 const careerQuickActions = [
   { label: "Curiosity Compass", icon: Compass, path: "/dashboard/curiosity-compass", color: "bg-blue/10 text-blue", desc: "Explore interests" },
   { label: "AI Roadmap", icon: Map, path: "/dashboard/roadmap", color: "bg-indigo/10 text-indigo", desc: "Plan your path" },
+  { label: "Career Blueprint", icon: Sparkles, path: "/dashboard/blueprint", color: "bg-warmth/10 text-warmth", desc: "One-click plan" },
+  { label: "Browse Taxonomy", icon: BookOpen, path: "/dashboard/taxonomy", color: "bg-success/10 text-success", desc: "Search 1000s of items" },
   { label: "SelfGraph™", icon: Brain, path: "/dashboard/selfgraph", color: "bg-terracotta/10 text-terracotta", desc: "Know yourself" },
   { label: "Living Resume", icon: FileText, path: "/dashboard/living-resume", color: "bg-primary/10 text-primary", desc: "Track growth" },
   { label: "Career Coach", icon: Bot, path: "/dashboard/career-coach", color: "bg-maroon/10 text-maroon", desc: "Get guidance" },
