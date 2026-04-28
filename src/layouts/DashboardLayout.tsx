@@ -13,6 +13,27 @@ import {
 } from "lucide-react";
 import Logo from "@/components/Logo";
 
+// Paths surfaced as the mobile bottom navbar — also kept in the side nav on desktop.
+const MOBILE_BOTTOM_NAV_PATHS = new Set([
+  "/dashboard/curiosity-compass",
+  "/dashboard/roadmap",
+  "/dashboard/explore",
+  "/dashboard/project-playground",
+  "/dashboard/job-matching",
+  "/dashboard/peer-circles",
+  "/dashboard/career-therapist",
+]);
+
+const mobileBottomNav = [
+  { label: "Compass", icon: Compass, path: "/dashboard/curiosity-compass" },
+  { label: "Roadmap", icon: Map, path: "/dashboard/roadmap" },
+  { label: "Explore", icon: Sparkles, path: "/dashboard/explore" },
+  { label: "Projects", icon: FolderKanban, path: "/dashboard/project-playground" },
+  { label: "Jobs", icon: Briefcase, path: "/dashboard/job-matching" },
+  { label: "Peers", icon: Users, path: "/dashboard/peer-circles" },
+  { label: "Therapy", icon: Heart, path: "/dashboard/career-therapist" },
+];
+
 const careerNav = [
   { label: "Dashboard", icon: LayoutDashboard, path: "/dashboard", color: "blue" },
   { label: "Curiosity Compass", icon: Compass, path: "/dashboard/curiosity-compass", color: "blue" },
@@ -108,7 +129,13 @@ const DashboardLayout = () => {
     );
   };
 
-  const NavContent = () => (
+  // On mobile, hide the 7 items that are surfaced in the bottom navbar
+  // to avoid duplication (only filtered when rendering the mobile sheet).
+  const NavContent = ({ isMobile = false }: { isMobile?: boolean }) => {
+    const filterMobile = (items: typeof careerNav) =>
+      isMobile ? items.filter((i) => !MOBILE_BOTTOM_NAV_PATHS.has(i.path)) : items;
+
+    return (
     <div className="flex flex-col h-full">
       <div className="p-5 border-b border-border">
         <Logo to="/dashboard" size="sm" />
@@ -123,7 +150,7 @@ const DashboardLayout = () => {
             <p className="font-body text-[10px] uppercase tracking-wider text-blue px-3 pt-2 pb-1 font-semibold">
               Career Tools
             </p>
-            {careerNav.filter(item => !isBoth || item.path !== "/dashboard").map(item => renderNavItem(item, "career"))}
+            {filterMobile(careerNav).filter(item => !isBoth || item.path !== "/dashboard").map(item => renderNavItem(item, "career"))}
           </>
         )}
 
@@ -179,7 +206,8 @@ const DashboardLayout = () => {
         </button>
       </div>
     </div>
-  );
+    );
+  };
 
   return (
     <div className="min-h-screen bg-background flex overflow-x-hidden">
@@ -202,22 +230,41 @@ const DashboardLayout = () => {
               </SheetTrigger>
               <SheetContent side="left" className="w-72 p-0">
                 <SheetTitle className="sr-only">Navigation</SheetTitle>
-                <NavContent />
+                <NavContent isMobile />
               </SheetContent>
             </Sheet>
           </div>
         </div>
       </div>
 
-      <main className="flex-1 min-w-0 lg:ml-64 mt-14 lg:mt-0">
+      <main className="flex-1 min-w-0 lg:ml-64 mt-14 lg:mt-0 pb-20 lg:pb-0">
         <div className="px-3 sm:px-5 md:px-6 lg:px-8 py-4 sm:py-5 md:py-6 lg:py-8 max-w-6xl mx-auto min-w-0 overflow-x-hidden responsive-page">
           <Outlet />
         </div>
       </main>
 
-      {/* Onboarding reminder popup for skipped steps */}
+      {/* Mobile bottom navbar — visible <lg only */}
+      <nav className="lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-card/95 backdrop-blur-md border-t border-border">
+        <div className="grid grid-cols-7 h-16">
+          {mobileBottomNav.map((item) => {
+            const isActive = location.pathname === item.path;
+            return (
+              <Link
+                key={item.path}
+                to={item.path}
+                className={`flex flex-col items-center justify-center gap-0.5 text-[10px] transition-colors ${
+                  isActive ? "text-primary" : "text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                <item.icon size={18} />
+                <span className="truncate px-1">{item.label}</span>
+              </Link>
+            );
+          })}
+        </div>
+      </nav>
+
       <OnboardingReminderPopup />
-      {/* Real-time reward unlock celebration popups */}
       <RewardCelebrationManager />
     </div>
   );

@@ -737,6 +737,24 @@ const Roadmap = () => {
                               ))}
                             </div>
                           )}
+
+                          {suggestion.roadmap_data?.live_resources?.length > 0 && (
+                            <div className="mt-3 space-y-1 border-l-2 border-primary/30 pl-2">
+                              <p className="text-[10px] uppercase tracking-wide text-primary font-semibold">Live resources</p>
+                              {suggestion.roadmap_data.live_resources.slice(0, 3).map((r: any, k: number) => (
+                                <a
+                                  key={k}
+                                  href={r.url}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="text-xs text-primary hover:underline flex items-start gap-1 break-words"
+                                >
+                                  <ExternalLink size={10} className="mt-0.5 shrink-0" />
+                                  <span className="min-w-0 break-words">{r.title}</span>
+                                </a>
+                              ))}
+                            </div>
+                          )}
                         </div>
                         <div className="flex flex-col gap-2 shrink-0">
                           <Button size="sm" onClick={() => acceptSuggestedRoadmap(suggestion)} disabled={generating} className="gap-1">
