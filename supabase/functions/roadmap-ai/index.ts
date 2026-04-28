@@ -5,6 +5,59 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
+// Firecrawl helper for live grounding
+const FIRECRAWL_V2 = "https://api.firecrawl.dev/v2";
+async function firecrawlSearch(query: string, limit = 4): Promise<any[]> {
+  const apiKey = Deno.env.get("FIRECRAWL_API_KEY");
+  if (!apiKey) return [];
+  try {
+    const res = await fetch(`${FIRECRAWL_V2}/search`, {
+      method: "POST",
+      headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" },
+      body: JSON.stringify({ query, limit, country: "in", lang: "en" }),
+    });
+    if (!res.ok) return [];
+    const data = await res.json();
+    const arr = data?.data || data?.web?.results || data?.results || [];
+    return (arr as any[])
+      .map((r) => ({
+        url: r.url || r.link || "",
+        title: (r.title || r.name || "").slice(0, 120),
+        description: (r.description || r.snippet || r.summary || "").slice(0, 200),
+      }))
+      .filter((r) => r.url && r.title);
+  } catch {
+    return [];
+  }
+}
+
+async function gatherLiveContext(ctx: any): Promise<{ query: string; results: any[] }[]> {
+  const queries: string[] = [];
+  const focus = (ctx.areasOfFocus || []).filter(Boolean).slice(0, 2);
+  const skills = (ctx.skills || []).filter(Boolean).slice(0, 2);
+  const interests = (ctx.interests || []).filter(Boolean).slice(0, 2);
+
+  focus.forEach((r: string) =>
+    queries.push(`how to become a ${r} in India 2026 step by step skills certifications salary INR`)
+  );
+  skills.forEach((s: string) =>
+    queries.push(`best free course to learn ${s} 2026 India site:coursera.org OR site:youtube.com OR site:nptel.ac.in`)
+  );
+  interests.forEach((i: string) =>
+    queries.push(`career paths in ${i} India 2026 entry level roles`)
+  );
+  if (ctx.shortTermGoals) {
+    queries.push(`${ctx.shortTermGoals} actionable plan India 2026`);
+  }
+
+  const capped = queries.slice(0, 5);
+  if (capped.length === 0) return [];
+  const results = await Promise.all(
+    capped.map(async (q) => ({ query: q, results: await firecrawlSearch(q, 3) }))
+  );
+  return results.filter((r) => r.results.length > 0);
+}
+
 serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
 
@@ -15,11 +68,22 @@ serve(async (req) => {
 
     let systemPrompt = "";
     let userPrompt = "";
+    let liveContext: { query: string; results: any[] }[] = [];
 
     if (type === "generate_roadmap") {
-      systemPrompt = `You are an AI career roadmap architect. Create a comprehensive, personalized roadmap with actionable steps across 5 phases: Exploration, Learning, Practice, Connection, and Opportunity. Each step should be specific, achievable, and build toward the user's goals.
+      // Live web grounding
+      liveContext = await gatherLiveContext(context);
 
-Return JSON: {
+      systemPrompt = `You are MyRaaha's AI career roadmap architect for India (Tier 2/3/4 friendly). Build a comprehensive, hyper-personalized roadmap across 5 phases: Exploration, Learning, Practice, Connection, Opportunity.
+
+Hard rules:
+- Use the LIVE_WEB_CONTEXT for real, current course names, certifications, programs and platforms. Cite the URL in step.resource_url when applicable.
+- All money figures in INR.
+- Each step must be specific, achievable, and time-boxed (estimated_duration).
+- Match the user's stated career stage and behavioral signals.
+- Voice: warm, jargon-free, Gen Z friendly.
+
+Return strict JSON: {
   "title": string,
   "description": string,
   "phases": [
@@ -33,22 +97,29 @@ Return JSON: {
           "priority": "high" | "medium" | "low",
           "skill_tags": string[],
           "estimated_duration": string,
-          "action_type": "explore" | "learn" | "build" | "connect" | "apply"
+          "action_type": "explore" | "learn" | "build" | "connect" | "apply",
+          "resource_url": string | null,
+          "resource_title": string | null
         }
       ]
     }
   ],
   "skill_gaps": [{ "skill": string, "current_level": number, "target_level": number, "importance": string }],
   "milestones": [{ "title": string, "phase": string, "description": string }],
-  "estimated_timeline": string
+  "estimated_timeline": string,
+  "live_resources_used": [{ "title": string, "url": string }]
 }`;
-      userPrompt = `Create a career roadmap for:
-Goals: Short-term: ${context.shortTermGoals || "Not specified"}. Long-term: ${context.longTermGoals || "Not specified"}.
-Interests: ${JSON.stringify(context.interests || [])}.
-Current Skills: ${JSON.stringify(context.skills || [])}.
-Industry: ${context.industry || "Not specified"}.
-Career Stage: ${context.careerStage || "exploring"}.
-Areas of Focus: ${JSON.stringify(context.areasOfFocus || [])}.`;
+      userPrompt = `USER_CONTEXT:
+Goals — Short-term: ${context.shortTermGoals || "Not specified"} | Long-term: ${context.longTermGoals || "Not specified"}
+Interests: ${JSON.stringify(context.interests || [])}
+Current Skills: ${JSON.stringify(context.skills || [])}
+Industry: ${context.industry || "Not specified"}
+Career Stage: ${context.careerStage || "exploring"}
+Areas of Focus: ${JSON.stringify(context.areasOfFocus || [])}
+Top Compass Signals: ${JSON.stringify(context.topSignals || [])}
+
+LIVE_WEB_CONTEXT (real, current — use for grounding & resource_url citations):
+${JSON.stringify(liveContext, null, 2)}`;
     } else if (type === "suggest_next_steps") {
       systemPrompt = `You are an adaptive career coach. Based on the user's current roadmap progress and behavior patterns, suggest the 3-5 most impactful next steps. Consider their completed tasks, skipped items, and current phase.
 
