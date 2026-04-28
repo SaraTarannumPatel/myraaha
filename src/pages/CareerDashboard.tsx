@@ -261,10 +261,13 @@ const CareerDashboard = () => {
       })()}
 
       {/* Welcome Header */}
-      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-1">
-        <h1 className="font-display text-3xl md:text-4xl text-foreground">
-          {greeting()}, <em className="text-primary">{profile?.full_name || "Explorer"}</em>
-        </h1>
+      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-2">
+        <div className="flex items-start justify-between gap-3 flex-wrap">
+          <h1 className="font-display text-3xl md:text-4xl text-foreground">
+            {greeting()}, <em className="text-primary">{profile?.full_name || "Explorer"}</em>
+          </h1>
+          <StreakBadge />
+        </div>
         <p className="font-body text-muted-foreground">
           Welcome back! Here's where you're at — let's keep building.
         </p>
