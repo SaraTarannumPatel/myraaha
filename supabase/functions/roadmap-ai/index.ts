@@ -217,6 +217,9 @@ Time taken: ${context.timeTaken || "unknown"}.`;
       throw new Error("Unknown type: " + type);
     }
 
+    // Use stronger reasoning model for full roadmap generation, faster for utility ops.
+    const model = type === "generate_roadmap" ? "google/gemini-2.5-pro" : "google/gemini-2.5-flash";
+
     const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
       headers: {
@@ -224,12 +227,12 @@ Time taken: ${context.timeTaken || "unknown"}.`;
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: "google/gemini-3-flash-preview",
+        model,
         messages: [
           { role: "system", content: systemPrompt },
           { role: "user", content: userPrompt },
         ],
-        temperature: 0.7,
+        response_format: { type: "json_object" },
       }),
     });
 
@@ -253,12 +256,18 @@ Time taken: ${context.timeTaken || "unknown"}.`;
 
     const data = await response.json();
     const content = data.choices?.[0]?.message?.content || "";
-    let parsed;
+    let parsed: any;
     try {
       const jsonMatch = content.match(/\{[\s\S]*\}/);
       parsed = jsonMatch ? JSON.parse(jsonMatch[0]) : { raw: content };
     } catch {
       parsed = { raw: content };
+    }
+
+    // Attach grounding metadata so the client can show "based on N live sources"
+    if (type === "generate_roadmap") {
+      parsed.grounded_with = liveContext.length;
+      parsed.live_context = liveContext;
     }
 
     return new Response(JSON.stringify(parsed), {
