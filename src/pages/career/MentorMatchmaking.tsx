@@ -103,6 +103,9 @@ const MentorMatchmaking = () => {
   const [filterDomain, setFilterDomain] = useState("all");
   const [filterAvailability, setFilterAvailability] = useState("all");
   const [filterFocus, setFilterFocus] = useState("all");
+  const [filterExperience, setFilterExperience] = useState("all"); // 0-3 / 4-7 / 8-12 / 13+
+  const [filterMinRating, setFilterMinRating] = useState("all"); // 0 / 3.5 / 4 / 4.5
+  const [filterVerifiedOnly, setFilterVerifiedOnly] = useState(false);
   const [selectedMentor, setSelectedMentor] = useState<Mentor | null>(null);
   const [viewingMentor, setViewingMentor] = useState<Mentor | null>(null);
   const [requestMessage, setRequestMessage] = useState("");
@@ -408,7 +411,17 @@ const MentorMatchmaking = () => {
     const matchDomain = filterDomain === "all" || (m.industries || []).some(i => i.toLowerCase() === filterDomain.toLowerCase());
     const matchAvailability = filterAvailability === "all" || m.availability === filterAvailability;
     const matchFocus = filterFocus === "all" || (m.focus_areas || []).some(f => f.toLowerCase().includes(filterFocus.toLowerCase()));
-    return matchSearch && matchDomain && matchAvailability && matchFocus;
+    const yrs = m.experience_years || 0;
+    const matchExp =
+      filterExperience === "all" ||
+      (filterExperience === "0-3" && yrs <= 3) ||
+      (filterExperience === "4-7" && yrs >= 4 && yrs <= 7) ||
+      (filterExperience === "8-12" && yrs >= 8 && yrs <= 12) ||
+      (filterExperience === "13+" && yrs >= 13);
+    const minR = filterMinRating === "all" ? 0 : parseFloat(filterMinRating);
+    const matchRating = (m.rating || 0) >= minR;
+    const matchVerified = !filterVerifiedOnly || !!m.is_verified;
+    return matchSearch && matchDomain && matchAvailability && matchFocus && matchExp && matchRating && matchVerified;
   });
 
   const getRequestStatus = (mentorId: string) => requests.find(r => r.mentor_id === mentorId);
@@ -538,6 +551,43 @@ const MentorMatchmaking = () => {
                   <select value={filterFocus} onChange={e => setFilterFocus(e.target.value)} className="px-3 py-2 rounded-lg border border-input bg-background text-sm">
                     {focuses.map(f => <option key={f} value={f}>{f === "all" ? "All Focus Areas" : f}</option>)}
                   </select>
+                  <select value={filterExperience} onChange={e => setFilterExperience(e.target.value)} className="px-3 py-2 rounded-lg border border-input bg-background text-sm">
+                    <option value="all">Any Experience</option>
+                    <option value="0-3">0–3 yrs</option>
+                    <option value="4-7">4–7 yrs</option>
+                    <option value="8-12">8–12 yrs</option>
+                    <option value="13+">13+ yrs</option>
+                  </select>
+                  <select value={filterMinRating} onChange={e => setFilterMinRating(e.target.value)} className="px-3 py-2 rounded-lg border border-input bg-background text-sm">
+                    <option value="all">Any Rating</option>
+                    <option value="3.5">3.5+ ★</option>
+                    <option value="4">4.0+ ★</option>
+                    <option value="4.5">4.5+ ★</option>
+                  </select>
+                  <label className="flex items-center gap-1.5 px-3 py-2 rounded-lg border border-input bg-background text-sm cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={filterVerifiedOnly}
+                      onChange={e => setFilterVerifiedOnly(e.target.checked)}
+                    />
+                    Verified only
+                  </label>
+                  {(filterDomain !== "all" || filterAvailability !== "all" || filterFocus !== "all" || filterExperience !== "all" || filterMinRating !== "all" || filterVerifiedOnly) && (
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      onClick={() => {
+                        setFilterDomain("all");
+                        setFilterAvailability("all");
+                        setFilterFocus("all");
+                        setFilterExperience("all");
+                        setFilterMinRating("all");
+                        setFilterVerifiedOnly(false);
+                      }}
+                    >
+                      Clear filters
+                    </Button>
+                  )}
                 </div>
               </div>
             </CardContent>
