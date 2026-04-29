@@ -109,6 +109,10 @@ const AICareerTherapist = () => {
   const [userAchievements, setUserAchievements] = useState<any[]>([]);
   const [energyZones, setEnergyZones] = useState<any[]>([]);
   const [journalEntries, setJournalEntries] = useState<any[]>([]);
+  const [userInterests, setUserInterests] = useState<any[]>([]);
+  const [userSignals, setUserSignals] = useState<any[]>([]);
+  const [activeRoadmap, setActiveRoadmap] = useState<any>(null);
+  const [recentMentorActivity, setRecentMentorActivity] = useState<any[]>([]);
 
   // Tool states
   const [breathingExercise, setBreathingExercise] = useState<any>(null);
@@ -134,13 +138,17 @@ const AICareerTherapist = () => {
   const loadData = useCallback(async () => {
     if (!user) return;
     setLoading(true);
-    const [sessRes, checkinRes, skillsRes, achieveRes, energyRes, journalRes] = await Promise.all([
+    const [sessRes, checkinRes, skillsRes, achieveRes, energyRes, journalRes, interestsRes, signalsRes, roadmapRes, mentorIxRes] = await Promise.all([
       supabase.from("coaching_sessions").select("*").eq("user_id", user.id).order("updated_at", { ascending: false }).limit(20),
       supabase.from("coaching_checkins").select("*").eq("user_id", user.id).order("created_at", { ascending: false }).limit(30),
       supabase.from("skill_items").select("name, category, proficiency_level").eq("user_id", user.id).limit(50),
       supabase.from("achievements").select("title, achievement_type, earned_at").eq("user_id", user.id).order("earned_at", { ascending: false }).limit(20),
       supabase.from("energy_zones").select("domain, energy_level, mood_before, mood_after, recorded_at").eq("user_id", user.id).order("recorded_at", { ascending: false }).limit(20),
       supabase.from("journal_entries").select("title, mood, tags, created_at").eq("user_id", user.id).order("created_at", { ascending: false }).limit(10),
+      supabase.from("interests").select("name, category, intensity").eq("user_id", user.id).limit(40),
+      supabase.from("user_signals").select("signal_type, signal_value, source_module, created_at").eq("user_id", user.id).order("created_at", { ascending: false }).limit(40),
+      supabase.from("roadmaps").select("title, description, current_phase, short_term_goals, long_term_goals, skill_gaps, created_at").eq("user_id", user.id).eq("is_active", true).maybeSingle(),
+      supabase.from("mentorship_interactions").select("interaction_type, mentor_id, created_at").eq("user_id", user.id).order("created_at", { ascending: false }).limit(10),
     ]);
     setSessions(sessRes.data || []);
     setCheckins(checkinRes.data || []);
@@ -148,6 +156,10 @@ const AICareerTherapist = () => {
     setUserAchievements(achieveRes.data || []);
     setEnergyZones(energyRes.data || []);
     setJournalEntries(journalRes.data || []);
+    setUserInterests(interestsRes.data || []);
+    setUserSignals(signalsRes.data || []);
+    setActiveRoadmap(roadmapRes.data || null);
+    setRecentMentorActivity(mentorIxRes.data || []);
     setLoading(false);
   }, [user]);
 
