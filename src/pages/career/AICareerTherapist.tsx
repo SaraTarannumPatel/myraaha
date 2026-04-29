@@ -189,17 +189,30 @@ const AICareerTherapist = () => {
     name: profile?.full_name || "friend",
     intent: profile?.active_intent || "career",
     userType: profile?.user_type || "student",
+    careerStage: profile?.career_stage || "exploring",
+    industry: profile?.industry || null,
+    shortTermGoals: profile?.short_term_goals || null,
+    longTermGoals: profile?.long_term_goals || null,
     recentMoods: checkins.slice(0, 5).map((c: any) => c.mood),
     challenges: profile?.areas_of_focus?.join(", ") || "not specified",
     stressLevel: checkins[0]?.energy ? (checkins[0].energy < 4 ? "high" : checkins[0].energy < 7 ? "moderate" : "low") : "unknown",
+    interests: userInterests.map(i => ({ name: i.name, category: i.category, intensity: i.intensity })),
+    topSignals: userSignals.slice(0, 15).map(s => ({ type: s.signal_type, value: s.signal_value, source: s.source_module })),
     skills: userSkills.map(s => ({ name: s.name, category: s.category, level: s.proficiency_level })),
     recentAchievements: userAchievements.slice(0, 5).map(a => ({ title: a.title, type: a.achievement_type })),
+    activeRoadmap: activeRoadmap ? {
+      title: activeRoadmap.title, phase: activeRoadmap.current_phase,
+      shortTerm: activeRoadmap.short_term_goals, longTerm: activeRoadmap.long_term_goals,
+      skillGaps: activeRoadmap.skill_gaps,
+    } : null,
+    mentorActivity: recentMentorActivity.slice(0, 5),
     energyLevel: checkins[0]?.energy || "unknown",
     energyPatterns: energyZones.slice(0, 5).map(e => ({ domain: e.domain, energy: e.energy_level, moodBefore: e.mood_before, moodAfter: e.mood_after })),
     recentJournals: journalEntries.slice(0, 3).map(j => ({ title: j.title, mood: j.mood, tags: j.tags })),
     checkins: checkins.slice(0, 10).map((c: any) => ({ mood: c.mood, energy: c.energy, confidence: c.confidence, reflection: c.reflection, date: c.created_at })),
     daysSinceActive: checkins.length > 0 ? Math.floor((Date.now() - new Date(checkins[0].created_at).getTime()) / 86400000) : "unknown",
-  }), [profile, checkins, userSkills, userAchievements, energyZones, journalEntries]);
+    exploreContext: exploreCtxRef.current || null,
+  }), [profile, checkins, userSkills, userAchievements, energyZones, journalEntries, userInterests, userSignals, activeRoadmap, recentMentorActivity]);
 
   const sendMessage = async (text?: string) => {
     const msg = text || input.trim();
