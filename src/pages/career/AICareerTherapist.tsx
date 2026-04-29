@@ -109,6 +109,10 @@ const AICareerTherapist = () => {
   const [userAchievements, setUserAchievements] = useState<any[]>([]);
   const [energyZones, setEnergyZones] = useState<any[]>([]);
   const [journalEntries, setJournalEntries] = useState<any[]>([]);
+  const [userInterests, setUserInterests] = useState<any[]>([]);
+  const [userSignals, setUserSignals] = useState<any[]>([]);
+  const [activeRoadmap, setActiveRoadmap] = useState<any>(null);
+  const [recentMentorActivity, setRecentMentorActivity] = useState<any[]>([]);
 
   // Tool states
   const [breathingExercise, setBreathingExercise] = useState<any>(null);
@@ -134,13 +138,17 @@ const AICareerTherapist = () => {
   const loadData = useCallback(async () => {
     if (!user) return;
     setLoading(true);
-    const [sessRes, checkinRes, skillsRes, achieveRes, energyRes, journalRes] = await Promise.all([
+    const [sessRes, checkinRes, skillsRes, achieveRes, energyRes, journalRes, interestsRes, signalsRes, roadmapRes, mentorIxRes] = await Promise.all([
       supabase.from("coaching_sessions").select("*").eq("user_id", user.id).order("updated_at", { ascending: false }).limit(20),
       supabase.from("coaching_checkins").select("*").eq("user_id", user.id).order("created_at", { ascending: false }).limit(30),
       supabase.from("skill_items").select("name, category, proficiency_level").eq("user_id", user.id).limit(50),
       supabase.from("achievements").select("title, achievement_type, earned_at").eq("user_id", user.id).order("earned_at", { ascending: false }).limit(20),
       supabase.from("energy_zones").select("domain, energy_level, mood_before, mood_after, recorded_at").eq("user_id", user.id).order("recorded_at", { ascending: false }).limit(20),
       supabase.from("journal_entries").select("title, mood, tags, created_at").eq("user_id", user.id).order("created_at", { ascending: false }).limit(10),
+      supabase.from("interests").select("name, category, intensity").eq("user_id", user.id).limit(40),
+      supabase.from("user_signals").select("signal_type, signal_value, source_module, created_at").eq("user_id", user.id).order("created_at", { ascending: false }).limit(40),
+      supabase.from("roadmaps").select("title, description, current_phase, short_term_goals, long_term_goals, skill_gaps, created_at").eq("user_id", user.id).eq("is_active", true).maybeSingle(),
+      supabase.from("mentorship_interactions").select("interaction_type, mentor_id, created_at").eq("user_id", user.id).order("created_at", { ascending: false }).limit(10),
     ]);
     setSessions(sessRes.data || []);
     setCheckins(checkinRes.data || []);
@@ -148,6 +156,10 @@ const AICareerTherapist = () => {
     setUserAchievements(achieveRes.data || []);
     setEnergyZones(energyRes.data || []);
     setJournalEntries(journalRes.data || []);
+    setUserInterests(interestsRes.data || []);
+    setUserSignals(signalsRes.data || []);
+    setActiveRoadmap(roadmapRes.data || null);
+    setRecentMentorActivity(mentorIxRes.data || []);
     setLoading(false);
   }, [user]);
 
@@ -177,17 +189,30 @@ const AICareerTherapist = () => {
     name: profile?.full_name || "friend",
     intent: profile?.active_intent || "career",
     userType: profile?.user_type || "student",
+    careerStage: profile?.career_stage || "exploring",
+    industry: profile?.industry || null,
+    shortTermGoals: profile?.short_term_goals || null,
+    longTermGoals: profile?.long_term_goals || null,
     recentMoods: checkins.slice(0, 5).map((c: any) => c.mood),
     challenges: profile?.areas_of_focus?.join(", ") || "not specified",
     stressLevel: checkins[0]?.energy ? (checkins[0].energy < 4 ? "high" : checkins[0].energy < 7 ? "moderate" : "low") : "unknown",
+    interests: userInterests.map(i => ({ name: i.name, category: i.category, intensity: i.intensity })),
+    topSignals: userSignals.slice(0, 15).map(s => ({ type: s.signal_type, value: s.signal_value, source: s.source_module })),
     skills: userSkills.map(s => ({ name: s.name, category: s.category, level: s.proficiency_level })),
     recentAchievements: userAchievements.slice(0, 5).map(a => ({ title: a.title, type: a.achievement_type })),
+    activeRoadmap: activeRoadmap ? {
+      title: activeRoadmap.title, phase: activeRoadmap.current_phase,
+      shortTerm: activeRoadmap.short_term_goals, longTerm: activeRoadmap.long_term_goals,
+      skillGaps: activeRoadmap.skill_gaps,
+    } : null,
+    mentorActivity: recentMentorActivity.slice(0, 5),
     energyLevel: checkins[0]?.energy || "unknown",
     energyPatterns: energyZones.slice(0, 5).map(e => ({ domain: e.domain, energy: e.energy_level, moodBefore: e.mood_before, moodAfter: e.mood_after })),
     recentJournals: journalEntries.slice(0, 3).map(j => ({ title: j.title, mood: j.mood, tags: j.tags })),
     checkins: checkins.slice(0, 10).map((c: any) => ({ mood: c.mood, energy: c.energy, confidence: c.confidence, reflection: c.reflection, date: c.created_at })),
     daysSinceActive: checkins.length > 0 ? Math.floor((Date.now() - new Date(checkins[0].created_at).getTime()) / 86400000) : "unknown",
-  }), [profile, checkins, userSkills, userAchievements, energyZones, journalEntries]);
+    exploreContext: exploreCtxRef.current || null,
+  }), [profile, checkins, userSkills, userAchievements, energyZones, journalEntries, userInterests, userSignals, activeRoadmap, recentMentorActivity]);
 
   const sendMessage = async (text?: string) => {
     const msg = text || input.trim();

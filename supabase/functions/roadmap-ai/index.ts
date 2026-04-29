@@ -62,9 +62,51 @@ serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
 
   try {
-    const { type, context } = await req.json();
+    const { type, context: rawContext } = await req.json();
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY not configured");
+
+    // Enrich context with real user signals from the database when authenticated
+    let context = { ...(rawContext || {}) };
+    try {
+      const authHeader = req.headers.get("Authorization") || "";
+      const SUPABASE_URL = Deno.env.get("SUPABASE_URL");
+      const SERVICE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
+      if (authHeader && SUPABASE_URL && SERVICE_KEY) {
+        const { createClient } = await import("https://esm.sh/@supabase/supabase-js@2.45.0");
+        const userClient = createClient(SUPABASE_URL, SERVICE_KEY, {
+          global: { headers: { Authorization: authHeader } },
+        });
+        const { data: { user } } = await userClient.auth.getUser();
+        if (user) {
+          const [signalsRes, interestsRes, profileRes, skillItemsRes] = await Promise.all([
+            userClient.from("user_signals").select("signal_type, signal_value, source_module").eq("user_id", user.id).order("created_at", { ascending: false }).limit(40),
+            userClient.from("interests").select("name, category, intensity").eq("user_id", user.id).limit(30),
+            userClient.from("profiles").select("full_name, career_stage, industry, areas_of_focus, short_term_goals, long_term_goals, user_type, age").eq("user_id", user.id).maybeSingle(),
+            userClient.from("skill_items").select("name, category, proficiency_level").eq("user_id", user.id).limit(30),
+          ]);
+          const signals = signalsRes.data || [];
+          const interests = (interestsRes.data || []).map((i: any) => i.name);
+          const skills = (skillItemsRes.data || []).map((s: any) => s.name);
+          const p = profileRes.data || {};
+          context = {
+            ...context,
+            interests: Array.from(new Set([...(context.interests || []), ...interests])).slice(0, 20),
+            skills: Array.from(new Set([...(context.skills || []), ...skills])).slice(0, 30),
+            careerStage: context.careerStage || p.career_stage || "exploring",
+            industry: context.industry || p.industry || null,
+            shortTermGoals: context.shortTermGoals || p.short_term_goals || null,
+            longTermGoals: context.longTermGoals || p.long_term_goals || null,
+            areasOfFocus: context.areasOfFocus || p.areas_of_focus || [],
+            userType: p.user_type || "student",
+            userName: p.full_name || null,
+            topSignals: signals.slice(0, 15).map((s: any) => ({ type: s.signal_type, value: s.signal_value, source: s.source_module })),
+          };
+        }
+      }
+    } catch (enrichErr) {
+      console.warn("roadmap-ai: signal enrichment skipped:", enrichErr);
+    }
 
     let systemPrompt = "";
     let userPrompt = "";

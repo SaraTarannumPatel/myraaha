@@ -43,8 +43,8 @@ const ExploreDetailDialog = ({ open, onClose, item, type, onNavigate }: ExploreD
       keywords: item.keywords,
     },
   };
-  const handleMentor = () => { onClose(); navigate("/career/mentor-matchmaking", { state: { exploreContext } }); };
-  const handleTherapist = () => { onClose(); navigate("/career/ai-career-therapist", { state: { exploreContext } }); };
+  const handleMentor = () => { onClose(); navigate("/dashboard/mentor-matchmaking", { state: { exploreContext } }); };
+  const handleTherapist = () => { onClose(); navigate("/dashboard/career-therapist", { state: { exploreContext } }); };
   const handleRoadmap = () => { onClose(); navigate("/dashboard/roadmap?tab=suggested&from=explore", { state: { exploreContext } }); };
 
   return (
