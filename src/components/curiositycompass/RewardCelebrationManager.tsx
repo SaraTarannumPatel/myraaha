@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import OnboardingRewardCelebration from "@/components/onboarding/OnboardingRewardCelebration";
 import { useAssessmentRewards } from "@/hooks/useAssessmentRewards";
 
@@ -8,14 +7,11 @@ import { useAssessmentRewards } from "@/hooks/useAssessmentRewards";
  */
 const RewardCelebrationManager = () => {
   const { pendingUnlocks, acknowledgeUnlock } = useAssessmentRewards();
-  const [shownIds, setShownIds] = useState<Set<string>>(new Set());
 
-  // Show the latest unacknowledged unlock that we haven't already shown locally
-  const next = pendingUnlocks.find((u) => !shownIds.has(u.id));
-
-  useEffect(() => {
-    if (next) setShownIds((s) => new Set(s).add(next.id));
-  }, [next]);
+  // Keep showing the oldest unacknowledged reward until the user taps Continue.
+  const next = [...pendingUnlocks].sort(
+    (a, b) => new Date(a.unlocked_at).getTime() - new Date(b.unlocked_at).getTime()
+  )[0];
 
   if (!next) return null;
 
