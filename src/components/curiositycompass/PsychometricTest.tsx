@@ -10,6 +10,7 @@ import { ArrowRight, ArrowLeft, CheckCircle2, ClipboardCheck, Brain } from "luci
 import { toast } from "sonner";
 import { useAssessmentRewards } from "@/hooks/useAssessmentRewards";
 import { buildPsychometricSignal, PSYCHOMETRIC_SIGNAL_MAP } from "@/lib/assessmentSignalMap";
+import RewardProgressTracker from "@/components/curiositycompass/RewardProgressTracker";
 
 interface PsychometricQuestion {
   id: string;
@@ -177,6 +178,14 @@ const PsychometricTest = ({ userId, onComplete, recordSignal }: Props) => {
             <Badge variant="outline" className="text-[10px]">Sec {current.section} — {current.sectionLabel}</Badge>
             <span className="text-[10px] text-muted-foreground font-body">{completedCount}/{total} answered</span>
           </div>
+        </div>
+
+        <div className="p-3 sm:p-4 border-b border-border bg-background/80">
+          <RewardProgressTracker
+            testType="psychometric"
+            title="Psychometric Rewards"
+            subtitle="Rewards unlock live at 25%, 50%, 75%, and 100%."
+          />
         </div>
 
         <div className="p-4 sm:p-6 max-h-[55vh] overflow-y-auto">
