@@ -48,7 +48,13 @@ export const useAssessmentRewards = () => {
   const [loading, setLoading] = useState(true);
 
   const fetchAll = useCallback(async () => {
-    if (!user) return;
+    if (!user) {
+      setProgress({ discovery: null, psychometric: null });
+      setMilestones([]);
+      setPendingUnlocks([]);
+      setLoading(false);
+      return;
+    }
     setLoading(true);
     const [progressRes, milestonesRes, eventsRes] = await Promise.all([
       supabase.from("assessment_progress" as any).select("*").eq("user_id", user.id),
@@ -84,9 +90,14 @@ export const useAssessmentRewards = () => {
       .channel(`reward-unlocks-${user.id}`)
       .on(
         "postgres_changes",
-        { event: "INSERT", schema: "public", table: "reward_unlock_events", filter: `user_id=eq.${user.id}` },
+        { event: "*", schema: "public", table: "reward_unlock_events", filter: `user_id=eq.${user.id}` },
         (payload) => {
-          setPendingUnlocks((prev) => [payload.new as UnlockEvent, ...prev]);
+          const nextEvent = payload.new as UnlockEvent | undefined;
+          if (!nextEvent || nextEvent.acknowledged) {
+            fetchAll();
+            return;
+          }
+          setPendingUnlocks((prev) => [nextEvent, ...prev.filter((e) => e.id !== nextEvent.id)]);
         }
       )
       .subscribe();
@@ -109,21 +120,10 @@ export const useAssessmentRewards = () => {
         return null;
       }
 
-      // Refetch any newly persisted unlock events so the celebration manager
-      // can pop them up instantly (don't wait for realtime).
+      // Always refresh after progress writes so milestone cards, entitlement gates,
+      // and celebration popups stay consistent for every user/session.
       const result = data as { progress: number; unlocked: any[] };
-      if (Array.isArray(result?.unlocked) && result.unlocked.length > 0) {
-        const { data: events } = await supabase
-          .from("reward_unlock_events" as any)
-          .select("*")
-          .eq("user_id", user.id)
-          .eq("acknowledged", false)
-          .order("unlocked_at", { ascending: false });
-        setPendingUnlocks(((events as any[]) || []) as UnlockEvent[]);
-      } else {
-        // Light refresh to keep progress bars in sync
-        await fetchAll();
-      }
+      await fetchAll();
       return result;
     },
     [user, fetchAll]
