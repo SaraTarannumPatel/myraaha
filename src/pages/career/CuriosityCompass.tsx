@@ -29,6 +29,7 @@ import PsychometricTest from "@/components/curiositycompass/PsychometricTest";
 import AssessmentGate from "@/components/curiositycompass/AssessmentGate";
 import OnboardingCelebration from "@/components/curiositycompass/OnboardingCelebration";
 import InsightsView from "@/components/curiositycompass/InsightsView";
+import RewardProgressTracker from "@/components/curiositycompass/RewardProgressTracker";
 import { useAssessmentRewards } from "@/hooks/useAssessmentRewards";
 import { buildDiscoverySignal } from "@/lib/assessmentSignalMap";
 import {
@@ -282,6 +283,14 @@ const AssessmentTestSection = ({ user, recordSignal, recordMultipleSignals }: { 
           <p className="font-body text-xs text-muted-foreground mt-2">
             {phase === "variant" ? "Vibe Check — quick calibration" : meta?.title}
           </p>
+        </div>
+
+        <div className="p-3 sm:p-4 border-b border-border bg-background/80">
+          <RewardProgressTracker
+            testType="discovery"
+            title="Discovery Rewards"
+            subtitle="Rewards unlock live at 25%, 50%, 75%, and 100%."
+          />
         </div>
 
         {/* Question Body */}
