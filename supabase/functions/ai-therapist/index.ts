@@ -226,19 +226,18 @@ SelfGraph (mood/energy patterns) · Curiosity Compass (re-explore interests) · 
 - End with 1-2 gentle reflective questions OR a single concrete tiny next step.
 - Never diagnose. Suggest professional help only if escalation patterns appear.`;
 
-    // Choose strong reasoning model for the deep-context chat
+    // Merge prior session history (memory) ahead of new messages, dedupe last user msg.
+    const incoming = Array.isArray(messages) ? messages : [];
+    const histForModel = priorMessages.length > 0
+      ? [...priorMessages, ...incoming.slice(-1)] // history + latest user msg only
+      : incoming;
+
     const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
-      headers: {
-        Authorization: `Bearer ${LOVABLE_API_KEY}`,
-        "Content-Type": "application/json",
-      },
+      headers: { Authorization: `Bearer ${LOVABLE_API_KEY}`, "Content-Type": "application/json" },
       body: JSON.stringify({
         model: "google/gemini-2.5-pro",
-        messages: [
-          { role: "system", content: systemPrompt },
-          ...messages,
-        ],
+        messages: [{ role: "system", content: systemPrompt }, ...histForModel],
         stream: true,
       }),
     });
@@ -251,8 +250,51 @@ SelfGraph (mood/energy patterns) · Curiosity Compass (re-explore interests) · 
       return new Response(JSON.stringify({ error: "AI service temporarily unavailable" }), { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } });
     }
 
-    return new Response(response.body, {
-      headers: { ...corsHeaders, "Content-Type": "text/event-stream" },
+    // Tee the SSE stream: pass through to client AND collect assistant text to persist on done.
+    const [clientStream, persistStream] = response.body!.tee();
+    if (userClient && userId && sessionId) {
+      (async () => {
+        try {
+          const reader = persistStream.getReader();
+          const decoder = new TextDecoder();
+          let buf = "", assistant = "";
+          while (true) {
+            const { done, value } = await reader.read();
+            if (done) break;
+            buf += decoder.decode(value, { stream: true });
+            let idx;
+            while ((idx = buf.indexOf("\n")) !== -1) {
+              let line = buf.slice(0, idx); buf = buf.slice(idx + 1);
+              if (line.endsWith("\r")) line = line.slice(0, -1);
+              if (!line.startsWith("data: ")) continue;
+              const json = line.slice(6).trim();
+              if (json === "[DONE]") continue;
+              try {
+                const p = JSON.parse(json);
+                const c = p.choices?.[0]?.delta?.content;
+                if (c) assistant += c;
+              } catch {}
+            }
+          }
+          if (assistant.trim()) {
+            await userClient.from("therapist_messages").insert({
+              session_id: sessionId, user_id: userId, role: "assistant", content: assistant,
+            });
+            await userClient.from("therapist_sessions").update({ last_message_at: new Date().toISOString() }).eq("id", sessionId);
+          }
+        } catch (persistErr) {
+          console.warn("ai-therapist: assistant persist failed:", persistErr);
+        }
+      })();
+    }
+
+    return new Response(clientStream, {
+      headers: {
+        ...corsHeaders,
+        "Content-Type": "text/event-stream",
+        "X-Session-Id": sessionId || "",
+        "Access-Control-Expose-Headers": "X-Session-Id",
+      },
     });
   } catch (e) {
     console.error("ai-therapist error:", e);
