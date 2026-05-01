@@ -306,10 +306,75 @@ Time taken: ${context.timeTaken || "unknown"}.`;
       parsed = { raw: content };
     }
 
-    // Attach grounding metadata so the client can show "based on N live sources"
+    // Attach grounding metadata
     if (type === "generate_roadmap") {
       parsed.grounded_with = liveContext.length;
       parsed.live_context = liveContext;
+
+      // Persist to roadmaps + roadmap_steps so the user's roadmap survives reloads.
+      try {
+        const authHeader = req.headers.get("Authorization") || "";
+        const SUPABASE_URL = Deno.env.get("SUPABASE_URL");
+        const SERVICE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
+        if (authHeader && SUPABASE_URL && SERVICE_KEY) {
+          const { createClient } = await import("https://esm.sh/@supabase/supabase-js@2.45.0");
+          const userClient = createClient(SUPABASE_URL, SERVICE_KEY, {
+            global: { headers: { Authorization: authHeader } },
+          });
+          const { data: { user } } = await userClient.auth.getUser();
+          if (user) {
+            // Deactivate prior active roadmaps of same intent so only one is "active"
+            const intent = (rawContext?.intent === "entrepreneurship") ? "entrepreneurship" : "career";
+            await userClient.from("roadmaps").update({ is_active: false })
+              .eq("user_id", user.id).eq("intent", intent).eq("is_active", true);
+
+            const { data: rmRow, error: rmErr } = await userClient.from("roadmaps").insert({
+              user_id: user.id,
+              title: parsed.title || "Your Personalized Roadmap",
+              description: parsed.description || null,
+              intent,
+              is_active: true,
+              short_term_goals: context.shortTermGoals || null,
+              long_term_goals: context.longTermGoals || null,
+              current_phase: parsed.phases?.[0]?.name || "exploration",
+              skill_gaps: parsed.skill_gaps || [],
+              ai_suggestions: { milestones: parsed.milestones || [], estimated_timeline: parsed.estimated_timeline || null, grounded_with: parsed.grounded_with || 0 },
+            }).select("id").single();
+
+            if (!rmErr && rmRow?.id) {
+              const stepsToInsert: any[] = [];
+              let order = 0;
+              for (const phase of parsed.phases || []) {
+                for (const step of phase.steps || []) {
+                  stepsToInsert.push({
+                    roadmap_id: rmRow.id,
+                    user_id: user.id,
+                    title: step.title || "Step",
+                    description: [
+                      step.description || "",
+                      step.resource_url ? `\n\nResource: ${step.resource_title || step.resource_url} — ${step.resource_url}` : "",
+                      step.estimated_duration ? `\nDuration: ${step.estimated_duration}` : "",
+                      step.skill_tags?.length ? `\nSkills: ${step.skill_tags.join(", ")}` : "",
+                      `\nPhase: ${phase.name}`,
+                    ].join(""),
+                    order_index: order++,
+                    status: "pending",
+                  });
+                }
+              }
+              if (stepsToInsert.length > 0) {
+                await userClient.from("roadmap_steps").insert(stepsToInsert);
+              }
+              parsed.roadmap_id = rmRow.id;
+              parsed.persisted = true;
+            } else if (rmErr) {
+              console.warn("roadmap-ai: persist failed", rmErr);
+            }
+          }
+        }
+      } catch (persistErr) {
+        console.warn("roadmap-ai: persistence skipped:", persistErr);
+      }
     }
 
     return new Response(JSON.stringify(parsed), {
