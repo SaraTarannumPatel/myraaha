@@ -311,7 +311,9 @@ Time taken: ${context.timeTaken || "unknown"}.`;
       parsed.grounded_with = liveContext.length;
       parsed.live_context = liveContext;
 
-      // Persist to roadmaps + roadmap_steps so the user's roadmap survives reloads.
+      // Persist only when caller opts in (persist: true). Existing callers in Roadmap.tsx
+      // already insert client-side; new callers (Explore CTA, Blueprint, Mentor flow) should pass persist: true.
+      if (persistFlag === true) {
       try {
         const authHeader = req.headers.get("Authorization") || "";
         const SUPABASE_URL = Deno.env.get("SUPABASE_URL");
