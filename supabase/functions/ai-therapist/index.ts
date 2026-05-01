@@ -9,9 +9,60 @@ serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
 
   try {
-    const { messages, context, type } = await req.json();
+    const { messages, context, type, sessionId: incomingSessionId } = await req.json();
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY is not configured");
+
+    // ---- Resolve user + session for streaming chat persistence ----
+    let userId: string | null = null;
+    let userClient: any = null;
+    let sessionId: string | null = incomingSessionId || null;
+    let priorMessages: { role: string; content: string }[] = [];
+
+    if (!type) {
+      // streaming chat path → load history & ensure session
+      try {
+        const authHeader = req.headers.get("Authorization") || "";
+        const SUPABASE_URL = Deno.env.get("SUPABASE_URL");
+        const SERVICE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
+        if (authHeader && SUPABASE_URL && SERVICE_KEY) {
+          const { createClient } = await import("https://esm.sh/@supabase/supabase-js@2.45.0");
+          userClient = createClient(SUPABASE_URL, SERVICE_KEY, {
+            global: { headers: { Authorization: authHeader } },
+          });
+          const { data: { user } } = await userClient.auth.getUser();
+          if (user) {
+            userId = user.id;
+            // ensure session
+            if (!sessionId) {
+              const firstUserMsg = (messages || []).find((m: any) => m.role === "user")?.content || "New conversation";
+              const { data: newSess } = await userClient.from("therapist_sessions").insert({
+                user_id: userId,
+                title: firstUserMsg.slice(0, 60),
+                context_snapshot: context || {},
+              }).select("id").single();
+              sessionId = newSess?.id || null;
+            } else {
+              // load prior messages for memory
+              const { data: hist } = await userClient.from("therapist_messages")
+                .select("role, content").eq("session_id", sessionId).order("created_at", { ascending: true }).limit(50);
+              priorMessages = hist || [];
+              // bump last_message_at
+              await userClient.from("therapist_sessions").update({ last_message_at: new Date().toISOString() }).eq("id", sessionId);
+            }
+            // persist the incoming user message (last one)
+            const lastUser = [...(messages || [])].reverse().find((m: any) => m.role === "user");
+            if (lastUser && sessionId) {
+              await userClient.from("therapist_messages").insert({
+                session_id: sessionId, user_id: userId, role: "user", content: lastUser.content,
+              });
+            }
+          }
+        }
+      } catch (sessErr) {
+        console.warn("ai-therapist: session persistence skipped:", sessErr);
+      }
+    }
 
     // Non-streaming structured responses
     if (type) {
