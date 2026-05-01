@@ -9,9 +9,60 @@ serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
 
   try {
-    const { messages, context, type } = await req.json();
+    const { messages, context, type, sessionId: incomingSessionId } = await req.json();
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY is not configured");
+
+    // ---- Resolve user + session for streaming chat persistence ----
+    let userId: string | null = null;
+    let userClient: any = null;
+    let sessionId: string | null = incomingSessionId || null;
+    let priorMessages: { role: string; content: string }[] = [];
+
+    if (!type) {
+      // streaming chat path → load history & ensure session
+      try {
+        const authHeader = req.headers.get("Authorization") || "";
+        const SUPABASE_URL = Deno.env.get("SUPABASE_URL");
+        const SERVICE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
+        if (authHeader && SUPABASE_URL && SERVICE_KEY) {
+          const { createClient } = await import("https://esm.sh/@supabase/supabase-js@2.45.0");
+          userClient = createClient(SUPABASE_URL, SERVICE_KEY, {
+            global: { headers: { Authorization: authHeader } },
+          });
+          const { data: { user } } = await userClient.auth.getUser();
+          if (user) {
+            userId = user.id;
+            // ensure session
+            if (!sessionId) {
+              const firstUserMsg = (messages || []).find((m: any) => m.role === "user")?.content || "New conversation";
+              const { data: newSess } = await userClient.from("therapist_sessions").insert({
+                user_id: userId,
+                title: firstUserMsg.slice(0, 60),
+                context_snapshot: context || {},
+              }).select("id").single();
+              sessionId = newSess?.id || null;
+            } else {
+              // load prior messages for memory
+              const { data: hist } = await userClient.from("therapist_messages")
+                .select("role, content").eq("session_id", sessionId).order("created_at", { ascending: true }).limit(50);
+              priorMessages = hist || [];
+              // bump last_message_at
+              await userClient.from("therapist_sessions").update({ last_message_at: new Date().toISOString() }).eq("id", sessionId);
+            }
+            // persist the incoming user message (last one)
+            const lastUser = [...(messages || [])].reverse().find((m: any) => m.role === "user");
+            if (lastUser && sessionId) {
+              await userClient.from("therapist_messages").insert({
+                session_id: sessionId, user_id: userId, role: "user", content: lastUser.content,
+              });
+            }
+          }
+        }
+      } catch (sessErr) {
+        console.warn("ai-therapist: session persistence skipped:", sessErr);
+      }
+    }
 
     // Non-streaming structured responses
     if (type) {
@@ -175,19 +226,18 @@ SelfGraph (mood/energy patterns) · Curiosity Compass (re-explore interests) · 
 - End with 1-2 gentle reflective questions OR a single concrete tiny next step.
 - Never diagnose. Suggest professional help only if escalation patterns appear.`;
 
-    // Choose strong reasoning model for the deep-context chat
+    // Merge prior session history (memory) ahead of new messages, dedupe last user msg.
+    const incoming = Array.isArray(messages) ? messages : [];
+    const histForModel = priorMessages.length > 0
+      ? [...priorMessages, ...incoming.slice(-1)] // history + latest user msg only
+      : incoming;
+
     const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
-      headers: {
-        Authorization: `Bearer ${LOVABLE_API_KEY}`,
-        "Content-Type": "application/json",
-      },
+      headers: { Authorization: `Bearer ${LOVABLE_API_KEY}`, "Content-Type": "application/json" },
       body: JSON.stringify({
         model: "google/gemini-2.5-pro",
-        messages: [
-          { role: "system", content: systemPrompt },
-          ...messages,
-        ],
+        messages: [{ role: "system", content: systemPrompt }, ...histForModel],
         stream: true,
       }),
     });
@@ -200,8 +250,51 @@ SelfGraph (mood/energy patterns) · Curiosity Compass (re-explore interests) · 
       return new Response(JSON.stringify({ error: "AI service temporarily unavailable" }), { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } });
     }
 
-    return new Response(response.body, {
-      headers: { ...corsHeaders, "Content-Type": "text/event-stream" },
+    // Tee the SSE stream: pass through to client AND collect assistant text to persist on done.
+    const [clientStream, persistStream] = response.body!.tee();
+    if (userClient && userId && sessionId) {
+      (async () => {
+        try {
+          const reader = persistStream.getReader();
+          const decoder = new TextDecoder();
+          let buf = "", assistant = "";
+          while (true) {
+            const { done, value } = await reader.read();
+            if (done) break;
+            buf += decoder.decode(value, { stream: true });
+            let idx;
+            while ((idx = buf.indexOf("\n")) !== -1) {
+              let line = buf.slice(0, idx); buf = buf.slice(idx + 1);
+              if (line.endsWith("\r")) line = line.slice(0, -1);
+              if (!line.startsWith("data: ")) continue;
+              const json = line.slice(6).trim();
+              if (json === "[DONE]") continue;
+              try {
+                const p = JSON.parse(json);
+                const c = p.choices?.[0]?.delta?.content;
+                if (c) assistant += c;
+              } catch {}
+            }
+          }
+          if (assistant.trim()) {
+            await userClient.from("therapist_messages").insert({
+              session_id: sessionId, user_id: userId, role: "assistant", content: assistant,
+            });
+            await userClient.from("therapist_sessions").update({ last_message_at: new Date().toISOString() }).eq("id", sessionId);
+          }
+        } catch (persistErr) {
+          console.warn("ai-therapist: assistant persist failed:", persistErr);
+        }
+      })();
+    }
+
+    return new Response(clientStream, {
+      headers: {
+        ...corsHeaders,
+        "Content-Type": "text/event-stream",
+        "X-Session-Id": sessionId || "",
+        "Access-Control-Expose-Headers": "X-Session-Id",
+      },
     });
   } catch (e) {
     console.error("ai-therapist error:", e);

@@ -1117,6 +1117,63 @@ export type Database = {
         }
         Relationships: []
       }
+      content_library_items: {
+        Row: {
+          content_type: string
+          created_at: string
+          description: string | null
+          difficulty: string | null
+          duration_minutes: number | null
+          id: string
+          is_free: boolean
+          language: string | null
+          metadata: Json | null
+          rating: number | null
+          source_name: string | null
+          source_url: string
+          tags: string[] | null
+          thumbnail_url: string | null
+          title: string
+          topics: string[] | null
+        }
+        Insert: {
+          content_type: string
+          created_at?: string
+          description?: string | null
+          difficulty?: string | null
+          duration_minutes?: number | null
+          id?: string
+          is_free?: boolean
+          language?: string | null
+          metadata?: Json | null
+          rating?: number | null
+          source_name?: string | null
+          source_url: string
+          tags?: string[] | null
+          thumbnail_url?: string | null
+          title: string
+          topics?: string[] | null
+        }
+        Update: {
+          content_type?: string
+          created_at?: string
+          description?: string | null
+          difficulty?: string | null
+          duration_minutes?: number | null
+          id?: string
+          is_free?: boolean
+          language?: string | null
+          metadata?: Json | null
+          rating?: number | null
+          source_name?: string | null
+          source_url?: string
+          tags?: string[] | null
+          thumbnail_url?: string | null
+          title?: string
+          topics?: string[] | null
+        }
+        Relationships: []
+      }
       countries_directory: {
         Row: {
           avg_salary_usd: string | null
@@ -2380,6 +2437,72 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      job_listings: {
+        Row: {
+          company: string | null
+          created_at: string
+          description: string | null
+          employment_type: string | null
+          experience_level: string | null
+          id: string
+          industry: string | null
+          is_active: boolean
+          location: string | null
+          metadata: Json | null
+          posted_at: string | null
+          remote_type: string | null
+          salary_max_inr: number | null
+          salary_min_inr: number | null
+          scraped_at: string
+          skills: string[] | null
+          source: string
+          source_url: string
+          title: string
+        }
+        Insert: {
+          company?: string | null
+          created_at?: string
+          description?: string | null
+          employment_type?: string | null
+          experience_level?: string | null
+          id?: string
+          industry?: string | null
+          is_active?: boolean
+          location?: string | null
+          metadata?: Json | null
+          posted_at?: string | null
+          remote_type?: string | null
+          salary_max_inr?: number | null
+          salary_min_inr?: number | null
+          scraped_at?: string
+          skills?: string[] | null
+          source: string
+          source_url: string
+          title: string
+        }
+        Update: {
+          company?: string | null
+          created_at?: string
+          description?: string | null
+          employment_type?: string | null
+          experience_level?: string | null
+          id?: string
+          industry?: string | null
+          is_active?: boolean
+          location?: string | null
+          metadata?: Json | null
+          posted_at?: string | null
+          remote_type?: string | null
+          salary_max_inr?: number | null
+          salary_min_inr?: number | null
+          scraped_at?: string
+          skills?: string[] | null
+          source?: string
+          source_url?: string
+          title?: string
+        }
+        Relationships: []
       }
       job_opportunities: {
         Row: {
@@ -6919,6 +7042,74 @@ export type Database = {
           mood?: string | null
           resolved_at?: string | null
           status?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      therapist_messages: {
+        Row: {
+          content: string
+          created_at: string
+          id: string
+          metadata: Json | null
+          role: string
+          session_id: string
+          user_id: string
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          id?: string
+          metadata?: Json | null
+          role: string
+          session_id: string
+          user_id: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          id?: string
+          metadata?: Json | null
+          role?: string
+          session_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "therapist_messages_session_id_fkey"
+            columns: ["session_id"]
+            isOneToOne: false
+            referencedRelation: "therapist_sessions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      therapist_sessions: {
+        Row: {
+          context_snapshot: Json | null
+          created_at: string
+          id: string
+          last_message_at: string
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          context_snapshot?: Json | null
+          created_at?: string
+          id?: string
+          last_message_at?: string
+          title?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          context_snapshot?: Json | null
+          created_at?: string
+          id?: string
+          last_message_at?: string
+          title?: string
+          updated_at?: string
           user_id?: string
         }
         Relationships: []
