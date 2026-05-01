@@ -377,6 +377,7 @@ Time taken: ${context.timeTaken || "unknown"}.`;
       } catch (persistErr) {
         console.warn("roadmap-ai: persistence skipped:", persistErr);
       }
+      } // end persistFlag
     }
 
     return new Response(JSON.stringify(parsed), {
