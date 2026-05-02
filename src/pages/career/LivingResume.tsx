@@ -18,6 +18,7 @@ import {
   MessageSquare, Heart, Shield, Copy, ExternalLink
 } from "lucide-react";
 import ModuleSearchBar from "@/components/search/ModuleSearchBar";
+import { exportResumePdf } from "@/lib/exportResumePdf";
 
 const LivingResume = () => {
   const { user, profile } = useAuth();
@@ -219,8 +220,23 @@ const LivingResume = () => {
             </div>
           </div>
           <div className="flex gap-2">
-            <Button variant="outline" size="sm" onClick={() => { toast.info("PDF export coming soon!"); }}>
-              <Download size={16} className="mr-1" /> Export
+            <Button variant="outline" size="sm" onClick={() => {
+              try {
+                exportResumePdf({
+                  fullName: profile?.full_name || user?.email?.split("@")[0],
+                  email: user?.email,
+                  publicUid: (profile as any)?.public_uid,
+                  experiences, achievements, interests, learningProgress,
+                  domainAffinity, decisionActions, identityEvals, clarityScores,
+                  challengeEnrollments, aiInsights,
+                });
+                toast.success("Resume PDF downloaded");
+              } catch (e) {
+                console.error(e);
+                toast.error("Could not generate PDF");
+              }
+            }}>
+              <Download size={16} className="mr-1" /> Export PDF
             </Button>
             <Button variant="outline" size="sm" onClick={() => setShowShareModal(true)}>
               <Share2 size={16} className="mr-1" /> Share
