@@ -47,6 +47,9 @@ export const useAssessmentRewards = () => {
   const [progress, setProgress] = useState<Record<TestType, AssessmentProgress | null>>({
     discovery: null,
     psychometric: null,
+    skillstacker: null,
+    roadmap: null,
+    entrep_onboarding: null,
   });
   const [milestones, setMilestones] = useState<RewardMilestone[]>([]);
   const [pendingUnlocks, setPendingUnlocks] = useState<UnlockEvent[]>([]);
