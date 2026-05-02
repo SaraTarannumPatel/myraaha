@@ -457,6 +457,14 @@ const Roadmap = () => {
   const stepsByPhase = PHASES.reduce((acc, phase) => { acc[phase.id] = steps.filter(s => s.phase === phase.id); return acc; }, {} as Record<string, any[]>);
   const currentPhaseIndex = PHASES.findIndex(p => p.id === activeRoadmap?.current_phase) || 0;
 
+  // Report Roadmap milestone progress (25/50/75/100%) — additive, picked up by
+  // the global RewardCelebrationManager via realtime.
+  const { report: reportRoadmapProgress } = useModuleProgress();
+  useEffect(() => {
+    if (!user || steps.length === 0) return;
+    void reportRoadmapProgress("roadmap", completedCount, steps.length);
+  }, [user, completedCount, steps.length, reportRoadmapProgress]);
+
   const statusIcon = (status: string) => {
     switch (status) {
       case "completed": return <Check size={16} className="text-accent" />;
