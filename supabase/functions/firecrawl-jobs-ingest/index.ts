@@ -102,15 +102,19 @@ serve(async (req) => {
 
         const text = `${title} ${description}`;
         const row = {
+          source: "firecrawl",
           source_url: url,
           title,
           description,
-          domain: inferDomain(text),
-          seniority: inferSeniority(text),
-          keywords: extractKeywords(text),
-          search_query: query,
-          country: "IN",
-          ingested_at: new Date().toISOString(),
+          industry: inferDomain(text),
+          experience_level: inferSeniority(text),
+          skills: extractKeywords(text),
+          location: "India",
+          remote_type: /remote/i.test(text) ? "remote" : (/hybrid/i.test(text) ? "hybrid" : "onsite"),
+          employment_type: /intern/i.test(text) ? "internship" : (/contract/i.test(text) ? "contract" : "full_time"),
+          scraped_at: new Date().toISOString(),
+          is_active: true,
+          metadata: { search_query: query },
         };
 
         const { error } = await supabase
