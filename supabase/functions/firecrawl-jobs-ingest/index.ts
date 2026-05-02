@@ -91,7 +91,12 @@ serve(async (req) => {
         continue;
       }
       const json = await res.json();
-      const arr: any[] = json?.data || json?.web?.results || json?.results || [];
+      const dataNode = json?.data ?? json;
+      const arr: any[] = Array.isArray(dataNode)
+        ? dataNode
+        : (Array.isArray(dataNode?.web) ? dataNode.web
+          : (Array.isArray(dataNode?.web?.results) ? dataNode.web.results
+            : (Array.isArray(json?.results) ? json.results : [])));
 
       let inserted = 0;
       for (const r of arr) {
