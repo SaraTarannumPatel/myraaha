@@ -54,7 +54,7 @@ export const useAssessmentRewards = () => {
 
   const fetchAll = useCallback(async () => {
     if (!user) {
-      setProgress({ discovery: null, psychometric: null });
+      setProgress({ discovery: null, psychometric: null, skillstacker: null, roadmap: null, entrep_onboarding: null });
       setMilestones([]);
       setPendingUnlocks([]);
       setLoading(false);
@@ -72,7 +72,7 @@ export const useAssessmentRewards = () => {
         .order("unlocked_at", { ascending: false }),
     ]);
 
-    const progMap: Record<TestType, AssessmentProgress | null> = { discovery: null, psychometric: null };
+    const progMap: Record<TestType, AssessmentProgress | null> = { discovery: null, psychometric: null, skillstacker: null, roadmap: null, entrep_onboarding: null };
     ((progressRes.data as any[]) || []).forEach((p: any) => {
       if (p.test_type === "discovery" || p.test_type === "psychometric") {
         progMap[p.test_type as TestType] = p as AssessmentProgress;
