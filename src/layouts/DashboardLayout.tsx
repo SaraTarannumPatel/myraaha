@@ -152,8 +152,9 @@ const DashboardLayout = () => {
   // On mobile, hide the 7 items that are surfaced in the bottom navbar
   // to avoid duplication (only filtered when rendering the mobile sheet).
   const NavContent = ({ isMobile = false }: { isMobile?: boolean }) => {
+    const activeBottomPaths = isEntrepreneurship ? ENTREP_BOTTOM_NAV_PATHS : CAREER_BOTTOM_NAV_PATHS;
     const filterMobile = (items: typeof careerNav) =>
-      isMobile ? items.filter((i) => !MOBILE_BOTTOM_NAV_PATHS.has(i.path)) : items;
+      isMobile ? items.filter((i) => !activeBottomPaths.has(i.path)) : items;
 
     return (
     <div className="flex flex-col h-full">
