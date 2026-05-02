@@ -1117,6 +1117,33 @@ export type Database = {
         }
         Relationships: []
       }
+      content_library_ingest_runs: {
+        Row: {
+          created_at: string
+          id: string
+          items_inserted: number
+          notes: string | null
+          run_type: string
+          status: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          items_inserted?: number
+          notes?: string | null
+          run_type?: string
+          status?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          items_inserted?: number
+          notes?: string | null
+          run_type?: string
+          status?: string
+        }
+        Relationships: []
+      }
       content_library_items: {
         Row: {
           content_type: string

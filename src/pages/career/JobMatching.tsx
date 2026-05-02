@@ -86,7 +86,7 @@ const JobMatching = () => {
 
   const fetchAll = async () => {
     if (!user) return;
-    const [oRes, cpRes, ccRes, aRes, sRes, rRes, refRes] = await Promise.all([
+    const [oRes, cpRes, ccRes, aRes, sRes, rRes, refRes, liveRes] = await Promise.all([
       supabase.from("job_opportunities").select("*").eq("is_active", true).order("is_featured", { ascending: false }).order("posted_at", { ascending: false }),
       supabase.from("career_paths").select("*").order("demand_level"),
       supabase.from("company_challenges").select("*").eq("status", "open").order("deadline"),
@@ -94,8 +94,29 @@ const JobMatching = () => {
       supabase.from("saved_opportunities").select("*").eq("user_id", user.id),
       supabase.from("opportunity_reminders" as any).select("*").eq("user_id", user.id).eq("is_dismissed", false).order("reminder_date"),
       supabase.from("opportunity_reflections").select("*").eq("user_id", user.id).order("created_at", { ascending: false }),
+      // Additive: live Firecrawl-sourced jobs from job_listings (additive to existing job_opportunities)
+      supabase.from("job_listings" as any).select("*").eq("is_active", true).order("scraped_at", { ascending: false }).limit(50),
     ]);
-    setOpportunities(oRes.data || []);
+    // Map live listings into the same shape used by the existing UI (additive merge — does not replace anything)
+    const liveAsOpps = ((liveRes.data || []) as any[]).map((j: any) => ({
+      id: `live-${j.id}`,
+      title: j.title,
+      company: j.company || j.metadata?.search_query || "Live Listing",
+      location: j.location || "India",
+      job_type: j.employment_type || "full_time",
+      remote_type: j.remote_type || "onsite",
+      experience_level: j.experience_level || "entry",
+      domain: j.industry || "General",
+      description: j.description || "",
+      required_skills: j.skills || [],
+      apply_url: j.source_url,
+      posted_at: j.posted_at || j.scraped_at,
+      is_featured: false,
+      is_active: true,
+      is_live_source: true,
+      source: "firecrawl",
+    }));
+    setOpportunities([...(oRes.data || []), ...liveAsOpps]);
     setCareerPaths(cpRes.data || []);
     setCompanyChallenges(ccRes.data || []);
     setApplications(aRes.data || []);
