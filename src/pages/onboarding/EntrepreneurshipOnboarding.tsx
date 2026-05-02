@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "@/contexts/AuthContext";
@@ -9,6 +9,7 @@ import {
 } from "lucide-react";
 import OnboardingProgressBar from "@/components/onboarding/OnboardingProgressBar";
 import OnboardingRewardBanner from "@/components/onboarding/OnboardingRewardBanner";
+import { useModuleProgress } from "@/hooks/useModuleProgress";
 
 const entrepreneurSteps = [
   {
