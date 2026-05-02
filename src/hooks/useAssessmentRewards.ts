@@ -2,7 +2,12 @@ import { useCallback, useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 
-export type TestType = "discovery" | "psychometric";
+export type TestType =
+  | "discovery"
+  | "psychometric"
+  | "skillstacker"
+  | "roadmap"
+  | "entrep_onboarding";
 
 export interface AssessmentProgress {
   test_type: TestType;
