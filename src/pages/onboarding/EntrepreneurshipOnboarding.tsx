@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "@/contexts/AuthContext";
@@ -9,6 +9,7 @@ import {
 } from "lucide-react";
 import OnboardingProgressBar from "@/components/onboarding/OnboardingProgressBar";
 import OnboardingRewardBanner from "@/components/onboarding/OnboardingRewardBanner";
+import { useModuleProgress } from "@/hooks/useModuleProgress";
 
 const entrepreneurSteps = [
   {
@@ -76,6 +77,13 @@ const EntrepreneurshipOnboarding = () => {
   const { updateProfile } = useAuth();
   const navigate = useNavigate();
   const current = entrepreneurSteps[step];
+
+  // Report entrepreneurship onboarding milestone progress (25/50/75/100%)
+  // — additive, triggers global RewardCelebrationManager.
+  const { report: reportEntrepProgress } = useModuleProgress();
+  useEffect(() => {
+    void reportEntrepProgress("entrep_onboarding", step + 1, entrepreneurSteps.length);
+  }, [step, reportEntrepProgress]);
 
   const toggleOption = (option: string) => {
     const key = current.id;

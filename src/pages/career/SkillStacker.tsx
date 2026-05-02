@@ -18,6 +18,7 @@ import {
 } from "lucide-react";
 import DirectorySearchDrawer from "@/components/directory/DirectorySearchDrawer";
 import ModuleSearchBar from "@/components/search/ModuleSearchBar";
+import { useModuleProgress } from "@/hooks/useModuleProgress";
 
 const CATEGORY_META: Record<string, { label: string; color: string; icon: any }> = {
   core: { label: "Core", color: "bg-primary text-primary-foreground", icon: Shield },
@@ -110,6 +111,8 @@ const SkillStacker = () => {
   const inProgressCount = skillItems.filter(s => ["accepted", "in_progress", "applied"].includes(s.status)).length;
   const overallProgress = skillItems.length > 0 ? Math.round((completedCount / skillItems.length) * 100) : 0;
 
+  const { report: reportSkillProgress } = useModuleProgress();
+
   // Badge milestones
   useEffect(() => {
     if (!user || completedCount === 0) return;
@@ -122,6 +125,14 @@ const SkillStacker = () => {
       }).then(() => toast.success(`🏆 Badge unlocked: ${badge}!`));
     }
   }, [completedCount]);
+
+  // Report SkillStacker milestone progress (25/50/75/100%) — additive, triggers
+  // global RewardCelebrationManager via reward_unlock_events realtime stream.
+  useEffect(() => {
+    if (!user || skillItems.length === 0) return;
+    void reportSkillProgress("skillstacker", completedCount, skillItems.length);
+  }, [user, completedCount, skillItems.length, reportSkillProgress]);
+
 
   const generateStack = async () => {
     setGenerating(true);

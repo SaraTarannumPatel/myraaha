@@ -2,7 +2,12 @@ import { useCallback, useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 
-export type TestType = "discovery" | "psychometric";
+export type TestType =
+  | "discovery"
+  | "psychometric"
+  | "skillstacker"
+  | "roadmap"
+  | "entrep_onboarding";
 
 export interface AssessmentProgress {
   test_type: TestType;
@@ -42,6 +47,9 @@ export const useAssessmentRewards = () => {
   const [progress, setProgress] = useState<Record<TestType, AssessmentProgress | null>>({
     discovery: null,
     psychometric: null,
+    skillstacker: null,
+    roadmap: null,
+    entrep_onboarding: null,
   });
   const [milestones, setMilestones] = useState<RewardMilestone[]>([]);
   const [pendingUnlocks, setPendingUnlocks] = useState<UnlockEvent[]>([]);
@@ -49,7 +57,7 @@ export const useAssessmentRewards = () => {
 
   const fetchAll = useCallback(async () => {
     if (!user) {
-      setProgress({ discovery: null, psychometric: null });
+      setProgress({ discovery: null, psychometric: null, skillstacker: null, roadmap: null, entrep_onboarding: null });
       setMilestones([]);
       setPendingUnlocks([]);
       setLoading(false);
@@ -67,10 +75,11 @@ export const useAssessmentRewards = () => {
         .order("unlocked_at", { ascending: false }),
     ]);
 
-    const progMap: Record<TestType, AssessmentProgress | null> = { discovery: null, psychometric: null };
+    const progMap: Record<TestType, AssessmentProgress | null> = { discovery: null, psychometric: null, skillstacker: null, roadmap: null, entrep_onboarding: null };
     ((progressRes.data as any[]) || []).forEach((p: any) => {
-      if (p.test_type === "discovery" || p.test_type === "psychometric") {
-        progMap[p.test_type as TestType] = p as AssessmentProgress;
+      const tt = p.test_type as TestType;
+      if (tt in progMap) {
+        progMap[tt] = p as AssessmentProgress;
       }
     });
     setProgress(progMap);
