@@ -78,6 +78,13 @@ const EntrepreneurshipOnboarding = () => {
   const navigate = useNavigate();
   const current = entrepreneurSteps[step];
 
+  // Report entrepreneurship onboarding milestone progress (25/50/75/100%)
+  // — additive, triggers global RewardCelebrationManager.
+  const { report: reportEntrepProgress } = useModuleProgress();
+  useEffect(() => {
+    void reportEntrepProgress("entrep_onboarding", step + 1, entrepreneurSteps.length);
+  }, [step, reportEntrepProgress]);
+
   const toggleOption = (option: string) => {
     const key = current.id;
     if (current.type === "single-select") {
