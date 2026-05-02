@@ -1,5 +1,8 @@
-// MyRaaha service worker — offline shell + stale-while-revalidate for assets/pages.
-const VERSION = "myraaha-v1";
+// MyRaaha service worker — offline shell + stale-while-revalidate for assets/pages
+// + last-known-good cache for Supabase REST GETs so users see cached roadmaps,
+// journals, etc. when offline.
+const VERSION = "myraaha-v2";
+const DATA_CACHE = "myraaha-data-v1";
 const CORE = ["/", "/manifest.webmanifest", "/myraaha-logo.png", "/favicon.png"];
 
 self.addEventListener("install", (e) => {
