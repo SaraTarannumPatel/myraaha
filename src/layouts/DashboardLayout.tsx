@@ -14,7 +14,7 @@ import {
 import Logo from "@/components/Logo";
 
 // Paths surfaced as the mobile bottom navbar — also kept in the side nav on desktop.
-const MOBILE_BOTTOM_NAV_PATHS = new Set([
+const CAREER_BOTTOM_NAV_PATHS = new Set([
   "/dashboard/curiosity-compass",
   "/dashboard/roadmap",
   "/dashboard/explore",
@@ -24,7 +24,17 @@ const MOBILE_BOTTOM_NAV_PATHS = new Set([
   "/dashboard/career-therapist",
 ]);
 
-const mobileBottomNav = [
+const ENTREP_BOTTOM_NAV_PATHS = new Set([
+  "/dashboard/startup-sparks",
+  "/dashboard/path-selector",
+  "/dashboard/mvp-builder",
+  "/dashboard/startup-lab",
+  "/dashboard/ai-coach",
+  "/dashboard/startup-communities",
+  "/dashboard/founder-profile",
+]);
+
+const careerMobileBottomNav = [
   { label: "Compass", icon: Compass, path: "/dashboard/curiosity-compass" },
   { label: "Roadmap", icon: Map, path: "/dashboard/roadmap" },
   { label: "Explore", icon: Sparkles, path: "/dashboard/explore" },
@@ -32,6 +42,16 @@ const mobileBottomNav = [
   { label: "Jobs", icon: Briefcase, path: "/dashboard/job-matching" },
   { label: "Peers", icon: Users, path: "/dashboard/peer-circles" },
   { label: "Therapy", icon: Heart, path: "/dashboard/career-therapist" },
+];
+
+const entrepMobileBottomNav = [
+  { label: "Sparks", icon: Lightbulb, path: "/dashboard/startup-sparks" },
+  { label: "Path", icon: Navigation, path: "/dashboard/path-selector" },
+  { label: "MVP", icon: Wrench, path: "/dashboard/mvp-builder" },
+  { label: "Lab", icon: Rocket, path: "/dashboard/startup-lab" },
+  { label: "Coach", icon: Bot, path: "/dashboard/ai-coach" },
+  { label: "Comms", icon: Globe, path: "/dashboard/startup-communities" },
+  { label: "Founder", icon: User, path: "/dashboard/founder-profile" },
 ];
 
 const careerNav = [
