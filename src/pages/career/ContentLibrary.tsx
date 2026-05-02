@@ -59,12 +59,28 @@ const ContentLibrary = () => {
   const fetchAllData = async () => {
     setLoading(true);
     try {
-      const [tracksRes, capsulesRes] = await Promise.all([
+      const [tracksRes, capsulesRes, libraryRes] = await Promise.all([
         supabase.from("learning_tracks").select("*").order("order_index"),
         supabase.from("learning_capsules").select("*").order("order_index"),
+        // Additive: live AI/Firecrawl-curated items from content_library_items
+        supabase.from("content_library_items" as any).select("*").order("created_at", { ascending: false }).limit(60),
       ]);
       setLearningTracks(tracksRes.data || []);
-      setLearningCapsules(capsulesRes.data || []);
+      // Additive merge: render library items in the existing capsules grid using a compatible shape
+      const liveAsCapsules = ((libraryRes.data || []) as any[]).map((it: any) => ({
+        id: `live-${it.id}`,
+        title: it.title,
+        description: it.description,
+        capsule_type: it.content_type || "article",
+        external_url: it.source_url,
+        provider: it.source_name,
+        duration_minutes: it.duration_minutes,
+        is_external: true,
+        is_live_source: true,
+        topics: it.topics || it.tags || [],
+        thumbnail_url: it.thumbnail_url,
+      }));
+      setLearningCapsules([...(capsulesRes.data || []), ...liveAsCapsules]);
 
       if (user) {
         const [progressRes, bookmarksRes, interestsRes] = await Promise.all([
