@@ -56,3 +56,6 @@ verify_jwt = false
 
 [functions.firecrawl-ingest]
 verify_jwt = false
+
+[functions.firecrawl-jobs-ingest]
+verify_jwt = false
