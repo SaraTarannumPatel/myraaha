@@ -3,6 +3,9 @@ project_id = "tdweqsszaakxhnzbyqar"
 [functions.explore-crosslink]
 verify_jwt = false
 
+[functions.explore-reciprocate]
+verify_jwt = false
+
 [functions.explore-enrich]
 verify_jwt = false
 
