@@ -3,6 +3,9 @@ project_id = "tdweqsszaakxhnzbyqar"
 [functions.explore-crosslink]
 verify_jwt = false
 
+[functions.explore-enrich]
+verify_jwt = false
+
 [functions.living-resume-ai]
 verify_jwt = false
 
