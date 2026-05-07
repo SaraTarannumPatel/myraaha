@@ -3,6 +3,15 @@ project_id = "tdweqsszaakxhnzbyqar"
 [functions.explore-crosslink]
 verify_jwt = false
 
+[functions.explore-crosslink-v2]
+verify_jwt = false
+
+[functions.explore-ai-link]
+verify_jwt = false
+
+[functions.explore-default-fill]
+verify_jwt = false
+
 [functions.explore-reciprocate]
 verify_jwt = false
 
