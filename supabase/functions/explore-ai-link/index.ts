@@ -113,7 +113,7 @@ Deno.serve(async (req) => {
     const data: Record<T, any[]> = {} as any;
     const tris_: Record<T, { id:string; name:string; t:Set<string> }[]> = {} as any;
     for (const t of TABLES) {
-      const { data: rows, error } = await supabase.from(t).select("id,description,keywords,"+NAME[t]+",related_skills,related_careers,related_industries,related_job_roles,related_sectors,related_domains,related_subjects,related_courses,related_universities,related_countries,top_careers,top_industries,top_sectors,top_domains,top_skills,top_subjects,top_courses,top_universities,popular_courses").limit(5000);
+      const { data: rows, error } = await supabase.from(t).select("*").limit(5000);
       if (error) throw new Error(`${t}: ${error.message}`);
       data[t] = rows || [];
       tris_[t] = (rows||[]).map((r:any)=>({ id:r.id, name:String(r[NAME[t]]||""), t: tris(String(r[NAME[t]]||"")) })).filter((x)=>x.name);
