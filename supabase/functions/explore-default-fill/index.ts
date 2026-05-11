@@ -15,10 +15,9 @@ const SCALAR_FIELDS: Record<string, string[]> = {
   industry_directory: ["demand_level","growth_trajectory","avg_salary_usd","icon_emoji"],
   sector_directory: ["demand_level","growth_trajectory","avg_salary_usd","icon_emoji"],
   domain_directory: ["icon_emoji"],
-  skills_directory: ["demand_level","growth_trajectory","avg_salary_usd","difficulty"],
+  skills_directory: ["demand_level","growth_trajectory","avg_salary_usd"],
   subjects_directory: ["demand_level"],
   online_courses_directory: ["demand_level","icon_emoji"],
-  universities_directory: [],
   countries_directory: ["demand_level","growth_trajectory","avg_salary_usd","icon_emoji"],
 };
 
