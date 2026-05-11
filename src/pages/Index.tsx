@@ -983,15 +983,15 @@ const SuccessStories = () => {
         </div>
 
         <div className="flex justify-center mb-12">
-          <div className="inline-flex flex-wrap justify-center bg-card rounded-full p-1.5 shadow-soft border border-border max-w-full overflow-x-auto">
+          <div className="inline-flex flex-wrap justify-center bg-secondary rounded-full p-1.5 shadow-soft border border-border max-w-full overflow-x-auto">
             {(Object.keys(storyData) as StoryTab[]).map((k) => (
               <button
                 key={k}
                 onClick={() => setActive(k)}
                 className={`px-6 sm:px-8 py-2.5 sm:py-3 rounded-full font-body text-xs sm:text-sm font-semibold whitespace-nowrap transition-all ${
                   active === k
-                    ? "bg-background text-primary shadow-card"
-                    : "text-muted-foreground hover:text-foreground"
+                    ? "bg-primary text-accent shadow-card"
+                    : "text-primary/70 hover:text-primary"
                 }`}
               >
                 {storyData[k].label}
