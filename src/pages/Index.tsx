@@ -419,8 +419,8 @@ const Index = () => {
                 <div className="w-12 h-12 rounded-2xl bg-white flex items-center justify-center mb-6">
                   <c.Icon size={22} className="text-primary" />
                 </div>
-                <h3 className="font-body text-xl sm:text-2xl text-accent font-semibold">
-                  {c.title} <em className="italic font-display font-normal">{c.italic}</em>
+                <h3 className="font-body text-xl sm:text-2xl text-accent font-bold leading-tight">
+                  {c.title} <em className="italic">{c.italic}</em>
                 </h3>
                 <p className="font-body text-sm sm:text-base text-accent/85 mt-4 leading-relaxed">{c.body}</p>
               </motion.div>
