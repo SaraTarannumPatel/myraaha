@@ -523,15 +523,15 @@ const Index = () => {
 
           {/* Tabs */}
           <div className="flex justify-center mb-12 sm:mb-14">
-            <div className="inline-flex flex-wrap justify-center bg-background rounded-full p-1.5 shadow-soft border border-border max-w-full overflow-x-auto">
+            <div className="inline-flex flex-wrap justify-center bg-secondary rounded-full p-1.5 shadow-soft border border-border max-w-full overflow-x-auto">
               {(Object.keys(stakeholderData) as StakeholderKey[]).map((k) => (
                 <button
                   key={k}
                   onClick={() => setActiveStake(k)}
                   className={`px-5 sm:px-7 py-2.5 sm:py-3 rounded-full font-body text-xs sm:text-sm font-semibold whitespace-nowrap transition-all ${
                     activeStake === k
-                      ? "bg-foreground text-background shadow-card"
-                      : "text-muted-foreground hover:text-foreground"
+                      ? "bg-primary text-accent shadow-card"
+                      : "text-primary/70 hover:text-primary"
                   }`}
                 >
                   {stakeholderData[k].label}
