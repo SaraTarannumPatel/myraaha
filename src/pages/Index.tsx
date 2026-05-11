@@ -104,7 +104,7 @@ const StakeholderCard = ({
     <div className="w-12 h-12 rounded-2xl bg-accent/40 text-primary flex items-center justify-center mb-6">
       <Icon size={22} />
     </div>
-    <h3 className="font-body text-xl text-foreground font-semibold leading-snug">
+    <h3 className="font-body text-xl sm:text-2xl text-foreground font-bold leading-tight">
       {title}
       <br />
       <Italic>{italic}</Italic>
