@@ -843,33 +843,6 @@ const Index = () => {
         </div>
       </section>
 
-      {/* ===== OUR IMPACT ===== */}
-      <section className="bg-background py-20 sm:py-28">
-        <div className="container mx-auto px-5 sm:px-8">
-          <div className="text-center max-w-3xl mx-auto mb-14 sm:mb-16">
-            <motion.h2
-              {...fadeUp}
-              className="font-body font-bold text-4xl sm:text-5xl md:text-6xl text-foreground"
-            >
-              Our <Italic>Impact</Italic>
-            </motion.h2>
-            <motion.p
-              {...fadeUp}
-              transition={{ duration: 0.6, delay: 0.15 }}
-              className="font-body text-base sm:text-lg text-muted-foreground mt-6"
-            >
-              Making a difference in communities and academia
-            </motion.p>
-          </div>
-
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            <StatCard Icon={RocketIcon} value="50+" label="Projects Partnered" />
-            <StatCard Icon={Users} value="1000+" label="Students Engaged" />
-            <StatCard Icon={Handshake} value="25+" label="Community Partners" />
-            <StatCard Icon={HomeIcon} value="10+" label="Academic Institutions" />
-          </div>
-        </div>
-      </section>
 
       {/* ===== SUCCESS STORIES ===== */}
       <SuccessStories />
