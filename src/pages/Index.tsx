@@ -621,9 +621,9 @@ const Index = () => {
               <motion.h2
                 {...fadeUp}
                 transition={{ duration: 0.7, delay: 0.1 }}
-                className="font-display text-4xl sm:text-5xl md:text-6xl text-foreground mb-10 leading-[1.05]"
+                className="font-body font-bold text-4xl sm:text-5xl md:text-6xl text-foreground mb-10 leading-[1.1]"
               >
-                Institutional <em className="italic text-primary">Reputation</em>
+                Institutional <Italic>Reputation</Italic>
               </motion.h2>
 
               <div className="space-y-7">
@@ -684,9 +684,9 @@ const Index = () => {
               <motion.h2
                 {...fadeUp}
                 transition={{ duration: 0.7, delay: 0.1 }}
-                className="font-display text-4xl sm:text-5xl md:text-6xl text-foreground mb-10 leading-[1.05]"
+                className="font-body font-bold text-4xl sm:text-5xl md:text-6xl text-foreground mb-10 leading-[1.1]"
               >
-                Parent <em className="italic text-primary">Satisfaction</em>
+                Parent <Italic>Satisfaction</Italic>
               </motion.h2>
 
               <div className="space-y-7">
@@ -865,7 +865,7 @@ const Index = () => {
             </div>
             <div className="p-10 sm:p-14 flex flex-col justify-center">
               <p className="font-body text-sm font-bold text-primary tracking-[0.22em] uppercase">Weekly Insights</p>
-              <h2 className="font-body font-bold text-3xl sm:text-4xl md:text-5xl text-foreground mt-4 leading-[1.1]">
+              <h2 className="font-body font-bold text-4xl sm:text-5xl md:text-6xl text-foreground mt-4 leading-[1.1]">
                 Stay ahead of the
                 <br />
                 <Italic>future of education.</Italic>
