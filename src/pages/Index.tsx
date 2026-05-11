@@ -907,38 +907,6 @@ const Index = () => {
         </div>
       </section>
 
-      {/* ===== Final CTA — Ready to Make an Impact ===== */}
-      <section className="bg-primary text-accent">
-        <div className="container mx-auto px-5 sm:px-8 py-24 sm:py-32 text-center">
-          <motion.h2
-            {...fadeUp}
-            className="font-body font-bold text-4xl sm:text-5xl md:text-6xl text-accent leading-tight max-w-4xl mx-auto"
-          >
-            Ready to Make an <em className="italic font-display font-normal">Impact?</em>
-          </motion.h2>
-          <motion.p
-            {...fadeUp}
-            transition={{ duration: 0.6, delay: 0.15 }}
-            className="font-body text-base sm:text-lg text-accent/85 mt-6 max-w-2xl mx-auto leading-relaxed"
-          >
-            Join our community of innovators and changemakers and start building the future today.
-          </motion.p>
-          <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center">
-            <Link
-              to="/auth"
-              className="inline-flex items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-accent/90 to-accent text-primary px-10 py-4 text-base font-bold hover:opacity-90 transition-opacity shadow-accent"
-            >
-              Apply Now
-            </Link>
-            <Link
-              to="/contact"
-              className="inline-flex items-center justify-center gap-2 rounded-2xl bg-card text-foreground px-10 py-4 text-base font-bold hover:bg-card/90 transition-colors"
-            >
-              Contact Us
-            </Link>
-          </div>
-        </div>
-      </section>
     </LandingLayout>
   );
 };
