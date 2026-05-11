@@ -14,6 +14,15 @@ import {
   Crosshair,
   ShieldCheck,
   CheckCircle2,
+  Globe2,
+  Compass as CompassIcon,
+  Rocket as RocketIcon,
+  Target as TargetIcon,
+  Lightbulb as LightbulbIcon,
+  LayoutPanelLeft as LayoutIcon,
+  Home as HomeIcon,
+  Handshake,
+  Send,
 } from "lucide-react";
 import { useState } from "react";
 import LandingLayout from "@/components/landing/shared/LandingLayout";
@@ -27,6 +36,16 @@ import svcTherapist from "@/assets/landing/svc-therapist.jpg";
 import svcLab from "@/assets/landing/svc-lab.jpg";
 import outcomeStudents from "@/assets/landing/outcome-students.jpg";
 import outcomeInstitution from "@/assets/landing/outcome-institution.jpg";
+import outcomeParents from "@/assets/landing/outcome-parents.jpg";
+import platMap from "@/assets/landing/plat-map.jpg";
+import platCompass from "@/assets/landing/plat-compass.jpg";
+import platJourney from "@/assets/landing/plat-journey.jpg";
+import platSystem from "@/assets/landing/plat-system.jpg";
+import platBuild from "@/assets/landing/plat-build.jpg";
+import platPath from "@/assets/landing/plat-path.jpg";
+import storyAlex from "@/assets/landing/story-alex.jpg";
+import storyRahul from "@/assets/landing/story-rahul.jpg";
+import insightsTablet from "@/assets/landing/insights-tablet.jpg";
 
 const fadeUp = {
   initial: { opacity: 0, y: 24 },
@@ -106,6 +125,84 @@ const OutcomeBullet = ({ title, italic, body }: { title: string; italic: string;
       <p className="font-body text-sm sm:text-base text-muted-foreground mt-2 leading-relaxed max-w-md">{body}</p>
     </div>
   </div>
+);
+
+const PlatformCard = ({
+  img,
+  alt,
+  Icon,
+  title,
+  italic,
+  titleSuffix,
+  lead,
+  bullets,
+}: {
+  img: string;
+  alt: string;
+  Icon: typeof Globe2;
+  title: string;
+  italic: string;
+  titleSuffix?: string;
+  lead: string;
+  bullets: { title: string; body: string }[];
+}) => (
+  <motion.div {...fadeUp} className="bg-card rounded-3xl border border-border shadow-soft overflow-hidden grid sm:grid-cols-2">
+    <div className="relative min-h-[280px] sm:min-h-0">
+      <img src={img} alt={alt} loading="lazy" className="absolute inset-0 w-full h-full object-cover" />
+    </div>
+    <div className="p-7 sm:p-8 flex flex-col">
+      <div className="flex items-start gap-3 mb-5">
+        <div className="w-11 h-11 rounded-2xl bg-accent/40 text-primary flex items-center justify-center shrink-0">
+          <Icon size={20} />
+        </div>
+        <h3 className="font-body text-xl sm:text-2xl text-foreground font-bold leading-tight pt-1">
+          {title} <Italic>{italic}</Italic>{titleSuffix}
+        </h3>
+      </div>
+      <p className="font-body text-base text-primary font-semibold italic leading-relaxed mb-6">{lead}</p>
+      <ul className="space-y-5">
+        {bullets.map((b) => (
+          <li key={b.title} className="flex gap-3">
+            <ArrowRight size={18} className="text-primary shrink-0 mt-1" />
+            <div>
+              <p className="font-body text-base text-foreground font-bold">{b.title}</p>
+              <p className="font-body text-sm text-muted-foreground mt-1 leading-relaxed">{b.body}</p>
+            </div>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </motion.div>
+);
+
+const StatCard = ({ Icon, value, label }: { Icon: typeof RocketIcon; value: string; label: string }) => (
+  <motion.div {...fadeUp} className="bg-card rounded-3xl border border-border shadow-soft p-8 sm:p-10 text-center flex flex-col items-center">
+    <Icon size={36} className="text-primary mb-6" strokeWidth={1.6} />
+    <div className="font-display text-5xl sm:text-6xl text-foreground leading-none">{value}</div>
+    <p className="font-body text-base sm:text-lg text-muted-foreground mt-5">{label}</p>
+  </motion.div>
+);
+
+const NumberedTextCard = ({
+  num,
+  title,
+  italic,
+  body,
+}: {
+  num: string;
+  title: string;
+  italic: string;
+  body: string;
+}) => (
+  <motion.div {...fadeUp} className="bg-card rounded-3xl border border-border shadow-soft p-8 sm:p-12">
+    <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-secondary mb-10">
+      <span className="font-display text-2xl text-primary tracking-wide">{num}</span>
+    </div>
+    <h3 className="font-display text-3xl sm:text-4xl md:text-5xl text-foreground leading-[1.1]">
+      {title} <em className="italic text-primary font-normal">{italic}</em>
+    </h3>
+    <p className="font-body text-base sm:text-lg text-muted-foreground mt-8 leading-relaxed">{body}</p>
+  </motion.div>
 );
 
 /* ---------- Stakeholder data ---------- */
@@ -641,32 +738,445 @@ const Index = () => {
         </div>
       </section>
 
-      {/* ===== Final CTA ===== */}
+      {/* ===== OUTCOME 03 — Parent Satisfaction ===== */}
+      <section className="bg-background-alt/50 py-20 sm:py-28">
+        <div className="container mx-auto px-5 sm:px-8">
+          <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+            <motion.div {...fadeUp}>
+              <img
+                src={outcomeParents}
+                alt="Family with career counselor reviewing student success report"
+                loading="lazy"
+                width={1280}
+                height={1024}
+                className="w-full rounded-3xl shadow-card object-cover aspect-[5/4]"
+              />
+            </motion.div>
+
+            <div>
+              <motion.div
+                {...fadeUp}
+                className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-secondary mb-7"
+              >
+                <span className="font-display text-2xl text-primary">03</span>
+              </motion.div>
+              <motion.h2
+                {...fadeUp}
+                transition={{ duration: 0.7, delay: 0.1 }}
+                className="font-display text-4xl sm:text-5xl md:text-6xl text-foreground mb-10 leading-[1.05]"
+              >
+                Parent <em className="italic text-primary">Satisfaction</em>
+              </motion.h2>
+
+              <div className="space-y-7">
+                <OutcomeBullet
+                  title="Improved Parent"
+                  italic="Satisfaction"
+                  body="In today's ambiguous world, parents look for clarity, and forward looking predictions."
+                />
+                <OutcomeBullet
+                  title="Positive"
+                  italic="Parenting"
+                  body="Another critical element is the segment of positive parenting for better student support."
+                />
+                <OutcomeBullet
+                  title="Structured Career Guidance"
+                  italic="System"
+                  body="myRaaha creates a systematic & integrated program to create a continuous guidance journey."
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ===== 04 / 05 — Numbered text cards ===== */}
+      <section className="bg-background py-20 sm:py-28">
+        <div className="container mx-auto px-5 sm:px-8">
+          <div className="grid md:grid-cols-2 gap-7">
+            <NumberedTextCard
+              num="04"
+              title="Policy"
+              italic="Alignment"
+              body="Alignment with Education Reform: Schools increasingly need to align with National Education Policy 2020."
+            />
+            <NumberedTextCard
+              num="05"
+              title="Ecosystem"
+              italic="Partnerships"
+              body="Alumni/Ecosystem Network: Schools can connect students with alumni mentors & industry professionals for a strong career support ecosystem."
+            />
+          </div>
+        </div>
+      </section>
+
+      {/* ===== THE PLATFORM ===== */}
+      <section className="bg-background-alt/40 py-20 sm:py-28">
+        <div className="container mx-auto px-5 sm:px-8">
+          <div className="text-center max-w-3xl mx-auto mb-14 sm:mb-16">
+            <motion.h2
+              {...fadeUp}
+              className="font-body font-bold text-4xl sm:text-5xl md:text-6xl text-foreground"
+            >
+              The <Italic>Platform</Italic>
+            </motion.h2>
+            <motion.p
+              {...fadeUp}
+              transition={{ duration: 0.6, delay: 0.15 }}
+              className="font-body text-base sm:text-lg text-muted-foreground mt-7 leading-relaxed"
+            >
+              We bring the power of integrated intervention for meaningful career journeys. Career success starts with myRaaha360
+            </motion.p>
+          </div>
+
+          <div className="grid lg:grid-cols-2 gap-7">
+            <PlatformCard
+              img={platMap}
+              alt="Glowing neural mind map"
+              Icon={Globe2}
+              title="The Map Was Always"
+              italic="Missing"
+              titleSuffix=", Not You."
+              lead="Confusion is not a flaw. It is data. MyRaaha doesn't fix you. It builds the map."
+              bullets={[
+                { title: "You are not behind. You are uncharted.", body: "The system starts reading you from day one." },
+                { title: "Your uncertainty is the starting point.", body: "We track what lights you up — quietly." },
+                { title: "Clarity is a process.", body: "The SelfGraph™ holds it with you, evolving in real time." },
+              ]}
+            />
+            <PlatformCard
+              img={platCompass}
+              alt="Hand holding compass with sunburst"
+              Icon={CompassIcon}
+              title="Direction Before"
+              italic="Destination."
+              lead="The world asks you to commit before you understand. We refuse that sequence."
+              bullets={[
+                { title: "Explore first. Decide later.", body: "The Curiosity Compass opens before any roadmap." },
+                { title: "Every path made visible.", body: "Stories, simulations, lived paths. Not brochures." },
+                { title: "See the tradeoffs.", body: "AI roadmaps that make the fine print visible." },
+              ]}
+            />
+            <PlatformCard
+              img={platJourney}
+              alt="Glowing journey path"
+              Icon={RocketIcon}
+              title="You Are Not a Resume. You Are a"
+              italic="Journey."
+              lead="Your aptitude today is not your ceiling tomorrow. Your story deserves to be tracked."
+              bullets={[
+                { title: "Captured automatically.", body: "The Living Resume™ forgets nothing." },
+                { title: "Identity evolves.", body: "The 3A Intelligence Engine evolves with you." },
+                { title: "No resets. No re-tests.", body: "Just compounding clarity." },
+              ]}
+            />
+            <PlatformCard
+              img={platSystem}
+              alt="Person walking with glowing guide"
+              Icon={TargetIcon}
+              title="The System Navigates. You Are Not"
+              italic="Alone."
+              lead="Self-navigation is a myth. We end years lost to confusion and missed opportunities."
+              bullets={[
+                { title: "Proactive guidance.", body: "The AI Career Therapist steps in before burnout." },
+                { title: "Matched trajectory.", body: "Real mentors. No gatekeeping." },
+                { title: "Inclusive by design.", body: "Built for Tier 3, Tier 4, and rural India." },
+              ]}
+            />
+            <PlatformCard
+              img={platBuild}
+              alt="Maker working on glowing lamp"
+              Icon={LightbulbIcon}
+              title="Build Something. Even if You Weren't"
+              italic="Told."
+              lead="Entrepreneurship is a system — learnable, teachable, and available to anyone."
+              bullets={[
+                { title: "Serious curiosity.", body: "Startup Sparks helps you follow it." },
+                { title: "Validated by reality.", body: "Sprints and MVP Builders turn thinking into doing." },
+                { title: "Build the person.", body: "The Funding Path Navigator is already waiting." },
+              ]}
+            />
+            <PlatformCard
+              img={platPath}
+              alt="Person standing on neon path overlooking city"
+              Icon={LayoutIcon}
+              title="Your Path. Not"
+              italic="Theirs."
+              lead="Not every builder wants a boardroom. Some want freedom. All of it counts."
+              bullets={[
+                { title: "Chosen, not assigned.", body: "The Path Selector adapts to what you actually want." },
+                { title: "Hybrid lives are real.", body: "Career and creation are not opposites. You can walk both." },
+                { title: "Start anywhere.", body: "No pitch deck or co-founder needed. We are your starting point." },
+              ]}
+            />
+          </div>
+        </div>
+      </section>
+
+      {/* ===== OUR IMPACT ===== */}
+      <section className="bg-background py-20 sm:py-28">
+        <div className="container mx-auto px-5 sm:px-8">
+          <div className="text-center max-w-3xl mx-auto mb-14 sm:mb-16">
+            <motion.h2
+              {...fadeUp}
+              className="font-body font-bold text-4xl sm:text-5xl md:text-6xl text-foreground"
+            >
+              Our <Italic>Impact</Italic>
+            </motion.h2>
+            <motion.p
+              {...fadeUp}
+              transition={{ duration: 0.6, delay: 0.15 }}
+              className="font-body text-base sm:text-lg text-muted-foreground mt-6"
+            >
+              Making a difference in communities and academia
+            </motion.p>
+          </div>
+
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <StatCard Icon={RocketIcon} value="50+" label="Projects Partnered" />
+            <StatCard Icon={Users} value="1000+" label="Students Engaged" />
+            <StatCard Icon={Handshake} value="25+" label="Community Partners" />
+            <StatCard Icon={HomeIcon} value="10+" label="Academic Institutions" />
+          </div>
+        </div>
+      </section>
+
+      {/* ===== SUCCESS STORIES ===== */}
+      <SuccessStories />
+
+      {/* ===== WEEKLY INSIGHTS ===== */}
+      <section className="bg-background py-20 sm:py-28">
+        <div className="container mx-auto px-5 sm:px-8">
+          <div className="rounded-3xl overflow-hidden border border-border shadow-soft grid lg:grid-cols-2 bg-card">
+            <div className="relative bg-primary p-10 sm:p-14 flex flex-col justify-end min-h-[420px]">
+              <img
+                src={insightsTablet}
+                alt="Tablet displaying MyRaaha Insight magazine"
+                loading="lazy"
+                className="absolute inset-0 w-full h-full object-cover opacity-40 mix-blend-luminosity"
+              />
+              <div className="relative">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="flex -space-x-2">
+                    <div className="w-9 h-9 rounded-full bg-accent/40 border-2 border-accent" />
+                    <div className="w-9 h-9 rounded-full bg-accent/60 border-2 border-accent" />
+                    <div className="w-9 h-9 rounded-full bg-accent/80 border-2 border-accent" />
+                  </div>
+                  <span className="inline-flex items-center justify-center px-3 py-1 rounded-full bg-accent text-primary text-xs font-bold">+5k</span>
+                </div>
+                <p className="font-body text-accent text-lg sm:text-xl font-semibold leading-snug">
+                  Join our thriving community of innovators
+                </p>
+              </div>
+            </div>
+            <div className="p-10 sm:p-14 flex flex-col justify-center">
+              <p className="font-body text-sm font-bold text-primary tracking-[0.22em] uppercase">Weekly Insights</p>
+              <h2 className="font-body font-bold text-3xl sm:text-4xl md:text-5xl text-foreground mt-4 leading-[1.1]">
+                Stay ahead of the
+                <br />
+                <Italic>future of education.</Italic>
+              </h2>
+              <p className="font-body text-base sm:text-lg text-muted-foreground mt-6 leading-relaxed">
+                Get curated insights on career evolution, NEP 2020 transitions, and exclusive ecosystem opportunities delivered every Monday.
+              </p>
+              <form
+                onSubmit={(e) => e.preventDefault()}
+                className="mt-8 flex flex-col sm:flex-row gap-3"
+              >
+                <input
+                  type="email"
+                  required
+                  placeholder="Your professional email"
+                  className="flex-1 bg-transparent border-b border-border focus:border-primary outline-none px-2 py-3 font-body text-base text-foreground placeholder:text-muted-foreground"
+                />
+                <button
+                  type="submit"
+                  className="inline-flex items-center justify-center gap-2 rounded-2xl bg-primary text-accent px-7 py-3 font-body text-base font-semibold hover:opacity-90 transition-opacity"
+                >
+                  Subscribe <Send size={16} />
+                </button>
+              </form>
+              <p className="font-body text-sm text-muted-foreground mt-4">
+                No spam. Just value. Unsubscribe anytime.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ===== Final CTA — Ready to Make an Impact ===== */}
       <section className="bg-primary text-accent">
-        <div className="container mx-auto px-5 sm:px-8 py-20 sm:py-24 text-center">
-          <h2 className="font-display text-3xl sm:text-4xl md:text-5xl text-accent leading-tight max-w-3xl mx-auto">
-            Ready to build a <em className="italic">future-ready</em> institution?
-          </h2>
-          <p className="font-body text-base sm:text-lg text-accent/85 mt-5 max-w-2xl mx-auto">
-            Partner with MyRaaha and transform how your students discover, decide, and thrive.
-          </p>
-          <div className="mt-9 flex flex-col sm:flex-row gap-3 justify-center">
+        <div className="container mx-auto px-5 sm:px-8 py-24 sm:py-32 text-center">
+          <motion.h2
+            {...fadeUp}
+            className="font-body font-bold text-4xl sm:text-5xl md:text-6xl text-accent leading-tight max-w-4xl mx-auto"
+          >
+            Ready to Make an <em className="italic font-display font-normal">Impact?</em>
+          </motion.h2>
+          <motion.p
+            {...fadeUp}
+            transition={{ duration: 0.6, delay: 0.15 }}
+            className="font-body text-base sm:text-lg text-accent/85 mt-6 max-w-2xl mx-auto leading-relaxed"
+          >
+            Join our community of innovators and changemakers and start building the future today.
+          </motion.p>
+          <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center">
             <Link
               to="/auth"
-              className="inline-flex items-center justify-center gap-2 rounded-full bg-accent text-primary px-8 py-4 text-sm font-semibold hover:opacity-90 transition-opacity"
+              className="inline-flex items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-accent/90 to-accent text-primary px-10 py-4 text-base font-bold hover:opacity-90 transition-opacity shadow-accent"
             >
-              Partner Portal <ArrowRight size={16} />
+              Apply Now
             </Link>
             <Link
               to="/contact"
-              className="inline-flex items-center justify-center gap-2 rounded-full border border-accent/40 text-accent px-8 py-4 text-sm font-medium hover:bg-accent/10 transition-colors"
+              className="inline-flex items-center justify-center gap-2 rounded-2xl bg-card text-foreground px-10 py-4 text-base font-bold hover:bg-card/90 transition-colors"
             >
-              Talk to us
+              Contact Us
             </Link>
           </div>
         </div>
       </section>
     </LandingLayout>
+  );
+};
+
+/* ---------- Success Stories component (with tabs) ---------- */
+
+type StoryTab = "students" | "institutes" | "parents" | "administrators";
+
+const storyData: Record<StoryTab, { label: string; cards: { img: string; quote: string; name: string; role: string }[] }> = {
+  students: {
+    label: "Students",
+    cards: [
+      {
+        img: storyAlex,
+        quote: "The partnerships program provided the resources and network we needed to scale our impact.",
+        name: "Alex Chen",
+        role: "Founder, TechStart",
+      },
+      {
+        img: storyRahul,
+        quote: "Myraaha helped me transition from being an overthinker to a focused entrepreneur with a clear action plan.",
+        name: "Rahul S.",
+        role: "Entrepreneurship Student",
+      },
+    ],
+  },
+  institutes: {
+    label: "Institutes",
+    cards: [
+      {
+        img: storyAlex,
+        quote: "Our placement velocity improved dramatically after integrating MyRaaha into our career cell workflow.",
+        name: "Dr. Priya Menon",
+        role: "Dean, Innovation Cell",
+      },
+      {
+        img: storyRahul,
+        quote: "The dashboards give us real visibility into student readiness — something no career portal ever offered.",
+        name: "Vikram Joshi",
+        role: "Director, Skill Council",
+      },
+    ],
+  },
+  parents: {
+    label: "Parents",
+    cards: [
+      {
+        img: storyAlex,
+        quote: "For the first time, I feel informed enough to actually support my daughter's career decisions.",
+        name: "Sunita R.",
+        role: "Parent, Class XII",
+      },
+      {
+        img: storyRahul,
+        quote: "MyRaaha turned dinner-table arguments into real conversations about my son's future.",
+        name: "Manoj Kapoor",
+        role: "Parent, College Student",
+      },
+    ],
+  },
+  administrators: {
+    label: "Administrators",
+    cards: [
+      {
+        img: storyAlex,
+        quote: "A genuine whole-school transformation framework — not another tool teachers have to learn.",
+        name: "Anita Sharma",
+        role: "Principal, K-12 School",
+      },
+      {
+        img: storyRahul,
+        quote: "Our NEP 2020 alignment journey became measurable and shareable with stakeholders.",
+        name: "Rajeev Nair",
+        role: "Academic Administrator",
+      },
+    ],
+  },
+};
+
+const SuccessStories = () => {
+  const [active, setActive] = useState<StoryTab>("students");
+  const cards = storyData[active].cards;
+  return (
+    <section className="bg-background-alt/40 py-20 sm:py-28">
+      <div className="container mx-auto px-5 sm:px-8">
+        <div className="text-center max-w-3xl mx-auto mb-12">
+          <motion.h2
+            {...fadeUp}
+            className="font-body font-bold text-4xl sm:text-5xl md:text-6xl text-foreground"
+          >
+            Success <Italic>Stories</Italic>
+          </motion.h2>
+          <motion.p
+            {...fadeUp}
+            transition={{ duration: 0.6, delay: 0.15 }}
+            className="font-body text-base sm:text-lg text-muted-foreground mt-6"
+          >
+            Hear from our partners, well wishers and participants
+          </motion.p>
+        </div>
+
+        <div className="flex justify-center mb-12">
+          <div className="inline-flex flex-wrap justify-center bg-card rounded-full p-1.5 shadow-soft border border-border max-w-full overflow-x-auto">
+            {(Object.keys(storyData) as StoryTab[]).map((k) => (
+              <button
+                key={k}
+                onClick={() => setActive(k)}
+                className={`px-6 sm:px-8 py-2.5 sm:py-3 rounded-full font-body text-xs sm:text-sm font-semibold whitespace-nowrap transition-all ${
+                  active === k
+                    ? "bg-background text-primary shadow-card"
+                    : "text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                {storyData[k].label}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <motion.div
+          key={active}
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4 }}
+          className="grid md:grid-cols-2 gap-6"
+        >
+          {cards.map((c) => (
+            <div key={c.name} className="bg-card rounded-3xl border border-border shadow-soft overflow-hidden">
+              <img src={c.img} alt={c.name} loading="lazy" className="w-full aspect-[16/9] object-cover" />
+              <div className="p-7 sm:p-8">
+                <p className="font-body italic text-base sm:text-lg text-foreground leading-relaxed">
+                  &ldquo;{c.quote}&rdquo;
+                </p>
+                <p className="font-body text-lg text-foreground font-bold mt-7">{c.name}</p>
+                <p className="font-body text-sm text-primary font-semibold mt-1">{c.role}</p>
+              </div>
+            </div>
+          ))}
+        </motion.div>
+      </div>
+    </section>
   );
 };
 
