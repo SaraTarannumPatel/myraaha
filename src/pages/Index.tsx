@@ -161,14 +161,14 @@ const PlatformCard = ({
           {title} <Italic>{italic}</Italic>{titleSuffix}
         </h3>
       </div>
-      <p className="font-body text-base text-primary font-semibold italic leading-relaxed mb-6">{lead}</p>
+      <p className="font-body text-lg text-primary font-semibold italic leading-relaxed mb-6">{lead}</p>
       <ul className="space-y-5">
         {bullets.map((b) => (
           <li key={b.title} className="flex gap-3">
             <ArrowRight size={18} className="text-primary shrink-0 mt-1" />
             <div>
-              <p className="font-body text-base text-foreground font-bold">{b.title}</p>
-              <p className="font-body text-sm text-muted-foreground mt-1 leading-relaxed">{b.body}</p>
+              <p className="font-body text-lg text-foreground font-semibold">{b.title}</p>
+              <p className="font-body text-base text-muted-foreground mt-1 leading-relaxed">{b.body}</p>
             </div>
           </li>
         ))}
