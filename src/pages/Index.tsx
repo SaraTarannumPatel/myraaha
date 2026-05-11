@@ -1019,7 +1019,7 @@ const SuccessStories = () => {
           {cards.map((c) => (
             <div key={c.name} className="bg-card rounded-3xl border border-border shadow-soft overflow-hidden">
               <img src={c.img} alt={c.name} loading="lazy" className="w-full aspect-[16/9] object-cover" />
-              <div className="p-7 sm:p-8">
+              <div className="p-7 sm:p-8 text-center">
                 <p className="font-body italic text-base sm:text-lg text-foreground leading-relaxed">
                   &ldquo;{c.quote}&rdquo;
                 </p>
