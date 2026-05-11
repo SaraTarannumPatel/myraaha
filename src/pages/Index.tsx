@@ -351,19 +351,6 @@ const Index = () => {
                 But the bigger question is, is this avoidable and who can help solve this?
               </motion.p>
 
-              <motion.div
-                {...fadeUp}
-                transition={{ duration: 0.6, delay: 0.3 }}
-                className="mt-9"
-              >
-                <Link
-                  to="/begin"
-                  className="inline-flex items-center justify-center gap-3 rounded-full bg-primary text-accent px-8 py-4 text-sm sm:text-base font-semibold shadow-accent hover:opacity-90 transition-opacity uppercase tracking-wide"
-                >
-                  <Rocket size={18} />
-                  Explore MyRaaha to get your answers
-                </Link>
-              </motion.div>
             </div>
 
             <motion.div
