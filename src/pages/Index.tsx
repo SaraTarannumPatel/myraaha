@@ -88,7 +88,7 @@ const ServiceCard = ({
       <h3 className="font-body text-xl sm:text-2xl text-foreground font-semibold leading-tight">
         {title} <Italic>{italic}</Italic>
       </h3>
-      <p className="font-body text-sm sm:text-base text-muted-foreground mt-4 leading-relaxed">{body}</p>
+      <p className="font-body text-base sm:text-lg text-muted-foreground mt-4 leading-relaxed">{body}</p>
     </div>
   </motion.div>
 );
