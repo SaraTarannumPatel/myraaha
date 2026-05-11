@@ -506,7 +506,7 @@ const Index = () => {
       </section>
 
       {/* ===== IMPACT GROUPS ===== */}
-      <section className="bg-secondary/40 py-20 sm:py-28">
+      <section className="bg-background-alt py-20 sm:py-28">
         <div className="container mx-auto px-5 sm:px-8">
           <div className="text-center max-w-3xl mx-auto mb-12">
             <motion.p {...fadeUp} className="font-body text-sm font-bold text-primary tracking-[0.22em] uppercase">
@@ -515,7 +515,7 @@ const Index = () => {
             <motion.h2
               {...fadeUp}
               transition={{ duration: 0.7, delay: 0.1 }}
-              className="font-body font-bold text-3xl sm:text-4xl md:text-5xl text-foreground mt-5 leading-tight"
+              className="font-body font-bold text-4xl sm:text-5xl md:text-6xl text-foreground mt-5 leading-[1.1]"
             >
               What is in it for our <Italic>stakeholders?</Italic>
             </motion.h2>
