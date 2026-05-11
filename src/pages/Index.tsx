@@ -55,7 +55,7 @@ const fadeUp = {
 /* ---------- Reusable bits ---------- */
 
 const Italic = ({ children }: { children: React.ReactNode }) => (
-  <em className="font-display not-italic italic text-primary font-normal">{children}</em>
+  <em className="italic text-primary">{children}</em>
 );
 
 const ServiceCard = ({
