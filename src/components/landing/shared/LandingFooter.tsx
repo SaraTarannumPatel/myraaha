@@ -41,7 +41,7 @@ const LandingFooter = () => {
       {/* CTA — Ready to Make an Impact */}
       <div className="bg-primary text-primary-foreground">
         <div className="container mx-auto px-5 sm:px-8 py-20 sm:py-24 text-center">
-          <h2 className="font-body font-bold text-3xl sm:text-4xl md:text-5xl text-primary-foreground leading-tight max-w-4xl mx-auto">
+          <h2 className="font-body font-semibold text-3xl sm:text-4xl md:text-5xl text-primary-foreground leading-tight max-w-4xl mx-auto">
             Ready to Make an <em className="italic font-normal">Impact?</em>
           </h2>
           <p className="font-body text-base sm:text-lg text-primary-foreground/85 mt-6 max-w-2xl mx-auto leading-relaxed">
