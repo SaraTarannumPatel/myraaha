@@ -14,6 +14,15 @@ import {
   Crosshair,
   ShieldCheck,
   CheckCircle2,
+  Globe2,
+  Compass as CompassIcon,
+  Rocket as RocketIcon,
+  Target as TargetIcon,
+  Lightbulb as LightbulbIcon,
+  LayoutPanelLeft as LayoutIcon,
+  Home as HomeIcon,
+  Handshake,
+  Send,
 } from "lucide-react";
 import { useState } from "react";
 import LandingLayout from "@/components/landing/shared/LandingLayout";
@@ -27,6 +36,16 @@ import svcTherapist from "@/assets/landing/svc-therapist.jpg";
 import svcLab from "@/assets/landing/svc-lab.jpg";
 import outcomeStudents from "@/assets/landing/outcome-students.jpg";
 import outcomeInstitution from "@/assets/landing/outcome-institution.jpg";
+import outcomeParents from "@/assets/landing/outcome-parents.jpg";
+import platMap from "@/assets/landing/plat-map.jpg";
+import platCompass from "@/assets/landing/plat-compass.jpg";
+import platJourney from "@/assets/landing/plat-journey.jpg";
+import platSystem from "@/assets/landing/plat-system.jpg";
+import platBuild from "@/assets/landing/plat-build.jpg";
+import platPath from "@/assets/landing/plat-path.jpg";
+import storyAlex from "@/assets/landing/story-alex.jpg";
+import storyRahul from "@/assets/landing/story-rahul.jpg";
+import insightsTablet from "@/assets/landing/insights-tablet.jpg";
 
 const fadeUp = {
   initial: { opacity: 0, y: 24 },
