@@ -519,7 +519,7 @@ const Index = () => {
         <div className="container mx-auto px-5 sm:px-8">
           <div className="text-center max-w-3xl mx-auto mb-12">
             <motion.p {...fadeUp} className="font-body text-sm font-bold text-primary tracking-[0.22em] uppercase">
-              Impact Groups
+              Value Realization
             </motion.p>
             <motion.h2
               {...fadeUp}
