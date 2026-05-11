@@ -21,6 +21,10 @@ import {
   Lightbulb as LightbulbIcon,
   LayoutPanelLeft as LayoutIcon,
   Send,
+  Award,
+  TrendingUp,
+  Handshake,
+  GitFork,
 } from "lucide-react";
 import { useState } from "react";
 import LandingLayout from "@/components/landing/shared/LandingLayout";
@@ -84,7 +88,7 @@ const ServiceCard = ({
       <h3 className="font-body text-xl sm:text-2xl text-foreground font-semibold leading-tight">
         {title} <Italic>{italic}</Italic>
       </h3>
-      <p className="font-body text-sm sm:text-base text-muted-foreground mt-4 leading-relaxed">{body}</p>
+      <p className="font-body text-base sm:text-lg text-muted-foreground mt-4 leading-relaxed">{body}</p>
     </div>
   </motion.div>
 );
@@ -100,8 +104,8 @@ const StakeholderCard = ({
   italic: string;
   body: string;
 }) => (
-  <motion.div {...fadeUp} className="bg-card rounded-3xl border border-border shadow-soft p-7 sm:p-8 flex flex-col">
-    <div className="w-12 h-12 rounded-2xl bg-accent/40 text-primary flex items-center justify-center mb-6">
+  <motion.div {...fadeUp} className="bg-card rounded-3xl border border-border shadow-soft p-7 sm:p-8 flex flex-col items-center text-center">
+    <div className="w-12 h-12 rounded-2xl bg-accent/40 text-primary flex items-center justify-center mb-6 mx-auto">
       <Icon size={22} />
     </div>
     <h3 className="font-body text-xl sm:text-2xl text-foreground font-semibold leading-tight">
@@ -109,7 +113,7 @@ const StakeholderCard = ({
       <br />
       <Italic>{italic}</Italic>
     </h3>
-    <p className="font-body text-sm text-muted-foreground mt-5 leading-relaxed">{body}</p>
+    <p className="font-body text-base sm:text-lg text-muted-foreground mt-5 leading-relaxed">{body}</p>
   </motion.div>
 );
 
@@ -157,14 +161,14 @@ const PlatformCard = ({
           {title} <Italic>{italic}</Italic>{titleSuffix}
         </h3>
       </div>
-      <p className="font-body text-base text-primary font-semibold italic leading-relaxed mb-6">{lead}</p>
+      <p className="font-body text-lg text-primary font-semibold italic leading-relaxed mb-6">{lead}</p>
       <ul className="space-y-5">
         {bullets.map((b) => (
           <li key={b.title} className="flex gap-3">
             <ArrowRight size={18} className="text-primary shrink-0 mt-1" />
             <div>
-              <p className="font-body text-base text-foreground font-bold">{b.title}</p>
-              <p className="font-body text-sm text-muted-foreground mt-1 leading-relaxed">{b.body}</p>
+              <p className="font-body text-lg text-foreground font-semibold">{b.title}</p>
+              <p className="font-body text-base text-muted-foreground mt-1 leading-relaxed">{b.body}</p>
             </div>
           </li>
         ))}
@@ -231,22 +235,22 @@ const stakeholderData: Record<
     label: "Parents",
     cards: [
       {
-        Icon: ShieldCheck,
-        title: "Informed",
-        italic: "Decisions",
-        body: "Move beyond hearsay with data-backed insights on streams, colleges, and careers tailored to your child.",
+        Icon: Lightbulb,
+        title: "Decision",
+        italic: "Intelligence",
+        body: "Data-driven insights to help parents support their child's choices with clarity and future-looking predictions.",
       },
       {
-        Icon: Users,
-        title: "Family",
-        italic: "Conversations",
-        body: "Bridge the generational gap with shared dashboards, progress notes and meaningful conversations about the future.",
+        Icon: Handshake,
+        title: "Positive",
+        italic: "Parenting",
+        body: "Resources and frameworks for fostering a supportive environment that aligns with the child's innate strengths.",
       },
       {
-        Icon: Compass,
-        title: "Trusted",
-        italic: "Guidance",
-        body: "An always-on counselor that understands modern career paths your child is actually curious about.",
+        Icon: TrendingUp,
+        title: "Continuous",
+        italic: "Tracking",
+        body: "Visibility into their child's progress and career readiness milestones throughout the academic journey.",
       },
     ],
   },
@@ -254,22 +258,22 @@ const stakeholderData: Record<
     label: "Institutions",
     cards: [
       {
-        Icon: LayoutPanelLeft,
-        title: "Policy",
-        italic: "Alignment",
-        body: "Alignment with Education Reform: Institutions increasingly need to align with National Education Policy 2020.",
-      },
-      {
-        Icon: Globe,
-        title: "Ecosystem",
-        italic: "Integration",
-        body: "Ecosystem Network, Institutions can connect students with alumni mentors & industry professionals for a strong career support ecosystem.",
-      },
-      {
-        Icon: Rocket,
-        title: "Future-Ready",
+        Icon: Award,
+        title: "Institutional",
         italic: "Reputation",
-        body: "Stand out as a forward-looking institution producing employable, confident graduates ready for tomorrow.",
+        body: "Attract better talent by offering a future-ready model with structured career development programs.",
+      },
+      {
+        Icon: GitFork,
+        title: "NEP 2020",
+        italic: "Alignment",
+        body: "Seamless integration with National Education Policy reforms focusing on holistic and vocational development.",
+      },
+      {
+        Icon: MessageSquare,
+        title: "Teacher",
+        italic: "Empowerment",
+        body: "Equipping educators with career intelligence and mentoring tools to become effective guides for students.",
       },
     ],
   },
@@ -293,6 +297,18 @@ const stakeholderData: Record<
         title: "Public-Private",
         italic: "Partnerships",
         body: "Co-create policy, run national programs, and shape the next generation of workforce alongside top institutions.",
+      },
+      {
+        Icon: LayoutPanelLeft,
+        title: "Policy",
+        italic: "Alignment",
+        body: "Alignment with Education Reform: Governments increasingly need to align with National Education Policy 2020.",
+      },
+      {
+        Icon: Globe2,
+        title: "Ecosystem",
+        italic: "Integration",
+        body: "Ecosystem Network, Institutions can connect students with alumni mentors & industry professionals for a strong career support ecosystem.",
       },
     ],
   },
@@ -555,181 +571,6 @@ const Index = () => {
       </section>
 
 
-      {/* ===== OUTCOME 01 — Student Outcome ===== */}
-      <section className="bg-background-alt/50 py-20 sm:py-28">
-        <div className="container mx-auto px-5 sm:px-8">
-          <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-            <motion.div {...fadeUp}>
-              <img
-                src={outcomeStudents}
-                alt="Students at digital screen showing career growth paths"
-                loading="lazy"
-                width={1280}
-                height={1024}
-                className="w-full rounded-3xl shadow-card object-cover aspect-[5/4]"
-              />
-            </motion.div>
-
-            <div>
-              <motion.div
-                {...fadeUp}
-                className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-secondary mb-7"
-              >
-                <span className="font-display text-2xl text-primary">01</span>
-              </motion.div>
-              <motion.h2
-                {...fadeUp}
-                transition={{ duration: 0.7, delay: 0.1 }}
-                className="font-body font-semibold text-4xl sm:text-5xl md:text-6xl text-foreground mb-10 leading-[1.1]"
-              >
-                Student <Italic>Outcome</Italic>
-              </motion.h2>
-
-              <div className="space-y-7">
-                <OutcomeBullet
-                  title="Career Clarity for"
-                  italic="Students"
-                  body="Enabling students make stream and career choices with confidence & clarity."
-                />
-                <OutcomeBullet
-                  title="Stronger Student"
-                  italic="Outcomes"
-                  body="Schools are increasingly judged by what students achieve after graduation."
-                />
-                <OutcomeBullet
-                  title="Exposure to Emerging"
-                  italic="Careers"
-                  body="Students discover emerging career paths, expanding their career imagination."
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ===== OUTCOME 02 — Institutional Reputation ===== */}
-      <section className="bg-background py-20 sm:py-28">
-        <div className="container mx-auto px-5 sm:px-8">
-          <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-            <div className="lg:order-1 order-2">
-              <motion.div
-                {...fadeUp}
-                className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-secondary mb-7"
-              >
-                <span className="font-display text-2xl text-primary">02</span>
-              </motion.div>
-              <motion.h2
-                {...fadeUp}
-                transition={{ duration: 0.7, delay: 0.1 }}
-                className="font-body font-semibold text-4xl sm:text-5xl md:text-6xl text-foreground mb-10 leading-[1.1]"
-              >
-                Institutional <Italic>Reputation</Italic>
-              </motion.h2>
-
-              <div className="space-y-7">
-                <OutcomeBullet
-                  title="Future-Ready Skill"
-                  italic="Development"
-                  body="The global job landscape is shifting due to AI, automation, & sustainability transitions."
-                />
-                <OutcomeBullet
-                  title="Student"
-                  italic="Acquisition"
-                  body="Future-ready school model with structured career development programs attract better student to beat peers."
-                />
-                <OutcomeBullet
-                  title="Teacher"
-                  italic="Enablement"
-                  body="Teachers are equipped with career intelligence, insights to become career mentors."
-                />
-              </div>
-            </div>
-
-            <motion.div {...fadeUp} className="lg:order-2 order-1">
-              <img
-                src={outcomeInstitution}
-                alt="Modern futuristic university campus building"
-                loading="lazy"
-                width={1280}
-                height={1024}
-                className="w-full rounded-3xl shadow-card object-cover aspect-[5/4]"
-              />
-            </motion.div>
-          </div>
-        </div>
-      </section>
-
-      {/* ===== OUTCOME 03 — Parent Satisfaction ===== */}
-      <section className="bg-background-alt/50 py-20 sm:py-28">
-        <div className="container mx-auto px-5 sm:px-8">
-          <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-            <motion.div {...fadeUp}>
-              <img
-                src={outcomeParents}
-                alt="Family with career counselor reviewing student success report"
-                loading="lazy"
-                width={1280}
-                height={1024}
-                className="w-full rounded-3xl shadow-card object-cover aspect-[5/4]"
-              />
-            </motion.div>
-
-            <div>
-              <motion.div
-                {...fadeUp}
-                className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-secondary mb-7"
-              >
-                <span className="font-display text-2xl text-primary">03</span>
-              </motion.div>
-              <motion.h2
-                {...fadeUp}
-                transition={{ duration: 0.7, delay: 0.1 }}
-                className="font-body font-semibold text-4xl sm:text-5xl md:text-6xl text-foreground mb-10 leading-[1.1]"
-              >
-                Parent <Italic>Satisfaction</Italic>
-              </motion.h2>
-
-              <div className="space-y-7">
-                <OutcomeBullet
-                  title="Improved Parent"
-                  italic="Satisfaction"
-                  body="In today's ambiguous world, parents look for clarity, and forward looking predictions."
-                />
-                <OutcomeBullet
-                  title="Positive"
-                  italic="Parenting"
-                  body="Another critical element is the segment of positive parenting for better student support."
-                />
-                <OutcomeBullet
-                  title="Structured Career Guidance"
-                  italic="System"
-                  body="myRaaha creates a systematic & integrated program to create a continuous guidance journey."
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ===== 04 / 05 — Numbered text cards ===== */}
-      <section className="bg-background py-20 sm:py-28">
-        <div className="container mx-auto px-5 sm:px-8">
-          <div className="grid md:grid-cols-2 gap-7">
-            <NumberedTextCard
-              num="04"
-              title="Policy"
-              italic="Alignment"
-              body="Alignment with Education Reform: Schools increasingly need to align with National Education Policy 2020."
-            />
-            <NumberedTextCard
-              num="05"
-              title="Ecosystem"
-              italic="Partnerships"
-              body="Alumni/Ecosystem Network: Schools can connect students with alumni mentors & industry professionals for a strong career support ecosystem."
-            />
-          </div>
-        </div>
-      </section>
 
       {/* ===== THE PLATFORM ===== */}
       <section className="bg-background-alt/40 py-20 sm:py-28">
