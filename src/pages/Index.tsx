@@ -563,40 +563,6 @@ const Index = () => {
         </div>
       </section>
 
-      {/* ===== STRATEGIC TRANSFORMATION ===== */}
-      <section className="bg-background py-20 sm:py-28">
-        <div className="container mx-auto px-5 sm:px-8">
-          <motion.p {...fadeUp} className="font-body text-sm font-bold text-primary tracking-[0.22em] uppercase">
-            Strategic Transformation
-          </motion.p>
-          <motion.h2
-            {...fadeUp}
-            transition={{ duration: 0.7, delay: 0.1 }}
-            className="font-display text-4xl sm:text-5xl md:text-6xl text-foreground mt-7 leading-[1.05]"
-          >
-            WE ENABLE
-            <br />
-            <em className="italic text-primary">"FUTURE READY COLLEGE MODEL"</em>
-          </motion.h2>
-
-          <div className="grid lg:grid-cols-2 gap-10 lg:gap-16 mt-14">
-            <motion.h3
-              {...fadeUp}
-              className="font-body text-2xl sm:text-3xl text-primary font-bold leading-snug"
-            >
-              Our unique value proposition is to guide students with clarity, confidence, and career
-            </motion.h3>
-            <motion.p
-              {...fadeUp}
-              transition={{ duration: 0.6, delay: 0.15 }}
-              className="font-body text-base sm:text-lg text-muted-foreground leading-relaxed"
-            >
-              myRaaha 360 is not just a career guidance ecosystem platform, but a whole-school transformation framework
-              aligned with the future of education, employability, and innovation, activating school's 5 strategic pillars
-            </motion.p>
-          </div>
-        </div>
-      </section>
 
       {/* ===== OUTCOME 01 — Student Outcome ===== */}
       <section className="bg-background-alt/50 py-20 sm:py-28">
