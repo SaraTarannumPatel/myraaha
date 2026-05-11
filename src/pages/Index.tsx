@@ -55,7 +55,7 @@ const fadeUp = {
 /* ---------- Reusable bits ---------- */
 
 const Italic = ({ children }: { children: React.ReactNode }) => (
-  <em className="font-display not-italic italic text-primary font-normal">{children}</em>
+  <em className="italic text-primary">{children}</em>
 );
 
 const ServiceCard = ({
@@ -104,7 +104,7 @@ const StakeholderCard = ({
     <div className="w-12 h-12 rounded-2xl bg-accent/40 text-primary flex items-center justify-center mb-6">
       <Icon size={22} />
     </div>
-    <h3 className="font-body text-xl text-foreground font-semibold leading-snug">
+    <h3 className="font-body text-xl sm:text-2xl text-foreground font-bold leading-tight">
       {title}
       <br />
       <Italic>{italic}</Italic>
@@ -189,8 +189,8 @@ const NumberedTextCard = ({
     <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-secondary mb-10">
       <span className="font-display text-2xl text-primary tracking-wide">{num}</span>
     </div>
-    <h3 className="font-display text-3xl sm:text-4xl md:text-5xl text-foreground leading-[1.1]">
-      {title} <em className="italic text-primary font-normal">{italic}</em>
+    <h3 className="font-body font-bold text-4xl sm:text-5xl md:text-6xl text-foreground leading-[1.1]">
+      {title} <Italic>{italic}</Italic>
     </h3>
     <p className="font-body text-base sm:text-lg text-muted-foreground mt-8 leading-relaxed">{body}</p>
   </motion.div>
@@ -375,7 +375,7 @@ const Index = () => {
             <motion.h2
               {...fadeUp}
               transition={{ duration: 0.7, delay: 0.1 }}
-              className="font-display text-4xl sm:text-5xl md:text-6xl text-accent mt-7 leading-[1.1]"
+              className="font-body font-bold text-4xl sm:text-5xl md:text-6xl text-accent mt-7 leading-[1.1]"
             >
               Empowering <em className="italic">Innovation</em>
               <br />
@@ -419,8 +419,8 @@ const Index = () => {
                 <div className="w-12 h-12 rounded-2xl bg-white flex items-center justify-center mb-6">
                   <c.Icon size={22} className="text-primary" />
                 </div>
-                <h3 className="font-body text-xl sm:text-2xl text-accent font-semibold">
-                  {c.title} <em className="italic font-display font-normal">{c.italic}</em>
+                <h3 className="font-body text-xl sm:text-2xl text-accent font-bold leading-tight">
+                  {c.title} <em className="italic">{c.italic}</em>
                 </h3>
                 <p className="font-body text-sm sm:text-base text-accent/85 mt-4 leading-relaxed">{c.body}</p>
               </motion.div>
@@ -506,7 +506,7 @@ const Index = () => {
       </section>
 
       {/* ===== IMPACT GROUPS ===== */}
-      <section className="bg-secondary/40 py-20 sm:py-28">
+      <section className="bg-background-alt py-20 sm:py-28">
         <div className="container mx-auto px-5 sm:px-8">
           <div className="text-center max-w-3xl mx-auto mb-12">
             <motion.p {...fadeUp} className="font-body text-sm font-bold text-primary tracking-[0.22em] uppercase">
@@ -515,7 +515,7 @@ const Index = () => {
             <motion.h2
               {...fadeUp}
               transition={{ duration: 0.7, delay: 0.1 }}
-              className="font-body font-bold text-3xl sm:text-4xl md:text-5xl text-foreground mt-5 leading-tight"
+              className="font-body font-bold text-4xl sm:text-5xl md:text-6xl text-foreground mt-5 leading-[1.1]"
             >
               What is in it for our <Italic>stakeholders?</Italic>
             </motion.h2>
@@ -523,15 +523,15 @@ const Index = () => {
 
           {/* Tabs */}
           <div className="flex justify-center mb-12 sm:mb-14">
-            <div className="inline-flex flex-wrap justify-center bg-background rounded-full p-1.5 shadow-soft border border-border max-w-full overflow-x-auto">
+            <div className="inline-flex flex-wrap justify-center bg-secondary rounded-full p-1.5 shadow-soft border border-border max-w-full overflow-x-auto">
               {(Object.keys(stakeholderData) as StakeholderKey[]).map((k) => (
                 <button
                   key={k}
                   onClick={() => setActiveStake(k)}
                   className={`px-5 sm:px-7 py-2.5 sm:py-3 rounded-full font-body text-xs sm:text-sm font-semibold whitespace-nowrap transition-all ${
                     activeStake === k
-                      ? "bg-foreground text-background shadow-card"
-                      : "text-muted-foreground hover:text-foreground"
+                      ? "bg-primary text-accent shadow-card"
+                      : "text-primary/70 hover:text-primary"
                   }`}
                 >
                   {stakeholderData[k].label}
@@ -580,9 +580,9 @@ const Index = () => {
               <motion.h2
                 {...fadeUp}
                 transition={{ duration: 0.7, delay: 0.1 }}
-                className="font-display text-4xl sm:text-5xl md:text-6xl text-foreground mb-10 leading-[1.05]"
+                className="font-body font-bold text-4xl sm:text-5xl md:text-6xl text-foreground mb-10 leading-[1.1]"
               >
-                Student <em className="italic text-primary">Outcome</em>
+                Student <Italic>Outcome</Italic>
               </motion.h2>
 
               <div className="space-y-7">
@@ -621,9 +621,9 @@ const Index = () => {
               <motion.h2
                 {...fadeUp}
                 transition={{ duration: 0.7, delay: 0.1 }}
-                className="font-display text-4xl sm:text-5xl md:text-6xl text-foreground mb-10 leading-[1.05]"
+                className="font-body font-bold text-4xl sm:text-5xl md:text-6xl text-foreground mb-10 leading-[1.1]"
               >
-                Institutional <em className="italic text-primary">Reputation</em>
+                Institutional <Italic>Reputation</Italic>
               </motion.h2>
 
               <div className="space-y-7">
@@ -684,9 +684,9 @@ const Index = () => {
               <motion.h2
                 {...fadeUp}
                 transition={{ duration: 0.7, delay: 0.1 }}
-                className="font-display text-4xl sm:text-5xl md:text-6xl text-foreground mb-10 leading-[1.05]"
+                className="font-body font-bold text-4xl sm:text-5xl md:text-6xl text-foreground mb-10 leading-[1.1]"
               >
-                Parent <em className="italic text-primary">Satisfaction</em>
+                Parent <Italic>Satisfaction</Italic>
               </motion.h2>
 
               <div className="space-y-7">
@@ -865,7 +865,7 @@ const Index = () => {
             </div>
             <div className="p-10 sm:p-14 flex flex-col justify-center">
               <p className="font-body text-sm font-bold text-primary tracking-[0.22em] uppercase">Weekly Insights</p>
-              <h2 className="font-body font-bold text-3xl sm:text-4xl md:text-5xl text-foreground mt-4 leading-[1.1]">
+              <h2 className="font-body font-bold text-4xl sm:text-5xl md:text-6xl text-foreground mt-4 leading-[1.1]">
                 Stay ahead of the
                 <br />
                 <Italic>future of education.</Italic>
@@ -983,15 +983,15 @@ const SuccessStories = () => {
         </div>
 
         <div className="flex justify-center mb-12">
-          <div className="inline-flex flex-wrap justify-center bg-card rounded-full p-1.5 shadow-soft border border-border max-w-full overflow-x-auto">
+          <div className="inline-flex flex-wrap justify-center bg-secondary rounded-full p-1.5 shadow-soft border border-border max-w-full overflow-x-auto">
             {(Object.keys(storyData) as StoryTab[]).map((k) => (
               <button
                 key={k}
                 onClick={() => setActive(k)}
                 className={`px-6 sm:px-8 py-2.5 sm:py-3 rounded-full font-body text-xs sm:text-sm font-semibold whitespace-nowrap transition-all ${
                   active === k
-                    ? "bg-background text-primary shadow-card"
-                    : "text-muted-foreground hover:text-foreground"
+                    ? "bg-primary text-accent shadow-card"
+                    : "text-primary/70 hover:text-primary"
                 }`}
               >
                 {storyData[k].label}

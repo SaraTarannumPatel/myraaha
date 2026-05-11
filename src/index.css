@@ -15,8 +15,8 @@
     */
 
     /* Foundational neutrals */
-    --background: 0 0% 100%;            /* #FFFFFF */
-    --background-alt: 0 0% 98%;         /* near-white section break */
+    --background: 0 0% 96%;             /* light grey base */
+    --background-alt: 0 0% 96%;         /* light grey section break */
     --foreground: 0 0% 0%;              /* #000000 body / secondary */
 
     --card: 0 0% 100%;
