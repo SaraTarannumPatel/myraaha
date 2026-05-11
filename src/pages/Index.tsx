@@ -189,8 +189,8 @@ const NumberedTextCard = ({
     <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-secondary mb-10">
       <span className="font-display text-2xl text-primary tracking-wide">{num}</span>
     </div>
-    <h3 className="font-display text-3xl sm:text-4xl md:text-5xl text-foreground leading-[1.1]">
-      {title} <em className="italic text-primary font-normal">{italic}</em>
+    <h3 className="font-body font-bold text-4xl sm:text-5xl md:text-6xl text-foreground leading-[1.1]">
+      {title} <Italic>{italic}</Italic>
     </h3>
     <p className="font-body text-base sm:text-lg text-muted-foreground mt-8 leading-relaxed">{body}</p>
   </motion.div>
