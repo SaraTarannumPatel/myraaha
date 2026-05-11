@@ -81,7 +81,7 @@ const ServiceCard = ({
       </div>
     </div>
     <div className="p-6 sm:p-7 pt-9 flex-1 flex flex-col">
-      <h3 className="font-body text-xl sm:text-2xl text-foreground font-bold leading-tight">
+      <h3 className="font-body text-xl sm:text-2xl text-foreground font-semibold leading-tight">
         {title} <Italic>{italic}</Italic>
       </h3>
       <p className="font-body text-sm sm:text-base text-muted-foreground mt-4 leading-relaxed">{body}</p>
@@ -104,7 +104,7 @@ const StakeholderCard = ({
     <div className="w-12 h-12 rounded-2xl bg-accent/40 text-primary flex items-center justify-center mb-6">
       <Icon size={22} />
     </div>
-    <h3 className="font-body text-xl sm:text-2xl text-foreground font-bold leading-tight">
+    <h3 className="font-body text-xl sm:text-2xl text-foreground font-semibold leading-tight">
       {title}
       <br />
       <Italic>{italic}</Italic>
@@ -117,7 +117,7 @@ const OutcomeBullet = ({ title, italic, body }: { title: string; italic: string;
   <div className="flex gap-4 items-start">
     <CheckCircle2 size={22} className="text-primary shrink-0 mt-1" />
     <div>
-      <h4 className="font-body text-lg sm:text-xl text-foreground font-bold">
+      <h4 className="font-body text-lg sm:text-xl text-foreground font-semibold">
         {title} <Italic>{italic}</Italic>
       </h4>
       <p className="font-body text-sm sm:text-base text-muted-foreground mt-2 leading-relaxed max-w-md">{body}</p>
@@ -153,7 +153,7 @@ const PlatformCard = ({
         <div className="w-11 h-11 rounded-2xl bg-accent/40 text-primary flex items-center justify-center shrink-0">
           <Icon size={20} />
         </div>
-        <h3 className="font-body text-xl sm:text-2xl text-foreground font-bold leading-tight pt-1">
+        <h3 className="font-body text-xl sm:text-2xl text-foreground font-semibold leading-tight pt-1">
           {title} <Italic>{italic}</Italic>{titleSuffix}
         </h3>
       </div>
@@ -189,7 +189,7 @@ const NumberedTextCard = ({
     <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-secondary mb-10">
       <span className="font-display text-2xl text-primary tracking-wide">{num}</span>
     </div>
-    <h3 className="font-body font-bold text-4xl sm:text-5xl md:text-6xl text-foreground leading-[1.1]">
+    <h3 className="font-body font-semibold text-4xl sm:text-5xl md:text-6xl text-foreground leading-[1.1]">
       {title} <Italic>{italic}</Italic>
     </h3>
     <p className="font-body text-base sm:text-lg text-muted-foreground mt-8 leading-relaxed">{body}</p>
@@ -325,7 +325,7 @@ const Index = () => {
                 initial={{ opacity: 0, y: 24 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.7, delay: 0.05 }}
-                className="font-body font-bold text-[2.2rem] sm:text-5xl md:text-6xl text-foreground leading-[1.1] tracking-tight"
+                className="font-body font-semibold text-[2.2rem] sm:text-5xl md:text-6xl text-foreground leading-[1.1] tracking-tight"
               >
                 Confusion at 16 is not a <Italic>flaw.</Italic>
                 <br />
@@ -375,7 +375,7 @@ const Index = () => {
             <motion.h2
               {...fadeUp}
               transition={{ duration: 0.7, delay: 0.1 }}
-              className="font-body font-bold text-4xl sm:text-5xl md:text-6xl text-accent mt-7 leading-[1.1]"
+              className="font-body font-semibold text-4xl sm:text-5xl md:text-6xl text-accent mt-7 leading-[1.1]"
             >
               Empowering <em className="italic">Innovation</em>
               <br />
@@ -419,7 +419,7 @@ const Index = () => {
                 <div className="w-12 h-12 rounded-2xl bg-white flex items-center justify-center mb-6">
                   <c.Icon size={22} className="text-primary" />
                 </div>
-                <h3 className="font-body text-xl sm:text-2xl text-accent font-bold leading-tight">
+                <h3 className="font-body text-xl sm:text-2xl text-accent font-semibold leading-tight">
                   {c.title} <em className="italic">{c.italic}</em>
                 </h3>
                 <p className="font-body text-sm sm:text-base text-accent/85 mt-4 leading-relaxed">{c.body}</p>
@@ -439,7 +439,7 @@ const Index = () => {
             <motion.h2
               {...fadeUp}
               transition={{ duration: 0.7, delay: 0.1 }}
-              className="font-body font-bold text-4xl sm:text-5xl md:text-6xl text-foreground mt-5"
+              className="font-body font-semibold text-4xl sm:text-5xl md:text-6xl text-foreground mt-5"
             >
               What We <Italic>Do</Italic>
             </motion.h2>
@@ -515,7 +515,7 @@ const Index = () => {
             <motion.h2
               {...fadeUp}
               transition={{ duration: 0.7, delay: 0.1 }}
-              className="font-body font-bold text-4xl sm:text-5xl md:text-6xl text-foreground mt-5 leading-[1.1]"
+              className="font-body font-semibold text-4xl sm:text-5xl md:text-6xl text-foreground mt-5 leading-[1.1]"
             >
               What is in it for our <Italic>stakeholders?</Italic>
             </motion.h2>
@@ -580,7 +580,7 @@ const Index = () => {
               <motion.h2
                 {...fadeUp}
                 transition={{ duration: 0.7, delay: 0.1 }}
-                className="font-body font-bold text-4xl sm:text-5xl md:text-6xl text-foreground mb-10 leading-[1.1]"
+                className="font-body font-semibold text-4xl sm:text-5xl md:text-6xl text-foreground mb-10 leading-[1.1]"
               >
                 Student <Italic>Outcome</Italic>
               </motion.h2>
@@ -621,7 +621,7 @@ const Index = () => {
               <motion.h2
                 {...fadeUp}
                 transition={{ duration: 0.7, delay: 0.1 }}
-                className="font-body font-bold text-4xl sm:text-5xl md:text-6xl text-foreground mb-10 leading-[1.1]"
+                className="font-body font-semibold text-4xl sm:text-5xl md:text-6xl text-foreground mb-10 leading-[1.1]"
               >
                 Institutional <Italic>Reputation</Italic>
               </motion.h2>
@@ -684,7 +684,7 @@ const Index = () => {
               <motion.h2
                 {...fadeUp}
                 transition={{ duration: 0.7, delay: 0.1 }}
-                className="font-body font-bold text-4xl sm:text-5xl md:text-6xl text-foreground mb-10 leading-[1.1]"
+                className="font-body font-semibold text-4xl sm:text-5xl md:text-6xl text-foreground mb-10 leading-[1.1]"
               >
                 Parent <Italic>Satisfaction</Italic>
               </motion.h2>
@@ -737,7 +737,7 @@ const Index = () => {
           <div className="text-center max-w-3xl mx-auto mb-14 sm:mb-16">
             <motion.h2
               {...fadeUp}
-              className="font-body font-bold text-4xl sm:text-5xl md:text-6xl text-foreground"
+              className="font-body font-semibold text-4xl sm:text-5xl md:text-6xl text-foreground"
             >
               The <Italic>Platform</Italic>
             </motion.h2>
@@ -865,7 +865,7 @@ const Index = () => {
             </div>
             <div className="p-10 sm:p-14 flex flex-col justify-center">
               <p className="font-body text-sm font-bold text-primary tracking-[0.22em] uppercase">Weekly Insights</p>
-              <h2 className="font-body font-bold text-4xl sm:text-5xl md:text-6xl text-foreground mt-4 leading-[1.1]">
+              <h2 className="font-body font-semibold text-4xl sm:text-5xl md:text-6xl text-foreground mt-4 leading-[1.1]">
                 Stay ahead of the
                 <br />
                 <Italic>future of education.</Italic>
@@ -969,7 +969,7 @@ const SuccessStories = () => {
         <div className="text-center max-w-3xl mx-auto mb-12">
           <motion.h2
             {...fadeUp}
-            className="font-body font-bold text-4xl sm:text-5xl md:text-6xl text-foreground"
+            className="font-body font-semibold text-4xl sm:text-5xl md:text-6xl text-foreground"
           >
             Success <Italic>Stories</Italic>
           </motion.h2>
