@@ -11,14 +11,14 @@ const cors = {
 
 const SCALAR_FIELDS: Record<string, string[]> = {
   career_paths: ["demand_level","growth_trajectory","difficulty","salary_range","avg_salary_usd","icon_emoji"],
-  job_roles_directory: ["demand_level","growth_trajectory","avg_salary_usd","icon_emoji"],
+  job_roles_directory: ["demand_level","growth_trajectory","avg_salary_usd"],
   industry_directory: ["demand_level","growth_trajectory","avg_salary_usd","icon_emoji"],
   sector_directory: ["demand_level","growth_trajectory","avg_salary_usd","icon_emoji"],
   domain_directory: ["icon_emoji"],
-  skills_directory: ["demand_level","growth_trajectory","avg_salary_usd","icon_emoji","difficulty"],
-  subjects_directory: ["demand_level","icon_emoji"],
+  skills_directory: ["demand_level","growth_trajectory","avg_salary_usd","difficulty"],
+  subjects_directory: ["demand_level"],
   online_courses_directory: ["demand_level","icon_emoji"],
-  universities_directory: ["icon_emoji"],
+  universities_directory: [],
   countries_directory: ["demand_level","growth_trajectory","avg_salary_usd","icon_emoji"],
 };
 
