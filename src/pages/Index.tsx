@@ -20,8 +20,6 @@ import {
   Target as TargetIcon,
   Lightbulb as LightbulbIcon,
   LayoutPanelLeft as LayoutIcon,
-  Home as HomeIcon,
-  Handshake,
   Send,
 } from "lucide-react";
 import { useState } from "react";
@@ -175,13 +173,6 @@ const PlatformCard = ({
   </motion.div>
 );
 
-const StatCard = ({ Icon, value, label }: { Icon: typeof RocketIcon; value: string; label: string }) => (
-  <motion.div {...fadeUp} className="bg-card rounded-3xl border border-border shadow-soft p-8 sm:p-10 text-center flex flex-col items-center">
-    <Icon size={36} className="text-primary mb-6" strokeWidth={1.6} />
-    <div className="font-display text-5xl sm:text-6xl text-foreground leading-none">{value}</div>
-    <p className="font-body text-base sm:text-lg text-muted-foreground mt-5">{label}</p>
-  </motion.div>
-);
 
 const NumberedTextCard = ({
   num,
