@@ -207,55 +207,32 @@ const NumberedTextCard = ({
 
 /* ---------- Stakeholder data ---------- */
 
-type StakeholderKey = "school" | "college" | "parents" | "institutions" | "companies";
+type StakeholderKey = "students" | "parents" | "institutions" | "governments";
 
 const stakeholderData: Record<
   StakeholderKey,
   { label: string; cards: { Icon: typeof Target; title: string; italic: string; body: string }[] }
 > = {
-  school: {
-    label: "School Students",
-    cards: [
-      {
-        Icon: Target,
-        title: "Stream Selection",
-        italic: "Clarity",
-        body: "Guided discovery to choose the right academic streams (Science, Commerce, Arts) based on aptitude and future growth.",
-      },
-      {
-        Icon: Compass,
-        title: "Early Career",
-        italic: "Discovery",
-        body: "Exposure to emerging 21st-century careers beyond the traditional options, expanding their professional imagination.",
-      },
-      {
-        Icon: ShieldCheck,
-        title: "Confidence",
-        italic: "Building",
-        body: "Reducing transition anxiety by providing a clear, step-by-step roadmap for their educational journey.",
-      },
-    ],
-  },
-  college: {
-    label: "College Students",
+  students: {
+    label: "Students",
     cards: [
       {
         Icon: Target,
         title: "Career",
-        italic: "Alignment",
-        body: "Align majors and electives with real-world career outcomes through evidence-based pathways and industry insights.",
+        italic: "Discovery",
+        body: "Career discovery before career decisions is essential for long-term career success and fulfilment. Enabling students make stream and career choices with confidence & clarity.",
       },
       {
-        Icon: Lightbulb,
-        title: "Skill",
-        italic: "Stacking",
-        body: "Build job-ready skills layered on top of degrees through curated micro-learning, projects, and certifications.",
+        Icon: Compass,
+        title: "Career",
+        italic: "Navigation",
+        body: "\u201CSelf-discovery\u201D before career decisions is essential for long-term career success and fulfilment. Students discover emerging career paths, expanding their career imagination.",
       },
       {
         Icon: Rocket,
-        title: "Placement",
-        italic: "Readiness",
-        body: "From resume to interview prep — be confident and prepared when opportunity comes knocking.",
+        title: "Career",
+        italic: "Building",
+        body: "Bridging the skill gap, access to industry professionals and support students with venture building, enabling stronger student outcomes.",
       },
     ],
   },
@@ -287,15 +264,15 @@ const stakeholderData: Record<
     cards: [
       {
         Icon: LayoutPanelLeft,
-        title: "Career",
-        italic: "Infrastructure",
-        body: "A whole-school transformation framework that activates your 5 strategic pillars without extra workload on staff.",
+        title: "Policy",
+        italic: "Alignment",
+        body: "Alignment with Education Reform: Institutions increasingly need to align with National Education Policy 2020.",
       },
       {
-        Icon: Target,
-        title: "Outcome",
-        italic: "Tracking",
-        body: "Measure student readiness, placement velocity, and skill alignment through a single integrated dashboard.",
+        Icon: Globe,
+        title: "Ecosystem",
+        italic: "Integration",
+        body: "Ecosystem Network, Institutions can connect students with alumni mentors & industry professionals for a strong career support ecosystem.",
       },
       {
         Icon: Rocket,
@@ -305,8 +282,8 @@ const stakeholderData: Record<
       },
     ],
   },
-  companies: {
-    label: "Companies",
+  governments: {
+    label: "Governments",
     cards: [
       {
         Icon: Crosshair,
@@ -316,15 +293,15 @@ const stakeholderData: Record<
       },
       {
         Icon: Workflow,
-        title: "Hiring",
-        italic: "Velocity",
-        body: "Reduce time-to-hire with smart shortlisting, structured assessments, and curated talent pipelines.",
+        title: "Workforce",
+        italic: "Readiness",
+        body: "Reduce skill-to-job mismatch with structured career pathways and aligned national skilling initiatives.",
       },
       {
         Icon: Globe,
-        title: "Industry",
+        title: "Public-Private",
         italic: "Partnerships",
-        body: "Co-create curriculum, run hackathons, and shape the next generation of workforce alongside top institutions.",
+        body: "Co-create policy, run national programs, and shape the next generation of workforce alongside top institutions.",
       },
     ],
   },
