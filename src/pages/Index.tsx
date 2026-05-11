@@ -100,8 +100,8 @@ const StakeholderCard = ({
   italic: string;
   body: string;
 }) => (
-  <motion.div {...fadeUp} className="bg-card rounded-3xl border border-border shadow-soft p-7 sm:p-8 flex flex-col">
-    <div className="w-12 h-12 rounded-2xl bg-accent/40 text-primary flex items-center justify-center mb-6">
+  <motion.div {...fadeUp} className="bg-card rounded-3xl border border-border shadow-soft p-7 sm:p-8 flex flex-col items-center text-center">
+    <div className="w-12 h-12 rounded-2xl bg-accent/40 text-primary flex items-center justify-center mb-6 mx-auto">
       <Icon size={22} />
     </div>
     <h3 className="font-body text-xl sm:text-2xl text-foreground font-semibold leading-tight">
@@ -109,7 +109,7 @@ const StakeholderCard = ({
       <br />
       <Italic>{italic}</Italic>
     </h3>
-    <p className="font-body text-sm text-muted-foreground mt-5 leading-relaxed">{body}</p>
+    <p className="font-body text-base sm:text-lg text-muted-foreground mt-5 leading-relaxed">{body}</p>
   </motion.div>
 );
 
