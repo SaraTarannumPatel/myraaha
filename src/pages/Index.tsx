@@ -20,8 +20,6 @@ import {
   Target as TargetIcon,
   Lightbulb as LightbulbIcon,
   LayoutPanelLeft as LayoutIcon,
-  Home as HomeIcon,
-  Handshake,
   Send,
 } from "lucide-react";
 import { useState } from "react";
@@ -175,13 +173,6 @@ const PlatformCard = ({
   </motion.div>
 );
 
-const StatCard = ({ Icon, value, label }: { Icon: typeof RocketIcon; value: string; label: string }) => (
-  <motion.div {...fadeUp} className="bg-card rounded-3xl border border-border shadow-soft p-8 sm:p-10 text-center flex flex-col items-center">
-    <Icon size={36} className="text-primary mb-6" strokeWidth={1.6} />
-    <div className="font-display text-5xl sm:text-6xl text-foreground leading-none">{value}</div>
-    <p className="font-body text-base sm:text-lg text-muted-foreground mt-5">{label}</p>
-  </motion.div>
-);
 
 const NumberedTextCard = ({
   num,
@@ -207,55 +198,32 @@ const NumberedTextCard = ({
 
 /* ---------- Stakeholder data ---------- */
 
-type StakeholderKey = "school" | "college" | "parents" | "institutions" | "companies";
+type StakeholderKey = "students" | "parents" | "institutions" | "governments";
 
 const stakeholderData: Record<
   StakeholderKey,
   { label: string; cards: { Icon: typeof Target; title: string; italic: string; body: string }[] }
 > = {
-  school: {
-    label: "School Students",
-    cards: [
-      {
-        Icon: Target,
-        title: "Stream Selection",
-        italic: "Clarity",
-        body: "Guided discovery to choose the right academic streams (Science, Commerce, Arts) based on aptitude and future growth.",
-      },
-      {
-        Icon: Compass,
-        title: "Early Career",
-        italic: "Discovery",
-        body: "Exposure to emerging 21st-century careers beyond the traditional options, expanding their professional imagination.",
-      },
-      {
-        Icon: ShieldCheck,
-        title: "Confidence",
-        italic: "Building",
-        body: "Reducing transition anxiety by providing a clear, step-by-step roadmap for their educational journey.",
-      },
-    ],
-  },
-  college: {
-    label: "College Students",
+  students: {
+    label: "Students",
     cards: [
       {
         Icon: Target,
         title: "Career",
-        italic: "Alignment",
-        body: "Align majors and electives with real-world career outcomes through evidence-based pathways and industry insights.",
+        italic: "Discovery",
+        body: "Career discovery before career decisions is essential for long-term career success and fulfilment. Enabling students make stream and career choices with confidence & clarity.",
       },
       {
-        Icon: Lightbulb,
-        title: "Skill",
-        italic: "Stacking",
-        body: "Build job-ready skills layered on top of degrees through curated micro-learning, projects, and certifications.",
+        Icon: Compass,
+        title: "Career",
+        italic: "Navigation",
+        body: "\u201CSelf-discovery\u201D before career decisions is essential for long-term career success and fulfilment. Students discover emerging career paths, expanding their career imagination.",
       },
       {
         Icon: Rocket,
-        title: "Placement",
-        italic: "Readiness",
-        body: "From resume to interview prep — be confident and prepared when opportunity comes knocking.",
+        title: "Career",
+        italic: "Building",
+        body: "Bridging the skill gap, access to industry professionals and support students with venture building, enabling stronger student outcomes.",
       },
     ],
   },
@@ -287,15 +255,15 @@ const stakeholderData: Record<
     cards: [
       {
         Icon: LayoutPanelLeft,
-        title: "Career",
-        italic: "Infrastructure",
-        body: "A whole-school transformation framework that activates your 5 strategic pillars without extra workload on staff.",
+        title: "Policy",
+        italic: "Alignment",
+        body: "Alignment with Education Reform: Institutions increasingly need to align with National Education Policy 2020.",
       },
       {
-        Icon: Target,
-        title: "Outcome",
-        italic: "Tracking",
-        body: "Measure student readiness, placement velocity, and skill alignment through a single integrated dashboard.",
+        Icon: Globe,
+        title: "Ecosystem",
+        italic: "Integration",
+        body: "Ecosystem Network, Institutions can connect students with alumni mentors & industry professionals for a strong career support ecosystem.",
       },
       {
         Icon: Rocket,
@@ -305,8 +273,8 @@ const stakeholderData: Record<
       },
     ],
   },
-  companies: {
-    label: "Companies",
+  governments: {
+    label: "Governments",
     cards: [
       {
         Icon: Crosshair,
@@ -316,22 +284,22 @@ const stakeholderData: Record<
       },
       {
         Icon: Workflow,
-        title: "Hiring",
-        italic: "Velocity",
-        body: "Reduce time-to-hire with smart shortlisting, structured assessments, and curated talent pipelines.",
+        title: "Workforce",
+        italic: "Readiness",
+        body: "Reduce skill-to-job mismatch with structured career pathways and aligned national skilling initiatives.",
       },
       {
         Icon: Globe,
-        title: "Industry",
+        title: "Public-Private",
         italic: "Partnerships",
-        body: "Co-create curriculum, run hackathons, and shape the next generation of workforce alongside top institutions.",
+        body: "Co-create policy, run national programs, and shape the next generation of workforce alongside top institutions.",
       },
     ],
   },
 };
 
 const Index = () => {
-  const [activeStake, setActiveStake] = useState<StakeholderKey>("school");
+  const [activeStake, setActiveStake] = useState<StakeholderKey>("students");
   const stake = stakeholderData[activeStake];
 
   return (
@@ -374,19 +342,6 @@ const Index = () => {
                 But the bigger question is, is this avoidable and who can help solve this?
               </motion.p>
 
-              <motion.div
-                {...fadeUp}
-                transition={{ duration: 0.6, delay: 0.3 }}
-                className="mt-9"
-              >
-                <Link
-                  to="/begin"
-                  className="inline-flex items-center justify-center gap-3 rounded-full bg-primary text-accent px-8 py-4 text-sm sm:text-base font-semibold shadow-accent hover:opacity-90 transition-opacity uppercase tracking-wide"
-                >
-                  <Rocket size={18} />
-                  Explore MyRaaha to get your answers
-                </Link>
-              </motion.div>
             </div>
 
             <motion.div
@@ -459,10 +414,10 @@ const Index = () => {
               <motion.div
                 key={c.italic}
                 {...fadeUp}
-                className="rounded-3xl bg-accent/10 border border-accent/20 p-7 sm:p-8 backdrop-blur-sm"
+                className="rounded-3xl bg-accent/10 border border-accent/20 p-7 sm:p-8 backdrop-blur-sm flex flex-col items-center text-center"
               >
-                <div className="w-12 h-12 rounded-2xl bg-accent/20 flex items-center justify-center mb-6">
-                  <c.Icon size={22} className="text-accent" />
+                <div className="w-12 h-12 rounded-2xl bg-white flex items-center justify-center mb-6">
+                  <c.Icon size={22} className="text-primary" />
                 </div>
                 <h3 className="font-body text-xl sm:text-2xl text-accent font-semibold">
                   {c.title} <em className="italic font-display font-normal">{c.italic}</em>
@@ -555,7 +510,7 @@ const Index = () => {
         <div className="container mx-auto px-5 sm:px-8">
           <div className="text-center max-w-3xl mx-auto mb-12">
             <motion.p {...fadeUp} className="font-body text-sm font-bold text-primary tracking-[0.22em] uppercase">
-              Impact Groups
+              Value Realization
             </motion.p>
             <motion.h2
               {...fadeUp}
@@ -599,40 +554,6 @@ const Index = () => {
         </div>
       </section>
 
-      {/* ===== STRATEGIC TRANSFORMATION ===== */}
-      <section className="bg-background py-20 sm:py-28">
-        <div className="container mx-auto px-5 sm:px-8">
-          <motion.p {...fadeUp} className="font-body text-sm font-bold text-primary tracking-[0.22em] uppercase">
-            Strategic Transformation
-          </motion.p>
-          <motion.h2
-            {...fadeUp}
-            transition={{ duration: 0.7, delay: 0.1 }}
-            className="font-display text-4xl sm:text-5xl md:text-6xl text-foreground mt-7 leading-[1.05]"
-          >
-            WE ENABLE
-            <br />
-            <em className="italic text-primary">"FUTURE READY COLLEGE MODEL"</em>
-          </motion.h2>
-
-          <div className="grid lg:grid-cols-2 gap-10 lg:gap-16 mt-14">
-            <motion.h3
-              {...fadeUp}
-              className="font-body text-2xl sm:text-3xl text-primary font-bold leading-snug"
-            >
-              Our unique value proposition is to guide students with clarity, confidence, and career
-            </motion.h3>
-            <motion.p
-              {...fadeUp}
-              transition={{ duration: 0.6, delay: 0.15 }}
-              className="font-body text-base sm:text-lg text-muted-foreground leading-relaxed"
-            >
-              myRaaha 360 is not just a career guidance ecosystem platform, but a whole-school transformation framework
-              aligned with the future of education, employability, and innovation, activating school's 5 strategic pillars
-            </motion.p>
-          </div>
-        </div>
-      </section>
 
       {/* ===== OUTCOME 01 — Student Outcome ===== */}
       <section className="bg-background-alt/50 py-20 sm:py-28">
@@ -913,33 +834,6 @@ const Index = () => {
         </div>
       </section>
 
-      {/* ===== OUR IMPACT ===== */}
-      <section className="bg-background py-20 sm:py-28">
-        <div className="container mx-auto px-5 sm:px-8">
-          <div className="text-center max-w-3xl mx-auto mb-14 sm:mb-16">
-            <motion.h2
-              {...fadeUp}
-              className="font-body font-bold text-4xl sm:text-5xl md:text-6xl text-foreground"
-            >
-              Our <Italic>Impact</Italic>
-            </motion.h2>
-            <motion.p
-              {...fadeUp}
-              transition={{ duration: 0.6, delay: 0.15 }}
-              className="font-body text-base sm:text-lg text-muted-foreground mt-6"
-            >
-              Making a difference in communities and academia
-            </motion.p>
-          </div>
-
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            <StatCard Icon={RocketIcon} value="50+" label="Projects Partnered" />
-            <StatCard Icon={Users} value="1000+" label="Students Engaged" />
-            <StatCard Icon={Handshake} value="25+" label="Community Partners" />
-            <StatCard Icon={HomeIcon} value="10+" label="Academic Institutions" />
-          </div>
-        </div>
-      </section>
 
       {/* ===== SUCCESS STORIES ===== */}
       <SuccessStories />
@@ -1004,45 +898,13 @@ const Index = () => {
         </div>
       </section>
 
-      {/* ===== Final CTA — Ready to Make an Impact ===== */}
-      <section className="bg-primary text-accent">
-        <div className="container mx-auto px-5 sm:px-8 py-24 sm:py-32 text-center">
-          <motion.h2
-            {...fadeUp}
-            className="font-body font-bold text-4xl sm:text-5xl md:text-6xl text-accent leading-tight max-w-4xl mx-auto"
-          >
-            Ready to Make an <em className="italic font-display font-normal">Impact?</em>
-          </motion.h2>
-          <motion.p
-            {...fadeUp}
-            transition={{ duration: 0.6, delay: 0.15 }}
-            className="font-body text-base sm:text-lg text-accent/85 mt-6 max-w-2xl mx-auto leading-relaxed"
-          >
-            Join our community of innovators and changemakers and start building the future today.
-          </motion.p>
-          <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center">
-            <Link
-              to="/auth"
-              className="inline-flex items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-accent/90 to-accent text-primary px-10 py-4 text-base font-bold hover:opacity-90 transition-opacity shadow-accent"
-            >
-              Apply Now
-            </Link>
-            <Link
-              to="/contact"
-              className="inline-flex items-center justify-center gap-2 rounded-2xl bg-card text-foreground px-10 py-4 text-base font-bold hover:bg-card/90 transition-colors"
-            >
-              Contact Us
-            </Link>
-          </div>
-        </div>
-      </section>
     </LandingLayout>
   );
 };
 
 /* ---------- Success Stories component (with tabs) ---------- */
 
-type StoryTab = "students" | "institutes" | "parents" | "administrators";
+type StoryTab = "students" | "institutes" | "parents";
 
 const storyData: Record<StoryTab, { label: string; cards: { img: string; quote: string; name: string; role: string }[] }> = {
   students: {
@@ -1093,23 +955,6 @@ const storyData: Record<StoryTab, { label: string; cards: { img: string; quote: 
         quote: "MyRaaha turned dinner-table arguments into real conversations about my son's future.",
         name: "Manoj Kapoor",
         role: "Parent, College Student",
-      },
-    ],
-  },
-  administrators: {
-    label: "Administrators",
-    cards: [
-      {
-        img: storyAlex,
-        quote: "A genuine whole-school transformation framework — not another tool teachers have to learn.",
-        name: "Anita Sharma",
-        role: "Principal, K-12 School",
-      },
-      {
-        img: storyRahul,
-        quote: "Our NEP 2020 alignment journey became measurable and shareable with stakeholders.",
-        name: "Rajeev Nair",
-        role: "Academic Administrator",
       },
     ],
   },
@@ -1165,7 +1010,7 @@ const SuccessStories = () => {
           {cards.map((c) => (
             <div key={c.name} className="bg-card rounded-3xl border border-border shadow-soft overflow-hidden">
               <img src={c.img} alt={c.name} loading="lazy" className="w-full aspect-[16/9] object-cover" />
-              <div className="p-7 sm:p-8">
+              <div className="p-7 sm:p-8 text-center">
                 <p className="font-body italic text-base sm:text-lg text-foreground leading-relaxed">
                   &ldquo;{c.quote}&rdquo;
                 </p>
