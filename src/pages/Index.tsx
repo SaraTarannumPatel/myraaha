@@ -913,7 +913,7 @@ const Index = () => {
 
 /* ---------- Success Stories component (with tabs) ---------- */
 
-type StoryTab = "students" | "institutes" | "parents" | "administrators";
+type StoryTab = "students" | "institutes" | "parents";
 
 const storyData: Record<StoryTab, { label: string; cards: { img: string; quote: string; name: string; role: string }[] }> = {
   students: {
@@ -964,23 +964,6 @@ const storyData: Record<StoryTab, { label: string; cards: { img: string; quote: 
         quote: "MyRaaha turned dinner-table arguments into real conversations about my son's future.",
         name: "Manoj Kapoor",
         role: "Parent, College Student",
-      },
-    ],
-  },
-  administrators: {
-    label: "Administrators",
-    cards: [
-      {
-        img: storyAlex,
-        quote: "A genuine whole-school transformation framework — not another tool teachers have to learn.",
-        name: "Anita Sharma",
-        role: "Principal, K-12 School",
-      },
-      {
-        img: storyRahul,
-        quote: "Our NEP 2020 alignment journey became measurable and shareable with stakeholders.",
-        name: "Rajeev Nair",
-        role: "Academic Administrator",
       },
     ],
   },
