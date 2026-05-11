@@ -127,6 +127,84 @@ const OutcomeBullet = ({ title, italic, body }: { title: string; italic: string;
   </div>
 );
 
+const PlatformCard = ({
+  img,
+  alt,
+  Icon,
+  title,
+  italic,
+  titleSuffix,
+  lead,
+  bullets,
+}: {
+  img: string;
+  alt: string;
+  Icon: typeof Globe2;
+  title: string;
+  italic: string;
+  titleSuffix?: string;
+  lead: string;
+  bullets: { title: string; body: string }[];
+}) => (
+  <motion.div {...fadeUp} className="bg-card rounded-3xl border border-border shadow-soft overflow-hidden grid sm:grid-cols-2">
+    <div className="relative min-h-[280px] sm:min-h-0">
+      <img src={img} alt={alt} loading="lazy" className="absolute inset-0 w-full h-full object-cover" />
+    </div>
+    <div className="p-7 sm:p-8 flex flex-col">
+      <div className="flex items-start gap-3 mb-5">
+        <div className="w-11 h-11 rounded-2xl bg-accent/40 text-primary flex items-center justify-center shrink-0">
+          <Icon size={20} />
+        </div>
+        <h3 className="font-body text-xl sm:text-2xl text-foreground font-bold leading-tight pt-1">
+          {title} <Italic>{italic}</Italic>{titleSuffix}
+        </h3>
+      </div>
+      <p className="font-body text-base text-primary font-semibold italic leading-relaxed mb-6">{lead}</p>
+      <ul className="space-y-5">
+        {bullets.map((b) => (
+          <li key={b.title} className="flex gap-3">
+            <ArrowRight size={18} className="text-primary shrink-0 mt-1" />
+            <div>
+              <p className="font-body text-base text-foreground font-bold">{b.title}</p>
+              <p className="font-body text-sm text-muted-foreground mt-1 leading-relaxed">{b.body}</p>
+            </div>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </motion.div>
+);
+
+const StatCard = ({ Icon, value, label }: { Icon: typeof RocketIcon; value: string; label: string }) => (
+  <motion.div {...fadeUp} className="bg-card rounded-3xl border border-border shadow-soft p-8 sm:p-10 text-center flex flex-col items-center">
+    <Icon size={36} className="text-primary mb-6" strokeWidth={1.6} />
+    <div className="font-display text-5xl sm:text-6xl text-foreground leading-none">{value}</div>
+    <p className="font-body text-base sm:text-lg text-muted-foreground mt-5">{label}</p>
+  </motion.div>
+);
+
+const NumberedTextCard = ({
+  num,
+  title,
+  italic,
+  body,
+}: {
+  num: string;
+  title: string;
+  italic: string;
+  body: string;
+}) => (
+  <motion.div {...fadeUp} className="bg-card rounded-3xl border border-border shadow-soft p-8 sm:p-12">
+    <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-secondary mb-10">
+      <span className="font-display text-2xl text-primary tracking-wide">{num}</span>
+    </div>
+    <h3 className="font-display text-3xl sm:text-4xl md:text-5xl text-foreground leading-[1.1]">
+      {title} <em className="italic text-primary font-normal">{italic}</em>
+    </h3>
+    <p className="font-body text-base sm:text-lg text-muted-foreground mt-8 leading-relaxed">{body}</p>
+  </motion.div>
+);
+
 /* ---------- Stakeholder data ---------- */
 
 type StakeholderKey = "school" | "college" | "parents" | "institutions" | "companies";
