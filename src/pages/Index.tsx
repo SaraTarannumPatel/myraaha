@@ -21,6 +21,10 @@ import {
   Lightbulb as LightbulbIcon,
   LayoutPanelLeft as LayoutIcon,
   Send,
+  Award,
+  TrendingUp,
+  Handshake,
+  GitFork,
 } from "lucide-react";
 import { useState } from "react";
 import LandingLayout from "@/components/landing/shared/LandingLayout";
