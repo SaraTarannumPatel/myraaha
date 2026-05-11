@@ -375,7 +375,7 @@ const Index = () => {
             <motion.h2
               {...fadeUp}
               transition={{ duration: 0.7, delay: 0.1 }}
-              className="font-display text-4xl sm:text-5xl md:text-6xl text-accent mt-7 leading-[1.1]"
+              className="font-body font-bold text-4xl sm:text-5xl md:text-6xl text-accent mt-7 leading-[1.1]"
             >
               Empowering <em className="italic">Innovation</em>
               <br />
