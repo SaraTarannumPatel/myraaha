@@ -423,10 +423,10 @@ const Index = () => {
               <motion.div
                 key={c.italic}
                 {...fadeUp}
-                className="rounded-3xl bg-accent/10 border border-accent/20 p-7 sm:p-8 backdrop-blur-sm"
+                className="rounded-3xl bg-accent/10 border border-accent/20 p-7 sm:p-8 backdrop-blur-sm flex flex-col items-center text-center"
               >
-                <div className="w-12 h-12 rounded-2xl bg-accent/20 flex items-center justify-center mb-6">
-                  <c.Icon size={22} className="text-accent" />
+                <div className="w-12 h-12 rounded-2xl bg-white flex items-center justify-center mb-6">
+                  <c.Icon size={22} className="text-primary" />
                 </div>
                 <h3 className="font-body text-xl sm:text-2xl text-accent font-semibold">
                   {c.title} <em className="italic font-display font-normal">{c.italic}</em>
