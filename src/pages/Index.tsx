@@ -308,7 +308,7 @@ const stakeholderData: Record<
 };
 
 const Index = () => {
-  const [activeStake, setActiveStake] = useState<StakeholderKey>("school");
+  const [activeStake, setActiveStake] = useState<StakeholderKey>("students");
   const stake = stakeholderData[activeStake];
 
   return (
