@@ -20,7 +20,11 @@ import Begin from "./pages/landing/Begin";
 import About from "./pages/landing/About";
 import Writing from "./pages/landing/Writing";
 import LandingCareers from "./pages/landing/Careers";
+import CareerRole from "./pages/landing/CareerRole";
 import Contact from "./pages/landing/Contact";
+import Privacy from "./pages/landing/Privacy";
+import Cookies from "./pages/landing/Cookies";
+import Terms from "./pages/landing/Terms";
 import IntroSlides from "./pages/IntroSlides";
 import Auth from "./pages/Auth";
 import GuestEntry from "./pages/GuestEntry";
@@ -100,6 +104,10 @@ const App = () => (
             <Route path="/about" element={<About />} />
             <Route path="/writing" element={<Writing />} />
             <Route path="/careers-info" element={<LandingCareers />} />
+            <Route path="/careers-info/:slug" element={<CareerRole />} />
+            <Route path="/privacy" element={<Privacy />} />
+            <Route path="/cookies" element={<Cookies />} />
+            <Route path="/terms" element={<Terms />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/intro" element={<IntroSlides />} />
             <Route path="/auth" element={<Auth />} />
