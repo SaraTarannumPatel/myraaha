@@ -5,7 +5,9 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@/contexts/AuthContext";
 import ProtectedRoute from "@/components/ProtectedRoute";
-import Index from "./pages/Index";
+import MyRaahaLanding from "./pages/MyRaahaLanding";
+import MyRaahaAbout from "./pages/MyRaahaAbout";
+import MyRaahaServices from "./pages/MyRaahaServices";
 import NotFound from "./pages/NotFound";
 // Landing site sub-pages
 import WhyWeExist from "./pages/landing/WhyWeExist";
@@ -90,8 +92,10 @@ const App = () => (
       <BrowserRouter>
         <AuthProvider>
           <Routes>
-            <Route path="/" element={<Index />} />
-            {/* Landing site */}
+            <Route path="/" element={<MyRaahaLanding />} />
+            <Route path="/about" element={<MyRaahaAbout />} />
+            <Route path="/services" element={<MyRaahaServices />} />
+            {/* Legacy landing routes (kept for backward compat) */}
             <Route path="/why" element={<WhyWeExist />} />
             <Route path="/how" element={<HowWeThink />} />
             <Route path="/raaha-marg" element={<RaahaMarg />} />
@@ -101,7 +105,7 @@ const App = () => (
             <Route path="/research" element={<Research />} />
             <Route path="/solutions" element={<Solutions />} />
             <Route path="/begin" element={<Begin />} />
-            <Route path="/about" element={<About />} />
+            <Route path="/about-legacy" element={<About />} />
             <Route path="/writing" element={<Writing />} />
             <Route path="/careers-info" element={<LandingCareers />} />
             <Route path="/careers-info/:slug" element={<CareerRole />} />
