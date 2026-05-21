@@ -1,10 +1,8 @@
-import { Link } from "react-router-dom";
 import LandingLayout from "@/components/landing/shared/LandingLayout";
 import PageHero from "@/components/landing/shared/PageHero";
 import Section from "@/components/landing/shared/Section";
 import { ArrowRight } from "lucide-react";
 import heroCareers from "@/assets/landing/hero-careers.jpg";
-import { careerRoles } from "@/data/careersData";
 
 const values = [
   ["The Problem", "Structural, not superficial. Career and entrepreneurship confusion affects hundreds of millions. The work here has stakes."],
@@ -57,27 +55,7 @@ const Careers = () => (
       </ul>
     </Section>
 
-    <Section variant="muted" eyebrow="Ways to join" title="Five paths in.">
-      <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
-        {careerRoles.map((r) => (
-          <Link
-            key={r.slug}
-            to={`/careers-info/${r.slug}`}
-            className="group rounded-2xl border border-border bg-background p-6 hover:border-primary transition-colors"
-          >
-            <p className="pill-chip">{r.type}</p>
-            <p className="font-display text-xl text-primary mt-3 group-hover:underline">{r.title}</p>
-            <p className="font-body text-sm text-foreground/75 mt-2 leading-relaxed">{r.summary}</p>
-            <span className="inline-flex items-center gap-2 mt-5 text-primary font-medium text-sm">
-              Learn more <ArrowRight size={14} />
-            </span>
-          </Link>
-        ))}
-      </div>
-    </Section>
-
     <Section eyebrow="Open roles" title="Currently hiring for.">
-
       <div className="grid md:grid-cols-2 gap-5">
         {roles.map(([t, b]) => (
           <article key={t} className="rounded-2xl border border-border p-7 group hover:border-primary transition-colors cursor-pointer">
