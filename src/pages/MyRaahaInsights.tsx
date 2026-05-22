@@ -1,0 +1,134 @@
+import { useEffect, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { ArrowRight, PenTool } from 'lucide-react';
+import MyRaahaNavbar from '../components/MyRaahaNavbar';
+import MyRaahaNewsletter from '../components/MyRaahaNewsletter';
+import MyRaahaFooter from '../components/MyRaahaFooter';
+import StandardPageHero from '../components/StandardPageHero';
+import WriteForMyRaahaModal from '../components/WriteForMyRaahaModal';
+import { insightsData } from '../data/insightsData';
+import { supabase } from '@/integrations/supabase/client';
+import './MyRaahaInsights.css';
+import './MyRaahaLanding.css';
+
+const MyRaahaInsights = () => {
+  const navigate = useNavigate();
+  const [activeCategory, setActiveCategory] = useState<string>('All');
+  const [isWriteModalOpen, setIsWriteModalOpen] = useState(false);
+  const [dbArticles, setDbArticles] = useState<any[]>([]);
+
+  useEffect(() => { window.scrollTo(0, 0); }, []);
+
+  useEffect(() => {
+    const fetchApproved = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('insights_submissions')
+          .select('*')
+          .eq('status', 'approved')
+          .order('created_at', { ascending: false });
+        if (error) throw error;
+        if (data) {
+          setDbArticles(data.map(item => ({
+            slug: `community-${item.id}`,
+            title: item.title,
+            category: item.category,
+            date: new Date(item.created_at).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }),
+            excerpt: item.excerpt,
+            image: item.cover_image_url || 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=800',
+            isUserSubmitted: true,
+          })));
+        }
+      } catch (err) {
+        console.warn('Community insights fallback:', err);
+      }
+    };
+    fetchApproved();
+  }, []);
+
+  const featuredPost = insightsData.find(p => p.slug === 'the-career-guidance-gap') || insightsData[0];
+  const allArticles = [...dbArticles, ...insightsData];
+  const filteredArticles = activeCategory === 'All'
+    ? allArticles
+    : allArticles.filter((a: any) => a.category === activeCategory);
+
+  const categories = [
+    { label: 'All insights', value: 'All' },
+    { label: 'Industry analysis', value: 'Industry Analysis' },
+    { label: 'Success stories', value: 'Success Stories' },
+    { label: 'Research', value: 'Research' },
+    { label: 'Events', value: 'Events' },
+  ];
+
+  return (
+    <div className="insights-page">
+      <MyRaahaNavbar />
+
+      <StandardPageHero
+        badge="Knowledge Hub"
+        title={<>Latest <span>perspectives</span> on innovation</>}
+        subtitle="Exploring the intersections of academia, industry, and social impact through our latest research, news, and success stories."
+        features={[]}
+      />
+
+      <div className="insights-action-bar-hero" style={{ maxWidth: '1400px', margin: '2rem auto -2rem', padding: '0 5rem', display: 'flex', justifyContent: 'flex-end', position: 'relative', zIndex: 10 }}>
+        <button onClick={() => setIsWriteModalOpen(true)} className="btn-partner" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+          <PenTool size={18} /> Write for MyRaaha
+        </button>
+      </div>
+
+      <section className="insights-featured">
+        <div className="featured-card">
+          <div className="featured-img-box">
+            <img src={featuredPost.image} alt={featuredPost.title} />
+          </div>
+          <div className="featured-content">
+            <span className="featured-category">Featured analysis</span>
+            <h2>{featuredPost.title}</h2>
+            <p>{featuredPost.excerpt}</p>
+            <Link to={`/insights/${featuredPost.slug}`} className="btn-partner read-article-btn">Read full analysis</Link>
+          </div>
+        </div>
+      </section>
+
+      <section className="insights-grid-section">
+        <div className="grid-filters">
+          {categories.map(cat => (
+            <button key={cat.value} className={`filter-btn ${activeCategory === cat.value ? 'active' : ''}`} onClick={() => setActiveCategory(cat.value)}>
+              {cat.label}
+            </button>
+          ))}
+        </div>
+
+        <div className="insights-grid">
+          {filteredArticles.map((article: any) => (
+            <div key={article.slug} className="insight-card" onClick={() => navigate(`/insights/${article.slug}`)} style={{ cursor: 'pointer' }}>
+              <div className="insight-img-box">
+                <img src={article.image} alt={article.title} />
+              </div>
+              <div className="insight-card-content">
+                <div className="insight-meta">
+                  <span>{article.category}</span>
+                  <span>•</span>
+                  <span>{article.date}</span>
+                </div>
+                <h3>{article.title}</h3>
+                <p>{article.excerpt}</p>
+                <Link to={`/insights/${article.slug}`} className="read-more" onClick={(e) => e.stopPropagation()}>
+                  Read More <ArrowRight className="w-4 h-4" />
+                </Link>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <MyRaahaNewsletter />
+      <MyRaahaFooter />
+
+      <WriteForMyRaahaModal isOpen={isWriteModalOpen} onClose={() => setIsWriteModalOpen(false)} />
+    </div>
+  );
+};
+
+export default MyRaahaInsights;

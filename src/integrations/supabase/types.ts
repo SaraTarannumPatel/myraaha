@@ -1087,6 +1087,33 @@ export type Database = {
         }
         Relationships: []
       }
+      contact_submissions: {
+        Row: {
+          created_at: string
+          email: string
+          id: string
+          message: string
+          name: string
+          type: string
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          id?: string
+          message: string
+          name: string
+          type: string
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          id?: string
+          message?: string
+          name?: string
+          type?: string
+        }
+        Relationships: []
+      }
       content_bookmarks: {
         Row: {
           collection: string | null
@@ -2145,6 +2172,48 @@ export type Database = {
           related_subjects?: string[] | null
           related_universities?: string[] | null
           soft_skills?: string[] | null
+        }
+        Relationships: []
+      }
+      insights_submissions: {
+        Row: {
+          author_email: string | null
+          author_name: string
+          author_title: string | null
+          category: string
+          content: string
+          cover_image_url: string | null
+          created_at: string
+          excerpt: string
+          id: string
+          status: string
+          title: string
+        }
+        Insert: {
+          author_email?: string | null
+          author_name: string
+          author_title?: string | null
+          category: string
+          content: string
+          cover_image_url?: string | null
+          created_at?: string
+          excerpt: string
+          id?: string
+          status?: string
+          title: string
+        }
+        Update: {
+          author_email?: string | null
+          author_name?: string
+          author_title?: string | null
+          category?: string
+          content?: string
+          cover_image_url?: string | null
+          created_at?: string
+          excerpt?: string
+          id?: string
+          status?: string
+          title?: string
         }
         Relationships: []
       }
