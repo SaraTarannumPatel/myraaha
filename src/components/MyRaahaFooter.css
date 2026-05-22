@@ -57,7 +57,8 @@
 }
 
 .footer-cta-btn {
-  @apply btn-white;
+  background: #ffffff !important;
+  color: var(--myraaha-blue) !important;
   font-size: 1rem !important;
   padding: 1rem 2.5rem !important;
   border-radius: 99px !important;
