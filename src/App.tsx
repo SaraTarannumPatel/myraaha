@@ -8,6 +8,10 @@ import ProtectedRoute from "@/components/ProtectedRoute";
 import MyRaahaLanding from "./pages/MyRaahaLanding";
 import MyRaahaAbout from "./pages/MyRaahaAbout";
 import MyRaahaServices from "./pages/MyRaahaServices";
+import MyRaahaPartnerships from "./pages/MyRaahaPartnerships";
+import MyRaahaContact from "./pages/MyRaahaContact";
+import MyRaahaInsights from "./pages/MyRaahaInsights";
+import MyRaahaInsightsDetail from "./pages/MyRaahaInsightsDetail";
 import NotFound from "./pages/NotFound";
 // Landing site sub-pages
 import WhyWeExist from "./pages/landing/WhyWeExist";
@@ -95,6 +99,10 @@ const App = () => (
             <Route path="/" element={<MyRaahaLanding />} />
             <Route path="/about" element={<MyRaahaAbout />} />
             <Route path="/services" element={<MyRaahaServices />} />
+            <Route path="/partnerships" element={<MyRaahaPartnerships />} />
+            <Route path="/insights" element={<MyRaahaInsights />} />
+            <Route path="/insights/:slug" element={<MyRaahaInsightsDetail />} />
+            <Route path="/contact" element={<MyRaahaContact />} />
             {/* Legacy landing routes (kept for backward compat) */}
             <Route path="/why" element={<WhyWeExist />} />
             <Route path="/how" element={<HowWeThink />} />
@@ -112,7 +120,7 @@ const App = () => (
             <Route path="/privacy" element={<Privacy />} />
             <Route path="/cookies" element={<Cookies />} />
             <Route path="/terms" element={<Terms />} />
-            <Route path="/contact" element={<Contact />} />
+            <Route path="/contact-legacy" element={<Contact />} />
             <Route path="/intro" element={<IntroSlides />} />
             <Route path="/auth" element={<Auth />} />
             <Route path="/guest" element={<GuestEntry />} />
