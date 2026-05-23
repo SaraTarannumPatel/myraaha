@@ -1,0 +1,99 @@
+/* MyRaaha Careers — job card listings used inside role landing pages */
+.jobs-grid {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.job-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  background: #ffffff;
+  border: 1px solid #f1f5f9;
+  border-radius: 20px;
+  padding: 1.5rem 2rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.02);
+}
+
+.job-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(85, 0, 203, 0.15);
+  box-shadow: 0 20px 40px rgba(85, 0, 203, 0.05);
+}
+
+.job-card-main {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  flex: 1;
+}
+
+.job-category-tag {
+  display: inline-block;
+  width: max-content;
+  padding: 4px 12px;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  border-radius: 99px;
+  background: var(--myraaha-blue-light, rgba(85, 0, 203, 0.08));
+  color: var(--myraaha-blue, #5500CB);
+}
+
+.job-info-text h3 {
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: 700;
+  line-height: 1.3;
+  color: var(--myraaha-text-dark, #0f172a);
+}
+
+.job-info-text h3 span {
+  color: var(--myraaha-blue, #5500CB);
+}
+
+.job-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.25rem;
+  margin-top: 0.5rem;
+  font-size: 0.85rem;
+  color: var(--myraaha-text-gray, #64748b);
+}
+
+.meta-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.btn-view-job {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #f8fafc;
+  color: var(--myraaha-blue, #5500CB);
+  border: 1px solid #f1f5f9;
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+}
+
+.job-card:hover .btn-view-job {
+  background: var(--myraaha-blue, #5500CB);
+  color: #ffffff;
+}
+
+@media (max-width: 768px) {
+  .job-card {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 1.5rem;
+  }
+}

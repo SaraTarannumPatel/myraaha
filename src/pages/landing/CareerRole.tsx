@@ -1,101 +1,254 @@
-import { Link, useParams } from "react-router-dom";
-import LandingLayout from "@/components/landing/shared/LandingLayout";
-import PageHero from "@/components/landing/shared/PageHero";
-import Section from "@/components/landing/shared/Section";
-import CTABand from "@/components/landing/shared/CTABand";
-import { getRoleBySlug, careerRoles } from "@/data/careersData";
+import { useEffect, useState, useRef } from 'react';
+import { useParams, Link } from 'react-router-dom';
+import {
+  ArrowLeft, CheckCircle, Upload, Send, Briefcase, AlertTriangle, FileText, Trash2,
+} from 'lucide-react';
+import MyRaahaNavbar from '../../components/MyRaahaNavbar';
+import MyRaahaFooter from '../../components/MyRaahaFooter';
+import StandardPageHero from '../../components/StandardPageHero';
+import { careersData } from '../../data/careersData';
+import { supabase } from '@/integrations/supabase/client';
+import './CareerRole.css';
 
-const CareerRolePage = () => {
-  const { slug = "" } = useParams();
-  const role = getRoleBySlug(slug);
+const RoleDetails = () => {
+  const { roleId } = useParams<{ roleId: string }>();
+  const [submitted, setSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [errorMsg, setErrorMsg] = useState('');
+
+  const [fullName, setFullName] = useState('');
+  const [email, setEmail] = useState('');
+  const [linkedinUrl, setLinkedinUrl] = useState('');
+  const [resumeFile, setResumeFile] = useState<File | null>(null);
+  const [resumePreviewName, setResumePreviewName] = useState('');
+
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => { window.scrollTo(0, 0); }, [roleId]);
+
+  const role = careersData.find(r => r.id === roleId);
 
   if (!role) {
     return (
-      <LandingLayout>
-        <Section
-          eyebrow="Careers"
-          title="Role not found"
-          lead="The role you were looking for isn't open right now."
-        >
-          <div className="flex flex-wrap gap-3">
-            {careerRoles.map((r) => (
-              <Link
-                key={r.slug}
-                to={`/careers-info/${r.slug}`}
-                className="pill-chip hover:bg-primary hover:text-accent transition-colors"
-              >
-                {r.title}
-              </Link>
-            ))}
-          </div>
-        </Section>
-      </LandingLayout>
+      <div className="role-page min-h-screen flex flex-col">
+        <MyRaahaNavbar />
+        <div className="container flex-grow flex flex-col items-center justify-center py-20 text-center">
+          <h2 className="text-3xl font-bold mb-4">Position Not Found</h2>
+          <p className="text-slate-500 mb-8">The career role you are looking for does not exist or has been filled.</p>
+          <Link to="/careers" className="btn-search py-3 px-6 rounded-xl text-white font-bold" style={{ background: 'var(--myraaha-blue, #5500CB)' }}>
+            Back to Careers
+          </Link>
+        </div>
+        <MyRaahaFooter />
+      </div>
     );
   }
 
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files.length > 0) {
+      const file = e.target.files[0];
+      if (file.size > 5 * 1024 * 1024) {
+        setErrorMsg('File size exceeds the 5MB limit. Please upload a smaller file.');
+        return;
+      }
+      setResumeFile(file);
+      setResumePreviewName(file.name);
+      setErrorMsg('');
+    }
+  };
+
+  const handleRemoveFile = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setResumeFile(null);
+    setResumePreviewName('');
+    if (fileInputRef.current) fileInputRef.current.value = '';
+  };
+
+  const triggerFileInput = () => fileInputRef.current?.click();
+
+  const handleApplySubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!fullName || !email || !resumeFile) {
+      setErrorMsg('Please fill in all required fields and upload your resume.');
+      return;
+    }
+    setIsSubmitting(true);
+    setErrorMsg('');
+    try {
+      const fileExt = resumeFile.name.split('.').pop();
+      const fileName = `${Date.now()}-${Math.random().toString(36).substring(2, 11)}.${fileExt}`;
+      const { error: uploadError } = await supabase.storage
+        .from('resumes')
+        .upload(fileName, resumeFile, { cacheControl: '3600', upsert: false });
+      if (uploadError) throw new Error(`Resume upload failed: ${uploadError.message}`);
+
+      const { data } = supabase.storage.from('resumes').getPublicUrl(fileName);
+      if (!data?.publicUrl) throw new Error('Failed to retrieve the resume URL.');
+
+      const { error: insertError } = await supabase.from('career_applications').insert([{
+        role_id: role.id,
+        role_title: role.title,
+        full_name: fullName.trim(),
+        email: email.trim(),
+        linkedin_url: linkedinUrl.trim() || null,
+        resume_url: data.publicUrl,
+        status: 'pending',
+      }]);
+      if (insertError) throw insertError;
+
+      setSubmitted(true);
+      setFullName(''); setEmail(''); setLinkedinUrl('');
+      setResumeFile(null); setResumePreviewName('');
+    } catch (err: any) {
+      console.error('Career application submission error:', err);
+      setErrorMsg(err.message || 'An error occurred while submitting your application. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const titleParts = role.title.split(' ');
+  const lastWord = titleParts[titleParts.length - 1];
+  const firstPart = titleParts.slice(0, -1).join(' ');
+
   return (
-    <LandingLayout>
-      <PageHero
-        eyebrow={`Careers · ${role.type}`}
-        title={<>{role.title} <span className="highlight-mark italic">at MyRaaha</span></>}
-        intro={role.summary}
-        illustration={role.image}
-        illustrationAlt={`${role.title} role at MyRaaha`}
+    <div className="role-page">
+      <MyRaahaNavbar />
+
+      <div className="role-container pt-8 px-4">
+        <Link to="/careers" className="inline-flex items-center gap-2 mb-4" style={{ textDecoration: 'none', color: 'var(--myraaha-text-gray)', fontWeight: 600 }}>
+          <ArrowLeft size={16} />
+          <span>Back to All Openings</span>
+        </Link>
+      </div>
+
+      <StandardPageHero
+        badge={`Careers / ${role.classification}`}
+        title={<>{firstPart} <span>{lastWord}</span></>}
+        subtitle={role.description}
+        features={[]}
       />
 
-      <Section>
-        <div className="grid lg:grid-cols-3 gap-8">
-          <aside className="lg:col-span-1 rounded-2xl border border-border p-6 h-fit space-y-4">
-            <Meta label="Type" value={role.type} />
-            <Meta label="Location" value={role.location} />
-            <Meta label="Commitment" value={role.commitment} />
-            <Link
-              to="/contact"
-              className="inline-flex w-full justify-center items-center rounded-full bg-primary text-accent px-6 py-3 text-sm font-semibold shadow-accent hover:opacity-90 transition"
-            >
-              Apply for this role
-            </Link>
-          </aside>
+      <section className="role-section">
+        <div className="role-container">
+          <div className="role-details-grid">
+            <div className="role-details-content">
+              <div className="role-details-card">
+                <span className="role-section-badge">The Role</span>
+                <h2 className="role-section-title" style={{ fontSize: '2.25rem' }}>About the <span>Position</span></h2>
+                <p className="role-section-subtitle" style={{ marginTop: '1rem', fontSize: '1.05rem' }}>
+                  As the {role.title} at MyRaaha, you will play an active role in shaping a tech-first, AI-driven career
+                  and entrepreneurship navigation infrastructure. You will collaborate across functional domains to deliver
+                  revenue-sustained, automation-led systems that own the full journey from clarity to real-world outcomes.
+                </p>
+              </div>
 
-          <div className="lg:col-span-2 space-y-10">
-            <Block title="What you'll do" items={role.responsibilities} />
-            <Block title="What we look for" items={role.qualifications} />
-            <Block title="What you get" items={role.benefits} />
+              <div className="role-details-card">
+                <h2 className="role-section-title" style={{ fontSize: '2.25rem', marginBottom: '2rem' }}>What we are <span>looking for</span></h2>
+                <ul className="role-requirements-list">
+                  {role.requirements.map((req, i) => (
+                    <li key={i} className="role-requirement-item">
+                      <div className="role-requirement-icon"><CheckCircle size={14} /></div>
+                      <span className="role-section-subtitle" style={{ fontSize: '1.05rem', color: 'var(--myraaha-text-dark)' }}>{req}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              <div>
+                <h2 className="role-section-title" style={{ fontSize: '2.25rem', marginBottom: '2rem' }}>{role.skillsLabel}</h2>
+                <div className="role-skills-grid">
+                  {role.skills.map((skill, i) => (
+                    <div key={i} className="role-skill-card">
+                      <div className="role-skill-icon"><Briefcase size={18} /></div>
+                      <div>
+                        <h4>{skill}</h4>
+                        <p>Essential Domain Expertise</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            <div className="role-sidebar-sticky">
+              <div className="role-application-card">
+                {submitted ? (
+                  <div className="text-center py-10 flex flex-col items-center justify-center">
+                    <div style={{ width: 64, height: 64, borderRadius: '50%', background: '#ecfdf5', color: '#10b981', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1.5rem' }}>
+                      <CheckCircle size={32} />
+                    </div>
+                    <h3 className="role-form-title" style={{ color: 'var(--myraaha-blue)' }}>Application Received!</h3>
+                    <p className="role-form-subtitle" style={{ marginTop: '0.5rem' }}>
+                      Thank you for applying to join the MyRaaha mission. Our team will review your credentials and get back to you shortly.
+                    </p>
+                  </div>
+                ) : (
+                  <form onSubmit={handleApplySubmit} className="flex flex-col">
+                    <div>
+                      <h3 className="role-form-title">Apply for this <span>Role</span></h3>
+                      <p className="role-form-subtitle">Join our revenue-sustained mission</p>
+                    </div>
+
+                    <div className="role-form-group">
+                      <label className="role-form-label">Full Name *</label>
+                      <input type="text" required placeholder="John Doe" className="role-form-input" value={fullName} onChange={e => setFullName(e.target.value)} disabled={isSubmitting} />
+                    </div>
+
+                    <div className="role-form-group">
+                      <label className="role-form-label">Email Address *</label>
+                      <input type="email" required placeholder="john@example.com" className="role-form-input" value={email} onChange={e => setEmail(e.target.value)} disabled={isSubmitting} />
+                    </div>
+
+                    <div className="role-form-group">
+                      <label className="role-form-label">LinkedIn / Portfolio</label>
+                      <input type="url" placeholder="https://linkedin.com/in/username" className="role-form-input" value={linkedinUrl} onChange={e => setLinkedinUrl(e.target.value)} disabled={isSubmitting} />
+                    </div>
+
+                    <div className="role-form-group">
+                      <label className="role-form-label">Resume (PDF) *</label>
+                      <div className="role-upload-zone" onClick={triggerFileInput} style={{ cursor: 'pointer', border: resumeFile ? '2px dashed var(--myraaha-blue)' : '2px dashed #e2e8f0', background: resumeFile ? '#f8fafc' : 'transparent', padding: '1.25rem' }}>
+                        {resumeFile ? (
+                          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%' }}>
+                            <FileText size={32} style={{ color: 'var(--myraaha-blue)' }} />
+                            <span style={{ fontSize: '0.85rem', fontWeight: 600, color: '#334155', marginTop: '0.5rem', wordBreak: 'break-all' }}>{resumePreviewName}</span>
+                            <span style={{ fontSize: '0.75rem', color: '#64748b', marginTop: '0.2rem' }}>{(resumeFile.size / (1024 * 1024)).toFixed(2)} MB</span>
+                            <button type="button" onClick={handleRemoveFile} style={{ marginTop: '0.75rem', background: '#fef2f2', border: '1px solid #fee2e2', color: '#ef4444', padding: '0.4rem 0.8rem', borderRadius: 8, fontSize: '0.75rem', fontWeight: 600, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+                              <Trash2 size={12} /> Remove
+                            </button>
+                          </div>
+                        ) : (
+                          <>
+                            <Upload size={22} style={{ color: '#64748b' }} />
+                            <span style={{ fontSize: '0.8rem', fontWeight: 600 }}>Upload PDF / DOCX</span>
+                            <span style={{ fontSize: '0.7rem', color: 'var(--myraaha-text-gray)' }}>Max size 5MB</span>
+                          </>
+                        )}
+                        <input type="file" ref={fileInputRef} style={{ display: 'none' }} accept=".pdf,.docx,.doc" onChange={handleFileChange} disabled={isSubmitting} />
+                      </div>
+                    </div>
+
+                    {errorMsg && (
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#dc2626', fontSize: '0.85rem', fontWeight: 500, marginBottom: '1rem', padding: '0.6rem', background: '#fef2f2', borderRadius: 8, border: '1px solid #fee2e2' }}>
+                        <AlertTriangle size={14} />
+                        <span>{errorMsg}</span>
+                      </div>
+                    )}
+
+                    <button type="submit" disabled={isSubmitting} className="role-submit-btn" style={{ marginTop: '1rem' }}>
+                      {isSubmitting ? 'Submitting...' : (<><span>Submit Application</span><Send size={14} /></>)}
+                    </button>
+                  </form>
+                )}
+              </div>
+            </div>
           </div>
         </div>
-      </Section>
+      </section>
 
-      <CTABand
-        title="See all open roles"
-        primaryLabel="Back to Careers"
-        primaryTo="/careers-info"
-      />
-    </LandingLayout>
+      <MyRaahaFooter />
+    </div>
   );
 };
 
-const Meta = ({ label, value }: { label: string; value: string }) => (
-  <div>
-    <p className="font-body text-xs uppercase tracking-[0.18em] text-grey-label">{label}</p>
-    <p className="font-display text-lg text-primary mt-1">{value}</p>
-  </div>
-);
-
-const Block = ({ title, items }: { title: string; items: string[] }) => (
-  <div>
-    <h3 className="font-display text-2xl sm:text-3xl text-primary mb-4">{title}</h3>
-    <ul className="space-y-3">
-      {items.map((i) => (
-        <li
-          key={i}
-          className="font-body text-base text-foreground/80 leading-relaxed pl-5 relative"
-        >
-          <span className="absolute left-0 top-2 w-2 h-2 rounded-full bg-accent" />
-          {i}
-        </li>
-      ))}
-    </ul>
-  </div>
-);
-
-export default CareerRolePage;
+export default RoleDetails;

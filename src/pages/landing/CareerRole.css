@@ -1,0 +1,973 @@
+/* Career Role Pages - Golden Standard Premium Overhaul */
+
+.role-page {
+  background: var(--myraaha-bg-grey);
+  color: var(--myraaha-text-dark);
+  font-family: 'Poppins', sans-serif;
+  overflow-x: hidden;
+}
+
+/* Page Section Styling with Radial Background Grid Pattern */
+.role-section {
+  padding: var(--section-spacing) 5rem !important;
+  background-color: var(--myraaha-bg-grey);
+  background-image: radial-gradient(#e2e8f0 1.2px, transparent 1.2px);
+  background-size: 40px 40px;
+  position: relative;
+}
+
+/* Light / Clean Contrast Background Section */
+.role-section.role-alt-bg {
+  background-color: #ffffff;
+  background-image: radial-gradient(#f1f5f9 1.2px, transparent 1.2px);
+  background-size: 30px 30px;
+  border-top: 1px solid #f1f5f9;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.role-container {
+  max-width: 1300px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 2;
+}
+
+.role-section-header {
+  text-align: center;
+  margin-bottom: 5rem;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Redesigned Premium badges */
+.role-section-badge {
+  display: inline-block;
+  padding: 0.6rem 1.5rem;
+  background: var(--myraaha-blue-light);
+  color: var(--myraaha-blue);
+  border-radius: 99px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  margin-bottom: 2rem;
+  border: 1px solid rgba(85, 0, 203, 0.1);
+}
+
+.role-section-title {
+  font-size: 3rem !important;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  line-height: 1.2;
+  color: var(--myraaha-text-dark);
+}
+
+.role-section-title span {
+  color: var(--myraaha-blue);
+  font-style: normal;
+}
+
+.role-section-subtitle {
+  font-size: 1.2rem;
+  color: var(--myraaha-text-gray);
+  line-height: 1.7;
+}
+
+/* Split Image Layout Redesign */
+.role-split-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr !important;
+  gap: 6rem;
+  align-items: center;
+  margin-bottom: 6rem;
+}
+
+.role-split-container.reversed {
+  grid-template-columns: 1fr 1fr !important;
+}
+
+.role-split-text {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.role-split-image {
+  position: relative;
+  height: 480px;
+  border-radius: 40px;
+  overflow: hidden;
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.08);
+  border: 6px solid #ffffff;
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.role-split-image:hover {
+  transform: scale(1.02);
+}
+
+.role-split-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Dark Mission Header (Aesthetics derived from Home Mission / Partnership commitment) */
+.role-section.dark-mission-bg {
+  background: #ffffff !important;
+  color: var(--myraaha-text-dark) !important;
+  position: relative;
+  overflow: hidden;
+  padding-top: var(--section-spacing) !important;
+  padding-bottom: 20px !important;
+  padding-left: 5rem !important;
+  padding-right: 5rem !important;
+  border-top: 1px solid #f1f5f9;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.role-section.dark-mission-bg .role-split-container {
+  margin-bottom: 0 !important;
+}
+
+.role-section.dark-mission-bg .role-section-badge {
+  background: var(--myraaha-blue-light) !important;
+  color: var(--myraaha-blue) !important;
+  border-color: rgba(85, 0, 203, 0.1) !important;
+}
+
+.role-section.dark-mission-bg .role-section-title {
+  color: var(--myraaha-text-dark) !important;
+}
+
+.role-section.dark-mission-bg .role-section-title span {
+  color: var(--myraaha-blue) !important;
+  font-style: normal !important;
+}
+
+.role-section.dark-mission-bg .role-section-subtitle {
+  color: var(--myraaha-text-gray) !important;
+}
+
+/* Hide Floating Radial Lights inside Lightened Mission Background */
+.dark-mission-bg::before, .dark-mission-bg::after {
+  display: none !important;
+}
+
+/* Perks Grid Modules - Stakeholder Card Inspired Aesthetics */
+.perks-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2.5rem;
+  margin-top: 2rem;
+}
+
+.perk-card {
+  padding: 3.5rem 2.5rem;
+  background: #ffffff;
+  border-radius: 32px;
+  border: 1px solid #f1f5f9;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.015);
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.perk-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: var(--myraaha-gradient);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.perk-card:hover {
+  transform: translateY(-12px);
+  border-color: rgba(85, 0, 203, 0.15);
+  box-shadow: 0 30px 60px rgba(85, 0, 203, 0.06);
+}
+
+.perk-card:hover::before {
+  opacity: 1;
+}
+
+.perk-icon {
+  width: 56px;
+  height: 56px;
+  background: var(--myraaha-blue-light);
+  color: var(--myraaha-blue);
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 2rem;
+  transition: transform 0.3s ease;
+}
+
+.perk-card:hover .perk-icon {
+  transform: scale(1.1) rotate(5deg);
+}
+
+.perk-card h3 {
+  font-size: 1.5rem !important;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  color: var(--myraaha-text-dark);
+}
+
+.perk-card h3 span {
+  color: var(--myraaha-blue);
+}
+
+.perk-card p {
+  color: var(--myraaha-text-gray);
+  line-height: 1.7;
+  font-size: 0.95rem;
+}
+
+/* Openings List - Branded Interactive Roster Modules */
+.openings-list {
+  max-width: 900px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.opening-card {
+  background: #ffffff;
+  padding: 2.5rem 3.5rem;
+  border-radius: 24px;
+  border: 1px solid #f1f5f9;
+  text-decoration: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.005);
+}
+
+.opening-card:hover {
+  border-color: var(--myraaha-blue-light);
+  box-shadow: 0 20px 40px rgba(85, 0, 203, 0.04);
+  transform: translateY(-4px) translateX(6px);
+}
+
+.opening-info h3 {
+  font-size: 1.5rem !important;
+  font-weight: 700;
+  margin-bottom: 0.75rem;
+  color: var(--myraaha-text-dark);
+  transition: color 0.3s;
+}
+
+.opening-card:hover h3 {
+  color: var(--myraaha-blue);
+}
+
+.opening-info h3 span {
+  color: var(--myraaha-blue);
+  font-weight: 700;
+}
+
+.opening-meta {
+  display: flex;
+  gap: 2rem;
+  color: var(--myraaha-text-gray);
+  font-size: 0.9rem;
+}
+
+.opening-meta span {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.opening-meta svg {
+  color: var(--myraaha-blue);
+}
+
+.btn-apply-small {
+  background: var(--myraaha-blue-light);
+  color: var(--myraaha-blue);
+  padding: 0.85rem 2rem;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 0.9rem;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.opening-card:hover .btn-apply-small {
+  background: var(--myraaha-blue);
+  color: #ffffff;
+  box-shadow: 0 10px 20px rgba(85, 0, 203, 0.15);
+}
+
+/* FAQ Grid & Interactive Accordion Cards */
+.faq-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 3rem;
+  margin-top: 1rem;
+}
+
+.faq-card {
+  background: #ffffff;
+  padding: 3rem;
+  border-radius: 28px;
+  border: 1px solid #f1f5f9;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.008);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.faq-card:hover {
+  border-color: rgba(85, 0, 203, 0.1);
+  transform: translateY(-5px);
+  box-shadow: 0 20px 40px rgba(85, 0, 203, 0.03);
+}
+
+.faq-card h3 {
+  font-size: 1.35rem !important;
+  font-weight: 700;
+  margin-bottom: 1.25rem;
+  color: var(--myraaha-text-dark);
+  line-height: 1.4;
+}
+
+.faq-card h3 span {
+  color: var(--myraaha-blue);
+}
+
+.faq-card p {
+  color: var(--myraaha-text-gray);
+  line-height: 1.7;
+  font-size: 0.95rem;
+}
+
+/* Custom styles for application list and bullet details */
+.detail-bullet-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.detail-bullet-item {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+}
+
+.detail-bullet-item svg {
+  color: #10b981;
+  flex-shrink: 0;
+  margin-top: 0.2rem;
+}
+
+.detail-bullet-item span {
+  font-size: 1.05rem;
+  color: var(--myraaha-text-gray);
+  line-height: 1.6;
+}
+
+/* ==========================================================================
+   ROLE DETAILS PAGE SPECIFIC PREMIUM STYLING
+   ========================================================================== */
+.role-details-grid {
+  display: grid;
+  grid-template-columns: 1.8fr 1.2fr;
+  gap: 5rem;
+  align-items: start;
+}
+
+.role-details-content {
+  display: flex;
+  flex-direction: column;
+  gap: 4rem;
+}
+
+.role-details-card {
+  background: #ffffff;
+  padding: 3.5rem;
+  border-radius: 32px;
+  border: 1px solid #f1f5f9;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.015);
+}
+
+.role-requirements-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: 0;
+  list-style: none;
+  margin: 0;
+}
+
+.role-requirement-item {
+  display: flex;
+  gap: 1.25rem;
+  align-items: start;
+}
+
+.role-requirement-icon {
+  width: 24px;
+  height: 24px;
+  background: #ecfdf5;
+  color: #10b981;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 0.15rem;
+}
+
+.role-skills-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+}
+
+.role-skill-card {
+  padding: 2rem;
+  background: #ffffff;
+  border-radius: 24px;
+  border: 1px solid #f1f5f9;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.008);
+  display: flex;
+  align-items: start;
+  gap: 1.5rem;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.role-skill-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(85, 0, 203, 0.15);
+  box-shadow: 0 20px 40px rgba(85, 0, 203, 0.04);
+}
+
+.role-skill-icon {
+  width: 48px;
+  height: 48px;
+  background: var(--myraaha-blue-light);
+  color: var(--myraaha-blue);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: transform 0.3s ease;
+}
+
+.role-skill-card:hover .role-skill-icon {
+  transform: rotate(5deg) scale(1.05);
+}
+
+.role-skill-card h4 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--myraaha-text-dark);
+  margin-bottom: 0.25rem;
+  line-height: 1.3;
+}
+
+.role-skill-card p {
+  font-size: 0.8rem;
+  color: var(--myraaha-text-gray);
+  margin: 0;
+}
+
+.role-sidebar-sticky {
+  position: sticky;
+  top: 7rem;
+}
+
+.role-application-card {
+  background: #ffffff;
+  border: 1px solid #f1f5f9;
+  border-radius: 32px;
+  padding: 3.5rem;
+  box-shadow: 0 25px 60px rgba(85, 0, 203, 0.04);
+  position: relative;
+  overflow: hidden;
+}
+
+.role-application-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: var(--myraaha-gradient);
+}
+
+.role-form-title {
+  font-size: 1.5rem !important;
+  font-weight: 700;
+  color: var(--myraaha-text-dark);
+  margin-bottom: 0.25rem;
+}
+
+.role-form-title span {
+  color: var(--myraaha-blue);
+}
+
+.role-form-subtitle {
+  font-size: 0.8rem;
+  color: var(--myraaha-text-gray);
+  margin-bottom: 2rem;
+}
+
+.role-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1.75rem;
+}
+
+.role-form-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--myraaha-text-gray);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.role-form-input {
+  width: 100%;
+  padding: 1rem 1.25rem;
+  border-radius: 14px;
+  border: 1px solid #e2e8f0;
+  font-family: inherit;
+  font-size: 0.9rem;
+  transition: all 0.3s;
+  background: var(--myraaha-bg-grey);
+}
+
+.role-form-input:focus {
+  outline: none;
+  border-color: var(--myraaha-blue);
+  background: #ffffff;
+  box-shadow: 0 0 0 4px var(--myraaha-blue-light);
+}
+
+.role-upload-zone {
+  border: 2px dashed #cbd5e1;
+  border-radius: 14px;
+  padding: 1.75rem;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  background: var(--myraaha-bg-grey);
+}
+
+.role-upload-zone:hover {
+  border-color: var(--myraaha-blue);
+  background: #ffffff;
+}
+
+.role-upload-zone svg {
+  color: var(--myraaha-text-gray);
+  margin-bottom: 0.25rem;
+}
+
+.role-submit-btn {
+  width: 100%;
+  padding: 1.1rem;
+  background: var(--myraaha-gradient);
+  color: white;
+  border: none;
+  border-radius: 14px;
+  font-weight: 700;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  box-shadow: 0 10px 25px rgba(85, 0, 203, 0.15);
+}
+
+.role-submit-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 15px 30px rgba(85, 0, 203, 0.25);
+}
+
+/* ==========================================================================
+   TABLET & MOBILE RESPONSIVENESS OVERRIDES
+   ========================================================================== */
+@media (max-width: 1024px) {
+  .role-section {
+    padding: var(--section-spacing-mobile) 2.5rem !important;
+  }
+  
+  .role-section.dark-mission-bg {
+    padding: var(--section-spacing-mobile) 2.5rem !important;
+  }
+  
+  .role-split-container {
+    grid-template-columns: 1fr;
+    gap: 4rem;
+  }
+  
+  .role-split-container.reversed {
+    grid-template-columns: 1fr;
+  }
+  
+  .perks-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .faq-grid {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .role-details-grid {
+    grid-template-columns: 1fr;
+    gap: 4rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .role-section {
+    padding: var(--section-spacing-mobile) 1.5rem !important;
+    text-align: center;
+  }
+  
+  .role-section.dark-mission-bg {
+    padding: var(--section-spacing-mobile) 1.5rem !important;
+    text-align: center;
+  }
+  
+  .role-split-text {
+    align-items: center;
+  }
+  
+  .role-split-image {
+    height: 320px;
+    border-radius: 28px;
+  }
+  
+  .role-section-title {
+    font-size: 2.25rem !important;
+  }
+  
+  .perks-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  
+  .perk-card {
+    padding: 2.5rem 1.75rem;
+    align-items: center;
+  }
+  
+  .perk-icon {
+    margin-bottom: 1.5rem;
+  }
+  
+  .opening-card {
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+    padding: 2rem;
+    text-align: center;
+  }
+  
+  .opening-meta {
+    flex-direction: column;
+    gap: 0.75rem;
+    align-items: center;
+  }
+  
+  .btn-apply-small {
+    width: 100%;
+    text-align: center;
+  }
+  
+  .faq-card {
+    padding: 2.25rem 1.5rem;
+  }
+  
+  .circle-1, .circle-2, .circle-3 {
+    display: none;
+  }
+
+  .role-skills-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .role-details-card {
+    padding: 2rem 1.5rem;
+  }
+  
+  .role-application-card {
+    padding: 2.5rem 1.5rem;
+  }
+
+  /* Center align and stack requirements block */
+  .role-requirements-list {
+    align-items: center !important;
+  }
+
+  .role-requirement-item {
+    flex-direction: column !important;
+    align-items: center !important;
+    text-align: center !important;
+    gap: 0.5rem !important;
+  }
+
+  .role-requirement-icon {
+    margin-top: 0 !important;
+  }
+
+  /* Center align and stack skill cards */
+  .role-skill-card {
+    flex-direction: column !important;
+    align-items: center !important;
+    text-align: center !important;
+    gap: 1rem !important;
+    padding: 2rem 1.5rem !important;
+  }
+
+  /* Center align details content headers */
+  .role-details-content {
+    text-align: center !important;
+    align-items: center !important;
+  }
+
+  .role-details-card {
+    text-align: center !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+  }
+
+  /* Center align role details title */
+  .role-details-card .role-section-title {
+    font-size: 1.85rem !important;
+    text-align: center !important;
+  }
+
+  .role-details-card .role-section-subtitle {
+    text-align: center !important;
+  }
+
+  /* Center align application form */
+  .role-application-card {
+    text-align: center !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+  }
+
+  .role-application-card form {
+    width: 100% !important;
+    align-items: center !important;
+  }
+
+  .role-form-group {
+    width: 100% !important;
+    align-items: center !important;
+  }
+
+  .role-form-label {
+    text-align: center !important;
+    width: 100% !important;
+  }
+
+  .role-form-input {
+    text-align: center !important;
+    width: 100% !important;
+  }
+
+  .role-upload-zone {
+    width: 100% !important;
+    align-items: center !important;
+    text-align: center !important;
+  }
+
+  /* Back to all openings link centering */
+  .role-container a {
+    display: flex !important;
+    justify-content: center !important;
+    width: 100% !important;
+    text-align: center !important;
+    margin-bottom: 2rem !important;
+  }
+}
+
+/* Extra-Small Mobile Optimization for Careers Pathways and Role Details (290px Viewports) */
+@media (max-width: 320px) {
+  .role-section {
+    padding: var(--section-spacing-mobile) 0.75rem !important;
+  }
+  
+  .role-section.dark-mission-bg {
+    padding: var(--section-spacing-mobile) 0.75rem !important;
+  }
+  
+  .role-section-title {
+    font-size: 1.65rem !important;
+  }
+
+  .role-section-subtitle {
+    font-size: 0.9rem !important;
+  }
+  
+  .role-split-image {
+    height: 220px !important;
+  }
+  
+  .perk-card {
+    padding: 2rem 1rem !important;
+  }
+  
+  .perk-card h3 {
+    font-size: 1.25rem !important;
+  }
+  
+  .opening-card {
+    padding: 1.5rem 0.75rem !important;
+  }
+  
+  .opening-info h3 {
+    font-size: 1.2rem !important;
+  }
+
+  .opening-meta {
+    gap: 0.5rem !important;
+    font-size: 0.75rem !important;
+  }
+  
+  .faq-card {
+    padding: 1.75rem 1rem !important;
+  }
+
+  .faq-card h3 {
+    font-size: 1.15rem !important;
+  }
+
+  .role-details-card {
+    padding: 1.75rem 1rem !important;
+  }
+
+  .role-details-card .role-section-title {
+    font-size: 1.5rem !important;
+  }
+
+  .role-skill-card {
+    padding: 1.5rem 1rem !important;
+  }
+
+  .role-skill-card h4 {
+    font-size: 1rem !important;
+  }
+
+  .role-application-card {
+    padding: 2rem 1rem !important;
+  }
+
+  .role-form-title {
+    font-size: 1.35rem !important;
+  }
+}
+
+/* Opportunities Section 2-Column Grid for Role Sub-pages (Desktop View) */
+@media (min-width: 769px) {
+  .role-page .jobs-grid {
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 1.5rem !important;
+    max-width: 1200px !important;
+    margin: 0 auto !important;
+  }
+
+  .role-page .job-card {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    padding: 1.5rem 2rem !important;
+    border-radius: 20px !important;
+    background: white !important;
+    border: 1px solid #f1f5f9 !important;
+    transition: all 0.3s ease !important;
+    height: auto !important;
+    min-height: unset !important;
+  }
+
+  .role-page .job-card-main {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 0.75rem !important;
+    width: auto !important;
+    flex-grow: 1 !important;
+  }
+
+  .role-page .job-info-text {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 0.5rem !important;
+    width: 100% !important;
+  }
+
+  .role-page .job-card h3 {
+    margin: 0 !important;
+    font-size: 1.25rem !important;
+    font-weight: 700 !important;
+    line-height: 1.3 !important;
+    color: var(--myraaha-text-dark) !important;
+  }
+
+  .role-page .job-category-tag {
+    margin: 0 !important;
+    padding: 4px 12px !important;
+    font-size: 0.65rem !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.5px !important;
+    border-radius: 99px !important;
+    width: auto !important;
+    display: inline-block !important;
+    text-align: left !important;
+  }
+
+  .role-page .job-meta {
+    display: flex !important;
+    flex-direction: row !important;
+    justify-content: flex-start !important;
+    align-items: center !important;
+    gap: 1.25rem !important;
+    margin: 0 !important;
+    font-size: 0.8rem !important;
+    color: var(--myraaha-text-gray) !important;
+  }
+
+  .role-page .btn-view-job {
+    width: 40px !important;
+    height: 40px !important;
+    border-radius: 50% !important;
+    flex-shrink: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    background: #f8fafc !important;
+    color: var(--myraaha-blue) !important;
+    border: 1px solid #f1f5f9 !important;
+    transition: all 0.3s ease !important;
+  }
+}
