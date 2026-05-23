@@ -1,0 +1,145 @@
+/* Premium Glassmorphic Navbar for MyRaaha */
+.myraaha-navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 80px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 5%;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(85, 0, 203, 0.08);
+  z-index: 1000;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.02);
+}
+
+.myraaha-logo {
+  display: flex;
+  align-items: center;
+  height: 100%;
+}
+
+.nav-logo-img {
+  height: 48px;
+  width: auto;
+  object-fit: contain;
+  transition: transform 0.3s ease;
+}
+
+.nav-logo-img:hover {
+  transform: scale(1.03);
+}
+
+/* Desktop Navigation Links */
+.myraaha-nav-links {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
+.myraaha-nav-links a {
+  position: relative;
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--myraaha-text-dark);
+  text-decoration: none;
+  padding: 0.5rem 0;
+  transition: color 0.3s ease;
+}
+
+.myraaha-nav-links a::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: var(--myraaha-gradient);
+  border-radius: 2px;
+  transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.myraaha-nav-links a:hover {
+  color: var(--myraaha-blue);
+}
+
+.myraaha-nav-links a:hover::after {
+  width: 100%;
+}
+
+.myraaha-nav-links a.active {
+  color: var(--myraaha-blue);
+  font-weight: 600;
+}
+
+.myraaha-nav-links a.active::after {
+  width: 100%;
+}
+
+/* Mobile Toggle Button */
+.mobile-menu-toggle {
+  display: none;
+  background: none;
+  border: none;
+  color: var(--myraaha-text-dark);
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 8px;
+  transition: background-color 0.2s;
+  z-index: 1010;
+}
+
+.mobile-menu-toggle:hover {
+  background-color: rgba(85, 0, 203, 0.05);
+}
+
+.mobile-menu-toggle svg {
+  stroke: var(--myraaha-blue);
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+  .mobile-menu-toggle {
+    display: block;
+  }
+
+  .myraaha-nav-links {
+    position: fixed;
+    top: 80px;
+    left: 100%;
+    width: 100%;
+    height: calc(100vh - 80px);
+    background: rgba(255, 255, 255, 0.98);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    flex-direction: column;
+    justify-content: flex-start;
+    padding-top: 3rem;
+    gap: 1.5rem;
+    z-index: 999;
+    transition: left 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: -10px 0 30px rgba(0, 0, 0, 0.02);
+  }
+
+  .myraaha-nav-links.open {
+    left: 0;
+  }
+
+  .myraaha-nav-links a {
+    font-size: 1.2rem;
+    width: 80%;
+    text-align: center;
+    padding: 1rem 0;
+    border-bottom: 1px solid rgba(85, 0, 203, 0.05);
+  }
+
+  .myraaha-nav-links a::after {
+    display: none;
+  }
+}

@@ -1,0 +1,188 @@
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
+import { useAuth } from "@/contexts/AuthContext";
+import { supabase } from "@/integrations/supabase/client";
+import { Button } from "@/components/ui/button";
+import { ArrowRight, ArrowLeft, Users, Eye, Lock } from "lucide-react";
+import OnboardingProgressBar from "@/components/onboarding/OnboardingProgressBar";
+import OnboardingRewardBanner from "@/components/onboarding/OnboardingRewardBanner";
+import { ONBOARDING_REWARDS } from "@/components/onboarding/OnboardingRewardBanner";
+import OnboardingRewardCelebration from "@/components/onboarding/OnboardingRewardCelebration";
+import UIDRevealCard from "@/components/onboarding/UIDRevealCard";
+
+const ConsentStep = () => {
+  const { user, profile, updateProfile, refreshProfile } = useAuth();
+  const navigate = useNavigate();
+  const [consentData, setConsentData] = useState(false);
+  const [consentMentor, setConsentMentor] = useState(false);
+  const [showUID, setShowUID] = useState(false);
+  const [generatedUid, setGeneratedUid] = useState(profile?.public_uid || "");
+  const [submitting, setSubmitting] = useState(false);
+
+  const createWelcomeNotifications = async () => {
+    if (!user) return;
+    const notifications = [
+      {
+        user_id: user.id,
+        title: "Welcome to MyRaaha! 🎉",
+        message: "Your journey starts now. Begin with the Curiosity Compass to discover your path.",
+        notification_type: "welcome",
+        action_url: "/dashboard/curiosity-compass",
+      },
+      {
+        user_id: user.id,
+        title: "Discover your interests 🧭",
+        message: "Use the Curiosity Compass to explore what drives you and find your direction.",
+        notification_type: "nudge",
+        action_url: "/dashboard/curiosity-compass",
+      },
+    ];
+    await supabase.from("notifications").insert(notifications);
+  };
+
+  const handleContinue = async () => {
+    if (submitting) return;
+    setSubmitting(true);
+    localStorage.setItem("myraaha_uid_reveal_pending", "true");
+
+    let uid = profile?.public_uid || "";
+    if (user && !uid) {
+      const { data, error } = await (supabase as any).rpc("ensure_profile_public_uid");
+      if (!error && data) uid = data;
+    }
+    setGeneratedUid(uid || "MR-XXXXXX");
+
+    await updateProfile({
+      onboarding_status: "complete",
+      ...({
+        consent_data_usage: consentData,
+        consent_mentor_sharing: consentMentor,
+      } as any),
+    });
+
+    if (user) {
+      const rewards = ONBOARDING_REWARDS.map((r) => ({
+        user_id: user.id,
+        milestone_percent: r.percent,
+        reward_key: r.rewardKey,
+        reward_title: r.title,
+        reward_description: r.description,
+      }));
+      await supabase.from("onboarding_rewards").upsert(rewards, { onConflict: "user_id,reward_key" });
+    }
+
+    await createWelcomeNotifications();
+    localStorage.removeItem("myraaha_initial_path");
+    await refreshProfile();
+    setShowUID(true);
+    setSubmitting(false);
+  };
+
+  const handleEnterApp = () => {
+    setShowUID(false);
+    localStorage.removeItem("myraaha_uid_reveal_pending");
+    navigate("/dashboard/curiosity-compass", { replace: true });
+  };
+
+  return (
+    <div className="min-h-screen bg-background flex flex-col">
+      <OnboardingProgressBar progress={90} />
+      <OnboardingRewardBanner currentProgress={90} showCelebration={!showUID} />
+      {showUID && profile && (
+        <UIDRevealCard
+          fullName={profile.full_name || "Explorer"}
+          uid={generatedUid || profile.public_uid || "MR-XXXXXX"}
+          rewards={ONBOARDING_REWARDS.map((reward) => reward.title)}
+          onContinue={handleEnterApp}
+        />
+      )}
+      <div className="flex-1 flex items-center justify-center p-6">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="max-w-xl w-full space-y-8"
+        >
+          <div className="text-center space-y-2">
+            <p className="font-body text-sm text-primary font-semibold uppercase tracking-wider">Almost There!</p>
+            <h1 className="font-display text-4xl text-primary">Your Privacy Matters</h1>
+            <p className="font-body text-muted-foreground">
+              Your journey is personal. You control what you share and who sees your progress.
+            </p>
+          </div>
+
+          <div className="space-y-4">
+            <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}
+              className="bg-card rounded-xl border border-border p-5">
+              <div className="flex items-start gap-4">
+                <div className="p-2 rounded-lg bg-primary/10"><Eye size={20} className="text-primary" /></div>
+                <div className="flex-1">
+                  <h3 className="font-display text-lg text-foreground">Personalized Experience</h3>
+                  <p className="font-body text-sm text-muted-foreground mt-1">
+                    Allow MyRaaha to use your interests, skills, and goals to provide personalized recommendations, AI insights, and tailored content.
+                  </p>
+                  <button onClick={() => setConsentData(!consentData)}
+                    className={`mt-3 flex items-center gap-2 px-4 py-2 rounded-full font-body text-sm transition-all ${
+                      consentData ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground hover:text-foreground"
+                    }`}>
+                    <div className={`w-4 h-4 rounded border-2 flex items-center justify-center ${consentData ? "border-primary-foreground bg-primary-foreground/20" : "border-muted-foreground"}`}>
+                      {consentData && <div className="w-2 h-2 rounded-sm bg-primary-foreground" />}
+                    </div>
+                    {consentData ? "Enabled" : "Enable personalization"}
+                  </button>
+                </div>
+              </div>
+            </motion.div>
+
+            <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}
+              className="bg-card rounded-xl border border-border p-5">
+              <div className="flex items-start gap-4">
+                <div className="p-2 rounded-lg bg-primary/10"><Users size={20} className="text-primary" /></div>
+                <div className="flex-1">
+                  <h3 className="font-display text-lg text-foreground">Mentor & Community Sharing</h3>
+                  <p className="font-body text-sm text-muted-foreground mt-1">
+                    Allow your profile highlights and progress to be visible to matched mentors and community groups.
+                  </p>
+                  <button onClick={() => setConsentMentor(!consentMentor)}
+                    className={`mt-3 flex items-center gap-2 px-4 py-2 rounded-full font-body text-sm transition-all ${
+                      consentMentor ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground hover:text-foreground"
+                    }`}>
+                    <div className={`w-4 h-4 rounded border-2 flex items-center justify-center ${consentMentor ? "border-primary-foreground bg-primary-foreground/20" : "border-muted-foreground"}`}>
+                      {consentMentor && <div className="w-2 h-2 rounded-sm bg-primary-foreground" />}
+                    </div>
+                    {consentMentor ? "Enabled" : "Enable sharing"}
+                  </button>
+                </div>
+              </div>
+            </motion.div>
+
+            <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}
+              className="bg-card rounded-xl border border-border p-5">
+              <div className="flex items-start gap-4">
+                <div className="p-2 rounded-lg bg-primary/10"><Lock size={20} className="text-primary" /></div>
+                <div>
+                  <h3 className="font-display text-lg text-foreground">Your Data, Your Control</h3>
+                  <p className="font-body text-sm text-muted-foreground mt-1">
+                    You can change these preferences anytime in Settings. We never sell your data.
+                  </p>
+                </div>
+              </div>
+            </motion.div>
+          </div>
+
+          <div className="flex justify-between">
+            <Button variant="ghost" onClick={() => navigate("/onboarding/journey")} className="font-body">
+              <ArrowLeft size={18} /> Back
+            </Button>
+            <Button onClick={handleContinue} disabled={submitting}
+              className="bg-primary text-primary-foreground rounded-full px-8 font-body font-semibold disabled:opacity-50">
+              {submitting ? "Finalizing..." : "Generate My UID"} <ArrowRight size={18} />
+            </Button>
+          </div>
+        </motion.div>
+      </div>
+    </div>
+  );
+};
+
+export default ConsentStep;

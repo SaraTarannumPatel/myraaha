@@ -1,0 +1,82 @@
+project_id = "tdweqsszaakxhnzbyqar"
+
+[functions.explore-crosslink]
+verify_jwt = false
+
+[functions.explore-crosslink-v2]
+verify_jwt = false
+
+[functions.explore-ai-link]
+verify_jwt = false
+
+[functions.explore-default-fill]
+verify_jwt = false
+
+[functions.explore-reciprocate]
+verify_jwt = false
+
+[functions.explore-enrich]
+verify_jwt = false
+
+[functions.living-resume-ai]
+verify_jwt = false
+
+[functions.selfgraph-ai]
+verify_jwt = false
+
+[functions.mentor-matchmaking-ai]
+verify_jwt = false
+
+[functions.peer-circles-ai]
+verify_jwt = false
+
+[functions.project-playground-ai]
+verify_jwt = false
+
+[functions.job-matching-ai]
+verify_jwt = false
+
+[functions.achievements-ai]
+verify_jwt = false
+
+[functions.skillstacker-ai]
+verify_jwt = false
+
+[functions.ai-coach]
+verify_jwt = false
+
+[functions.career-coach-insights]
+verify_jwt = false
+
+[functions.ai-therapist]
+verify_jwt = false
+
+[functions.journal-ai]
+verify_jwt = false
+
+[functions.transition-planner-ai]
+verify_jwt = false
+
+[functions.data-ingestion]
+verify_jwt = false
+
+[functions.mindset-coach]
+verify_jwt = false
+
+[functions.roadmap-ai]
+verify_jwt = false
+
+[functions.roadmap-suggestions]
+verify_jwt = false
+
+[functions.roadmap-step-details]
+verify_jwt = false
+
+[functions.firecrawl-ingest]
+verify_jwt = false
+
+[functions.firecrawl-jobs-ingest]
+verify_jwt = false
+
+[functions.firecrawl-content-ingest]
+verify_jwt = false

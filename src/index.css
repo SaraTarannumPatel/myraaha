@@ -1,0 +1,864 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* ===== MyRaaha Brand Palette =====
+       Primary  : #8305F2  → buttons, titles, icons
+       BG       : #FFFFFF
+       Text     : #000000  → secondary text, subtitles, body
+       Accent   : #F9DF77  → highlight backgrounds, button text
+       Neutral  : #6F7370  → meta, labels, hints
+    */
+
+    /* Foundational neutrals */
+    --background: 0 0% 96%;             /* light grey base */
+    --background-alt: 0 0% 96%;         /* light grey section break */
+    --foreground: 0 0% 0%;              /* #000000 body / secondary */
+
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 0%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 0%;
+
+    --heading: 270 96% 48%;             /* primary purple — titles use this */
+    --text-secondary: 0 0% 0%;
+
+    /* Greyscale (uses #6F7370 family) */
+    --grey-divider: 144 2% 88%;
+    --grey-disabled: 144 2% 75%;
+    --grey-meta: 144 2% 60%;
+    --grey-label: 144 2% 45%;           /* #6F7370 */
+
+    /* ===== Brand ===== */
+    /* Primary — Vivid Purple #8305F2 */
+    --primary: 270 96% 48%;
+    --primary-foreground: 0 0% 100%;    /* white text on purple */
+    --green-secondary: 270 96% 60%;
+    --green-wash: 270 90% 92%;
+
+    --secondary: 270 100% 97%;          /* lightest purple surface */
+    --secondary-foreground: 270 96% 30%;
+
+    --muted: 144 2% 95%;
+    --muted-foreground: 144 2% 45%;
+
+    /* Legacy blue tokens remapped to purple family */
+    --blue-primary: 270 96% 48%;
+    --blue-secondary: 270 80% 60%;
+    --blue-light: 270 70% 80%;
+
+    /* ===== Accent — Lightest Purple ===== */
+    --accent: 270 100% 97%;
+    --accent-foreground: 270 96% 30%;
+    --yellow-highlight: 270 100% 95%;
+    --yellow-icon: 270 96% 48%;
+
+    /* AI / Indigo enhancers → purple variants */
+    --indigo-deep: 270 96% 30%;
+    --indigo-analytical: 270 80% 40%;
+
+    /* Human-warmth accents (kept for legacy) */
+    --terracotta: 270 96% 48%;
+    --terracotta-light: 270 100% 97%;
+    --maroon: 270 96% 30%;
+    --maroon-light: 270 80% 40%;
+
+    /* Status */
+    --success: 142 70% 38%;
+    --success-foreground: 0 0% 100%;
+    --warning: 270 100% 97%;
+    --warning-foreground: 270 96% 30%;
+    --info: 270 96% 48%;
+    --info-foreground: 0 0% 100%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    --ai: 270 96% 48%;
+    --ai-foreground: 0 0% 100%;
+
+    --milestone: 270 96% 30%;
+    --milestone-foreground: 0 0% 100%;
+
+    --warmth: 270 100% 97%;
+    --warmth-foreground: 270 96% 30%;
+
+    /* Structural */
+    --border: 144 2% 90%;
+    --input: 144 2% 90%;
+    --ring: 270 96% 48%;
+
+    --radius: 0.875rem;
+
+    --font-display: 'Poppins', sans-serif;
+    --font-body: 'Poppins', sans-serif;
+
+    /* Gradients */
+    --gradient-warm: linear-gradient(135deg, hsl(270 96% 48%), hsl(270 80% 60%));
+    --gradient-hero: linear-gradient(180deg, hsl(0 0% 100%) 0%, hsl(270 100% 97%) 100%);
+    --gradient-dark: linear-gradient(135deg, hsl(270 96% 30%), hsl(270 96% 18%));
+    --gradient-glow: radial-gradient(ellipse at 50% 0%, hsl(270 96% 48% / 0.15) 0%, transparent 60%);
+    --gradient-accent: linear-gradient(135deg, hsl(270 100% 97%), hsl(270 100% 95%));
+    --gradient-milestone: linear-gradient(135deg, hsl(270 96% 48%), hsl(270 96% 30%));
+
+    /* Shadows */
+    --shadow-soft: 0 2px 20px -4px hsl(270 96% 30% / 0.08);
+    --shadow-card: 0 6px 32px -8px hsl(270 96% 30% / 0.12);
+    --shadow-accent: 0 10px 30px -6px hsl(270 96% 48% / 0.25);
+
+    /* Sidebar */
+    --sidebar-background: 0 0% 100%;
+    --sidebar-foreground: 0 0% 0%;
+    --sidebar-primary: 270 96% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 270 100% 97%;
+    --sidebar-accent-foreground: 270 96% 30%;
+    --sidebar-border: 144 2% 90%;
+    --sidebar-ring: 270 96% 48%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-body antialiased;
+    overflow-x: hidden;
+  }
+
+  html {
+    overflow-x: hidden;
+  }
+
+  img, video, canvas, svg {
+    max-width: 100%;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-display);
+    color: hsl(var(--primary));
+  }
+}
+
+@layer components {
+  /* Inline highlighter — paints a yellow marker behind a phrase */
+  .highlight-mark {
+    background: linear-gradient(180deg, transparent 55%, hsl(var(--accent)) 55%);
+    padding: 0 0.15em;
+    color: hsl(var(--primary));
+  }
+
+  /* Pill chip — for tags / CTAs */
+  .pill-chip {
+    @apply inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-medium;
+    background: hsl(var(--accent));
+    color: hsl(var(--primary));
+  }
+}
+
+@layer utilities {
+  .font-display {
+    font-family: var(--font-display);
+  }
+
+  .font-body {
+    font-family: var(--font-body);
+  }
+
+  .gradient-warm {
+    background: var(--gradient-warm);
+  }
+
+  .gradient-hero {
+    background: var(--gradient-hero);
+  }
+
+  .gradient-dark {
+    background: var(--gradient-dark);
+  }
+
+  .gradient-glow {
+    background: var(--gradient-glow);
+  }
+
+  .gradient-accent {
+    background: var(--gradient-accent);
+  }
+
+  .gradient-milestone {
+    background: var(--gradient-milestone);
+  }
+
+  .shadow-soft {
+    box-shadow: var(--shadow-soft);
+  }
+
+  .shadow-card {
+    box-shadow: var(--shadow-card);
+  }
+
+  .shadow-accent {
+    box-shadow: var(--shadow-accent);
+  }
+
+  .text-gradient-warm {
+    background: var(--gradient-warm);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .text-gradient-accent {
+    background: var(--gradient-accent);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .text-gradient-milestone {
+    background: var(--gradient-milestone);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .responsive-page {
+    overflow-wrap: anywhere;
+  }
+
+  .responsive-page table {
+    min-width: 640px;
+  }
+
+  .responsive-page :where(.overflow-x-auto, [data-radix-scroll-area-viewport]) {
+    max-width: 100%;
+  }
+
+  @media (max-width: 767px) {
+    .responsive-page :where(h1) {
+      font-size: clamp(2.25rem, 14vw, 4.25rem);
+      line-height: 0.98;
+    }
+
+    .responsive-page :where(h2) {
+      font-size: clamp(1.75rem, 10vw, 3rem);
+      line-height: 1.05;
+    }
+
+    .responsive-page :where(.container) {
+      padding-left: 1.25rem;
+      padding-right: 1.25rem;
+    }
+  }
+}
+
+/* ===== Mobile Responsive Utilities ===== */
+@layer utilities {
+  /* Scrollable tabs for mobile */
+  .tabs-scroll {
+    @apply flex overflow-x-auto gap-1 pb-1 -mx-1 px-1 scrollbar-hide;
+    scroll-snap-type: x mandatory;
+  }
+  .tabs-scroll > * {
+    @apply flex-shrink-0;
+    scroll-snap-align: start;
+  }
+
+  /* Module page wrapper — consistent vertical rhythm + safe horizontal padding */
+  .module-page {
+    @apply space-y-4 sm:space-y-5 md:space-y-6 min-w-0;
+  }
+
+  /* Module hero: title + icon row that never overflows on mobile */
+  .module-hero {
+    @apply flex items-start gap-2.5 sm:gap-3 min-w-0;
+  }
+  .module-hero-icon {
+    @apply w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-primary flex items-center justify-center shrink-0;
+  }
+  .module-hero-title {
+    @apply font-display text-lg sm:text-xl md:text-2xl text-primary truncate;
+  }
+  .module-hero-subtitle {
+    @apply font-body text-[11px] sm:text-xs text-muted-foreground line-clamp-2;
+  }
+
+  /* Card grids that breathe on every breakpoint */
+  .card-grid-1-2-3 {
+    @apply grid gap-3 sm:gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3;
+  }
+  .card-grid-1-2 {
+    @apply grid gap-3 sm:gap-4 grid-cols-1 sm:grid-cols-2;
+  }
+  .card-grid-2-4 {
+    @apply grid gap-2 sm:gap-3 grid-cols-2 sm:grid-cols-4;
+  }
+
+  /* Tab list styling — horizontally scrollable on mobile */
+  .module-tabs {
+    @apply flex overflow-x-auto scrollbar-hide gap-1 pb-1 w-full;
+  }
+  .module-tabs > * {
+    @apply shrink-0;
+  }
+
+  /* Modal / sheet bodies that should never overflow viewport on mobile */
+  .module-modal-body {
+    @apply max-h-[70vh] sm:max-h-[55vh] overflow-y-auto;
+  }
+
+  /* Action button rows that stack on mobile, row on tablet+ */
+  .action-row {
+    @apply flex flex-col sm:flex-row gap-2 sm:gap-3 w-full;
+  }
+  .action-row > * {
+    @apply w-full sm:w-auto;
+  }
+}
+
+/* ===========================================================
+   Mobile responsiveness pass — applies inside dashboard pages
+   without touching every page file. Keeps desktop unchanged.
+   =========================================================== */
+@media (max-width: 639px) {
+  /* Tighten oversized vertical rhythm on mobile */
+  main .space-y-8 > :not([hidden]) ~ :not([hidden]) {
+    margin-top: 1.25rem !important;
+  }
+  main .space-y-6 > :not([hidden]) ~ :not([hidden]) {
+    margin-top: 1rem !important;
+  }
+  /* Cap oversized display headings */
+  main h1.text-3xl, main h1.text-4xl, main h1.text-5xl {
+    font-size: 1.5rem !important;
+    line-height: 1.85rem !important;
+  }
+  main h2.text-3xl, main h2.text-4xl {
+    font-size: 1.35rem !important;
+    line-height: 1.7rem !important;
+  }
+  main h3.text-2xl, main h3.text-xl {
+    font-size: 1.05rem !important;
+    line-height: 1.45rem !important;
+  }
+  /* Force 3-col + 4-col module grids to single col on phones */
+  main .grid.grid-cols-3:not([class*="sm:grid-cols"]):not([class*="md:grid-cols"]),
+  main .grid.grid-cols-4:not([class*="sm:grid-cols"]):not([class*="md:grid-cols"]) {
+    grid-template-columns: 1fr !important;
+  }
+  /* Soften large card paddings on mobile */
+  main .p-8 { padding: 1rem !important; }
+  main .p-6 { padding: 0.875rem !important; }
+  main .px-8 { padding-left: 1rem !important; padding-right: 1rem !important; }
+  main .py-8 { padding-top: 1rem !important; padding-bottom: 1rem !important; }
+  /* Prevent fixed-width icon tiles from blowing the layout */
+  main .w-16.h-16 { width: 3rem !important; height: 3rem !important; }
+  main .w-14.h-14 { width: 2.75rem !important; height: 2.75rem !important; }
+  main .w-12.h-12 { width: 2.5rem !important; height: 2.5rem !important; }
+  /* Dashboard tab triggers: ensure they wrap or scroll */
+  main [role="tablist"] {
+    flex-wrap: wrap;
+  }
+  /* Ensure long tag/badge rows wrap */
+  main .flex.items-center.gap-3 { gap: 0.5rem !important; }
+}
+
+/* Hide scrollbar for tabs */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* ===========================================================
+   Extra mobile pass — compass / roadmap / explore / mentor /
+   therapist / skill-stacker / project-playground / intro /
+   onboarding / landing all share these utilities.
+   =========================================================== */
+@media (max-width: 639px) {
+  /* Card content padding tightening for dense modules */
+  main [class*="CardContent"], main .pt-6 { padding-top: 1rem !important; }
+  /* Ensure interaction buttons row fits 4-up on phones */
+  main .grid.grid-cols-4 > button {
+    padding-left: 0.25rem !important;
+    padding-right: 0.25rem !important;
+    font-size: 0.7rem;
+  }
+  main .grid.grid-cols-4 > button .text-xs { font-size: 0.65rem; }
+  /* Wrap badges sensibly */
+  main .flex.flex-wrap.gap-1\.5 > * { max-width: 100%; }
+  /* Fixed/absolute popups must stay within viewport on mobile */
+  .fixed.inset-0 > div[class*="max-w-xl"],
+  .fixed.inset-0 > div[class*="max-w-2xl"],
+  .fixed.inset-0 > div[class*="max-w-3xl"] {
+    max-height: 92vh;
+    overflow-y: auto;
+  }
+  /* Landing-style hero headlines */
+  main h1.font-display, main h2.font-display { word-break: break-word; }
+  /* Tab triggers — ensure horizontal scroll instead of overflow */
+  main [role="tablist"] {
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    scrollbar-width: none;
+  }
+  main [role="tablist"]::-webkit-scrollbar { display: none; }
+  main [role="tablist"] > [role="tab"] { flex-shrink: 0; }
+}
+
+/* Tablet portrait extra polish */
+@media (min-width: 640px) and (max-width: 767px) {
+  main h1.text-4xl, main h1.text-5xl { font-size: 2rem !important; line-height: 2.4rem !important; }
+  main .grid.grid-cols-3 { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+}
+
+/* Universal dialog/sheet/drawer mobile clamp + landing polish */
+@media (max-width: 639px) {
+  [role="dialog"] [class*="max-w-lg"],
+  [role="dialog"] [class*="max-w-xl"],
+  [role="dialog"] [class*="max-w-2xl"],
+  [role="dialog"] [class*="max-w-3xl"],
+  [role="dialog"] [class*="max-w-4xl"] {
+    max-width: calc(100vw - 1.5rem) !important;
+    width: calc(100vw - 1.5rem) !important;
+  }
+  [role="dialog"] > div { max-height: 92vh; overflow-y: auto; }
+  [data-radix-popper-content-wrapper] { max-width: calc(100vw - 1rem) !important; }
+  main section .grid.lg\:grid-cols-3,
+  main section .grid.md\:grid-cols-3,
+  main section .grid.lg\:grid-cols-4,
+  main section .grid.md\:grid-cols-4 {
+    grid-template-columns: 1fr !important;
+    gap: 1rem !important;
+  }
+  main section h1.text-6xl, main section h1.text-7xl, main section h1.text-8xl {
+    font-size: 2.25rem !important;
+    line-height: 1.05 !important;
+  }
+  main section h2.text-5xl, main section h2.text-6xl {
+    font-size: 1.75rem !important;
+    line-height: 1.1 !important;
+  }
+}
+
+/* ===== MyRaaha landing-pages CSS variables (additive — used by MyRaahaLanding/About/Services .css) ===== */
+:root {
+  --myraaha-blue: #5500CB;
+  --myraaha-blue-dark: #3d0099;
+  --myraaha-blue-light: #f3e8ff;
+  --myraaha-gradient: linear-gradient(135deg, #5500CB 0%, #7c3aed 100%);
+  --myraaha-text-dark: #000000;
+  --myraaha-text-gray: #4b5563;
+  --myraaha-text-grey: #4b5563;
+  --myraaha-white: #ffffff;
+  --myraaha-accent: #C9CBC4;
+  --myraaha-bg-grey: rgba(211, 211, 211, 0.1);
+  --section-spacing: 120px;
+  --section-spacing-mobile: 60px;
+  --header-gap-title: 1.25rem;
+  --header-gap-subtitle: 4rem;
+}
+
+/* ==========================================================================
+   MYRAAHA LANDING WEBSITE DESIGN SYSTEM OVERRIDES
+   Matches the specification in docs/landing_page_design_system.md
+   ========================================================================== */
+
+/* 0. Navbar Clearance - Push all hero sections below the 80px fixed glass navbar */
+.myraaha-hero {
+  margin-top: 0px !important;
+}
+
+.myraaha-hero,
+.standard-page-hero,
+.partnerships-hero-v2,
+.services-hero {
+  padding-top: calc(80px + 3rem) !important;
+}
+
+@media (max-width: 768px) {
+  .myraaha-hero,
+  .standard-page-hero,
+  .partnerships-hero-v2,
+  .services-hero {
+    padding-top: calc(80px + 2rem) !important;
+  }
+}
+
+/* 1. Global Typography overrides for landing wrappers */
+.myraaha-landing,
+.about-page,
+.services-page,
+.partnerships-page,
+.careers-page,
+.insights-page,
+.insights-detail-page,
+.contact-page {
+  font-family: 'Poppins', sans-serif !important;
+}
+
+/* 2. Enforced Design System Section Badges (Section 3.A) */
+.section-badge,
+.mission-badge,
+.hero-badge,
+.section-badge-white,
+.culture-badge,
+.white-badge-v2,
+.hero-badge-v2,
+.section-badge-v2,
+.services-hero-badge,
+.mosaic-tag {
+  background: #f3e8ff !important;
+  color: #5500cb !important;
+  padding: 0.5rem 1.5rem !important;
+  border-radius: 99px !important;
+  font-family: 'Poppins', sans-serif !important;
+  font-size: 0.8rem !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.1em !important;
+  line-height: 1.0 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  border: none !important;
+  margin-bottom: 1.5rem !important;
+}
+
+/* 3. Section Titles (Section 2) */
+.section-title,
+.mission-title,
+.beacon-title,
+.about-section-title,
+.culture-title,
+.hero-title-v2,
+.section-title-v2,
+.cta-title-v2,
+.final-content h3,
+.services-hero-title,
+.strip-title {
+  font-size: 3rem !important;
+  font-weight: 700 !important;
+  line-height: 1.1 !important;
+  color: var(--myraaha-text-dark, #000000) !important;
+  font-family: 'Poppins', sans-serif !important;
+}
+
+/* Premium Contrast Override for Dark Sections */
+.motivation-premium .section-title,
+.motivation-premium .mission-title,
+.motivation-premium h2,
+.theory-premium-v7 .section-title,
+.theory-premium-v7 h2,
+.services-cta h2,
+.about-journey h2,
+.about-values h2,
+.partnerships-asks-v2 h2,
+.partnerships-cta-v2 h2,
+.cta-title-v2,
+.final-content h3,
+.careers-section.why-work-with-us h2 {
+  color: #ffffff !important;
+}
+
+/* 4. Section Subtitles / Descriptions (Section 2) */
+.section-subtitle,
+.mission-subtitle,
+.beacon-subtitle,
+.culture-subtitle,
+.hero-subtitle-v2,
+.section-subtitle-v2,
+.cta-subtitle-v2,
+.services-hero-subtitle {
+  font-size: 1.1rem !important;
+  font-weight: 400 !important;
+  line-height: 1.6 !important;
+  color: var(--myraaha-text-gray, #4b5563) !important;
+  font-family: 'Poppins', sans-serif !important;
+}
+
+/* 5. Card Titles (Section 2) */
+.service-card h3,
+.stakeholder-card h3,
+.incubation-extension-card h3,
+.process-card h4,
+.value-card h3,
+.path-card-v2 h3,
+.ask-card-v2 h3,
+.join-path-card h3,
+.job-card h3,
+.compounding-card h4,
+.mosaic-card h3,
+.eco-card h4 {
+  font-size: 1.45rem !important;
+  font-weight: 600 !important;
+  line-height: 1.35 !important;
+  color: var(--myraaha-text-dark, #000000) !important;
+  font-family: 'Poppins', sans-serif !important;
+}
+
+/* 6. Incubation/Service Cards Hover & Spacing (Section 3.B) */
+.incubation-extension-card,
+.service-card,
+.platform-mini-card,
+.process-card,
+.path-card-v2,
+.ask-card-v2,
+.join-path-card,
+.job-card,
+.compounding-card,
+.mosaic-card,
+.eco-card,
+.value-card {
+  background: rgba(211, 211, 211, 0.1) !important;
+  border-radius: 32px !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05) !important;
+  border: 1px solid rgba(226, 232, 240, 0.6) !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+.incubation-extension-card:hover,
+.service-card:hover,
+.platform-mini-card:hover,
+.process-card:hover,
+.path-card-v2:hover,
+.ask-card-v2:hover,
+.join-path-card:hover,
+.job-card:hover,
+.compounding-card:hover,
+.mosaic-card:hover,
+.eco-card:hover,
+.value-card:hover {
+  transform: translateY(-10px) !important;
+  box-shadow: 0 20px 40px rgba(85, 0, 203, 0.08) !important;
+  border-color: rgba(85, 0, 203, 0.15) !important;
+}
+
+/* 7. Mobile & Responsive Typography Scaling (Section 4) */
+@media (max-width: 768px) {
+  .section-title,
+  .mission-title,
+  .beacon-title,
+  .about-section-title,
+  .myraaha-landing h2,
+  .about-page h2,
+  .services-page h2,
+  .partnerships-page h2,
+  .careers-page h2,
+  .insights-page h2,
+  .insights-detail-page h2,
+  .contact-page h2 {
+    font-size: 32px !important;
+    line-height: 1.2 !important;
+    font-weight: 700 !important;
+  }
+
+  .service-card h3,
+  .stakeholder-card h3,
+  .incubation-extension-card h3,
+  .process-card h4,
+  .value-card h3,
+  .myraaha-landing h3,
+  .about-page h3,
+  .services-page h3,
+  .partnerships-page h3,
+  .careers-page h3,
+  .insights-page h3,
+  .insights-detail-page h3,
+  .contact-page h3 {
+    font-size: 20px !important;
+    line-height: 1.3 !important;
+    font-weight: 600 !important;
+  }
+
+  .myraaha-landing p,
+  .about-page p,
+  .services-page p,
+  .partnerships-page p,
+  .careers-page p,
+  .insights-page p,
+  .insights-detail-page p,
+  .contact-page p,
+  .section-subtitle,
+  .mission-subtitle,
+  .beacon-subtitle {
+    font-size: 1.05rem !important;
+    line-height: 1.6 !important;
+    font-weight: 400 !important;
+  }
+
+  /* Touch-safe button scaling */
+  .btn-primary,
+  .btn-purple,
+  .btn-cta-primary,
+  .btn-learn-more {
+    min-height: 48px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+
+  .btn-secondary,
+  .btn-white,
+  .btn-cta-secondary {
+    min-height: 44px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .section-title,
+  .mission-title,
+  .beacon-title,
+  .about-section-title,
+  .myraaha-landing h2,
+  .about-page h2,
+  .services-page h2,
+  .partnerships-page h2,
+  .careers-page h2,
+  .insights-page h2,
+  .insights-detail-page h2,
+  .contact-page h2 {
+    font-size: 28px !important;
+  }
+}
+
+@media (max-width: 320px) {
+  .section-title,
+  .mission-title,
+  .beacon-title,
+  .about-section-title,
+  .myraaha-landing h2,
+  .about-page h2,
+  .services-page h2,
+  .partnerships-page h2,
+  .careers-page h2,
+  .insights-page h2,
+  .insights-detail-page h2,
+  .contact-page h2 {
+    font-size: 24px !important;
+  }
+}
+
+/* Force all heading highlights across the entire landing website to brand purple #5500cb */
+.hero-title span,
+.section-title span,
+.mission-title span,
+.beacon-title span,
+.culture-title span,
+.hero-title-v2 span,
+.section-title-v2 span,
+.cta-title-v2 span,
+.about-section-title span,
+.about-hero-title span,
+.role-section-title span,
+.motivation-hero-title span,
+.services-hero-title span,
+.strip-title span,
+.standard-page-hero .hero-title span,
+.standard-page-hero .hero-title span.italic,
+.myraaha-hero .hero-title span {
+  color: #5500cb !important;
+  background: none !important;
+  -webkit-text-fill-color: #5500cb !important;
+}
+
+/* 
+   Strict Accessibility Rule: 
+   EVERY text element situated on a purple (#5500cb) or dark gradient background 
+   MUST be strictly colored pure white (#ffffff). 
+*/
+.myraaha-mission,
+.myraaha-mission h2,
+.myraaha-mission h3,
+.myraaha-mission p,
+.myraaha-mission span,
+.myraaha-mission strong,
+.myraaha-cta,
+.myraaha-cta h2,
+.myraaha-cta p,
+.myraaha-cta a,
+.myraaha-footer,
+.myraaha-footer a,
+.myraaha-footer p,
+.myraaha-footer span,
+.myraaha-footer h4,
+.motivation-premium .motivation-hero-title,
+.motivation-premium .motivation-hero-lead,
+.role-section.dark-mission-bg,
+.role-section.dark-mission-bg h2,
+.role-section.dark-mission-bg p,
+.role-section.dark-mission-bg li,
+.role-section.dark-mission-bg span {
+  color: #ffffff !important;
+}
+
+/* Section badge styling exception for clear contrast on purple backgrounds */
+.myraaha-mission .mission-badge,
+.myraaha-mission .mission-badge span,
+.motivation-premium .section-badge-white,
+.role-section.dark-mission-bg .section-badge,
+.role-section.dark-mission-bg .section-badge span {
+  background: #f3e8ff !important;
+  color: #5500cb !important;
+  -webkit-text-fill-color: #5500cb !important;
+}
+
+/* Allow highlight words on purple backgrounds to stand out in readable lavender light (#f3e8ff) */
+.myraaha-mission .mission-title span,
+.myraaha-mission .mission-card h3 span,
+.myraaha-cta .cta-title span,
+.motivation-premium .motivation-hero-title span,
+.role-section.dark-mission-bg .role-section-title span {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+/* Master Accessibility Override for all colorful background sections across the entire landing website */
+.myraaha-mission h1, .myraaha-mission h2, .myraaha-mission h3, .myraaha-mission h4, .myraaha-mission p, .myraaha-mission span, .myraaha-mission strong, .myraaha-mission li,
+.myraaha-cta h1, .myraaha-cta h2, .myraaha-cta h3, .myraaha-cta p, .myraaha-cta span, .myraaha-cta strong,
+.myraaha-footer h1, .myraaha-footer h2, .myraaha-footer h3, .myraaha-footer h4, .myraaha-footer p, .myraaha-footer span, .myraaha-footer strong, .myraaha-footer li,
+.standard-page-hero h1, .standard-page-hero h2, .standard-page-hero h3, .standard-page-hero p, .standard-page-hero span, .standard-page-hero strong,
+.partnerships-hero-v2 h1, .partnerships-hero-v2 h2, .partnerships-hero-v2 h3, .partnerships-hero-v2 p, .partnerships-hero-v2 span, .partnerships-hero-v2 strong,
+.services-hero h1, .services-hero h2, .services-hero h3, .services-hero p, .services-hero span, .services-hero strong,
+.motivation-premium h1, .motivation-premium h2, .motivation-premium h3, .motivation-premium p, .motivation-premium span, .motivation-premium strong,
+.role-section.dark-mission-bg h1, .role-section.dark-mission-bg h2, .role-section.dark-mission-bg h3, .role-section.dark-mission-bg p, .role-section.dark-mission-bg span, .role-section.dark-mission-bg strong, .role-section.dark-mission-bg li,
+.partnerships-asks-v2 h1, .partnerships-asks-v2 h2, .partnerships-asks-v2 h3, .partnerships-asks-v2 p, .partnerships-asks-v2 span, .partnerships-asks-v2 strong, .partnerships-asks-v2 li,
+.partnerships-cta-v2 h1, .partnerships-cta-v2 h2, .partnerships-cta-v2 h3, .partnerships-cta-v2 p, .partnerships-cta-v2 span, .partnerships-cta-v2 strong,
+.about-journey h1, .about-journey h2, .about-journey h3, .about-journey p, .about-journey span, .about-journey strong, .about-journey li,
+.about-values h1, .about-values h2, .about-values h3, .about-values p, .about-values span, .about-values strong, .about-values li,
+.services-cta h1, .services-cta h2, .services-cta h3, .services-cta p, .services-cta span, .services-cta strong,
+.careers-section.why-work-with-us h1, .careers-section.why-work-with-us h2, .careers-section.why-work-with-us h3, .careers-section.why-work-with-us p, .careers-section.why-work-with-us span, .careers-section.why-work-with-us strong, .careers-section.why-work-with-us li {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+/* Ensure no secondary elements override white-on-colorful rule */
+.standard-page-hero .section-badge,
+.standard-page-hero .section-badge span,
+.partnerships-hero-v2 .section-badge,
+.partnerships-hero-v2 .section-badge span,
+.services-hero .section-badge,
+.services-hero .section-badge span,
+.about-journey .section-badge,
+.about-journey .section-badge span,
+.about-values .section-badge,
+.about-values .section-badge span,
+.about-journey .timeline-dot,
+.about-journey .timeline-dot span {
+  color: #ffffff !important;
+  background: rgba(255, 255, 255, 0.15) !important;
+  border-color: rgba(255, 255, 255, 0.3) !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+

@@ -1,0 +1,15 @@
+{
+  "name": "MyRaaha",
+  "short_name": "MyRaaha",
+  "description": "Discover your path. Build your future.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#FAF7F0",
+  "theme_color": "#1B2845",
+  "orientation": "portrait",
+  "icons": [
+    { "src": "/myraaha-logo.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/myraaha-logo.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}
