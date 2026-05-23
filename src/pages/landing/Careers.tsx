@@ -1,123 +1,58 @@
-import { Link } from "react-router-dom";
-import LandingLayout from "@/components/landing/shared/LandingLayout";
-import PageHero from "@/components/landing/shared/PageHero";
-import Section from "@/components/landing/shared/Section";
-import { ArrowRight } from "lucide-react";
-import heroCareers from "@/assets/landing/hero-careers.jpg";
-import { careerRoles } from "@/data/careersData";
+import { useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import { Users, GraduationCap, Heart, Handshake, Layers, ArrowRight } from 'lucide-react';
+import MyRaahaNavbar from '../../components/MyRaahaNavbar';
+import MyRaahaFooter from '../../components/MyRaahaFooter';
+import StandardPageHero from '../../components/StandardPageHero';
+import './CareerRole.css';
 
-const values = [
-  ["The Problem", "Structural, not superficial. Career and entrepreneurship confusion affects hundreds of millions. The work here has stakes."],
-  ["The Model", "Non-profit by intent. Revenue-first by design. We build durably, not virally."],
-  ["The Approach", "We move deliberately. We think through decisions. We care about quality, not just speed."],
-  ["The Access", "India-first — including Tier 3, Tier 4, and rural communities consistently underserved by existing systems."],
-  ["The Stage", "We are early. The decisions you make here will be formative. The opportunity to shape something is real."],
+const paths = [
+  { slug: 'core-team', title: 'Core Team', icon: Users, description: 'Full-time builders shaping the long-term vision of MyRaaha across product, engineering, AI, and operations.' },
+  { slug: 'intern', title: 'Internships', icon: GraduationCap, description: 'Launch your career with hands-on building, expert mentorship, and a pathway to core team roles.' },
+  { slug: 'volunteer', title: 'Volunteer', icon: Heart, description: 'Empower students in Tier 3 & 4 India through community moderation, translation, and grass-roots outreach.' },
+  { slug: 'facilitator', title: 'Facilitator', icon: Handshake, description: 'Lead workshops, mentor founders, and facilitate the transition from curiosity to creation.' },
+  { slug: 'freelance', title: 'Freelance', icon: Layers, description: 'Bring specialized expertise to high-impact, project-based collaborations on our talent roster.' },
 ];
 
-const roles = [
-  ["Product Designer — Navigation Experience", "Designing the core user journey — from onboarding through exploration through execution. Someone who thinks in systems, not screens."],
-  ["Backend Engineer — Behavioral Intelligence", "Building the data layer that powers behavioral observation and personalization. Understands the difference between engagement optimization and genuine user benefit."],
-  ["Content Strategist — Career & Entrepreneurship", "Creating the editorial, learning, and community content that makes MyRaaha useful beyond the algorithm."],
-  ["Research Lead — User Journey & Impact", "Tracking the real-world outcomes of MyRaaha's guidance. Cares about what actually happens to users."],
-];
+const CareersHub = () => {
+  useEffect(() => { window.scrollTo(0, 0); }, []);
+  return (
+    <div className="role-page">
+      <MyRaahaNavbar />
 
-const Careers = () => (
-  <LandingLayout>
-    <PageHero
-      eyebrow="Careers at MyRaaha"
-      title={<>We're building something <span className="highlight-mark italic">that matters.</span> We'd like to build it with you.</>}
-      intro="MyRaaha is a small, serious team working on a problem that has been unsolved for too long. We don't move fast and break things. We think carefully and build durably."
-      illustration={heroCareers}
-      illustrationAlt="A small diverse team collaborating warmly at a wooden table with plants and laptops"
-    />
+      <StandardPageHero
+        badge="Careers at MyRaaha"
+        title={<>Build something <span>that matters.</span></>}
+        subtitle="MyRaaha is a small, serious team working on a problem that has been unsolved for too long. We don't move fast and break things — we think carefully and build durably. Choose the path that fits you."
+        features={[]}
+      />
 
-    <Section eyebrow="Why join" title="Five things to know.">
-      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
-        {values.map(([t, b], i) => (
-          <div key={t} className="rounded-2xl border border-border p-6">
-            <p className="font-body text-xs uppercase tracking-[0.2em] text-grey-label">Value {String(i + 1).padStart(2, "0")}</p>
-            <p className="font-display text-xl text-primary mt-2">{t}</p>
-            <p className="font-body text-sm text-foreground/75 mt-2">{b}</p>
+      <section className="role-section role-alt-bg">
+        <div className="role-container">
+          <div className="role-section-header">
+            <span className="role-section-badge">Five paths in</span>
+            <h2 className="role-section-title">Find your <span>way in</span></h2>
+            <p className="role-section-subtitle">Whether you want to commit full-time, intern, volunteer, facilitate, or freelance — there's a place for you.</p>
           </div>
-        ))}
-      </div>
-    </Section>
 
-    <Section variant="muted" eyebrow="Who we hire" title="Specific qualities we value.">
-      <ul className="space-y-3 max-w-3xl">
-        {[
-          "You find the problem genuinely interesting, not just the solution.",
-          "You're comfortable with ambiguity and can make good decisions with incomplete information.",
-          "You communicate precisely — not verbosely, not carelessly.",
-          "You care more about getting it right than about being right.",
-          "You can hold both the human and the technical dimension at once.",
-        ].map((q) => (
-          <li key={q} className="rounded-xl bg-background border border-border px-5 py-3 font-body text-base text-foreground/80">— {q}</li>
-        ))}
-      </ul>
-    </Section>
+          <div className="perks-grid" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))' }}>
+            {paths.map(p => (
+              <Link key={p.slug} to={`/careers/${p.slug}`} className="perk-card" style={{ textDecoration: 'none', color: 'inherit' }}>
+                <div className="perk-icon"><p.icon /></div>
+                <h3>{p.title.split(' ').slice(0, -1).join(' ')} <span>{p.title.split(' ').slice(-1)}</span></h3>
+                <p>{p.description}</p>
+                <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', marginTop: '1.25rem', color: 'var(--myraaha-blue)', fontWeight: 600, fontSize: '0.9rem' }}>
+                  Explore <ArrowRight size={14} />
+                </span>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
 
-    <Section variant="muted" eyebrow="Ways to join" title="Five paths in.">
-      <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
-        {careerRoles.map((r) => (
-          <Link
-            key={r.slug}
-            to={`/careers-info/${r.slug}`}
-            className="group rounded-2xl border border-border bg-background p-6 hover:border-primary transition-colors"
-          >
-            <p className="pill-chip">{r.type}</p>
-            <p className="font-display text-xl text-primary mt-3 group-hover:underline">{r.title}</p>
-            <p className="font-body text-sm text-foreground/75 mt-2 leading-relaxed">{r.summary}</p>
-            <span className="inline-flex items-center gap-2 mt-5 text-primary font-medium text-sm">
-              Learn more <ArrowRight size={14} />
-            </span>
-          </Link>
-        ))}
-      </div>
-    </Section>
+      <MyRaahaFooter />
+    </div>
+  );
+};
 
-    <Section eyebrow="Open roles" title="Currently hiring for.">
-
-      <div className="grid md:grid-cols-2 gap-5">
-        {roles.map(([t, b]) => (
-          <article key={t} className="rounded-2xl border border-border p-7 group hover:border-primary transition-colors cursor-pointer">
-            <p className="font-display text-xl text-primary leading-snug">{t}</p>
-            <p className="font-body text-sm text-foreground/75 mt-3 leading-relaxed">{b}</p>
-            <span className="inline-flex items-center gap-2 mt-5 text-primary font-medium text-sm">Apply <ArrowRight size={14} /></span>
-          </article>
-        ))}
-      </div>
-      <p className="font-body text-sm text-grey-label italic mt-8 max-w-2xl">
-        We're a small team. We hire slowly and intentionally. If you don't see a role that fits — but you believe in what we're building — reach out anyway.
-      </p>
-    </Section>
-
-    <Section variant="muted" title="Apply.">
-      <form className="grid sm:grid-cols-2 gap-4 max-w-2xl">
-        {[
-          ["name", "Full name", "text"],
-          ["email", "Email address", "email"],
-          ["role", "Role you're applying for", "text"],
-          ["location", "Location", "text"],
-        ].map(([id, label, type]) => (
-          <label key={id} className="block">
-            <span className="font-body text-xs text-grey-label">{label}</span>
-            <input type={type} className="mt-1.5 w-full rounded-xl border border-border bg-background px-4 py-3 text-sm font-body focus:outline-none focus:border-primary" />
-          </label>
-        ))}
-        <label className="block sm:col-span-2">
-          <span className="font-body text-xs text-grey-label">What draws you to this work? (250 words max)</span>
-          <textarea rows={5} className="mt-1.5 w-full rounded-xl border border-border bg-background px-4 py-3 text-sm font-body focus:outline-none focus:border-primary" />
-        </label>
-        <button type="submit" className="sm:col-span-2 justify-self-start rounded-full bg-primary text-accent px-6 py-3 text-sm font-semibold">
-          Send my application
-        </button>
-        <p className="sm:col-span-2 font-body text-xs text-grey-meta italic">
-          We read every application carefully. We respond to everyone, even if we're not moving forward. Your time matters to us.
-        </p>
-      </form>
-    </Section>
-  </LandingLayout>
-);
-
-export default Careers;
+export default CareersHub;

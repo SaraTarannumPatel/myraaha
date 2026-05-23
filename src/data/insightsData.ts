@@ -424,3 +424,5 @@ export const insightsData: BlogPost[] = [
     relatedReadingSlugs: ['career-transition-at-27', 'the-skills-jobs-mismatch', 'career-navigation-workshop-series']
   }
 ];
+
+export type InsightArticle = BlogPost;
