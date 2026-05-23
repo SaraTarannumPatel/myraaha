@@ -3188,7 +3188,7 @@
   .motivation-hero-image { position: absolute; inset: 0; z-index: 0; }
   .motivation-hero-content { position: relative; z-index: 1; padding: 2rem; margin-top: auto; }
   .motivation-hero-title { font-size: 2rem; color: white; }
-  .motivation-hero-title span { color: var(--myraaha-blue-light); }
+  .motivation-hero-title span { color: #ffffff !important; }
   .motivation-hero-lead { color: rgba(255,255,255,0.8); }
   .motivation-image-overlay { background: linear-gradient(to bottom, transparent, rgba(15,23,42,0.9)); opacity: 1; }
   
@@ -3383,7 +3383,7 @@
   .motivation-hero-image { position: absolute; inset: 0; z-index: 0; }
   .motivation-hero-content { position: relative; z-index: 1; padding: 2rem; margin-top: auto; }
   .motivation-hero-title { font-size: 2rem; color: white; }
-  .motivation-hero-title span { color: var(--myraaha-blue-light); }
+  .motivation-hero-title span { color: #ffffff !important; }
   .motivation-hero-lead { color: rgba(255,255,255,0.8); }
   .motivation-image-overlay { background: linear-gradient(to bottom, transparent, rgba(15,23,42,0.9)); opacity: 1; }
   

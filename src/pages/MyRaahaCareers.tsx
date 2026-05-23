@@ -202,7 +202,7 @@ const MyRaahaCareers = () => {
 
         <div className="culture-row">
           <div className="culture-text">
-            <h3 style={{ fontWeight: '700', fontSize: '1.45rem' }}>Autonomy and <span style={{ fontWeight: '700', fontSize: '1.45rem' }}>accountability</span></h3>
+            <h3>Autonomy and <span>accountability</span></h3>
             <p>We don't manage people; we manage missions. Every team member has the freedom to own their work and the responsibility to deliver excellence.</p>
             <div className="culture-features">
               <div className="culture-feature">
@@ -224,7 +224,7 @@ const MyRaahaCareers = () => {
 
         <div className="culture-row reversed">
           <div className="culture-text">
-            <h3 style={{ fontWeight: '700', fontSize: '1.45rem' }}>Empathy and <span style={{ fontWeight: '700', fontSize: '1.45rem' }}>Precision</span></h3>
+            <h3>Empathy and <span>Precision</span></h3>
             <p>We combine deep human understanding with clinical precision. Our technology scales empathy to reach every student in Bharat.</p>
             <div className="culture-features">
               <div className="culture-feature">

@@ -544,12 +544,33 @@
 .cta-title-v2,
 .final-content h3,
 .services-hero-title,
-.strip-title {
+.strip-title,
+.life-content h2,
+.about-page h2,
+.services-page h2,
+.partnerships-page h2,
+.careers-page h2,
+.insights-page h2,
+.insights-detail-page h2,
+.contact-page h2 {
   font-size: 3rem !important;
   font-weight: 700 !important;
   line-height: 1.1 !important;
-  color: var(--myraaha-text-dark, #000000) !important;
   font-family: 'Poppins', sans-serif !important;
+}
+
+.section-title,
+.mission-title,
+.beacon-title,
+.about-section-title,
+.culture-title,
+.hero-title-v2,
+.section-title-v2,
+.cta-title-v2,
+.final-content h3,
+.services-hero-title,
+.strip-title {
+  color: var(--myraaha-text-dark, #000000) !important;
 }
 
 /* Premium Contrast Override for Dark Sections */
@@ -564,8 +585,7 @@
 .partnerships-asks-v2 h2,
 .partnerships-cta-v2 h2,
 .cta-title-v2,
-.final-content h3,
-.careers-section.why-work-with-us h2 {
+.final-content h3 {
   color: #ffffff !important;
 }
 
@@ -837,11 +857,11 @@
 .partnerships-cta-v2 h1, .partnerships-cta-v2 h2, .partnerships-cta-v2 h3, .partnerships-cta-v2 p, .partnerships-cta-v2 span, .partnerships-cta-v2 strong,
 .about-journey h1, .about-journey h2, .about-journey h3, .about-journey p, .about-journey span, .about-journey strong, .about-journey li,
 .about-values h1, .about-values h2, .about-values h3, .about-values p, .about-values span, .about-values strong, .about-values li,
-.services-cta h1, .services-cta h2, .services-cta h3, .services-cta p, .services-cta span, .services-cta strong,
-.careers-section.why-work-with-us h1, .careers-section.why-work-with-us h2, .careers-section.why-work-with-us h3, .careers-section.why-work-with-us p, .careers-section.why-work-with-us span, .careers-section.why-work-with-us strong, .careers-section.why-work-with-us li {
+.services-cta h1, .services-cta h2, .services-cta h3, .services-cta p, .services-cta span, .services-cta strong {
   color: #ffffff !important;
   -webkit-text-fill-color: #ffffff !important;
 }
+
 
 /* Ensure no secondary elements override white-on-colorful rule */
 .standard-page-hero .section-badge,
@@ -861,4 +881,48 @@
   border-color: rgba(255, 255, 255, 0.3) !important;
   -webkit-text-fill-color: #ffffff !important;
 }
+
+/* Remove text highlights (force pure white) for spans and titles in dark background sections across all landing pages */
+.standard-page-hero .hero-title span,
+.standard-page-hero .hero-title span.italic,
+.standard-page-hero .hero-subtitle span,
+.careers-page .standard-page-hero .hero-title span,
+.careers-page .standard-page-hero .hero-title span.italic,
+.careers-page .standard-page-hero .hero-subtitle span,
+.myraaha-mission .mission-title span,
+.myraaha-mission .mission-card h3 span,
+.myraaha-landing .myraaha-mission .mission-title span,
+.myraaha-landing .myraaha-mission .mission-card h3 span,
+.myraaha-landing .myraaha-mission .mission-subtitle span,
+.motivation-premium .motivation-hero-title span,
+.motivation-premium .motivation-hero-lead span,
+.about-page .motivation-premium .motivation-hero-title span,
+.about-page .motivation-premium .motivation-hero-lead span,
+.motivation-hero-title span,
+.partnerships-hero-v2 .hero-title-v2 span,
+.partnerships-hero-v2 .hero-subtitle-v2 span,
+.myraaha-partnerships-v2 .partnerships-hero-v2 .hero-title-v2 span,
+.myraaha-partnerships-v2 .partnerships-hero-v2 .hero-subtitle-v2 span,
+.partnerships-cta-v2 .cta-title-v2 span,
+.partnerships-cta-v2 h2 span,
+.partnerships-asks-v2 .section-title-v2 span,
+.partnerships-asks-v2 .ask-card-v2 h3 span,
+.partnerships-asks-v2 .section-subtitle-v2 span,
+.myraaha-partnerships-v2 .partnerships-asks-v2 .section-title-v2 span,
+.myraaha-partnerships-v2 .partnerships-asks-v2 .ask-card-v2 h3 span,
+.myraaha-partnerships-v2 .partnerships-asks-v2 .section-subtitle-v2 span,
+.about-page .standard-page-hero .hero-title span,
+.about-page .standard-page-hero .hero-subtitle span,
+.services-page .standard-page-hero .hero-title span,
+.services-page .standard-page-hero .hero-subtitle span,
+.insights-page .standard-page-hero .hero-title span,
+.insights-page .standard-page-hero .hero-subtitle span,
+.contact-standard-v4 .standard-page-hero .hero-title span,
+.contact-standard-v4 .standard-page-hero .hero-subtitle span {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  background: none !important;
+}
+
+
 

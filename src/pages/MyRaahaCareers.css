@@ -1341,19 +1341,31 @@
   }
 }
 
-/* Custom Careers Page Design Overrides */
-.careers-section.why-work-with-us .section-title,
-.careers-section.why-work-with-us .section-title span {
+/* Force all text in the "Why join us?" section to the premium darkest shade of slate grey */
+.careers-section.why-work-with-us,
+.careers-section.why-work-with-us *,
+.why-work-with-us,
+.why-work-with-us * {
   color: #1e293b !important;
   -webkit-text-fill-color: #1e293b !important;
 }
 
+/* Ensure Culture Card Titles match rest of card titles across the website */
 .team-culture h3,
 .team-culture h3 span,
 .culture-text h3,
 .culture-text h3 span {
   font-weight: 700 !important;
   font-size: 1.45rem !important;
+}
+
+@media (max-width: 768px) {
+  .team-culture h3,
+  .team-culture h3 span,
+  .culture-text h3,
+  .culture-text h3 span {
+    font-size: 20px !important;
+  }
 }
 
 .life-at-myraaha .section-title span {
