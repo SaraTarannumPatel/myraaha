@@ -539,6 +539,7 @@
 .beacon-title,
 .about-section-title,
 .culture-title,
+.hero-title,
 .hero-title-v2,
 .section-title-v2,
 .cta-title-v2,
@@ -552,7 +553,21 @@
 .careers-page h2,
 .insights-page h2,
 .insights-detail-page h2,
-.contact-page h2 {
+.contact-page h2,
+.contact-standard-v4 h2,
+.contact-v4-main .v4-form-header h2,
+.motivation-hero-title,
+.motivation-premium .motivation-hero-title,
+.compounding-header h3,
+.split-content h2,
+.incubation-program-section h2,
+.incubation-program-section .split-content h2,
+.beacon-platform-section .about-section-title,
+.insights-featured h2,
+.insights-grid-section h2,
+.contact-standard-v4 .standard-page-hero .hero-title,
+.careers-page .standard-page-hero .hero-title,
+.standard-page-hero .hero-title {
   font-size: 3rem !important;
   font-weight: 700 !important;
   line-height: 1.1 !important;
