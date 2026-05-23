@@ -314,6 +314,45 @@ export type Database = {
         }
         Relationships: []
       }
+      career_applications: {
+        Row: {
+          created_at: string
+          email: string
+          full_name: string
+          id: string
+          linkedin_url: string | null
+          resume_url: string
+          role_id: string
+          role_title: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          full_name: string
+          id?: string
+          linkedin_url?: string | null
+          resume_url: string
+          role_id: string
+          role_title: string
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          full_name?: string
+          id?: string
+          linkedin_url?: string | null
+          resume_url?: string
+          role_id?: string
+          role_title?: string
+          status?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       career_card_interactions: {
         Row: {
           card_id: string
