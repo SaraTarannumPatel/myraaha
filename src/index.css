@@ -448,21 +448,3 @@
     line-height: 1.1 !important;
   }
 }
-
-/* ===== MyRaaha landing-pages CSS variables (additive — used by MyRaahaLanding/About/Services .css) ===== */
-:root {
-  --myraaha-blue: #5500CB;
-  --myraaha-blue-dark: #3d0099;
-  --myraaha-blue-light: #f3e8ff;
-  --myraaha-gradient: linear-gradient(135deg, #5500CB 0%, #7c3aed 100%);
-  --myraaha-text-dark: #000000;
-  --myraaha-text-gray: #4b5563;
-  --myraaha-text-grey: #4b5563;
-  --myraaha-white: #ffffff;
-  --myraaha-accent: #C9CBC4;
-  --myraaha-bg-grey: rgba(211, 211, 211, 0.1);
-  --section-spacing: 120px;
-  --section-spacing-mobile: 60px;
-  --header-gap-title: 1.25rem;
-  --header-gap-subtitle: 4rem;
-}

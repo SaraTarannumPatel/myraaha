@@ -5,13 +5,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@/contexts/AuthContext";
 import ProtectedRoute from "@/components/ProtectedRoute";
-import MyRaahaLanding from "./pages/MyRaahaLanding";
-import MyRaahaAbout from "./pages/MyRaahaAbout";
-import MyRaahaServices from "./pages/MyRaahaServices";
-import MyRaahaPartnerships from "./pages/MyRaahaPartnerships";
-import MyRaahaContact from "./pages/MyRaahaContact";
-import MyRaahaInsights from "./pages/MyRaahaInsights";
-import MyRaahaInsightsDetail from "./pages/MyRaahaInsightsDetail";
+import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 // Landing site sub-pages
 import WhyWeExist from "./pages/landing/WhyWeExist";
@@ -26,11 +20,7 @@ import Begin from "./pages/landing/Begin";
 import About from "./pages/landing/About";
 import Writing from "./pages/landing/Writing";
 import LandingCareers from "./pages/landing/Careers";
-import CareerRole from "./pages/landing/CareerRole";
 import Contact from "./pages/landing/Contact";
-import Privacy from "./pages/landing/Privacy";
-import Cookies from "./pages/landing/Cookies";
-import Terms from "./pages/landing/Terms";
 import IntroSlides from "./pages/IntroSlides";
 import Auth from "./pages/Auth";
 import GuestEntry from "./pages/GuestEntry";
@@ -96,14 +86,8 @@ const App = () => (
       <BrowserRouter>
         <AuthProvider>
           <Routes>
-            <Route path="/" element={<MyRaahaLanding />} />
-            <Route path="/about" element={<MyRaahaAbout />} />
-            <Route path="/services" element={<MyRaahaServices />} />
-            <Route path="/partnerships" element={<MyRaahaPartnerships />} />
-            <Route path="/insights" element={<MyRaahaInsights />} />
-            <Route path="/insights/:slug" element={<MyRaahaInsightsDetail />} />
-            <Route path="/contact" element={<MyRaahaContact />} />
-            {/* Legacy landing routes (kept for backward compat) */}
+            <Route path="/" element={<Index />} />
+            {/* Landing site */}
             <Route path="/why" element={<WhyWeExist />} />
             <Route path="/how" element={<HowWeThink />} />
             <Route path="/raaha-marg" element={<RaahaMarg />} />
@@ -113,14 +97,10 @@ const App = () => (
             <Route path="/research" element={<Research />} />
             <Route path="/solutions" element={<Solutions />} />
             <Route path="/begin" element={<Begin />} />
-            <Route path="/about-legacy" element={<About />} />
+            <Route path="/about" element={<About />} />
             <Route path="/writing" element={<Writing />} />
             <Route path="/careers-info" element={<LandingCareers />} />
-            <Route path="/careers-info/:slug" element={<CareerRole />} />
-            <Route path="/privacy" element={<Privacy />} />
-            <Route path="/cookies" element={<Cookies />} />
-            <Route path="/terms" element={<Terms />} />
-            <Route path="/contact-legacy" element={<Contact />} />
+            <Route path="/contact" element={<Contact />} />
             <Route path="/intro" element={<IntroSlides />} />
             <Route path="/auth" element={<Auth />} />
             <Route path="/guest" element={<GuestEntry />} />
