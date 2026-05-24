@@ -1,37 +1,43 @@
-import { Link } from "react-router-dom";
+import { useState } from 'react';
+import { Link, useLocation } from 'react-router-dom';
+import { Menu, X } from 'lucide-react';
+import './MyRaahaNavbar.css';
 
-/**
- * STUB — awaiting upload of the real MyRaahaNavbar.
- * Minimal navbar so landing pages compile and remain navigable.
- */
-const MyRaahaNavbar = () => (
-  <nav
-    style={{
-      position: "fixed",
-      top: 0,
-      left: 0,
-      right: 0,
-      zIndex: 50,
-      background: "#fff",
-      borderBottom: "1px solid #eee",
-      padding: "1rem 2rem",
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "space-between",
-      fontFamily: "Poppins, sans-serif",
-    }}
-  >
-    <Link to="/" style={{ fontWeight: 700, color: "#5500CB", textDecoration: "none" }}>
-      MyRaaha
-    </Link>
-    <div style={{ display: "flex", gap: "1.5rem" }}>
-      <Link to="/" style={{ color: "#000", textDecoration: "none" }}>Home</Link>
-      <Link to="/about" style={{ color: "#000", textDecoration: "none" }}>About</Link>
-      <Link to="/services" style={{ color: "#000", textDecoration: "none" }}>Services</Link>
-      <Link to="/contact" style={{ color: "#000", textDecoration: "none" }}>Contact</Link>
-      <Link to="/auth" style={{ color: "#5500CB", textDecoration: "none", fontWeight: 600 }}>Sign in</Link>
-    </div>
-  </nav>
-);
+const MyRaahaNavbar = () => {
+  const location = useLocation();
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const isActive = (path: string) => (location.pathname === path ? 'active' : '');
+  const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
+  const closeMenu = () => setIsMenuOpen(false);
+
+  return (
+    <nav className={`myraaha-navbar ${isMenuOpen ? 'menu-open' : ''}`}>
+      <div className="myraaha-logo">
+        <Link
+          to="/"
+          onClick={closeMenu}
+          style={{ display: 'flex', alignItems: 'center', textDecoration: 'none', color: 'inherit' }}
+        >
+          <img src="/myraaha-logo.png" alt="MyRaaha Logo" className="nav-logo-img" />
+        </Link>
+      </div>
+
+      <button className="mobile-menu-toggle" onClick={toggleMenu} aria-label="Toggle menu">
+        {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+      </button>
+
+      <div className={`myraaha-nav-links ${isMenuOpen ? 'open' : ''}`}>
+        <Link to="/" className={isActive('/')} onClick={closeMenu}>Home</Link>
+        <Link to="/about" className={isActive('/about')} onClick={closeMenu}>About</Link>
+        <Link to="/services" className={isActive('/services')} onClick={closeMenu}>Services</Link>
+        <Link to="/partnerships" className={isActive('/partnerships')} onClick={closeMenu}>Partnerships</Link>
+        <Link to="/careers" className={isActive('/careers')} onClick={closeMenu}>Careers</Link>
+        <Link to="/insights" className={isActive('/insights')} onClick={closeMenu}>Insights</Link>
+        <Link to="/contact" className={isActive('/contact')} onClick={closeMenu}>Contact</Link>
+      </div>
+    </nav>
+  );
+};
 
 export default MyRaahaNavbar;
