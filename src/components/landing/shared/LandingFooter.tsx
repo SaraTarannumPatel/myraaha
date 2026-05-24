@@ -38,6 +38,32 @@ const LandingFooter = () => {
 
   return (
     <footer className="border-t border-border bg-background">
+      {/* CTA — Ready to Make an Impact */}
+      <div className="bg-primary text-primary-foreground">
+        <div className="container mx-auto px-5 sm:px-8 py-20 sm:py-24 text-center">
+          <h2 className="font-body font-semibold text-3xl sm:text-4xl md:text-5xl text-primary-foreground leading-tight max-w-4xl mx-auto">
+            Ready to Make an <em className="italic font-normal">Impact?</em>
+          </h2>
+          <p className="font-body text-base sm:text-lg text-primary-foreground/85 mt-6 max-w-2xl mx-auto leading-relaxed">
+            Join our community of innovators and changemakers and start building the future today.
+          </p>
+          <div className="mt-8 flex flex-col sm:flex-row gap-4 justify-center">
+            <Link
+              to="/auth"
+              className="inline-flex items-center justify-center gap-2 rounded-2xl bg-accent text-accent-foreground px-10 py-4 text-base font-bold hover:opacity-90 transition-opacity shadow-accent"
+            >
+              Apply Now
+            </Link>
+            <Link
+              to="/contact"
+              className="inline-flex items-center justify-center gap-2 rounded-2xl bg-card text-foreground px-10 py-4 text-base font-bold hover:bg-card/90 transition-colors"
+            >
+              Contact Us
+            </Link>
+          </div>
+        </div>
+      </div>
+
       {/* Newsletter band */}
       <div className="border-b border-border/60">
         <div className="container mx-auto px-5 sm:px-8 py-14 sm:py-20 grid lg:grid-cols-2 gap-10 items-center">

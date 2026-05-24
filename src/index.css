@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -15,8 +15,8 @@
     */
 
     /* Foundational neutrals */
-    --background: 0 0% 100%;            /* #FFFFFF */
-    --background-alt: 0 0% 98%;         /* near-white section break */
+    --background: 0 0% 96%;             /* light grey base */
+    --background-alt: 0 0% 96%;         /* light grey section break */
     --foreground: 0 0% 0%;              /* #000000 body / secondary */
 
     --card: 0 0% 100%;
@@ -37,26 +37,26 @@
     /* ===== Brand ===== */
     /* Primary — Vivid Purple #8305F2 */
     --primary: 270 96% 48%;
-    --primary-foreground: 48 92% 72%;   /* yellow text on purple buttons */
-    --green-secondary: 270 96% 60%;     /* legacy alias → lighter purple */
-    --green-wash: 270 90% 92%;          /* legacy alias → purple wash */
+    --primary-foreground: 0 0% 100%;    /* white text on purple */
+    --green-secondary: 270 96% 60%;
+    --green-wash: 270 90% 92%;
 
-    --secondary: 48 92% 96%;            /* very light yellow surface */
-    --secondary-foreground: 0 0% 0%;
+    --secondary: 270 100% 97%;          /* lightest purple surface */
+    --secondary-foreground: 270 96% 30%;
 
     --muted: 144 2% 95%;
-    --muted-foreground: 144 2% 45%;     /* #6F7370 */
+    --muted-foreground: 144 2% 45%;
 
     /* Legacy blue tokens remapped to purple family */
     --blue-primary: 270 96% 48%;
     --blue-secondary: 270 80% 60%;
     --blue-light: 270 70% 80%;
 
-    /* ===== Accent — Warm Yellow #F9DF77 ===== */
-    --accent: 48 92% 72%;               /* #F9DF77 */
-    --accent-foreground: 270 96% 30%;   /* deep purple text on yellow */
-    --yellow-highlight: 48 92% 80%;
-    --yellow-icon: 48 80% 60%;
+    /* ===== Accent — Lightest Purple ===== */
+    --accent: 270 100% 97%;
+    --accent-foreground: 270 96% 30%;
+    --yellow-highlight: 270 100% 95%;
+    --yellow-icon: 270 96% 48%;
 
     /* AI / Indigo enhancers → purple variants */
     --indigo-deep: 270 96% 30%;
@@ -64,28 +64,28 @@
 
     /* Human-warmth accents (kept for legacy) */
     --terracotta: 270 96% 48%;
-    --terracotta-light: 48 92% 72%;
+    --terracotta-light: 270 100% 97%;
     --maroon: 270 96% 30%;
     --maroon-light: 270 80% 40%;
 
     /* Status */
     --success: 142 70% 38%;
     --success-foreground: 0 0% 100%;
-    --warning: 48 92% 72%;
-    --warning-foreground: 0 0% 0%;
+    --warning: 270 100% 97%;
+    --warning-foreground: 270 96% 30%;
     --info: 270 96% 48%;
-    --info-foreground: 48 92% 72%;
+    --info-foreground: 0 0% 100%;
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
 
     --ai: 270 96% 48%;
-    --ai-foreground: 48 92% 72%;
+    --ai-foreground: 0 0% 100%;
 
     --milestone: 270 96% 30%;
-    --milestone-foreground: 48 92% 72%;
+    --milestone-foreground: 0 0% 100%;
 
-    --warmth: 48 92% 72%;
-    --warmth-foreground: 0 0% 0%;
+    --warmth: 270 100% 97%;
+    --warmth-foreground: 270 96% 30%;
 
     /* Structural */
     --border: 144 2% 90%;
@@ -94,15 +94,15 @@
 
     --radius: 0.875rem;
 
-    --font-display: 'Instrument Serif', serif;
-    --font-body: 'Inter', sans-serif;
+    --font-display: 'Poppins', sans-serif;
+    --font-body: 'Poppins', sans-serif;
 
     /* Gradients */
     --gradient-warm: linear-gradient(135deg, hsl(270 96% 48%), hsl(270 80% 60%));
-    --gradient-hero: linear-gradient(180deg, hsl(0 0% 100%) 0%, hsl(48 92% 96%) 100%);
+    --gradient-hero: linear-gradient(180deg, hsl(0 0% 100%) 0%, hsl(270 100% 97%) 100%);
     --gradient-dark: linear-gradient(135deg, hsl(270 96% 30%), hsl(270 96% 18%));
-    --gradient-glow: radial-gradient(ellipse at 50% 0%, hsl(48 92% 72% / 0.35) 0%, transparent 60%);
-    --gradient-accent: linear-gradient(135deg, hsl(48 92% 72%), hsl(48 92% 80%));
+    --gradient-glow: radial-gradient(ellipse at 50% 0%, hsl(270 96% 48% / 0.15) 0%, transparent 60%);
+    --gradient-accent: linear-gradient(135deg, hsl(270 100% 97%), hsl(270 100% 95%));
     --gradient-milestone: linear-gradient(135deg, hsl(270 96% 48%), hsl(270 96% 30%));
 
     /* Shadows */
@@ -114,8 +114,8 @@
     --sidebar-background: 0 0% 100%;
     --sidebar-foreground: 0 0% 0%;
     --sidebar-primary: 270 96% 48%;
-    --sidebar-primary-foreground: 48 92% 72%;
-    --sidebar-accent: 48 92% 92%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 270 100% 97%;
     --sidebar-accent-foreground: 270 96% 30%;
     --sidebar-border: 144 2% 90%;
     --sidebar-ring: 270 96% 48%;
@@ -447,4 +447,22 @@
     font-size: 1.75rem !important;
     line-height: 1.1 !important;
   }
+}
+
+/* ===== MyRaaha landing-pages CSS variables (additive — used by MyRaahaLanding/About/Services .css) ===== */
+:root {
+  --myraaha-blue: #5500CB;
+  --myraaha-blue-dark: #3d0099;
+  --myraaha-blue-light: #f3e8ff;
+  --myraaha-gradient: linear-gradient(135deg, #5500CB 0%, #7c3aed 100%);
+  --myraaha-text-dark: #000000;
+  --myraaha-text-gray: #4b5563;
+  --myraaha-text-grey: #4b5563;
+  --myraaha-white: #ffffff;
+  --myraaha-accent: #C9CBC4;
+  --myraaha-bg-grey: rgba(211, 211, 211, 0.1);
+  --section-spacing: 120px;
+  --section-spacing-mobile: 60px;
+  --header-gap-title: 1.25rem;
+  --header-gap-subtitle: 4rem;
 }
