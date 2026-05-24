@@ -1,868 +1,711 @@
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import {
-  ArrowRight,
-  Rocket,
-  Users,
-  Workflow,
-  Globe,
-  Compass,
-  Target,
-  Lightbulb,
-  MessageSquare,
-  LayoutPanelLeft,
-  Crosshair,
-  ShieldCheck,
-  CheckCircle2,
-  Globe2,
-  Compass as CompassIcon,
-  Rocket as RocketIcon,
-  Target as TargetIcon,
-  Lightbulb as LightbulbIcon,
-  LayoutPanelLeft as LayoutIcon,
-  Send,
-  Award,
-  TrendingUp,
-  Handshake,
-  GitFork,
-} from "lucide-react";
-import { useState } from "react";
+import { ArrowRight, Search, Bell, Compass, Map as MapIcon, Sparkles, Bike, Layers, Brain, Building2, Users, Eye } from "lucide-react";
 import LandingLayout from "@/components/landing/shared/LandingLayout";
-
-import heroImg from "@/assets/landing/home-hero.jpg";
-import svcCuriosity from "@/assets/landing/svc-curiosity.jpg";
-import svcNavigator from "@/assets/landing/svc-navigator.jpg";
-import svcVenture from "@/assets/landing/svc-venture.jpg";
-import svcSkill from "@/assets/landing/svc-skill.jpg";
-import svcTherapist from "@/assets/landing/svc-therapist.jpg";
-import svcLab from "@/assets/landing/svc-lab.jpg";
-import outcomeStudents from "@/assets/landing/outcome-students.jpg";
-import outcomeInstitution from "@/assets/landing/outcome-institution.jpg";
-import outcomeParents from "@/assets/landing/outcome-parents.jpg";
-import platMap from "@/assets/landing/plat-map.jpg";
-import platCompass from "@/assets/landing/plat-compass.jpg";
-import platJourney from "@/assets/landing/plat-journey.jpg";
-import platSystem from "@/assets/landing/plat-system.jpg";
-import platBuild from "@/assets/landing/plat-build.jpg";
-import platPath from "@/assets/landing/plat-path.jpg";
-import storyAlex from "@/assets/landing/story-alex.jpg";
-import storyRahul from "@/assets/landing/story-rahul.jpg";
-import insightsTablet from "@/assets/landing/insights-tablet.jpg";
+import Section from "@/components/landing/shared/Section";
+import Quote from "@/components/landing/shared/Quote";
+import CTABand from "@/components/landing/shared/CTABand";
+import raahaJourney from "@/assets/landing/raaha-journey.jpg";
+import raahaMarg from "@/assets/landing/raaha-marg.jpg";
+import appFrame from "@/assets/landing/app-frame.jpg";
+import heroArrival from "@/assets/landing/hero-arrival.jpg";
+import heroIdentification from "@/assets/landing/hero-identification.jpg";
+import heroBicycle from "@/assets/landing/hero-bicycle.jpg";
+import heroPaths from "@/assets/landing/hero-paths.jpg";
 
 const fadeUp = {
   initial: { opacity: 0, y: 24 },
   whileInView: { opacity: 1, y: 0 },
-  viewport: { once: true, margin: "-60px" },
+  viewport: { once: true, margin: "-80px" },
   transition: { duration: 0.6 },
 };
 
-/* ---------- Reusable bits ---------- */
-
-const Italic = ({ children }: { children: React.ReactNode }) => (
-  <em className="italic text-primary">{children}</em>
-);
-
-const ServiceCard = ({
-  img,
-  alt,
-  Icon,
-  title,
-  italic,
-  body,
-}: {
-  img: string;
-  alt: string;
-  Icon: typeof Rocket;
-  title: string;
-  italic: string;
-  body: string;
-}) => (
-  <motion.div {...fadeUp} className="bg-card rounded-3xl border border-border shadow-soft overflow-hidden flex flex-col">
-    <div className="relative">
-      <img src={img} alt={alt} loading="lazy" className="w-full aspect-[4/3] object-cover" />
-      <div className="absolute -bottom-5 left-5 w-12 h-12 rounded-2xl bg-primary text-accent flex items-center justify-center shadow-accent">
-        <Icon size={22} />
-      </div>
-    </div>
-    <div className="p-6 sm:p-7 pt-9 flex-1 flex flex-col">
-      <h3 className="font-body text-xl sm:text-2xl text-foreground font-semibold leading-tight">
-        {title} <Italic>{italic}</Italic>
-      </h3>
-      <p className="font-body text-base sm:text-lg text-muted-foreground mt-4 leading-relaxed">{body}</p>
-    </div>
-  </motion.div>
-);
-
-const StakeholderCard = ({
-  Icon,
-  title,
-  italic,
-  body,
-}: {
-  Icon: typeof Target;
-  title: string;
-  italic: string;
-  body: string;
-}) => (
-  <motion.div {...fadeUp} className="bg-card rounded-3xl border border-border shadow-soft p-7 sm:p-8 flex flex-col items-center text-center">
-    <div className="w-12 h-12 rounded-2xl bg-accent/40 text-primary flex items-center justify-center mb-6 mx-auto">
-      <Icon size={22} />
-    </div>
-    <h3 className="font-body text-xl sm:text-2xl text-foreground font-semibold leading-tight">
-      {title}
-      <br />
-      <Italic>{italic}</Italic>
-    </h3>
-    <p className="font-body text-base sm:text-lg text-muted-foreground mt-5 leading-relaxed">{body}</p>
-  </motion.div>
-);
-
-const OutcomeBullet = ({ title, italic, body }: { title: string; italic: string; body: string }) => (
-  <div className="flex gap-4 items-start">
-    <CheckCircle2 size={22} className="text-primary shrink-0 mt-1" />
-    <div>
-      <h4 className="font-body text-lg sm:text-xl text-foreground font-semibold">
-        {title} <Italic>{italic}</Italic>
-      </h4>
-      <p className="font-body text-sm sm:text-base text-muted-foreground mt-2 leading-relaxed max-w-md">{body}</p>
-    </div>
-  </div>
-);
-
-const PlatformCard = ({
-  img,
-  alt,
-  Icon,
-  title,
-  italic,
-  titleSuffix,
-  lead,
-  bullets,
-}: {
-  img: string;
-  alt: string;
-  Icon: typeof Globe2;
-  title: string;
-  italic: string;
-  titleSuffix?: string;
-  lead: string;
-  bullets: { title: string; body: string }[];
-}) => (
-  <motion.div {...fadeUp} className="bg-card rounded-3xl border border-border shadow-soft overflow-hidden grid sm:grid-cols-2">
-    <div className="relative min-h-[280px] sm:min-h-0">
-      <img src={img} alt={alt} loading="lazy" className="absolute inset-0 w-full h-full object-cover" />
-    </div>
-    <div className="p-7 sm:p-8 flex flex-col">
-      <div className="flex items-start gap-3 mb-5">
-        <div className="w-11 h-11 rounded-2xl bg-accent/40 text-primary flex items-center justify-center shrink-0">
-          <Icon size={20} />
-        </div>
-        <h3 className="font-body text-xl sm:text-2xl text-foreground font-semibold leading-tight pt-1">
-          {title} <Italic>{italic}</Italic>{titleSuffix}
-        </h3>
-      </div>
-      <p className="font-body text-lg text-primary font-semibold italic leading-relaxed mb-6">{lead}</p>
-      <ul className="space-y-5">
-        {bullets.map((b) => (
-          <li key={b.title} className="flex gap-3">
-            <ArrowRight size={18} className="text-primary shrink-0 mt-1" />
-            <div>
-              <p className="font-body text-lg text-foreground font-semibold">{b.title}</p>
-              <p className="font-body text-base text-muted-foreground mt-1 leading-relaxed">{b.body}</p>
-            </div>
-          </li>
-        ))}
-      </ul>
-    </div>
-  </motion.div>
-);
-
-
-const NumberedTextCard = ({
-  num,
-  title,
-  italic,
-  body,
-}: {
-  num: string;
-  title: string;
-  italic: string;
-  body: string;
-}) => (
-  <motion.div {...fadeUp} className="bg-card rounded-3xl border border-border shadow-soft p-8 sm:p-12">
-    <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-secondary mb-10">
-      <span className="font-display text-2xl text-primary tracking-wide">{num}</span>
-    </div>
-    <h3 className="font-body font-semibold text-4xl sm:text-5xl md:text-6xl text-foreground leading-[1.1]">
-      {title} <Italic>{italic}</Italic>
-    </h3>
-    <p className="font-body text-base sm:text-lg text-muted-foreground mt-8 leading-relaxed">{body}</p>
-  </motion.div>
-);
-
-/* ---------- Stakeholder data ---------- */
-
-type StakeholderKey = "students" | "parents" | "institutions" | "governments";
-
-const stakeholderData: Record<
-  StakeholderKey,
-  { label: string; cards: { Icon: typeof Target; title: string; italic: string; body: string }[] }
-> = {
-  students: {
-    label: "Students",
-    cards: [
-      {
-        Icon: Target,
-        title: "Career",
-        italic: "Discovery",
-        body: "Career discovery before career decisions is essential for long-term career success and fulfilment. Enabling students make stream and career choices with confidence & clarity.",
-      },
-      {
-        Icon: Compass,
-        title: "Career",
-        italic: "Navigation",
-        body: "\u201CSelf-discovery\u201D before career decisions is essential for long-term career success and fulfilment. Students discover emerging career paths, expanding their career imagination.",
-      },
-      {
-        Icon: Rocket,
-        title: "Career",
-        italic: "Building",
-        body: "Bridging the skill gap, access to industry professionals and support students with venture building, enabling stronger student outcomes.",
-      },
-    ],
-  },
-  parents: {
-    label: "Parents",
-    cards: [
-      {
-        Icon: Lightbulb,
-        title: "Decision",
-        italic: "Intelligence",
-        body: "Data-driven insights to help parents support their child's choices with clarity and future-looking predictions.",
-      },
-      {
-        Icon: Handshake,
-        title: "Positive",
-        italic: "Parenting",
-        body: "Resources and frameworks for fostering a supportive environment that aligns with the child's innate strengths.",
-      },
-      {
-        Icon: TrendingUp,
-        title: "Continuous",
-        italic: "Tracking",
-        body: "Visibility into their child's progress and career readiness milestones throughout the academic journey.",
-      },
-    ],
-  },
-  institutions: {
-    label: "Institutions",
-    cards: [
-      {
-        Icon: Award,
-        title: "Institutional",
-        italic: "Reputation",
-        body: "Attract better talent by offering a future-ready model with structured career development programs.",
-      },
-      {
-        Icon: GitFork,
-        title: "NEP 2020",
-        italic: "Alignment",
-        body: "Seamless integration with National Education Policy reforms focusing on holistic and vocational development.",
-      },
-      {
-        Icon: MessageSquare,
-        title: "Teacher",
-        italic: "Empowerment",
-        body: "Equipping educators with career intelligence and mentoring tools to become effective guides for students.",
-      },
-    ],
-  },
-  governments: {
-    label: "Governments",
-    cards: [
-      {
-        Icon: Crosshair,
-        title: "Talent",
-        italic: "Discovery",
-        body: "Access pre-vetted, skill-matched talent across regions with verified profiles and aptitude signals.",
-      },
-      {
-        Icon: Workflow,
-        title: "Workforce",
-        italic: "Readiness",
-        body: "Reduce skill-to-job mismatch with structured career pathways and aligned national skilling initiatives.",
-      },
-      {
-        Icon: Globe,
-        title: "Public-Private",
-        italic: "Partnerships",
-        body: "Co-create policy, run national programs, and shape the next generation of workforce alongside top institutions.",
-      },
-      {
-        Icon: LayoutPanelLeft,
-        title: "Policy",
-        italic: "Alignment",
-        body: "Alignment with Education Reform: Governments increasingly need to align with National Education Policy 2020.",
-      },
-      {
-        Icon: Globe2,
-        title: "Ecosystem",
-        italic: "Integration",
-        body: "Ecosystem Network, Institutions can connect students with alumni mentors & industry professionals for a strong career support ecosystem.",
-      },
-    ],
-  },
-};
-
 const Index = () => {
-  const [activeStake, setActiveStake] = useState<StakeholderKey>("students");
-  const stake = stakeholderData[activeStake];
-
   return (
-    <LandingLayout navAlwaysVisible>
-      {/* ===== HERO ===== */}
-      <section className="relative overflow-hidden bg-background">
+    <LandingLayout navAlwaysVisible={false}>
+      {/* ===== Chapter 1 — Arrival ===== */}
+      <section className="relative overflow-hidden">
+        <div className="absolute inset-0 gradient-hero pointer-events-none" />
         <div className="absolute -top-32 right-[-10%] w-[34rem] h-[34rem] rounded-full bg-accent/30 blur-3xl pointer-events-none" />
-        <div className="container mx-auto px-5 sm:px-8 pt-12 sm:pt-20 pb-20 sm:pb-28 relative">
-          <div className="grid lg:grid-cols-12 gap-10 lg:gap-14 items-center">
-            <div className="lg:col-span-6">
-              <motion.div
-                initial={{ opacity: 0, y: 16 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5 }}
-                className="inline-block rounded-full bg-accent/40 px-5 py-2 mb-7"
-              >
-                <span className="font-body text-sm font-semibold text-primary">
-                  Connecting Academia with Community Impact
-                </span>
-              </motion.div>
+        <div className="absolute bottom-[-10rem] left-[-6rem] w-[28rem] h-[28rem] rounded-full bg-primary/10 blur-3xl pointer-events-none" />
 
+        <div className="container mx-auto px-5 sm:px-8 pt-20 sm:pt-28 pb-24 sm:pb-32 relative">
+          <div className="grid lg:grid-cols-12 gap-12 items-center">
+            <div className="lg:col-span-7">
+              <motion.p {...fadeUp} className="font-body text-xs uppercase tracking-[0.28em] text-grey-label mb-6">
+                Chapter 1 — Arrival
+              </motion.p>
               <motion.h1
-                initial={{ opacity: 0, y: 24 }}
-                animate={{ opacity: 1, y: 0 }}
+                {...fadeUp}
                 transition={{ duration: 0.7, delay: 0.05 }}
-                className="font-body font-semibold text-[2.2rem] sm:text-5xl md:text-6xl text-foreground leading-[1.1] tracking-tight"
+                className="font-display text-[2.6rem] sm:text-6xl md:text-7xl lg:text-[5.4rem] text-primary leading-[1.02] tracking-tight"
               >
-                Confusion at 16 is not a <Italic>flaw.</Italic>
-                <br />
-                Uncertainty at 22 is not <Italic>failure.</Italic>
-                <br />
-                Hesitation is not <Italic>weakness.</Italic>
+                You don't need to{" "}
+                <span className="highlight-mark italic">decide anything</span> here.
               </motion.h1>
-
               <motion.p
                 {...fadeUp}
-                transition={{ duration: 0.6, delay: 0.2 }}
-                className="font-body text-base sm:text-lg text-muted-foreground mt-7 max-w-lg leading-relaxed"
+                transition={{ duration: 0.6, delay: 0.15 }}
+                className="font-body text-base sm:text-lg text-foreground/75 mt-7 max-w-xl leading-relaxed"
               >
-                But the bigger question is, is this avoidable and who can help solve this?
+                A sanctuary for the overthinkers, the late bloomers, and the ambitious souls who feel stuck at 2 AM.{" "}
+                <em className="text-primary not-italic font-medium">Breathe. We have time.</em>
               </motion.p>
+              <motion.div
+                {...fadeUp}
+                transition={{ duration: 0.6, delay: 0.25 }}
+                className="mt-10 flex flex-col sm:flex-row gap-3"
+              >
+                <Link
+                  to="/begin"
+                  className="inline-flex items-center justify-center gap-2 rounded-full bg-primary text-accent px-7 py-3.5 text-sm font-semibold hover:opacity-90 transition-opacity"
+                >
+                  Enter the Sanctuary <ArrowRight size={16} />
+                </Link>
+                <Link
+                  to="/experience"
+                  className="inline-flex items-center justify-center gap-2 rounded-full border border-primary/20 text-primary px-7 py-3.5 text-sm font-medium hover:bg-primary/5 transition-colors"
+                >
+                  Watch the Journey
+                </Link>
+              </motion.div>
 
+              <motion.p
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.9 }}
+                className="font-body text-xs text-grey-meta mt-10 italic"
+              >
+                Your journey. At your pace.
+              </motion.p>
             </div>
 
             <motion.div
-              initial={{ opacity: 0, scale: 0.96 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.8, delay: 0.2 }}
-              className="lg:col-span-6"
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.9, delay: 0.2 }}
+              className="lg:col-span-5"
             >
-              <img
-                src={heroImg}
-                alt="Diverse team collaborating around a table with laptops"
-                width={1280}
-                height={1024}
-                className="w-full rounded-3xl shadow-card object-cover aspect-[5/4]"
-              />
+              <div className="relative">
+                <motion.img
+                  animate={{ y: [0, -10, 0] }}
+                  transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+                  src={heroArrival}
+                  alt="A young person sitting cross-legged on a cloud, journaling with thought bubbles of a compass, leaf and star"
+                  className="w-full max-w-md mx-auto rounded-3xl"
+                  width={1024}
+                  height={1024}
+                />
+                <motion.div
+                  animate={{ y: [0, -8, 0] }}
+                  transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                  className="absolute top-6 left-2 sm:left-6 bg-background/90 backdrop-blur-md border border-border rounded-2xl px-4 py-3 shadow-soft"
+                >
+                  <p className="font-display text-sm text-primary">Raaha</p>
+                  <p className="font-body text-[10px] text-grey-meta">The hand that steadies you</p>
+                </motion.div>
+                <motion.div
+                  animate={{ y: [0, -10, 0] }}
+                  transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 0.6 }}
+                  className="absolute bottom-10 right-2 sm:right-0 bg-background/90 backdrop-blur-md border border-border rounded-2xl px-4 py-3 shadow-soft"
+                >
+                  <p className="font-display text-sm text-primary">Marg</p>
+                  <p className="font-body text-[10px] text-grey-meta">The spine that keeps you moving</p>
+                </motion.div>
+              </div>
             </motion.div>
           </div>
         </div>
       </section>
 
-      {/* ===== MISSION ===== */}
-      <section className="bg-primary text-accent py-20 sm:py-28">
-        <div className="container mx-auto px-5 sm:px-8">
-          <div className="text-center max-w-3xl mx-auto">
-            <motion.span
+      {/* ===== Chapter 2 — Identification ===== */}
+      <Section
+        eyebrow="Chapter 2 — Identification"
+        title={
+          <>
+            You've <span className="italic">probably</span> been{" "}
+            <span className="highlight-mark italic">here before.</span>
+          </>
+        }
+      >
+        <div className="grid lg:grid-cols-12 gap-10 items-start">
+          <div className="lg:col-span-7 space-y-5">
+            <motion.img
               {...fadeUp}
-              className="inline-block rounded-full bg-accent/15 border border-accent/30 px-6 py-2 font-body text-sm text-accent font-medium"
-            >
-              Our Mission
-            </motion.span>
-            <motion.h2
-              {...fadeUp}
-              transition={{ duration: 0.7, delay: 0.1 }}
-              className="font-body font-semibold text-4xl sm:text-5xl md:text-6xl text-accent mt-7 leading-[1.1]"
-            >
-              Empowering <em className="italic">Innovation</em>
-              <br />
-              Through Collaboration
-            </motion.h2>
-            <motion.p
-              {...fadeUp}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              className="font-body text-base sm:text-lg text-accent/85 mt-6 leading-relaxed max-w-2xl mx-auto"
-            >
-              We bring together entrepreneurs, researchers, and industry leaders to create transformative solutions that shape the future.
-            </motion.p>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-5 sm:gap-6 mt-14 sm:mt-16">
-            {[
-              {
-                Icon: Users,
-                title: "Our",
-                italic: "People",
-                body: "Community first approach to drive P2P connections that transform individual journeys.",
-              },
-              {
-                Icon: Workflow,
-                title: "Our",
-                italic: "Process",
-                body: "Tech first approach to give AI enabled solutions in the hands of every student.",
-              },
-              {
-                Icon: Globe,
-                title: "The",
-                italic: "Platform",
-                body: "Creating a one stop guided solution that make a real difference in the student's career journey.",
-              },
-            ].map((c) => (
-              <motion.div
-                key={c.italic}
-                {...fadeUp}
-                className="rounded-3xl bg-accent/10 border border-accent/20 p-7 sm:p-8 backdrop-blur-sm flex flex-col items-center text-center"
-              >
-                <div className="w-12 h-12 rounded-2xl bg-white flex items-center justify-center mb-6">
-                  <c.Icon size={22} className="text-primary" />
+              src={heroIdentification}
+              alt="A young person at 2 AM with browser tabs floating around their head, tea cup nearby"
+              className="w-full max-w-sm rounded-3xl mb-2"
+              loading="lazy"
+              width={1024}
+              height={1024}
+            />
+            {/* Mock browser */}
+            <motion.div {...fadeUp} className="rounded-2xl border border-border shadow-soft overflow-hidden bg-background">
+              <div className="flex items-center gap-2 px-4 py-3 border-b border-border bg-secondary/40">
+                <span className="h-2.5 w-2.5 rounded-full bg-destructive/60" />
+                <span className="h-2.5 w-2.5 rounded-full bg-warning" />
+                <span className="h-2.5 w-2.5 rounded-full bg-success/70" />
+                <div className="ml-3 flex-1 flex items-center gap-2 bg-background border border-border rounded-full px-4 py-1.5">
+                  <Search size={14} className="text-grey-meta" />
+                  <p className="font-body text-xs text-foreground/80 truncate">
+                    career paths for people who don't know what they want…
+                  </p>
                 </div>
-                <h3 className="font-body text-xl sm:text-2xl text-accent font-semibold leading-tight">
-                  {c.title} <em className="italic">{c.italic}</em>
-                </h3>
-                <p className="font-body text-sm sm:text-base text-accent/85 mt-4 leading-relaxed">{c.body}</p>
-              </motion.div>
-            ))}
+                <span className="font-body text-[10px] text-grey-meta whitespace-nowrap">Tab 42 of 42</span>
+              </div>
+              <div className="p-6 sm:p-8 grid sm:grid-cols-2 gap-4">
+                <div className="rounded-xl border border-border p-5">
+                  <p className="font-body text-[10px] uppercase tracking-wider text-grey-meta">Internal Monologue · 2:45 AM</p>
+                  <p className="font-display text-lg text-primary mt-2 leading-snug">
+                    "What am I <em>even doing</em> with my life?"
+                  </p>
+                </div>
+                <div className="rounded-xl border border-border p-5 bg-secondary/40">
+                  <div className="flex items-center gap-2 mb-2">
+                    <Bell size={14} className="text-primary" />
+                    <p className="font-body text-[10px] uppercase tracking-wider text-grey-meta">LinkedIn · just now</p>
+                  </div>
+                  <p className="font-body text-sm text-foreground/85 leading-relaxed">
+                    "Everyone is getting promoted except me."
+                  </p>
+                </div>
+              </div>
+            </motion.div>
+          </div>
+
+          <div className="lg:col-span-5">
+            <ol className="space-y-5">
+              {[
+                "The endless scroll for 'purpose'.",
+                "Winning the race, but on the wrong track.",
+                "Asking people for answers they don't have.",
+              ].map((line, i) => (
+                <motion.li {...fadeUp} key={line} transition={{ duration: 0.5, delay: i * 0.06 }} className="flex gap-4">
+                  <span className="font-display text-2xl text-accent-foreground bg-accent rounded-full w-10 h-10 flex items-center justify-center shrink-0">
+                    {String(i + 1).padStart(2, "0")}
+                  </span>
+                  <p className="font-body text-base text-foreground/85 pt-1.5 leading-relaxed">{line}</p>
+                </motion.li>
+              ))}
+            </ol>
+
+            <motion.div
+              {...fadeUp}
+              transition={{ duration: 0.6, delay: 0.25 }}
+              className="mt-8 rounded-2xl bg-primary text-accent p-6 sm:p-7"
+            >
+              <p className="font-display text-xl sm:text-2xl text-accent leading-snug">
+                Clarity isn't a prize for finishing. It's a method for beginning.
+              </p>
+              <p className="font-body text-sm text-accent/85 mt-3">
+                We don't give you another map. <em>We teach you how to see.</em>
+              </p>
+            </motion.div>
           </div>
         </div>
-      </section>
+      </Section>
 
-      {/* ===== SERVICES ===== */}
-      <section className="bg-background py-20 sm:py-28">
-        <div className="container mx-auto px-5 sm:px-8">
-          <div className="text-center max-w-3xl mx-auto mb-14 sm:mb-16">
-            <motion.p {...fadeUp} className="font-body text-sm font-bold text-primary tracking-[0.22em] uppercase">
-              Our Services
-            </motion.p>
-            <motion.h2
-              {...fadeUp}
-              transition={{ duration: 0.7, delay: 0.1 }}
-              className="font-body font-semibold text-4xl sm:text-5xl md:text-6xl text-foreground mt-5"
-            >
-              What We <Italic>Do</Italic>
-            </motion.h2>
-            <motion.p
-              {...fadeUp}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              className="font-body text-base sm:text-lg text-muted-foreground mt-6 leading-relaxed"
-            >
-              Inclusive and holistic career guidance with early interventions for better skill and labour market alignment and career pathways
-            </motion.p>
-          </div>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-7">
-            <ServiceCard
-              img={svcCuriosity}
-              alt="Laptop showing analytics dashboard"
-              Icon={Compass}
-              title="Curiosity"
-              italic="Compass"
-              body="Supporting innovative ideas from concept to market with expert mentorship and resources."
-            />
-            <ServiceCard
-              img={svcNavigator}
-              alt="Community brainstorming with sticky notes"
-              Icon={Target}
-              title="Career"
-              italic="Navigator"
-              body="Bridging academia with real-world social impact through collaborative community initiatives."
-            />
-            <ServiceCard
-              img={svcVenture}
-              alt="Mentor and student collaborating"
-              Icon={Rocket}
-              title="Venture"
-              italic="Builder"
-              body="Creating opportunities for students and faculty to engage in industry-leading research."
-            />
-            <ServiceCard
-              img={svcSkill}
-              alt="Hackathon event with many participants"
-              Icon={Lightbulb}
-              title="Skill"
-              italic="Studio"
-              body="Hosting hackathons, workshops, and conferences to spark creativity and networking."
-            />
-            <ServiceCard
-              img={svcTherapist}
-              alt="Career therapist portrait"
-              Icon={MessageSquare}
-              title="Career"
-              italic="Therapist"
-              body="Address mental well being by bridging career planning with emotional health, helping individuals manage anxiety, align professional goals with personal values, attain clarity for confidence."
-            />
-            <ServiceCard
-              img={svcLab}
-              alt="Modern corporate skyscrapers"
-              Icon={LayoutPanelLeft}
-              title="Career"
-              italic="Lab"
-              body="Modern workforce solutions for high speed, high-scale job and talent fitment. Smart marketplace for covering jobs and talent, that are either unexplored or not properly leveraged."
-            />
-          </div>
-        </div>
-      </section>
-
-      {/* ===== IMPACT GROUPS ===== */}
-      <section className="bg-background-alt py-20 sm:py-28">
-        <div className="container mx-auto px-5 sm:px-8">
-          <div className="text-center max-w-3xl mx-auto mb-12">
-            <motion.p {...fadeUp} className="font-body text-sm font-bold text-primary tracking-[0.22em] uppercase">
-              Value Realization
-            </motion.p>
-            <motion.h2
-              {...fadeUp}
-              transition={{ duration: 0.7, delay: 0.1 }}
-              className="font-body font-semibold text-4xl sm:text-5xl md:text-6xl text-foreground mt-5 leading-[1.1]"
-            >
-              What is in it for our <Italic>stakeholders?</Italic>
-            </motion.h2>
-          </div>
-
-          {/* Tabs */}
-          <div className="flex justify-center mb-12 sm:mb-14">
-            <div className="inline-flex flex-wrap justify-center bg-secondary rounded-full p-1.5 shadow-soft border border-border max-w-full overflow-x-auto">
-              {(Object.keys(stakeholderData) as StakeholderKey[]).map((k) => (
-                <button
-                  key={k}
-                  onClick={() => setActiveStake(k)}
-                  className={`px-5 sm:px-7 py-2.5 sm:py-3 rounded-full font-body text-xs sm:text-sm font-semibold whitespace-nowrap transition-all ${
-                    activeStake === k
-                      ? "bg-primary text-accent shadow-card"
-                      : "text-primary/70 hover:text-primary"
-                  }`}
+      {/* ===== The Disconnection ===== */}
+      <Section
+        variant="muted"
+        eyebrow="The Disconnection"
+        title={
+          <>
+            Everything is <span className="italic">separate.</span>{" "}
+            <span className="highlight-mark italic">That's the problem.</span>
+          </>
+        }
+      >
+        <div className="grid lg:grid-cols-12 gap-10">
+          <div className="lg:col-span-7">
+            <div className="flex flex-wrap gap-3">
+              {["Aptitude Tests", "Courses", "Mentors", "Job Portals", "Startup Advice", "Funding"].map((tag, i) => (
+                <motion.span
+                  key={tag}
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.4, delay: i * 0.05 }}
+                  className="rounded-full bg-background border border-border px-5 py-2.5 font-body text-sm text-foreground/80"
+                  style={{ transform: `rotate(${(i % 3) - 1}deg)` }}
                 >
-                  {stakeholderData[k].label}
-                </button>
+                  {tag}
+                </motion.span>
               ))}
             </div>
+            <p className="font-body text-base text-foreground/75 mt-8 max-w-lg leading-relaxed">
+              You are expected to connect all this yourself. And when something doesn't work, you start over.
+            </p>
           </div>
+          <div className="lg:col-span-5 flex items-center">
+            <p className="font-display text-3xl sm:text-4xl text-primary leading-tight">
+              This is an{" "}
+              <span className="highlight-mark italic">infrastructure</span> problem.
+            </p>
+          </div>
+        </div>
+      </Section>
 
-          <motion.div
-            key={activeStake}
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4 }}
-            className="grid md:grid-cols-3 gap-6"
-          >
-            {stake.cards.map((c) => (
-              <StakeholderCard key={c.italic} {...c} />
+      {/* ===== Chapter 3 — Normalization ===== */}
+      <Section
+        eyebrow="Chapter 3 — Normalization"
+        title={
+          <>
+            Confusion at 22 is <span className="italic">not a flaw.</span>
+            <br />
+            Uncertainty at 28 is <span className="italic">not failure.</span>
+            <br />
+            Hesitation is <span className="highlight-mark italic">not weakness.</span>
+          </>
+        }
+        lead="Life isn't linear. Clarity isn't a switch. The pressure to 'figure it out fast' leads to blind choices. Not confident ones."
+      >
+        <div className="grid sm:grid-cols-2 gap-6 max-w-3xl">
+          <div className="rounded-2xl border border-border p-7 bg-secondary/40">
+            <p className="font-display text-3xl text-primary">You are not late.</p>
+            <p className="font-body text-sm text-foreground/70 mt-3">Where understanding begins.</p>
+          </div>
+          <div className="rounded-2xl border border-border p-7">
+            <p className="font-body text-xs uppercase tracking-[0.2em] text-grey-label mb-3">Reframe</p>
+            <p className="font-body text-base text-foreground/80 leading-relaxed">
+              Your hesitation is information. Your confusion is a signal. Both deserve patience.
+            </p>
+          </div>
+        </div>
+      </Section>
+
+      {/* ===== The Paradox ===== */}
+      <Section variant="muted" eyebrow="The Paradox" title={<>You have <span className="italic">information.</span> <span className="highlight-mark italic">Not direction.</span></>}>
+        <div className="grid lg:grid-cols-2 gap-10">
+          <p className="font-body text-base sm:text-lg text-foreground/80 leading-relaxed">
+            You consume a lot of information online and offline. But no one owns your full journey. Unless there is someone or something
+            in the flow to tell you whether you are doing it right or not, you get lost. No matter how much information you have,
+            if you don't have someone guiding you at every step, you won't know what to do when you are stuck.
+          </p>
+          <div className="rounded-2xl bg-primary text-accent p-7 sm:p-9">
+            <p className="font-display text-2xl sm:text-3xl text-accent leading-snug">
+              Information is useless without a bigger picture.
+            </p>
+            <p className="font-body text-sm text-accent/85 mt-4 leading-relaxed">
+              MyRaaha connects what you know to where you're going. It handholds you till you achieve it — and acts as
+              emergency support even after.
+            </p>
+          </div>
+        </div>
+      </Section>
+
+      {/* ===== Chapter 4 — Rushing ===== */}
+      <Section
+        eyebrow="Chapter 4 — The Problem With Rushing"
+        title={<>Most systems push decisions <span className="highlight-mark italic">too early.</span></>}
+        lead="Pick. Choose. Commit. Start. But what if you don't know yourself yet?"
+      >
+        <div className="grid lg:grid-cols-12 gap-10 items-start">
+          <div className="lg:col-span-5 relative aspect-square max-w-sm mx-auto">
+            {["Pick.", "Start.", "Choose.", "Commit.", "Restart.", "Again."].map((word, i) => (
+              <motion.span
+                key={word}
+                animate={{ rotate: 360 }}
+                transition={{ duration: 22 + i * 2, repeat: Infinity, ease: "linear" }}
+                className="absolute inset-0 flex items-start justify-center font-display text-xl text-primary/70"
+                style={{ transform: `rotate(${(i / 6) * 360}deg)` }}
+              >
+                <span className="-mt-2 px-3 bg-background">{word}</span>
+              </motion.span>
             ))}
-          </motion.div>
-        </div>
-      </section>
-
-
-
-      {/* ===== THE PLATFORM ===== */}
-      <section className="bg-background-alt/40 py-20 sm:py-28">
-        <div className="container mx-auto px-5 sm:px-8">
-          <div className="text-center max-w-3xl mx-auto mb-14 sm:mb-16">
-            <motion.h2
-              {...fadeUp}
-              className="font-body font-semibold text-4xl sm:text-5xl md:text-6xl text-foreground"
-            >
-              The <Italic>Platform</Italic>
-            </motion.h2>
-            <motion.p
-              {...fadeUp}
-              transition={{ duration: 0.6, delay: 0.15 }}
-              className="font-body text-base sm:text-lg text-muted-foreground mt-7 leading-relaxed"
-            >
-              We bring the power of integrated intervention for meaningful career journeys. Career success starts with myRaaha360
-            </motion.p>
+            <div className="absolute inset-12 rounded-full border border-dashed border-primary/30" />
+            <div className="absolute inset-24 rounded-full bg-accent/40 flex items-center justify-center">
+              <p className="font-display text-primary text-center text-sm leading-tight px-3">And again.</p>
+            </div>
           </div>
 
-          <div className="grid lg:grid-cols-2 gap-7">
-            <PlatformCard
-              img={platMap}
-              alt="Glowing neural mind map"
-              Icon={Globe2}
-              title="The Map Was Always"
-              italic="Missing"
-              titleSuffix=", Not You."
-              lead="Confusion is not a flaw. It is data. MyRaaha doesn't fix you. It builds the map."
-              bullets={[
-                { title: "You are not behind. You are uncharted.", body: "The system starts reading you from day one." },
-                { title: "Your uncertainty is the starting point.", body: "We track what lights you up — quietly." },
-                { title: "Clarity is a process.", body: "The SelfGraph™ holds it with you, evolving in real time." },
-              ]}
-            />
-            <PlatformCard
-              img={platCompass}
-              alt="Hand holding compass with sunburst"
-              Icon={CompassIcon}
-              title="Direction Before"
-              italic="Destination."
-              lead="The world asks you to commit before you understand. We refuse that sequence."
-              bullets={[
-                { title: "Explore first. Decide later.", body: "The Curiosity Compass opens before any roadmap." },
-                { title: "Every path made visible.", body: "Stories, simulations, lived paths. Not brochures." },
-                { title: "See the tradeoffs.", body: "AI roadmaps that make the fine print visible." },
-              ]}
-            />
-            <PlatformCard
-              img={platJourney}
-              alt="Glowing journey path"
-              Icon={RocketIcon}
-              title="You Are Not a Resume. You Are a"
-              italic="Journey."
-              lead="Your aptitude today is not your ceiling tomorrow. Your story deserves to be tracked."
-              bullets={[
-                { title: "Captured automatically.", body: "The Living Resume™ forgets nothing." },
-                { title: "Identity evolves.", body: "The 3A Intelligence Engine evolves with you." },
-                { title: "No resets. No re-tests.", body: "Just compounding clarity." },
-              ]}
-            />
-            <PlatformCard
-              img={platSystem}
-              alt="Person walking with glowing guide"
-              Icon={TargetIcon}
-              title="The System Navigates. You Are Not"
-              italic="Alone."
-              lead="Self-navigation is a myth. We end years lost to confusion and missed opportunities."
-              bullets={[
-                { title: "Proactive guidance.", body: "The AI Career Therapist steps in before burnout." },
-                { title: "Matched trajectory.", body: "Real mentors. No gatekeeping." },
-                { title: "Inclusive by design.", body: "Built for Tier 3, Tier 4, and rural India." },
-              ]}
-            />
-            <PlatformCard
-              img={platBuild}
-              alt="Maker working on glowing lamp"
-              Icon={LightbulbIcon}
-              title="Build Something. Even if You Weren't"
-              italic="Told."
-              lead="Entrepreneurship is a system — learnable, teachable, and available to anyone."
-              bullets={[
-                { title: "Serious curiosity.", body: "Startup Sparks helps you follow it." },
-                { title: "Validated by reality.", body: "Sprints and MVP Builders turn thinking into doing." },
-                { title: "Build the person.", body: "The Funding Path Navigator is already waiting." },
-              ]}
-            />
-            <PlatformCard
-              img={platPath}
-              alt="Person standing on neon path overlooking city"
-              Icon={LayoutIcon}
-              title="Your Path. Not"
-              italic="Theirs."
-              lead="Not every builder wants a boardroom. Some want freedom. All of it counts."
-              bullets={[
-                { title: "Chosen, not assigned.", body: "The Path Selector adapts to what you actually want." },
-                { title: "Hybrid lives are real.", body: "Career and creation are not opposites. You can walk both." },
-                { title: "Start anywhere.", body: "No pitch deck or co-founder needed. We are your starting point." },
-              ]}
-            />
+          <div className="lg:col-span-7 space-y-6">
+            <ul className="space-y-3">
+              {["What energizes vs drains you", "Where you flow vs hesitate", "How you respond under pressure"].map((line) => (
+                <li key={line} className="flex gap-3 items-start">
+                  <span className="mt-2 h-1.5 w-1.5 rounded-full bg-primary shrink-0" />
+                  <p className="font-body text-base text-foreground/80">{line}</p>
+                </li>
+              ))}
+            </ul>
+            <div className="rounded-2xl border border-border p-7 bg-secondary/40">
+              <p className="font-display text-2xl text-primary leading-snug">Early decisions cost later.</p>
+              <p className="font-body text-sm text-foreground/75 mt-3 leading-relaxed">
+                Not because they're wrong — but because they lack self-knowledge.
+              </p>
+            </div>
+            <p className="font-body text-sm text-grey-label italic">
+              The system is built for speed. Not understanding. <span className="text-primary">But speed is not readiness.</span>
+            </p>
           </div>
         </div>
-      </section>
+      </Section>
 
+      {/* ===== Practical Walkthrough ===== */}
+      <Section
+        eyebrow="A Practical Walkthrough"
+        title={<>One app. <span className="highlight-mark italic">Pure navigation.</span></>}
+        lead="You don't see random content. You move through structured stages."
+      >
+        <div className="grid md:grid-cols-2 gap-6">
+          {[
+            {
+              icon: Brain,
+              step: "01",
+              title: "Personal Intelligence Setup",
+              body: "The app observes what you explore, where you hesitate, and what you drop. Not a one-time test result.",
+              outputs: ["Risk Tolerance Score", "Energy Gain vs Drain Map", "Work-style Analysis"],
+            },
+            {
+              icon: MapIcon,
+              step: "02",
+              title: "Pathway Narrowing Engine",
+              body: "Instead of 200 paths, it filters based on industry growth signals, skill saturation, and income stability.",
+              outputs: ["Skills Gap Breakdown", "Time-to-readiness Estimate", "Transition Feasibility"],
+            },
+            {
+              icon: Layers,
+              step: "03",
+              title: "Career Execution System",
+              body: "A structured skill roadmap and learning sequence. It adjusts if you fall behind or shift interest.",
+              outputs: ["Weekly Action Plans", "No Random Course Hopping", "Portfolio Milestones"],
+            },
+            {
+              icon: Building2,
+              step: "04",
+              title: "Startup Validation & Build",
+              body: "Idea → Problem validation → Market testing. It does not let you skip validation or quit on motivation.",
+              outputs: ["Market Signal Analysis", "Founder Mindset Score", "Execution Tracker"],
+            },
+          ].map((s, i) => (
+            <motion.article
+              key={s.step}
+              {...fadeUp}
+              transition={{ duration: 0.5, delay: i * 0.05 }}
+              className="rounded-2xl border border-border p-7 sm:p-8 hover:shadow-soft transition-shadow bg-background"
+            >
+              <div className="flex items-start justify-between mb-5">
+                <span className="font-body text-xs uppercase tracking-[0.2em] text-grey-label">Step {s.step}</span>
+                <s.icon size={22} className="text-primary" />
+              </div>
+              <h3 className="font-display text-2xl text-primary leading-snug">{s.title}</h3>
+              <p className="font-body text-sm text-foreground/75 mt-3 leading-relaxed">{s.body}</p>
+              <div className="mt-5 pt-5 border-t border-border/60 flex flex-wrap gap-2">
+                {s.outputs.map((o) => (
+                  <span key={o} className="rounded-full bg-secondary/60 text-foreground/75 px-3 py-1 text-[11px] font-body">
+                    {o}
+                  </span>
+                ))}
+              </div>
+            </motion.article>
+          ))}
+        </div>
+      </Section>
 
-      {/* ===== SUCCESS STORIES ===== */}
-      <SuccessStories />
-
-      {/* ===== WEEKLY INSIGHTS ===== */}
-      <section className="bg-background py-20 sm:py-28">
-        <div className="container mx-auto px-5 sm:px-8">
-          <div className="rounded-3xl overflow-hidden border border-border shadow-soft grid lg:grid-cols-2 bg-card">
-            <div className="relative bg-primary p-10 sm:p-14 flex flex-col justify-end min-h-[420px]">
-              <img
-                src={insightsTablet}
-                alt="Tablet displaying MyRaaha Insight magazine"
+      {/* ===== Chapter 5 — Bicycle ===== */}
+      <Section variant="muted" eyebrow="Chapter 5 — The Bicycle" title={<>What if you <span className="italic">listened</span> before choosing?</>}>
+        <div className="grid lg:grid-cols-12 gap-10 items-center">
+          <div className="lg:col-span-7">
+            <p className="font-body text-base sm:text-lg text-foreground/80 leading-relaxed">
+              Learning a bicycle. When you start for the first time, you have no clue. Unless someone guides you in real time —
+              someone who holds the seat and stays so you don't fall — it becomes difficult.
+            </p>
+          </div>
+          <div className="lg:col-span-5">
+            <div className="relative">
+              <motion.img
+                animate={{ y: [0, -8, 0] }}
+                transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+                src={heroBicycle}
+                alt="A grandparent steadying a young person learning to ride a bicycle on a sunlit path"
+                className="w-full max-w-sm mx-auto rounded-3xl"
                 loading="lazy"
-                className="absolute inset-0 w-full h-full object-cover opacity-40 mix-blend-luminosity"
+                width={1024}
+                height={1024}
               />
-              <div className="relative">
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="flex -space-x-2">
-                    <div className="w-9 h-9 rounded-full bg-accent/40 border-2 border-accent" />
-                    <div className="w-9 h-9 rounded-full bg-accent/60 border-2 border-accent" />
-                    <div className="w-9 h-9 rounded-full bg-accent/80 border-2 border-accent" />
+              <motion.div
+                initial={{ opacity: 0, y: 8 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                className="absolute -bottom-4 left-1/2 -translate-x-1/2 rounded-2xl bg-background border border-border shadow-soft px-4 py-3 flex items-center gap-2"
+              >
+                <Bike size={16} className="text-primary" />
+                <p className="font-display text-sm text-primary">MyRaaha holds the seat.</p>
+              </motion.div>
+            </div>
+          </div>
+        </div>
+      </Section>
+
+      {/* ===== Safe Exploration / Decision Simulator ===== */}
+      <Section
+        eyebrow="Safe Exploration"
+        title={<>Explore Before <span className="highlight-mark italic">You Commit.</span></>}
+        lead="Instead of blindly picking, you simulate paths. If you're a student, you see what a career actually demands before locking in."
+      >
+        <div className="grid lg:grid-cols-12 gap-10 items-start">
+          <motion.div {...fadeUp} className="lg:col-span-7">
+            <div className="rounded-3xl bg-secondary/40 p-6 sm:p-8 border border-border">
+              <div className="flex items-center justify-between mb-5">
+                <p className="font-body text-xs uppercase tracking-wider text-grey-label">Decision Simulator™</p>
+                <span className="pill-chip">Live</span>
+              </div>
+              <p className="font-display text-2xl text-primary">Transition Path: Product Management</p>
+              <div className="grid sm:grid-cols-3 gap-4 mt-6">
+                {[
+                  { label: "Skill Gap", value: "High", tint: "bg-warning/30 text-foreground" },
+                  { label: "Market Salary", value: "$110k", tint: "bg-accent text-primary" },
+                  { label: "Safe Transition", value: "75%", tint: "bg-primary text-accent" },
+                ].map((m) => (
+                  <div key={m.label} className={`rounded-xl p-4 ${m.tint}`}>
+                    <p className="font-body text-[11px] uppercase tracking-wider opacity-80">{m.label}</p>
+                    <p className="font-display text-2xl mt-1">{m.value}</p>
                   </div>
-                  <span className="inline-flex items-center justify-center px-3 py-1 rounded-full bg-accent text-primary text-xs font-bold">+5k</span>
-                </div>
-                <p className="font-body text-accent text-lg sm:text-xl font-semibold leading-snug">
-                  Join our thriving community of innovators
-                </p>
+                ))}
               </div>
-            </div>
-            <div className="p-10 sm:p-14 flex flex-col justify-center">
-              <p className="font-body text-sm font-bold text-primary tracking-[0.22em] uppercase">Weekly Insights</p>
-              <h2 className="font-body font-semibold text-4xl sm:text-5xl md:text-6xl text-foreground mt-4 leading-[1.1]">
-                Stay ahead of the
-                <br />
-                <Italic>future of education.</Italic>
-              </h2>
-              <p className="font-body text-base sm:text-lg text-muted-foreground mt-6 leading-relaxed">
-                Get curated insights on career evolution, NEP 2020 transitions, and exclusive ecosystem opportunities delivered every Monday.
-              </p>
-              <form
-                onSubmit={(e) => e.preventDefault()}
-                className="mt-8 flex flex-col sm:flex-row gap-3"
-              >
-                <input
-                  type="email"
-                  required
-                  placeholder="Your professional email"
-                  className="flex-1 bg-transparent border-b border-border focus:border-primary outline-none px-2 py-3 font-body text-base text-foreground placeholder:text-muted-foreground"
-                />
-                <button
-                  type="submit"
-                  className="inline-flex items-center justify-center gap-2 rounded-2xl bg-primary text-accent px-7 py-3 font-body text-base font-semibold hover:opacity-90 transition-opacity"
-                >
-                  Subscribe <Send size={16} />
-                </button>
-              </form>
-              <p className="font-body text-sm text-muted-foreground mt-4">
-                No spam. Just value. Unsubscribe anytime.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-    </LandingLayout>
-  );
-};
-
-/* ---------- Success Stories component (with tabs) ---------- */
-
-type StoryTab = "students" | "institutes" | "parents";
-
-const storyData: Record<StoryTab, { label: string; cards: { img: string; quote: string; name: string; role: string }[] }> = {
-  students: {
-    label: "Students",
-    cards: [
-      {
-        img: storyAlex,
-        quote: "The partnerships program provided the resources and network we needed to scale our impact.",
-        name: "Alex Chen",
-        role: "Founder, TechStart",
-      },
-      {
-        img: storyRahul,
-        quote: "Myraaha helped me transition from being an overthinker to a focused entrepreneur with a clear action plan.",
-        name: "Rahul S.",
-        role: "Entrepreneurship Student",
-      },
-    ],
-  },
-  institutes: {
-    label: "Institutes",
-    cards: [
-      {
-        img: storyAlex,
-        quote: "Our placement velocity improved dramatically after integrating MyRaaha into our career cell workflow.",
-        name: "Dr. Priya Menon",
-        role: "Dean, Innovation Cell",
-      },
-      {
-        img: storyRahul,
-        quote: "The dashboards give us real visibility into student readiness — something no career portal ever offered.",
-        name: "Vikram Joshi",
-        role: "Director, Skill Council",
-      },
-    ],
-  },
-  parents: {
-    label: "Parents",
-    cards: [
-      {
-        img: storyAlex,
-        quote: "For the first time, I feel informed enough to actually support my daughter's career decisions.",
-        name: "Sunita R.",
-        role: "Parent, Class XII",
-      },
-      {
-        img: storyRahul,
-        quote: "MyRaaha turned dinner-table arguments into real conversations about my son's future.",
-        name: "Manoj Kapoor",
-        role: "Parent, College Student",
-      },
-    ],
-  },
-};
-
-const SuccessStories = () => {
-  const [active, setActive] = useState<StoryTab>("students");
-  const cards = storyData[active].cards;
-  return (
-    <section className="bg-background-alt/40 py-20 sm:py-28">
-      <div className="container mx-auto px-5 sm:px-8">
-        <div className="text-center max-w-3xl mx-auto mb-12">
-          <motion.h2
-            {...fadeUp}
-            className="font-body font-semibold text-4xl sm:text-5xl md:text-6xl text-foreground"
-          >
-            Success <Italic>Stories</Italic>
-          </motion.h2>
-          <motion.p
-            {...fadeUp}
-            transition={{ duration: 0.6, delay: 0.15 }}
-            className="font-body text-base sm:text-lg text-muted-foreground mt-6"
-          >
-            Hear from our partners, well wishers and participants
-          </motion.p>
-        </div>
-
-        <div className="flex justify-center mb-12">
-          <div className="inline-flex flex-wrap justify-center bg-secondary rounded-full p-1.5 shadow-soft border border-border max-w-full overflow-x-auto">
-            {(Object.keys(storyData) as StoryTab[]).map((k) => (
-              <button
-                key={k}
-                onClick={() => setActive(k)}
-                className={`px-6 sm:px-8 py-2.5 sm:py-3 rounded-full font-body text-xs sm:text-sm font-semibold whitespace-nowrap transition-all ${
-                  active === k
-                    ? "bg-primary text-accent shadow-card"
-                    : "text-primary/70 hover:text-primary"
-                }`}
-              >
-                {storyData[k].label}
+              <button className="mt-6 inline-flex items-center gap-2 rounded-full border border-primary/30 text-primary px-5 py-2.5 text-sm font-medium">
+                Explore Cost vs Reward <ArrowRight size={14} />
               </button>
-            ))}
+            </div>
+          </motion.div>
+
+          <div className="lg:col-span-5 space-y-5">
+            <p className="font-display text-2xl text-primary leading-snug">
+              See what a transition really costs — <span className="highlight-mark italic">skills, time, and money.</span>
+            </p>
+            <ul className="space-y-3">
+              {["Market demand analysis", "Income realities", "Effort vs Risk analysis"].map((i) => (
+                <li key={i} className="flex gap-3 items-start">
+                  <Eye size={16} className="text-primary mt-1 shrink-0" />
+                  <p className="font-body text-base text-foreground/80">{i}</p>
+                </li>
+              ))}
+            </ul>
           </div>
         </div>
+      </Section>
 
-        <motion.div
-          key={active}
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4 }}
-          className="grid md:grid-cols-2 gap-6"
-        >
-          {cards.map((c) => (
-            <div key={c.name} className="bg-card rounded-3xl border border-border shadow-soft overflow-hidden">
-              <img src={c.img} alt={c.name} loading="lazy" className="w-full aspect-[16/9] object-cover" />
-              <div className="p-7 sm:p-8 text-center">
-                <p className="font-body italic text-base sm:text-lg text-foreground leading-relaxed">
-                  &ldquo;{c.quote}&rdquo;
-                </p>
-                <p className="font-body text-lg text-foreground font-bold mt-7">{c.name}</p>
-                <p className="font-body text-sm text-primary font-semibold mt-1">{c.role}</p>
-              </div>
+      {/* ===== User Outcomes ===== */}
+      <Section variant="muted" eyebrow="User Outcomes" title={<><span className="italic">Real</span> outcomes. <span className="highlight-mark italic">No guesswork.</span></>}>
+        <div className="grid sm:grid-cols-2 gap-6">
+          {[
+            {
+              who: "Student",
+              traits: ["Clear direction before degree", "Career simulation", "Identity tracking"],
+              result: "Graduate with clarity, not confusion.",
+            },
+            {
+              who: "Professional",
+              traits: ["Misalignment detection", "Safe transition modeling", "Skill gap precision"],
+              result: "Switch careers strategically, not emotionally.",
+            },
+            {
+              who: "Aspiring Founder",
+              traits: ["Problem-first validation", "Market-backed idea filtering", "Founder mindset score"],
+              result: "Build with structure, not motivation.",
+            },
+            {
+              who: "Active Builder",
+              traits: ["Execution consistency", "Pivot analysis", "Funding eligibility"],
+              result: "Fewer blind pivots. Measured growth.",
+            },
+          ].map((p) => (
+            <article key={p.who} className="rounded-2xl bg-background border border-border p-7 sm:p-8">
+              <p className="font-body text-xs uppercase tracking-[0.2em] text-grey-label">For the</p>
+              <h3 className="font-display text-2xl text-primary mt-1">{p.who}</h3>
+              <ul className="mt-5 space-y-2">
+                {p.traits.map((t) => (
+                  <li key={t} className="font-body text-sm text-foreground/75 flex gap-2">
+                    <span className="text-primary">·</span> {t}
+                  </li>
+                ))}
+              </ul>
+              <p className="font-display text-base text-primary mt-6 pt-5 border-t border-border/60 leading-snug">
+                The Result: <span className="highlight-mark italic">{p.result}</span>
+              </p>
+            </article>
+          ))}
+        </div>
+      </Section>
+
+      {/* ===== Recruitment ===== */}
+      <Section
+        eyebrow="For Companies & Talent Leads"
+        title={<>Hire <span className="italic">pre-vetted</span> tech talent, <span className="highlight-mark italic">fast.</span></>}
+        lead="Standard resumes don't show growth or work-style. MyRaaha does. We connect you with talent whose Aptitude, Attitude, and Articulation are already validated."
+      >
+        <div className="grid sm:grid-cols-2 gap-6 max-w-2xl">
+          <div className="rounded-2xl bg-primary text-accent p-7">
+            <p className="font-body text-xs uppercase tracking-[0.2em] text-accent/75">Efficiency</p>
+            <p className="font-display text-4xl text-accent mt-2">2.5×</p>
+            <p className="font-body text-sm text-accent/85 mt-1">Faster hiring</p>
+          </div>
+          <div className="rounded-2xl bg-accent text-primary p-7">
+            <p className="font-body text-xs uppercase tracking-[0.2em] text-primary/75">Retention</p>
+            <p className="font-display text-4xl text-primary mt-2">90%+</p>
+            <p className="font-body text-sm text-primary/80 mt-1">Aligned</p>
+          </div>
+        </div>
+      </Section>
+
+      {/* ===== Chapter 8 — Structure ===== */}
+      <Section
+        variant="muted"
+        eyebrow="Chapter 8 — When Structure Arrives"
+        title={<>No <span className="italic">rush.</span> <span className="highlight-mark italic">But no drifting either.</span></>}
+        lead="Clarity leads to direction. Direction needs structure."
+      >
+        <div className="grid md:grid-cols-2 gap-6">
+          {[
+            {
+              tag: "For Careers",
+              items: [
+                ["The Assessment", "Identify your true baseline and untapped potential."],
+                ["The Decision Sandbox", "Test careers without the risk of quitting."],
+                ["The Fast Track", "Accelerated navigation to your first major milestone."],
+              ],
+            },
+            {
+              tag: "For Founders",
+              items: [
+                ["The Founder Match", "Identify your true baseline and untapped potential."],
+                ["Market Validation", "Test ideas without the risk of full commitment."],
+                ["Growth Precision", "Accelerated navigation to your first major milestone."],
+              ],
+            },
+          ].map((card) => (
+            <div key={card.tag} className="rounded-2xl bg-background border border-border p-7 sm:p-9">
+              <p className="font-body text-xs uppercase tracking-[0.22em] text-primary mb-5 font-semibold">{card.tag}</p>
+              <ul className="divide-y divide-border/60">
+                {card.items.map(([t, b]) => (
+                  <li key={t} className="py-4 first:pt-0 last:pb-0">
+                    <p className="font-display text-lg text-primary">{t}</p>
+                    <p className="font-body text-sm text-foreground/75 mt-1">{b}</p>
+                  </li>
+                ))}
+              </ul>
             </div>
           ))}
-        </motion.div>
-      </div>
-    </section>
+        </div>
+        <p className="font-display text-xl text-grey-label mt-10 italic">
+          You don't move on <span className="text-primary">motivation.</span> You move on{" "}
+          <span className="highlight-mark text-primary">readiness.</span>
+        </p>
+      </Section>
+
+      {/* ===== Mission / Automated Navigator ===== */}
+      <Section
+        eyebrow="Our Mission"
+        title={<><span className="italic">Precision,</span> but <span className="highlight-mark italic">still human.</span></>}
+        lead="MyRaaha isn't generic AI. It is built for decision modeling and anticipating confusion before it happens. Because it is automated, it scales beyond metro cities to Tier 3 and rural regions."
+      >
+        <div className="grid md:grid-cols-2 gap-6 max-w-3xl">
+          <div className="rounded-2xl border border-border p-7">
+            <Users size={22} className="text-primary mb-3" />
+            <p className="font-display text-xl text-primary">Accessibility</p>
+            <p className="font-body text-sm text-foreground/75 mt-2 leading-relaxed">
+              Stays affordable for everyone, not just the elite.
+            </p>
+          </div>
+          <div className="rounded-2xl border border-border p-7 bg-secondary/40">
+            <Sparkles size={22} className="text-primary mb-3" />
+            <p className="font-display text-xl text-primary">Accountability</p>
+            <p className="font-body text-sm text-foreground/75 mt-2 leading-relaxed">
+              Revenue-sustained and impact-measured.
+            </p>
+          </div>
+        </div>
+      </Section>
+
+      {/* ===== Process Walkthrough ===== */}
+      <Section
+        variant="muted"
+        eyebrow="( Process Walkthrough )"
+        title={<>For <span className="italic">Thoughtful</span> Decision Makers.</>}
+      >
+        <div className="grid lg:grid-cols-12 gap-10 items-center">
+          <div className="lg:col-span-7 space-y-5">
+            {[
+              ["01", "Arrival & Reflection", "We start where you are. No judgment, just baseline clarity."],
+              ["02", "Active Simulations", "Experience the work before you sign the contract."],
+              ["03", "Direct Alignment", "We place you where you actually belong."],
+            ].map(([n, t, b]) => (
+              <div key={n} className="flex gap-5 items-start border-b border-border/60 pb-5 last:border-0">
+                <span className="font-display text-3xl text-accent-foreground bg-accent rounded-xl w-14 h-14 flex items-center justify-center shrink-0">
+                  {n}
+                </span>
+                <div>
+                  <p className="font-display text-xl text-primary">{t}</p>
+                  <p className="font-body text-sm text-foreground/75 mt-1">{b}</p>
+                </div>
+              </div>
+            ))}
+            <Link
+              to="/begin"
+              className="inline-flex items-center gap-2 rounded-full bg-primary text-accent px-6 py-3 text-sm font-semibold mt-4"
+            >
+              Start Your Journey <ArrowRight size={16} />
+            </Link>
+          </div>
+          <div className="lg:col-span-5 relative">
+            <img src={appFrame} alt="MyRaaha mobile app frame" className="w-full max-w-xs mx-auto" loading="lazy" width={1024} height={1280} />
+            <p className="font-display text-base text-primary text-center mt-4 italic max-w-xs mx-auto">
+              "It's not about speed." <br />
+              <span className="text-grey-label">"It's about the right direction."</span>
+            </p>
+          </div>
+        </div>
+      </Section>
+
+      {/* ===== Raaha × Marg teaser ===== */}
+      <Section eyebrow="Raaha × Marg" title={<>Two principles. <span className="highlight-mark italic">One system.</span></>}>
+        <div className="grid lg:grid-cols-12 gap-10 items-center">
+          <div className="lg:col-span-7">
+            <img src={raahaMarg} alt="Raaha and Marg — a hand holding a seed beside a staircase rising into light" className="w-full" loading="lazy" width={1600} height={900} />
+          </div>
+          <div className="lg:col-span-5 space-y-5">
+            <div>
+              <p className="font-display text-2xl text-primary">Raaha</p>
+              <p className="font-body text-sm text-foreground/75 mt-1">The hand that steadies you. The pre-decision space.</p>
+            </div>
+            <div>
+              <p className="font-display text-2xl text-primary">Marg</p>
+              <p className="font-body text-sm text-foreground/75 mt-1">The spine that keeps you moving. The post-clarity structure.</p>
+            </div>
+            <Link to="/raaha-marg" className="inline-flex items-center gap-2 text-primary font-medium text-sm border-b border-primary pb-1">
+              Read the philosophy <ArrowRight size={14} />
+            </Link>
+          </div>
+        </div>
+      </Section>
+
+      {/* ===== Chapter 11 — Afterword ===== */}
+      <Section eyebrow="Afterword" title={<>Clarity is <span className="highlight-mark italic">not a race.</span></>}>
+        <div className="grid sm:grid-cols-3 gap-6 max-w-3xl">
+          {[
+            ["Baseline", "You are not behind."],
+            ["Growth", "You are not broken."],
+            ["Resilience", "You are not weak."],
+          ].map(([t, b]) => (
+            <div key={t} className="rounded-2xl border border-border p-6 text-center">
+              <p className="font-body text-xs uppercase tracking-[0.22em] text-grey-label">{t}</p>
+              <p className="font-display text-xl text-primary mt-3">{b}</p>
+            </div>
+          ))}
+        </div>
+        <Quote>
+          You don't need another direction. <span className="highlight-mark italic">You need something that stays.</span>
+        </Quote>
+      </Section>
+
+      <CTABand
+        eyebrow="Begin when you're ready"
+        title="Take the first step. It doesn't commit you to anything."
+        body="Free to start. No pressure to continue. Your journey, at your pace."
+        secondaryLabel="How MyRaaha Thinks"
+        secondaryTo="/how"
+      />
+    </LandingLayout>
   );
 };
 
