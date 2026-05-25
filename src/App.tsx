@@ -14,20 +14,13 @@ import MyRaahaInsights from "./pages/MyRaahaInsights";
 import MyRaahaInsightsDetail from "./pages/MyRaahaInsightsDetail";
 import NotFound from "./pages/NotFound";
 // Landing site sub-pages
-import WhyWeExist from "./pages/landing/WhyWeExist";
-import HowWeThink from "./pages/landing/HowWeThink";
-import RaahaMarg from "./pages/landing/RaahaMarg";
-import Experience from "./pages/landing/Experience";
-import WhenHelps from "./pages/landing/WhenHelps";
-import Principles from "./pages/landing/Principles";
-import Research from "./pages/landing/Research";
-import Solutions from "./pages/landing/Solutions";
-import Begin from "./pages/landing/Begin";
-import About from "./pages/landing/About";
-import Writing from "./pages/landing/Writing";
 import LandingCareers from "./pages/landing/Careers";
 import CareerRole from "./pages/landing/CareerRole";
-import Contact from "./pages/landing/Contact";
+import CareerCoreTeam from "./pages/landing/CareerCoreTeam";
+import CareerIntern from "./pages/landing/CareerIntern";
+import CareerVolunteer from "./pages/landing/CareerVolunteer";
+import CareerFacilitator from "./pages/landing/CareerFacilitator";
+import CareerFreelancer from "./pages/landing/CareerFreelancer";
 import Privacy from "./pages/landing/Privacy";
 import Cookies from "./pages/landing/Cookies";
 import Terms from "./pages/landing/Terms";
@@ -103,24 +96,18 @@ const App = () => (
             <Route path="/insights" element={<MyRaahaInsights />} />
             <Route path="/insights/:slug" element={<MyRaahaInsightsDetail />} />
             <Route path="/contact" element={<MyRaahaContact />} />
-            {/* Legacy landing routes (kept for backward compat) */}
-            <Route path="/why" element={<WhyWeExist />} />
-            <Route path="/how" element={<HowWeThink />} />
-            <Route path="/raaha-marg" element={<RaahaMarg />} />
-            <Route path="/experience" element={<Experience />} />
-            <Route path="/when" element={<WhenHelps />} />
-            <Route path="/principles" element={<Principles />} />
-            <Route path="/research" element={<Research />} />
-            <Route path="/solutions" element={<Solutions />} />
-            <Route path="/begin" element={<Begin />} />
-            <Route path="/about-legacy" element={<About />} />
-            <Route path="/writing" element={<Writing />} />
-            <Route path="/careers-info" element={<LandingCareers />} />
-            <Route path="/careers-info/:slug" element={<CareerRole />} />
+            {/* Careers system */}
+            <Route path="/careers" element={<LandingCareers />} />
+            <Route path="/careers/core-team" element={<CareerCoreTeam />} />
+            <Route path="/careers/intern" element={<CareerIntern />} />
+            <Route path="/careers/volunteer" element={<CareerVolunteer />} />
+            <Route path="/careers/facilitator" element={<CareerFacilitator />} />
+            <Route path="/careers/freelance" element={<CareerFreelancer />} />
+            <Route path="/careers/role/:roleId" element={<CareerRole />} />
+            {/* Legal */}
             <Route path="/privacy" element={<Privacy />} />
             <Route path="/cookies" element={<Cookies />} />
             <Route path="/terms" element={<Terms />} />
-            <Route path="/contact-legacy" element={<Contact />} />
             <Route path="/intro" element={<IntroSlides />} />
             <Route path="/auth" element={<Auth />} />
             <Route path="/guest" element={<GuestEntry />} />
