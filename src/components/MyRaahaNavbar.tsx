@@ -35,6 +35,11 @@ const MyRaahaNavbar = () => {
         <Link to="/careers" className={isActive('/careers')} onClick={closeMenu}>Careers</Link>
         <Link to="/insights" className={isActive('/insights')} onClick={closeMenu}>Insights</Link>
         <Link to="/contact" className={isActive('/contact')} onClick={closeMenu}>Contact</Link>
+
+        <div className="myraaha-nav-cta">
+          <Link to="/auth" className="nav-btn-signin" onClick={closeMenu}>Sign In</Link>
+          <Link to="/intro" className="nav-btn-getstarted" onClick={closeMenu}>Get Started</Link>
+        </div>
       </div>
     </nav>
   );

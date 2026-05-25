@@ -12,6 +12,7 @@
   backdrop-filter: saturate(180%) blur(14px);
   border-bottom: 1px solid #f1f5f9;
   font-family: 'Poppins', sans-serif;
+  min-height: 72px;
 }
 
 .myraaha-logo .nav-logo-img {
@@ -23,7 +24,7 @@
 .myraaha-nav-links {
   display: flex;
   align-items: center;
-  gap: 2.25rem;
+  gap: 1.75rem;
 }
 
 .myraaha-nav-links a {
@@ -52,7 +53,45 @@
   bottom: -6px;
   height: 2px;
   border-radius: 2px;
-  background: var(--myraaha-gradient);
+  background: var(--myraaha-gradient, linear-gradient(135deg, #5500CB, #8305F2));
+}
+
+.myraaha-nav-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-left: 0.75rem;
+  padding-left: 1.25rem;
+  border-left: 1px solid #e2e8f0;
+}
+
+.myraaha-nav-cta a { padding: 0; }
+.myraaha-nav-cta a.active::after { display: none; }
+
+.nav-btn-signin {
+  font-size: 0.9rem !important;
+  font-weight: 600 !important;
+  color: var(--myraaha-blue, #5500CB) !important;
+  padding: 0.5rem 1rem !important;
+  border-radius: 99px;
+  transition: background 0.2s ease;
+}
+.nav-btn-signin:hover { background: rgba(85, 0, 203, 0.08); }
+
+.nav-btn-getstarted {
+  font-size: 0.9rem !important;
+  font-weight: 600 !important;
+  color: #ffffff !important;
+  background: var(--myraaha-gradient, linear-gradient(135deg, #5500CB, #8305F2));
+  padding: 0.55rem 1.25rem !important;
+  border-radius: 99px;
+  box-shadow: 0 6px 18px -8px rgba(85, 0, 203, 0.55);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.nav-btn-getstarted:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 22px -8px rgba(85, 0, 203, 0.65);
+  color: #ffffff !important;
 }
 
 .mobile-menu-toggle {
@@ -66,11 +105,12 @@
 
 @media (max-width: 1024px) {
   .myraaha-navbar { padding: 1rem 2rem; }
-  .myraaha-nav-links { gap: 1.5rem; }
+  .myraaha-nav-links { gap: 1.25rem; }
+  .myraaha-nav-cta { margin-left: 0.25rem; padding-left: 0.75rem; gap: 0.5rem; }
 }
 
 @media (max-width: 768px) {
-  .myraaha-navbar { padding: 0.85rem 1.25rem; }
+  .myraaha-navbar { padding: 0.85rem 1.25rem; min-height: 64px; }
   .mobile-menu-toggle { display: inline-flex; }
   .myraaha-nav-links {
     position: fixed;
@@ -83,7 +123,40 @@
     transform: translateX(100%);
     transition: transform 0.3s ease;
     border-top: 1px solid #f1f5f9;
+    overflow-y: auto;
   }
   .myraaha-nav-links.open { transform: translateX(0); }
   .myraaha-nav-links a { font-size: 1.1rem; width: 100%; padding: 0.5rem 0; }
+  .myraaha-nav-cta {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.75rem;
+    margin: 1rem 0 0;
+    padding: 1rem 0 0;
+    border-left: none;
+    border-top: 1px solid #e2e8f0;
+    width: 100%;
+  }
+  .nav-btn-signin, .nav-btn-getstarted { text-align: center; width: 100%; }
+}
+
+/* Spacer so fixed navbar never overlaps hero sections */
+.myraaha-navbar ~ * .standard-page-hero,
+.myraaha-navbar ~ * .myraaha-hero,
+.myraaha-navbar ~ * .partnerships-hero-v2,
+.myraaha-navbar ~ * .about-hero {
+  padding-top: 112px;
+}
+
+/* Generic: any page that starts with the navbar gets first-child top spacing */
+body .standard-page-hero { padding-top: 112px; }
+.myraaha-hero { padding-top: 112px !important; }
+.partnerships-hero-v2 { padding-top: 112px !important; }
+.about-hero { padding-top: 112px !important; }
+
+@media (max-width: 768px) {
+  body .standard-page-hero { padding-top: 96px; }
+  .myraaha-hero { padding-top: 96px !important; }
+  .partnerships-hero-v2 { padding-top: 96px !important; }
+  .about-hero { padding-top: 96px !important; }
 }

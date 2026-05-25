@@ -11,8 +11,8 @@ const MyRaahaFooter = () => {
         <h2 className="footer-cta-title">Ready to Make an <span>Impact?</span></h2>
         <p className="footer-cta-desc">Join our community of innovators and changemakers and start building the future today.</p>
         <div className="footer-cta-btns">
-          <Link to="/careers-info" className="btn-cta-primary">Apply Now</Link>
-          <Link to="/contact" className="btn-cta-secondary">Contact Us</Link>
+          <Link to="/intro" className="btn-cta-primary">Get Started</Link>
+          <Link to="/auth" className="btn-cta-secondary">Sign In</Link>
         </div>
       </div>
 
@@ -45,7 +45,7 @@ const MyRaahaFooter = () => {
             <h4><span>Resources</span></h4>
             <ul>
               <li><Link to="/insights">Insights & News</Link></li>
-              <li><Link to="/careers-info">Careers</Link></li>
+              <li><Link to="/careers">Careers</Link></li>
             </ul>
           </div>
 
