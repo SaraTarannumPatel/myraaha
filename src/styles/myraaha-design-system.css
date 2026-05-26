@@ -40,14 +40,14 @@ html {
    Scope all overrides under known landing-page roots so we don't touch
    dashboard / app pages.
    --------------------------------------------------------------------- */
-.myraaha-landing,
-.myraaha-about,
-.myraaha-services,
-.myraaha-partnerships,
-.myraaha-careers,
-.myraaha-insights,
-.myraaha-insights-detail,
-.myraaha-contact,
+.myraaha-landing, .landing-page,
+.myraaha-about, .about-page, .myraaha-about-page,
+.myraaha-services, .services-page,
+.myraaha-partnerships, .myraaha-partnerships-v2,
+.myraaha-careers, .careers-page,
+.myraaha-insights, .insights-page,
+.myraaha-insights-detail, .insights-detail-page,
+.myraaha-contact, .contact-standard-v4, .contact-page,
 .myraaha-legal,
 .standard-page-hero,
 .myraaha-navbar,
@@ -58,9 +58,9 @@ html {
 }
 
 /* Body baseline on landing pages */
-.myraaha-landing, .myraaha-about, .myraaha-services, .myraaha-partnerships,
-.myraaha-careers, .myraaha-insights, .myraaha-insights-detail,
-.myraaha-contact, .myraaha-legal {
+.myraaha-landing, .landing-page, .myraaha-about, .about-page, .myraaha-about-page, .myraaha-services, .services-page, .myraaha-partnerships, .myraaha-partnerships-v2,
+.myraaha-careers, .careers-page, .myraaha-insights, .insights-page, .myraaha-insights-detail, .insights-detail-page,
+.myraaha-contact, .contact-standard-v4, .contact-page, .myraaha-legal {
   background: var(--myraaha-bg-grey);
 }
 
