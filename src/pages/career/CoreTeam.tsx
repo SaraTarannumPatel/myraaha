@@ -10,7 +10,6 @@ import { careersData } from '../../data/careersData';
 
 const CoreTeam = () => {
   const navigate = useNavigate();
-  useEffect(() => { window.scrollTo(0, 0); }, []);
 
   const coreTeamRoles = careersData.filter(role => role.classification === 'Core Team');
 

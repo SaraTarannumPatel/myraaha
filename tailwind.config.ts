@@ -16,6 +16,28 @@ export default {
       fontFamily: {
         display: ["Poppins", "sans-serif"],
         body: ["Poppins", "sans-serif"],
+        poppins: ["Poppins", "sans-serif"],
+      },
+      fontSize: {
+        /* MyRaaha Design System Typography Scale */
+        "hero": ["3.5rem", { lineHeight: "1.1", fontWeight: "700" }],
+        "section-opener": ["2.75rem", { lineHeight: "1.15", fontWeight: "600" }],
+        "reflective": ["2rem", { lineHeight: "1.3", fontWeight: "400" }],
+        "h1": ["2.5rem", { lineHeight: "1.1", fontWeight: "700" }],
+        "h2": ["2rem", { lineHeight: "1.15", fontWeight: "700" }],
+        "h3": ["1.5rem", { lineHeight: "1.2", fontWeight: "600" }],
+        "h4": ["1.25rem", { lineHeight: "1.3", fontWeight: "600" }],
+        "body-primary": ["1rem", { lineHeight: "1.6", fontWeight: "400" }],
+        "body-long": ["1rem", { lineHeight: "1.8", fontWeight: "400" }],
+        "body-secondary": ["0.9rem", { lineHeight: "1.6", fontWeight: "400" }],
+        "prompt": ["1.1rem", { lineHeight: "1.5", fontWeight: "400" }],
+        "guidance": ["0.95rem", { lineHeight: "1.6", fontWeight: "400" }],
+        "micro-guidance": ["0.8rem", { lineHeight: "1.5", fontWeight: "400" }],
+        "ui-button": ["1rem", { lineHeight: "1.2", fontWeight: "600" }],
+        "ui-label": ["0.85rem", { lineHeight: "1.4", fontWeight: "500" }],
+        "ui-nav": ["0.95rem", { lineHeight: "1.4", fontWeight: "500" }],
+        "ui-helper": ["0.8rem", { lineHeight: "1.5", fontWeight: "400" }],
+        "ui-meta": ["0.75rem", { lineHeight: "1.4", fontWeight: "600" }],
       },
       colors: {
         border: "hsl(var(--border))",

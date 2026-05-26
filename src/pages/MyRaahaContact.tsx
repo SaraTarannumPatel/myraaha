@@ -20,10 +20,6 @@ import './MyRaahaContact.css';
 import StandardPageHero from '../components/StandardPageHero';
 
 const MyRaahaContact = () => {
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
-
   const [formData, setFormData] = useState({
     name: '',
     email: '',

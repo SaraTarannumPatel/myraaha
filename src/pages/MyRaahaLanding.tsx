@@ -25,7 +25,15 @@ import './MyRaahaLanding.css';
 type StakeholderType = 'Students' | 'Parents' | 'Institutions' | 'Governments';
 
 const MyRaahaLanding = () => {
-  const [activeStakeholder, setActiveStakeholder] = useState<StakeholderType>('Students');
+  const [activeStakeholder, setActiveStakeholder] = useState<StakeholderType>(() => {
+    const saved = sessionStorage.getItem('myraaha_active_stakeholder');
+    return (saved as StakeholderType) || 'Students';
+  });
+
+  useEffect(() => {
+    sessionStorage.setItem('myraaha_active_stakeholder', activeStakeholder);
+  }, [activeStakeholder]);
+
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const scrollTabs = (direction: 'left' | 'right') => {
@@ -38,9 +46,6 @@ const MyRaahaLanding = () => {
     }
   };
 
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
 
   const stakeholders: Record<StakeholderType, { title: string; description: string; icon: JSX.Element }[]> = {
     'Students': [
@@ -51,12 +56,12 @@ const MyRaahaLanding = () => {
       },
       {
         title: 'Career Navigation',
-        description: 'Helping students discover emerging career paths and expanding their career imagination through personalized guidance.',
+        description: 'Helping students explore emerging career paths and expand career imagination through personalized guidance.',
         icon: <Compass className="w-6 h-6" />
       },
       {
         title: 'Career Building',
-        description: 'Bridging the skill gap with access to industry professionals to enable stronger and more impactful student outcomes.',
+        description: 'Bridging the skill gap with domain relevant resources to enable stronger and more impactful student outcomes.',
         icon: <ShieldCheck className="w-6 h-6" />
       }
     ],
@@ -68,12 +73,12 @@ const MyRaahaLanding = () => {
       },
       {
         title: 'Positive Parenting',
-        description: 'Resources and frameworks for fostering a supportive environment that aligns with the child\'s innate strengths and talents.',
+        description: 'Resources and frameworks fostering a supportive environment that aligns with the child\'s innate strengths.',
         icon: <Handshake className="w-6 h-6" />
       },
       {
         title: 'Continuous Tracking',
-        description: 'Complete visibility into child\'s progress and career readiness milestones throughout their entire academic journey.',
+        description: 'Complete visibility into child\'s progress and career readiness milestones throughout their entire journey.',
         icon: <TrendingUp className="w-6 h-6" />
       }
     ],
@@ -120,11 +125,14 @@ const MyRaahaLanding = () => {
 
       {/* Hero Section */}
       <section className="myraaha-hero">
-        <div className="hero-content" style={{ transform: 'translateY(50px)' }}>
+        <div className="hero-content">
           <h1 className="hero-title">
-            Confusion at 16 is <span style={{ color: '#5500cb' }}>not a flaw.</span> <br />
-            Uncertainty at 22 is <span>not failure.</span> <br />
-            Hesitation is <span>not weakness.</span>
+            Confusion at 16 is <br />
+            <span style={{ color: '#5500cb' }}>not a flaw.</span> <br />
+            Uncertainty at 22 is <br />
+            <span>not a failure.</span> <br />
+            Hesitation is <br />
+            <span>not a weakness.</span>
           </h1>
           <p className="hero-subtitle">
             <span className="hero-subtitle-highlight">
@@ -178,7 +186,7 @@ const MyRaahaLanding = () => {
             <div className="mission-icon">
               <Globe className="w-8 h-8" />
             </div>
-            <h3>The <span>platform</span></h3>
+            <h3>Our <span>platform</span></h3>
             <p>Tech first approach to give AI enabled solutions directly in the hands of every single student.</p>
           </div>
         </div>
@@ -231,7 +239,7 @@ const MyRaahaLanding = () => {
             </div>
             <div className="service-content">
               <h3>Venture <span>builder</span></h3>
-              <p>“Future of work” is about job creation over job seekers for individual empowerment</p>
+              <p>“Future of work” is about job creators over job seekers for individual empowerment</p>
             </div>
           </Link>
 
@@ -245,7 +253,7 @@ const MyRaahaLanding = () => {
             </div>
             <div className="service-content">
               <h3>Skill <span>studio</span></h3>
-              <p>“Continuous learning and skilling” are no longer optional but essential survival tools for future</p>
+              <p>“Continuous learning and skilling” are no longer optional but essential survival tools in future</p>
             </div>
           </Link>
 
@@ -259,7 +267,7 @@ const MyRaahaLanding = () => {
             </div>
             <div className="service-content">
               <h3>Career <span>therapist</span></h3>
-              <p>“Emotionally intelligent support” to help users navigate the mental and emotional aspects of their career journey</p>
+              <p>“Emotionally intelligent support” to help users navigate career's mental and emotional aspects.</p>
             </div>
           </Link>
 
@@ -321,8 +329,8 @@ const MyRaahaLanding = () => {
       <section className="myraaha-beacon" id="platform">
         <div className="section-header">
           <span className="section-badge">Our platform</span>
-          <h2 className="beacon-title"><span className="text-black-force">The</span> <span>platform</span></h2>
-          <p className="beacon-subtitle">We bring the power of integrated intervention for meaningful career journeys. Career success starts with MyRaaha360</p>
+          <h2 className="beacon-title"><span className="text-black-force">The</span> <span>Platform</span></h2>
+          <p className="beacon-subtitle">We bring the power of integrated intervention for meaningful career journeys. Career success starts with <span className="text-black-force font-weight-[700]">MyRaaha360</span></p>
         </div>
         
         <div className="beacon-grid">
@@ -338,7 +346,7 @@ const MyRaahaLanding = () => {
               <p className="beacon-card-lead">We provide a prescriptive solution not to fix you but to build a map for you.</p>
               <ul className="beacon-features">
                 <li><span>Real time role proximity</span></li>
-                <li><span>Career path optimization.</span></li>
+                <li><span>Career path optimization</span></li>
                 <li><span>Proactive interventions</span></li>
               </ul>
             </div>
@@ -411,7 +419,7 @@ const MyRaahaLanding = () => {
               <ul className="beacon-features">
                 <li><span>Enabling last mile giving</span></li>
                 <li><span>Expanded capacity</span></li>
-                <li><span>Building the trust of giving</span></li>
+                <li><span>Building trust of giving</span></li>
               </ul>
             </div>
           </div>

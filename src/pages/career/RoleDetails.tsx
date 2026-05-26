@@ -32,10 +32,6 @@ const RoleDetails = () => {
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, [roleId]);
-
   const role = careersData.find(r => r.id === roleId);
 
   if (!role) {

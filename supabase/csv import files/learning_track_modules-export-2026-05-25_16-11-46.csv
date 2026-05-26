@@ -1,0 +1,41 @@
+id;track_id;title;description;content;module_type;duration_minutes;order_index;resources;quiz;created_at
+773e384b-f464-4a36-8549-5ab8b4f66eea;0c60de17-7940-445c-8d7f-86153873a455;Introduction & Overview;Understanding what this track covers and why it matters;;lesson;10;1;[];[];2026-03-08 11:30:29.05839+00
+a4fc720b-1431-4e74-8ace-bbffc4602fe4;b9faab32-eef9-4e1d-88ea-6a8f8857ce01;Introduction & Overview;Understanding what this track covers and why it matters;;lesson;10;1;[];[];2026-03-08 11:30:29.05839+00
+fd09eeb8-5814-449a-b76c-d0db5e5adc02;07b5a894-3317-499b-93ab-f6e08e21968c;Introduction & Overview;Understanding what this track covers and why it matters;;lesson;10;1;[];[];2026-03-08 11:30:29.05839+00
+f9433860-23d0-4f2e-84a8-c0b449df909b;95734890-c963-4b3e-aa98-0ff053627af1;Introduction & Overview;Understanding what this track covers and why it matters;;lesson;10;1;[];[];2026-03-08 11:30:29.05839+00
+1a2f1a95-c81b-4ee4-972c-ef7e01b46c73;8642f5e3-0d58-4ca4-a29f-6e1399ba3114;Introduction & Overview;Understanding what this track covers and why it matters;;lesson;10;1;[];[];2026-03-08 11:30:29.05839+00
+267da08a-c372-4cca-a2df-91c93b3f100e;9ee7f51f-8a93-42d3-8567-78b54ecfc016;Introduction & Overview;Understanding what this track covers and why it matters;;lesson;10;1;[];[];2026-03-08 11:30:29.05839+00
+652fba41-9008-480a-b1ff-7a4c73157caf;680a2a6e-51c3-4fc9-8f7f-e01eadd4784d;Introduction & Overview;Understanding what this track covers and why it matters;;lesson;10;1;[];[];2026-03-08 11:30:29.05839+00
+03fb16e6-1546-409b-b99c-e0c313bf9441;d6c7b32b-661e-4221-bda1-00a7966cde0c;Introduction & Overview;Understanding what this track covers and why it matters;;lesson;10;1;[];[];2026-03-08 11:30:29.05839+00
+d367f2b3-8436-46e6-8aa0-95f1bd608610;a36033be-0168-4711-829e-a0b63629137a;Introduction & Overview;Understanding what this track covers and why it matters;;lesson;10;1;[];[];2026-03-08 11:30:29.05839+00
+c95f67d6-5575-418a-bfb3-fe3e1908676a;d0cdea48-0f00-4ef4-abe4-07e028d34602;Introduction & Overview;Understanding what this track covers and why it matters;;lesson;10;1;[];[];2026-03-08 11:30:29.05839+00
+165bb3de-034a-4a5b-a334-9bd34cc94ccb;0c60de17-7940-445c-8d7f-86153873a455;Core Concepts;The foundational ideas you need to master;;lesson;20;2;[];[];2026-03-08 11:30:29.05839+00
+e6490c55-a50d-4c3e-95a1-8288ebca1f0c;b9faab32-eef9-4e1d-88ea-6a8f8857ce01;Core Concepts;The foundational ideas you need to master;;lesson;20;2;[];[];2026-03-08 11:30:29.05839+00
+c7433919-1341-4565-9df4-c31afb33f993;07b5a894-3317-499b-93ab-f6e08e21968c;Core Concepts;The foundational ideas you need to master;;lesson;20;2;[];[];2026-03-08 11:30:29.05839+00
+b0e53667-9d4d-4487-9427-154ccc84f551;95734890-c963-4b3e-aa98-0ff053627af1;Core Concepts;The foundational ideas you need to master;;lesson;20;2;[];[];2026-03-08 11:30:29.05839+00
+9768b2f9-bf16-48ac-a498-6c2700fcdbaa;8642f5e3-0d58-4ca4-a29f-6e1399ba3114;Core Concepts;The foundational ideas you need to master;;lesson;20;2;[];[];2026-03-08 11:30:29.05839+00
+3f777671-7d72-4031-a97e-a5ff70426fff;9ee7f51f-8a93-42d3-8567-78b54ecfc016;Core Concepts;The foundational ideas you need to master;;lesson;20;2;[];[];2026-03-08 11:30:29.05839+00
+8e6d6dcb-2e90-46f6-a8b5-78acc54b898c;680a2a6e-51c3-4fc9-8f7f-e01eadd4784d;Core Concepts;The foundational ideas you need to master;;lesson;20;2;[];[];2026-03-08 11:30:29.05839+00
+52236a10-15e1-47e4-99b3-a4b8a3b70de3;d6c7b32b-661e-4221-bda1-00a7966cde0c;Core Concepts;The foundational ideas you need to master;;lesson;20;2;[];[];2026-03-08 11:30:29.05839+00
+44e5829f-1bf4-437c-a28b-66d134067c57;a36033be-0168-4711-829e-a0b63629137a;Core Concepts;The foundational ideas you need to master;;lesson;20;2;[];[];2026-03-08 11:30:29.05839+00
+1bfad1bd-bf09-4f43-b975-cf306fbf1474;d0cdea48-0f00-4ef4-abe4-07e028d34602;Core Concepts;The foundational ideas you need to master;;lesson;20;2;[];[];2026-03-08 11:30:29.05839+00
+f3e23cb8-8d03-4b48-b4dd-c46ce11cca3f;0c60de17-7940-445c-8d7f-86153873a455;Practical Application;Putting concepts into practice with exercises;;exercise;30;3;[];[];2026-03-08 11:30:29.05839+00
+6451e31d-f74f-467d-8ea3-bd3d8e0ce793;b9faab32-eef9-4e1d-88ea-6a8f8857ce01;Practical Application;Putting concepts into practice with exercises;;exercise;30;3;[];[];2026-03-08 11:30:29.05839+00
+0e006650-16bd-4c12-8279-c00f540e64a5;07b5a894-3317-499b-93ab-f6e08e21968c;Practical Application;Putting concepts into practice with exercises;;exercise;30;3;[];[];2026-03-08 11:30:29.05839+00
+191350ec-54dc-4b06-abbd-9a1a30a1c3e8;95734890-c963-4b3e-aa98-0ff053627af1;Practical Application;Putting concepts into practice with exercises;;exercise;30;3;[];[];2026-03-08 11:30:29.05839+00
+3687acff-2e3a-4bf4-85c0-6b4a68df19f6;8642f5e3-0d58-4ca4-a29f-6e1399ba3114;Practical Application;Putting concepts into practice with exercises;;exercise;30;3;[];[];2026-03-08 11:30:29.05839+00
+7591f1c8-f4f2-4774-82b6-91cddab59bec;9ee7f51f-8a93-42d3-8567-78b54ecfc016;Practical Application;Putting concepts into practice with exercises;;exercise;30;3;[];[];2026-03-08 11:30:29.05839+00
+33904e57-927e-4af1-98a9-17d7e42fd9b7;680a2a6e-51c3-4fc9-8f7f-e01eadd4784d;Practical Application;Putting concepts into practice with exercises;;exercise;30;3;[];[];2026-03-08 11:30:29.05839+00
+3c1429fc-cb22-45a5-b687-cd7fef646031;d6c7b32b-661e-4221-bda1-00a7966cde0c;Practical Application;Putting concepts into practice with exercises;;exercise;30;3;[];[];2026-03-08 11:30:29.05839+00
+11812921-9eeb-4aa0-a82f-c4ea0c61bc7d;a36033be-0168-4711-829e-a0b63629137a;Practical Application;Putting concepts into practice with exercises;;exercise;30;3;[];[];2026-03-08 11:30:29.05839+00
+d9826569-497d-48b5-bfd7-2015a70f74ec;d0cdea48-0f00-4ef4-abe4-07e028d34602;Practical Application;Putting concepts into practice with exercises;;exercise;30;3;[];[];2026-03-08 11:30:29.05839+00
+de48ecf5-01a4-4d82-8d6a-9fb18f961f80;0c60de17-7940-445c-8d7f-86153873a455;Knowledge Check;Test your understanding with a quiz;;quiz;15;4;[];[];2026-03-08 11:30:29.05839+00
+c62ac30d-ee03-4f45-8697-d72eb020a0e0;b9faab32-eef9-4e1d-88ea-6a8f8857ce01;Knowledge Check;Test your understanding with a quiz;;quiz;15;4;[];[];2026-03-08 11:30:29.05839+00
+1a48f9ac-b746-49d3-878c-5e4bbe5336f0;07b5a894-3317-499b-93ab-f6e08e21968c;Knowledge Check;Test your understanding with a quiz;;quiz;15;4;[];[];2026-03-08 11:30:29.05839+00
+47dea8ec-0ede-4f97-a6f8-275e65a21089;95734890-c963-4b3e-aa98-0ff053627af1;Knowledge Check;Test your understanding with a quiz;;quiz;15;4;[];[];2026-03-08 11:30:29.05839+00
+687e190c-6a9e-4b41-801f-ee07ad45d9e1;8642f5e3-0d58-4ca4-a29f-6e1399ba3114;Knowledge Check;Test your understanding with a quiz;;quiz;15;4;[];[];2026-03-08 11:30:29.05839+00
+5e096127-5f34-47bb-b1a6-98881b89ad90;9ee7f51f-8a93-42d3-8567-78b54ecfc016;Knowledge Check;Test your understanding with a quiz;;quiz;15;4;[];[];2026-03-08 11:30:29.05839+00
+5eb96749-9473-462d-a4e5-e677898c9c0d;680a2a6e-51c3-4fc9-8f7f-e01eadd4784d;Knowledge Check;Test your understanding with a quiz;;quiz;15;4;[];[];2026-03-08 11:30:29.05839+00
+8dcfe981-c0dd-4bd8-82fd-5a283b86509f;d6c7b32b-661e-4221-bda1-00a7966cde0c;Knowledge Check;Test your understanding with a quiz;;quiz;15;4;[];[];2026-03-08 11:30:29.05839+00
+a525e909-27e7-4fb1-ba2d-7837607a00d5;a36033be-0168-4711-829e-a0b63629137a;Knowledge Check;Test your understanding with a quiz;;quiz;15;4;[];[];2026-03-08 11:30:29.05839+00
+2f7d0f50-8db6-41ec-89fd-316d706c4307;d0cdea48-0f00-4ef4-abe4-07e028d34602;Knowledge Check;Test your understanding with a quiz;;quiz;15;4;[];[];2026-03-08 11:30:29.05839+00

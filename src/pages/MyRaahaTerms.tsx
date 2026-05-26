@@ -10,9 +10,6 @@ import MobileLegal from './mobile/MobileLegal';
 
 const MyRaahaTerms = () => {
   const isMobile = useMobile();
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
 
   const sections = [
     { id: 'acceptance', label: 'Acceptance' },

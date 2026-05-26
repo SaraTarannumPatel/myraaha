@@ -143,3 +143,100 @@
     display: none;
   }
 }
+
+/* ==========================================================================
+   NAVBAR AUTH BUTTONS (Universal Design System Conforming)
+   ========================================================================== */
+.nav-auth-group {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  margin-left: 1rem;
+  flex-shrink: 0;
+}
+
+.nav-btn-login, .nav-btn-signup, .nav-btn-dashboard {
+  position: relative !important;
+  white-space: nowrap !important;
+  flex-shrink: 0 !important;
+}
+
+.nav-btn-login::after, 
+.nav-btn-signup::after, 
+.nav-btn-dashboard::after {
+  display: none !important;
+  content: none !important;
+}
+
+.nav-btn-login {
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--myraaha-blue, #5500cb) !important;
+  text-decoration: none;
+  padding: 0.3rem 0.8rem !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 99px;
+  background: transparent;
+}
+
+.nav-btn-login:hover {
+  color: var(--myraaha-blue-dark, #3d0099) !important;
+  background: rgba(85, 0, 203, 0.05);
+  transform: translateY(-1px);
+}
+
+.nav-btn-signup, .nav-btn-dashboard {
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 600;
+  background: var(--myraaha-gradient, linear-gradient(135deg, #5500cb 0%, #7c3aed 100%));
+  color: white !important;
+  text-decoration: none;
+  padding: 0.35rem 1.1rem !important;
+  border-radius: 99px;
+  box-shadow: 0 4px 12px rgba(85, 0, 203, 0.12);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+}
+
+.nav-btn-signup:hover, .nav-btn-dashboard:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(85, 0, 203, 0.28);
+  filter: brightness(1.08);
+}
+
+@media (max-width: 768px) {
+  .nav-auth-group {
+    flex-direction: column;
+    width: 80%;
+    margin-left: 0;
+    margin-top: 1rem;
+    gap: 1rem;
+  }
+  
+  .nav-btn-login {
+    width: 100%;
+    text-align: center;
+    border: 1px solid rgba(85, 0, 203, 0.15) !important;
+    border-radius: 99px;
+    padding: 0.8rem 0;
+    color: var(--myraaha-blue, #5500cb) !important;
+  }
+
+  .nav-btn-login:hover {
+    background: rgba(85, 0, 203, 0.05);
+  }
+  
+  .nav-btn-signup, .nav-btn-dashboard {
+    width: 100%;
+    text-align: center;
+    padding: 0.8rem 0;
+  }
+}

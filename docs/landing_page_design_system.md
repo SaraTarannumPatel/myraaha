@@ -1,128 +1,159 @@
-# MyRaaha Landing Page Typography & Color System Specification
+# MyRaaha Landing Website Design System & Brand Guidelines
 
-This document details the complete typography system, content style definitions, responsive overrides, and color scheme tokens used across the entire **MyRaaha Landing Page** (located in `MyRaahaLanding.tsx` and `MyRaahaLanding.css`).
+This document serves as the master styling guide and brand guideline specification for the entire **MyRaaha Landing Website** suite. It covers all core landing pages, including the Main Landing, About, Services, Partnerships, Insights, Careers, Contact, and Legal sections.
 
 ---
 
 ## 1. Global Typography Foundation
 
-The MyRaaha design system relies on a clean, premium, and geometric type system powered by a single primary font family:
+The MyRaaha design system enforces a premium, geometric type system built around a single primary font family:
 
 *   **Primary Font Family:** `'Poppins', sans-serif`
-*   **Base Font Size:** `html { font-size: 20px; }`
+*   **Import Reference:** `@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');`
+*   **Base Reading Size:** `html { font-size: 20px; }`
     > [!IMPORTANT]
     > Because the root HTML font size is set to `20px`, all standard CSS `rem` values map to a base of `20px` (e.g., `1rem = 20px`, `2rem = 40px`, `1.1rem = 22px`).
-*   **Italics & Decoration:** Standard text styles explicitly enforce normal font styling (`font-style: normal !important`) for highlights and body, keeping type clean and structured.
+*   **Text Transformation Safeguard:** All key headings and subtitles explicitly enforce sentence-case styling (`text-transform: none !important`) and reset custom italicization to normal (`font-style: normal !important`) for highlights, ensuring a modern, polished editorial aesthetic.
 
 ---
 
-## 2. Typography Hierarchy by Content Type (Desktop)
+## 2. Typography Scale Hierarchy (Desktop)
 
-Below is the desktop hierarchy for all core landing page content types.
-
-| Content Type | Key CSS Classes / Elements | Font Size (rem) | Font Size (px) | Font Weight | Line Height | Color Token | Notes & Aesthetics |
-| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| **Hero Title** | `.hero-title` (nested in `.myraaha-hero`) | `2.75rem` | `55px` | `600` (Semibold) | `1.1` | `#000000` (`--myraaha-text-dark`) | Enforces sentence case. Has custom nested span colors. |
-| **Section Title** | `.section-title`, `.mission-title`, `.beacon-title` | `2.2rem` | `44px` | `700` (Bold) | `1.1` | `#000000` (`--myraaha-text-dark`) | Overridden to `#ffffff` in dark/purple backgrounds. |
-| **Section Subtitle / Description** | `.section-subtitle`, `.mission-subtitle`, `.beacon-subtitle` | `1.1rem` | `22px` | `400` (Regular) | `1.6` | `#4b5563` (`--myraaha-text-gray`) | Overridden to `#ffffff` with `0.8` opacity in dark sections. |
-| **Capsule Heading (Badges)** | `.section-badge`, `.mission-badge`, `.hero-badge` | `0.8rem` | `16px` | `700` (Bold) | `1.0` (inline) | `#5500CB` (`--myraaha-blue`) | All-caps, background `#f3e8ff`, letter-spacing `0.1em`. |
-| **Card Title** | `h3` (inside `.service-card`, `.stakeholder-card`, etc.) | `1.45rem` / `29px` (from Tailwind config) | `29px` | `600` (Semibold) | `1.3` to `1.39` | `#000000` (`--myraaha-text-dark`) | Overridden to `#ffffff` in dark sections (e.g., Mission). |
-| **Hero Subtitle Highlight** | `.hero-subtitle-highlight` | `1.4rem` | `28px` | `500` (Medium) | `1.4` (inline) | `#ffffff` | Background `#5500cb`, rounded pill (`99px`), horizontal spacing. |
-| **Active Tab Text** | `.stakeholder-tab.active` | `0.95rem` | `19px` | `600` (Semibold) | `1.0` | `#5500cb` (`--myraaha-blue`) | Background `#ffffff` (desktop), border `#f1f5f9`, shadow. |
-| **Inactive Tab Text** | `.stakeholder-tab` | `0.95rem` | `19px` | `600` (Semibold) | `1.0` | `#4b5563` (`--myraaha-text-gray`) | Background `transparent` (desktop), smooth color transition. |
-| **Button Text (Primary)** | `.btn-primary`, `.btn-purple`, `.btn-beacon-explore` | `1.0rem` | `20px` | `600` (Semibold) | `1.2` | `#5500cb` (`--myraaha-blue`) | Background `#f3e8ff` (lavender), border-radius `14px`. |
-| **Button Text (Secondary)** | `.btn-secondary`, `.btn-white` | `1.0rem` | `20px` | `600` (Semibold) | `1.2` | `#000000` (`--myraaha-text-dark`) | Background `rgba(211, 211, 211, 0.1)`, border `#e2e8f0`. |
-
----
-
-## 3. Premium Interactive Elements & Card Layouts
-
-The landing page features beautifully tailored, interactive visual containers:
-
-### A. Capsule Headings & Section Badges
-*   **Styling:** Solid pastel background `#f3e8ff`, deep violet text `#5500CB`, uppercase text transformation, letter spacing of `0.1em`, and fully rounded pill borders (`border-radius: 99px !important`).
-*   **Special Contrast Override:** In dark-purple sections (e.g., the Mission section), these badges are strictly styled with `background: #f3e8ff !important` and `color: #5500cb !important` to ensure legible, premium contrast.
-
-### B. Cards System
-*   **Mission Cards:**
-    *   *Background:* `rgba(255, 255, 255, 0.05)` (glassmorphism on dark vertical gradient).
-    *   *Border:* `1px solid rgba(255, 255, 255, 0.1)`.
-    *   *Hover Micro-Animation:* Translates `translateY(-8px)` upwards, background shifts to `rgba(255, 255, 255, 0.08)`.
-    *   *Corner Radius:* `32px`.
-*   **Service Cards:**
-    *   *Background:* `rgba(211, 211, 211, 0.1)` (main off-white theme).
-    *   *Box Shadow:* Soft shadow `0 10px 30px rgba(0,0,0,0.05)`.
-    *   *Hover Micro-Animation:* Translates `translateY(-10px)` upwards, box shadow grows into a purple glow `0 20px 40px rgba(85, 0, 203, 0.08)`.
-    *   *Corner Radius:* `32px` (desktop) / `12px` (mobile).
-*   **Stakeholder Cards:**
-    *   *Background:* `rgba(211, 211, 211, 0.1)` with light borders `1px solid #f1f5f9`.
-    *   *Hover Micro-Animation:* Translates `translateY(-12px)` upwards, border glows violet `rgba(85, 0, 203, 0.15)`, box shadow `0 30px 60px rgba(85, 0, 203, 0.1)`. A thin, colorful top border gradient (`--myraaha-gradient`) fades in.
-    *   *Corner Radius:* `32px`.
-*   **Beacon Cards (Platform Map):**
-    *   *Background:* `rgba(211, 211, 211, 0.1)` (desktop) / `#ffffff` (mobile card).
-    *   *Hover Micro-Animation:* Translates `translateY(-8px)`.
-    *   *Corner Radius:* `20px` (desktop) / `32px` (mobile).
+| Class / Element | Tailwind Token | Font Size (rem) | Font Size (px) | Font Weight | Line Height | Color Token / Application |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| **Main Hero Title** | `text-hero` | `3.5rem` | `70px` | `700` (Bold) | `1.1` | `#ffffff` (Standard Page Hero) or `#000000` (Main Landing) |
+| **Section Title** | `text-section-opener` | `2.2rem` | `44px` | `700` (Bold) | `1.1` | `#000000` (`--myraaha-text-dark`) |
+| **Reflective / Subtitle** | `text-reflective` | `2.0rem` | `40px` | `400` (Regular) | `1.3` | `#4b5563` (`--myraaha-text-gray`) |
+| **Header 1 (H1)** | `text-h1` | `2.5rem` | `50px` | `700` (Bold) | `1.1` | `#000000` / slate-800 |
+| **Header 2 (H2)** | `text-h2` | `2.0rem` | `40px` | `700` (Bold) | `1.15` | Slate-800 |
+| **Header 3 (H3 / Cards)** | `text-h3` | `1.45rem` | `29px` | `600` (Semibold) | `1.3` | `#000000` (`--myraaha-text-dark`) |
+| **Body Primary** | `text-body-primary` | `1.0rem` | `20px` | `400` (Regular) | `1.6` | `#4b5563` (`--myraaha-text-gray`) |
+| **Body Long / Paragraphs** | `text-body-long` | `1.0rem` | `20px` | `400` (Regular) | `1.8` | `#4b5563` (`--myraaha-text-gray`) |
+| **Body Secondary** | `text-body-secondary` | `0.9rem` | `18px` | `400` (Regular) | `1.6` | Gray-600 / Metadata labels |
+| **Input / Prompt Text** | `text-prompt` | `1.1rem` | `22px` | `400` (Regular) | `1.5` | Forms and dynamic inputs |
+| **Pills & Badges** | `text-micro-guidance` | `0.8rem` | `16px` | `700` (Bold) | `1.0` (inline) | `#5500CB` (`--myraaha-blue`), Uppercase, letter-spacing `0.1em` |
+| **UI Button Text** | `text-ui-button` | `1.0rem` | `20px` | `600` (Semibold) | `1.2` | Action button text labels |
+| **UI Navigation Link** | `text-ui-nav` | `0.95rem` | `19px` | `500` (Medium) | `1.4` | Navbar links |
 
 ---
 
-## 4. Mobile & Responsive Typography Scaling
+## 3. Brand Color Registry
 
-To ensure pixel-perfect legibility across all screen sizes, a robust media-query scaling system is implemented:
+The color scheme features high-fidelity purple tones supported by soft canvas grays and crisp white cards:
 
-### A. Headings Scaling (Hero, Section, Mission, and Platform titles)
-*   **Standard Mobile Viewport (`<= 768px`):** Scaled down to `32px !important` (line height `1.2`, weight `700`).
-*   **Narrow Mobile Viewport (`<= 480px`):** Scaled down to `28px !important`.
-*   **Ultra-Narrow Viewport (`<= 320px`):** Scaled down to `24px !important`.
-*   **Mini Viewport (`<= 290px`):** Scaled down to `1.65rem` / `1.8rem` (approx `33px`-`36px` depending on inheritance).
-
-### B. Other Core Text Types on Mobile
-*   **Card Titles (`h3`):** Scaled down to `20px !important` (line-height `1.3`, weight `600`).
-*   **Body & Description Text (`p`):** Scaled down to `1.05rem !important` (approx `21px`, line-height `1.6`, weight `400`).
-*   **Hero Subtitle Highlight:** Scales to `1.2rem !important` (tablet/1024px), down to `1.15rem` (768px), and down to `0.85rem` (290px) to prevent layout overflows.
-*   **Buttons:** Min-height is set to touch-safe `48px !important` (primary) and `44px !important` (secondary). Corner radius adjusts to `8px` or `16px` for touch ergonomics.
-
----
-
-## 5. Background Colors & Core Color Scheme
-
-The MyRaaha platform implements a sleek, high-fidelity color scheme dominated by elegant shades of purple and neutral gray tones.
+### A. Core Hex Tokens
 
 ```mermaid
-graph TD
+graph LR
     subgraph Brand Purple Palette
         P1["Deep Brand Purple<br>#5500CB"]
         P2["Royal Purple Dark<br>#3D0099"]
         P3["Lavender Light Accent<br>#F3E8FF"]
     end
-    subgraph Neutral Grays & Whites
+    subgraph Structure Grays & Whites
         N1["Main Canvas Gray<br>rgba(211,211,211,0.1)"]
         N2["Dark Text Gray<br>#4B5563"]
-        N3["Pitch Black Text<br>#000000"]
-        N4["Pure White<br>#FFFFFF"]
+        N3["Pure White<br>#FFFFFF"]
     end
 ```
 
-### A. Core Hex Token Registry
-1.  **Primary Brand Purple (`--myraaha-blue`):** `#5500CB`
-    *   Used for active tabs, highlight words, secondary text icons, and primary button hover states.
-2.  **Brand Purple Dark (`--myraaha-blue-dark`):** `#3D0099`
-    *   Used in the vertical gradient background of the Mission and CTA sections.
-3.  **Lavender Light Accent (`--myraaha-blue-light` / `lightestPurple`):** `#F3E8FF`
-    *   Used for badges, tags, primary button backgrounds, and highlight words in dark backgrounds.
-4.  **Brand Gradient (`--myraaha-gradient`):** `linear-gradient(135deg, #5500CB 0%, #7c3aed 100%)`
-    *   A vibrant purple-to-violet linear gradient used for accent highlights and active indicators.
-5.  **Pitch Black (`--myraaha-text-dark`):** `#000000`
-    *   Enforces premium readability for all primary headings, titles, and card headers.
-6.  **Slate / Gray (`--myraaha-text-gray` / `textSecondary`):** `#4B5563`
-    *   Used for description text, card paragraphs, and inactive metadata.
-7.  **Main Canvas BG (`--myraaha-bg-grey`):** `rgba(211, 211, 211, 0.1)`
-    *   A very subtle, translucent light-gray tone with 10% opacity, providing a clean, elegant layout backing.
+*   **Primary Brand Purple (`--myraaha-blue`):** `#5500CB`
+    *   *Usage:* Highlights, active navigation states, accent icons, and primary buttons.
+*   **Brand Purple Dark (`--myraaha-blue-dark`):** `#3D0099`
+    *   *Usage:* Backings for primary banners, background gradients, and footer panels.
+*   **Lavender Light Accent (`--myraaha-blue-light`):** `#F3E8FF`
+    *   *Usage:* Capsule badges, tags, primary button backgrounds, and card overlays.
+*   **Primary Brand Gradient (`--myraaha-gradient`):** `linear-gradient(135deg, #5500CB 0%, #7c3aed 100%)`
+    *   *Usage:* Standard page heroes, decorative borders, active indicators, and sign-up CTAs.
+*   **Main Canvas BG (`--myraaha-bg-grey`):** `rgba(211, 211, 211, 0.1)`
+    *   *Usage:* Global page background. Gives a modern, off-white translucent texture.
+*   **Text Dark (`--myraaha-text-dark`):** `#000000` (and Slate-800 `#1e293b` for general headings).
+*   **Text Gray (`--myraaha-text-gray`):** `#4b5563`.
 
-### B. Background Layout Hierarchy of Landing Page Sections
-*   **Hero Section:** Background is the translucent `--myraaha-bg-grey` superimposed with a precise radial dotted grid: `radial-gradient(#e2e8f0 1px, transparent 1px)` sized at `40px 40px`.
-*   **Mission Section:** A deep, premium vertical gradient from `#3D0099` to `#5500CB`. Behind it, three soft blur blobs (`#5500CB`, `#7c3aed`, and `#a78bfa` with `0.05` opacity) float dynamically under a dotted mesh pattern.
-*   **Services Section:** `--myraaha-bg-grey`.
-*   **Stakeholders Section:** `--myraaha-bg-grey` with a white stakeholder filter tab navigation block.
-*   **Beacon Section (The Platform):** `--myraaha-bg-grey` with standard white layout cards on mobile to highlight depth.
-*   **Newsletter Section:** Uses a custom, soft lavender panel nested on a clean background.
-*   **Footer Section:** Uses a solid purple canvas matching `#5500CB` with stark white text links and social circles.
+### B. High-Contrast Enforcement Rule
+To guarantee premium readability across both light and dark regions:
+1.  **Dark Purple Zones:** (e.g., Mission, CTA, standard page heroes, and footers):
+    *   All nested headers and paragraphs are strictly forced to white (`#ffffff !important`).
+    *   Span highlights in dark areas use **Light Lavender (`#f3e8ff !important`)** instead of the standard brand purple.
+2.  **Light/Translucent Zones:** (e.g., Services, Stakeholders, and Careers):
+    *   Headers are forced to Black (`#000000 !important`).
+    *   Span highlights use **Brand Purple (`#5500cb !important`)**.
+
+---
+
+## 4. Page Layouts & Structural Background Hierarchy
+
+*   **Main Landing Page (`MyRaahaLanding.tsx`):**
+    *   *Hero Section:* Main Canvas BG (`--myraaha-bg-grey`) with a radial grid backing: `radial-gradient(#e2e8f0 1px, transparent 1px)` sized at `40px 40px`.
+    *   *Mission Section:* Solid deep gradient from `#3D0099` to `#5500CB` with glowing blurred gradient circles (blurs up to `100px`) animated to float slowly.
+    *   *Services Section:* Main Canvas BG with off-white cards.
+    *   *Stakeholder Section:* Main Canvas BG with a white background filter tab block (`#f8fafc`).
+    *   *Beacon Section:* Main Canvas BG with standard white grids on mobile.
+*   **About Page (`MyRaahaAbout.tsx`):**
+    *   *Strategic Framework Mosaic:* Clean, premium grid boxes featuring dark-gray outlines, subtle stat bars (`LFPR` comparison from 55% to 70%), and full-width imagery overlays.
+    *   *Timeline (Journey):* Vertical line centered on desktop (`left: 50%`) and aligned left on mobile (`left: 20px`), decorated with glowing purple timeline dots and numbered steps.
+*   **Services Page (`MyRaahaServices.tsx`):**
+    *   *Alternating Feature Layouts:* Side-by-side splits with large rounded visuals and detailed bullet lists.
+*   **Partnerships Page (`MyRaahaPartnerships.tsx`):**
+    *   *Dynamic Path (Timeline):* Center-aligned dotted path with colorful input-output indicator tags (`io-tag`) reflecting inputs (`#3b82f6`) and outputs (`#5500cb`).
+
+---
+
+## 5. Premium Cards & Micro-Animations
+
+The design system incorporates elegant micro-interactions to create a highly responsive experience:
+
+```mermaid
+graph TD
+    A[Card Component] --> B(Hover State)
+    B --> C[Translate Y upwards -8px to -12px]
+    B --> D[Shadow transitions to deep violet glow 8% opacity]
+    B --> E[Image inside scales up by 6% dynamically]
+    B --> F[Top color border gradient fades in]
+```
+
+### A. Card Styles
+*   **Service Cards:** Rounded corners (`32px`), soft shadow (`0 10px 30px rgba(0,0,0,0.05)`). On hover, translates `translateY(-10px)` with a purple shadow glow: `0 20px 40px rgba(85, 0, 203, 0.08)`.
+*   **Stakeholder Cards:** Features a thin color border gradient (`--myraaha-gradient`) that fades in from the top on hover, along with a `translateY(-12px)` lift.
+*   **Mission Cards:** Glassmorphic layout styled with `rgba(255, 255, 255, 0.05)` backing and thin borders `1px solid rgba(255, 255, 255, 0.1)`.
+
+### B. Global Image Radius
+*   All visual media and images (except navigation logos) are universally rounded to a corner radius of **`20px`** (or **`32px`** on hero banners) to maintain a soft, friendly aesthetic.
+
+---
+
+## 6. Icons & Navigation Details
+
+### A. Icon Tokens (Lucide React)
+*   **Main Landing:** `Globe`, `Rocket`, `Handshake`, `Lightbulb`, `MessageSquare`, `Target`, `Layout`, `Users`, `Workflow`, `Compass`, `Briefcase`, `ShieldCheck`, `TrendingUp`, `Award`, `ArrowRight`.
+*   **Sizing Rules:**
+    *   *Hero features:* `w-5 h-5` / `w-6 h-6` (20px / 24px) for inline items.
+    *   *Card Headers:* `w-6 h-6` (24px) nested in a container size of `48px x 48px` or `56px x 56px`.
+    *   *Mission banners:* Large `w-8 h-8` (32px) white stroke icons.
+*   **Coloring Rules:** Icons inside light cards are styled with `color: var(--myraaha-blue)` or matching status tokens (pink, light-blue, yellow highlights). Inside dark purple sections, icons are forced to `#ffffff`.
+
+### B. Header & Navbar
+*   **Style:** Glassmorphic fixed bar with `80px` height, translucent background `rgba(255, 255, 255, 0.85)` with a backdrop blur of `12px`, and a bottom border `1px solid rgba(85, 0, 203, 0.08)`.
+*   **Auth Buttons:**
+    *   *Login:* Text link styled with Poppins `0.95rem`, bold weight `600`, color `#5500cb`.
+    *   *Sign Up:* Solid pill button styled with `var(--myraaha-gradient)` backing, white text, and a soft drop shadow `0 4px 15px rgba(85, 0, 203, 0.15)`.
+
+---
+
+## 7. Responsive Breakpoints & Mobile Scaling
+
+To guarantee readability across all viewports, font sizes and touch targets scale dynamically:
+
+### A. Responsive Breakpoints
+*   **Desktop Standard:** `>= 1024px`
+*   **Tablet / Large Mobile:** `< 1024px` and `>= 768px`
+*   **Mobile Standard:** `< 768px`
+*   **Narrow Mobile:** `< 480px`
+*   **Ultra-Narrow Mobile:** `< 320px`
+
+### B. Mobile Conversions
+*   **Main Headings (Hero, Section Titles):** Scales from `3.5rem` / `2.75rem` down to `2.25rem` / `32px` (standard mobile), and down to `28px` (narrow mobile).
+*   **Card Headings (H3):** Scales down to `20px` (`1rem` mapping).
+*   **Subtitles & Paragraphs:** Scales down to `1.05rem` (`21px`) or `0.95rem` (`19px`) with a line height of `1.6`.
+*   **Touch Targets (Buttons):** Min-height is set to a safe **`48px !important`** (primary buttons) and **`44px !important`** (secondary buttons).
+*   **Hero Highlights:** The subtitle pill (`.hero-subtitle-highlight`) adjusts from desktop `white-space: nowrap` to mobile `white-space: normal` with automatic margins (`margin: 15px auto 2.5rem auto`) to prevent screen clipping.

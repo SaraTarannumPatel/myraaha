@@ -67,17 +67,32 @@ const MyRaahaCareers = () => {
     }
   };
 
-  const [searchTerm, setSearchTerm] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('All');
-  const [selectedClassification, setSelectedClassification] = useState('All Paths');
+  const [searchTerm, setSearchTerm] = useState(() => {
+    return sessionStorage.getItem('myraaha_careers_search') || '';
+  });
+  const [selectedCategory, setSelectedCategory] = useState(() => {
+    return sessionStorage.getItem('myraaha_careers_category') || 'All';
+  });
+  const [selectedClassification, setSelectedClassification] = useState(() => {
+    return sessionStorage.getItem('myraaha_careers_classification') || 'All Paths';
+  });
+
+  useEffect(() => {
+    sessionStorage.setItem('myraaha_careers_search', searchTerm);
+  }, [searchTerm]);
+
+  useEffect(() => {
+    sessionStorage.setItem('myraaha_careers_category', selectedCategory);
+  }, [selectedCategory]);
+
+  useEffect(() => {
+    sessionStorage.setItem('myraaha_careers_classification', selectedClassification);
+  }, [selectedClassification]);
+
   const [selectedJob, setSelectedJob] = useState<Job | null>(null);
   const [showApplyForm, setShowApplyForm] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
-
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
 
   const categories = ['All', ...Array.from(new Set(jobs.map(j => j.category)))];
 
@@ -129,7 +144,7 @@ const MyRaahaCareers = () => {
           <div className="role-split-container">
             <div className="role-split-text">
               <span className="section-badge">Our purpose</span>
-              <h2 className="section-title" style={{ color: '#1e293b' }}>Why join <span style={{ color: '#1e293b' }}>us?</span></h2>
+              <h2 className="section-title">Why join <span>us?</span></h2>
               <p className="section-subtitle">
                 We aren't just building a company; we're building a movement to unlock human potential at scale. 
                 Our mission is to ensure that every individual, regardless of their background, has 
@@ -196,13 +211,13 @@ const MyRaahaCareers = () => {
       <section className="about-section team-culture">
         <div className="culture-header">
           <span className="culture-badge">Our Culture</span>
-          <h2 className="culture-title">The MyRaaha <span>way</span></h2>
+          <h2 className="culture-title">The MyRaaha <span>Way</span></h2>
           <p className="culture-subtitle">We are building an ecosystem based on radical autonomy, unshakeable conviction, and a quiet, structural confidence.</p>
         </div>
 
         <div className="culture-row">
           <div className="culture-text">
-            <h3>Autonomy and <span>accountability</span></h3>
+            <h3>Autonomy and <span>Accountability</span></h3>
             <p>We don't manage people; we manage missions. Every team member has the freedom to own their work and the responsibility to deliver excellence.</p>
             <div className="culture-features">
               <div className="culture-feature">
@@ -253,7 +268,7 @@ const MyRaahaCareers = () => {
           </div>
           <div className="life-content">
             <div className="life-chapter life-intro">
-              <span className="section-badge">Life at MyRaaha</span>
+              <span className="section-badge" style={{ color: '#ffffff' }}>Life at MyRaaha</span>
               <h2 className="section-title">Where work meets <span style={{ color: '#ffffff' }}>purpose</span></h2>
             </div>
             

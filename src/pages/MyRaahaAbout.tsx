@@ -126,10 +126,6 @@ const teamMembers: Record<string, TeamMember[]> = {
 const MyRaahaAbout = () => {
   const [expandedMember, setExpandedMember] = useState<string | null>(null);
 
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
-
   return (
     <div className="about-page">
       <MyRaahaNavbar />
@@ -138,7 +134,7 @@ const MyRaahaAbout = () => {
         badge="Who we are"
         title={
           <>
-            Clarity to direction, action to outcome, <br />
+            Clarity to Direction, Action to Outcome, <br />
             Impact for <span>tomorrow</span>
           </>
         }
@@ -175,22 +171,22 @@ const MyRaahaAbout = () => {
           <div className="compounding-grid">
             <div className="compounding-card">
               <div className="card-number">01</div>
-              <h4>Low <span>confidence</span></h4>
+              <h4>Low <span>Confidence</span></h4>
               <p>Uncertainty in career direction leading to hesitation and missed beginnings.</p>
             </div>
             <div className="compounding-card">
               <div className="card-number">02</div>
-              <h4>Under<span>employment</span></h4>
+              <h4>Under <span>employment</span></h4>
               <p>Job dissatisfaction arising from skill-role misalignment in early careers.</p>
             </div>
             <div className="compounding-card">
               <div className="card-number">03</div>
-              <h4>No <span>direction</span></h4>
+              <h4>No <span>Direction</span></h4>
               <p>Drowning in information without a structured path to convert it to action.</p>
             </div>
             <div className="compounding-card">
               <div className="card-number">04</div>
-              <h4>Missed <span>odds</span></h4>
+              <h4>Missed <span>Odds</span></h4>
               <p>Lost opportunities due to lack of awareness of emerging global domains.</p>
             </div>
           </div>
@@ -254,7 +250,7 @@ const MyRaahaAbout = () => {
           {/* Need Card */}
           <div className="mosaic-card need-card">
             <div className="mosaic-card-header">
-              <span className="mosaic-tag">The Solution</span>
+              <span className="mosaic-tag">The Pull</span>
               <h3>The <span>need</span></h3>
             </div>
             <div className="need-stats-grid">
@@ -284,7 +280,7 @@ const MyRaahaAbout = () => {
         </div>
 
         <div className="value-realization-strip">
-          <div className="strip-title">What quality guidance <br /> <span>offers</span></div>
+          <div className="strip-title">What quality guidance <span>offers</span></div>
           <div className="offers-grid">
             <div className="offer-card">
               <div className="offer-icon"><BookOpen size={20} /></div>
@@ -327,7 +323,7 @@ const MyRaahaAbout = () => {
           <div className="prism-container">
             <div className="prism-content">
               <div className="prism-icon-box"><Star size={32} /></div>
-              <h3>The North <span>star</span></h3>
+              <h3>The North <span>Star</span></h3>
               <p className="prism-lead">To democratize career guidance for students and early professionals by combining human empathy and intelligent technology.</p>
               <div className="prism-mission">
                 <p>"Building the world's most empathetic career intelligence platform — where technology scales trust."</p>
@@ -350,7 +346,7 @@ const MyRaahaAbout = () => {
             <div className="eco-card">
               <div className="eco-img"><img src="https://images.unsplash.com/photo-1521737711867-e3b97375f902?auto=format&fit=crop&w=400&q=80" alt="Human" /></div>
               <div className="eco-content">
-                <h4>Human <span>resources</span></h4>
+                <h4>Human <span>Resources</span></h4>
                 <p>Certified counsellors & domain mentors providing the "Empathy Layer".</p>
                 <ul className="eco-perks">
                   <li>Personal fit assessment</li>
@@ -361,7 +357,7 @@ const MyRaahaAbout = () => {
             <div className="eco-card">
               <div className="eco-img"><img src="https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&w=400&q=80" alt="Tech" /></div>
               <div className="eco-content">
-                <h4>Technology <span>stack</span></h4>
+                <h4>Technology <span>Stack</span></h4>
                 <p>Proprietary AI profiling engine and recommendation architecture.</p>
                 <ul className="eco-perks">
                   <li>Data-driven profiling</li>
@@ -372,7 +368,7 @@ const MyRaahaAbout = () => {
             <div className="eco-card">
               <div className="eco-img"><img src="https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&w=400&q=80" alt="Partners" /></div>
               <div className="eco-content">
-                <h4>Partner <span>network</span></h4>
+                <h4>Partner <span>Network</span></h4>
                 <p>Deep integration with schools, NGOs, and Government bodies.</p>
                 <ul className="eco-perks">
                   <li>NEP compliance tools</li>
@@ -383,7 +379,7 @@ const MyRaahaAbout = () => {
             <div className="eco-card">
               <div className="eco-img"><img src="https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?auto=format&fit=crop&w=400&q=80" alt="Knowledge" /></div>
               <div className="eco-content">
-                <h4>Knowledge <span>base</span></h4>
+                <h4>Knowledge <span>Base</span></h4>
                 <p>The world's most comprehensive library of emerging career paths.</p>
                 <ul className="eco-perks">
                   <li>Role-based libraries</li>
@@ -398,7 +394,7 @@ const MyRaahaAbout = () => {
         <div className="theory-v7-layer engine-layer">
           <div className="layer-header">
             <span className="layer-num">03</span>
-            <h3>Intelligence <span>architecture</span></h3>
+            <h3>Intelligence <span>Architecture</span></h3>
           </div>
           <div className="engine-flow-v7">
             <div className="engine-hub">
@@ -409,7 +405,7 @@ const MyRaahaAbout = () => {
             <div className="engine-connector"><Infinity size={32} /></div>
             <div className="engine-hub core">
               <div className="hub-icon"><Cpu size={24} /></div>
-              <h5>AI Profiling Engine</h5>
+              <h5>AI Recommendaion Engine</h5>
               <p>The Intelligence Core</p>
             </div>
             <div className="engine-connector"><Infinity size={32} /></div>
@@ -537,7 +533,7 @@ const MyRaahaAbout = () => {
             </div>
             <div className="timeline-dot"><span>04</span></div>
             <div className="timeline-content">
-              <span className="timeline-date">November 2025 – February 2026</span>
+              <span className="timeline-date">December 2025 – January 2026</span>
               <h3>Building what didn't <span>exist</span></h3>
               <p>
                 MyRaaha was creating an entirely new category. The 3A Intelligence Engine, The Living Resume™, and The SelfGraph™ took shape. ShuttlEx took shape here—not a quiz, but a living, breathing journey that evolved with every choice.
@@ -547,7 +543,7 @@ const MyRaahaAbout = () => {
 
           <div className="timeline-item">
             <div className="timeline-content">
-              <span className="timeline-date">March – April 2026</span>
+              <span className="timeline-date">February 2026 – March 2026</span>
               <h3>The hard <span>middle</span></h3>
               <p>
                 The quiet, unglamorous stretch. The architecture was defined, the team was assembled, but the product was not yet ready. The culture—no emotional theatrics, no hype—became the thing that kept momentum alive when progress felt slow.
@@ -561,14 +557,14 @@ const MyRaahaAbout = () => {
 
           <div className="timeline-item">
             <div className="timeline-image">
-              <img src="/myraaha_platform_map_v2_1778819717803.png" alt="MVP. Ready." />
+              <img src="/myraaha_platform_map_v2_1778819717803.png" alt="MyRaaha is born." />
             </div>
             <div className="timeline-dot"><span>06</span></div>
             <div className="timeline-content">
-              <span className="timeline-date">May 2026</span>
-              <h3>MVP. <span>ready</span>.</h3>
+              <span className="timeline-date">April 2026 -May 2026</span>
+              <h3>MyRaaha is <span>born</span>.</h3>
               <p>
-                Eleven months after the first phone call, MyRaaha arrives at its MVP release. A product designed not to inspire, but to navigate—with the kind of quiet, structural confidence that comes from building something you believe in completely.
+                Eleven months after the first phone call, MyRaaha is born. A product designed not to inspire, but to navigate—with the kind of quiet, structural confidence that comes from building something you believe in completely.
               </p>
             </div>
           </div>
@@ -579,6 +575,7 @@ const MyRaahaAbout = () => {
       <section className="about-section about-values">
         <span className="section-badge">Our values</span>
         <h2 className="section-title">Our core <span>values</span></h2>
+        <p className="section-subtitle">We put our HEART in everything we do</p>
         
         <div className="values-grid">
           <div className="value-card">
@@ -642,7 +639,7 @@ const MyRaahaAbout = () => {
                       width: '100%', 
                       aspectRatio: '1/1', 
                       overflow: 'hidden', 
-                      borderRadius: '32px', 
+                      borderRadius: '30px', 
                       boxShadow: '0 10px 30px rgba(0, 0, 0, 0.05)',
                       border: '1px solid rgba(226, 232, 240, 0.6)',
                       background: 'var(--myraaha-bg-grey)',
@@ -668,7 +665,7 @@ const MyRaahaAbout = () => {
                   style={{ 
                     marginTop: '1.25rem', 
                     marginBottom: 0,
-                    fontSize: '1.4rem', 
+                    fontSize: '1.2rem', 
                     fontWeight: 600, 
                     color: '#5500cb', 
                     textAlign: 'center',

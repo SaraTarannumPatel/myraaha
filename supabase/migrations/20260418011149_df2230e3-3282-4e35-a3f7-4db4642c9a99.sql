@@ -1,5 +1,139 @@
+-- Add missing relation and data columns to directory tables (to recover from incomplete migration and ensure database consistency)
+ALTER TABLE public.industry_directory
+  ADD COLUMN IF NOT EXISTS demand_level text,
+  ADD COLUMN IF NOT EXISTS growth_trajectory text,
+  ADD COLUMN IF NOT EXISTS avg_salary_usd text,
+  ADD COLUMN IF NOT EXISTS soft_skills text[],
+  ADD COLUMN IF NOT EXISTS interests text[],
+  ADD COLUMN IF NOT EXISTS countries_in_demand text[],
+  ADD COLUMN IF NOT EXISTS related_careers text[],
+  ADD COLUMN IF NOT EXISTS related_countries text[],
+  ADD COLUMN IF NOT EXISTS related_courses text[],
+  ADD COLUMN IF NOT EXISTS related_domains text[],
+  ADD COLUMN IF NOT EXISTS related_job_roles text[],
+  ADD COLUMN IF NOT EXISTS related_sectors text[],
+  ADD COLUMN IF NOT EXISTS related_skills text[],
+  ADD COLUMN IF NOT EXISTS related_subjects text[],
+  ADD COLUMN IF NOT EXISTS related_universities text[];
+
+ALTER TABLE public.sector_directory
+  ADD COLUMN IF NOT EXISTS demand_level text,
+  ADD COLUMN IF NOT EXISTS growth_trajectory text,
+  ADD COLUMN IF NOT EXISTS avg_salary_usd text,
+  ADD COLUMN IF NOT EXISTS soft_skills text[],
+  ADD COLUMN IF NOT EXISTS interests text[],
+  ADD COLUMN IF NOT EXISTS countries_in_demand text[],
+  ADD COLUMN IF NOT EXISTS related_industries text[],
+  ADD COLUMN IF NOT EXISTS related_careers text[],
+  ADD COLUMN IF NOT EXISTS related_skills text[],
+  ADD COLUMN IF NOT EXISTS related_domains text[],
+  ADD COLUMN IF NOT EXISTS related_countries text[],
+  ADD COLUMN IF NOT EXISTS related_courses text[],
+  ADD COLUMN IF NOT EXISTS related_job_roles text[],
+  ADD COLUMN IF NOT EXISTS related_sectors text[],
+  ADD COLUMN IF NOT EXISTS related_subjects text[],
+  ADD COLUMN IF NOT EXISTS related_universities text[];
+
+ALTER TABLE public.subjects_directory
+  ADD COLUMN IF NOT EXISTS related_careers text[],
+  ADD COLUMN IF NOT EXISTS related_skills text[],
+  ADD COLUMN IF NOT EXISTS related_industries text[],
+  ADD COLUMN IF NOT EXISTS related_countries text[],
+  ADD COLUMN IF NOT EXISTS related_courses text[],
+  ADD COLUMN IF NOT EXISTS related_domains text[],
+  ADD COLUMN IF NOT EXISTS related_job_roles text[],
+  ADD COLUMN IF NOT EXISTS related_sectors text[],
+  ADD COLUMN IF NOT EXISTS related_subjects text[],
+  ADD COLUMN IF NOT EXISTS related_universities text[],
+  ADD COLUMN IF NOT EXISTS countries_in_demand text[];
+
+ALTER TABLE public.skills_directory
+  ADD COLUMN IF NOT EXISTS related_careers text[],
+  ADD COLUMN IF NOT EXISTS related_industries text[],
+  ADD COLUMN IF NOT EXISTS related_domains text[],
+  ADD COLUMN IF NOT EXISTS related_countries text[],
+  ADD COLUMN IF NOT EXISTS related_courses text[],
+  ADD COLUMN IF NOT EXISTS related_job_roles text[],
+  ADD COLUMN IF NOT EXISTS related_sectors text[],
+  ADD COLUMN IF NOT EXISTS related_subjects text[],
+  ADD COLUMN IF NOT EXISTS related_universities text[],
+  ADD COLUMN IF NOT EXISTS countries_in_demand text[];
+
+ALTER TABLE public.career_paths
+  ADD COLUMN IF NOT EXISTS related_careers text[],
+  ADD COLUMN IF NOT EXISTS related_countries text[],
+  ADD COLUMN IF NOT EXISTS related_courses text[],
+  ADD COLUMN IF NOT EXISTS related_domains text[],
+  ADD COLUMN IF NOT EXISTS related_industries text[],
+  ADD COLUMN IF NOT EXISTS related_job_roles text[],
+  ADD COLUMN IF NOT EXISTS related_sectors text[],
+  ADD COLUMN IF NOT EXISTS related_skills text[],
+  ADD COLUMN IF NOT EXISTS related_subjects text[],
+  ADD COLUMN IF NOT EXISTS related_universities text[],
+  ADD COLUMN IF NOT EXISTS demand_level text,
+  ADD COLUMN IF NOT EXISTS growth_trajectory text,
+  ADD COLUMN IF NOT EXISTS avg_salary_usd text,
+  ADD COLUMN IF NOT EXISTS soft_skills text[],
+  ADD COLUMN IF NOT EXISTS interests text[],
+  ADD COLUMN IF NOT EXISTS countries_in_demand text[],
+  ADD COLUMN IF NOT EXISTS difficulty text,
+  ADD COLUMN IF NOT EXISTS industry_trends text,
+  ADD COLUMN IF NOT EXISTS salary_range text,
+  ADD COLUMN IF NOT EXISTS tools_certifications text[];
+
+ALTER TABLE public.domain_directory
+  ADD COLUMN IF NOT EXISTS related_careers text[],
+  ADD COLUMN IF NOT EXISTS related_countries text[],
+  ADD COLUMN IF NOT EXISTS related_courses text[],
+  ADD COLUMN IF NOT EXISTS related_domains text[],
+  ADD COLUMN IF NOT EXISTS related_industries text[],
+  ADD COLUMN IF NOT EXISTS related_job_roles text[],
+  ADD COLUMN IF NOT EXISTS related_sectors text[],
+  ADD COLUMN IF NOT EXISTS related_skills text[],
+  ADD COLUMN IF NOT EXISTS related_subjects text[],
+  ADD COLUMN IF NOT EXISTS related_universities text[],
+  ADD COLUMN IF NOT EXISTS demand_level text,
+  ADD COLUMN IF NOT EXISTS growth_trajectory text,
+  ADD COLUMN IF NOT EXISTS avg_salary_usd text,
+  ADD COLUMN IF NOT EXISTS soft_skills text[],
+  ADD COLUMN IF NOT EXISTS interests text[],
+  ADD COLUMN IF NOT EXISTS countries_in_demand text[],
+  ADD COLUMN IF NOT EXISTS category text,
+  ADD COLUMN IF NOT EXISTS parent_domain text,
+  ADD COLUMN IF NOT EXISTS industry text,
+  ADD COLUMN IF NOT EXISTS sector text;
+
+ALTER TABLE public.universities_directory
+  ADD COLUMN IF NOT EXISTS related_careers text[] DEFAULT '{}',
+  ADD COLUMN IF NOT EXISTS related_countries text[] DEFAULT '{}',
+  ADD COLUMN IF NOT EXISTS related_courses text[] DEFAULT '{}',
+  ADD COLUMN IF NOT EXISTS related_domains text[] DEFAULT '{}',
+  ADD COLUMN IF NOT EXISTS related_industries text[] DEFAULT '{}',
+  ADD COLUMN IF NOT EXISTS related_job_roles text[] DEFAULT '{}',
+  ADD COLUMN IF NOT EXISTS related_sectors text[] DEFAULT '{}',
+  ADD COLUMN IF NOT EXISTS related_skills text[] DEFAULT '{}',
+  ADD COLUMN IF NOT EXISTS related_subjects text[] DEFAULT '{}',
+  ADD COLUMN IF NOT EXISTS related_universities text[] DEFAULT '{}',
+  ADD COLUMN IF NOT EXISTS soft_skills text[] DEFAULT '{}',
+  ADD COLUMN IF NOT EXISTS interests text[] DEFAULT '{}';
+
+ALTER TABLE public.job_roles_directory
+  ADD COLUMN IF NOT EXISTS related_careers text[] DEFAULT '{}',
+  ADD COLUMN IF NOT EXISTS related_countries text[] DEFAULT '{}',
+  ADD COLUMN IF NOT EXISTS related_courses text[] DEFAULT '{}',
+  ADD COLUMN IF NOT EXISTS related_domains text[] DEFAULT '{}',
+  ADD COLUMN IF NOT EXISTS related_industries text[] DEFAULT '{}',
+  ADD COLUMN IF NOT EXISTS related_job_roles text[] DEFAULT '{}',
+  ADD COLUMN IF NOT EXISTS related_sectors text[] DEFAULT '{}',
+  ADD COLUMN IF NOT EXISTS related_skills text[] DEFAULT '{}',
+  ADD COLUMN IF NOT EXISTS related_subjects text[] DEFAULT '{}',
+  ADD COLUMN IF NOT EXISTS related_universities text[] DEFAULT '{}',
+  ADD COLUMN IF NOT EXISTS soft_skills text[] DEFAULT '{}',
+  ADD COLUMN IF NOT EXISTS interests text[] DEFAULT '{}',
+  ADD COLUMN IF NOT EXISTS countries_in_demand text[] DEFAULT '{}';
 
 -- SKILLS ⇄ everything
+
 UPDATE public.skills_directory s SET
   related_industries = ARRAY(SELECT DISTINCT unnest(COALESCE(s.related_industries,'{}') || sub.matched)),
   related_sectors    = ARRAY(SELECT DISTINCT unnest(COALESCE(s.related_sectors,'{}')    || sub.matched_sec)),

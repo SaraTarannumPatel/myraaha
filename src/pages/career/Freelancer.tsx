@@ -7,8 +7,6 @@ import './CareerRole.css';
 import StandardPageHero from '../../components/StandardPageHero';
 
 const Freelancer = () => {
-  useEffect(() => { window.scrollTo(0, 0); }, []);
-
   return (
     <div className="role-page">
       <MyRaahaNavbar />

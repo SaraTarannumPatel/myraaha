@@ -23,12 +23,8 @@
   font-weight: 600;
   margin-bottom: 1.5rem;
   line-height: 1.1;
-  color: #ffffff !important;
+  color: #ffffff;
   max-width: 1200px;
-}
-
-.standard-page-hero .hero-title span {
-  color: #ffffff !important;
 }
 
 .standard-page-hero .hero-title span.italic {

@@ -10,7 +10,6 @@ import { careersData } from '../../data/careersData';
 
 const Volunteer = () => {
   const navigate = useNavigate();
-  useEffect(() => { window.scrollTo(0, 0); }, []);
 
   const volunteerRoles = careersData.filter(role => role.classification === 'Volunteer');
 

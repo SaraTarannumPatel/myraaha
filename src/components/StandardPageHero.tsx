@@ -13,6 +13,7 @@ interface StandardPageHeroProps {
   subtitle: string | React.ReactNode;
   features: HeroFeature[];
   className?: string;
+  children?: React.ReactNode;
 }
 
 const StandardPageHero: React.FC<StandardPageHeroProps> = ({ 
@@ -20,7 +21,8 @@ const StandardPageHero: React.FC<StandardPageHeroProps> = ({
   title, 
   subtitle, 
   features,
-  className = ""
+  className = "",
+  children
 }) => {
   return (
     <header className={`standard-page-hero ${className}`}>
@@ -39,6 +41,8 @@ const StandardPageHero: React.FC<StandardPageHeroProps> = ({
       <p className="hero-subtitle" style={{ textAlign: 'center', width: '100%', margin: '0 auto' }}>
         {subtitle}
       </p>
+
+      {children}
 
       {features && features.length > 0 && (
         <div className="hero-features-standard">

@@ -8,7 +8,8 @@ import {
   Calendar, 
   Search, 
   TrendingUp, 
-  Rocket
+  Rocket,
+  ArrowRight
 } from 'lucide-react';
 import MyRaahaNavbar from '../components/MyRaahaNavbar';
 import MyRaahaNewsletter from '../components/MyRaahaNewsletter';
@@ -18,45 +19,38 @@ import { useMobile } from '../hooks/useMobile';
 import MobilePartnerships from './mobile/MobilePartnerships';
 
 const MyRaahaPartnerships = () => {
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
-
   return (
     <div className="myraaha-partnerships-v2">
       <MyRaahaNavbar />
 
       {/* Hero Section */}
-      <section className="partnerships-hero-v2" style={{ backgroundColor: '#5500cb', backgroundImage: 'none' }}>
+      <section className="partnerships-hero-v2">
         <div className="hero-content-v2">
           <div className="hero-badge-v2">
             Institutional Partnerships
           </div>
-          <h1 className="hero-title-v2" style={{ color: '#ffffff' }}>
-            We don't sell to institutions.<br />
-            We build with <span style={{ color: '#ffffff' }}>them</span>.
+          <h1 className="hero-title-v2">
+            We Don't <span>Sell</span> to Institutions.<br />
+            We <span>Build</span> With Them.
           </h1>
-          <p className="hero-subtitle-v2" style={{ color: '#ffffff', opacity: 0.9 }}>
+          <p className="hero-subtitle-v2">
             MyRaaha exists because the system failed students. We're not here to replace what institutions do — we're here to give them the infrastructure they never had. A partnership with MyRaaha means your students stop guessing and start navigating. From day one.
           </p>
           <div className="hero-btns-v2">
-            <Link to="/contact" className="btn-primary-v2" style={{ textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '0.5rem', backgroundColor: '#f8fafc', color: '#5500cb' }}>
+            <button className="btn-primary-v2" onClick={() => window.location.href = '/contact'}>
               <MessageSquare className="w-5 h-5" />
               Let's Talk
-            </Link>
+            </button>
           </div>
         </div>
         <div className="hero-image-container-v2">
-          <img
-            src="/myraaha_hero_v2_1778819576959.png"
-            alt="Institutional Partnership"
-            className="hero-image-v2"
+          <img 
+            src="/myraaha_service_incubation_1778164176716.png" 
+            alt="Institutional Partnership" 
+            className="hero-image-v2" 
           />
         </div>
       </section>
-
-
-
 
       <section className="partnerships-engagement-v2">
         <div className="section-header-v2">
@@ -89,6 +83,9 @@ const MyRaahaPartnerships = () => {
                 </div>
               </div>
             </div>
+            <div className="path-image-v2">
+              <img src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=600&q=80" alt="Discovery Workshop" />
+            </div>
           </div>
 
           {/* Step 2: Proposal */}
@@ -111,6 +108,9 @@ const MyRaahaPartnerships = () => {
                   <span className="io-val">Proposal</span>
                 </div>
               </div>
+            </div>
+            <div className="path-image-v2">
+              <img src="https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=600&q=80" alt="Proposal Discussion" />
             </div>
           </div>
 
@@ -135,6 +135,9 @@ const MyRaahaPartnerships = () => {
                 </div>
               </div>
             </div>
+            <div className="path-image-v2">
+              <img src="https://images.unsplash.com/photo-1434030216411-0b793f4b4173?auto=format&fit=crop&w=600&q=80" alt="Service Selection" />
+            </div>
           </div>
 
           {/* Step 4: Introduction */}
@@ -158,17 +161,23 @@ const MyRaahaPartnerships = () => {
                 </div>
               </div>
             </div>
+            <div className="path-image-v2">
+              <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=600&q=80" alt="Service Introduction" />
+            </div>
           </div>
 
-          {/* Step 5: Delivery */}
+            {/* Step 5: Delivery */}
           <div className="path-step-v2 left">
             <div className="path-marker">05</div>
-            <div className="path-card-v2 delivery-card">
+            <div className="path-card-v2">
               <div className="path-card-header">
-                <div className="path-icon-box"><Rocket /></div>
+                <div className="path-icon-box"><Settings /></div>
                 <h3>Service <span>delivery</span></h3>
               </div>
               <p>We take you through the value journey keeping the key success metrics in mind</p>
+            </div>
+            <div className="path-image-v2">
+              <img src="https://images.unsplash.com/photo-1531538606174-0f90ff5dce83?auto=format&fit=crop&w=600&q=80" alt="Service Delivery" />
             </div>
           </div>
 
@@ -177,7 +186,7 @@ const MyRaahaPartnerships = () => {
             <div className="final-glow"></div>
             <div className="final-content">
               <div className="final-icon"><TrendingUp /></div>
-              <h3 style={{ color: '#ffffff' }}>Value <span style={{ color: '#ffffff' }}>journey</span></h3>
+              <h3 style={{ color: '#ffffff' }}>Value journey</h3>
               <p>The ultimate outcome of our partnership</p>
             </div>
           </div>
@@ -192,7 +201,7 @@ const MyRaahaPartnerships = () => {
           <div className="visual-circle-v2 circle-2-v2"></div>
         </div>
         <div className="asks-content-v2">
-          <span className="section-badge-v2 white-badge-v2">Our mutual commitment</span>
+          <span className="section-badge-v2 white-badge-v2" style={{ color: '#ffffff' }}>Our mutual commitment</span>
           <h2 className="section-title-v2 white-text-v2">What we ask of <span>you</span></h2>
           <p className="section-subtitle-v2 gray-text-v2">We are an early-stage platform. In return for being part of the first cohort, we ask for three things:</p>
           

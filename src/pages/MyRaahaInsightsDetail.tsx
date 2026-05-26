@@ -22,8 +22,6 @@ const MyRaahaInsightsDetail = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    window.scrollTo(0, 0);
-    
     const loadPost = async () => {
       setIsLoading(true);
       if (slug && slug.startsWith('community-')) {
@@ -168,13 +166,22 @@ const MyRaahaInsightsDetail = () => {
               </div>
             </div>
 
-            <h1 className="insight-title">
-              {post.title.split(':').map((part, index) => (
-                <span key={index}>
-                  {index === 0 ? part : <span className="insight-title-subtitle">: {part}</span>}
-                </span>
-              ))}
-            </h1>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '2rem', flexWrap: 'wrap', width: '100%' }}>
+              <h1 className="insight-title" style={{ margin: 0, flex: 1 }}>
+                {post.title.split(':').map((part, index) => (
+                  <span key={index}>
+                    {index === 0 ? part : <span className="insight-title-subtitle">: {part}</span>}
+                  </span>
+                ))}
+              </h1>
+              <button 
+                onClick={() => setIsWriteModalOpen(true)}
+                className="btn-partner"
+                style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.75rem 1.5rem', flexShrink: 0, marginTop: '0.5rem' }}
+              >
+                <PenTool size={18} /> Write for MyRaaha
+              </button>
+            </div>
             
             <p className="insight-excerpt">{post.excerpt}</p>
 
@@ -229,17 +236,6 @@ const MyRaahaInsightsDetail = () => {
             </div>
           </div>
         </header>
-
-        {/* Action Bar Right Below Hero */}
-        <div className="insights-action-bar-hero" style={{ maxWidth: '1400px', margin: '2rem auto -1rem', padding: '0 2rem', display: 'flex', justifyContent: 'flex-end', position: 'relative', zIndex: 10 }}>
-          <button 
-            onClick={() => setIsWriteModalOpen(true)}
-            className="btn-partner"
-            style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.75rem 1.5rem' }}
-          >
-            <PenTool size={18} /> Write for MyRaaha
-          </button>
-        </div>
 
         {/* Featured Image */}
         <div className="insight-featured-image-container">

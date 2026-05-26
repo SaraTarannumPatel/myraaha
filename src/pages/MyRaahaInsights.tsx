@@ -19,15 +19,16 @@ import { supabase } from '@/integrations/supabase/client';
 
 const MyRaahaInsights = () => {
   const navigate = useNavigate();
-  const [activeCategory, setActiveCategory] = useState<string>('All');
+  const [activeCategory, setActiveCategory] = useState<string>(() => {
+    return sessionStorage.getItem('myraaha_active_category') || 'All';
+  });
+
+  useEffect(() => {
+    sessionStorage.setItem('myraaha_active_category', activeCategory);
+  }, [activeCategory]);
   const [isWriteModalOpen, setIsWriteModalOpen] = useState(false);
   const [dbArticles, setDbArticles] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
-
   // Fetch approved user submissions from Supabase
   useEffect(() => {
     const fetchApprovedInsights = async () => {
@@ -98,18 +99,17 @@ const MyRaahaInsights = () => {
         }
         subtitle="Exploring the intersections of academia, industry, and social impact through our latest research, news, and success stories."
         features={[]}
-      />
-
-      {/* Action Bar Right Below Hero */}
-      <div className="insights-action-bar-hero" style={{ maxWidth: '1400px', margin: '2rem auto -2rem', padding: '0 5rem', display: 'flex', justifyContent: 'flex-end', position: 'relative', zIndex: 10 }}>
-        <button 
-          onClick={() => setIsWriteModalOpen(true)}
-          className="btn-partner"
-          style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}
-        >
-          <PenTool size={18} /> Write for MyRaaha
-        </button>
-      </div>
+      >
+        <div style={{ marginTop: '2rem', display: 'flex', justifyContent: 'center' }}>
+          <button 
+            onClick={() => setIsWriteModalOpen(true)}
+            className="btn-partner"
+            style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}
+          >
+            <PenTool size={18} /> Write for MyRaaha
+          </button>
+        </div>
+      </StandardPageHero>
 
       {/* Featured Insight */}
       <section className="insights-featured">
@@ -119,7 +119,7 @@ const MyRaahaInsights = () => {
           </div>
           <div className="featured-content">
             <span className="featured-category">Featured analysis</span>
-            <h2>The career guidance gap: Why India's navigation system is structurally <span>broken</span></h2>
+            <h2>The Career Guidance Gap: Why India's Navigation System is Structurally <span>Broken</span></h2>
             <p>{featuredPost.excerpt}</p>
             <Link to={`/insights/${featuredPost.slug}`} className="btn-partner read-article-btn">Read full analysis</Link>
           </div>

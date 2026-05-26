@@ -1,8 +1,11 @@
 import { Link } from 'react-router-dom';
 import { Linkedin, Twitter, Mail, Instagram, Facebook } from 'lucide-react';
+import { useAuth } from '../contexts/AuthContext';
 import './MyRaahaFooter.css';
 
 const MyRaahaFooter = () => {
+  const { user, signOut } = useAuth();
+
   return (
     <footer className="myraaha-footer-modern">
       <div className="footer-glow"></div>
@@ -46,6 +49,42 @@ const MyRaahaFooter = () => {
             <ul>
               <li><Link to="/insights">Insights & News</Link></li>
               <li><Link to="/careers">Careers</Link></li>
+            </ul>
+          </div>
+
+          <div className="footer-nav-col">
+            <h4><span>Account</span></h4>
+            <ul>
+              {user ? (
+                <>
+                  <li><Link to="/redirect">Dashboard</Link></li>
+                  <li>
+                    <button 
+                      onClick={async () => {
+                        await signOut();
+                      }} 
+                      style={{ 
+                        background: 'none', 
+                        border: 'none', 
+                        color: 'rgba(255, 255, 255, 0.7)', 
+                        font: 'inherit', 
+                        cursor: 'pointer', 
+                        padding: 0, 
+                        textAlign: 'left',
+                        transition: 'all 0.3s ease'
+                      }}
+                      className="footer-signout-btn"
+                    >
+                      Sign Out
+                    </button>
+                  </li>
+                </>
+              ) : (
+                <>
+                  <li><Link to="/auth?mode=login">Sign In</Link></li>
+                  <li><Link to="/auth?mode=signup">Sign Up</Link></li>
+                </>
+              )}
             </ul>
           </div>
           

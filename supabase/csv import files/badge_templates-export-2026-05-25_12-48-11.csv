@@ -1,0 +1,41 @@
+id;type;title;description;icon_emoji;points;category;unlock_criteria;is_active;created_at
+7b72a3ea-17ce-48c6-ad99-305d931f0f07;first_interest;Curiosity Spark;Added your first interest;🧭;10;exploration;;true;2026-03-08 12:46:41.837488+00
+cd180448-d2d5-462e-9183-5b65a80bb001;ten_interests;Explorer;Mapped 10+ interests;🌟;25;exploration;;true;2026-03-08 12:46:41.837488+00
+fb083489-aed2-48c1-a0d7-c6c0f51ac3e0;first_observation;Problem Spotter;Logged your first problem observation;🔍;15;exploration;;true;2026-03-08 12:46:41.837488+00
+c788bee1-f993-4395-9e31-bec37f5b2c3c;first_idea_card;Idea Collector;Interacted with your first idea card;💡;10;exploration;;true;2026-03-08 12:46:41.837488+00
+894626f3-1667-4417-9ec5-e4fcc759b8b0;first_startup_idea;Visionary;Created your first startup idea;🎯;20;exploration;;true;2026-03-08 12:46:41.837488+00
+6107a830-8f40-4880-8089-ca1420ad797a;first_journal;Reflector;Wrote your first journal entry;📝;10;learning;;true;2026-03-08 12:46:41.837488+00
+125a11b2-54d1-425c-9776-21d110e22ed9;five_journals;Deep Thinker;Wrote 5 journal entries;📓;30;learning;;true;2026-03-08 12:46:41.837488+00
+87d30a8d-17d0-4ee3-8d69-b7544906f868;first_learning_track;Student;Started a learning track;📚;15;learning;;true;2026-03-08 12:46:41.837488+00
+946e3dbe-45e7-4350-a5d9-ed2561c11af6;first_capsule;Knowledge Seeker;Completed a learning capsule;🎓;15;learning;;true;2026-03-08 12:46:41.837488+00
+2b23b4d9-8e32-46ba-a0e1-15579e209945;first_project;Creator;Started your first project;🚀;20;building;;true;2026-03-08 12:46:41.837488+00
+12aa7093-f2fa-40f3-85c9-bed2423991a3;first_lab_plan;Lab Scientist;Created your first lab plan;🧪;20;building;;true;2026-03-08 12:46:41.837488+00
+c3e9f299-4d53-42c0-82c0-ad91f2db38a1;first_experiment;Experimenter;Ran your first MVP experiment;⚗️;25;building;;true;2026-03-08 12:46:41.837488+00
+b5c66980-d40e-492c-8018-a42dda5a0b8a;first_milestone;Milestone Maker;Completed your first milestone;🏁;20;building;;true;2026-03-08 12:46:41.837488+00
+bb99f330-bd03-4a80-ace0-0a16a66d3be0;first_validation;Validator;Completed a validation sprint;✅;30;building;;true;2026-03-08 12:46:41.837488+00
+4af8640c-0352-4da5-9159-98c76cfae5c4;first_connection;Networker;Made your first connection;🤝;15;collaboration;;true;2026-03-08 12:46:41.837488+00
+4260d90d-afbd-469d-bc16-4f145c3eca10;five_connections;Connector;Made 5 connections;🌐;35;collaboration;;true;2026-03-08 12:46:41.837488+00
+4cccd881-e501-40d5-88cf-90dc8650a873;first_community_join;Community Member;Joined your first community;👥;10;community;;true;2026-03-08 12:46:41.837488+00
+3ce5e82f-74d7-4a41-92d0-0e802e997060;first_post;Voice Found;Published your first community post;📢;15;community;;true;2026-03-08 12:46:41.837488+00
+f38e2a8f-8acd-4981-a832-ad909de67f80;five_posts;Thought Leader;Published 5 community posts;🎤;35;community;;true;2026-03-08 12:46:41.837488+00
+7696c5fe-0f12-4a5e-b188-07bfabd81d8c;first_checkin;Self-Aware;Completed your first mood check-in;🧘;10;resilience;;true;2026-03-08 12:46:41.837488+00
+7e8e5200-b932-42e2-b1d3-b0a09f176da7;five_checkins;Emotionally Intelligent;Completed 5 mood check-ins;💪;30;resilience;;true;2026-03-08 12:46:41.837488+00
+004b81cc-f1ad-40b2-985c-0f9df7f6405a;first_habit;Habit Former;Created your first mindset habit;🌱;15;resilience;;true;2026-03-08 12:46:41.837488+00
+b46f850c-8e72-4533-980c-59efeba8e1b2;first_challenge;Challenge Accepted;Started a mindset challenge;⚔️;20;resilience;;true;2026-03-08 12:46:41.837488+00
+e974f496-5dde-4c13-8740-62ddeb059a40;first_roadmap;Pathfinder;Created your first roadmap;🗺️;15;leadership;;true;2026-03-08 12:46:41.837488+00
+54efad44-c616-4186-b0ab-e22f2f9f4442;founder_profile;Founder Identity;Completed your founder profile;👤;20;leadership;;true;2026-03-08 12:46:41.837488+00
+0e92ada7-e79f-46f9-90c1-db9853ee8b17;first_path;Direction Set;Selected your first entrepreneurial path;🧭;20;leadership;;true;2026-03-08 12:46:41.837488+00
+18865baa-eac5-49ab-b91e-392d5798e927;first_moodboard;Vision Architect;Created your first moodboard;🎨;15;leadership;;true;2026-03-08 12:46:41.837488+00
+5600cbf5-e2b0-445b-bf0e-9192c13cbf6a;five_skills;Skill Builder;Added 5 skills;🎯;25;learning;;true;2026-03-08 12:46:41.837488+00
+31060b80-48bc-4855-b995-64948f0ef483;ten_skills;Skill Master;Added 10 skills;🏅;50;learning;;true;2026-03-08 12:46:41.837488+00
+98928fd3-ce87-40af-beb1-98cc8160f628;streak_3;Consistent;3-day activity streak;🔥;30;resilience;;true;2026-03-08 12:46:41.837488+00
+98655f33-23a0-4231-ba9f-77c56e8015fe;streak_7;Dedicated;7-day activity streak;⚡;50;resilience;;true;2026-03-08 12:46:41.837488+00
+696196ef-3afd-44e7-b348-581de4455a80;streak_14;Unstoppable;14-day activity streak;💎;75;resilience;;true;2026-03-08 12:46:41.837488+00
+dd79e269-55e5-4267-ab3d-15320767824b;streak_30;Iron Will;30-day activity streak;🏆;100;resilience;;true;2026-03-08 12:46:41.837488+00
+856d4a23-e5a3-4b19-818b-465790593e84;hundred_points;Centurion;Earned 100 total points;💯;25;leadership;;true;2026-03-08 12:46:41.837488+00
+bceb793b-8a71-485a-b3f1-7d66ad6c5b94;five_hundred_points;Legend;Earned 500 total points;👑;50;leadership;;true;2026-03-08 12:46:41.837488+00
+bae56f2e-73de-4ad6-b6b9-7f7ff0c51ad8;first_application;Go-Getter;Submitted your first job application;📮;15;exploration;;true;2026-03-08 12:46:41.837488+00
+4cf31bcd-90be-4eea-a288-7b5005bd5f38;first_mentor_session;Guided;Completed your first mentor session;🎓;20;collaboration;;true;2026-03-08 12:46:41.837488+00
+7684c216-496b-4ff9-ad51-93db3af52ca2;first_peer_circle;Circle Joiner;Joined your first peer circle;⭕;15;community;;true;2026-03-08 12:46:41.837488+00
+e39619e4-c08c-44d8-89f4-3e8b0b2b2b51;first_challenge_complete;Challenge Champion;Completed a project challenge;🏅;30;building;;true;2026-03-08 12:46:41.837488+00
+16af66dd-f4db-4d7a-8c94-3bd99939c57c;first_reflection;Thoughtful;Wrote your first project reflection;💭;10;learning;;true;2026-03-08 12:46:41.837488+00

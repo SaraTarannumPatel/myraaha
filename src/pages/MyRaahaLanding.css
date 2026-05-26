@@ -11,9 +11,8 @@
 
 /* Hero Section */
 .myraaha-hero {
-  padding: 0 5rem var(--section-spacing) !important;
-  padding-top: calc(80px + 4rem) !important; /* Force ample clearance below fixed navbar */
-  margin-top: 0 !important; /* Removed negative tuck to perfectly clear navbar */
+  padding: 0 5rem var(--section-spacing);
+  margin-top: -40px !important; /* Force upward shift */
   display: grid;
   grid-template-columns: 1.1fr 0.9fr;
   gap: 4rem;
@@ -41,12 +40,12 @@
 }
 
 .hero-title {
-  font-family: 'Poppins', sans-serif !important;
-  font-size: 2.75rem !important;
-  font-weight: 600 !important;
-  line-height: 1.1 !important;
+  
+  
+  
+  line-height: 1.1;
   margin-bottom: 1.5rem;
-  color: var(--myraaha-text-dark) !important;
+  color: var(--myraaha-text-dark);
 }
 
 .hero-title span {
@@ -79,14 +78,16 @@
   justify-content: flex-start !important; /* Force left align content */
   background-color: #5500cb !important;
   color: white !important;
+  padding: 0.75rem 2.5rem;
   border-radius: 99px;
   font-weight: 500;
   margin: 20px 0 3rem 0 !important; /* Added 20px top gap to title */
-  font-size: 1.15rem !important; /* Reduced premium font size */
-  width: max-content !important;
-  max-width: max-content !important; /* Maintain clean left aligned pill wrapping */
+  font-size: 1.4rem !important;
+  width: 100%;
+  max-width: 820px !important;
   white-space: nowrap !important;
-  padding: 0.65rem 2.2rem !important; /* Reduced horizontal capsule padding */
+  width: max-content !important;
+  padding: 0.85rem 3.5rem !important; /* Increased horizontal padding/content width */
   text-align: left !important;
 }
 
@@ -134,15 +135,11 @@
 
 .hero-image-container {
   position: relative;
-  margin-top: 0 !important; /* Cleared negative tuck to ensure perfect navbar clearance */
+  margin-top: -100px; /* Moved up by 100px */
 }
 
 .hero-image {
-  width: 75% !important; /* Reduced width elegantly */
-  margin: 0 auto !important; /* Center the image in its container */
-  display: block !important;
-  max-height: 380px !important; /* Reduced vertical bulk elegantly */
-  object-fit: cover !important; /* Maintain sharp visual framing */
+  width: 100%;
   border-radius: 32px;
   box-shadow: 0 20px 50px rgba(0,0,0,0.1);
 }
@@ -165,8 +162,8 @@
     white-space: normal !important;
     width: auto !important;
     max-width: 100% !important;
-    font-size: 1.05rem !important;
-    padding: 0.55rem 1.8rem !important;
+    font-size: 1.2rem !important;
+    padding: 0.75rem 2rem !important;
     display: inline-flex !important;
     justify-content: center !important;
     text-align: center !important;
@@ -277,19 +274,16 @@
 }
 
 .mission-title {
-  font-family: 'Poppins', sans-serif !important;
-  font-size: 2.2rem !important;
-  font-weight: 700 !important;
-  color: #ffffff !important; /* Force high contrast white */
-  line-height: 1.1 !important;
-  margin-bottom: 2rem !important;
-  position: relative !important;
-  z-index: 2 !important;
+  color: var(--myraaha-blue);
+  line-height: 1.1;
+  margin-bottom: 2rem;
+  position: relative;
+  z-index: 2;
 }
 
 .mission-title span {
-  color: #f3e8ff !important; /* Premium lavender accent highlight */
-  font-style: normal !important;
+  color: var(--myraaha-blue);
+  font-style: normal;
 }
 
 .mission-subtitle {
@@ -2663,29 +2657,3 @@
     border-radius: 16px !important;
   }
 }
-
-/* Force all card titles and their spans in the landing page to be bold */
-.myraaha-landing .mission-card h3,
-.myraaha-landing .mission-card h3 span,
-.myraaha-landing .service-card h3,
-.myraaha-landing .service-card h3 span,
-.myraaha-landing .stakeholder-card h3,
-.myraaha-landing .stakeholder-card h3 span,
-.myraaha-landing .beacon-card h3,
-.myraaha-landing .beacon-card h3 span,
-.myraaha-landing .beacon-card-header h3,
-.myraaha-landing .beacon-card-header h3 span {
-  font-weight: 700 !important;
-}
-
-/* Increase vertical spacing between sentences in the Hero Title on Home page */
-.myraaha-landing .hero-title {
-  line-height: 1.55 !important;
-}
-
-/* Move the left hand side sub-section of the hero section of the home page 50px down */
-.myraaha-landing .myraaha-hero .hero-content {
-  transform: translateY(50px) !important;
-}
-
-

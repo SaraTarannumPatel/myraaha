@@ -10,7 +10,6 @@ import { careersData } from '../../data/careersData';
 
 const Facilitator = () => {
   const navigate = useNavigate();
-  useEffect(() => { window.scrollTo(0, 0); }, []);
 
   const facilitatorRoles = careersData.filter(role => role.classification === 'Facilitator');
 

@@ -19,53 +19,16 @@
   z-index: 0;
 }
 
-.footer-cta-btns {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 1.5rem;
-  margin: 0 auto;
-}
-
-.footer-cta-btns .btn-cta-primary,
-.footer-cta-btns .btn-cta-secondary {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0.85rem 2.25rem;
-  font-family: 'Poppins', sans-serif;
-  font-size: 1rem;
-  font-weight: 600;
-  border-radius: 99px;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  text-decoration: none !important;
-  cursor: pointer;
-  border: 2px solid transparent;
-}
-
 .footer-cta-btns .btn-cta-primary {
   background: white !important;
   color: var(--myraaha-blue) !important;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  border-radius: 99px !important;
 }
 
 .footer-cta-btns .btn-cta-primary:hover {
-  background: #f8fafc !important;
-  color: var(--myraaha-blue) !important;
+  background: #f3e8ff !important;
   transform: translateY(-2px);
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
-}
-
-.footer-cta-btns .btn-cta-secondary {
-  background: transparent !important;
-  color: white !important;
-  border: 2px solid rgba(255, 255, 255, 0.4) !important;
-}
-
-.footer-cta-btns .btn-cta-secondary:hover {
-  background: rgba(255, 255, 255, 0.1) !important;
-  border-color: white !important;
-  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
 }
 
 .footer-top-cta {
@@ -94,8 +57,20 @@
 }
 
 .footer-cta-btn {
-  background: white;
-  color: var(--myraaha-blue);
+  background: rgba(211, 211, 211, 0.1);
+  color: #000000;
+  border: 1px solid #e2e8f0;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.8rem 2.25rem;
+  border-radius: 99px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  text-decoration: none;
+  line-height: 1.2;
   font-size: 1rem !important;
   padding: 1rem 2.5rem !important;
   border-radius: 99px !important;
@@ -164,7 +139,7 @@
 
 .footer-links-wrapper {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   gap: 3rem;
 }
 
@@ -194,8 +169,8 @@
   display: block;
 }
 
-.footer-nav-col a:hover {
-  color: white;
+.footer-nav-col a:hover, .footer-signout-btn:hover {
+  color: white !important;
   transform: translateX(4px);
   display: inline-block;
 }
