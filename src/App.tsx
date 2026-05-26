@@ -13,8 +13,6 @@ import MyRaahaContact from "./pages/MyRaahaContact";
 import MyRaahaInsights from "./pages/MyRaahaInsights";
 import MyRaahaInsightsDetail from "./pages/MyRaahaInsightsDetail";
 import NotFound from "./pages/NotFound";
-import SmartRedirect from "./components/SmartRedirect";
-import Layout from "./components/Layout";
 // Landing site sub-pages
 import LandingCareers from "./pages/landing/Careers";
 import CareerRole from "./pages/landing/CareerRole";
