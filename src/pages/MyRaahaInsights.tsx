@@ -27,11 +27,11 @@ const MyRaahaInsights = () => {
   useEffect(() => {
     const fetchApprovedInsights = async () => {
       try {
-        const { data, error } = await supabase
-          .from("insights_submissions")
+        const { data: rawData, error } = await (supabase as any)
+          .from("public_insights")
           .select("*")
-          .eq("status", "approved")
           .order("created_at", { ascending: false });
+        const data = rawData as any[] | null;
 
         if (error) throw error;
 

@@ -13,6 +13,7 @@ interface StandardPageHeroProps {
   subtitle: string | React.ReactNode;
   features: HeroFeature[];
   className?: string;
+  children?: React.ReactNode;
 }
 
 const StandardPageHero: React.FC<StandardPageHeroProps> = ({
@@ -21,6 +22,7 @@ const StandardPageHero: React.FC<StandardPageHeroProps> = ({
   subtitle,
   features,
   className = "",
+  children,
 }) => {
   return (
     <header className={`standard-page-hero ${className}`}>
@@ -53,6 +55,7 @@ const StandardPageHero: React.FC<StandardPageHeroProps> = ({
           })}
         </div>
       )}
+      {children}
     </header>
   );
 };
