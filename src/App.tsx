@@ -13,6 +13,8 @@ import MyRaahaContact from "./pages/MyRaahaContact";
 import MyRaahaInsights from "./pages/MyRaahaInsights";
 import MyRaahaInsightsDetail from "./pages/MyRaahaInsightsDetail";
 import NotFound from "./pages/NotFound";
+import SmartRedirect from "./components/SmartRedirect";
+import Layout from "./components/Layout";
 // Landing site sub-pages
 import LandingCareers from "./pages/landing/Careers";
 import CareerRole from "./pages/landing/CareerRole";
@@ -112,11 +114,46 @@ const App = () => (
             <Route path="/auth" element={<Auth />} />
             <Route path="/guest" element={<GuestEntry />} />
             <Route path="/verify-otp" element={<OTPVerification />} />
-            <Route path="/onboarding" element={<ProtectedRoute><Welcome /></ProtectedRoute>} />
-            <Route path="/onboarding/user-type" element={<ProtectedRoute><UserTypeSelection /></ProtectedRoute>} />
-            <Route path="/onboarding/journey" element={<ProtectedRoute><JourneyDiscovery /></ProtectedRoute>} />
-            <Route path="/onboarding/consent" element={<ProtectedRoute><ConsentStep /></ProtectedRoute>} />
-            <Route path="/dashboard" element={<ProtectedRoute><DashboardLayout /></ProtectedRoute>}>
+            <Route
+              path="/onboarding"
+              element={
+                <ProtectedRoute>
+                  <Welcome />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/onboarding/user-type"
+              element={
+                <ProtectedRoute>
+                  <UserTypeSelection />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/onboarding/journey"
+              element={
+                <ProtectedRoute>
+                  <JourneyDiscovery />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/onboarding/consent"
+              element={
+                <ProtectedRoute>
+                  <ConsentStep />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/dashboard"
+              element={
+                <ProtectedRoute>
+                  <DashboardLayout />
+                </ProtectedRoute>
+              }
+            >
               <Route index element={<Dashboard />} />
               <Route path="insights" element={<Insights />} />
               {/* Career */}
