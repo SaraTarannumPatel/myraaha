@@ -12,9 +12,8 @@ import MyRaahaPartnerships from "./pages/MyRaahaPartnerships";
 import MyRaahaContact from "./pages/MyRaahaContact";
 import MyRaahaInsights from "./pages/MyRaahaInsights";
 import MyRaahaInsightsDetail from "./pages/MyRaahaInsightsDetail";
+import MyRaahaCareers from "./pages/MyRaahaCareers";
 import NotFound from "./pages/NotFound";
-// Landing site sub-pages
-import LandingCareers from "./pages/landing/Careers";
 import CareerRole from "./pages/landing/CareerRole";
 import CareerCoreTeam from "./pages/landing/CareerCoreTeam";
 import CareerIntern from "./pages/landing/CareerIntern";
