@@ -16,9 +16,10 @@ const MyRaahaNewsletter = () => {
     setFeedbackMsg('');
 
     try {
+      const { data: { user } } = await supabase.auth.getUser();
       const { error } = await supabase
         .from('newsletter_subscriptions')
-        .insert([{ email: email.trim().toLowerCase() }]);
+        .insert([{ email: email.trim().toLowerCase(), user_id: user?.id ?? null }]);
 
       if (error) {
         if (error.code === '23505') {

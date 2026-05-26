@@ -68,6 +68,7 @@ const WriteForMyRaahaModal = ({ isOpen, onClose }: WriteForMyRaahaModalProps) =>
         if (data) coverImageUrl = data.publicUrl;
       }
 
+      const { data: { user } } = await supabase.auth.getUser();
       const { error: insertError } = await supabase
         .from('insights_submissions')
         .insert([{
@@ -79,6 +80,7 @@ const WriteForMyRaahaModal = ({ isOpen, onClose }: WriteForMyRaahaModalProps) =>
           content: content.trim(),
           cover_image_url: coverImageUrl || null,
           status: 'pending',
+          user_id: user?.id ?? null,
         }]);
 
       if (insertError) throw insertError;

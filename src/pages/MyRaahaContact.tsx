@@ -45,12 +45,14 @@ const MyRaahaContact = () => {
     setErrorMsg("");
 
     try {
+      const { data: { user } } = await supabase.auth.getUser();
       const { error } = await supabase.from("contact_submissions").insert([
         {
           name: formData.name.trim(),
           email: formData.email.trim().toLowerCase(),
           type: formData.type,
           message: formData.message.trim(),
+          user_id: user?.id ?? null,
         },
       ]);
 
