@@ -28,9 +28,8 @@ const MyRaahaInsights = () => {
     const fetchApprovedInsights = async () => {
       try {
         const { data, error } = await supabase
-          .from("insights_submissions")
+          .from("public_insights" as any)
           .select("*")
-          .eq("status", "approved")
           .order("created_at", { ascending: false });
 
         if (error) throw error;

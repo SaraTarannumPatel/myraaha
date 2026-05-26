@@ -42,7 +42,7 @@ const MyRaahaInsightsDetail = () => {
       if (slug && slug.startsWith("community-")) {
         try {
           const dbId = slug.substring("community-".length);
-          const { data, error } = await supabase.from("insights_submissions").select("*").eq("id", dbId).single();
+          const { data, error } = await supabase.from("public_insights" as any).select("*").eq("id", dbId).single();
 
           if (error) throw error;
 
