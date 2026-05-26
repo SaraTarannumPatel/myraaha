@@ -75,8 +75,14 @@ const RoleDetails = () => {
     setIsSubmitting(true);
     setErrorMsg('');
     try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) {
+        setErrorMsg('Please sign in to submit your application.');
+        setIsSubmitting(false);
+        return;
+      }
       const fileExt = resumeFile.name.split('.').pop();
-      const fileName = `${Date.now()}-${Math.random().toString(36).substring(2, 11)}.${fileExt}`;
+      const fileName = `${user.id}/${Date.now()}-${Math.random().toString(36).substring(2, 11)}.${fileExt}`;
       const { error: uploadError } = await supabase.storage
         .from('resumes')
         .upload(fileName, resumeFile, { cacheControl: '3600', upsert: false });
@@ -93,6 +99,7 @@ const RoleDetails = () => {
         linkedin_url: linkedinUrl.trim() || null,
         resume_url: data.publicUrl,
         status: 'pending',
+        user_id: user.id,
       }]);
       if (insertError) throw insertError;
 
