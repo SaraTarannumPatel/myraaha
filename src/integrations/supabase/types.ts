@@ -326,6 +326,7 @@ export type Database = {
           role_title: string
           status: string
           updated_at: string
+          user_id: string | null
         }
         Insert: {
           created_at?: string
@@ -338,6 +339,7 @@ export type Database = {
           role_title: string
           status?: string
           updated_at?: string
+          user_id?: string | null
         }
         Update: {
           created_at?: string
@@ -350,6 +352,7 @@ export type Database = {
           role_title?: string
           status?: string
           updated_at?: string
+          user_id?: string | null
         }
         Relationships: []
       }
@@ -1134,6 +1137,7 @@ export type Database = {
           message: string
           name: string
           type: string
+          user_id: string | null
         }
         Insert: {
           created_at?: string
@@ -1142,6 +1146,7 @@ export type Database = {
           message: string
           name: string
           type: string
+          user_id?: string | null
         }
         Update: {
           created_at?: string
@@ -1150,6 +1155,7 @@ export type Database = {
           message?: string
           name?: string
           type?: string
+          user_id?: string | null
         }
         Relationships: []
       }
@@ -2227,6 +2233,7 @@ export type Database = {
           id: string
           status: string
           title: string
+          user_id: string | null
         }
         Insert: {
           author_email?: string | null
@@ -2240,6 +2247,7 @@ export type Database = {
           id?: string
           status?: string
           title: string
+          user_id?: string | null
         }
         Update: {
           author_email?: string | null
@@ -2253,6 +2261,7 @@ export type Database = {
           id?: string
           status?: string
           title?: string
+          user_id?: string | null
         }
         Relationships: []
       }
@@ -4121,16 +4130,19 @@ export type Database = {
           created_at: string
           email: string
           id: string
+          user_id: string | null
         }
         Insert: {
           created_at?: string
           email: string
           id?: string
+          user_id?: string | null
         }
         Update: {
           created_at?: string
           email?: string
           id?: string
+          user_id?: string | null
         }
         Relationships: []
       }
@@ -7826,7 +7838,45 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      public_insights: {
+        Row: {
+          author_name: string | null
+          author_title: string | null
+          category: string | null
+          content: string | null
+          cover_image_url: string | null
+          created_at: string | null
+          excerpt: string | null
+          id: string | null
+          status: string | null
+          title: string | null
+        }
+        Insert: {
+          author_name?: string | null
+          author_title?: string | null
+          category?: string | null
+          content?: string | null
+          cover_image_url?: string | null
+          created_at?: string | null
+          excerpt?: string | null
+          id?: string | null
+          status?: string | null
+          title?: string | null
+        }
+        Update: {
+          author_name?: string | null
+          author_title?: string | null
+          category?: string | null
+          content?: string | null
+          cover_image_url?: string | null
+          created_at?: string | null
+          excerpt?: string | null
+          id?: string | null
+          status?: string | null
+          title?: string | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       consume_entitlement: {
