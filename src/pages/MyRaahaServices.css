@@ -1,13 +1,12 @@
 .services-page {
-  
   color: var(--myraaha-text-dark);
 }
 
-.services-hero-title, .split-content h2, .services-cta h2, h2 {
-  
-  
+.services-hero-title,
+.split-content h2,
+.services-cta h2,
+h2 {
   line-height: 1.1;
-  
 }
 
 .services-hero-title {
@@ -15,10 +14,9 @@
   margin-bottom: 1.5rem;
 }
 
-.split-content h2, h2 {
-  
+.split-content h2,
+h2 {
   margin-bottom: 1.5rem;
-  
 }
 
 /* Services Hero */
@@ -90,7 +88,7 @@
   flex: 1;
   border-radius: 24px;
   overflow: hidden;
-  box-shadow: 0 20px 50px rgba(0,0,0,0.1);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.1);
   transform: translateY(-40px);
 }
 
@@ -105,16 +103,12 @@
 }
 
 .split-content h2 {
-  
-  
   margin-bottom: 1.5rem;
 }
 
 .split-content p {
   color: var(--myraaha-text-gray);
   margin-bottom: 2.5rem;
-  
-  
 }
 
 .bullet-list {
@@ -166,9 +160,11 @@
   background: var(--myraaha-bg-grey);
   border-radius: 24px;
   overflow: hidden;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
   border: 1px solid #f1f5f9;
-  transition: transform 0.3s, box-shadow 0.3s;
+  transition:
+    transform 0.3s,
+    box-shadow 0.3s;
 }
 
 .incubation-extension-card:hover {
@@ -257,10 +253,8 @@
 }
 
 .platform-mini-card p {
-  
   color: var(--myraaha-text-gray);
   margin: 0;
-  
 }
 
 .key-benefits-list {
@@ -301,7 +295,7 @@
   background: var(--myraaha-bg-grey);
   border-radius: 20px;
   padding: 2rem;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.02);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
   border: 1px solid #f1f5f9;
 }
 
@@ -325,9 +319,7 @@
 }
 
 .process-card p {
-  
   color: var(--myraaha-text-gray);
-  
 }
 
 /* CTA Section */
@@ -348,10 +340,8 @@
 }
 
 .services-hero p {
-  
   max-width: 700px;
   margin: 0 auto;
-  
 }
 
 /* Handled by global rule */
@@ -362,22 +352,16 @@ h3 {
 }
 
 p {
-  
-  
 }
 
 .services-cta h2 {
   margin-bottom: 1.5rem;
-  
-  
 }
 
 .services-cta p {
   opacity: 0.7;
   max-width: 600px;
   margin: 0 auto 3rem;
-  
-  
 }
 
 .btn-cta-white {
@@ -392,7 +376,8 @@ p {
 
 /* Responsive Improvements */
 @media (max-width: 1024px) {
-  .split-section, .beacon-platform-grid {
+  .split-section,
+  .beacon-platform-grid {
     flex-direction: column !important;
     gap: 3rem;
     padding-left: 2rem !important;
@@ -401,7 +386,8 @@ p {
   .split-section.reverse {
     flex-direction: column !important;
   }
-  .process-grid, .incubation-extension-grid {
+  .process-grid,
+  .incubation-extension-grid {
     grid-template-columns: repeat(2, 1fr);
   }
   .beacon-platform-image {
@@ -417,11 +403,11 @@ p {
     --section-spacing-mobile: 5rem;
   }
 
-  .services-hero, 
-  .split-section, 
-  .beacon-platform-section, 
-  .our-process-section, 
-  .services-cta, 
+  .services-hero,
+  .split-section,
+  .beacon-platform-section,
+  .our-process-section,
+  .services-cta,
   .incubation-program-section {
     padding-top: var(--section-spacing-mobile) !important;
     padding-bottom: var(--section-spacing-mobile) !important;
@@ -440,7 +426,7 @@ p {
     max-width: 500px;
     margin: 0 auto;
     border-radius: 28px !important;
-    box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
   }
 
   .split-content h2 {
@@ -472,7 +458,7 @@ p {
     padding: 0.75rem 1rem;
     background: white;
     border-radius: 12px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.02);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.02);
     border: 1px solid #f1f5f9;
   }
 
@@ -494,7 +480,7 @@ p {
   .incubation-extension-card {
     background: white;
     border-radius: 32px !important;
-    box-shadow: 0 15px 40px rgba(0,0,0,0.04) !important;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.04) !important;
     border: 1px solid #f1f5f9;
   }
 
@@ -582,11 +568,11 @@ p {
 
 /* Middle Mobile Optimization (Standard Smartphones 360px - 430px) */
 @media (max-width: 480px) {
-  .services-hero, 
-  .split-section, 
-  .beacon-platform-section, 
-  .our-process-section, 
-  .services-cta, 
+  .services-hero,
+  .split-section,
+  .beacon-platform-section,
+  .our-process-section,
+  .services-cta,
   .incubation-program-section {
     padding: 4rem 1.25rem !important;
   }
@@ -614,9 +600,9 @@ p {
 
 /* Extra-Small Mobile Optimization (290px Viewports) */
 @media (max-width: 320px) {
-  .services-hero, 
-  .split-section, 
-  .beacon-platform-section, 
+  .services-hero,
+  .split-section,
+  .beacon-platform-section,
   .incubation-program-section {
     padding: 3.5rem 1rem !important;
   }

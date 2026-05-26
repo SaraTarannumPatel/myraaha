@@ -33,7 +33,6 @@
 }
 
 .hero-title-v2 {
-  
   font-size: clamp(2.5rem, 6vw, 3.75rem);
   font-weight: 700;
   line-height: 1.1;
@@ -86,7 +85,7 @@
 .hero-image-v2 {
   width: 100%;
   border-radius: 32px;
-  box-shadow: 0 20px 50px rgba(0,0,0,0.1);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.1);
 }
 
 /* Section Common V2 */
@@ -124,7 +123,6 @@
   line-height: 1.6;
 }
 
-
 /* Our Engagement Model V2 - Dynamic Path */
 .partnerships-engagement-v2 {
   padding: var(--section-spacing) 5rem;
@@ -145,10 +143,11 @@
   top: 0;
   bottom: 100px;
   width: 2px;
-  background: linear-gradient(to bottom, 
-    rgba(85, 0, 203, 0.05) 0%, 
-    var(--myraaha-blue) 20%, 
-    var(--myraaha-blue) 80%, 
+  background: linear-gradient(
+    to bottom,
+    rgba(85, 0, 203, 0.05) 0%,
+    var(--myraaha-blue) 20%,
+    var(--myraaha-blue) 80%,
     rgba(85, 0, 203, 0.05) 100%
   );
   transform: translateX(-50%);
@@ -156,21 +155,55 @@
 }
 
 .path-step-v2 {
-  display: flex;
-  margin-bottom: 3.5rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6rem;
+  align-items: center;
+  margin-bottom: 5rem;
   position: relative;
   z-index: 2;
   width: 100%;
 }
 
-.path-step-v2.left {
-  justify-content: flex-start;
-  padding-right: 50%;
+.path-step-v2.left .path-card-v2 {
+  grid-column: 1;
+  grid-row: 1;
 }
 
-.path-step-v2.right {
-  justify-content: flex-end;
-  padding-left: 50%;
+.path-step-v2.left .path-image-v2 {
+  grid-column: 2;
+  grid-row: 1;
+}
+
+.path-step-v2.right .path-card-v2 {
+  grid-column: 2;
+  grid-row: 1;
+}
+
+.path-step-v2.right .path-image-v2 {
+  grid-column: 1;
+  grid-row: 1;
+}
+
+.path-image-v2 {
+  width: 100%;
+  height: 280px;
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03);
+  border: 1px solid #eef2f6;
+  position: relative;
+}
+
+.path-image-v2 img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.path-step-v2:hover .path-image-v2 img {
+  transform: scale(1.06);
 }
 
 .path-marker {
@@ -199,19 +232,9 @@
   padding: 2rem;
   border-radius: 24px;
   border: 1px solid #f1f5f9;
-  width: 90%;
+  width: 100%;
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
-}
-
-.path-step-v2.left .path-card-v2 {
-  margin-right: 1.5rem;
-  box-shadow: -10px 10px 30px rgba(0,0,0,0.02);
-}
-
-.path-step-v2.right .path-card-v2 {
-  margin-left: 1.5rem;
-  box-shadow: 10px 10px 30px rgba(0,0,0,0.02);
 }
 
 .path-card-v2:hover {
@@ -299,8 +322,12 @@
   color: var(--myraaha-text-dark);
 }
 
-.io-item.input .io-tag { color: #3b82f6; }
-.io-item.output .io-tag { color: var(--myraaha-blue); }
+.io-item.input .io-tag {
+  color: #3b82f6;
+}
+.io-item.output .io-tag {
+  color: var(--myraaha-blue);
+}
 
 .delivery-card {
   background: #fdfbff;
@@ -349,7 +376,10 @@
   margin: 0 auto 2rem;
 }
 
-.final-icon svg { width: 40px; height: 40px; }
+.final-icon svg {
+  width: 40px;
+  height: 40px;
+}
 
 .final-content h3 {
   color: white;
@@ -364,24 +394,36 @@
 }
 
 @media (max-width: 1024px) {
-  .path-step-v2.left, .path-step-v2.right {
+  .path-step-v2 {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .path-step-v2.left,
+  .path-step-v2.right {
     padding: 0 0 0 4rem;
     justify-content: flex-start;
   }
-  
+
   .path-line {
     left: 22px;
     transform: none;
   }
-  
+
   .path-marker {
     left: 22px;
     transform: translateX(-50%);
   }
-  
+
   .path-card-v2 {
     width: 100%;
     margin: 0 !important;
+  }
+
+  .path-image-v2 {
+    height: 220px;
+    border-radius: 20px;
   }
 
   .path-io-line {
@@ -399,31 +441,29 @@
     padding-left: 1.25rem !important;
     padding-right: 1.25rem !important;
   }
-  
+
   .path-step-v2 {
     padding-left: 3rem;
   }
-  
+
   .path-card-v2 {
     padding: 1.5rem;
   }
-  
+
   .path-io-grid {
     grid-template-columns: 1fr;
     gap: 1.25rem;
   }
-  
+
   .final-content {
     padding: 3rem 1.5rem;
     border-radius: 24px;
   }
-  
+
   .final-content h3 {
     font-size: 1.4rem !important;
   }
 }
-
-
 
 /* Asks Section V2 (Mission style with visuals) */
 .partnerships-asks-v2 {
@@ -480,15 +520,20 @@
 .white-badge-v2 {
   background: rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(10px);
-  border: 1px solid rgba(255,255,255,0.2);
+  border: 1px solid rgba(255, 255, 255, 0.2);
   color: #ffffff !important;
   padding: 0.5rem 1.5rem;
   border-radius: 99px;
   margin-bottom: 2rem;
 }
 
-.white-text-v2 { color: white !important; }
-.gray-text-v2 { opacity: 0.8; color: #cbd5e1 !important; }
+.white-text-v2 {
+  color: white !important;
+}
+.gray-text-v2 {
+  opacity: 0.8;
+  color: #cbd5e1 !important;
+}
 
 .asks-grid-v2 {
   display: grid;
@@ -524,7 +569,7 @@
   align-items: center;
   justify-content: center;
   margin: 0 auto 2.5rem;
-  border: 1px solid rgba(255,255,255,0.1);
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .ask-icon-v2 svg {
@@ -544,7 +589,6 @@
   font-size: 1rem;
 }
 
-
 /* CTA Section V2 */
 .partnerships-cta-v2 {
   padding: var(--section-spacing) 5rem;
@@ -559,7 +603,6 @@
 }
 
 .cta-title-v2 {
-  
   font-size: clamp(2.5rem, 6vw, 3.5rem);
   font-weight: 700;
   margin-bottom: 1.5rem;
@@ -593,7 +636,7 @@
 
 .btn-cta-primary-v2:hover {
   transform: scale(1.05);
-  box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
 }
 
 /* /* ==========================================================================
@@ -657,6 +700,8 @@
     margin-bottom: 2rem;
     position: relative;
     display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
     width: 100%;
     box-sizing: border-box;
   }
@@ -684,7 +729,7 @@
     background: white;
     padding: 1.5rem 1.25rem;
     border-radius: 20px;
-    box-shadow: 0 8px 25px rgba(0,0,0,0.03) !important;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.03) !important;
     border: 1px solid #f1f5f9;
     text-align: center;
     box-sizing: border-box;
@@ -846,7 +891,8 @@
   .path-step-v2 {
     padding-left: 3.25rem;
   }
-  .path-line, .path-marker {
+  .path-line,
+  .path-marker {
     left: 18px;
   }
   .path-marker {
@@ -868,7 +914,8 @@
     padding-left: 3.25rem;
   }
 
-  .path-line, .path-marker {
+  .path-line,
+  .path-marker {
     left: 18px;
   }
 

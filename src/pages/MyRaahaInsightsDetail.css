@@ -3,7 +3,7 @@
 .insights-detail-page {
   background-color: #ffffff;
   color: var(--myraaha-text-dark, #0f172a);
-  font-family: 'Inter', sans-serif;
+  font-family: "Inter", sans-serif;
   overflow-x: hidden;
 }
 
@@ -66,13 +66,13 @@
   font-size: 0.85rem;
   font-weight: 700;
   cursor: pointer;
-  box-shadow: 0 4px 10px rgba(85,0,203,0.15);
+  box-shadow: 0 4px 10px rgba(85, 0, 203, 0.15);
   transition: all 0.3s;
 }
 
 .insight-write-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 15px rgba(85,0,203,0.25);
+  box-shadow: 0 6px 15px rgba(85, 0, 203, 0.25);
 }
 
 .insight-back-link {
@@ -100,7 +100,7 @@
 }
 
 .insight-title {
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
   font-size: 3.5rem;
   font-weight: 800;
   line-height: 1.15;
@@ -272,7 +272,7 @@
   max-height: 600px;
   object-fit: cover;
   border-radius: 24px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
 }
 
 /* Article Layout (2-Column) */
@@ -301,12 +301,12 @@
   padding-right: 8px;
   padding-left: 3px;
   color: var(--myraaha-blue, #5500cb);
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
   font-weight: 800;
 }
 
 .insight-h3 {
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
   font-size: 2rem;
   font-weight: 800;
   color: var(--myraaha-text-dark, #0f172a);
@@ -315,7 +315,7 @@
 }
 
 .insight-h4 {
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
   font-size: 1.5rem;
   font-weight: 700;
   color: var(--myraaha-text-dark, #0f172a);
@@ -386,7 +386,7 @@
 }
 
 .insight-widget-title {
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
   font-size: 1.1rem;
   font-weight: 700;
   margin-bottom: 1rem;
@@ -486,7 +486,7 @@
   display: flex;
   align-items: center;
   gap: 3.5rem;
-  box-shadow: 0 15px 40px rgba(0,0,0,0.02);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.02);
 }
 
 .insight-author-large-avatar {
@@ -511,7 +511,7 @@
 }
 
 .insight-author-bio h3 {
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
   font-size: 2.1rem;
   font-weight: 800;
   color: var(--myraaha-text-dark, #0f172a);
@@ -544,7 +544,7 @@
   justify-content: center;
   border-radius: 50%;
   border: 1px solid #e2e8f0;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.02);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.02);
 }
 
 .insight-author-socials a:hover {
@@ -584,7 +584,7 @@
   flex-shrink: 0;
   border-radius: 10px;
   overflow: hidden;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
 }
 
 .insight-sidebar-related-image img {
@@ -608,7 +608,7 @@
 }
 
 .insight-sidebar-related-title {
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
   font-size: 0.9rem;
   font-weight: 700;
   color: var(--myraaha-text-dark, #0f172a);
@@ -639,7 +639,7 @@
 }
 
 .not-found-container h2 {
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
   font-size: 2.5rem;
   font-weight: 800;
   margin-bottom: 1rem;
@@ -657,7 +657,8 @@
 }
 
 @media (max-width: 768px) {
-  .insight-header-container, .insight-header-section {
+  .insight-header-container,
+  .insight-header-section {
     text-align: center;
     display: flex;
     flex-direction: column;
@@ -677,7 +678,7 @@
   .insight-header-section {
     padding: 6rem 1.5rem 2rem;
   }
-  
+
   .insight-title {
     font-size: 2.25rem;
   }
@@ -698,7 +699,7 @@
     align-items: center;
     text-align: center;
   }
-  
+
   .insight-horizontal-toolbar {
     width: 100%;
     justify-content: center;
@@ -772,7 +773,7 @@
   .insight-author-socials {
     justify-content: center;
   }
-  
+
   .insights-action-bar-hero {
     justify-content: center !important;
   }
@@ -782,17 +783,17 @@
   .insight-title {
     font-size: 1.85rem;
   }
-  
+
   .insight-author-card-content {
     padding: 2rem 1.25rem;
   }
-  
+
   .insight-author-large-avatar {
     width: 90px;
     height: 90px;
     font-size: 2rem;
   }
-  
+
   .insight-author-bio h3 {
     font-size: 1.75rem;
   }
@@ -802,27 +803,27 @@
   .insight-header-section {
     padding: 5rem 1rem 1.5rem;
   }
-  
+
   .insight-title {
     font-size: 1.5rem;
   }
-  
+
   .insight-excerpt {
     font-size: 1rem;
   }
-  
+
   .insight-article-layout {
     padding: 0 1rem;
   }
-  
+
   .insight-article-body {
     font-size: 0.95rem;
   }
-  
+
   .insight-author-card-full {
     padding: 0 1rem;
   }
-  
+
   .insight-write-btn {
     font-size: 0.8rem;
     padding: 0.5rem 1rem;
@@ -834,89 +835,89 @@
   .insight-header-section {
     padding: 5rem 0.75rem 1.5rem;
   }
-  
+
   .insight-breadcrumbs {
     font-size: 0.75rem;
   }
-  
+
   .insight-title {
     font-size: 1.35rem;
   }
-  
+
   .insight-excerpt {
     font-size: 0.9rem;
   }
-  
+
   .insight-top-meta-container {
     gap: 1rem;
   }
-  
+
   .insight-author-meta {
     gap: 0.5rem;
   }
-  
+
   .insight-author-avatar {
     width: 40px;
     height: 40px;
   }
-  
+
   .insight-author-name {
     font-size: 0.9rem;
   }
-  
+
   .insight-meta-stats {
     font-size: 0.75rem;
     flex-wrap: wrap;
     justify-content: center;
   }
-  
+
   .insight-horizontal-toolbar {
     flex-direction: column;
     gap: 1rem;
   }
-  
+
   .insight-social-group {
     flex-wrap: wrap;
     justify-content: center;
   }
-  
+
   .insight-article-layout {
     padding: 0 0.75rem;
   }
-  
+
   .insight-h3 {
     font-size: 1.25rem;
   }
-  
+
   .insight-h4 {
     font-size: 1.15rem;
   }
-  
+
   .insight-quote {
     padding: 1.5rem 1rem;
     font-size: 1.1rem;
   }
-  
+
   .insight-list li {
     font-size: 0.9rem;
   }
-  
+
   .insight-author-card-full {
     padding: 0 0.75rem;
   }
-  
+
   .insight-author-card-content {
     padding: 1.5rem 1rem;
   }
-  
+
   .insight-author-bio h3 {
     font-size: 1.4rem;
   }
-  
+
   .insight-author-bio p {
     font-size: 0.95rem;
   }
-  
+
   .insight-author-large-avatar {
     width: 80px;
     height: 80px;

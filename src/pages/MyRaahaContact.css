@@ -84,7 +84,7 @@
   border: 1px solid #e2e8f0;
   padding: 1.25rem;
   border-radius: 16px;
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
   font-size: 1rem;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
@@ -117,7 +117,7 @@
   padding: 3rem;
   border-radius: 32px;
   border: 1px solid #f1f5f9;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.02);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.02);
   transition: all 0.4s ease;
 }
 
@@ -228,7 +228,7 @@
 
 .faq-card-modern:hover {
   transform: translateY(-10px);
-  box-shadow: 0 30px 60px rgba(0,0,0,0.05);
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.05);
   border-color: var(--myraaha-blue-light);
 }
 
@@ -267,31 +267,31 @@
 }
 
 @media (max-width: 768px) {
-  .contact-v4-main, .contact-v4-faq {
+  .contact-v4-main,
+  .contact-v4-faq {
     padding-left: 1.5rem !important;
     padding-right: 1.5rem !important;
   }
-  
+
   .v4-form-card {
     padding: 2.5rem;
     border-radius: 24px;
   }
-  
+
   .v4-contact-form {
     grid-template-columns: 1fr;
   }
-  
-  .v4-form-group.full-width, .v4-submit-btn {
+
+  .v4-form-group.full-width,
+  .v4-submit-btn {
     grid-column: span 1;
   }
-  
+
   .faq-v4-grid {
     grid-template-columns: 1fr;
   }
-  
+
   .v4-form-header h2 {
     font-size: 2rem !important;
   }
 }
-
-
