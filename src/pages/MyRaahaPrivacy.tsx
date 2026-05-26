@@ -5,11 +5,8 @@ import MyRaahaNewsletter from '../components/MyRaahaNewsletter';
 import MyRaahaFooter from '../components/MyRaahaFooter';
 import StandardPageHero from '../components/StandardPageHero';
 import './MyRaahaLegal.css';
-import { useMobile } from '../hooks/useMobile';
-import MobileLegal from './mobile/MobileLegal';
 
 const MyRaahaPrivacy = () => {
-  const isMobile = useMobile();
 
   const sections = [
     { id: 'introduction', label: 'Introduction' },
@@ -21,99 +18,7 @@ const MyRaahaPrivacy = () => {
     { id: 'contact', label: 'Contact us' }
   ];
 
-  if (isMobile) {
-    return (
-      <MobileLegal 
-        badge="Privacy Policy"
-        title={<>Data <span>empathy</span> & <br /> Personalized trust</>}
-        subtitle={<>At MyRaaha, privacy isn't a checkbox — it's the core of how we scale trust across Bharat's diverse career landscapes.</>}
-        content={
-          <div className="legal-editorial-content">
-            <span className="last-updated-v2">Published: May 15, 2026</span>
-            
-            <div id="introduction" className="legal-block">
-              <h2><span>01</span> Introduction <span>overview</span></h2>
-              <p>MyRaaha ("we", "us", or "our") operates the ShuttlEx platform. We believe that career guidance requires a safe space for exploration.</p>
-              <div className="legal-insight-box">
-                <p>Privacy is the bridge between clinical data and emotional intelligence.</p>
-              </div>
-            </div>
-
-            <div id="collection" className="legal-block">
-              <h2><span>02</span> Data <span>collection</span></h2>
-              <p>We collect information that helps our AI understand your personal fit.</p>
-            </div>
-
-            <div id="usage" className="legal-block">
-              <h2><span>03</span> How we <span>use data</span></h2>
-              <p>Your information fuels the 3A Intelligence Engine, ensuring every roadmap we generate is unique.</p>
-            </div>
-
-            <div id="sharing" className="legal-block">
-              <h2><span>04</span> Sharing <span>policy</span></h2>
-              <p>Data sharing is always consent-first. We never trade your career journey for profit.</p>
-            </div>
-
-            <div id="contact" className="legal-block">
-              <h2><span>05</span> Contact <span>us</span></h2>
-              <p>Questions? Email us at privacy@myraaha.org</p>
-            </div>
-          </div>
-        }
-      />
-    );
-  }
-
-  return (
-    <div className="legal-page">
-      <MyRaahaNavbar />
-
-      <StandardPageHero 
-        badge="Privacy Policy"
-        title={
-          <>
-            Data <span>empathy</span> & <br />
-            Personalized trust
-          </>
-        }
-        subtitle={
-          <>
-            At MyRaaha, privacy isn't a checkbox — it's the core of how we scale trust <br /> 
-            across Bharat's diverse career landscapes.
-          </>
-        }
-        features={[
-          { icon: Shield, label: 'Secure' },
-          { icon: Lock, label: 'Private' },
-          { icon: Eye, label: 'Transparent' }
-        ]}
-      />
-
-      <section className="legal-section">
-        <aside className="legal-sidebar">
-          <div className="legal-nav-header">
-            <h4>Contents</h4>
-          </div>
-          <nav className="legal-nav-links">
-            {sections.map((section) => (
-              <a key={section.id} href={`#${section.id}`} className="legal-nav-item">
-                <div className="legal-nav-dot"></div>
-                {section.label}
-              </a>
-            ))}
-          </nav>
-        </aside>
-
-        <main className="legal-editorial-content">
-          <span className="last-updated-v2">Published: May 15, 2026</span>
-          
-          <div id="introduction" className="legal-block">
-            <h2><span>01</span> Introduction <span>overview</span></h2>
-            <p>
-              MyRaaha ("we", "us", or "our") operates the ShuttlEx platform. We believe that career guidance requires a safe space for exploration. This policy outlines how we protect that space by handling your data with unshakeable conviction and structural clarity.
-            </p>
-            <div className="legal-insight-box">
-              <p>Privacy is the bridge between clinical data and emotional intelligence. We don't just protect data; we protect the narrative of your future.</p>
+ we protect the narrative of your future.</p>
             </div>
           </div>
 
