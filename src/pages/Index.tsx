@@ -680,7 +680,7 @@ const Index = () => {
       <SuccessStories />
 
       {/* ===== WEEKLY INSIGHTS ===== */}
-      <section className="py-20 sm:py-28">
+      <section className="bg-background py-20 sm:py-28">
         <div className="container mx-auto px-5 sm:px-8">
           <div className="rounded-3xl overflow-hidden border border-border shadow-soft grid lg:grid-cols-2 bg-card">
             <div className="relative bg-primary p-10 sm:p-14 flex flex-col justify-end min-h-[420px]">

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
@@ -12,13 +12,7 @@ import loginIllustration from "@/assets/auth-login-illustration.png";
 import signupIllustration from "@/assets/auth-signup-illustration.png";
 
 const Auth = () => {
-  const location = useLocation();
-  const [isLogin, setIsLogin] = useState(() => {
-    const params = new URLSearchParams(location.search);
-    if (params.get("mode") === "signup") return false;
-    if (params.get("mode") === "login") return true;
-    return true;
-  });
+  const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
@@ -26,16 +20,6 @@ const Auth = () => {
   const [emailVerified, setEmailVerified] = useState(false);
   const { signIn, user, profile } = useAuth();
   const navigate = useNavigate();
-
-  // Sync state if query parameters change
-  useEffect(() => {
-    const params = new URLSearchParams(location.search);
-    if (params.get("mode") === "signup") {
-      setIsLogin(false);
-    } else if (params.get("mode") === "login") {
-      setIsLogin(true);
-    }
-  }, [location.search]);
 
   // Detect email verification from URL hash
   useEffect(() => {
