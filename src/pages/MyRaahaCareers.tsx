@@ -411,7 +411,7 @@ const MyRaahaCareers = () => {
             
             <div className="modal-header">
               <span className="job-category-tag">{selectedJob.category}</span>
-              <h2>{selectedJob.title.split(' ').slice(0, -1).join(' ')} <span>{selectedJob.title.split(' ').slice(-1).toLowerCase()}</span></h2>
+              <h2>{selectedJob.title.split(' ').slice(0, -1).join(' ')} <span>{(selectedJob.title.split(' ').slice(-1)[0] || '').toLowerCase()}</span></h2>
               <div className="job-meta">
                 <div className="meta-item"><MapPin className="w-4 h-4" /> <span>{selectedJob.location}</span></div>
                 <div className="meta-item"><Clock className="w-4 h-4" /> <span>{selectedJob.type}</span></div>
