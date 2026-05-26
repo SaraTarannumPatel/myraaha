@@ -1,0 +1,386 @@
+/* =====================================================================
+   MyRaaha Landing Website — Universal Design System Override
+   Applied globally to all landing pages. High specificity / !important
+   used intentionally to enforce the master style guide across existing
+   page-level CSS without rewriting it.
+   ===================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+:root {
+  /* Brand palette tokens (per design system spec) */
+  --myraaha-blue: #5500CB;
+  --myraaha-blue-dark: #3D0099;
+  --myraaha-blue-light: #F3E8FF;
+  --myraaha-gradient: linear-gradient(135deg, #5500CB 0%, #7c3aed 100%);
+  --myraaha-text-dark: #000000;
+  --myraaha-text-slate: #1e293b;
+  --myraaha-text-gray: #4B5563;
+  --myraaha-text-grey: #4B5563;
+  --myraaha-white: #FFFFFF;
+  --myraaha-bg-grey: rgba(211, 211, 211, 0.1);
+  --myraaha-canvas: #FFFFFF;
+
+  /* Spacing */
+  --section-spacing: 120px;
+  --section-spacing-mobile: 60px;
+
+  /* Radii */
+  --radius-image: 20px;
+  --radius-hero-image: 32px;
+  --radius-card: 24px;
+}
+
+/* Root font size — 20px base per spec */
+html {
+  font-size: 20px;
+}
+
+/* ---------------------------------------------------------------------
+   Scope all overrides under known landing-page roots so we don't touch
+   dashboard / app pages.
+   --------------------------------------------------------------------- */
+.myraaha-landing,
+.myraaha-about,
+.myraaha-services,
+.myraaha-partnerships,
+.myraaha-careers,
+.myraaha-insights,
+.myraaha-insights-detail,
+.myraaha-contact,
+.myraaha-legal,
+.standard-page-hero,
+.myraaha-navbar,
+.myraaha-footer,
+.myraaha-newsletter {
+  font-family: 'Poppins', sans-serif !important;
+  color: var(--myraaha-text-dark);
+}
+
+/* Body baseline on landing pages */
+.myraaha-landing, .myraaha-about, .myraaha-services, .myraaha-partnerships,
+.myraaha-careers, .myraaha-insights, .myraaha-insights-detail,
+.myraaha-contact, .myraaha-legal {
+  background: var(--myraaha-bg-grey);
+}
+
+/* =====================================================================
+   Typography Scale — Desktop (per spec)
+   ===================================================================== */
+
+/* Hero title (Standard Page Hero — dark purple zone, white text) */
+.standard-page-hero .hero-title,
+.myraaha-hero h1,
+.about-hero h1,
+.partnerships-hero-v2 h1 {
+  font-family: 'Poppins', sans-serif !important;
+  font-size: 3.5rem !important;        /* 70px */
+  font-weight: 700 !important;
+  line-height: 1.1 !important;
+  text-transform: none !important;
+  letter-spacing: -0.01em !important;
+  color: #ffffff !important;
+}
+
+.standard-page-hero .hero-title span,
+.standard-page-hero .hero-title em {
+  font-style: normal !important;
+  color: #f3e8ff !important;            /* lavender highlight on dark */
+}
+
+.standard-page-hero .hero-subtitle,
+.about-hero p,
+.partnerships-hero-v2 p {
+  font-family: 'Poppins', sans-serif !important;
+  font-size: 1.15rem !important;        /* ~23px */
+  font-weight: 400 !important;
+  line-height: 1.6 !important;
+  color: #ffffff !important;
+  text-transform: none !important;
+}
+
+/* Main landing hero is light zone -> dark text */
+.myraaha-landing .hero-section h1,
+.myraaha-landing .hero-title-main {
+  font-family: 'Poppins', sans-serif !important;
+  font-size: 3.5rem !important;
+  font-weight: 700 !important;
+  line-height: 1.1 !important;
+  color: #000000 !important;
+  text-transform: none !important;
+}
+.myraaha-landing .hero-section h1 span,
+.myraaha-landing .hero-section h1 em,
+.myraaha-landing .hero-title-main span {
+  font-style: normal !important;
+  color: #5500CB !important;
+}
+
+/* H1 / Section Title */
+.myraaha-landing h1, .myraaha-about h1, .myraaha-services h1,
+.myraaha-partnerships h1, .myraaha-careers h1, .myraaha-insights h1,
+.myraaha-contact h1, .myraaha-legal h1 {
+  font-family: 'Poppins', sans-serif;
+  font-size: 2.5rem;        /* 50px */
+  font-weight: 700;
+  line-height: 1.1;
+  color: var(--myraaha-text-dark);
+  text-transform: none;
+}
+
+/* H2 — section opener */
+.myraaha-landing h2, .myraaha-about h2, .myraaha-services h2,
+.myraaha-partnerships h2, .myraaha-careers h2, .myraaha-insights h2,
+.myraaha-contact h2, .myraaha-legal h2,
+.section-title {
+  font-family: 'Poppins', sans-serif;
+  font-size: 2.2rem;        /* 44px */
+  font-weight: 700;
+  line-height: 1.15;
+  color: var(--myraaha-text-dark);
+  text-transform: none;
+  letter-spacing: -0.01em;
+}
+
+/* H3 / Card titles */
+.myraaha-landing h3, .myraaha-about h3, .myraaha-services h3,
+.myraaha-partnerships h3, .myraaha-careers h3, .myraaha-insights h3,
+.myraaha-contact h3, .myraaha-legal h3 {
+  font-family: 'Poppins', sans-serif;
+  font-size: 1.45rem;       /* 29px */
+  font-weight: 600;
+  line-height: 1.3;
+  color: var(--myraaha-text-dark);
+  text-transform: none;
+}
+
+/* H4 / minor */
+.myraaha-landing h4, .myraaha-about h4, .myraaha-services h4,
+.myraaha-partnerships h4, .myraaha-careers h4, .myraaha-insights h4 {
+  font-size: 1.15rem;
+  font-weight: 600;
+  line-height: 1.35;
+  color: var(--myraaha-text-dark);
+}
+
+/* Body text */
+.myraaha-landing p, .myraaha-about p, .myraaha-services p,
+.myraaha-partnerships p, .myraaha-careers p, .myraaha-insights p,
+.myraaha-contact p, .myraaha-legal p {
+  font-family: 'Poppins', sans-serif;
+  font-size: 1rem;          /* 20px */
+  font-weight: 400;
+  line-height: 1.6;
+  color: var(--myraaha-text-gray);
+}
+
+/* Reflective subtitle (large light intro) */
+.section-subtitle, .reflective-subtitle {
+  font-family: 'Poppins', sans-serif !important;
+  font-size: 1.4rem !important;
+  font-weight: 400 !important;
+  line-height: 1.5 !important;
+  color: var(--myraaha-text-gray) !important;
+  text-transform: none !important;
+}
+
+/* Pills & section badges */
+.section-badge, .pill-badge, .badge-pill {
+  font-family: 'Poppins', sans-serif !important;
+  font-size: 0.8rem !important;
+  font-weight: 700 !important;
+  line-height: 1 !important;
+  letter-spacing: 0.1em !important;
+  text-transform: uppercase !important;
+  color: #5500CB !important;
+  background: #F3E8FF !important;
+  display: inline-flex;
+  padding: 0.5rem 1.1rem;
+  border-radius: 99px;
+}
+
+/* Inverse pill (inside dark purple zones) */
+.standard-page-hero .section-badge,
+.mission-section .section-badge,
+.cta-band .section-badge {
+  color: #ffffff !important;
+  background: rgba(255,255,255,0.12) !important;
+  border: 1px solid rgba(255,255,255,0.22);
+  backdrop-filter: blur(8px);
+}
+
+/* Buttons */
+.btn-primary, .btn-gradient, .myraaha-btn-primary {
+  font-family: 'Poppins', sans-serif !important;
+  font-size: 1rem !important;
+  font-weight: 600 !important;
+  background: var(--myraaha-gradient) !important;
+  color: #ffffff !important;
+  border: none;
+  padding: 0.85rem 1.75rem;
+  border-radius: 99px;
+  box-shadow: 0 6px 20px -6px rgba(85,0,203,0.45);
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+.btn-primary:hover, .btn-gradient:hover, .myraaha-btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 28px -8px rgba(85,0,203,0.55);
+}
+
+.btn-secondary, .myraaha-btn-secondary {
+  font-family: 'Poppins', sans-serif !important;
+  font-weight: 600 !important;
+  color: #5500CB !important;
+  background: #F3E8FF !important;
+  border-radius: 99px;
+  padding: 0.85rem 1.75rem;
+}
+
+/* =====================================================================
+   Dark Purple Zone Enforcement — text becomes white, accents lavender
+   ===================================================================== */
+.mission-section, .cta-band, .footer-dark, .myraaha-footer,
+.standard-page-hero, .dark-purple-zone {
+  color: #ffffff !important;
+}
+.mission-section h1, .mission-section h2, .mission-section h3, .mission-section h4,
+.cta-band h1, .cta-band h2, .cta-band h3,
+.standard-page-hero h1, .standard-page-hero h2, .standard-page-hero h3,
+.dark-purple-zone h1, .dark-purple-zone h2, .dark-purple-zone h3,
+.myraaha-footer h1, .myraaha-footer h2, .myraaha-footer h3, .myraaha-footer h4 {
+  color: #ffffff !important;
+}
+.mission-section p, .cta-band p, .standard-page-hero p,
+.dark-purple-zone p, .myraaha-footer p {
+  color: rgba(255,255,255,0.85) !important;
+}
+.mission-section span.highlight,
+.cta-band span.highlight,
+.standard-page-hero span.highlight,
+.dark-purple-zone span.highlight {
+  color: #f3e8ff !important;
+}
+
+/* =====================================================================
+   Image styling — universal soft radius + visibility fallback
+   ===================================================================== */
+.myraaha-landing img, .myraaha-about img, .myraaha-services img,
+.myraaha-partnerships img, .myraaha-careers img, .myraaha-insights img,
+.myraaha-contact img, .myraaha-legal img {
+  border-radius: var(--radius-image);
+  max-width: 100%;
+  height: auto;
+  display: block;
+  background: #F3E8FF;        /* gentle lavender placeholder if image fails */
+  object-fit: cover;
+}
+.myraaha-hero img, .about-hero img, .standard-page-hero img {
+  border-radius: var(--radius-hero-image);
+}
+.myraaha-navbar img, .myraaha-footer .footer-logo img {
+  border-radius: 0;
+  background: transparent;
+}
+
+/* =====================================================================
+   Card hover micro-interactions
+   ===================================================================== */
+.service-card, .stakeholder-card, .feature-card, .insight-card,
+.career-card, .partnership-card {
+  background: #ffffff;
+  border-radius: 24px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+  transition: transform .3s ease, box-shadow .3s ease;
+  overflow: hidden;
+}
+.service-card:hover, .stakeholder-card:hover, .feature-card:hover,
+.insight-card:hover, .career-card:hover, .partnership-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 20px 40px rgba(85,0,203,0.10);
+}
+
+/* =====================================================================
+   Mobile Responsiveness — landing only
+   ===================================================================== */
+@media (max-width: 1024px) {
+  html { font-size: 18px; }
+  .standard-page-hero .hero-title,
+  .myraaha-landing .hero-section h1 { font-size: 2.75rem !important; }
+}
+
+@media (max-width: 768px) {
+  html { font-size: 17px; }
+
+  .standard-page-hero .hero-title,
+  .myraaha-landing .hero-section h1,
+  .about-hero h1, .partnerships-hero-v2 h1 {
+    font-size: 2.25rem !important;
+    line-height: 1.15 !important;
+  }
+  .standard-page-hero .hero-subtitle,
+  .myraaha-landing .hero-section p,
+  .about-hero p, .partnerships-hero-v2 p {
+    font-size: 1.05rem !important;
+    line-height: 1.6 !important;
+  }
+
+  .myraaha-landing h1, .myraaha-about h1, .myraaha-services h1,
+  .myraaha-partnerships h1, .myraaha-careers h1, .myraaha-insights h1,
+  .myraaha-contact h1 { font-size: 2rem; }
+
+  .myraaha-landing h2, .myraaha-about h2, .myraaha-services h2,
+  .myraaha-partnerships h2, .myraaha-careers h2, .myraaha-insights h2,
+  .myraaha-contact h2, .section-title { font-size: 1.65rem; }
+
+  .myraaha-landing h3, .myraaha-about h3, .myraaha-services h3,
+  .myraaha-partnerships h3, .myraaha-careers h3, .section-subtitle,
+  .reflective-subtitle { font-size: 1.15rem !important; }
+
+  .btn-primary, .btn-secondary, .myraaha-btn-primary, .myraaha-btn-secondary {
+    min-height: 48px !important;
+    width: 100%;
+    justify-content: center;
+  }
+
+  /* Stack any side-by-side grid on landing pages */
+  .myraaha-landing .grid-2, .myraaha-landing .grid-3,
+  .myraaha-about .grid-2, .myraaha-about .grid-3,
+  .myraaha-services .grid-2, .myraaha-services .grid-3,
+  .myraaha-partnerships .grid-2, .myraaha-partnerships .grid-3,
+  .myraaha-careers .grid-2, .myraaha-careers .grid-3 {
+    grid-template-columns: 1fr !important;
+    gap: 1.25rem !important;
+  }
+
+  /* Generic landing section padding */
+  .myraaha-landing section, .myraaha-about section, .myraaha-services section,
+  .myraaha-partnerships section, .myraaha-careers section, .myraaha-insights section,
+  .myraaha-contact section, .myraaha-legal section {
+    padding-left: 1.25rem !important;
+    padding-right: 1.25rem !important;
+  }
+}
+
+@media (max-width: 480px) {
+  html { font-size: 16px; }
+  .standard-page-hero .hero-title,
+  .myraaha-landing .hero-section h1 { font-size: 1.85rem !important; }
+  .myraaha-landing h2, .myraaha-about h2, .myraaha-services h2,
+  .myraaha-partnerships h2, .myraaha-careers h2, .section-title {
+    font-size: 1.45rem;
+  }
+}
+
+@media (max-width: 320px) {
+  html { font-size: 15px; }
+  .standard-page-hero .hero-title { font-size: 1.5rem !important; }
+}
+
+/* =====================================================================
+   Image fallback — outline if missing so layouts don't collapse
+   ===================================================================== */
+img[src=""], img:not([src]), img.broken {
+  background: linear-gradient(135deg, #F3E8FF 0%, rgba(85,0,203,0.08) 100%);
+  border: 1px dashed rgba(85,0,203,0.25);
+  min-height: 200px;
+}
