@@ -28,7 +28,7 @@ import MyRaahaNavbar from '../components/MyRaahaNavbar';
 import MyRaahaFooter from '../components/MyRaahaFooter';
 import { careersData } from '../data/careersData';
 import './MyRaahaCareers.css';
-import './career/CareerRole.css';
+import './careers/CareerRole.css';
 import StandardPageHero from '../components/StandardPageHero';
 
 interface Job {

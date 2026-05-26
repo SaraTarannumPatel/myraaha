@@ -2777,15 +2777,16 @@
   background: var(--myraaha-bg-grey);
   padding: 1rem 1.5rem;
   border-radius: 16px;
-  border: 1px solid #eef2f6;
+  border: 1px solid #5500cb;
+  box-shadow: 0 4px 12px rgba(85, 0, 203, 0.04);
   transition: all 0.3s ease;
 }
 
 .offer-card:hover {
   background: white;
   transform: translateY(-4px);
-  border-color: var(--myraaha-blue-light);
-  box-shadow: 0 10px 25px rgba(85,0,203,0.06);
+  border-color: #5500cb;
+  box-shadow: 0 10px 25px rgba(85, 0, 203, 0.08);
 }
 
 .offer-icon {

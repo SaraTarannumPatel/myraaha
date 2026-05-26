@@ -15,7 +15,7 @@ import './MyRaahaLanding.css';
 import StandardPageHero from '../components/StandardPageHero';
 import WriteForMyRaahaModal from '../components/WriteForMyRaahaModal';
 import { insightsData } from '../data/insightsData';
-import { supabase } from '@/integrations/supabase/client';
+import { supabase } from '../services/supabaseClient';
 
 const MyRaahaInsights = () => {
   const navigate = useNavigate();

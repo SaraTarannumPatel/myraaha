@@ -399,7 +399,7 @@ const MyRaahaLanding = () => {
               </div>
               <p className="beacon-card-lead">We handhold potential entrepreneurs to start and sustain their ventures</p>
               <ul className="beacon-features">
-                <li><span>Industry relevant mentors</span></li>
+                <li><span>Domain relevant mentors</span></li>
                 <li><span>Impact investing</span></li>
                 <li><span>Incubation support</span></li>
               </ul>

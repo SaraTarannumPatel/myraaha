@@ -14,7 +14,7 @@ import {
 import MyRaahaNavbar from '../components/MyRaahaNavbar';
 import MyRaahaNewsletter from '../components/MyRaahaNewsletter';
 import MyRaahaFooter from '../components/MyRaahaFooter';
-import { supabase } from '@/integrations/supabase/client';
+import { supabase } from '../services/supabaseClient';
 import './MyRaahaLanding.css';
 import './MyRaahaContact.css';
 import StandardPageHero from '../components/StandardPageHero';

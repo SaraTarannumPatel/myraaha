@@ -6,7 +6,7 @@ import MyRaahaNewsletter from '../components/MyRaahaNewsletter';
 import MyRaahaFooter from '../components/MyRaahaFooter';
 import WriteForMyRaahaModal from '../components/WriteForMyRaahaModal';
 import { insightsData } from '../data/insightsData';
-import { supabase } from '@/integrations/supabase/client';
+import { supabase } from '../services/supabaseClient';
 import './MyRaahaInsightsDetail.css';
 import './MyRaahaLanding.css';
 

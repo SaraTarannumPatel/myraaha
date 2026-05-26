@@ -70,19 +70,19 @@ const MyRaahaServices = () => {
         <div className="incubation-extension-grid">
           {/* Card 1 */}
           <div className="incubation-extension-card">
-            <img src="/myraaha_platform_map_v2_1778819717803.png" alt="Reflect" />
+            <img src="/myraaha_about_motivation_v2_1778819838845.png" alt="Explore" />
             <div className="incubation-extension-content">
-              <h3>Reflect <span>patterns</span></h3>
-              <p>Capture thoughts, emotions, behaviors, and emerging patterns through psychometrics, reflections, mood inputs, and adaptive insights — building a deeper understanding of identity, environments, strengths, and preferences over time.</p>
+              <h3>Explore <span>possibilities</span></h3>
+              <p>Discover interests, passions, and possibilities through interactive prompts, stories, challenges, and visual exploration — helping users uncover what naturally excites and motivates them.</p>
             </div>
           </div>
 
           {/* Card 2 */}
           <div className="incubation-extension-card">
-            <img src="/myraaha_about_motivation_v2_1778819838845.png" alt="Explore" />
+            <img src="/myraaha_platform_map_v2_1778819717803.png" alt="Reflect" />
             <div className="incubation-extension-content">
-              <h3>Explore <span>possibilities</span></h3>
-              <p>Discover interests, passions, and possibilities through interactive prompts, stories, challenges, and visual exploration — helping users uncover what naturally excites and motivates them.</p>
+              <h3>Reflect <span>patterns</span></h3>
+              <p>Capture thoughts, emotions, behaviors, and emerging patterns through psychometrics, reflections, mood inputs, and adaptive insights — building a deeper understanding of identity, environments, strengths, and preferences over time.</p>
             </div>
           </div>
 
