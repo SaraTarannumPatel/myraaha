@@ -231,19 +231,20 @@ Using ALL the above context, generate a deeply specific, actionable, and resourc
       throw new Error("Failed to parse AI response");
     }
 
-    // ─── Get authenticated user ──────────────────────────────────────────────
-    const authHeader = req.headers.get("Authorization") || "";
-    const token = authHeader.replace("Bearer ", "");
-    const { data: { user } } = await supabase.auth.getUser(token);
-    if (!user) throw new Error("Unauthorized");
-
-    // ─── Upsert into cache table ─────────────────────────────────────────────
+    // ─── Upsert into cache table (scoped to authenticated user) ────────────
     await supabase.from("roadmap_step_details").upsert({
       step_id: stepId,
-      user_id: user.id,
+      user_id: authedUser.id,
       overview: parsed.overview || "",
       total_time_estimate: parsed.total_time_estimate || "",
       difficulty_level: parsed.difficulty_level || "",
+      sub_steps: parsed.sub_steps || [],
+      time_breakdown: parsed.time_breakdown || {},
+      learning_resources: parsed.learning_resources || {},
+      career_context: parsed.career_context || {},
+      guidance: parsed.guidance || {},
+      generated_at: new Date().toISOString(),
+    }, { onConflict: "step_id" });
       sub_steps: parsed.sub_steps || [],
       time_breakdown: parsed.time_breakdown || {},
       learning_resources: parsed.learning_resources || {},
