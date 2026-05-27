@@ -245,13 +245,6 @@ Using ALL the above context, generate a deeply specific, actionable, and resourc
       guidance: parsed.guidance || {},
       generated_at: new Date().toISOString(),
     }, { onConflict: "step_id" });
-      sub_steps: parsed.sub_steps || [],
-      time_breakdown: parsed.time_breakdown || {},
-      learning_resources: parsed.learning_resources || {},
-      career_context: parsed.career_context || {},
-      guidance: parsed.guidance || {},
-      generated_at: new Date().toISOString(),
-    }, { onConflict: "step_id" });
 
     return new Response(JSON.stringify({ ...parsed, cached: false }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
