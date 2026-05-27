@@ -96,6 +96,8 @@ async function aiPick(target: { table: T; name: string; description?: string },
   }
   const j = await res.json();
   try {
+    const { isAdminRequest, forbidden } = await import("../_shared/auth.ts");
+    if (!(await isAdminRequest(req))) return forbidden("Admin only");
     const txt = j.choices?.[0]?.message?.content || "{}";
     return JSON.parse(txt);
   } catch { return {}; }

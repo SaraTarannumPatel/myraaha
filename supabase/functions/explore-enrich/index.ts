@@ -216,6 +216,8 @@ Deno.serve(async (req) => {
   );
 
   try {
+    const { isAdminRequest, forbidden } = await import("../_shared/auth.ts");
+    if (!(await isAdminRequest(req))) return forbidden("Admin only");
     // 1) Load all rows for all tables
     const data: Record<T, Row[]> = {} as any;
     for (const t of TABLES) {

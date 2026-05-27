@@ -1,16 +1,19 @@
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { getAuthUser, isAdminRequest, unauthorized, forbidden } from "../_shared/auth.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
+  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-admin-secret, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
 serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
 
   try {
+    const authedUser = await getAuthUser(req);
+    if (!authedUser) return unauthorized();
     const { type, context } = await req.json();
     const apiKey = Deno.env.get("LOVABLE_API_KEY");
     if (!apiKey) throw new Error("Missing API key");
@@ -20,6 +23,7 @@ serve(async (req) => {
     const supabase = createClient(supabaseUrl, supabaseKey);
 
     if (type === "generate_stories") {
+      if (!(await isAdminRequest(req))) return forbidden("Admin only");
       // Generate career stories for paths that don't have stories yet
       const { data: paths } = await supabase.from("career_paths").select("*");
       const { data: existingStories } = await supabase.from("career_stories").select("career_path_id");
@@ -114,9 +118,8 @@ Return a JSON object with these fields:
     }
 
     if (type === "analyze_behavior") {
-      // Analyze user's story interactions to build behavioral profile
-      const userId = context.user_id;
-      if (!userId) throw new Error("user_id required");
+      // Always use the authenticated user's id, never trust client input
+      const userId = authedUser.id;
 
       const { data: interactions } = await supabase
         .from("career_story_interactions")

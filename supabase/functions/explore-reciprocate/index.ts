@@ -81,6 +81,8 @@ Deno.serve(async (req) => {
     Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
   );
   try {
+    const { isAdminRequest, forbidden } = await import("../_shared/auth.ts");
+    if (!(await isAdminRequest(req))) return forbidden("Admin only");
     // Load all rows
     const data: Record<T, Row[]> = {} as any;
     for (const t of TABLES) {

@@ -314,6 +314,48 @@ export type Database = {
         }
         Relationships: []
       }
+      career_applications: {
+        Row: {
+          created_at: string
+          email: string
+          full_name: string
+          id: string
+          linkedin_url: string | null
+          resume_url: string
+          role_id: string
+          role_title: string
+          status: string
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          full_name: string
+          id?: string
+          linkedin_url?: string | null
+          resume_url: string
+          role_id: string
+          role_title: string
+          status?: string
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          full_name?: string
+          id?: string
+          linkedin_url?: string | null
+          resume_url?: string
+          role_id?: string
+          role_title?: string
+          status?: string
+          updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       career_card_interactions: {
         Row: {
           card_id: string
@@ -1084,6 +1126,36 @@ export type Database = {
           requester_id?: string
           status?: Database["public"]["Enums"]["connection_status"] | null
           updated_at?: string
+        }
+        Relationships: []
+      }
+      contact_submissions: {
+        Row: {
+          created_at: string
+          email: string
+          id: string
+          message: string
+          name: string
+          type: string
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          id?: string
+          message: string
+          name: string
+          type: string
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          id?: string
+          message?: string
+          name?: string
+          type?: string
+          user_id?: string | null
         }
         Relationships: []
       }
@@ -2145,6 +2217,51 @@ export type Database = {
           related_subjects?: string[] | null
           related_universities?: string[] | null
           soft_skills?: string[] | null
+        }
+        Relationships: []
+      }
+      insights_submissions: {
+        Row: {
+          author_email: string | null
+          author_name: string
+          author_title: string | null
+          category: string
+          content: string
+          cover_image_url: string | null
+          created_at: string
+          excerpt: string
+          id: string
+          status: string
+          title: string
+          user_id: string | null
+        }
+        Insert: {
+          author_email?: string | null
+          author_name: string
+          author_title?: string | null
+          category: string
+          content: string
+          cover_image_url?: string | null
+          created_at?: string
+          excerpt: string
+          id?: string
+          status?: string
+          title: string
+          user_id?: string | null
+        }
+        Update: {
+          author_email?: string | null
+          author_name?: string
+          author_title?: string | null
+          category?: string
+          content?: string
+          cover_image_url?: string | null
+          created_at?: string
+          excerpt?: string
+          id?: string
+          status?: string
+          title?: string
+          user_id?: string | null
         }
         Relationships: []
       }
@@ -4007,6 +4124,27 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      newsletter_subscriptions: {
+        Row: {
+          created_at: string
+          email: string
+          id: string
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          id?: string
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          id?: string
+          user_id?: string | null
+        }
+        Relationships: []
       }
       notifications: {
         Row: {
@@ -7700,7 +7838,45 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      public_insights: {
+        Row: {
+          author_name: string | null
+          author_title: string | null
+          category: string | null
+          content: string | null
+          cover_image_url: string | null
+          created_at: string | null
+          excerpt: string | null
+          id: string | null
+          status: string | null
+          title: string | null
+        }
+        Insert: {
+          author_name?: string | null
+          author_title?: string | null
+          category?: string | null
+          content?: string | null
+          cover_image_url?: string | null
+          created_at?: string | null
+          excerpt?: string | null
+          id?: string | null
+          status?: string | null
+          title?: string | null
+        }
+        Update: {
+          author_name?: string | null
+          author_title?: string | null
+          category?: string | null
+          content?: string | null
+          cover_image_url?: string | null
+          created_at?: string | null
+          excerpt?: string | null
+          id?: string | null
+          status?: string | null
+          title?: string | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       consume_entitlement: {

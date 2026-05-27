@@ -44,6 +44,8 @@ Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: cors });
   const supabase = createClient(Deno.env.get("SUPABASE_URL")!, Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!);
   try {
+    const { isAdminRequest, forbidden } = await import("../_shared/auth.ts");
+    if (!(await isAdminRequest(req))) return forbidden("Admin only");
     const summary: Record<string, Record<string, { default: string|null; filled: number }>> = {};
     for (const [table, fields] of Object.entries(SCALAR_FIELDS)) {
       summary[table] = {};

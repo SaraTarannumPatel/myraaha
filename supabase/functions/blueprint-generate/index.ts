@@ -46,6 +46,10 @@ Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
 
   try {
+    const { getAuthUser, unauthorized } = await import("../_shared/auth.ts");
+    const user = await getAuthUser(req);
+    if (!user) return unauthorized();
+
     const apiKey = Deno.env.get("LOVABLE_API_KEY");
     if (!apiKey) throw new Error("LOVABLE_API_KEY missing");
 
