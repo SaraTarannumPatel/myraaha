@@ -1,5 +1,6 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { getAuthUser, unauthorized } from "../_shared/auth.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -10,6 +11,10 @@ serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
 
   try {
+    // ─── Auth check FIRST (before any DB/AI work) ───────────────────────────
+    const authedUser = await getAuthUser(req);
+    if (!authedUser) return unauthorized();
+
     const { stepId, stepTitle, stepDescription, stepPhase, stepCategory, roadmapTitle, userGoals, forceRefresh } = await req.json();
 
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
@@ -20,13 +25,14 @@ serve(async (req) => {
 
     const supabase = createClient(SUPABASE_URL!, SUPABASE_SERVICE_ROLE_KEY!);
 
-    // ─── Check cache first (valid for 7 days) ───────────────────────────────
+    // ─── Check cache first (scoped to this user) ────────────────────────────
     if (!forceRefresh) {
       const { data: cached } = await supabase
         .from("roadmap_step_details")
         .select("*")
         .eq("step_id", stepId)
-        .single();
+        .eq("user_id", authedUser.id)
+        .maybeSingle();
 
       if (cached) {
         const age = Date.now() - new Date(cached.generated_at).getTime();
