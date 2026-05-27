@@ -116,8 +116,7 @@ Salary Range: ${path.salary_range || ""}`;
     }
 
     if (type === "analyze_challenge_behavior") {
-      const userId = context.user_id;
-      if (!userId) throw new Error("user_id required");
+      const userId = authedUser.id;
 
       const { data: interactions } = await supabase
         .from("challenge_card_interactions")
