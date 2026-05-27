@@ -118,9 +118,8 @@ Return a JSON object with these fields:
     }
 
     if (type === "analyze_behavior") {
-      // Analyze user's story interactions to build behavioral profile
-      const userId = context.user_id;
-      if (!userId) throw new Error("user_id required");
+      // Always use the authenticated user's id, never trust client input
+      const userId = authedUser.id;
 
       const { data: interactions } = await supabase
         .from("career_story_interactions")
