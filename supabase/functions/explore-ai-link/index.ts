@@ -4,10 +4,11 @@
 // Pre-filters candidates by trigram overlap to keep prompts small.
 // Non-destructive: appends to related_*/top_* arrays only. JSON-only output.
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { isAdminRequest, forbidden } from "../_shared/auth.ts";
 
 const cors = {
   "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
+  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-admin-secret",
 };
 
 const TABLES = [
