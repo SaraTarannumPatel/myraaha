@@ -97,8 +97,6 @@ async function aiPick(target: { table: T; name: string; description?: string },
   }
   const j = await res.json();
   try {
-    const { isAdminRequest, forbidden } = await import("../_shared/auth.ts");
-    if (!(await isAdminRequest(req))) return forbidden("Admin only");
     const txt = j.choices?.[0]?.message?.content || "{}";
     return JSON.parse(txt);
   } catch { return {}; }
@@ -106,6 +104,7 @@ async function aiPick(target: { table: T; name: string; description?: string },
 
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: cors });
+  if (!(await isAdminRequest(req))) return forbidden("Admin only");
   const supabase = createClient(Deno.env.get("SUPABASE_URL")!, Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!);
   try {
     const url = new URL(req.url);
