@@ -1,4 +1,5 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { getAuthUser, unauthorized } from "../_shared/auth.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -60,6 +61,9 @@ async function gatherLiveContext(ctx: any): Promise<{ query: string; results: an
 
 serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
+
+  const user = await getAuthUser(req);
+  if (!user) return unauthorized();
 
   try {
     const { type, context: rawContext, persist: persistFlag } = await req.json();

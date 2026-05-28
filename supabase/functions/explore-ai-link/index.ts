@@ -4,10 +4,11 @@
 // Pre-filters candidates by trigram overlap to keep prompts small.
 // Non-destructive: appends to related_*/top_* arrays only. JSON-only output.
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { isAdminRequest, forbidden } from "../_shared/auth.ts";
 
 const cors = {
   "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
+  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-admin-secret",
 };
 
 const TABLES = [
@@ -96,8 +97,6 @@ async function aiPick(target: { table: T; name: string; description?: string },
   }
   const j = await res.json();
   try {
-    const { isAdminRequest, forbidden } = await import("../_shared/auth.ts");
-    if (!(await isAdminRequest(req))) return forbidden("Admin only");
     const txt = j.choices?.[0]?.message?.content || "{}";
     return JSON.parse(txt);
   } catch { return {}; }
@@ -105,6 +104,7 @@ async function aiPick(target: { table: T; name: string; description?: string },
 
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: cors });
+  if (!(await isAdminRequest(req))) return forbidden("Admin only");
   const supabase = createClient(Deno.env.get("SUPABASE_URL")!, Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!);
   try {
     const url = new URL(req.url);
