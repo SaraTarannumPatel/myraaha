@@ -1745,6 +1745,80 @@ export type Database = {
         }
         Relationships: []
       }
+      dream_board_collections: {
+        Row: {
+          created_at: string
+          description: string | null
+          id: string
+          is_default: boolean
+          name: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_default?: boolean
+          name: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_default?: boolean
+          name?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      dream_board_entries: {
+        Row: {
+          collection_id: string | null
+          created_at: string
+          entry_kind: string
+          id: string
+          metadata: Json
+          note: string | null
+          ref_id: string | null
+          title: string
+          user_id: string
+        }
+        Insert: {
+          collection_id?: string | null
+          created_at?: string
+          entry_kind: string
+          id?: string
+          metadata?: Json
+          note?: string | null
+          ref_id?: string | null
+          title: string
+          user_id: string
+        }
+        Update: {
+          collection_id?: string | null
+          created_at?: string
+          entry_kind?: string
+          id?: string
+          metadata?: Json
+          note?: string | null
+          ref_id?: string | null
+          title?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "dream_board_entries_collection_id_fkey"
+            columns: ["collection_id"]
+            isOneToOne: false
+            referencedRelation: "dream_board_collections"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       energy_zones: {
         Row: {
           domain: string
@@ -1784,6 +1858,63 @@ export type Database = {
           task_type?: string | null
           time_spent_minutes?: number | null
           user_id?: string
+        }
+        Relationships: []
+      }
+      exam_gates: {
+        Row: {
+          code: string
+          conducting_body: string | null
+          created_at: string
+          description: string | null
+          difficulty_score: number | null
+          eligibility_stage: Database["public"]["Enums"]["exam_stage"]
+          frequency: string | null
+          full_name: string | null
+          id: string
+          is_active: boolean
+          metadata: Json
+          name: string
+          next_window: string | null
+          official_url: string | null
+          typical_prep_months: number | null
+          updated_at: string
+        }
+        Insert: {
+          code: string
+          conducting_body?: string | null
+          created_at?: string
+          description?: string | null
+          difficulty_score?: number | null
+          eligibility_stage?: Database["public"]["Enums"]["exam_stage"]
+          frequency?: string | null
+          full_name?: string | null
+          id?: string
+          is_active?: boolean
+          metadata?: Json
+          name: string
+          next_window?: string | null
+          official_url?: string | null
+          typical_prep_months?: number | null
+          updated_at?: string
+        }
+        Update: {
+          code?: string
+          conducting_body?: string | null
+          created_at?: string
+          description?: string | null
+          difficulty_score?: number | null
+          eligibility_stage?: Database["public"]["Enums"]["exam_stage"]
+          frequency?: string | null
+          full_name?: string | null
+          id?: string
+          is_active?: boolean
+          metadata?: Json
+          name?: string
+          next_window?: string | null
+          official_url?: string | null
+          typical_prep_months?: number | null
+          updated_at?: string
         }
         Relationships: []
       }
@@ -2012,6 +2143,56 @@ export type Database = {
             columns: ["hackathon_id"]
             isOneToOne: false
             referencedRelation: "project_hackathons"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      hiring_pulse_snapshots: {
+        Row: {
+          id: string
+          median_salary_inr: number | null
+          metadata: Json
+          new_postings: number
+          open_postings: number
+          role_id: string
+          snapshot_at: string
+          top_cities: Json
+          top_companies: Json
+          trend: string | null
+          window_hours: number
+        }
+        Insert: {
+          id?: string
+          median_salary_inr?: number | null
+          metadata?: Json
+          new_postings?: number
+          open_postings?: number
+          role_id: string
+          snapshot_at?: string
+          top_cities?: Json
+          top_companies?: Json
+          trend?: string | null
+          window_hours?: number
+        }
+        Update: {
+          id?: string
+          median_salary_inr?: number | null
+          metadata?: Json
+          new_postings?: number
+          open_postings?: number
+          role_id?: string
+          snapshot_at?: string
+          top_cities?: Json
+          top_companies?: Json
+          trend?: string | null
+          window_hours?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "hiring_pulse_snapshots_role_id_fkey"
+            columns: ["role_id"]
+            isOneToOne: false
+            referencedRelation: "taxonomy_nodes"
             referencedColumns: ["id"]
           },
         ]
@@ -2922,6 +3103,42 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      ksao_dimensions: {
+        Row: {
+          code: string
+          created_at: string
+          description: string | null
+          display_order: number
+          family: Database["public"]["Enums"]["ksao_family"]
+          id: string
+          is_active: boolean
+          name: string
+          parent_code: string | null
+        }
+        Insert: {
+          code: string
+          created_at?: string
+          description?: string | null
+          display_order?: number
+          family: Database["public"]["Enums"]["ksao_family"]
+          id?: string
+          is_active?: boolean
+          name: string
+          parent_code?: string | null
+        }
+        Update: {
+          code?: string
+          created_at?: string
+          description?: string | null
+          display_order?: number
+          family?: Database["public"]["Enums"]["ksao_family"]
+          id?: string
+          is_active?: boolean
+          name?: string
+          parent_code?: string | null
+        }
+        Relationships: []
       }
       lab_milestones: {
         Row: {
@@ -4615,6 +4832,112 @@ export type Database = {
           },
         ]
       }
+      pathfinder_milestones: {
+        Row: {
+          completed_at: string | null
+          created_at: string
+          description: string | null
+          est_cost_inr: number | null
+          est_months: number | null
+          id: string
+          kind: string
+          metadata: Json
+          ref_id: string | null
+          route_id: string
+          status: string
+          step_order: number
+          title: string
+        }
+        Insert: {
+          completed_at?: string | null
+          created_at?: string
+          description?: string | null
+          est_cost_inr?: number | null
+          est_months?: number | null
+          id?: string
+          kind: string
+          metadata?: Json
+          ref_id?: string | null
+          route_id: string
+          status?: string
+          step_order: number
+          title: string
+        }
+        Update: {
+          completed_at?: string | null
+          created_at?: string
+          description?: string | null
+          est_cost_inr?: number | null
+          est_months?: number | null
+          id?: string
+          kind?: string
+          metadata?: Json
+          ref_id?: string | null
+          route_id?: string
+          status?: string
+          step_order?: number
+          title?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "pathfinder_milestones_route_id_fkey"
+            columns: ["route_id"]
+            isOneToOne: false
+            referencedRelation: "pathfinder_routes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      pathfinder_routes: {
+        Row: {
+          computed_at: string
+          created_at: string
+          flavor: Database["public"]["Enums"]["pathfinder_flavor"]
+          id: string
+          is_active: boolean
+          route_data: Json
+          success_score: number | null
+          target_role_id: string
+          total_cost_inr: number | null
+          total_months: number | null
+          user_id: string
+        }
+        Insert: {
+          computed_at?: string
+          created_at?: string
+          flavor: Database["public"]["Enums"]["pathfinder_flavor"]
+          id?: string
+          is_active?: boolean
+          route_data?: Json
+          success_score?: number | null
+          target_role_id: string
+          total_cost_inr?: number | null
+          total_months?: number | null
+          user_id: string
+        }
+        Update: {
+          computed_at?: string
+          created_at?: string
+          flavor?: Database["public"]["Enums"]["pathfinder_flavor"]
+          id?: string
+          is_active?: boolean
+          route_data?: Json
+          success_score?: number | null
+          target_role_id?: string
+          total_cost_inr?: number | null
+          total_months?: number | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "pathfinder_routes_target_role_id_fkey"
+            columns: ["target_role_id"]
+            isOneToOne: false
+            referencedRelation: "taxonomy_nodes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       peer_circle_comments: {
         Row: {
           content: string
@@ -5008,6 +5331,39 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      pioneer_points: {
+        Row: {
+          created_at: string
+          id: string
+          metadata: Json
+          points: number
+          reason: string
+          ref_id: string | null
+          ref_kind: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          metadata?: Json
+          points: number
+          reason: string
+          ref_id?: string | null
+          ref_kind?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          metadata?: Json
+          points?: number
+          reason?: string
+          ref_id?: string | null
+          ref_kind?: string | null
+          user_id?: string
+        }
+        Relationships: []
       }
       pod_discussions: {
         Row: {
@@ -6057,6 +6413,220 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      role_education_edges: {
+        Row: {
+          created_at: string
+          fit_score: number | null
+          id: string
+          notes: string | null
+          program_id: string
+          program_kind: string
+          role_id: string
+        }
+        Insert: {
+          created_at?: string
+          fit_score?: number | null
+          id?: string
+          notes?: string | null
+          program_id: string
+          program_kind: string
+          role_id: string
+        }
+        Update: {
+          created_at?: string
+          fit_score?: number | null
+          id?: string
+          notes?: string | null
+          program_id?: string
+          program_kind?: string
+          role_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "role_education_edges_role_id_fkey"
+            columns: ["role_id"]
+            isOneToOne: false
+            referencedRelation: "taxonomy_nodes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      role_exam_gate_edges: {
+        Row: {
+          created_at: string
+          gate_id: string
+          id: string
+          is_mandatory: boolean
+          notes: string | null
+          role_id: string
+        }
+        Insert: {
+          created_at?: string
+          gate_id: string
+          id?: string
+          is_mandatory?: boolean
+          notes?: string | null
+          role_id: string
+        }
+        Update: {
+          created_at?: string
+          gate_id?: string
+          id?: string
+          is_mandatory?: boolean
+          notes?: string | null
+          role_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "role_exam_gate_edges_gate_id_fkey"
+            columns: ["gate_id"]
+            isOneToOne: false
+            referencedRelation: "exam_gates"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "role_exam_gate_edges_role_id_fkey"
+            columns: ["role_id"]
+            isOneToOne: false
+            referencedRelation: "taxonomy_nodes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      role_ksao_vectors: {
+        Row: {
+          created_at: string
+          dimension_id: string
+          id: string
+          importance: number | null
+          role_id: string
+          source: string | null
+          updated_at: string
+          weight: number
+        }
+        Insert: {
+          created_at?: string
+          dimension_id: string
+          id?: string
+          importance?: number | null
+          role_id: string
+          source?: string | null
+          updated_at?: string
+          weight?: number
+        }
+        Update: {
+          created_at?: string
+          dimension_id?: string
+          id?: string
+          importance?: number | null
+          role_id?: string
+          source?: string | null
+          updated_at?: string
+          weight?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "role_ksao_vectors_dimension_id_fkey"
+            columns: ["dimension_id"]
+            isOneToOne: false
+            referencedRelation: "ksao_dimensions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "role_ksao_vectors_role_id_fkey"
+            columns: ["role_id"]
+            isOneToOne: false
+            referencedRelation: "taxonomy_nodes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      role_role_edges: {
+        Row: {
+          created_at: string
+          edge_type: Database["public"]["Enums"]["role_edge_type"]
+          from_role_id: string
+          id: string
+          rationale: string | null
+          source: string | null
+          to_role_id: string
+          weight: number
+        }
+        Insert: {
+          created_at?: string
+          edge_type: Database["public"]["Enums"]["role_edge_type"]
+          from_role_id: string
+          id?: string
+          rationale?: string | null
+          source?: string | null
+          to_role_id: string
+          weight?: number
+        }
+        Update: {
+          created_at?: string
+          edge_type?: Database["public"]["Enums"]["role_edge_type"]
+          from_role_id?: string
+          id?: string
+          rationale?: string | null
+          source?: string | null
+          to_role_id?: string
+          weight?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "role_role_edges_from_role_id_fkey"
+            columns: ["from_role_id"]
+            isOneToOne: false
+            referencedRelation: "taxonomy_nodes"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "role_role_edges_to_role_id_fkey"
+            columns: ["to_role_id"]
+            isOneToOne: false
+            referencedRelation: "taxonomy_nodes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      role_views_log: {
+        Row: {
+          created_at: string
+          dwell_ms: number | null
+          id: string
+          role_id: string
+          source: string | null
+          tab: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          dwell_ms?: number | null
+          id?: string
+          role_id: string
+          source?: string | null
+          tab?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          dwell_ms?: number | null
+          id?: string
+          role_id?: string
+          source?: string | null
+          tab?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "role_views_log_role_id_fkey"
+            columns: ["role_id"]
+            isOneToOne: false
+            referencedRelation: "taxonomy_nodes"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       saved_opportunities: {
         Row: {
@@ -7211,6 +7781,56 @@ export type Database = {
         }
         Relationships: []
       }
+      taxonomy_nodes: {
+        Row: {
+          created_at: string
+          description: string | null
+          id: string
+          is_active: boolean
+          level: Database["public"]["Enums"]["taxonomy_level"]
+          metadata: Json
+          name: string
+          parent_id: string | null
+          slug: string
+          source: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_active?: boolean
+          level: Database["public"]["Enums"]["taxonomy_level"]
+          metadata?: Json
+          name: string
+          parent_id?: string | null
+          slug: string
+          source?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_active?: boolean
+          level?: Database["public"]["Enums"]["taxonomy_level"]
+          metadata?: Json
+          name?: string
+          parent_id?: string | null
+          slug?: string
+          source?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "taxonomy_nodes_parent_id_fkey"
+            columns: ["parent_id"]
+            isOneToOne: false
+            referencedRelation: "taxonomy_nodes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       therapist_messages: {
         Row: {
           content: string
@@ -7606,6 +8226,47 @@ export type Database = {
         }
         Relationships: []
       }
+      user_ksao_vectors: {
+        Row: {
+          confidence: number
+          dimension_id: string
+          id: string
+          last_signal_at: string | null
+          score: number
+          sources: Json
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          confidence?: number
+          dimension_id: string
+          id?: string
+          last_signal_at?: string | null
+          score?: number
+          sources?: Json
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          confidence?: number
+          dimension_id?: string
+          id?: string
+          last_signal_at?: string | null
+          score?: number
+          sources?: Json
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_ksao_vectors_dimension_id_fkey"
+            columns: ["dimension_id"]
+            isOneToOne: false
+            referencedRelation: "ksao_dimensions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       user_learning_progress: {
         Row: {
           completed_at: string | null
@@ -7896,6 +8557,8 @@ export type Database = {
         Returns: boolean
       }
       is_email_verified: { Args: { _email: string }; Returns: boolean }
+      show_limit: { Args: never; Returns: number }
+      show_trgm: { Args: { "": string }; Returns: string[] }
       unlock_reward: { Args: { _milestone_key: string }; Returns: Json }
       update_assessment_progress: {
         Args: { _completed: number; _test_type: string; _total: number }
@@ -7905,6 +8568,14 @@ export type Database = {
     Enums: {
       app_role: "admin" | "moderator" | "user"
       connection_status: "pending" | "accepted" | "declined"
+      exam_stage: "class_10" | "class_12" | "ug" | "pg" | "post_pg" | "any"
+      ksao_family:
+        | "knowledge"
+        | "skill"
+        | "cognitive"
+        | "curiosity"
+        | "value"
+        | "personality"
       onboarding_status:
         | "welcome"
         | "user_type"
@@ -7912,12 +8583,26 @@ export type Database = {
         | "complete"
         | "personal_info"
         | "consent"
+      pathfinder_flavor: "fastest" | "safest" | "no_cost"
       project_status: "idea" | "planning" | "building" | "launched" | "archived"
       roadmap_step_status:
         | "not_started"
         | "in_progress"
         | "completed"
         | "skipped"
+      role_edge_type: "similar" | "progression" | "pivot" | "cluster_mediated"
+      taxonomy_level:
+        | "sector"
+        | "sub_sector"
+        | "industry_family"
+        | "industry"
+        | "domain"
+        | "sub_domain"
+        | "function"
+        | "job_family"
+        | "career_cluster"
+        | "career_pathway_cluster"
+        | "role"
       user_intent: "career" | "entrepreneurship" | "both"
       user_type:
         | "school"
@@ -8056,6 +8741,15 @@ export const Constants = {
     Enums: {
       app_role: ["admin", "moderator", "user"],
       connection_status: ["pending", "accepted", "declined"],
+      exam_stage: ["class_10", "class_12", "ug", "pg", "post_pg", "any"],
+      ksao_family: [
+        "knowledge",
+        "skill",
+        "cognitive",
+        "curiosity",
+        "value",
+        "personality",
+      ],
       onboarding_status: [
         "welcome",
         "user_type",
@@ -8064,12 +8758,27 @@ export const Constants = {
         "personal_info",
         "consent",
       ],
+      pathfinder_flavor: ["fastest", "safest", "no_cost"],
       project_status: ["idea", "planning", "building", "launched", "archived"],
       roadmap_step_status: [
         "not_started",
         "in_progress",
         "completed",
         "skipped",
+      ],
+      role_edge_type: ["similar", "progression", "pivot", "cluster_mediated"],
+      taxonomy_level: [
+        "sector",
+        "sub_sector",
+        "industry_family",
+        "industry",
+        "domain",
+        "sub_domain",
+        "function",
+        "job_family",
+        "career_cluster",
+        "career_pathway_cluster",
+        "role",
       ],
       user_intent: ["career", "entrepreneurship", "both"],
       user_type: [
