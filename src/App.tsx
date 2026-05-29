@@ -35,7 +35,7 @@ import Dashboard from "./pages/Dashboard";
 import Insights from "./pages/Insights";
 // Career
 import CuriosityCompass from "./pages/career/CuriosityCompass";
-import Roadmap from "./pages/career/Roadmap";
+import CareerMap from "./pages/career/CareerMap";
 import SelfGraph from "./pages/career/SelfGraph";
 import LivingResume from "./pages/career/LivingResume";
 import Explore from "./pages/career/Explore";
@@ -114,7 +114,9 @@ const App = () => (
               <Route path="insights" element={<Insights />} />
               {/* Career */}
               <Route path="curiosity-compass" element={<CuriosityCompass />} />
-              <Route path="roadmap" element={<Roadmap />} />
+              <Route path="roadmap" element={<CareerMap />} />
+              <Route path="careermap" element={<CareerMap />} />
+
               <Route path="selfgraph" element={<SelfGraph />} />
               <Route path="living-resume" element={<LivingResume />} />
               <Route path="explore" element={<Explore />} />
