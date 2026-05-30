@@ -57,7 +57,7 @@ const ResetPassword = () => {
       <div className="px-4 sm:px-6 pt-4 sm:pt-6">
         <Logo to="/" size="sm" />
       </div>
-      <div className="flex-1 flex items-center justify-center p-4 sm:p-6">
+      <div className="flex-1 flex flex-col items-center justify-center p-4 sm:p-6 py-8 pb-20">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}

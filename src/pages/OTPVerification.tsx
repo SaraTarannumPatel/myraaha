@@ -122,11 +122,11 @@ const OTPVerification = () => {
   };
 
   return (
-    <div className="h-[100dvh] bg-background flex flex-col overflow-hidden">
+    <div className="min-h-screen bg-background flex flex-col">
       <OnboardingProgressBar progress={8} />
       <OnboardingRewardBanner currentProgress={8} />
 
-      <div className="flex-1 flex flex-col items-center justify-center px-6 max-w-md mx-auto w-full">
+      <div className="flex-1 flex flex-col items-center justify-center px-6 py-8 pb-20 max-w-md mx-auto w-full">
         <div className="w-full mb-4 flex items-center">
           <button
             onClick={() => navigate(-1)}

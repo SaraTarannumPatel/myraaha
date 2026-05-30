@@ -113,11 +113,11 @@ const Auth = () => {
   if (user) return null;
 
   return (
-    <div className="h-[100dvh] bg-background flex flex-col overflow-hidden">
+    <div className="min-h-screen bg-background flex flex-col">
       <OnboardingProgressBar progress={5} />
       <OnboardingRewardBanner currentProgress={5} />
 
-      <div className="flex-1 flex items-center justify-center px-4">
+      <div className="flex-1 flex flex-col items-center justify-center px-4 py-2 pb-4">
         <div className="flex flex-col w-full max-w-md">
 
           {/* Email verification banner */}
@@ -143,7 +143,7 @@ const Auth = () => {
             )}
           </AnimatePresence>
           
-          <div className="relative mb-3">
+          <div className="relative mb-2">
             <AnimatePresence mode="wait">
               <motion.div
                 key={isLogin ? "login" : "signup"}
@@ -153,15 +153,15 @@ const Auth = () => {
                 transition={{ duration: 0.3 }}
                 className="relative"
               >
-                <div className="flex items-start">
-                  <h1 className="font-display text-[3.5rem] sm:text-[4.5rem] lg:text-[5.5rem] leading-[0.90] font-bold text-primary flex-1 z-10">
+                <div className="flex items-center">
+                  <h1 className="font-display text-[2rem] sm:text-[2.4rem] leading-tight font-bold text-primary flex-1 z-10">
                     {isLogin ? (
-                      <>Hey,<br />Login<br />Now</>
+                      <>Hey, Login Now</>
                     ) : (
-                      <>Continue<br />your<br />journey!</>
+                      <>Continue your journey!</>
                     )}
                   </h1>
-                  <div className="w-[40%] sm:w-[35%] -mt-2 -mr-2">
+                  <div className="w-[28%] sm:w-[25%] ml-2">
                     <img
                       src={isLogin ? loginIllustration : signupIllustration}
                       alt=""
@@ -175,7 +175,7 @@ const Auth = () => {
             </AnimatePresence>
           </div>
 
-          <div className="flex items-center gap-2 mb-3 font-body text-sm">
+          <div className="flex items-center gap-2 mb-2 font-body text-xs">
             <button
               onClick={() => setIsLogin(true)}
               className={`transition-colors ${isLogin ? "text-foreground font-semibold" : "text-muted-foreground"}`}
@@ -191,14 +191,14 @@ const Auth = () => {
             </button>
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-3">
+          <form onSubmit={handleSubmit} className="space-y-2">
             <input
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder={isLogin ? "Email" : "Email"}
               required
-              className="w-full h-14 rounded-2xl bg-muted px-5 font-body text-sm text-foreground placeholder:text-muted-foreground outline-none border-none focus:ring-2 focus:ring-primary transition-all"
+              className="w-full h-10 rounded-xl bg-muted px-4 font-body text-sm text-foreground placeholder:text-muted-foreground outline-none border-none focus:ring-2 focus:ring-primary transition-all"
             />
 
             {!isLogin && (
@@ -208,7 +208,7 @@ const Auth = () => {
                 onChange={(e) => handlePhoneChange(e.target.value)}
                 placeholder="+91 XXXXX XXXXX"
                 required
-                className="w-full h-14 rounded-2xl bg-muted px-5 font-body text-sm text-foreground placeholder:text-muted-foreground outline-none border-none focus:ring-2 focus:ring-primary transition-all"
+                className="w-full h-10 rounded-xl bg-muted px-4 font-body text-sm text-foreground placeholder:text-muted-foreground outline-none border-none focus:ring-2 focus:ring-primary transition-all"
                 onFocus={() => !phone && setPhone("+91 ")}
               />
             )}
@@ -220,11 +220,11 @@ const Auth = () => {
               placeholder="Password"
               required
               minLength={6}
-              className="w-full h-14 rounded-2xl bg-muted px-5 font-body text-sm text-foreground placeholder:text-muted-foreground outline-none border-none focus:ring-2 focus:ring-primary transition-all"
+              className="w-full h-10 rounded-xl bg-muted px-4 font-body text-sm text-foreground placeholder:text-muted-foreground outline-none border-none focus:ring-2 focus:ring-primary transition-all"
             />
 
             {isLogin && (
-              <div className="flex items-center gap-2 font-body text-sm pt-1">
+              <div className="flex items-center gap-2 font-body text-xs pt-0.5">
                 <span className="text-muted-foreground">Forgot Password</span>
                 <span className="text-muted-foreground">/</span>
                 <button
@@ -245,8 +245,8 @@ const Auth = () => {
             )}
           </form>
 
-          <div className="mt-3">
-            <div className="flex items-center gap-3 mb-3">
+          <div className="mt-2">
+            <div className="flex items-center gap-3 mb-2">
               <div className="flex-1 h-px bg-border" />
               <span className="font-body text-xs text-muted-foreground">
                 Or {isLogin ? "Login" : "Signup"} with
@@ -275,7 +275,7 @@ const Auth = () => {
             </div>
           </div>
 
-          <div className="flex items-center justify-between mt-4">
+          <div className="flex items-center justify-between mt-3">
             {isLogin ? (
               <button
                 onClick={() => navigate("/guest")}

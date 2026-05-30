@@ -111,11 +111,11 @@ const BothOnboarding = () => {
     <div className="min-h-screen bg-background flex flex-col">
       <OnboardingProgressBar progress={50} />
       <OnboardingRewardBanner currentProgress={50} />
-      <div className="flex-1 flex items-center justify-center p-6">
+      <div className="flex-1 flex flex-col items-center justify-center p-6 py-4 pb-6">
       <motion.div
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
-        className="max-w-2xl w-full space-y-8"
+        className="max-w-2xl w-full space-y-4"
       >
         <div className="flex items-center gap-2">
           {bothSteps.map((_, i) => (
@@ -127,8 +127,8 @@ const BothOnboarding = () => {
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary font-body text-xs font-semibold">
             <Sparkles size={12} /> Hybrid Path Setup
           </div>
-          <h1 className="font-display text-3xl md:text-4xl text-foreground">{current.title}</h1>
-          <p className="font-body text-muted-foreground">{current.subtitle}</p>
+          <h1 className="onboarding-step-heading text-foreground">{current.title}</h1>
+          <p className="onboarding-step-desc text-muted-foreground mt-2">{current.subtitle}</p>
         </div>
 
         <AnimatePresence mode="wait">
@@ -174,14 +174,14 @@ const BothOnboarding = () => {
                     </div>
                     <div>
                       <div className="flex items-center gap-2">
-                        <h3 className="font-display text-sm text-foreground">{tool.name}</h3>
+                        <h3 className="choice-card-title text-foreground">{tool.name}</h3>
                         <span className={`px-1.5 py-0.5 rounded text-[10px] font-body font-semibold ${
                           tool.tag === "Both" ? "bg-primary/10 text-primary" :
                           tool.tag === "Career" ? "bg-accent/10 text-accent" :
                           "bg-muted text-muted-foreground"
                         }`}>{tool.tag}</span>
                       </div>
-                      <p className="font-body text-xs text-muted-foreground mt-0.5">{tool.desc}</p>
+                      <p className="choice-card-desc text-muted-foreground mt-0.5">{tool.desc}</p>
                     </div>
                   </motion.div>
                 ))}

@@ -64,7 +64,7 @@ const OnboardingRewardCelebration = ({ emoji, title, description, onContinue }: 
               <span className="font-body text-xs uppercase tracking-wider font-bold">Reward Unlocked!</span>
               <PartyPopper size={16} />
             </div>
-            <h2 className="font-display text-2xl text-foreground">{title}</h2>
+            <h2 className="reward-celebration-title text-foreground">{title}</h2>
             <p className="font-body text-sm text-muted-foreground leading-relaxed">{description}</p>
             <Button
               onClick={onContinue}

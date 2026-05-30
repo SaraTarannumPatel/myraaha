@@ -50,11 +50,11 @@ const IntentSelection = () => {
       <OnboardingProgressBar progress={35} />
       <OnboardingRewardBanner currentProgress={35} />
 
-      <div className="flex-1 flex items-center justify-center p-6">
+      <div className="flex-1 flex flex-col items-center justify-center p-6 py-4 pb-6">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
-          className="max-w-3xl w-full space-y-8"
+          className="max-w-3xl w-full space-y-4"
         >
           <div className="text-center space-y-4">
             <motion.div
@@ -65,10 +65,10 @@ const IntentSelection = () => {
             >
               <Sparkles className="text-primary-foreground" size={36} />
             </motion.div>
-            <h1 className="font-display text-4xl text-primary">
+            <h1 className="onboarding-welcome-headline text-primary">
               Welcome to <em className="text-gradient-warm">MyRaaha</em>
             </h1>
-            <p className="font-body text-muted-foreground">
+            <p className="onboarding-welcome-desc text-muted-foreground mt-2">
               Where your career growth and startup journey meet. What's your focus?
             </p>
           </div>
@@ -90,8 +90,8 @@ const IntentSelection = () => {
                   <div className={`w-14 h-14 rounded-xl flex items-center justify-center mb-4 ${isSelected ? intent.iconBg : "bg-muted"}`}>
                     <intent.icon size={28} className={isSelected ? "text-primary-foreground" : "text-muted-foreground"} />
                   </div>
-                  <h3 className="font-display text-xl text-foreground">{intent.title}</h3>
-                  <p className="font-body text-sm text-muted-foreground mt-2">{intent.description}</p>
+                  <h3 className="choice-card-title text-foreground">{intent.title}</h3>
+                  <p className="choice-card-desc text-muted-foreground mt-2">{intent.description}</p>
                   <ul className="mt-4 space-y-1">
                     {intent.features.map((f) => (
                       <li key={f} className={`font-body text-xs font-medium ${isSelected ? intent.featureColor : "text-primary"}`}>• {f}</li>

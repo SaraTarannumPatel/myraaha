@@ -92,7 +92,7 @@ const UIDRevealCard = ({ fullName, uid, rewards = [], onContinue }: UIDRevealCar
                 <ShieldCheck size={20} className="text-primary" />
               </div>
               <div className="flex items-center gap-2">
-                <code className="flex-1 font-mono text-2xl font-bold text-primary tracking-wider">
+                <code className="flex-1 uid-reveal text-primary">
                   {uid}
                 </code>
                 <button

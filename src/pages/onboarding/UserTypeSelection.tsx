@@ -29,16 +29,16 @@ const UserTypeSelection = () => {
       <OnboardingProgressBar progress={20} />
       <OnboardingRewardBanner currentProgress={20} />
 
-      <div className="flex-1 flex items-center justify-center p-6">
+      <div className="flex-1 flex flex-col items-center justify-center p-6 py-4 pb-6">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
-          className="max-w-2xl w-full space-y-8"
+          className="max-w-2xl w-full space-y-4"
         >
           <div className="text-center space-y-2">
-            <p className="font-body text-sm text-blue font-semibold uppercase tracking-wider">Step 1 of 4</p>
-            <h1 className="font-display text-4xl text-primary">Where are you in your journey?</h1>
-            <p className="font-body text-muted-foreground">This helps us calibrate your experience.</p>
+            <p className="progress-step-label text-blue tracking-wider uppercase">Step 1 of 4</p>
+            <h1 className="onboarding-step-heading text-primary">Where are you in your journey?</h1>
+            <p className="onboarding-step-desc text-muted-foreground mt-2">This helps us calibrate your experience.</p>
           </div>
 
           <div className="grid gap-3">
@@ -59,8 +59,8 @@ const UserTypeSelection = () => {
                     <type.icon size={20} className={isSelected ? "text-primary-foreground" : type.iconColor} />
                   </div>
                   <div>
-                    <h3 className="font-display text-lg text-foreground">{type.title}</h3>
-                    <p className="font-body text-sm text-muted-foreground mt-0.5">{type.description}</p>
+                    <h3 className="choice-card-title text-foreground">{type.title}</h3>
+                    <p className="choice-card-desc text-muted-foreground mt-0.5">{type.description}</p>
                   </div>
                 </motion.button>
               );

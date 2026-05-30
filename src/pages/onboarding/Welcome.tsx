@@ -25,12 +25,12 @@ const Welcome = () => {
       <OnboardingProgressBar progress={10} />
       <OnboardingRewardBanner currentProgress={10} />
 
-      <div className="flex-1 flex items-center justify-center p-4 sm:p-6">
+      <div className="flex-1 flex flex-col items-center justify-center p-4 sm:p-6 py-4 pb-6">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7 }}
-          className="max-w-lg w-full text-center space-y-6 sm:space-y-8"
+          className="max-w-lg w-full text-center space-y-3 sm:space-y-4"
         >
           <div className="space-y-2">
             <motion.div
@@ -41,10 +41,10 @@ const Welcome = () => {
             >
               <Sparkles className="text-accent" size={32} />
             </motion.div>
-            <h1 className="font-display text-3xl sm:text-4xl md:text-5xl text-primary mt-5 sm:mt-6 leading-tight">
+            <h1 className="onboarding-welcome-headline text-primary mt-5 sm:mt-6">
               Welcome to <em className="highlight-mark">MyRaaha</em>
             </h1>
-            <p className="font-body text-foreground/70 text-base sm:text-lg mt-3 sm:mt-4 px-2">
+            <p className="onboarding-welcome-desc text-foreground/70 mt-3 sm:mt-4">
               Hey{profile?.full_name ? `, ${profile.full_name}` : ""}! Let's set up your personalized journey in just a few steps.
             </p>
           </div>
@@ -65,8 +65,8 @@ const Welcome = () => {
                 <div className={`w-10 h-10 rounded-lg ${item.bg} flex items-center justify-center mb-2`}>
                   <item.icon size={20} className={item.color} />
                 </div>
-                <h3 className="font-display text-lg text-foreground">{item.title}</h3>
-                <p className="font-body text-sm text-muted-foreground">{item.desc}</p>
+                <h3 className="choice-card-title text-foreground">{item.title}</h3>
+                <p className="choice-card-desc text-muted-foreground mt-0.5">{item.desc}</p>
               </motion.div>
             ))}
           </div>

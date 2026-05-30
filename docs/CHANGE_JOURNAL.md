@@ -55,26 +55,3 @@ CareerMap-CareerScape spec.
    `pathfinder-compute`, `hiring-pulse-ingest`, `roleview-enrich`.
 4. Frontend: MapCanvas (react-force-graph), PathFinderPanel, RoleSheet,
    DreamBoardDrawer.
-
-## 2026-05-30 — Phase 0.5: KSAO + sector roots + exam gates seeded
-
-**What.** Loaded foundational reference data on top of the Phase 0 schema.
-- 283 KSAO leaf dimensions + 42 cluster headers across 6 families
-  (knowledge, skill, cognitive, curiosity, value, personality)
-- 17 sector roots in `taxonomy_nodes` (Healthcare, BFSI, Manufacturing,
-  Tech & IT, Media, Education, NGO, Real Estate, Retail, Sports, Telecom,
-  Transport, Agriculture, Energy, Govt/Defence, Hospitality, Legal)
-- 38 India exam gates with eligibility_stage + prep months + difficulty
-  (JEE Main/Adv, NEET UG/PG, CLAT, CUET UG/PG, CAT/XAT, GATE, UPSC CSE/ESE,
-  SSC CGL, RBI/IBPS/SBI PO, NDA/CDS/AFCAT, NIFT/NID/UCEED/CEED/NATA,
-  ICAR AIEEA, CA/CS/CMA Foundation, AIIMS PG/INI CET/FMGE, UGC NET,
-  TISSNET, HSEE, IIFT/SNAP/MAT/ATMA).
-
-**Why.** The KSAO matching engine, PathFinder gate banner, and sector
-landing pages all read from these tables. Without them the Phase 1
-vector builder has nothing to score against.
-
-**Next.** Ingest the 8 staged sector workbooks (~7,945 role rows total)
-into `taxonomy_nodes`. The psycopg2 path hit a role-permission error;
-will switch to psql-driven ingestion (same role that ran the seeds) and
-then start the Tech & IT vertical slice (KSAO vector backfill + RoleSheet).

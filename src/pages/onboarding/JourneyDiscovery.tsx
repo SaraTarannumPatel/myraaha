@@ -325,7 +325,7 @@ const JourneyDiscovery = () => {
     <div className="min-h-screen bg-background flex flex-col">
       <OnboardingProgressBar progress={progressPercent} />
       <OnboardingRewardBanner currentProgress={progressPercent} />
-      <div className="flex-1 flex items-center justify-center p-4 sm:p-6">
+      <div className="flex-1 flex flex-col items-center justify-center p-4 sm:p-6 py-4 pb-6">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
@@ -333,10 +333,10 @@ const JourneyDiscovery = () => {
         >
           <div className="space-y-2">
             <div className="flex items-center justify-between">
-              <span className="font-body text-xs text-muted-foreground uppercase tracking-wider">
+              <span className="progress-step-label text-muted-foreground uppercase tracking-wider">
                 {sectionLabel}
               </span>
-              <span className="font-body text-xs text-muted-foreground">
+              <span className="progress-step-counter text-muted-foreground">
                 {step + 1} / {totalSteps}
               </span>
             </div>
@@ -365,7 +365,7 @@ const JourneyDiscovery = () => {
                 <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-primary/10">
                   <currentQ.icon size={22} className={currentQ.iconColor} />
                 </div>
-                <h1 className="font-display text-2xl sm:text-3xl text-primary">
+                <h1 className="onboarding-step-heading text-primary">
                   {currentQ.question}
                 </h1>
               </div>

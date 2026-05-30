@@ -97,16 +97,16 @@ const ConsentStep = () => {
           onContinue={handleEnterApp}
         />
       )}
-      <div className="flex-1 flex items-center justify-center p-6">
+      <div className="flex-1 flex flex-col items-center justify-center p-6 py-4 pb-6">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
-          className="max-w-xl w-full space-y-8"
+          className="max-w-xl w-full space-y-4"
         >
           <div className="text-center space-y-2">
-            <p className="font-body text-sm text-primary font-semibold uppercase tracking-wider">Almost There!</p>
-            <h1 className="font-display text-4xl text-primary">Your Privacy Matters</h1>
-            <p className="font-body text-muted-foreground">
+            <p className="progress-step-label text-primary uppercase tracking-wider">Almost There!</p>
+            <h1 className="onboarding-step-heading text-primary">Your Privacy Matters</h1>
+            <p className="onboarding-step-desc text-muted-foreground mt-2">
               Your journey is personal. You control what you share and who sees your progress.
             </p>
           </div>
@@ -117,8 +117,8 @@ const ConsentStep = () => {
               <div className="flex items-start gap-4">
                 <div className="p-2 rounded-lg bg-primary/10"><Eye size={20} className="text-primary" /></div>
                 <div className="flex-1">
-                  <h3 className="font-display text-lg text-foreground">Personalized Experience</h3>
-                  <p className="font-body text-sm text-muted-foreground mt-1">
+                  <h3 className="choice-card-title text-foreground">Personalized Experience</h3>
+                  <p className="choice-card-desc text-muted-foreground mt-1">
                     Allow MyRaaha to use your interests, skills, and goals to provide personalized recommendations, AI insights, and tailored content.
                   </p>
                   <button onClick={() => setConsentData(!consentData)}
@@ -139,8 +139,8 @@ const ConsentStep = () => {
               <div className="flex items-start gap-4">
                 <div className="p-2 rounded-lg bg-primary/10"><Users size={20} className="text-primary" /></div>
                 <div className="flex-1">
-                  <h3 className="font-display text-lg text-foreground">Mentor & Community Sharing</h3>
-                  <p className="font-body text-sm text-muted-foreground mt-1">
+                  <h3 className="choice-card-title text-foreground">Mentor & Community Sharing</h3>
+                  <p className="choice-card-desc text-muted-foreground mt-1">
                     Allow your profile highlights and progress to be visible to matched mentors and community groups.
                   </p>
                   <button onClick={() => setConsentMentor(!consentMentor)}
@@ -161,8 +161,8 @@ const ConsentStep = () => {
               <div className="flex items-start gap-4">
                 <div className="p-2 rounded-lg bg-primary/10"><Lock size={20} className="text-primary" /></div>
                 <div>
-                  <h3 className="font-display text-lg text-foreground">Your Data, Your Control</h3>
-                  <p className="font-body text-sm text-muted-foreground mt-1">
+                  <h3 className="choice-card-title text-foreground">Your Data, Your Control</h3>
+                  <p className="choice-card-desc text-muted-foreground mt-1">
                     You can change these preferences anytime in Settings. We never sell your data.
                   </p>
                 </div>
