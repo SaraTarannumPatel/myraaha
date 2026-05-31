@@ -106,9 +106,17 @@ const Auth = () => {
     if (error) toast.error("Google sign-in failed. Please try again.");
   };
 
-  const handleSocialUnavailable = (provider: string) => {
-    toast.info(`${provider} sign-in coming soon!`);
+  const handleAppleSignIn = async () => {
+    const { error } = await lovable.auth.signInWithOAuth("apple", {
+      redirect_uri: window.location.origin,
+    });
+    if (error) toast.error("Apple sign-in failed. Please try again.");
   };
+
+  const handleFacebookUnavailable = () => {
+    toast.info("Facebook sign-in isn't supported yet. Please use Google, Apple, or email.");
+  };
+
 
   if (user) return null;
 
