@@ -55,3 +55,21 @@ CareerMap-CareerScape spec.
    `pathfinder-compute`, `hiring-pulse-ingest`, `roleview-enrich`.
 4. Frontend: MapCanvas (react-force-graph), PathFinderPanel, RoleSheet,
    DreamBoardDrawer.
+
+## 2026-05-31 — Auth: Apple + Facebook stance + reset polish, Tech & IT taxonomy loaded
+
+**What:**
+- Enabled native Apple OAuth (Google + Apple) via Lovable Cloud managed social auth.
+- Wired Apple button on /auth to `lovable.auth.signInWithOAuth("apple")`.
+- Facebook button now shows a clear "not supported" toast (Lovable Cloud doesn't natively support Facebook OAuth).
+- Improved "Forgot password" UX on /auth: clearer label, confirms reset link sent to the registered email; `/reset-password` page already handles the recovery hash.
+- Excluded `src/_archived` and orphaned `MobileLogin.tsx` from tsconfig to unblock build.
+- Restored missing supabase imports in `MyRaahaNewsletter` and `MyRaahaContact`; stubbed `FadeInView`; removed dangling `MobilePartnerships` import; fixed `.category` → `.department` on careers pages.
+
+**CareerMap data ingest (Tech & IT):**
+- Generated batched SQL from `TechIT.xlsx` (766 roles) and loaded via psql.
+- `taxonomy_nodes` now holds: 1 sector (Technology & IT) + 21 sub_sector + 71 industry_family + 73 industry + 80 each at domain/sub_domain/function/job_family/career_cluster/career_pathway_cluster + **766 roles**.
+
+**Why:** Unblock real-time password reset, broaden sign-in options to the providers Lovable Cloud actually supports, and complete the first end-to-end vertical slice data load for the new CareerMap-CareerScape module.
+
+**Files:** `src/pages/Auth.tsx`, `tsconfig.app.json`, `src/components/MyRaahaNewsletter.tsx`, `src/pages/MyRaahaContact.tsx`, `src/components/TrustSections.tsx`, `src/pages/MyRaahaPartnerships.tsx`, `src/pages/career/{CoreTeam,Facilitator,Intern,Volunteer}.tsx`, `src/integrations/lovable/index.ts`.
