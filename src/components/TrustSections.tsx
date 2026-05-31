@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { FadeInView } from './PublicLayout';
+const FadeInView = ({children}: {children: React.ReactNode}) => <>{children}</>;
 import { ArrowRight, CheckCircle, Users, GraduationCap, Building2, Briefcase, Heart, BookOpen, Quote, Mail, Zap } from 'lucide-react';
 
 export const ImpactSection = () => {
