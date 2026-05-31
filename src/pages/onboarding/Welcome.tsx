@@ -73,9 +73,9 @@ const Welcome = () => {
 
           <Button
             onClick={handleContinue}
-            className="bg-primary text-accent rounded-full h-12 px-8 font-body font-semibold text-base hover:bg-primary"
+            className="bg-primary text-white rounded-full h-[52px] min-h-[52px] px-8 font-body font-semibold text-base hover:bg-primary/95"
           >
-            Let's Go <ArrowRight size={18} />
+            Let's Go <ArrowRight size={18} className="ml-1.5" />
           </Button>
         </motion.div>
       </div>

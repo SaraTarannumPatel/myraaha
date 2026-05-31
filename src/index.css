@@ -1157,7 +1157,7 @@
 }
 
 /* Buttons & Tabs (Universal Design) */
-.myraaha-landing-site button, 
+.myraaha-landing-site button:not(.mobile-menu-toggle), 
 .btn-primary, .btn-purple, .btn-cta-primary, .btn-beacon-explore, .btn-learn-more, .btn-submit, .btn-subscribe, .btn-send, .btn-next,
 .btn-secondary, .btn-white, .btn-cta-white, .btn-cta-secondary, .btn-prev, .btn-accent,
 .n-v3-btn, .n-v3-badge, .hero-btn, .cta-btn, .footer-cta-btn, .stakeholder-tab {
@@ -1802,6 +1802,299 @@ html body .insight-header-section {
   html body .partnerships-hero-v2,
   html body .insight-header-section {
     margin-top: 50px !important;
+  }
+}
+
+/* ==========================================================================
+   LANDING WEBSITE MOBILE RESPONSIVENESS AND OVERFLOW CORRECTIONS
+   ========================================================================== */
+
+/* 1. Global Reset to prevent layout overflow across all landing pages */
+html:has(.myraaha-landing-site), 
+html:has(.myraaha-landing-site) body {
+  overflow-x: hidden !important;
+  max-width: 100% !important;
+}
+
+.myraaha-landing-site, 
+.myraaha-landing-site * {
+  box-sizing: border-box !important;
+}
+
+.myraaha-landing-site {
+  overflow-x: hidden !important;
+  width: 100% !important;
+  position: relative !important;
+}
+
+/* 2. Fix mobile navigation links drawer horizontal shift and margins */
+@media (max-width: 1024px) {
+  .myraaha-nav-links {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    left: auto !important;
+    box-sizing: border-box !important;
+  }
+  .myraaha-nav-links.open {
+    right: 0 !important;
+  }
+}
+
+/* 3. Unify page content and navbar horizontal alignment on tablet */
+@media (max-width: 1024px) {
+  .myraaha-navbar {
+    padding-left: 40px !important;
+    padding-right: 40px !important;
+  }
+  
+  .section-padding, 
+  .myraaha-hero, 
+  .standard-page-hero,
+  .about-section,
+  .careers-section,
+  .job-list-section,
+  .portal-container,
+  .insights-featured,
+  .insights-grid-section,
+  .contact-v4-main,
+  .contact-v4-map,
+  .contact-v4-faq,
+  .partnerships-hero-v2,
+  .partnerships-engagement-v2,
+  .partnerships-process-v2,
+  .partnerships-benefits-v2,
+  .partnerships-asks-v2,
+  .partnerships-cta-v2,
+  .role-section,
+  .life-at-myraaha,
+  .motivation-v3,
+  .bharat-v3,
+  .theory-cinematic-v6,
+  .about-journey,
+  .about-values,
+  .team-grid-section,
+  .team-culture,
+  .newsletter-section-v3,
+  .myraaha-newsletter-v3 {
+    padding-left: 40px !important;
+    padding-right: 40px !important;
+  }
+}
+
+/* 4. Global Typography, Header Scaling and Padding Alignment on Mobile */
+@media (max-width: 768px) {
+  .myraaha-navbar {
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+  }
+  
+  .section-padding, 
+  .myraaha-hero, 
+  .standard-page-hero,
+  .about-section,
+  .careers-section,
+  .job-list-section,
+  .portal-container,
+  .insights-featured,
+  .insights-grid-section,
+  .contact-v4-main,
+  .contact-v4-map,
+  .contact-v4-faq,
+  .partnerships-hero-v2,
+  .partnerships-engagement-v2,
+  .partnerships-process-v2,
+  .partnerships-benefits-v2,
+  .partnerships-asks-v2,
+  .partnerships-cta-v2,
+  .role-section,
+  .life-at-myraaha,
+  .motivation-v3,
+  .bharat-v3,
+  .theory-cinematic-v6,
+  .about-journey,
+  .about-values,
+  .team-grid-section,
+  .team-culture,
+  .newsletter-section-v3,
+  .myraaha-newsletter-v3 {
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+  }
+
+  body .myraaha-landing-site h1,
+  body .type-hero, 
+  body .hero-title,
+  body .hero-title-v2,
+  body .about-hero-title,
+  body .partner-hero-title,
+  body .motivation-hero-title,
+  body .services-title,
+  body .partnerships-title,
+  body .careers-title,
+  body .contact-title,
+  body .insights-title,
+  body .partner-title,
+  body .cta-title,
+  body .footer-cta-title,
+  body .n-v3-title,
+  body .mission-title,
+  body .future-ready-title-v2,
+  body .beacon-title,
+  body .culture-title,
+  body .about-section-title,
+  body .role-section-title,
+  body .weekly-insights-title,
+  body .cs-title,
+  body .section-title,
+  body .section-title-v2,
+  body .role-form-title,
+  body .myraaha-landing-site h2 {
+    font-size: 30px !important;
+    line-height: 1.25 !important;
+    font-weight: 700 !important;
+    overflow-wrap: break-word !important;
+    word-wrap: break-word !important;
+    word-break: normal !important;
+    white-space: normal !important;
+  }
+
+  /* Section Subtitles & Body Paragraphs Mobile Calibration */
+  body .section-subtitle,
+  body .hero-subtitle,
+  body .about-subtitle,
+  body .services-subtitle,
+  body .partnerships-subtitle,
+  body .careers-subtitle,
+  body .contact-subtitle,
+  body .insights-subtitle,
+  body .partner-subtitle,
+  body .cta-subtitle,
+  body .footer-cta-desc,
+  body .n-v3-subtitle,
+  body .mission-subtitle,
+  body .future-ready-uvp-v2,
+  body .beacon-subtitle,
+  body .footer-mission,
+  body .testimonial-quote,
+  body .body-text,
+  body .description-text,
+  body .about-section-subtitle,
+  body .role-section-subtitle,
+  body .culture-subtitle,
+  body .hero-subtitle-v2,
+  body .section-subtitle-v2,
+  body .partner-hero-subtitle,
+  body .motivation-hero-lead,
+  body .role-form-subtitle {
+    font-size: 0.95rem !important;
+    line-height: 1.55 !important;
+  }
+
+  /* Prevent negative margin and 100vw container overflows */
+  .hero-image-container img, 
+  .hero-banner img, 
+  .impact-block .impact-image,
+  .life-image img,
+  .floating-img,
+  .prism-visual img {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+
+  /* Fix clipped timeline badges on Partnerships page */
+  .path-marker {
+    left: 8px !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    z-index: 10 !important;
+  }
+
+  .path-line {
+    left: 25px !important;
+    opacity: 0.15 !important;
+  }
+  
+  /* Fix opp-point-card nowrap overflow on about page */
+  .opp-point-card {
+    white-space: normal !important;
+    text-align: center;
+    justify-content: center;
+  }
+
+  /* Stakeholder mobile horizontal scroll block wrap fixes */
+  .stakeholder-filter-wrapper {
+    width: 100% !important;
+    margin-left: 0 !important;
+    padding: 0 !important;
+    max-width: 100% !important;
+  }
+}
+
+@media (max-width: 480px) {
+  body .myraaha-landing-site h1,
+  body .type-hero, 
+  body .hero-title,
+  body .hero-title-v2,
+  body .about-hero-title,
+  body .partner-hero-title,
+  body .motivation-hero-title,
+  body .services-title,
+  body .partnerships-title,
+  body .careers-title,
+  body .contact-title,
+  body .insights-title,
+  body .partner-title,
+  body .cta-title,
+  body .footer-cta-title,
+  body .n-v3-title,
+  body .mission-title,
+  body .future-ready-title-v2,
+  body .beacon-title,
+  body .culture-title,
+  body .about-section-title,
+  body .role-section-title,
+  body .weekly-insights-title,
+  body .cs-title,
+  body .section-title,
+  body .section-title-v2,
+  body .role-form-title,
+  body .myraaha-landing-site h2 {
+    font-size: 26px !important;
+  }
+}
+
+@media (max-width: 320px) {
+  body .myraaha-landing-site h1,
+  body .type-hero, 
+  body .hero-title,
+  body .hero-title-v2,
+  body .about-hero-title,
+  body .partner-hero-title,
+  body .motivation-hero-title,
+  body .services-title,
+  body .partnerships-title,
+  body .careers-title,
+  body .contact-title,
+  body .insights-title,
+  body .partner-title,
+  body .cta-title,
+  body .footer-cta-title,
+  body .n-v3-title,
+  body .mission-title,
+  body .future-ready-title-v2,
+  body .beacon-title,
+  body .culture-title,
+  body .about-section-title,
+  body .role-section-title,
+  body .weekly-insights-title,
+  body .cs-title,
+  body .section-title,
+  body .section-title-v2,
+  body .role-form-title,
+  body .myraaha-landing-site h2 {
+    font-size: 22px !important;
   }
 }
 

@@ -377,7 +377,7 @@ const JourneyDiscovery = () => {
                     placeholder={currentQ.placeholder}
                     value={answers[currentQ.id] || ""}
                     onChange={(e) => handleTextChange(e.target.value)}
-                    className="h-14 rounded-2xl bg-[hsl(0,0%,85%,0.3)] px-5 font-body text-base border-none focus-visible:ring-2 focus-visible:ring-primary"
+                    className="h-12 md:h-12 md:min-h-[48px] min-h-[52px] rounded-md bg-muted px-4 font-body text-base border-none focus-visible:ring-2 focus-visible:ring-primary"
                     onKeyDown={(e) => e.key === "Enter" && canNext && handleNext()}
                   />
                 </div>
@@ -400,8 +400,8 @@ const JourneyDiscovery = () => {
                         onClick={() => handleSelect(opt.value)}
                         className={`${
                           currentQ.options!.length > 5
-                            ? "px-4 py-2.5 rounded-xl"
-                            : "w-full text-left p-4 rounded-xl"
+                            ? "px-4 py-2.5 rounded-lg"
+                            : "w-full text-left p-4 rounded-lg"
                         } border-2 transition-all font-body text-sm ${
                           isSelected
                             ? "border-primary bg-primary/10 text-foreground font-semibold shadow-sm"
@@ -419,15 +419,15 @@ const JourneyDiscovery = () => {
           </AnimatePresence>
 
           <div className="flex justify-between pt-2">
-            <Button variant="ghost" onClick={handleBack} className="font-body">
+            <Button variant="ghost" onClick={handleBack} className="font-body h-[48px] min-h-[48px] px-4 rounded-full">
               <ArrowLeft size={18} /> Back
             </Button>
             <Button
               onClick={handleNext}
               disabled={!canNext}
-              className="bg-primary text-accent rounded-full px-8 font-body font-semibold hover:bg-primary disabled:opacity-50"
+              className="bg-primary text-white rounded-full h-[52px] min-h-[52px] px-8 font-body font-semibold hover:bg-primary/95 disabled:opacity-50"
             >
-              {step === totalSteps - 1 ? "Finish" : "Next"} <ArrowRight size={18} />
+              {step === totalSteps - 1 ? "Finish" : "Next"} <ArrowRight size={18} className="ml-1.5" />
             </Button>
           </div>
         </motion.div>

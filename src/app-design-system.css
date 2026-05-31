@@ -3,21 +3,20 @@
 .myraaha-app {
   /* 1. TYPOGRAPHY FOUNDATION */
   font-family: 'Poppins', sans-serif !important;
-  font-size: 13px !important;
   --font-primary: 'Poppins', sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
 
-  /* 2. TYPE SCALE — DESKTOP */
-  --text-xs: 9px;
-  --text-sm: 11px;
-  --text-base: 13px;
-  --text-md: 15px;
-  --text-lg: 17px;
-  --text-xl: 20px;
-  --text-2xl: 24px;
-  --text-3xl: 28px;
-  --text-4xl: 36px;
-  --text-5xl: 44px;
+  /* 2. TYPE SCALE — DESKTOP (Base: 16px. Scale: 1.25) */
+  --text-xs: 11px;
+  --text-sm: 13px;
+  --text-base: 16px;
+  --text-md: 18px;
+  --text-lg: 20px;
+  --text-xl: 24px;
+  --text-2xl: 30px;
+  --text-3xl: 36px;
+  --text-4xl: 48px;
+  --text-5xl: 60px;
 
   /* 5. SPACING SYSTEM */
   --space-1: 4px;
@@ -42,29 +41,28 @@
   --radius-pill: 50px;
 }
 
-/* 3. TYPE SCALE — MOBILE */
+/* 3. TYPE SCALE — MOBILE (Base: 15px. Scale: 1.2) */
 @media (max-width: 768px) {
   .myraaha-app {
-    font-size: 11px !important;
-    --text-xs: 8px;
-    --text-sm: 10px;
-    --text-base: 11px;
-    --text-md: 13px;
-    --text-lg: 16px;
-    --text-xl: 18px;
-    --text-2xl: 21px;
-    --text-3xl: 24px;
-    --text-4xl: 30px;
-    --text-5xl: 30px; /* Cap at 30px for mobile */
+    --text-xs: 10px;
+    --text-sm: 12px;
+    --text-base: 15px;
+    --text-md: 17px;
+    --text-lg: 20px;
+    --text-xl: 22px;
+    --text-2xl: 26px;
+    --text-3xl: 30px;
+    --text-4xl: 36px;
+    --text-5xl: 36px; /* Nothing above 36px on mobile */
   }
 }
 
-/* =========================================
-   TAILWIND UTILITY OVERRIDES FOR APP
+/* ==========================================================================
+   GLOBAL UTILITY OVERRIDES FOR APP
    (This ensures the design system applies to ShadCN and Tailwind components)
-   ========================================= */
+   ========================================================================== */
 
-/* Global Font Family Enforcement */
+/* Rule 1: One font family. Poppins only (except mono areas) */
 .myraaha-app *,
 .myraaha-app .font-display,
 .myraaha-app .font-body,
@@ -74,23 +72,89 @@
 }
 
 /* Rule 4: 65ch maximum line length on all prose */
-.myraaha-app p {
-  max-width: 65ch;
+.myraaha-app p,
+.myraaha-app .prose p,
+.myraaha-app .description-text {
+  max-width: 65ch !important;
 }
 
-/* Rule 5: Poppins body copy never goes below 1.65 line height (Except mobile which is 1.7) */
+/* Rule 5: Poppins body copy never goes below 1.65 line height */
+.myraaha-app p,
+.myraaha-app span:not(.font-mono),
+.myraaha-app div:not(.font-mono) {
+  line-height: 1.65 !important;
+}
 
 /* Tailwind Text Size Overrides — DESKTOP */
-.myraaha-app .text-xs { font-size: var(--text-xs) !important; font-weight: 400; line-height: 1.5 !important; letter-spacing: 0.03em !important; }
-.myraaha-app .text-sm { font-size: var(--text-sm) !important; font-weight: 400; line-height: 1.55 !important; letter-spacing: 0.02em !important; }
-.myraaha-app .text-base { font-size: var(--text-base) !important; font-weight: 400; line-height: 1.65 !important; letter-spacing: 0 !important; }
-.myraaha-app .text-md { font-size: var(--text-md) !important; font-weight: 400; line-height: 1.6 !important; letter-spacing: 0 !important; }
-.myraaha-app .text-lg { font-size: var(--text-lg) !important; font-weight: 500; line-height: 1.5 !important; letter-spacing: -0.01em !important; }
-.myraaha-app .text-xl { font-size: var(--text-xl) !important; font-weight: 600; line-height: 1.4 !important; letter-spacing: -0.01em !important; }
-.myraaha-app .text-2xl { font-size: var(--text-2xl) !important; font-weight: 700; line-height: 1.3 !important; letter-spacing: -0.02em !important; }
-.myraaha-app .text-3xl { font-size: var(--text-3xl) !important; font-weight: 700; line-height: 1.25 !important; letter-spacing: -0.02em !important; }
-.myraaha-app .text-4xl { font-size: var(--text-4xl) !important; font-weight: 700; line-height: 1.2 !important; letter-spacing: -0.03em !important; }
-.myraaha-app .text-5xl { font-size: var(--text-5xl) !important; font-weight: 700; line-height: 1.1 !important; letter-spacing: -0.04em !important; }
+.myraaha-app .text-xs {
+  font-size: var(--text-xs) !important;
+  font-weight: 400;
+  line-height: 1.5 !important;
+  letter-spacing: 0.03em !important; /* Rule 3: Positive letter spacing on small labels */
+}
+
+.myraaha-app .text-sm {
+  font-size: var(--text-sm) !important;
+  font-weight: 400;
+  line-height: 1.55 !important;
+  letter-spacing: 0.02em !important;
+}
+
+.myraaha-app .text-base {
+  font-size: var(--text-base) !important;
+  font-weight: 400;
+  line-height: 1.65 !important;
+  letter-spacing: 0 !important;
+}
+
+.myraaha-app .text-md {
+  font-size: var(--text-md) !important;
+  font-weight: 400;
+  line-height: 1.6 !important;
+  letter-spacing: 0 !important;
+}
+
+.myraaha-app .text-lg {
+  font-size: var(--text-lg) !important;
+  font-weight: 500;
+  line-height: 1.5 !important;
+  letter-spacing: -0.01em !important;
+}
+
+.myraaha-app .text-xl {
+  font-size: var(--text-xl) !important;
+  font-weight: 600;
+  line-height: 1.4 !important;
+  letter-spacing: -0.01em !important;
+}
+
+.myraaha-app .text-2xl {
+  font-size: var(--text-2xl) !important;
+  font-weight: 700;
+  line-height: 1.3 !important;
+  letter-spacing: -0.02em !important; /* Rule 3: Negative letter spacing on large headers */
+}
+
+.myraaha-app .text-3xl {
+  font-size: var(--text-3xl) !important;
+  font-weight: 700;
+  line-height: 1.25 !important;
+  letter-spacing: -0.02em !important;
+}
+
+.myraaha-app .text-4xl {
+  font-size: var(--text-4xl) !important;
+  font-weight: 700;
+  line-height: 1.2 !important;
+  letter-spacing: -0.03em !important;
+}
+
+.myraaha-app .text-5xl {
+  font-size: var(--text-5xl) !important;
+  font-weight: 700;
+  line-height: 1.1 !important;
+  letter-spacing: -0.04em !important;
+}
 
 /* Tailwind Text Size Overrides — MOBILE */
 @media (max-width: 768px) {
@@ -106,64 +170,268 @@
   .myraaha-app .text-5xl { font-size: 36px !important; line-height: 1.2 !important; letter-spacing: -0.03em !important; } /* Cap at 36px */
 }
 
-/* =========================================
-   ONBOARDING TYPOGRAPHY CLASSES
-   ========================================= */
+/* ==========================================================================
+   AUTHENTICATED APP — DASHBOARD SPECIFICS
+   ========================================================================== */
+
+/* Dashboard Greeting */
+.myraaha-app .dashboard-greeting {
+  font-family: var(--font-primary) !important;
+  font-size: 30px !important;
+  font-weight: 700 !important;
+  line-height: 1.3 !important;
+}
+@media (max-width: 768px) {
+  .myraaha-app .dashboard-greeting {
+    font-size: 24px !important;
+  }
+}
+
+/* Dashboard Section Title / Divider */
+.myraaha-app .dashboard-section-title,
+.myraaha-app .app-section-divider {
+  font-family: var(--font-primary) !important;
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.1em !important;
+  text-transform: uppercase !important;
+}
+
+/* Card Title */
+.myraaha-app .app-card-title,
+.myraaha-app .card h3,
+.myraaha-app [class*="-card"] h3 {
+  font-family: var(--font-primary) !important;
+  font-size: 16px !important;
+  font-weight: 600 !important;
+  line-height: 1.4 !important;
+  letter-spacing: -0.01em !important;
+}
+@media (max-width: 768px) {
+  .myraaha-app .app-card-title,
+  .myraaha-app .card h3,
+  .myraaha-app [class*="-card"] h3 {
+    font-size: 15px !important;
+  }
+}
+
+/* Card Body */
+.myraaha-app .app-card-body,
+.myraaha-app .card p,
+.myraaha-app [class*="-card"] p {
+  font-family: var(--font-primary) !important;
+  font-size: 14px !important;
+  font-weight: 400 !important;
+  line-height: 1.65 !important;
+}
+@media (max-width: 768px) {
+  .myraaha-app .app-card-body,
+  .myraaha-app .card p,
+  .myraaha-app [class*="-card"] p {
+    font-size: 13px !important;
+  }
+}
+
+/* Card Metadata / Timestamp */
+.myraaha-app .app-card-metadata {
+  font-family: var(--font-primary) !important;
+  font-size: 12px !important;
+  font-weight: 400 !important;
+  letter-spacing: 0.01em !important;
+}
+
+/* Card Tag / Badge */
+.myraaha-app .app-card-tag,
+.myraaha-app .app-card-badge {
+  font-family: var(--font-primary) !important;
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.08em !important;
+  text-transform: uppercase !important;
+  padding: 3px 10px !important;
+  border-radius: var(--radius-pill) !important;
+}
+
+/* Sidebar Navigation — Section Label */
+.myraaha-app .sidebar-section-label {
+  font-family: var(--font-primary) !important;
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.12em !important;
+  text-transform: uppercase !important;
+}
+
+/* Sidebar Navigation — Item */
+.myraaha-app .sidebar-nav-item {
+  font-family: var(--font-primary) !important;
+  font-size: 14px !important;
+  font-weight: 400 !important;
+  line-height: 1.4 !important;
+  min-height: 40px !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+}
+.myraaha-app .sidebar-nav-item.active,
+.myraaha-app .sidebar-nav-item[data-active="true"] {
+  font-weight: 600 !important;
+}
+
+/* Bottom Tab Bar Label (Mobile) */
+.myraaha-app .bottom-tab-item {
+  font-family: var(--font-primary) !important;
+  font-size: 10px !important;
+  font-weight: 500 !important;
+  letter-spacing: 0.02em !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  gap: 4px !important;
+}
+.myraaha-app .bottom-tab-item.active {
+  font-weight: 700 !important;
+}
+
+/* Top App Bar — Logo */
+.myraaha-app .app-logo {
+  font-family: var(--font-primary) !important;
+  font-size: 20px !important;
+  font-weight: 700 !important;
+  letter-spacing: -0.01em !important;
+}
+@media (max-width: 768px) {
+  .myraaha-app .app-logo {
+    font-size: 18px !important;
+  }
+}
+
+/* Top App Bar — Search Placeholder */
+.myraaha-app .app-search-placeholder::placeholder {
+  font-family: var(--font-primary) !important;
+  font-size: 14px !important;
+  font-weight: 400 !important;
+  font-style: italic !important;
+}
+
+/* Module Page Title (H1 inside app) */
+.myraaha-app .app-page-title,
+.myraaha-app h1:not(.onboarding-welcome-headline) {
+  font-family: var(--font-primary) !important;
+  font-size: 36px !important;
+  font-weight: 700 !important;
+  line-height: 1.2 !important;
+  letter-spacing: -0.02em !important;
+}
+@media (max-width: 768px) {
+  .myraaha-app .app-page-title,
+  .myraaha-app h1:not(.onboarding-welcome-headline) {
+    font-size: 28px !important;
+  }
+}
+
+/* Module Subtitle */
+.myraaha-app .app-module-subtitle {
+  font-family: var(--font-primary) !important;
+  font-size: 16px !important;
+  font-weight: 400 !important;
+  line-height: 1.7 !important;
+  max-width: 560px !important;
+}
+@media (max-width: 768px) {
+  .myraaha-app .app-module-subtitle {
+    font-size: 14px !important;
+  }
+}
+
+
+/* ==========================================================================
+   ONBOARDING
+   ========================================================================= */
 
 .myraaha-app .onboarding-welcome-headline {
   font-family: var(--font-primary) !important;
-  font-size: 36px !important;
+  font-size: 48px !important;
   font-weight: 700 !important;
   line-height: 1.2 !important;
   text-align: center !important;
   max-width: 640px !important;
   margin: 0 auto;
 }
+@media (max-width: 768px) {
+  .myraaha-app .onboarding-welcome-headline {
+    font-size: 30px !important;
+  }
+}
 
 .myraaha-app .onboarding-welcome-desc {
   font-family: var(--font-primary) !important;
-  font-size: 13px !important;
+  font-size: 17px !important;
   font-weight: 400 !important;
   line-height: 1.7 !important;
   text-align: center !important;
   max-width: 500px !important;
   margin: 0 auto;
 }
+@media (max-width: 768px) {
+  .myraaha-app .onboarding-welcome-desc {
+    font-size: 15px !important;
+  }
+}
 
 .myraaha-app .onboarding-step-heading {
   font-family: var(--font-primary) !important;
-  font-size: 26px !important;
+  font-size: 36px !important;
   font-weight: 700 !important;
   line-height: 1.25 !important;
   text-align: center !important;
 }
+@media (max-width: 768px) {
+  .myraaha-app .onboarding-step-heading {
+    font-size: 26px !important;
+  }
+}
 
 .myraaha-app .onboarding-step-desc {
   font-family: var(--font-primary) !important;
-  font-size: 12px !important;
+  font-size: 16px !important;
   font-weight: 400 !important;
   line-height: 1.7 !important;
   text-align: center !important;
   max-width: 480px !important;
   margin: 0 auto;
 }
+@media (max-width: 768px) {
+  .myraaha-app .onboarding-step-desc {
+    font-size: 14px !important;
+  }
+}
 
 .myraaha-app .choice-card-title {
   font-family: var(--font-primary) !important;
-  font-size: 12px !important;
+  font-size: 16px !important;
   font-weight: 600 !important;
+}
+@media (max-width: 768px) {
+  .myraaha-app .choice-card-title {
+    font-size: 15px !important;
+  }
 }
 
 .myraaha-app .choice-card-desc {
   font-family: var(--font-primary) !important;
-  font-size: 10px !important;
+  font-size: 13px !important;
   font-weight: 400 !important;
   line-height: 1.55 !important;
+}
+@media (max-width: 768px) {
+  .myraaha-app .choice-card-desc {
+    font-size: 12px !important;
+  }
 }
 
 .myraaha-app .progress-step-label {
   font-family: var(--font-primary) !important;
-  font-size: 9px !important;
+  font-size: 12px !important;
   font-weight: 500 !important;
 }
 .myraaha-app .progress-step-label.active {
@@ -172,106 +440,674 @@
 
 .myraaha-app .progress-step-counter {
   font-family: var(--font-mono) !important;
-  font-size: 10px !important;
+  font-size: 13px !important;
   font-weight: 600 !important;
   letter-spacing: 0.04em !important;
+}
+@media (max-width: 768px) {
+  .myraaha-app .progress-step-counter {
+    font-size: 12px !important;
+  }
 }
 
 .myraaha-app .reward-celebration-title {
   font-family: var(--font-primary) !important;
-  font-size: 22px !important;
+  font-size: 30px !important;
   font-weight: 700 !important;
   text-align: center !important;
+}
+@media (max-width: 768px) {
+  .myraaha-app .reward-celebration-title {
+    font-size: 24px !important;
+  }
 }
 
 .myraaha-app .uid-reveal {
   font-family: var(--font-mono) !important;
-  font-size: 18px !important;
+  font-size: 22px !important;
   font-weight: 700 !important;
   letter-spacing: 0.12em !important;
   padding: 10px 24px !important;
   border-radius: var(--radius-md) !important;
   text-align: center !important;
 }
-
 @media (max-width: 768px) {
-  .myraaha-app .onboarding-welcome-headline { font-size: 24px !important; }
-  .myraaha-app .onboarding-welcome-desc { font-size: 11px !important; }
-  .myraaha-app .onboarding-step-heading { font-size: 18px !important; }
-  .myraaha-app .onboarding-step-desc { font-size: 10px !important; }
-  .myraaha-app .choice-card-title { font-size: 11px !important; }
-  .myraaha-app .choice-card-desc { font-size: 9px !important; }
-  .myraaha-app .progress-step-counter { font-size: 9px !important; }
-  .myraaha-app .reward-celebration-title { font-size: 16px !important; }
-  .myraaha-app .uid-reveal { font-size: 14px !important; }
+  .myraaha-app .uid-reveal {
+    font-size: 20px !important;
+  }
 }
 
-/* =========================================
-   ELEMENT-BY-ELEMENT SPECIFICS
-   ========================================= */
 
-/* JetBrains Mono overrides */
-.myraaha-app .progress-step-counter,
-.myraaha-app .selfgraph-primary-score,
-.myraaha-app .progress-percentage,
-.myraaha-app .public-uid,
-.myraaha-app .graph-data-point-label,
-.myraaha-app .otp-input {
+/* ==========================================================================
+   DATA, SCORES & GRAPHS (JetBrains Mono Enforced)
+   ========================================================================== */
+
+.myraaha-app .selfgraph-primary-score {
   font-family: var(--font-mono) !important;
-}
-
-/* Buttons Minimum Heights */
-.myraaha-app button, 
-.myraaha-app .btn,
-.myraaha-app .Button {
-  min-height: 48px;
-  border-radius: var(--radius-pill);
-  font-family: var(--font-primary) !important;
+  font-size: 56px !important;
+  font-weight: 700 !important;
+  letter-spacing: -0.02em !important;
 }
 @media (max-width: 768px) {
-  .myraaha-app button, 
-  .myraaha-app .btn,
-  .myraaha-app .Button {
-    min-height: 52px;
+  .myraaha-app .selfgraph-primary-score {
+    font-size: 48px !important;
   }
 }
 
-/* Inputs Minimum Heights */
-.myraaha-app input:not([type="checkbox"]):not([type="radio"]), 
-.myraaha-app select, 
-.myraaha-app textarea {
-  min-height: 48px;
-  border-radius: var(--radius-md);
-}
-@media (max-width: 768px) {
-  .myraaha-app input:not([type="checkbox"]):not([type="radio"]), 
-  .myraaha-app select, 
-  .myraaha-app textarea {
-    min-height: 52px;
-  }
-}
-
-/* Tap Targets */
-@media (max-width: 768px) {
-  .myraaha-app [role="tab"],
-  .myraaha-app a,
-  .myraaha-app label {
-    min-height: 44px;
-    display: inline-flex;
-    align-items: center;
-  }
-}
-
-/* Section labels & Badges */
-.myraaha-app .badge, 
-.myraaha-app .uppercase-label,
 .myraaha-app .score-label {
+  font-family: var(--font-primary) !important;
+  font-size: 11px !important;
+  font-weight: 700 !important;
   letter-spacing: 0.1em !important;
   text-transform: uppercase !important;
-  font-weight: 700 !important;
 }
 
-/* Border Radius Overrides */
+.myraaha-app .score-descriptor {
+  font-family: var(--font-primary) !important;
+  font-size: 18px !important;
+  font-weight: 500 !important;
+  font-style: italic !important;
+}
+@media (max-width: 768px) {
+  .myraaha-app .score-descriptor {
+    font-size: 16px !important;
+  }
+}
+
+.myraaha-app .progress-percentage {
+  font-family: var(--font-mono) !important;
+  font-size: 20px !important;
+  font-weight: 600 !important;
+}
+@media (max-width: 768px) {
+  .myraaha-app .progress-percentage {
+    font-size: 18px !important;
+  }
+}
+
+.myraaha-app .public-uid {
+  font-family: var(--font-mono) !important;
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.1em !important;
+  padding: 4px 12px !important;
+  border-radius: var(--radius-sm) !important;
+}
+
+.myraaha-app .stat-number,
+.myraaha-app .impact-number {
+  font-family: var(--font-primary) !important;
+  font-size: 56px !important;
+  font-weight: 700 !important;
+}
+@media (max-width: 768px) {
+  .myraaha-app .stat-number,
+  .myraaha-app .impact-number {
+    font-size: 36px !important;
+  }
+}
+
+.myraaha-app .stat-label {
+  font-family: var(--font-primary) !important;
+  font-size: 13px !important;
+  font-weight: 500 !important;
+}
+@media (max-width: 768px) {
+  .myraaha-app .stat-label {
+    font-size: 12px !important;
+  }
+}
+
+.myraaha-app .graph-axis-label {
+  font-family: var(--font-primary) !important;
+  font-size: 11px !important;
+  font-weight: 400 !important;
+}
+
+.myraaha-app .graph-data-point-label {
+  font-family: var(--font-mono) !important;
+  font-size: 11px !important;
+  font-weight: 500 !important;
+}
+
+.myraaha-app .domain-affinity-tag {
+  font-family: var(--font-primary) !important;
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.05em !important;
+  text-transform: uppercase !important;
+  padding: 4px 12px !important;
+  border-radius: var(--radius-pill) !important;
+}
+
+
+/* ==========================================================================
+   FORMS & INPUTS
+   ========================================================================== */
+
+/* Input Label */
+.myraaha-app .input-label,
+.myraaha-app label:not(.checkbox-radio-label) {
+  font-family: var(--font-primary) !important;
+  font-size: 13px !important;
+  font-weight: 500 !important;
+  margin-bottom: 6px !important;
+  display: block !important;
+}
+
+/* Inputs Minimum Heights (Rule 6: Mobile tap targets are 44px minimum) */
+.myraaha-app input:not([type="checkbox"]):not([type="radio"]),
+.myraaha-app select,
+.myraaha-app textarea {
+  min-height: 48px !important;
+  border-radius: var(--radius-md) !important;
+  font-family: var(--font-primary) !important;
+  font-size: 15px !important;
+  font-weight: 400 !important;
+}
+@media (max-width: 768px) {
+  .myraaha-app input:not([type="checkbox"]):not([type="radio"]),
+  .myraaha-app select,
+  .myraaha-app textarea {
+    min-height: 52px !important;
+    font-size: 15px !important;
+  }
+}
+
+/* Input Placeholder */
+.myraaha-app input::placeholder,
+.myraaha-app textarea::placeholder,
+.myraaha-app .input-placeholder {
+  font-family: var(--font-primary) !important;
+  font-size: 15px !important;
+  font-weight: 400 !important;
+  font-style: italic !important;
+}
+
+/* Input Helper & Error Text */
+.myraaha-app .input-helper-text {
+  font-family: var(--font-primary) !important;
+  font-size: 12px !important;
+  font-weight: 400 !important;
+  margin-top: 5px !important;
+}
+
+.myraaha-app .input-error-text {
+  font-family: var(--font-primary) !important;
+  font-size: 12px !important;
+  font-weight: 500 !important;
+  margin-top: 5px !important;
+}
+
+/* Select / Dropdown Specific */
+.myraaha-app select,
+.myraaha-app .select-dropdown {
+  font-family: var(--font-primary) !important;
+  font-size: 14px !important;
+  font-weight: 400 !important;
+  min-height: 48px !important;
+}
+@media (max-width: 768px) {
+  .myraaha-app select,
+  .myraaha-app .select-dropdown {
+    font-size: 15px !important;
+    min-height: 52px !important;
+  }
+}
+
+/* Checkbox & Radio Labels + Mobile Tap Targets */
+.myraaha-app .checkbox-radio-label {
+  font-family: var(--font-primary) !important;
+  font-size: 14px !important;
+  font-weight: 400 !important;
+}
+@media (max-width: 768px) {
+  .myraaha-app [type="checkbox"],
+  .myraaha-app [type="radio"] {
+    width: 24px !important;
+    height: 24px !important;
+  }
+  .myraaha-app .checkbox-radio-container,
+  .myraaha-app label:has([type="checkbox"]),
+  .myraaha-app label:has([type="radio"]) {
+    min-height: 44px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+  }
+}
+
+/* OTP Input Specific */
+.myraaha-app .otp-input {
+  font-family: var(--font-mono) !important;
+  font-size: 28px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.1em !important;
+  text-align: center !important;
+}
+.myraaha-app .otp-digit-field {
+  width: 56px !important;
+  height: 64px !important;
+  border-radius: var(--radius-md) !important;
+}
+@media (max-width: 768px) {
+  .myraaha-app .otp-input {
+    font-size: 24px !important;
+  }
+  .myraaha-app .otp-digit-field {
+    width: 48px !important;
+    height: 56px !important;
+  }
+}
+
+
+/* ==========================================================================
+   AI FEATURES
+   ========================================================================== */
+
+/* User Message */
+.myraaha-app .ai-chat-user {
+  font-family: var(--font-primary) !important;
+  font-size: 15px !important;
+  font-weight: 400 !important;
+  line-height: 1.65 !important;
+  border-radius: 18px 18px 4px 18px !important;
+  padding: 12px 18px !important;
+  max-width: 72% !important;
+}
+@media (max-width: 768px) {
+  .myraaha-app .ai-chat-user {
+    font-size: 14px !important;
+    max-width: 80vw !important;
+  }
+}
+
+/* AI Response */
+.myraaha-app .ai-chat-response {
+  font-family: var(--font-primary) !important;
+  font-size: 15px !important;
+  font-weight: 400 !important;
+  line-height: 1.75 !important;
+  border-radius: 18px 18px 18px 4px !important;
+  padding: 14px 18px !important;
+  max-width: 78% !important;
+}
+@media (max-width: 768px) {
+  .myraaha-app .ai-chat-response {
+    font-size: 14px !important;
+    max-width: 88vw !important;
+  }
+}
+
+/* AI Response — Emphasized Insight */
+.myraaha-app .ai-chat-insight {
+  font-family: var(--font-primary) !important;
+  font-size: 18px !important;
+  font-weight: 600 !important;
+  font-style: italic !important;
+}
+@media (max-width: 768px) {
+  .myraaha-app .ai-chat-insight {
+    font-size: 16px !important;
+  }
+}
+
+/* AI Typing Indicator */
+.myraaha-app .ai-typing-indicator {
+  font-family: var(--font-primary) !important;
+  font-size: 13px !important;
+  font-weight: 400 !important;
+  font-style: italic !important;
+}
+@media (max-width: 768px) {
+  .myraaha-app .ai-typing-indicator {
+    font-size: 12px !important;
+  }
+}
+
+/* AI Chat Input */
+.myraaha-app .ai-chat-input {
+  font-family: var(--font-primary) !important;
+  font-size: 15px !important;
+  font-weight: 400 !important;
+  min-height: 52px !important;
+  border-radius: 12px !important;
+}
+@media (max-width: 768px) {
+  .myraaha-app .ai-chat-input {
+    border-radius: var(--radius-pill) !important; /* Pill shape on mobile */
+  }
+}
+
+
+/* ==========================================================================
+   NOTIFICATIONS & ALERTS
+   ========================================================================== */
+
+/* Notification Item */
+.myraaha-app .notification-title {
+  font-family: var(--font-primary) !important;
+  font-size: 14px !important;
+  font-weight: 600 !important;
+}
+
+.myraaha-app .notification-body {
+  font-family: var(--font-primary) !important;
+  font-size: 13px !important;
+  font-weight: 400 !important;
+  line-height: 1.55 !important;
+}
+
+.myraaha-app .notification-timestamp {
+  font-family: var(--font-primary) !important;
+  font-size: 11px !important;
+  font-weight: 400 !important;
+}
+
+/* Toast / Snackbar */
+.myraaha-app .app-toast,
+.myraaha-app [role="status"] {
+  font-family: var(--font-primary) !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  border-radius: 10px !important;
+  padding: 12px 20px !important;
+}
+@media (max-width: 768px) {
+  .myraaha-app .app-toast,
+  .myraaha-app [role="status"] {
+    font-size: 13px !important;
+    max-width: calc(100vw - 40px) !important;
+  }
+}
+
+/* In-App Alerts */
+.myraaha-app .alert-title {
+  font-family: var(--font-primary) !important;
+  font-size: 15px !important;
+  font-weight: 600 !important;
+}
+
+.myraaha-app .alert-body {
+  font-family: var(--font-primary) !important;
+  font-size: 14px !important;
+  font-weight: 400 !important;
+  line-height: 1.6 !important;
+}
+@media (max-width: 768px) {
+  .myraaha-app .alert-body {
+    font-size: 13px !important;
+  }
+}
+
+
+/* ==========================================================================
+   TABLES & LISTS
+   ========================================================================== */
+
+/* Table Header */
+.myraaha-app .app-table-header,
+.myraaha-app th {
+  font-family: var(--font-primary) !important;
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.08em !important;
+  text-transform: uppercase !important;
+}
+
+/* Table Body Cell */
+.myraaha-app .app-table-cell,
+.myraaha-app td {
+  font-family: var(--font-primary) !important;
+  font-size: 14px !important;
+  font-weight: 400 !important;
+  line-height: 1.5 !important;
+  min-height: 52px !important;
+}
+@media (max-width: 768px) {
+  .myraaha-app .app-table-cell,
+  .myraaha-app td {
+    font-size: 13px !important;
+    min-height: 48px !important;
+  }
+}
+
+.myraaha-app .app-table-cell-highlight {
+  font-family: var(--font-primary) !important;
+  font-size: 14px !important;
+  font-weight: 600 !important;
+}
+
+/* List Items */
+.myraaha-app .app-list-item-primary {
+  font-family: var(--font-primary) !important;
+  font-size: 15px !important;
+  font-weight: 400 !important;
+  line-height: 1.6 !important;
+}
+@media (max-width: 768px) {
+  .myraaha-app .app-list-item-primary {
+    min-height: 52px !important;
+    display: flex !important;
+    align-items: center !important;
+  }
+}
+
+.myraaha-app .app-list-item-secondary {
+  font-family: var(--font-primary) !important;
+  font-size: 13px !important;
+  font-weight: 400 !important;
+}
+@media (max-width: 768px) {
+  .myraaha-app .app-list-item-secondary {
+    font-size: 12px !important;
+  }
+}
+
+/* Empty States */
+.myraaha-app .empty-state-heading {
+  font-family: var(--font-primary) !important;
+  font-size: 24px !important;
+  font-weight: 700 !important;
+  font-style: italic !important;
+  text-align: center !important;
+}
+@media (max-width: 768px) {
+  .myraaha-app .empty-state-heading {
+    font-size: 20px !important;
+  }
+}
+
+.myraaha-app .empty-state-description {
+  font-family: var(--font-primary) !important;
+  font-size: 15px !important;
+  font-weight: 400 !important;
+  text-align: center !important;
+  line-height: 1.65 !important;
+  max-width: 400px !important;
+}
+@media (max-width: 768px) {
+  .myraaha-app .empty-state-description {
+    font-size: 14px !important;
+  }
+}
+
+
+/* ==========================================================================
+   TOOLTIPS & MODALS
+   ========================================================================== */
+
+/* Tooltips */
+.myraaha-app .app-tooltip {
+  font-family: var(--font-primary) !important;
+  font-size: 12px !important;
+  font-weight: 400 !important;
+  border-radius: var(--radius-sm) !important;
+  padding: 6px 12px !important;
+  max-width: 260px !important;
+  line-height: 1.5 !important;
+}
+@media (max-width: 768px) {
+  .myraaha-app .app-tooltip {
+    max-width: 220px !important;
+  }
+}
+
+/* Modals */
+.myraaha-app .modal-title {
+  font-family: var(--font-primary) !important;
+  font-size: 26px !important;
+  font-weight: 700 !important;
+}
+@media (max-width: 768px) {
+  .myraaha-app .modal-title {
+    font-size: 22px !important;
+  }
+}
+
+.myraaha-app .modal-body {
+  font-family: var(--font-primary) !important;
+  font-size: 15px !important;
+  font-weight: 400 !important;
+  line-height: 1.7 !important;
+}
+@media (max-width: 768px) {
+  .myraaha-app .modal-body {
+    font-size: 14px !important;
+  }
+}
+
+.myraaha-app .modal-action-desc {
+  font-family: var(--font-primary) !important;
+  font-size: 13px !important;
+  font-weight: 400 !important;
+  line-height: 1.55 !important;
+}
+
+
+/* ==========================================================================
+   LONG-FORM / ARTICLE CONTENT
+   ========================================================================== */
+
+.myraaha-app .article-title {
+  font-family: var(--font-primary) !important;
+  font-size: 48px !important;
+  font-weight: 700 !important;
+  line-height: 1.2 !important;
+  letter-spacing: -0.03em !important;
+  max-width: 720px !important;
+}
+@media (max-width: 768px) {
+  .myraaha-app .article-title {
+    font-size: 28px !important;
+  }
+}
+
+.myraaha-app .article-byline {
+  font-family: var(--font-primary) !important;
+  font-size: 13px !important;
+  font-weight: 500 !important;
+  letter-spacing: 0.03em !important;
+}
+@media (max-width: 768px) {
+  .myraaha-app .article-byline {
+    font-size: 12px !important;
+  }
+}
+
+.myraaha-app .article-body {
+  font-family: var(--font-primary) !important;
+  font-size: 17px !important;
+  font-weight: 400 !important;
+  line-height: 1.85 !important;
+  max-width: 65ch !important;
+}
+@media (max-width: 768px) {
+  .myraaha-app .article-body {
+    font-size: 16px !important;
+  }
+}
+
+.myraaha-app .article-subheading {
+  font-family: var(--font-primary) !important;
+  font-size: 28px !important;
+  font-weight: 700 !important;
+  line-height: 1.3 !important;
+  margin-top: 48px !important;
+}
+@media (max-width: 768px) {
+  .myraaha-app .article-subheading {
+    font-size: 22px !important;
+    margin-top: 36px !important;
+  }
+}
+
+.myraaha-app .article-pullquote {
+  font-family: var(--font-primary) !important;
+  font-size: 22px !important;
+  font-weight: 300 !important;
+  font-style: italic !important;
+  line-height: 1.6 !important;
+  border-left: 3px solid var(--myraaha-blue, #5500cb) !important;
+  padding-left: 28px !important;
+  margin: 40px 0 !important;
+}
+@media (max-width: 768px) {
+  .myraaha-app .article-pullquote {
+    font-size: 18px !important;
+    padding-left: 16px !important;
+    margin: 24px 0 !important;
+  }
+}
+
+.myraaha-app .article-caption {
+  font-family: var(--font-primary) !important;
+  font-size: 13px !important;
+  font-weight: 400 !important;
+  font-style: italic !important;
+}
+@media (max-width: 768px) {
+  .myraaha-app .article-caption {
+    font-size: 12px !important;
+  }
+}
+
+
+/* ==========================================================================
+   INTERACTIVE BUTTON MINIMUMS & OVERRIDES
+   ========================================================================== */
+
+/* Button Heights (Rule 6: Mobile tap targets are 44px minimum) */
+.myraaha-app button, 
+.myraaha-app .btn,
+.myraaha-app [role="button"],
+.myraaha-app [type="button"],
+.myraaha-app [type="submit"] {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  transition: all 200ms ease !important;
+  cursor: pointer !important;
+}
+
+/* Primary buttons */
+.myraaha-app button:not(.btn-secondary):not(.btn-ghost):not(.btn-text):not([class*="secondary"]):not([class*="ghost"]):not([class*="outline"]):not([class*="link"]):not(.mobile-menu-toggle):not(.social-btn):not([class*="social"]),
+.myraaha-app .btn-primary {
+  min-height: 52px !important;
+  padding: 0 32px !important;
+  border-radius: var(--radius-pill) !important;
+}
+
+/* Secondary buttons */
+.myraaha-app button.btn-secondary,
+.myraaha-app button[class*="secondary"],
+.myraaha-app button[class*="outline"],
+.myraaha-app .btn-secondary {
+  min-height: 48px !important;
+  padding: 0 28px !important;
+  border-radius: var(--radius-pill) !important;
+}
+
+/* Border Radius Classes Overrides */
 .myraaha-app .rounded-sm { border-radius: var(--radius-sm) !important; }
 .myraaha-app .rounded-md { border-radius: var(--radius-md) !important; }
 .myraaha-app .rounded-lg { border-radius: var(--radius-lg) !important; }
@@ -279,17 +1115,8 @@
 .myraaha-app .rounded-2xl { border-radius: var(--radius-2xl) !important; }
 .myraaha-app .rounded-full { border-radius: var(--radius-pill) !important; }
 
-/* OTP Input specific */
-.myraaha-app .otp-input {
-  font-size: 28px !important;
-  font-weight: 700 !important;
-  letter-spacing: 0.1em !important;
-  text-align: center !important;
+/* Transition durations */
+.myraaha-app * {
+  transition-duration: 200ms !important;
+  transition-timing-function: ease !important;
 }
-@media (max-width: 768px) {
-  .myraaha-app .otp-input {
-    font-size: 24px !important;
-  }
-}
-
-

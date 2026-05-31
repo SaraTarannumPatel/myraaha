@@ -113,20 +113,34 @@ const ConsentStep = () => {
 
           <div className="space-y-4">
             <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}
-              className="bg-card rounded-xl border border-border p-5">
+              className="bg-white rounded-xl border border-border p-5">
               <div className="flex items-start gap-4">
                 <div className="p-2 rounded-lg bg-primary/10"><Eye size={20} className="text-primary" /></div>
                 <div className="flex-1">
-                  <h3 className="choice-card-title text-foreground">Personalized Experience</h3>
-                  <p className="choice-card-desc text-muted-foreground mt-1">
+                  <h3 className="choice-card-title text-foreground font-semibold">Personalized Experience</h3>
+                  <p className="choice-card-desc text-muted-foreground mt-1 text-sm">
                     Allow MyRaaha to use your interests, skills, and goals to provide personalized recommendations, AI insights, and tailored content.
                   </p>
                   <button onClick={() => setConsentData(!consentData)}
-                    className={`mt-3 flex items-center gap-2 px-4 py-2 rounded-full font-body text-sm transition-all ${
-                      consentData ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground hover:text-foreground"
+                    className={`mt-3.5 flex items-center gap-2.5 px-5 py-2.5 rounded-full font-body text-sm font-semibold transition-all border shadow-sm ${
+                      consentData 
+                        ? "bg-primary border-primary text-white" 
+                        : "bg-white border-gray-300 text-gray-700 hover:bg-gray-50"
                     }`}>
-                    <div className={`w-4 h-4 rounded border-2 flex items-center justify-center ${consentData ? "border-primary-foreground bg-primary-foreground/20" : "border-muted-foreground"}`}>
-                      {consentData && <div className="w-2 h-2 rounded-sm bg-primary-foreground" />}
+                    <div className="relative w-4 h-4 flex items-center justify-center">
+                      <div className={`w-4 h-4 rounded border flex items-center justify-center transition-all ${
+                        consentData ? "border-white bg-white/20 scale-110" : "border-gray-400 bg-transparent"
+                      }`}>
+                        {consentData && (
+                          <motion.div
+                            initial={{ scale: 0 }}
+                            animate={{ scale: 1 }}
+                            transition={{ type: "spring", stiffness: 350, damping: 20 }}
+                          >
+                            <Check className="w-3 h-3 text-white" strokeWidth={3} />
+                          </motion.div>
+                        )}
+                      </div>
                     </div>
                     {consentData ? "Enabled" : "Enable personalization"}
                   </button>
@@ -135,20 +149,34 @@ const ConsentStep = () => {
             </motion.div>
 
             <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}
-              className="bg-card rounded-xl border border-border p-5">
+              className="bg-white rounded-xl border border-border p-5">
               <div className="flex items-start gap-4">
                 <div className="p-2 rounded-lg bg-primary/10"><Users size={20} className="text-primary" /></div>
                 <div className="flex-1">
-                  <h3 className="choice-card-title text-foreground">Mentor & Community Sharing</h3>
-                  <p className="choice-card-desc text-muted-foreground mt-1">
+                  <h3 className="choice-card-title text-foreground font-semibold">Mentor & Community Sharing</h3>
+                  <p className="choice-card-desc text-muted-foreground mt-1 text-sm">
                     Allow your profile highlights and progress to be visible to matched mentors and community groups.
                   </p>
                   <button onClick={() => setConsentMentor(!consentMentor)}
-                    className={`mt-3 flex items-center gap-2 px-4 py-2 rounded-full font-body text-sm transition-all ${
-                      consentMentor ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground hover:text-foreground"
+                    className={`mt-3.5 flex items-center gap-2.5 px-5 py-2.5 rounded-full font-body text-sm font-semibold transition-all border shadow-sm ${
+                      consentMentor 
+                        ? "bg-primary border-primary text-white" 
+                        : "bg-white border-gray-300 text-gray-700 hover:bg-gray-50"
                     }`}>
-                    <div className={`w-4 h-4 rounded border-2 flex items-center justify-center ${consentMentor ? "border-primary-foreground bg-primary-foreground/20" : "border-muted-foreground"}`}>
-                      {consentMentor && <div className="w-2 h-2 rounded-sm bg-primary-foreground" />}
+                    <div className="relative w-4 h-4 flex items-center justify-center">
+                      <div className={`w-4 h-4 rounded border flex items-center justify-center transition-all ${
+                        consentMentor ? "border-white bg-white/20 scale-110" : "border-gray-400 bg-transparent"
+                      }`}>
+                        {consentMentor && (
+                          <motion.div
+                            initial={{ scale: 0 }}
+                            animate={{ scale: 1 }}
+                            transition={{ type: "spring", stiffness: 350, damping: 20 }}
+                          >
+                            <Check className="w-3 h-3 text-white" strokeWidth={3} />
+                          </motion.div>
+                        )}
+                      </div>
                     </div>
                     {consentMentor ? "Enabled" : "Enable sharing"}
                   </button>
@@ -157,12 +185,12 @@ const ConsentStep = () => {
             </motion.div>
 
             <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}
-              className="bg-card rounded-xl border border-border p-5">
+              className="bg-white rounded-xl border border-border p-5">
               <div className="flex items-start gap-4">
                 <div className="p-2 rounded-lg bg-primary/10"><Lock size={20} className="text-primary" /></div>
                 <div>
-                  <h3 className="choice-card-title text-foreground">Your Data, Your Control</h3>
-                  <p className="choice-card-desc text-muted-foreground mt-1">
+                  <h3 className="choice-card-title text-foreground font-semibold">Your Data, Your Control</h3>
+                  <p className="choice-card-desc text-muted-foreground mt-1 text-sm">
                     You can change these preferences anytime in Settings. We never sell your data.
                   </p>
                 </div>
@@ -170,13 +198,13 @@ const ConsentStep = () => {
             </motion.div>
           </div>
 
-          <div className="flex justify-between">
-            <Button variant="ghost" onClick={() => navigate("/onboarding/journey")} className="font-body">
-              <ArrowLeft size={18} /> Back
+          <div className="flex justify-between items-center">
+            <Button variant="ghost" onClick={() => navigate("/onboarding/journey")} className="font-body h-[48px] min-h-[48px] px-4 rounded-full">
+              <ArrowLeft size={18} className="mr-1.5" /> Back
             </Button>
             <Button onClick={handleContinue} disabled={submitting}
-              className="bg-primary text-primary-foreground rounded-full px-8 font-body font-semibold disabled:opacity-50">
-              {submitting ? "Finalizing..." : "Generate My UID"} <ArrowRight size={18} />
+              className="bg-primary text-white rounded-full h-[52px] min-h-[52px] px-8 font-body font-semibold hover:bg-primary/90 disabled:opacity-50">
+              {submitting ? "Finalizing..." : "Generate My UID"} <ArrowRight size={18} className="ml-1.5" />
             </Button>
           </div>
         </motion.div>

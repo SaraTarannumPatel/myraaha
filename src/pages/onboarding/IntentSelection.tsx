@@ -35,14 +35,8 @@ const IntentSelection = () => {
 
   const handleContinue = async () => {
     if (!selected) return;
-    const isGuest = localStorage.getItem("myraaha_is_guest") === "true";
-    if (isGuest) {
-      localStorage.setItem("myraaha_guest_intent", selected);
-      navigate("/onboarding/guided");
-    } else {
-      await updateProfile({ active_intent: selected as any, onboarding_status: "guided" as any });
-      navigate("/onboarding/guided");
-    }
+    await updateProfile({ active_intent: selected as any, onboarding_status: "guided" as any });
+    navigate("/onboarding/guided");
   };
 
   return (
@@ -106,9 +100,9 @@ const IntentSelection = () => {
             <Button
               onClick={handleContinue}
               disabled={!selected}
-              className="bg-primary text-accent rounded-full px-8 font-body font-semibold hover:bg-primary disabled:opacity-50"
+              className="bg-primary text-white rounded-full px-8 h-[52px] min-h-[52px] font-body font-semibold hover:bg-primary/95 disabled:opacity-50"
             >
-              Continue <ArrowRight size={18} />
+              Continue <ArrowRight size={18} className="ml-1.5" />
             </Button>
           </div>
         </motion.div>

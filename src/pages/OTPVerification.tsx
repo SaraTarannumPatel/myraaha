@@ -182,7 +182,7 @@ const OTPVerification = () => {
         <button
           onClick={handleICheckedIt}
           disabled={checking}
-          className="w-full py-4 rounded-full bg-primary font-body text-base font-semibold text-accent hover:bg-primary transition-colors disabled:opacity-50 mb-3"
+          className="w-full py-4 rounded-full bg-primary font-body text-base font-semibold text-white hover:bg-primary/95 transition-colors disabled:opacity-50 mb-3"
         >
           {checking ? "Checking..." : "I've verified my email"}
         </button>

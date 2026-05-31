@@ -162,7 +162,7 @@ const Auth = () => {
                 className="relative"
               >
                 <div className="flex items-center">
-                  <h1 className="font-display text-[2rem] sm:text-[2.4rem] leading-tight font-bold text-primary flex-1 z-10">
+                  <h1 className="onboarding-welcome-headline text-primary flex-1 z-10 !text-left">
                     {isLogin ? (
                       <>Hey, Login Now</>
                     ) : (
@@ -186,14 +186,14 @@ const Auth = () => {
           <div className="flex items-center gap-2 mb-2 font-body text-xs">
             <button
               onClick={() => setIsLogin(true)}
-              className={`transition-colors ${isLogin ? "text-foreground font-semibold" : "text-muted-foreground"}`}
+              className={`transition-colors py-2 px-3 min-h-[44px] flex items-center ${isLogin ? "text-foreground font-semibold" : "text-muted-foreground"}`}
             >
               I am an old user
             </button>
             <span className="text-muted-foreground">/</span>
             <button
               onClick={() => setIsLogin(false)}
-              className={`transition-colors ${!isLogin ? "text-foreground font-semibold" : "text-muted-foreground"}`}
+              className={`transition-colors py-2 px-3 min-h-[44px] flex items-center ${!isLogin ? "text-foreground font-semibold" : "text-muted-foreground"}`}
             >
               New User
             </button>
@@ -206,7 +206,7 @@ const Auth = () => {
               onChange={(e) => setEmail(e.target.value)}
               placeholder={isLogin ? "Email" : "Email"}
               required
-              className="w-full h-10 rounded-xl bg-muted px-4 font-body text-sm text-foreground placeholder:text-muted-foreground outline-none border-none focus:ring-2 focus:ring-primary transition-all"
+              className="w-full h-12 md:h-12 md:min-h-[48px] min-h-[52px] rounded-md bg-muted px-4 font-body text-base placeholder:text-muted-foreground outline-none border-none focus:ring-2 focus:ring-primary transition-all"
             />
 
             {!isLogin && (
@@ -216,7 +216,7 @@ const Auth = () => {
                 onChange={(e) => handlePhoneChange(e.target.value)}
                 placeholder="+91 XXXXX XXXXX"
                 required
-                className="w-full h-10 rounded-xl bg-muted px-4 font-body text-sm text-foreground placeholder:text-muted-foreground outline-none border-none focus:ring-2 focus:ring-primary transition-all"
+                className="w-full h-12 md:h-12 md:min-h-[48px] min-h-[52px] rounded-md bg-muted px-4 font-body text-base placeholder:text-muted-foreground outline-none border-none focus:ring-2 focus:ring-primary transition-all"
                 onFocus={() => !phone && setPhone("+91 ")}
               />
             )}
@@ -228,7 +228,7 @@ const Auth = () => {
               placeholder="Password"
               required
               minLength={6}
-              className="w-full h-10 rounded-xl bg-muted px-4 font-body text-sm text-foreground placeholder:text-muted-foreground outline-none border-none focus:ring-2 focus:ring-primary transition-all"
+              className="w-full h-12 md:h-12 md:min-h-[48px] min-h-[52px] rounded-md bg-muted px-4 font-body text-base placeholder:text-muted-foreground outline-none border-none focus:ring-2 focus:ring-primary transition-all"
             />
 
             {isLogin && (
@@ -245,7 +245,7 @@ const Auth = () => {
                     if (error) toast.error(error.message);
                     else toast.success(`Reset link sent to ${target}. Check your inbox.`);
                   }}
-                  className="text-foreground font-semibold underline underline-offset-2"
+                  className="text-foreground font-semibold underline underline-offset-2 py-2 min-h-[44px] flex items-center"
                 >
                   Send reset link
                 </button>
@@ -262,7 +262,7 @@ const Auth = () => {
               <div className="flex-1 h-px bg-border" />
             </div>
             <div className="flex items-center justify-center gap-8">
-              <button onClick={handleGoogleSignIn} className="w-8 h-8 flex items-center justify-center" aria-label="Google">
+              <button onClick={handleGoogleSignIn} className="social-btn w-12 h-12 md:w-11 md:h-11 flex items-center justify-center rounded-full hover:bg-muted transition-colors" aria-label="Google">
                 <svg viewBox="0 0 24 24" className="w-6 h-6">
                   <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/>
                   <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
@@ -270,12 +270,12 @@ const Auth = () => {
                   <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
                 </svg>
               </button>
-              <button onClick={handleFacebookUnavailable} className="w-8 h-8 flex items-center justify-center" aria-label="Facebook">
+              <button onClick={handleFacebookUnavailable} className="social-btn w-12 h-12 md:w-11 md:h-11 flex items-center justify-center rounded-full hover:bg-muted transition-colors" aria-label="Facebook">
                 <svg viewBox="0 0 24 24" className="w-6 h-6" fill="#1877F2">
                   <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
                 </svg>
               </button>
-              <button onClick={handleAppleSignIn} className="w-8 h-8 flex items-center justify-center" aria-label="Apple">
+              <button onClick={handleAppleSignIn} className="social-btn w-12 h-12 md:w-11 md:h-11 flex items-center justify-center rounded-full hover:bg-muted transition-colors" aria-label="Apple">
                 <svg viewBox="0 0 24 24" className="w-6 h-6" fill="currentColor">
                   <path d="M17.05 20.28c-.98.95-2.05.88-3.08.4-1.09-.5-2.08-.48-3.24 0-1.44.62-2.2.44-3.06-.4C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.54 4.09zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z"/>
                 </svg>
@@ -285,16 +285,16 @@ const Auth = () => {
 
           <div className="flex items-center justify-between mt-3">
             {isLogin ? (
-              <button
-                onClick={() => navigate("/guest")}
-                className="font-body text-sm text-foreground font-medium"
-              >
-                Enter as Guest
-              </button>
+              <div className="flex items-center gap-1 font-body text-sm h-[48px] px-4 flex items-center">
+                <span className="text-muted-foreground">New here?</span>
+                <button onClick={() => setIsLogin(false)} className="text-foreground font-medium py-2">
+                  Sign Up
+                </button>
+              </div>
             ) : (
-              <div className="flex items-center gap-1 font-body text-sm">
+              <div className="flex items-center gap-1 font-body text-sm h-[48px] px-4 flex items-center">
                 <span className="text-muted-foreground">Already User?</span>
-                <button onClick={() => setIsLogin(true)} className="text-foreground font-medium">
+                <button onClick={() => setIsLogin(true)} className="text-foreground font-medium py-2">
                   Login
                 </button>
               </div>
@@ -302,7 +302,7 @@ const Auth = () => {
             <button
               onClick={() => handleSubmit()}
               disabled={submitting}
-              className="flex items-center gap-2 px-8 py-3 rounded-full bg-primary font-body text-sm font-semibold text-accent hover:bg-primary transition-colors disabled:opacity-50"
+              className="flex items-center justify-center gap-2 h-[52px] min-h-[52px] px-8 rounded-full bg-primary font-body text-base font-semibold text-white hover:bg-primary/95 transition-colors disabled:opacity-50"
             >
               {submitting ? "Please wait..." : isLogin ? "Login" : "Sign Up"}
               <ArrowRight size={16} />
