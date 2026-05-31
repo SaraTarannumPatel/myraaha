@@ -233,21 +233,21 @@ const Auth = () => {
 
             {isLogin && (
               <div className="flex items-center gap-2 font-body text-xs pt-0.5">
-                <span className="text-muted-foreground">Forgot Password</span>
-                <span className="text-muted-foreground">/</span>
+                <span className="text-muted-foreground">Forgot password?</span>
                 <button
                   type="button"
                   onClick={async () => {
-                    if (!email) { toast.error("Enter your email first"); return; }
-                    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+                    const target = email.trim();
+                    if (!target) { toast.error("Enter your registered email above first"); return; }
+                    const { error } = await supabase.auth.resetPasswordForEmail(target, {
                       redirectTo: `${window.location.origin}/reset-password`,
                     });
                     if (error) toast.error(error.message);
-                    else toast.success("Check your email for a password reset link!");
+                    else toast.success(`Reset link sent to ${target}. Check your inbox.`);
                   }}
                   className="text-foreground font-semibold underline underline-offset-2"
                 >
-                  Reset
+                  Send reset link
                 </button>
               </div>
             )}
