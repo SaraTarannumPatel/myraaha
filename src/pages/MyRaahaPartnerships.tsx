@@ -16,7 +16,6 @@ import MyRaahaNewsletter from '../components/MyRaahaNewsletter';
 import MyRaahaFooter from '../components/MyRaahaFooter';
 import './MyRaahaPartnerships.css';
 import { useMobile } from '../hooks/useMobile';
-import MobilePartnerships from './mobile/MobilePartnerships';
 
 const MyRaahaPartnerships = () => {
   return (
