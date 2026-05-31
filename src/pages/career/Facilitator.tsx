@@ -91,7 +91,7 @@ const Facilitator = () => {
             {facilitatorRoles.map(job => (
               <div key={job.id} className="job-card" onClick={() => navigate(`/careers/role/${job.id}`)}>
                 <div className="job-card-main">
-                  <span className="job-category-tag">{job.category}</span>
+                  <span className="job-category-tag">{job.department}</span>
                   <div className="job-info-text">
                     <h3>{job.title.split(' ').slice(0, -1).join(' ')} <span>{job.title.split(' ').slice(-1)}</span></h3>
                     <div className="job-meta">

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { FadeInView } from './PublicLayout';
 import { ArrowRight, CheckCircle, Users, GraduationCap, Building2, Briefcase, Heart, BookOpen, Quote, Mail, Zap } from 'lucide-react';
+const FadeInView = ({children, className}: {children: React.ReactNode; className?: string; delay?: number}) => <div className={className}>{children}</div>;
 
 export const ImpactSection = () => {
   const stats = [
