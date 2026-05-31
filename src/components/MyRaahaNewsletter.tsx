@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Send, User, Check, AlertCircle, Loader2 } from 'lucide-react';
+import { supabase } from '@/integrations/supabase/client';
 import './MyRaahaNewsletter.css';
 
 const MyRaahaNewsletter = () => {
