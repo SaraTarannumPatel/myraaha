@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, ArrowLeft, Users, Eye, Lock } from "lucide-react";
+import { ArrowRight, ArrowLeft, Users, Eye, Lock, Check } from "lucide-react";
 import OnboardingProgressBar from "@/components/onboarding/OnboardingProgressBar";
 import OnboardingRewardBanner from "@/components/onboarding/OnboardingRewardBanner";
 import { ONBOARDING_REWARDS } from "@/components/onboarding/OnboardingRewardBanner";
