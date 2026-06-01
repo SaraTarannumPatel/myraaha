@@ -68,40 +68,18 @@
     display: none !important;
   }
 
-  .myraaha-landing-site h1, 
-  .myraaha-landing-site h2, 
-  .myraaha-landing-site h3, 
-  .myraaha-landing-site .section-title, 
-  .myraaha-landing-site .role-section-title, 
-  .myraaha-landing-site .careers-title, 
-  .myraaha-landing-site .about-hero-title {
+  /* Landing-site heading defaults — non-!important so each landing page CSS can override per-section. */
+  .myraaha-landing-site h1,
+  .myraaha-landing-site h2,
+  .myraaha-landing-site h3 {
     @apply font-poppins font-semibold leading-[1.1];
-    color: #1e293b; /* Dark grey (Slate 800) */
-    font-size: 2.75rem !important;
-    font-weight: 600 !important;
+    color: #1e293b;
   }
 
-  /* Global Section Header Standard */
+  /* Global Section Header Standard (web app + landing fallback) */
   .section-header, .about-section-header, .careers-section-header, .v4-form-header, .modal-header {
     text-align: center;
     margin-bottom: var(--header-gap-subtitle);
-  }
-
-  .section-title, .about-section-title, .culture-title, .v4-form-header h2, .modal-header h2, .section-title-v2, .role-section-title {
-    font-size: 2.2rem !important;
-    font-weight: 700 !important;
-    margin-bottom: var(--header-gap-title) !important;
-    color: var(--myraaha-text-dark);
-    text-transform: none !important; /* Enforce Sentence Case */
-  }
-
-  .section-subtitle, .about-section-subtitle, .culture-subtitle, .v4-form-header p, .modal-header p {
-    font-size: 1.1rem !important;
-    color: var(--myraaha-text-gray);
-    max-width: 800px;
-    margin: 0 auto !important;
-    line-height: 1.6;
-    text-transform: none !important; /* Enforce Sentence Case */
   }
 
   /* Force #ffffff on dark/purple backgrounds - STRICT ENFORCEMENT */
