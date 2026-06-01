@@ -4,6 +4,18 @@ Append-only log of MAJOR changes. Each entry: what / why / before / benefit / fi
 
 ---
 
+## 2026-06-01 — Sector ingestion + landing CSS de-conflict
+
+**What.** (a) Ran the psql staging loader across Media, NGO, Real Estate, Retail, Sports, Telecom, Transport — added ~7,180 roles to `taxonomy_nodes`, bringing total to 7,946 roles across 11 hierarchy levels. (b) Removed the orphan Vite default `src/App.css` and stray `fix_*.cjs` scripts. (c) Relaxed three blanket `!important` overrides in `src/index.css` that were forcing uniform font-size on every `h1/h2/h3`, `.section-title`, and `.section-subtitle` inside `.myraaha-landing-site`, clobbering each landing page's dedicated typography in `MyRaaha*.css`.
+
+**Why.** Landing pages have per-section type hierarchies in their own CSS files. The global `font-size: 2.75rem !important` (h1-h3), `2.2rem !important` (section titles), and `1.1rem !important` (section subtitles) in `index.css @layer base` was winning the cascade and flattening that hierarchy → distorted layout.
+
+**Benefit.** Landing CSS now governs landing pages. Web-app routes unaffected (rules were never scoped to `.myraaha-app`).
+
+**Files.** `src/index.css`, deleted `src/App.css`, `fix_ide_problems.cjs`, `fix_onboarding.cjs`. Sector data via `/tmp/ingest_sectors.py`.
+
+
+
 ## 2026-05-29 — CareerMap-CareerScape: Phase 0 schema + Roadmap archive
 
 **What.** Replaced the AI Roadmaps module with the foundation of the new
