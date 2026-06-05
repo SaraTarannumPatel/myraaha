@@ -427,6 +427,822 @@ export type Database = {
         }
         Relationships: []
       }
+      career_intel_agri_env_natural_resources: {
+        Row: {
+          career_cluster: string | null
+          career_pathway_cluster: string | null
+          created_at: string
+          domain_name: string | null
+          function_name: string | null
+          id: number
+          industry_family: string | null
+          industry_name: string | null
+          job_family: string | null
+          role_name: string
+          sector_name: string | null
+          sub_domain_name: string | null
+          sub_sector_name: string | null
+        }
+        Insert: {
+          career_cluster?: string | null
+          career_pathway_cluster?: string | null
+          created_at?: string
+          domain_name?: string | null
+          function_name?: string | null
+          id?: number
+          industry_family?: string | null
+          industry_name?: string | null
+          job_family?: string | null
+          role_name: string
+          sector_name?: string | null
+          sub_domain_name?: string | null
+          sub_sector_name?: string | null
+        }
+        Update: {
+          career_cluster?: string | null
+          career_pathway_cluster?: string | null
+          created_at?: string
+          domain_name?: string | null
+          function_name?: string | null
+          id?: number
+          industry_family?: string | null
+          industry_name?: string | null
+          job_family?: string | null
+          role_name?: string
+          sector_name?: string | null
+          sub_domain_name?: string | null
+          sub_sector_name?: string | null
+        }
+        Relationships: []
+      }
+      career_intel_education: {
+        Row: {
+          career_cluster: string | null
+          career_pathway_cluster: string | null
+          created_at: string
+          domain_name: string | null
+          function_name: string | null
+          id: number
+          industry_family: string | null
+          industry_name: string | null
+          job_family: string | null
+          role_name: string
+          sector_name: string | null
+          sub_domain_name: string | null
+          sub_sector_name: string | null
+        }
+        Insert: {
+          career_cluster?: string | null
+          career_pathway_cluster?: string | null
+          created_at?: string
+          domain_name?: string | null
+          function_name?: string | null
+          id?: number
+          industry_family?: string | null
+          industry_name?: string | null
+          job_family?: string | null
+          role_name: string
+          sector_name?: string | null
+          sub_domain_name?: string | null
+          sub_sector_name?: string | null
+        }
+        Update: {
+          career_cluster?: string | null
+          career_pathway_cluster?: string | null
+          created_at?: string
+          domain_name?: string | null
+          function_name?: string | null
+          id?: number
+          industry_family?: string | null
+          industry_name?: string | null
+          job_family?: string | null
+          role_name?: string
+          sector_name?: string | null
+          sub_domain_name?: string | null
+          sub_sector_name?: string | null
+        }
+        Relationships: []
+      }
+      career_intel_energy_utilities: {
+        Row: {
+          career_cluster: string | null
+          career_pathway_cluster: string | null
+          created_at: string
+          domain_name: string | null
+          function_name: string | null
+          id: number
+          industry_family: string | null
+          industry_name: string | null
+          job_family: string | null
+          role_name: string
+          sector_name: string | null
+          sub_domain_name: string | null
+          sub_sector_name: string | null
+        }
+        Insert: {
+          career_cluster?: string | null
+          career_pathway_cluster?: string | null
+          created_at?: string
+          domain_name?: string | null
+          function_name?: string | null
+          id?: number
+          industry_family?: string | null
+          industry_name?: string | null
+          job_family?: string | null
+          role_name: string
+          sector_name?: string | null
+          sub_domain_name?: string | null
+          sub_sector_name?: string | null
+        }
+        Update: {
+          career_cluster?: string | null
+          career_pathway_cluster?: string | null
+          created_at?: string
+          domain_name?: string | null
+          function_name?: string | null
+          id?: number
+          industry_family?: string | null
+          industry_name?: string | null
+          job_family?: string | null
+          role_name?: string
+          sector_name?: string | null
+          sub_domain_name?: string | null
+          sub_sector_name?: string | null
+        }
+        Relationships: []
+      }
+      career_intel_financial_services: {
+        Row: {
+          career_cluster: string | null
+          career_pathway_cluster: string | null
+          created_at: string
+          domain_name: string | null
+          function_name: string | null
+          id: number
+          industry_family: string | null
+          industry_name: string | null
+          job_family: string | null
+          role_name: string
+          sector_name: string | null
+          sub_domain_name: string | null
+          sub_sector_name: string | null
+        }
+        Insert: {
+          career_cluster?: string | null
+          career_pathway_cluster?: string | null
+          created_at?: string
+          domain_name?: string | null
+          function_name?: string | null
+          id?: number
+          industry_family?: string | null
+          industry_name?: string | null
+          job_family?: string | null
+          role_name: string
+          sector_name?: string | null
+          sub_domain_name?: string | null
+          sub_sector_name?: string | null
+        }
+        Update: {
+          career_cluster?: string | null
+          career_pathway_cluster?: string | null
+          created_at?: string
+          domain_name?: string | null
+          function_name?: string | null
+          id?: number
+          industry_family?: string | null
+          industry_name?: string | null
+          job_family?: string | null
+          role_name?: string
+          sector_name?: string | null
+          sub_domain_name?: string | null
+          sub_sector_name?: string | null
+        }
+        Relationships: []
+      }
+      career_intel_govt_public_sector: {
+        Row: {
+          career_cluster: string | null
+          career_pathway_cluster: string | null
+          created_at: string
+          domain_name: string | null
+          function_name: string | null
+          id: number
+          industry_family: string | null
+          industry_name: string | null
+          job_family: string | null
+          role_name: string
+          sector_name: string | null
+          sub_domain_name: string | null
+          sub_sector_name: string | null
+        }
+        Insert: {
+          career_cluster?: string | null
+          career_pathway_cluster?: string | null
+          created_at?: string
+          domain_name?: string | null
+          function_name?: string | null
+          id?: number
+          industry_family?: string | null
+          industry_name?: string | null
+          job_family?: string | null
+          role_name: string
+          sector_name?: string | null
+          sub_domain_name?: string | null
+          sub_sector_name?: string | null
+        }
+        Update: {
+          career_cluster?: string | null
+          career_pathway_cluster?: string | null
+          created_at?: string
+          domain_name?: string | null
+          function_name?: string | null
+          id?: number
+          industry_family?: string | null
+          industry_name?: string | null
+          job_family?: string | null
+          role_name?: string
+          sector_name?: string | null
+          sub_domain_name?: string | null
+          sub_sector_name?: string | null
+        }
+        Relationships: []
+      }
+      career_intel_healthcare_life_sciences: {
+        Row: {
+          career_cluster: string | null
+          career_pathway_cluster: string | null
+          created_at: string
+          domain_name: string | null
+          function_name: string | null
+          id: number
+          industry_family: string | null
+          industry_name: string | null
+          job_family: string | null
+          role_name: string
+          sector_name: string | null
+          sub_domain_name: string | null
+          sub_sector_name: string | null
+        }
+        Insert: {
+          career_cluster?: string | null
+          career_pathway_cluster?: string | null
+          created_at?: string
+          domain_name?: string | null
+          function_name?: string | null
+          id?: number
+          industry_family?: string | null
+          industry_name?: string | null
+          job_family?: string | null
+          role_name: string
+          sector_name?: string | null
+          sub_domain_name?: string | null
+          sub_sector_name?: string | null
+        }
+        Update: {
+          career_cluster?: string | null
+          career_pathway_cluster?: string | null
+          created_at?: string
+          domain_name?: string | null
+          function_name?: string | null
+          id?: number
+          industry_family?: string | null
+          industry_name?: string | null
+          job_family?: string | null
+          role_name?: string
+          sector_name?: string | null
+          sub_domain_name?: string | null
+          sub_sector_name?: string | null
+        }
+        Relationships: []
+      }
+      career_intel_hospitality_tourism_travel: {
+        Row: {
+          career_cluster: string | null
+          career_pathway_cluster: string | null
+          created_at: string
+          domain_name: string | null
+          function_name: string | null
+          id: number
+          industry_family: string | null
+          industry_name: string | null
+          job_family: string | null
+          role_name: string
+          sector_name: string | null
+          sub_domain_name: string | null
+          sub_sector_name: string | null
+        }
+        Insert: {
+          career_cluster?: string | null
+          career_pathway_cluster?: string | null
+          created_at?: string
+          domain_name?: string | null
+          function_name?: string | null
+          id?: number
+          industry_family?: string | null
+          industry_name?: string | null
+          job_family?: string | null
+          role_name: string
+          sector_name?: string | null
+          sub_domain_name?: string | null
+          sub_sector_name?: string | null
+        }
+        Update: {
+          career_cluster?: string | null
+          career_pathway_cluster?: string | null
+          created_at?: string
+          domain_name?: string | null
+          function_name?: string | null
+          id?: number
+          industry_family?: string | null
+          industry_name?: string | null
+          job_family?: string | null
+          role_name?: string
+          sector_name?: string | null
+          sub_domain_name?: string | null
+          sub_sector_name?: string | null
+        }
+        Relationships: []
+      }
+      career_intel_legal_prof_services: {
+        Row: {
+          career_cluster: string | null
+          career_pathway_cluster: string | null
+          created_at: string
+          domain_name: string | null
+          function_name: string | null
+          id: number
+          industry_family: string | null
+          industry_name: string | null
+          job_family: string | null
+          role_name: string
+          sector_name: string | null
+          sub_domain_name: string | null
+          sub_sector_name: string | null
+        }
+        Insert: {
+          career_cluster?: string | null
+          career_pathway_cluster?: string | null
+          created_at?: string
+          domain_name?: string | null
+          function_name?: string | null
+          id?: number
+          industry_family?: string | null
+          industry_name?: string | null
+          job_family?: string | null
+          role_name: string
+          sector_name?: string | null
+          sub_domain_name?: string | null
+          sub_sector_name?: string | null
+        }
+        Update: {
+          career_cluster?: string | null
+          career_pathway_cluster?: string | null
+          created_at?: string
+          domain_name?: string | null
+          function_name?: string | null
+          id?: number
+          industry_family?: string | null
+          industry_name?: string | null
+          job_family?: string | null
+          role_name?: string
+          sector_name?: string | null
+          sub_domain_name?: string | null
+          sub_sector_name?: string | null
+        }
+        Relationships: []
+      }
+      career_intel_manufacturing_engineering: {
+        Row: {
+          career_cluster: string | null
+          career_pathway_cluster: string | null
+          created_at: string
+          domain_name: string | null
+          function_name: string | null
+          id: number
+          industry_family: string | null
+          industry_name: string | null
+          job_family: string | null
+          role_name: string
+          sector_name: string | null
+          sub_domain_name: string | null
+          sub_sector_name: string | null
+        }
+        Insert: {
+          career_cluster?: string | null
+          career_pathway_cluster?: string | null
+          created_at?: string
+          domain_name?: string | null
+          function_name?: string | null
+          id?: number
+          industry_family?: string | null
+          industry_name?: string | null
+          job_family?: string | null
+          role_name: string
+          sector_name?: string | null
+          sub_domain_name?: string | null
+          sub_sector_name?: string | null
+        }
+        Update: {
+          career_cluster?: string | null
+          career_pathway_cluster?: string | null
+          created_at?: string
+          domain_name?: string | null
+          function_name?: string | null
+          id?: number
+          industry_family?: string | null
+          industry_name?: string | null
+          job_family?: string | null
+          role_name?: string
+          sector_name?: string | null
+          sub_domain_name?: string | null
+          sub_sector_name?: string | null
+        }
+        Relationships: []
+      }
+      career_intel_media_ent_creative: {
+        Row: {
+          career_cluster: string | null
+          career_pathway_cluster: string | null
+          created_at: string
+          domain_name: string | null
+          function_name: string | null
+          id: number
+          industry_family: string | null
+          industry_name: string | null
+          job_family: string | null
+          role_name: string
+          sector_name: string | null
+          sub_domain_name: string | null
+          sub_sector_name: string | null
+        }
+        Insert: {
+          career_cluster?: string | null
+          career_pathway_cluster?: string | null
+          created_at?: string
+          domain_name?: string | null
+          function_name?: string | null
+          id?: number
+          industry_family?: string | null
+          industry_name?: string | null
+          job_family?: string | null
+          role_name: string
+          sector_name?: string | null
+          sub_domain_name?: string | null
+          sub_sector_name?: string | null
+        }
+        Update: {
+          career_cluster?: string | null
+          career_pathway_cluster?: string | null
+          created_at?: string
+          domain_name?: string | null
+          function_name?: string | null
+          id?: number
+          industry_family?: string | null
+          industry_name?: string | null
+          job_family?: string | null
+          role_name?: string
+          sector_name?: string | null
+          sub_domain_name?: string | null
+          sub_sector_name?: string | null
+        }
+        Relationships: []
+      }
+      career_intel_ngo_development: {
+        Row: {
+          career_cluster: string | null
+          career_pathway_cluster: string | null
+          created_at: string
+          domain_name: string | null
+          function_name: string | null
+          id: number
+          industry_family: string | null
+          industry_name: string | null
+          job_family: string | null
+          role_name: string
+          sector_name: string | null
+          sub_domain_name: string | null
+          sub_sector_name: string | null
+        }
+        Insert: {
+          career_cluster?: string | null
+          career_pathway_cluster?: string | null
+          created_at?: string
+          domain_name?: string | null
+          function_name?: string | null
+          id?: number
+          industry_family?: string | null
+          industry_name?: string | null
+          job_family?: string | null
+          role_name: string
+          sector_name?: string | null
+          sub_domain_name?: string | null
+          sub_sector_name?: string | null
+        }
+        Update: {
+          career_cluster?: string | null
+          career_pathway_cluster?: string | null
+          created_at?: string
+          domain_name?: string | null
+          function_name?: string | null
+          id?: number
+          industry_family?: string | null
+          industry_name?: string | null
+          job_family?: string | null
+          role_name?: string
+          sector_name?: string | null
+          sub_domain_name?: string | null
+          sub_sector_name?: string | null
+        }
+        Relationships: []
+      }
+      career_intel_real_estate_construction: {
+        Row: {
+          career_cluster: string | null
+          career_pathway_cluster: string | null
+          created_at: string
+          domain_name: string | null
+          function_name: string | null
+          id: number
+          industry_family: string | null
+          industry_name: string | null
+          job_family: string | null
+          role_name: string
+          sector_name: string | null
+          sub_domain_name: string | null
+          sub_sector_name: string | null
+        }
+        Insert: {
+          career_cluster?: string | null
+          career_pathway_cluster?: string | null
+          created_at?: string
+          domain_name?: string | null
+          function_name?: string | null
+          id?: number
+          industry_family?: string | null
+          industry_name?: string | null
+          job_family?: string | null
+          role_name: string
+          sector_name?: string | null
+          sub_domain_name?: string | null
+          sub_sector_name?: string | null
+        }
+        Update: {
+          career_cluster?: string | null
+          career_pathway_cluster?: string | null
+          created_at?: string
+          domain_name?: string | null
+          function_name?: string | null
+          id?: number
+          industry_family?: string | null
+          industry_name?: string | null
+          job_family?: string | null
+          role_name?: string
+          sector_name?: string | null
+          sub_domain_name?: string | null
+          sub_sector_name?: string | null
+        }
+        Relationships: []
+      }
+      career_intel_retail_consumer_goods: {
+        Row: {
+          career_cluster: string | null
+          career_pathway_cluster: string | null
+          created_at: string
+          domain_name: string | null
+          function_name: string | null
+          id: number
+          industry_family: string | null
+          industry_name: string | null
+          job_family: string | null
+          role_name: string
+          sector_name: string | null
+          sub_domain_name: string | null
+          sub_sector_name: string | null
+        }
+        Insert: {
+          career_cluster?: string | null
+          career_pathway_cluster?: string | null
+          created_at?: string
+          domain_name?: string | null
+          function_name?: string | null
+          id?: number
+          industry_family?: string | null
+          industry_name?: string | null
+          job_family?: string | null
+          role_name: string
+          sector_name?: string | null
+          sub_domain_name?: string | null
+          sub_sector_name?: string | null
+        }
+        Update: {
+          career_cluster?: string | null
+          career_pathway_cluster?: string | null
+          created_at?: string
+          domain_name?: string | null
+          function_name?: string | null
+          id?: number
+          industry_family?: string | null
+          industry_name?: string | null
+          job_family?: string | null
+          role_name?: string
+          sector_name?: string | null
+          sub_domain_name?: string | null
+          sub_sector_name?: string | null
+        }
+        Relationships: []
+      }
+      career_intel_sports: {
+        Row: {
+          career_cluster: string | null
+          career_pathway_cluster: string | null
+          created_at: string
+          domain_name: string | null
+          function_name: string | null
+          id: number
+          industry_family: string | null
+          industry_name: string | null
+          job_family: string | null
+          role_name: string
+          sector_name: string | null
+          sub_domain_name: string | null
+          sub_sector_name: string | null
+        }
+        Insert: {
+          career_cluster?: string | null
+          career_pathway_cluster?: string | null
+          created_at?: string
+          domain_name?: string | null
+          function_name?: string | null
+          id?: number
+          industry_family?: string | null
+          industry_name?: string | null
+          job_family?: string | null
+          role_name: string
+          sector_name?: string | null
+          sub_domain_name?: string | null
+          sub_sector_name?: string | null
+        }
+        Update: {
+          career_cluster?: string | null
+          career_pathway_cluster?: string | null
+          created_at?: string
+          domain_name?: string | null
+          function_name?: string | null
+          id?: number
+          industry_family?: string | null
+          industry_name?: string | null
+          job_family?: string | null
+          role_name?: string
+          sector_name?: string | null
+          sub_domain_name?: string | null
+          sub_sector_name?: string | null
+        }
+        Relationships: []
+      }
+      career_intel_tech_it: {
+        Row: {
+          career_cluster: string | null
+          career_pathway_cluster: string | null
+          created_at: string
+          domain_name: string | null
+          function_name: string | null
+          id: number
+          industry_family: string | null
+          industry_name: string | null
+          job_family: string | null
+          role_name: string
+          sector_name: string | null
+          sub_domain_name: string | null
+          sub_sector_name: string | null
+        }
+        Insert: {
+          career_cluster?: string | null
+          career_pathway_cluster?: string | null
+          created_at?: string
+          domain_name?: string | null
+          function_name?: string | null
+          id?: number
+          industry_family?: string | null
+          industry_name?: string | null
+          job_family?: string | null
+          role_name: string
+          sector_name?: string | null
+          sub_domain_name?: string | null
+          sub_sector_name?: string | null
+        }
+        Update: {
+          career_cluster?: string | null
+          career_pathway_cluster?: string | null
+          created_at?: string
+          domain_name?: string | null
+          function_name?: string | null
+          id?: number
+          industry_family?: string | null
+          industry_name?: string | null
+          job_family?: string | null
+          role_name?: string
+          sector_name?: string | null
+          sub_domain_name?: string | null
+          sub_sector_name?: string | null
+        }
+        Relationships: []
+      }
+      career_intel_telecommunications: {
+        Row: {
+          career_cluster: string | null
+          career_pathway_cluster: string | null
+          created_at: string
+          domain_name: string | null
+          function_name: string | null
+          id: number
+          industry_family: string | null
+          industry_name: string | null
+          job_family: string | null
+          role_name: string
+          sector_name: string | null
+          sub_domain_name: string | null
+          sub_sector_name: string | null
+        }
+        Insert: {
+          career_cluster?: string | null
+          career_pathway_cluster?: string | null
+          created_at?: string
+          domain_name?: string | null
+          function_name?: string | null
+          id?: number
+          industry_family?: string | null
+          industry_name?: string | null
+          job_family?: string | null
+          role_name: string
+          sector_name?: string | null
+          sub_domain_name?: string | null
+          sub_sector_name?: string | null
+        }
+        Update: {
+          career_cluster?: string | null
+          career_pathway_cluster?: string | null
+          created_at?: string
+          domain_name?: string | null
+          function_name?: string | null
+          id?: number
+          industry_family?: string | null
+          industry_name?: string | null
+          job_family?: string | null
+          role_name?: string
+          sector_name?: string | null
+          sub_domain_name?: string | null
+          sub_sector_name?: string | null
+        }
+        Relationships: []
+      }
+      career_intel_transport_logistics: {
+        Row: {
+          career_cluster: string | null
+          career_pathway_cluster: string | null
+          created_at: string
+          domain_name: string | null
+          function_name: string | null
+          id: number
+          industry_family: string | null
+          industry_name: string | null
+          job_family: string | null
+          role_name: string
+          sector_name: string | null
+          sub_domain_name: string | null
+          sub_sector_name: string | null
+        }
+        Insert: {
+          career_cluster?: string | null
+          career_pathway_cluster?: string | null
+          created_at?: string
+          domain_name?: string | null
+          function_name?: string | null
+          id?: number
+          industry_family?: string | null
+          industry_name?: string | null
+          job_family?: string | null
+          role_name: string
+          sector_name?: string | null
+          sub_domain_name?: string | null
+          sub_sector_name?: string | null
+        }
+        Update: {
+          career_cluster?: string | null
+          career_pathway_cluster?: string | null
+          created_at?: string
+          domain_name?: string | null
+          function_name?: string | null
+          id?: number
+          industry_family?: string | null
+          industry_name?: string | null
+          job_family?: string | null
+          role_name?: string
+          sector_name?: string | null
+          sub_domain_name?: string | null
+          sub_sector_name?: string | null
+        }
+        Relationships: []
+      }
       career_path_interactions: {
         Row: {
           career_path_id: string
