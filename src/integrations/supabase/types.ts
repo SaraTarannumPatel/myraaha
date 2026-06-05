@@ -670,6 +670,57 @@ export type Database = {
           },
         ]
       }
+      career_taxonomy: {
+        Row: {
+          career_cluster: string | null
+          career_pathway_cluster: string | null
+          created_at: string
+          domain_name: string | null
+          function_name: string | null
+          id: number
+          industry_family: string | null
+          industry_name: string | null
+          job_family: string | null
+          role_name: string
+          sector_name: string
+          source_workbook: string
+          sub_domain_name: string | null
+          sub_sector_name: string | null
+        }
+        Insert: {
+          career_cluster?: string | null
+          career_pathway_cluster?: string | null
+          created_at?: string
+          domain_name?: string | null
+          function_name?: string | null
+          id?: number
+          industry_family?: string | null
+          industry_name?: string | null
+          job_family?: string | null
+          role_name: string
+          sector_name: string
+          source_workbook: string
+          sub_domain_name?: string | null
+          sub_sector_name?: string | null
+        }
+        Update: {
+          career_cluster?: string | null
+          career_pathway_cluster?: string | null
+          created_at?: string
+          domain_name?: string | null
+          function_name?: string | null
+          id?: number
+          industry_family?: string | null
+          industry_name?: string | null
+          job_family?: string | null
+          role_name?: string
+          sector_name?: string
+          source_workbook?: string
+          sub_domain_name?: string | null
+          sub_sector_name?: string | null
+        }
+        Relationships: []
+      }
       challenge_card_interactions: {
         Row: {
           challenge_id: string
