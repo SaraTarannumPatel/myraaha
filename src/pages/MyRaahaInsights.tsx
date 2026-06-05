@@ -157,9 +157,10 @@ const MyRaahaInsights = () => {
                   <span>•</span>
                   <span>{article.date}</span>
                 </div>
-                <h3 dangerouslySetInnerHTML={{ 
-                  __html: article.title.split(' ').slice(0, -1).join(' ') + ' <span>' + article.title.split(' ').slice(-1) + '</span>' 
-                }}></h3>
+                <h3>
+                  {article.title.split(' ').slice(0, -1).join(' ')}{' '}
+                  <span>{article.title.split(' ').slice(-1)[0]}</span>
+                </h3>
                 <p>{article.excerpt}</p>
                 <Link to={`/insights/${article.slug}`} className="read-more" onClick={(e) => e.stopPropagation()}>
                   Read More <ArrowRight className="w-4 h-4" />
