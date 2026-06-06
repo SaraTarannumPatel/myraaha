@@ -140,19 +140,31 @@ const PsychometricTest = ({ userId, onComplete, recordSignal }: Props) => {
   };
 
   if (completed) {
+    // Preview saved answers (read-only). "Retake Assessment" intentionally removed —
+    // psychometric results are one-time-per-user; users can review but not reset.
     return (
       <Card className="border-primary/20 bg-primary/5">
-        <CardContent className="pt-6 text-center space-y-4">
-          <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center mx-auto">
-            <CheckCircle2 size={32} className="text-primary" />
+        <CardContent className="pt-6 space-y-4">
+          <div className="text-center space-y-3">
+            <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center mx-auto">
+              <CheckCircle2 size={32} className="text-primary" />
+            </div>
+            <h3 className="font-display text-xl">Assessment Complete ✨</h3>
+            <p className="font-body text-sm text-muted-foreground">
+              Your psychometric profile is now active. AI modules are calibrated to your cognitive style, emotional patterns, and learning preferences.
+            </p>
           </div>
-          <h3 className="font-display text-xl">Assessment Complete ✨</h3>
-          <p className="font-body text-sm text-muted-foreground">
-            Your psychometric profile is now active. AI modules are calibrated to your cognitive style, emotional patterns, and learning preferences.
-          </p>
-          <Button variant="outline" onClick={() => { setCompleted(false); setStep(0); setAnswers({}); }}>
-            Retake Assessment
-          </Button>
+          {Object.keys(answers).length > 0 && (
+            <div className="mt-4 border-t border-border pt-4 space-y-3 max-h-[40vh] overflow-y-auto">
+              <h4 className="font-display text-sm text-primary">Your Answers</h4>
+              {PSYCHOMETRIC_QUESTIONS.filter((q) => answers[q.id]).map((q) => (
+                <div key={q.id} className="text-left">
+                  <p className="font-body text-xs text-muted-foreground">{q.question}</p>
+                  <p className="font-body text-sm font-semibold text-foreground mt-0.5">{answers[q.id]}</p>
+                </div>
+              ))}
+            </div>
+          )}
         </CardContent>
       </Card>
     );
