@@ -2076,4 +2076,132 @@ html:has(.myraaha-landing-site) body {
   }
 }
 
+/* ==========================================================================
+   STRICT POPUP, MODAL, OVERLAY, DROPDOWN & SELECT BACKGROUND ENFORCEMENT
+   Ensures no dialog, popover, hover card, select, drawer, menu, tooltip, or card has a transparent background
+   ========================================================================== */
+
+/* 1. Target Tailwind/ShadCN utility background classes commonly used on overlays */
+.bg-background,
+.bg-card,
+.bg-popover,
+.bg-dialog,
+.bg-sheet {
+  background-color: #ffffff !important;
+}
+
+/* 2. Target specific Radix UI and ShadCN components directly */
+[role="dialog"],
+[role="menu"],
+[role="listbox"],
+[role="tooltip"],
+[role="menuitem"],
+[role="option"],
+.DialogContent,
+.PopoverContent,
+.DropdownMenuContent,
+.DropdownMenuItem,
+.SheetContent,
+.HoverCardContent,
+.ContextMenuContent,
+.MenubarContent,
+.SelectContent,
+.SelectItem,
+.TooltipContent,
+.CommandDialog,
+.Command,
+.CommandInput,
+.CommandList,
+.CommandItem,
+.DrawerContent,
+.Card,
+.card,
+[data-radix-popper-content-wrapper] > div {
+  background-color: #ffffff !important;
+}
+
+/* 3. Exceptions and adjustments to overlay backdrops (so the background behind the modal isn't solid white) */
+div.fixed.inset-0.bg-black\/80,
+div.fixed.inset-0.bg-background\/80,
+.DialogOverlay,
+[data-role="overlay"],
+.bg-black\/80,
+.bg-black\/50,
+.bg-background\/80,
+[data-state="open"].fixed.inset-0 {
+  background-color: rgba(0, 0, 0, 0.6) !important;
+}
+
+/* 4. Fix dropdown list options / items hover and background */
+.SelectContent [role="option"],
+.DropdownMenuContent [role="menuitem"],
+.SelectItem,
+.DropdownMenuItem {
+  background-color: #ffffff !important;
+}
+.SelectContent [role="option"]:hover,
+.DropdownMenuContent [role="menuitem"]:hover,
+.SelectItem:hover,
+.DropdownMenuItem:hover,
+.SelectContent [role="option"][data-highlighted],
+.DropdownMenuContent [role="menuitem"][data-highlighted],
+.SelectItem[data-highlighted],
+.DropdownMenuItem[data-highlighted] {
+  background-color: var(--myraaha-blue-light, #f3e8ff) !important;
+  color: var(--myraaha-blue, #5500cb) !important;
+}
+
+/* 5. Selected active tabs: universal #5500cb background and #ffffff text, capsule style */
+button[data-state="active"][role="tab"] {
+  background-color: #5500cb !important;
+  color: #ffffff !important;
+  border-radius: 9999px !important;
+}
+
+/* ==========================================================================
+   CURIOSITY COMPASS OVERRIDES & PREMIUM UI SYSTEM
+   ========================================================================== */
+.curiosity-compass-container,
+.curiosity-compass-container * {
+  max-width: none !important;
+  box-sizing: border-box;
+}
+
+/* Prevent paragraph constrictions */
+.curiosity-compass-container p,
+.curiosity-compass-container span,
+.curiosity-compass-container div,
+.curiosity-compass-container .prose p,
+.curiosity-compass-container .description-text {
+  max-width: none !important;
+}
+
+/* Universal text alignments and app-like layouts */
+.curiosity-compass-container h1,
+.curiosity-compass-container h2,
+.curiosity-compass-container h3,
+.curiosity-compass-container h4,
+.curiosity-compass-container p {
+  text-align: left !important;
+}
+
+/* Buttons inside Curiosity Compass */
+.curiosity-compass-container button {
+  text-align: center !important;
+}
+
+/* Responsive premium card designs */
+.curiosity-compass-card {
+  background: #ffffff;
+  border: 1px solid rgba(226, 232, 240, 0.8);
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.03), 0 8px 10px -6px rgba(0, 0, 0, 0.03);
+  border-radius: 24px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.curiosity-compass-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 20px 25px -5px rgba(85, 0, 203, 0.04), 0 10px 10px -5px rgba(85, 0, 203, 0.02);
+  border-color: rgba(85, 0, 203, 0.2);
+}
 

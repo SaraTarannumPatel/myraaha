@@ -338,125 +338,147 @@ const StoryModeCards = () => {
   return (
     <div className="space-y-6">
       {/* Stats Bar */}
-      <div className="flex items-center justify-between flex-wrap gap-3">
+      <div className="bg-card border border-border rounded-2xl p-4 shadow-sm flex items-center justify-between flex-wrap gap-3">
         <div className="flex items-center gap-4">
-          <span className="flex items-center gap-1.5 text-sm"><Heart size={14} className="text-terracotta" /> <span className="font-body text-muted-foreground">{stats.loved}</span></span>
-          <span className="flex items-center gap-1.5 text-sm"><ThumbsUp size={14} className="text-primary" /> <span className="font-body text-muted-foreground">{stats.liked}</span></span>
-          <span className="flex items-center gap-1.5 text-sm"><Bookmark size={14} className="text-blue-primary" /> <span className="font-body text-muted-foreground">{stats.bookmarked}</span></span>
-          <span className="flex items-center gap-1.5 text-sm"><XCircle size={14} className="text-grey-meta" /> <span className="font-body text-muted-foreground">{stats.skipped}</span></span>
+          <span className="flex items-center gap-1.5 text-xs text-muted-foreground">
+            <Heart size={14} className="text-terracotta fill-terracotta" />
+            <span className="font-body font-semibold text-foreground">{stats.loved}</span> loved
+          </span>
+          <span className="flex items-center gap-1.5 text-xs text-muted-foreground">
+            <ThumbsUp size={14} className="text-primary fill-primary/10" />
+            <span className="font-body font-semibold text-foreground">{stats.liked}</span> liked
+          </span>
+          <span className="flex items-center gap-1.5 text-xs text-muted-foreground">
+            <Bookmark size={14} className="text-blue-500 fill-blue-500/10" />
+            <span className="font-body font-semibold text-foreground">{stats.bookmarked}</span> saved
+          </span>
+          <span className="flex items-center gap-1.5 text-xs text-muted-foreground">
+            <XCircle size={14} className="text-muted-foreground" />
+            <span className="font-body font-semibold text-foreground">{stats.skipped}</span> skipped
+          </span>
         </div>
-        {interactionCount >= 3 && (
-          <Button size="sm" variant="outline" onClick={runAnalysis} disabled={analyzing}>
-            {analyzing ? <><Loader2 size={14} className="mr-2 animate-spin" /> Analyzing...</> : <><Brain size={14} className="mr-2" /> Analyze My Choices</>}
+        {interactionCount >= 3 && !showAnalysis && (
+          <Button size="sm" variant="outline" onClick={runAnalysis} disabled={analyzing} className="h-8 text-xs rounded-xl border-primary/20 hover:bg-primary/5 hover:text-primary">
+            {analyzing ? <><Loader2 size={12} className="mr-1.5 animate-spin" /> Analyzing...</> : <><Brain size={12} className="mr-1.5" /> Analyze Vibes</>}
           </Button>
         )}
       </div>
 
-      {/* Domain Filter (multi-select dropdown) */}
-      <div className="flex items-center gap-2 flex-wrap">
-        <span className="font-body text-xs text-muted-foreground">Filter by domain:</span>
-        <MultiSelect
-          options={domains}
-          selected={filterDomains}
-          onChange={(next) => { setFilterDomains(next); setCurrentIndex(0); }}
-          label="domains"
-          placeholder="All domains"
-          totalCount={domains.length}
-        />
-      </div>
-
-      {/* Progress */}
-      <div className="space-y-2">
-        <div className="flex justify-between text-xs font-body text-muted-foreground">
-          <span>Story {currentIndex + 1}{hasMore ? "+" : ` of ${filtered.length}`}</span>
-          <span>{interactionCount} stories explored</span>
+      {/* Domain Filter & Progress Card */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-center bg-card/60 border border-border rounded-2xl p-4 shadow-sm">
+        <div className="flex items-center gap-2">
+          <span className="font-body text-xs text-muted-foreground shrink-0">Filter by domain:</span>
+          <MultiSelect
+            options={domains}
+            selected={filterDomains}
+            onChange={(next) => { setFilterDomains(next); setCurrentIndex(0); }}
+            label="domains"
+            placeholder="All domains"
+            totalCount={domains.length}
+          />
         </div>
-        <Progress value={hasMore ? Math.min(95, ((currentIndex + 1) / Math.max(filtered.length, 1)) * 100) : ((currentIndex + 1) / Math.max(filtered.length, 1)) * 100} className="h-1.5" />
+        <div className="space-y-1.5">
+          <div className="flex justify-between text-[11px] font-body text-muted-foreground">
+            <span>Story {currentIndex + 1}{hasMore ? "+" : ` of ${filtered.length}`}</span>
+            <span>{interactionCount} explored</span>
+          </div>
+          <Progress value={hasMore ? Math.min(95, ((currentIndex + 1) / Math.max(filtered.length, 1)) * 100) : ((currentIndex + 1) / Math.max(filtered.length, 1)) * 100} className="h-1" />
+        </div>
       </div>
 
       {/* Story Card */}
       <AnimatePresence mode="wait">
         {current && (
-          <motion.div key={current.id} initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -30 }} transition={{ duration: 0.3 }}>
-            <Card className={`overflow-hidden transition-all ${
-              interactions[current.id] === "love" ? "border-terracotta/50 ring-2 ring-terracotta/20" :
-              interactions[current.id] === "like" ? "border-primary/50 ring-2 ring-primary/20" :
-              interactions[current.id] === "bookmark" ? "border-blue-primary/50 ring-2 ring-blue-primary/20" :
-              interactions[current.id] === "not_for_me" ? "opacity-70" : ""
+          <motion.div key={current.id} initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -15 }} transition={{ duration: 0.2 }}>
+            <Card className={`overflow-hidden transition-all duration-300 rounded-2xl border shadow-md hover:shadow-lg ${
+              interactions[current.id] === "love" ? "border-terracotta/40 ring-1 ring-terracotta/10" :
+              interactions[current.id] === "like" ? "border-primary/40 ring-1 ring-primary/10" :
+              interactions[current.id] === "bookmark" ? "border-blue-500/40 ring-1 ring-blue-500/10" :
+              interactions[current.id] === "not_for_me" ? "opacity-75" : ""
             }`}>
+              
               {/* Story Header */}
-              <div className="bg-gradient-to-r from-primary/10 via-accent/5 to-transparent px-6 py-5">
+              <div className="bg-gradient-to-r from-primary/5 via-accent/5 to-transparent px-6 py-5 border-b border-border/40">
                 <div className="flex items-start gap-4">
-                  <div className="w-14 h-14 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center shrink-0">
-                    <User size={24} className="text-primary-foreground" />
+                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center shrink-0 border border-primary/10">
+                    <span className="font-display font-bold text-sm text-primary">
+                      {current.narrator_name?.charAt(0) || "P"}
+                    </span>
                   </div>
-                  <div className="flex-1 min-w-0">
-                    <h2 className="font-display text-xl text-foreground leading-snug">{current.title}</h2>
-                    <div className="flex items-center gap-2 mt-1.5 flex-wrap">
-                      <span className="font-body text-sm text-muted-foreground">{current.narrator_name}</span>
-                      <span className="text-muted-foreground">·</span>
-                      <span className="font-body text-sm text-muted-foreground">{current.narrator_role}</span>
+                  <div className="flex-1 min-w-0 space-y-1">
+                    <h2 className="font-display text-base font-bold text-foreground leading-snug">{current.title}</h2>
+                    <div className="flex items-center gap-1.5 text-xs text-muted-foreground flex-wrap font-body">
+                      <span>{current.narrator_name}</span>
+                      <span>•</span>
+                      <span>{current.narrator_role}</span>
                       {current.narrator_experience_years && (
                         <>
-                          <span className="text-muted-foreground">·</span>
-                          <span className="font-body text-sm text-muted-foreground">{current.narrator_experience_years}y exp</span>
+                          <span>•</span>
+                          <span>{current.narrator_experience_years}y exp</span>
                         </>
                       )}
                     </div>
-                    <div className="flex items-center gap-2 mt-2">
-                      <Badge variant="secondary">{current.domain}</Badge>
-                      {current.difficulty_level && <Badge variant="outline">{current.difficulty_level}</Badge>}
+                    <div className="flex items-center gap-1.5 pt-1">
+                      <Badge variant="secondary" className="px-2 py-0.5 text-[10px]">{current.domain}</Badge>
+                      {current.difficulty_level && <Badge variant="outline" className="px-2 py-0.5 text-[10px]">{current.difficulty_level}</Badge>}
                     </div>
                   </div>
                 </div>
               </div>
 
-              <CardContent className="pt-5 space-y-5">
+              <CardContent className="p-3.5 sm:p-6 space-y-4 sm:space-y-5">
                 {/* Main Story */}
                 <div className="relative">
-                  <Quote size={20} className="absolute -top-1 -left-1 text-primary/20" />
-                  <p className="font-body text-sm text-foreground leading-relaxed pl-6 whitespace-pre-line">
+                  <Quote size={20} className="absolute -top-1 -left-1 text-primary/10" />
+                  <p className="font-body text-sm text-foreground leading-relaxed pl-7 whitespace-pre-line">
                     {current.story_content}
                   </p>
                 </div>
 
                 {/* Day in Life */}
                 {current.day_in_life && (
-                  <div className="p-4 rounded-xl bg-secondary border border-border">
-                    <div className="flex items-center gap-2 mb-2">
-                      <Clock size={15} className="text-primary" />
-                      <span className="font-display text-sm text-foreground">a day in my life</span>
+                  <div className="p-4 rounded-2xl bg-muted/30 border border-border/50">
+                    <div className="flex items-center gap-2 mb-1.5">
+                      <Clock size={14} className="text-primary" />
+                      <span className="font-display text-xs font-semibold text-foreground uppercase tracking-wider">A day in my life</span>
                     </div>
-                    <p className="font-body text-sm text-muted-foreground leading-relaxed">{current.day_in_life}</p>
+                    <p className="font-body text-xs text-muted-foreground leading-relaxed">{current.day_in_life}</p>
                   </div>
                 )}
 
-                {/* Expandable Details */}
-                <button onClick={() => setExpanded(!expanded)} className="w-full text-center font-body text-sm text-primary hover:underline py-1">
-                  {expanded ? "show less ↑" : "the real tea — pros, cons, skills & more ↓"}
+                {/* Expandable Details CTA */}
+                <button
+                  onClick={() => setExpanded(!expanded)}
+                  className="w-full text-center font-body text-xs text-primary font-medium hover:underline py-1.5 border-t border-border/20"
+                >
+                  {expanded ? "Collapse detailed overview ↑" : "Reveal real career stats (pros, cons, skills) ↓"}
                 </button>
 
                 <AnimatePresence>
                   {expanded && (
-                    <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} exit={{ height: 0, opacity: 0 }} className="space-y-4 overflow-hidden">
+                    <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} exit={{ height: 0, opacity: 0 }} className="space-y-4 overflow-hidden pt-2">
                       {/* Pros & Cons */}
-                      <div className="grid grid-cols-2 gap-3">
-                        <div className="p-3 rounded-lg bg-success/5 border border-success/20">
-                          <h4 className="font-display text-sm mb-2 flex items-center gap-1.5"><CheckCircle2 size={14} className="text-success" /> the good stuff</h4>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div className="p-3.5 rounded-xl bg-success/5 border border-success/15">
+                          <h4 className="font-display text-xs font-semibold mb-2 flex items-center gap-1.5 text-success">
+                            <CheckCircle2 size={13} className="text-success" /> The Good Stuff
+                          </h4>
                           <ul className="space-y-1">
                             {current.pros.map((p, i) => (
-                              <li key={i} className="font-body text-xs text-muted-foreground flex items-start gap-1.5">
-                                <span className="text-success mt-0.5">+</span> {p}
+                              <li key={i} className="font-body text-[11px] text-muted-foreground flex items-start gap-1.5 leading-relaxed">
+                                <span className="text-success font-bold mt-0.5">•</span> {p}
                               </li>
                             ))}
                           </ul>
                         </div>
-                        <div className="p-3 rounded-lg bg-warmth/5 border border-warmth/20">
-                          <h4 className="font-display text-sm mb-2 flex items-center gap-1.5"><AlertTriangle size={14} className="text-warmth" /> keep in mind</h4>
+                        <div className="p-3.5 rounded-xl bg-warmth/5 border border-warmth/15">
+                          <h4 className="font-display text-xs font-semibold mb-2 flex items-center gap-1.5 text-warmth">
+                            <AlertTriangle size={13} className="text-warmth" /> Challenges
+                          </h4>
                           <ul className="space-y-1">
                             {current.cons.map((c, i) => (
-                              <li key={i} className="font-body text-xs text-muted-foreground flex items-start gap-1.5">
-                                <span className="text-warmth mt-0.5">–</span> {c}
+                              <li key={i} className="font-body text-[11px] text-muted-foreground flex items-start gap-1.5 leading-relaxed">
+                                <span className="text-warmth font-bold mt-0.5">•</span> {c}
                               </li>
                             ))}
                           </ul>
@@ -465,8 +487,10 @@ const StoryModeCards = () => {
 
                       {/* Skills */}
                       {current.skills_highlighted.length > 0 && (
-                        <div>
-                          <h4 className="font-display text-sm mb-2 flex items-center gap-2"><Zap size={14} className="text-primary" /> skills that matter here</h4>
+                        <div className="space-y-1.5">
+                          <h4 className="font-display text-xs font-semibold flex items-center gap-1.5 text-foreground">
+                            <Zap size={13} className="text-primary" /> Key Skills Needed
+                          </h4>
                           <div className="flex flex-wrap gap-1.5">
                             {current.skills_highlighted.map(s => <Badge key={s} variant="outline" className="text-xs">{s}</Badge>)}
                           </div>
@@ -475,18 +499,18 @@ const StoryModeCards = () => {
 
                       {/* Advice */}
                       {current.advice && (
-                        <div className="p-4 rounded-xl bg-accent/10 border border-accent/20">
-                          <div className="flex items-center gap-2 mb-2">
-                            <Lightbulb size={15} className="text-accent-foreground" />
-                            <span className="font-display text-sm text-foreground">their advice to you</span>
+                        <div className="p-3.5 rounded-xl bg-accent/5 border border-accent/15">
+                          <div className="flex items-center gap-2 mb-1.5">
+                            <Lightbulb size={14} className="text-accent-foreground" />
+                            <span className="font-display text-xs font-semibold text-foreground uppercase tracking-wider">Professional Advice</span>
                           </div>
-                          <p className="font-body text-sm text-muted-foreground italic">"{current.advice}"</p>
+                          <p className="font-body text-xs text-muted-foreground italic leading-relaxed">"{current.advice}"</p>
                         </div>
                       )}
 
                       {/* Tags */}
                       {current.tags.length > 0 && (
-                        <div className="flex flex-wrap gap-1.5">
+                        <div className="flex flex-wrap gap-1.5 pt-1">
                           {current.tags.map(t => <Badge key={t} variant="secondary" className="text-[10px]">#{t}</Badge>)}
                         </div>
                       )}
@@ -495,35 +519,35 @@ const StoryModeCards = () => {
                 </AnimatePresence>
 
                 {/* Interaction Buttons */}
-                <div className="grid grid-cols-4 gap-2 pt-3 border-t border-border">
+                <div className="grid grid-cols-4 gap-1 sm:gap-2 pt-4 border-t border-border/50">
                   {([
-                    { type: "like" as InteractionType, icon: ThumbsUp, label: "Like", activeClass: "bg-primary hover:bg-primary/90 border-primary text-primary-foreground" },
-                    { type: "love" as InteractionType, icon: Heart, label: "Love", activeClass: "bg-terracotta hover:bg-terracotta/90 border-terracotta text-primary-foreground" },
-                    { type: "bookmark" as InteractionType, icon: Bookmark, label: "Save", activeClass: "bg-[hsl(var(--blue-primary))] hover:bg-[hsl(var(--blue-primary))]/90 border-[hsl(var(--blue-primary))] text-primary-foreground" },
-                    { type: "not_for_me" as InteractionType, icon: XCircle, label: "Not me", activeClass: "bg-muted-foreground hover:bg-muted-foreground/90 text-primary-foreground" },
+                    { type: "like" as InteractionType, icon: ThumbsUp, label: "Like", activeClass: "bg-primary hover:bg-primary/90 border-primary text-primary-foreground font-semibold" },
+                    { type: "love" as InteractionType, icon: Heart, label: "Love", activeClass: "bg-terracotta hover:bg-terracotta/90 border-terracotta text-primary-foreground font-semibold" },
+                    { type: "bookmark" as InteractionType, icon: Bookmark, label: "Save", activeClass: "bg-blue-500 hover:bg-blue-600 border-blue-500 text-white font-semibold" },
+                    { type: "not_for_me" as InteractionType, icon: XCircle, label: "Not Me", activeClass: "bg-muted-foreground hover:bg-muted-foreground/90 text-primary-foreground font-semibold" },
                   ]).map(btn => {
                     const active = interactions[current.id] === btn.type;
                     return (
                       <Button
                         key={btn.type}
                         variant={active ? "default" : "outline"}
-                        className={`flex flex-col items-center gap-1 h-auto py-3 transition-all ${active ? btn.activeClass : ""}`}
+                        className={`flex flex-col items-center gap-1.5 h-auto py-2 sm:py-2.5 px-0.5 sm:px-2 rounded-xl transition-all ${active ? btn.activeClass : "border-border/80 hover:bg-muted/40 hover:border-primary/30"}`}
                         onClick={() => handleInteraction(current.id, btn.type)}
                       >
-                        <btn.icon size={18} className={active ? "fill-current" : ""} />
-                        <span className="text-xs">{btn.label}</span>
+                        <btn.icon size={16} className={active ? "fill-current" : ""} />
+                        <span className="text-[10px] font-body uppercase tracking-wider">{btn.label}</span>
                       </Button>
                     );
                   })}
                 </div>
 
-                {/* Navigation */}
-                <div className="flex justify-between pt-1">
-                  <Button variant="ghost" size="sm" onClick={() => { setCurrentIndex(Math.max(0, currentIndex - 1)); setExpanded(false); startTimeRef.current = Date.now(); }} disabled={currentIndex === 0}>
-                    <ChevronLeft size={16} className="mr-1" /> Previous
+                {/* Navigation Controls */}
+                <div className="flex justify-between pt-1 border-t border-border/10">
+                  <Button variant="ghost" size="sm" onClick={() => { setCurrentIndex(Math.max(0, currentIndex - 1)); setExpanded(false); startTimeRef.current = Date.now(); }} disabled={currentIndex === 0} className="text-xs rounded-full h-[36px] px-4">
+                    <ChevronLeft size={14} className="mr-1.5" /> Previous
                   </Button>
-                  <Button variant="ghost" size="sm" onClick={() => { setCurrentIndex(Math.min(filtered.length - 1, currentIndex + 1)); setExpanded(false); startTimeRef.current = Date.now(); }} disabled={currentIndex >= filtered.length - 1}>
-                    Next <ChevronRight size={16} className="ml-1" />
+                  <Button variant="ghost" size="sm" onClick={() => { setCurrentIndex(Math.min(filtered.length - 1, currentIndex + 1)); setExpanded(false); startTimeRef.current = Date.now(); }} disabled={currentIndex >= filtered.length - 1} className="text-xs rounded-full h-[36px] px-4">
+                    Next <ChevronRight size={14} className="ml-1.5" />
                   </Button>
                 </div>
               </CardContent>
@@ -532,18 +556,20 @@ const StoryModeCards = () => {
         )}
       </AnimatePresence>
 
-      {/* Analysis Trigger */}
+      {/* Analysis Trigger Card */}
       {interactionCount >= 3 && !showAnalysis && (
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
-          <Card className="border-primary/30 bg-gradient-to-r from-primary/5 to-accent/5">
-            <CardContent className="pt-6 text-center">
-              <Sparkles className="mx-auto text-primary mb-3" size={32} />
-              <h3 className="font-display text-lg mb-2">ready to see what your choices say about you?</h3>
-              <p className="font-body text-sm text-muted-foreground mb-4">you've explored {interactionCount} stories — enough for our AI to spot patterns in what excites you</p>
-              <Button onClick={runAnalysis} disabled={analyzing}>
-                {analyzing ? <><Loader2 size={14} className="mr-2 animate-spin" /> analyzing your vibes...</> : <><Brain size={14} className="mr-2" /> Show Me My Analysis</>}
-              </Button>
-            </CardContent>
+        <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }}>
+          <Card className="border-primary/20 bg-gradient-to-br from-primary/5 via-accent/5 to-transparent rounded-2xl shadow-sm overflow-hidden p-6 text-center space-y-4">
+            <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mx-auto border border-primary/20">
+              <Sparkles className="text-primary" size={22} />
+            </div>
+            <div className="space-y-1.5">
+              <h3 className="font-display font-bold text-base text-foreground">See your behavioral analysis</h3>
+              <p className="font-body text-xs text-muted-foreground max-w-md mx-auto">You've explored {interactionCount} stories. Our AI can now extract patterns and calibrate your career archetype.</p>
+            </div>
+            <Button onClick={runAnalysis} disabled={analyzing} className="text-xs rounded-full px-6 h-[40px] font-semibold">
+              {analyzing ? <><Loader2 size={12} className="mr-1.5 animate-spin" /> Analyzing vibes...</> : <><Brain size={12} className="mr-1.5" /> Analyze My Vibe</>}
+            </Button>
           </Card>
         </motion.div>
       )}
@@ -551,43 +577,43 @@ const StoryModeCards = () => {
       {/* Behavioral Analysis Results */}
       <AnimatePresence>
         {showAnalysis && analysis && (
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-4">
-            <Card className="border-primary/40 bg-gradient-to-br from-primary/5 to-accent/5">
-              <CardContent className="pt-6 space-y-5">
+          <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} className="space-y-4">
+            <Card className="border-primary/30 bg-card rounded-2xl shadow-md overflow-hidden">
+              <CardContent className="p-6 space-y-6">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
+                  <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center border border-primary/20">
                     <Brain className="text-primary" size={20} />
                   </div>
                   <div>
-                    <h3 className="font-display text-lg text-foreground">your behavioral blueprint 🧬</h3>
-                    <p className="font-body text-xs text-muted-foreground">confidence: {Math.round(analysis.confidence_score * 100)}%</p>
+                    <h3 className="font-display font-bold text-base text-foreground">Your Behavioral Blueprint 🧬</h3>
+                    <p className="font-body text-[10px] text-muted-foreground uppercase tracking-wider font-semibold">confidence: {Math.round(analysis.confidence_score * 100)}%</p>
                   </div>
                 </div>
 
                 {analysis.ai_summary && (
-                  <p className="font-body text-sm text-foreground leading-relaxed bg-muted/30 p-4 rounded-lg">{analysis.ai_summary}</p>
+                  <p className="font-body text-xs text-muted-foreground leading-relaxed bg-muted/40 p-4 rounded-xl border border-border/50">{analysis.ai_summary}</p>
                 )}
 
-                {/* Domains */}
-                <div className="grid grid-cols-2 gap-3">
-                  <div>
-                    <h4 className="font-display text-sm mb-2 text-success">you're drawn to</h4>
+                {/* Domains attracted / rejected */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="p-3.5 rounded-xl bg-success/5 border border-success/15 space-y-2">
+                    <h4 className="font-display text-xs font-bold text-success uppercase tracking-wider">Domains Attracted</h4>
                     <div className="flex flex-wrap gap-1.5">
-                      {analysis.domains_attracted.map(d => <Badge key={d} className="bg-success/10 text-success border-success/30 text-xs">{d}</Badge>)}
+                      {analysis.domains_attracted.map(d => <Badge key={d} className="bg-success/10 text-success border-success/30 hover:bg-success/20 text-xs">{d}</Badge>)}
                     </div>
                   </div>
-                  <div>
-                    <h4 className="font-display text-sm mb-2 text-warmth">not your thing</h4>
+                  <div className="p-3.5 rounded-xl bg-warmth/5 border border-warmth/15 space-y-2">
+                    <h4 className="font-display text-xs font-bold text-warmth uppercase tracking-wider">Domains Rejected</h4>
                     <div className="flex flex-wrap gap-1.5">
-                      {analysis.domains_rejected.map(d => <Badge key={d} className="bg-warmth/10 text-warmth border-warmth/30 text-xs">{d}</Badge>)}
+                      {analysis.domains_rejected.map(d => <Badge key={d} className="bg-warmth/10 text-warmth border-warmth/30 hover:bg-warmth/20 text-xs">{d}</Badge>)}
                     </div>
                   </div>
                 </div>
 
-                {/* Skills */}
+                {/* Skills resonated */}
                 {analysis.skills_resonated.length > 0 && (
-                  <div>
-                    <h4 className="font-display text-sm mb-2">skills you vibe with</h4>
+                  <div className="space-y-2">
+                    <h4 className="font-display text-xs font-bold text-foreground uppercase tracking-wider">Skills Resonated</h4>
                     <div className="flex flex-wrap gap-1.5">
                       {analysis.skills_resonated.map(s => <Badge key={s} variant="outline" className="text-xs">{s}</Badge>)}
                     </div>
@@ -596,13 +622,13 @@ const StoryModeCards = () => {
 
                 {/* Personality Signals */}
                 {Object.keys(analysis.personality_signals).length > 0 && (
-                  <div>
-                    <h4 className="font-display text-sm mb-2">personality signals</h4>
-                    <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
+                  <div className="space-y-2">
+                    <h4 className="font-display text-xs font-bold text-foreground uppercase tracking-wider">Personality & Mindset Signals</h4>
+                    <div className="grid grid-cols-2 md:grid-cols-3 gap-2.5">
                       {Object.entries(analysis.personality_signals).map(([key, val]) => (
-                        <div key={key} className="p-2.5 rounded-lg bg-muted/30 border border-border">
-                          <p className="font-body text-[10px] text-muted-foreground uppercase tracking-wider">{key.replace(/_/g, " ")}</p>
-                          <p className="font-display text-sm text-foreground capitalize">{val}</p>
+                        <div key={key} className="p-3 rounded-xl bg-muted/30 border border-border/50 space-y-0.5">
+                          <p className="font-body text-[9px] text-muted-foreground uppercase tracking-wider font-semibold">{key.replace(/_/g, " ")}</p>
+                          <p className="font-display text-xs font-bold text-foreground capitalize">{val}</p>
                         </div>
                       ))}
                     </div>
@@ -611,60 +637,68 @@ const StoryModeCards = () => {
 
                 {/* Career Inclinations */}
                 {analysis.career_inclinations?.top_3_paths?.length > 0 && (
-                  <div className="p-4 rounded-xl bg-primary/5 border border-primary/20">
-                    <h4 className="font-display text-sm mb-3 flex items-center gap-2"><Star size={14} className="text-primary" /> top career paths for you</h4>
-                    {analysis.career_inclinations.top_3_paths.map((p, i) => (
-                      <div key={i} className="flex items-center gap-2 mb-1.5">
-                        <span className="font-display text-sm text-primary">{i + 1}.</span>
-                        <span className="font-body text-sm text-foreground">{p}</span>
-                      </div>
-                    ))}
+                  <div className="p-4 rounded-xl bg-primary/5 border border-primary/15 space-y-3">
+                    <h4 className="font-display text-xs font-bold text-foreground uppercase tracking-wider flex items-center gap-1.5">
+                      <Star size={12} className="text-primary" /> Top Career Paths For You
+                    </h4>
+                    <div className="space-y-2">
+                      {analysis.career_inclinations.top_3_paths.map((p, i) => (
+                        <div key={i} className="flex items-center gap-2">
+                          <span className="w-5 h-5 rounded-full bg-primary/10 flex items-center justify-center font-display text-xs font-bold text-primary shrink-0">{i + 1}</span>
+                          <span className="font-body text-xs text-foreground font-semibold">{p}</span>
+                        </div>
+                      ))}
+                    </div>
                   </div>
                 )}
 
                 {/* Blind Spots */}
                 {analysis.career_inclinations?.blind_spots?.length > 0 && (
-                  <div className="p-3 rounded-lg bg-accent/10 border border-accent/20">
-                    <h4 className="font-display text-xs mb-1.5 text-accent-foreground">💡 you might also enjoy (but haven't explored yet)</h4>
+                  <div className="p-3.5 rounded-xl bg-accent/5 border border-accent/15 space-y-2">
+                    <h4 className="font-display text-xs font-bold text-accent-foreground flex items-center gap-1.5">
+                      💡 Suggested Exploration Paths (Unseen Blind Spots)
+                    </h4>
                     <div className="flex flex-wrap gap-1.5">
                       {analysis.career_inclinations.blind_spots.map(b => <Badge key={b} variant="secondary" className="text-xs">{b}</Badge>)}
                     </div>
                   </div>
                 )}
 
-                <Button
-                  className="w-full"
-                  onClick={generatePersonalizedRoadmap}
-                  disabled={generatingRoadmap}
-                >
-                  {generatingRoadmap ? (
-                    <><Loader2 size={14} className="mr-2 animate-spin" /> Generating your roadmap...</>
-                  ) : (
-                    <><Sparkles size={14} className="mr-2" /> Generate Your Personalized AI Roadmap <ArrowRight size={14} className="ml-2" /></>
-                  )}
-                </Button>
-                <Button variant="ghost" className="w-full" onClick={() => setShowAnalysis(false)}>
-                  Keep Exploring Stories
-                </Button>
+                <div className="flex flex-col sm:flex-row gap-2 pt-2 border-t border-border/40">
+                  <Button
+                    className="flex-1 text-xs rounded-full h-[40px] font-semibold"
+                    onClick={generatePersonalizedRoadmap}
+                    disabled={generatingRoadmap}
+                  >
+                    {generatingRoadmap ? (
+                      <><Loader2 size={12} className="mr-1.5 animate-spin" /> Generating...</>
+                    ) : (
+                      <><Sparkles size={12} className="mr-1.5" /> Generate Personalized AI Roadmap</>
+                    )}
+                  </Button>
+                  <Button variant="outline" className="text-xs rounded-full h-[40px] font-semibold" onClick={() => setShowAnalysis(false)}>
+                    Keep Exploring
+                  </Button>
+                </div>
               </CardContent>
             </Card>
           </motion.div>
         )}
       </AnimatePresence>
 
-      {/* Generate More */}
+      {/* Generate More indicator */}
       {generating && (
-        <div className="text-center py-4">
-          <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground">
-            <Loader2 size={14} className="animate-spin" /> generating more stories in the background...
+        <div className="text-center py-2">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-muted/40 border border-border text-xs text-muted-foreground">
+            <Loader2 size={12} className="animate-spin text-primary" /> Generating more stories in background...
           </div>
         </div>
       )}
 
       {!generating && stories.length > 0 && (
-        <div className="text-center">
-          <Button variant="ghost" size="sm" onClick={generateStories}>
-            <RefreshCw size={14} className="mr-2" /> Generate More Stories
+        <div className="text-center pt-2">
+          <Button variant="ghost" size="sm" onClick={generateStories} className="text-xs rounded-full h-[36px] text-muted-foreground hover:text-foreground">
+            <RefreshCw size={12} className="mr-1.5" /> Load new career stories
           </Button>
         </div>
       )}

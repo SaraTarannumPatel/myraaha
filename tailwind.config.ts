@@ -55,6 +55,19 @@ export default {
         accentDark: '#D1D5DB',
         accentLight: '#F3F4F6',
         lightestPurple: '#F3E8FF',
+        background: '#ffffff',
+        foreground: '#000000',
+        card: {
+          DEFAULT: '#ffffff',
+          foreground: '#000000',
+        },
+        popover: {
+          DEFAULT: '#ffffff',
+          foreground: '#000000',
+        },
+        border: '#E5E7EB',
+        input: '#E5E7EB',
+        ring: '#5500CB',
       },
       keyframes: {
         walkScroll: {

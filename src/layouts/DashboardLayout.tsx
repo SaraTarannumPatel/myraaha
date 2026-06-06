@@ -259,7 +259,11 @@ const DashboardLayout = () => {
       </div>
 
       <main className="flex-1 min-w-0 lg:ml-64 mt-14 lg:mt-0 pb-20 lg:pb-0">
-        <div className="px-3 sm:px-5 md:px-6 lg:px-8 py-4 sm:py-5 md:py-6 lg:py-8 max-w-6xl mx-auto min-w-0 overflow-x-hidden responsive-page">
+        <div className={`py-4 sm:py-5 md:py-6 lg:py-8 mx-auto min-w-0 responsive-page ${
+          location.pathname === "/dashboard/curiosity-compass"
+            ? "max-w-none w-full px-3 sm:px-5 lg:px-6 lg:overflow-x-visible overflow-x-hidden"
+            : "max-w-6xl px-3 sm:px-5 md:px-6 lg:px-8 overflow-x-hidden"
+        }`}>
           <Outlet />
         </div>
       </main>

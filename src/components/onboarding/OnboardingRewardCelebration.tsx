@@ -49,7 +49,7 @@ const OnboardingRewardCelebration = ({ emoji, title, description, onContinue }: 
           animate={{ scale: 1, opacity: 1, y: 0 }}
           transition={{ type: "spring", damping: 15, stiffness: 200, delay: 0.2 }}
           className="bg-white rounded-3xl border border-border shadow-2xl p-8 max-w-sm mx-6 text-center relative overflow-hidden"
-          style={{ backgroundColor: "#fafafa" }}
+          style={{ backgroundColor: "#ffffff" }}
         >
           <div className="absolute inset-0 bg-gradient-to-b from-[hsl(48 92% 88%)] to-transparent opacity-50 pointer-events-none" />
           <div className="relative z-10 space-y-4">

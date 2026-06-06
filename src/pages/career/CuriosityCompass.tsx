@@ -14,7 +14,7 @@ import {
   Trophy, Zap, MessageSquare, Palette, Target, Star, ChevronRight,
   Play, Check, Lightbulb, Brain, Meh, HelpCircle, Bot,
   PenLine, BookOpen, Users, Goal, TrendingUp, Activity, Eye, Layers,
-  Map, Route, CheckCircle2, ClipboardCheck, Lock
+  Map, Route, CheckCircle2, ClipboardCheck, Lock, RefreshCw
 } from "lucide-react";
 import CareerCardDeck from "@/components/career/CareerCardDeck";
 import StoryModeCards from "@/components/career/StoryModeCards";
@@ -29,7 +29,6 @@ import PsychometricTest from "@/components/curiositycompass/PsychometricTest";
 import AssessmentGate from "@/components/curiositycompass/AssessmentGate";
 import OnboardingCelebration from "@/components/curiositycompass/OnboardingCelebration";
 import InsightsView from "@/components/curiositycompass/InsightsView";
-import RewardProgressTracker from "@/components/curiositycompass/RewardProgressTracker";
 import { useAssessmentRewards } from "@/hooks/useAssessmentRewards";
 import { buildDiscoverySignal } from "@/lib/assessmentSignalMap";
 import {
@@ -249,27 +248,37 @@ const AssessmentTestSection = ({ user, recordSignal, recordMultipleSignals }: { 
     });
 
     return (
-      <Card className="border-primary/20 bg-primary/5">
-        <CardContent className="pt-6 space-y-4">
-          <div className="text-center space-y-3">
-            <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center mx-auto">
-              <CheckCircle2 size={32} className="text-primary" />
-            </div>
-            <h3 className="font-display text-xl">Assessment Complete ✨</h3>
-            <p className="font-body text-sm text-muted-foreground">
-              Your Curiosity Compass has been calibrated. Journey:{" "}
-              <Badge variant="secondary">{meta?.title || journeyId}</Badge>
+      <Card className="border-primary/20 bg-gradient-to-br from-primary/[0.02] to-accent/[0.02] shadow-xl rounded-3xl overflow-hidden p-6 sm:p-8">
+        <CardContent className="pt-4 text-center space-y-6">
+          <div className="w-20 h-20 rounded-3xl bg-primary/10 flex items-center justify-center mx-auto shadow-inner">
+            <CheckCircle2 size={40} className="text-primary" />
+          </div>
+          <div className="space-y-2">
+            <h3 className="font-display text-2xl font-bold text-foreground">Assessment Complete ✨</h3>
+            <p className="font-body text-sm text-muted-foreground max-w-md mx-auto leading-relaxed">
+              Your Curiosity Compass has been successfully calibrated! All career paths and exploration modules are now tuned to your profile.
             </p>
           </div>
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-border bg-white shadow-sm">
+            <span className="font-body text-xs font-semibold text-muted-foreground">Your Journey Archetype:</span>
+            <Badge variant="secondary" className="font-display text-xs px-2.5 py-0.5 text-primary bg-primary/10">{meta?.title || journeyId}</Badge>
+          </div>
+          <div className="pt-2">
+            <Button variant="outline" className="rounded-full px-6 font-body text-xs font-semibold" onClick={() => { setCompleted(false); setPhase("variant"); setVariantStep(0); setVariantAnswers({}); setJourneyStep(0); setJourneyAnswers({}); }}>
+              Retake Assessment
+            </Button>
+          </div>
           {allAnswers.length > 0 && (
-            <div className="mt-4 border-t border-border pt-4 space-y-3 max-h-[40vh] overflow-y-auto">
-              <h4 className="font-display text-sm text-primary">Your Answers</h4>
-              {allAnswers.map((item, i) => (
-                <div key={i} className="text-left">
-                  <p className="font-body text-xs text-muted-foreground">{item.q}</p>
-                  <p className="font-body text-sm font-semibold text-foreground mt-0.5">{item.a}</p>
-                </div>
-              ))}
+            <div className="mt-6 border-t border-border/60 pt-6 space-y-4 max-h-[30vh] overflow-y-auto pr-2">
+              <h4 className="font-display text-sm font-bold text-primary text-left">Your Profile Answers</h4>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {allAnswers.map((item, i) => (
+                  <div key={i} className="text-left bg-white p-3.5 rounded-2xl border border-border/80 shadow-sm">
+                    <p className="font-body text-[10px] text-muted-foreground leading-normal">{item.q}</p>
+                    <p className="font-body text-xs font-bold text-foreground mt-1 leading-normal">{item.a}</p>
+                  </div>
+                ))}
+              </div>
             </div>
           )}
         </CardContent>
@@ -294,48 +303,75 @@ const AssessmentTestSection = ({ user, recordSignal, recordMultipleSignals }: { 
   };
 
   return (
-    <div className="fixed inset-0 z-40 bg-background/80 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
+    <div className="w-full">
       <motion.div
-        initial={{ opacity: 0, scale: 0.92, y: 20 }}
-        animate={{ opacity: 1, scale: 1, y: 0 }}
-        className="max-w-xl w-full bg-card rounded-2xl border border-border shadow-2xl overflow-hidden my-4"
+        initial={{ opacity: 0, y: 15 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="w-full bg-white rounded-3xl border border-border shadow-xl overflow-hidden relative"
       >
-        {/* Popup Header */}
-        <div className="p-5 sm:p-6 border-b border-border bg-gradient-to-r from-primary/5 to-accent/5">
-          <div className="flex items-center justify-between mb-3">
-            <div className="flex items-center gap-2">
-              <ClipboardCheck size={18} className="text-primary" />
-              <span className="font-display text-sm sm:text-base">Discovery Assessment</span>
-            </div>
-            <span className="font-body text-xs text-muted-foreground">{currentTotal + 1} / {totalSteps}</span>
-          </div>
-          <Progress value={((currentTotal + 1) / totalSteps) * 100} className="h-1.5" />
-          <p className="font-body text-xs text-muted-foreground mt-2">
-            {phase === "variant" ? "Vibe Check — quick calibration" : meta?.title}
-          </p>
-        </div>
-
-        <div className="p-3 sm:p-4 border-b border-border bg-background/80">
-          <RewardProgressTracker
-            testType="discovery"
-            title="Discovery Rewards"
-            subtitle="Rewards unlock live at 25%, 50%, 75%, and 100%."
+        <div className="absolute inset-0 bg-gradient-to-br from-primary/[0.01] to-accent/[0.01] pointer-events-none" />
+        
+        {/* Progress Bar along the top edge */}
+        <div className="w-full h-1 bg-muted/60 relative overflow-hidden">
+          <motion.div 
+            className="absolute top-0 left-0 h-full bg-gradient-to-r from-primary to-accent"
+            initial={{ width: 0 }}
+            animate={{ width: `${((currentTotal + 1) / totalSteps) * 100}%` }}
+            transition={{ duration: 0.3 }}
           />
         </div>
 
+        {/* Section Header */}
+        <div className="p-6 border-b border-border/40 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-muted/10 relative z-10">
+          <div className="space-y-1">
+            <div className="flex items-center gap-2">
+              <ClipboardCheck size={20} className="text-[#5500cb]" />
+              <span className="font-display font-bold text-base text-foreground">Discovery Assessment</span>
+            </div>
+            <p className="font-body text-xs text-muted-foreground">
+              {phase === "variant" ? "Vibe Check — quick calibration" : meta?.title}
+            </p>
+          </div>
+          <Badge variant="outline" className="text-xs px-3 py-1 font-mono rounded-full bg-background border-border/80 text-[#5500cb]">
+            Question {currentTotal + 1} of {totalSteps}
+          </Badge>
+        </div>
+
         {/* Question Body */}
-        <div className="p-5 sm:p-6 max-h-[55vh] overflow-y-auto">
+        <div className="p-6 sm:p-8 space-y-6 relative z-10">
           <AnimatePresence mode="wait">
             {phase === "variant" && currentVariantQ && (
-              <motion.div key={`v-${variantStep}`} initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-4">
-                <h3 className="font-display text-base sm:text-lg text-foreground">{currentVariantQ.question}</h3>
-                <div className="space-y-2">
+              <motion.div 
+                key={`v-${variantStep}`} 
+                initial={{ opacity: 0, x: 20 }} 
+                animate={{ opacity: 1, x: 0 }} 
+                exit={{ opacity: 0, x: -20 }} 
+                className="space-y-6"
+              >
+                <h3 className="font-display text-lg sm:text-xl font-semibold text-foreground tracking-tight leading-snug">
+                  {currentVariantQ.question}
+                </h3>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   {currentVariantQ.options.map((opt) => {
                     const isSelected = variantAnswers[currentVariantQ.id] === opt.value;
                     return (
-                      <button key={opt.value} onClick={() => setVariantAnswers({ ...variantAnswers, [currentVariantQ.id]: opt.value })}
-                        className={`w-full text-left p-3 rounded-xl border-2 transition-all font-body text-sm ${isSelected ? "border-primary bg-primary/10 font-semibold" : "border-border hover:border-primary/30"}`}>
-                        {isSelected && <CheckCircle2 size={14} className="inline mr-2 text-primary" />}{opt.label}
+                      <button 
+                        key={opt.value} 
+                        onClick={() => setVariantAnswers({ ...variantAnswers, [currentVariantQ.id]: opt.value })}
+                        className={`group flex items-center justify-between p-5 rounded-2xl border-2 text-left transition-all duration-300 font-body text-sm relative overflow-hidden ${
+                          isSelected 
+                            ? "border-primary bg-primary/[0.03] shadow-md font-semibold text-primary" 
+                            : "border-border/80 bg-card hover:border-primary/40 hover:bg-muted/10 text-foreground"
+                        }`}
+                      >
+                        <div className="flex items-center gap-3">
+                          <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all ${
+                            isSelected ? "border-primary bg-primary text-white" : "border-muted-foreground/30 group-hover:border-primary/50"
+                          }`}>
+                            {isSelected && <Check size={10} strokeWidth={3} />}
+                          </div>
+                          <span className="font-medium">{opt.label}</span>
+                        </div>
                       </button>
                     );
                   })}
@@ -344,22 +380,48 @@ const AssessmentTestSection = ({ user, recordSignal, recordMultipleSignals }: { 
             )}
 
             {phase === "journey" && currentJourneyQ && (
-              <motion.div key={`j-${journeyStep}`} initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-4">
-                <h3 className="font-display text-base sm:text-lg text-foreground">{currentJourneyQ.question}</h3>
-                {currentJourneyQ.type === "multi" && (
-                  <p className="font-body text-xs text-muted-foreground">Pick {currentJourneyQ.maxSelect ? `up to ${currentJourneyQ.maxSelect}` : "as many as you want"}</p>
-                )}
-                <div className={currentJourneyQ.options.length > 5 ? "flex flex-wrap gap-2" : "space-y-2"}>
+              <motion.div 
+                key={`j-${journeyStep}`} 
+                initial={{ opacity: 0, x: 20 }} 
+                animate={{ opacity: 1, x: 0 }} 
+                exit={{ opacity: 0, x: -20 }} 
+                className="space-y-6"
+              >
+                <div className="space-y-2">
+                  <h3 className="font-display text-lg sm:text-xl font-semibold text-foreground tracking-tight leading-snug">
+                    {currentJourneyQ.question}
+                  </h3>
+                  {currentJourneyQ.type === "multi" && (
+                    <p className="font-body text-xs text-muted-foreground">
+                      Pick {currentJourneyQ.maxSelect ? `up to ${currentJourneyQ.maxSelect}` : "as many as you want"}
+                    </p>
+                  )}
+                </div>
+                
+                <div className={currentJourneyQ.options.length > 5 ? "grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3" : "grid grid-cols-1 sm:grid-cols-2 gap-4"}>
                   {currentJourneyQ.options.map((opt) => {
                     const isMulti = currentJourneyQ.type === "multi";
                     const isSelected = isMulti
                       ? ((journeyAnswers[currentJourneyQ.id] as string[]) || []).includes(opt.value)
                       : journeyAnswers[currentJourneyQ.id] === opt.value;
                     return (
-                      <button key={opt.value}
+                      <button 
+                        key={opt.value}
                         onClick={() => handleJourneySelect(currentJourneyQ.id, opt.value, currentJourneyQ.type, currentJourneyQ.maxSelect)}
-                        className={`${currentJourneyQ.options.length > 5 ? "px-3 py-2 rounded-xl" : "w-full text-left p-3 rounded-xl"} border-2 transition-all font-body text-sm ${isSelected ? "border-primary bg-primary/10 font-semibold" : "border-border hover:border-primary/30"}`}>
-                        {isSelected && <CheckCircle2 size={14} className="inline mr-1.5 text-primary" />}{opt.label}
+                        className={`group flex items-center justify-between p-4 rounded-xl border-2 text-left transition-all duration-300 font-body text-xs sm:text-sm relative overflow-hidden ${
+                          isSelected 
+                            ? "border-primary bg-primary/[0.03] shadow-md font-semibold text-primary" 
+                            : "border-border/80 bg-card hover:border-primary/40 hover:bg-muted/10 text-foreground"
+                        }`}
+                      >
+                        <div className="flex items-center gap-3">
+                          <div className={`w-4 h-4 rounded-md border flex items-center justify-center transition-all ${
+                            isSelected ? "border-primary bg-primary text-white" : "border-muted-foreground/30 group-hover:border-primary/50"
+                          }`}>
+                            {isSelected && <Check size={10} strokeWidth={3} />}
+                          </div>
+                          <span className="font-medium leading-snug">{opt.label}</span>
+                        </div>
                       </button>
                     );
                   })}
@@ -369,27 +431,48 @@ const AssessmentTestSection = ({ user, recordSignal, recordMultipleSignals }: { 
           </AnimatePresence>
         </div>
 
-        {/* Footer */}
-        <div className="p-4 sm:p-5 border-t border-border bg-muted/20 flex items-center justify-between gap-2">
-          <Button variant="ghost" size="sm" onClick={() => {
-            if (phase === "variant") { if (variantStep > 0) setVariantStep(variantStep - 1); }
-            else { if (journeyStep > 0) setJourneyStep(journeyStep - 1); else setPhase("variant"); }
-          }} disabled={phase === "variant" && variantStep === 0}>
-            <ArrowLeft size={14} className="mr-1" /> Back
+        {/* Footer / Controls */}
+        <div className="p-6 border-t border-border/40 bg-muted/10 flex flex-col sm:flex-row items-center justify-between gap-4 relative z-10">
+          <Button 
+            variant="ghost" 
+            size="sm" 
+            onClick={() => {
+              if (phase === "variant") { if (variantStep > 0) setVariantStep(variantStep - 1); }
+              else { if (journeyStep > 0) setJourneyStep(journeyStep - 1); else setPhase("variant"); }
+            }} 
+            disabled={phase === "variant" && variantStep === 0} 
+            className="font-body h-11 px-6 rounded-full border border-border/50 hover:bg-background/80"
+          >
+            <ArrowLeft size={16} className="mr-2" /> Previous
           </Button>
-          <div className="flex items-center gap-2">
-            <Button variant="ghost" size="sm" onClick={phase === "variant" ? handleSkipVariant : handleSkipJourney} className="text-muted-foreground text-xs">
+          
+          <div className="flex items-center gap-3 w-full sm:w-auto justify-end">
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              onClick={phase === "variant" ? handleSkipVariant : handleSkipJourney} 
+              className="font-body text-muted-foreground hover:text-foreground text-xs h-11 px-5 rounded-full"
+            >
               Skip
             </Button>
+            
             {phase === "variant" ? (
-              <Button onClick={handleVariantNext} disabled={!variantAnswers[currentVariantQ?.id]} size="sm" className="bg-primary text-accent rounded-full px-5">
-                Next <ArrowRight size={14} className="ml-1" />
+              <Button 
+                onClick={handleVariantNext} 
+                disabled={!variantAnswers[currentVariantQ?.id]} 
+                size="sm" 
+                className="bg-primary text-white hover:bg-primary/95 rounded-full h-11 px-8 font-body font-semibold shadow-md disabled:opacity-40 disabled:cursor-not-allowed"
+              >
+                Next Question <ArrowRight size={16} className="ml-2" />
               </Button>
             ) : (
-              <Button onClick={handleJourneyNext}
+              <Button 
+                onClick={handleJourneyNext}
                 disabled={currentJourneyQ?.type === "single" ? !journeyAnswers[currentJourneyQ.id] : !((journeyAnswers[currentJourneyQ?.id] as string[])?.length > 0)}
-                size="sm" className="bg-primary text-accent rounded-full px-5">
-                {journeyStep === journeyQs.length - 1 ? "Finish" : "Next"} <ArrowRight size={14} className="ml-1" />
+                size="sm" 
+                className="bg-primary text-white hover:bg-primary/95 rounded-full h-11 px-8 font-body font-semibold shadow-md disabled:opacity-40 disabled:cursor-not-allowed"
+              >
+                {journeyStep === journeyQs.length - 1 ? "Complete Assessment" : "Next Question"} <ArrowRight size={16} className="ml-2" />
               </Button>
             )}
           </div>
@@ -438,12 +521,13 @@ const CompassIntro = ({ onComplete }: { onComplete: () => void }) => {
         exit={{ opacity: 0, y: -20 }}
         className="fixed inset-0 z-50 bg-background/95 backdrop-blur-sm flex items-center justify-center p-4"
       >
-        <div className="max-w-lg w-full bg-card rounded-2xl border border-border shadow-2xl p-8 space-y-6">
+        <div className="max-w-lg w-full bg-card rounded-2xl border border-border shadow-2xl p-5 sm:p-8 space-y-6">
           <div className="text-center space-y-4">
-            <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-primary to-accent flex items-center justify-center mx-auto">
-              <page.icon size={36} className="text-primary-foreground" />
+            <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-gradient-to-br from-primary to-accent flex items-center justify-center mx-auto">
+              <page.icon size={28} className="text-primary-foreground sm:hidden" />
+              <page.icon size={36} className="text-primary-foreground hidden sm:block" />
             </div>
-            <h2 className="font-display text-2xl text-foreground">{page.title}</h2>
+            <h2 className="font-display text-xl sm:text-2xl text-foreground">{page.title}</h2>
             <p className="font-body text-sm text-muted-foreground">{page.description}</p>
           </div>
 
@@ -502,29 +586,31 @@ const CompassIntro = ({ onComplete }: { onComplete: () => void }) => {
 const PopupAssessmentCard = ({ children, title, subtitle, progress, total, onSkip }: {
   children: React.ReactNode; title: string; subtitle?: string; progress: number; total: number; onSkip?: () => void;
 }) => (
-  <div className="fixed inset-0 z-40 bg-background/80 backdrop-blur-sm flex items-center justify-center p-4">
-    <motion.div
-      initial={{ opacity: 0, scale: 0.9 }}
-      animate={{ opacity: 1, scale: 1 }}
-      className="max-w-xl w-full bg-card rounded-2xl border border-border shadow-2xl overflow-hidden"
-    >
-      <div className="p-6 border-b border-border">
-        <div className="flex items-center justify-between mb-3">
-          <Badge variant="outline" className="text-xs">{title}</Badge>
-          <span className="font-body text-xs text-muted-foreground">{progress} / {total}</span>
+  <div className="fixed inset-0 z-40 bg-background/80 backdrop-blur-sm overflow-y-auto">
+    <div className="flex min-h-full items-center justify-center p-4">
+      <motion.div
+        initial={{ opacity: 0, scale: 0.9 }}
+        animate={{ opacity: 1, scale: 1 }}
+        className="max-w-xl w-full bg-card rounded-2xl border border-border shadow-2xl overflow-hidden my-4"
+      >
+        <div className="p-6 border-b border-border">
+          <div className="flex items-center justify-between mb-3">
+            <Badge variant="outline" className="text-xs">{title}</Badge>
+            <span className="font-body text-xs text-muted-foreground">{progress} / {total}</span>
+          </div>
+          <Progress value={(progress / total) * 100} className="h-1.5" />
+          {subtitle && <p className="font-body text-xs text-muted-foreground mt-2">{subtitle}</p>}
         </div>
-        <Progress value={(progress / total) * 100} className="h-1.5" />
-        {subtitle && <p className="font-body text-xs text-muted-foreground mt-2">{subtitle}</p>}
-      </div>
-      <div className="p-6 max-h-[60vh] overflow-y-auto">{children}</div>
-      {onSkip && (
-        <div className="p-4 border-t border-border flex justify-end">
-          <Button variant="ghost" size="sm" onClick={onSkip} className="text-muted-foreground text-xs">
-            Skip this question
-          </Button>
-        </div>
-      )}
-    </motion.div>
+        <div className="p-6 max-h-[60vh] overflow-y-auto">{children}</div>
+        {onSkip && (
+          <div className="p-4 border-t border-border flex justify-end">
+            <Button variant="ghost" size="sm" onClick={onSkip} className="text-muted-foreground text-xs">
+              Skip this question
+            </Button>
+          </div>
+        )}
+      </motion.div>
+    </div>
   </div>
 );
 
@@ -579,12 +665,54 @@ const CuriosityCompass = () => {
   const [showVisualBlueprint, setShowVisualBlueprint] = useState(false);
   const [generatingVisualRoadmap, setGeneratingVisualRoadmap] = useState(false);
 
+  const [conclusion, setConclusion] = useState<any>(null);
+  const [conclusionLoading, setConclusionLoading] = useState(true);
+  const [regeneratingConclusion, setRegeneratingConclusion] = useState(false);
+
+  const fetchConclusion = async () => {
+    if (!user) return;
+    setConclusionLoading(true);
+    const { data } = await supabase
+      .from("assessment_conclusions" as any)
+      .select("*")
+      .eq("user_id", user.id)
+      .order("generated_at", { ascending: false })
+      .limit(1)
+      .maybeSingle();
+    setConclusion(data || null);
+    setConclusionLoading(false);
+  };
+
+  const regenerateConclusion = async () => {
+    if (!user) return;
+    setRegeneratingConclusion(true);
+    try {
+      const { data, error } = await supabase.functions.invoke("assessment-synthesizer", {
+        body: { test_type: "combined" },
+      });
+      if (error) throw error;
+      setConclusion(data);
+      toast.success("Insights regenerated from your latest signals.");
+    } catch (e: any) {
+      toast.error(e?.message || "Could not regenerate insights.");
+    } finally {
+      setRegeneratingConclusion(false);
+    }
+  };
+
   useEffect(() => {
     if (user) fetchAll();
   }, [user]);
 
   const fetchAll = async () => {
-    await Promise.all([fetchCareerCards(), fetchQuests(), fetchDomains(), fetchInterests(), fetchNextStepData()]);
+    await Promise.all([
+      fetchCareerCards(),
+      fetchQuests(),
+      fetchDomains(),
+      fetchInterests(),
+      fetchNextStepData(),
+      fetchConclusion(),
+    ]);
     setLoading(false);
   };
 
@@ -972,7 +1100,7 @@ const CuriosityCompass = () => {
   }
 
   return (
-    <div className="space-y-8">
+    <div className="w-full max-w-none mx-auto py-6 curiosity-compass-container px-4 sm:px-6 lg:px-8">
       {/* Intro pages for first-time visitors */}
       {showIntro && (
         <CompassIntro onComplete={() => {
@@ -983,812 +1111,1148 @@ const CuriosityCompass = () => {
 
       {/* Onboarding celebration for fully completed users */}
       <OnboardingCelebration onDismiss={() => { setShowCelebration(false); setTab("assessment"); }} />
-      {/* Header */}
-      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
-        <div className="flex items-center gap-3 mb-2">
-          <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary to-accent flex items-center justify-center">
-            <Compass size={24} className="text-primary-foreground" />
+
+      <Tabs value={tab} onValueChange={(v) => {
+        // Block locked tabs
+        if (!bothAssessmentsDone && !["assessment", "psychometric"].includes(v)) {
+          toast.info("Complete both assessments first to unlock this section.");
+          return;
+        }
+        setTab(v);
+      }} className="w-full">
+      {/* Top Header Bar with Horizontal Nav & Profile Card */}
+      <div className="flex flex-col lg:flex-row justify-between items-stretch lg:items-center gap-6 pb-6 mb-6 border-b border-border/50 w-full">
+        
+        {/* Left Side: Horizontal Profile Card (with increased height) */}
+        <div className="bg-white rounded-3xl border border-border shadow-xl p-5 md:py-6 md:px-7 relative overflow-hidden flex flex-col sm:flex-row items-center gap-5 sm:gap-7 shrink-0 w-full sm:w-auto min-h-[110px]">
+          <div className="absolute inset-0 bg-gradient-to-b from-primary/5 to-transparent pointer-events-none" />
+          
+          <div className="relative z-10 flex items-center gap-3.5">
+            <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-[#5500cb] to-accent flex items-center justify-center text-primary-foreground font-semibold shrink-0">
+              <Compass size={24} className="text-white" />
+            </div>
           </div>
-          <div>
-            <h1 className="font-display text-3xl text-foreground">Curiosity Compass</h1>
-            <p className="font-body text-muted-foreground">Let's explore what excites you. No right or wrong answers.</p>
+
+          <div className="relative z-10 flex items-center gap-5 text-center border-t sm:border-t-0 sm:border-l border-border/50 pt-3 sm:pt-0 w-full sm:w-auto justify-between sm:justify-start sm:pl-7">
+            <div className="px-1.5 sm:px-2">
+              <p className="font-display text-base text-[#5500cb] font-bold">{likedCount}</p>
+              <p className="font-body text-[10px] text-muted-foreground uppercase tracking-wider font-semibold">Liked</p>
+            </div>
+            <div className="px-1.5 sm:px-2">
+              <p className="font-display text-base text-[#5500cb] font-bold">{completedQuests}</p>
+              <p className="font-body text-[10px] text-muted-foreground uppercase tracking-wider font-semibold">Quests</p>
+            </div>
+            <div className="px-1.5 sm:px-2">
+              <p className="font-display text-base text-[#5500cb] font-bold">{domains.length}</p>
+              <p className="font-body text-[10px] text-muted-foreground uppercase tracking-wider font-semibold">Matched</p>
+            </div>
+            <div className="px-1.5 sm:px-2">
+              <p className="font-display text-base text-[#5500cb] font-bold">{interests.length}</p>
+              <p className="font-body text-[10px] text-muted-foreground uppercase tracking-wider font-semibold">Interests</p>
+            </div>
           </div>
         </div>
-      </motion.div>
 
-      {/* Search Bar */}
-      <ModuleSearchBar
-        placeholder="Search career domains, job roles, paths..."
-        sources={["careers", "domains", "jobs"]}
-        showAiBadge
-        onSelect={(item) => {
-          recordSignal("curiosity_compass", item.title, "domain_interest", 0.8, { source: "search" });
-          toast.success(`"${item.title}" added to your exploration signals!`);
-        }}
-      />
-
-      {/* Progress Stats */}
-      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}>
-        <Card>
-          <CardContent className="pt-6">
-            <div className="grid grid-cols-4 gap-4 text-center">
-              <div>
-                <div className="w-10 h-10 rounded-full bg-terracotta/10 flex items-center justify-center mx-auto mb-2">
-                  <Heart className="text-terracotta" size={18} />
-                </div>
-                <p className="font-display text-2xl text-foreground">{likedCount}</p>
-                <p className="font-body text-xs text-muted-foreground">Domains Liked</p>
-              </div>
-              <div>
-                <div className="w-10 h-10 rounded-full bg-accent/10 flex items-center justify-center mx-auto mb-2">
-                  <Trophy className="text-accent" size={18} />
-                </div>
-                <p className="font-display text-2xl text-foreground">{completedQuests}</p>
-                <p className="font-body text-xs text-muted-foreground">Quests Done</p>
-              </div>
-              <div>
-                <div className="w-10 h-10 rounded-full bg-success/10 flex items-center justify-center mx-auto mb-2">
-                  <Star className="text-success" size={18} />
-                </div>
-                <p className="font-display text-2xl text-foreground">{domains.length}</p>
-                <p className="font-body text-xs text-muted-foreground">Recommendations</p>
-              </div>
-              <div>
-                <div className="w-10 h-10 rounded-full bg-indigo/10 flex items-center justify-center mx-auto mb-2">
-                  <PenLine className="text-indigo" size={18} />
-                </div>
-                <p className="font-display text-2xl text-foreground">{interests.length}</p>
-                <p className="font-body text-xs text-muted-foreground">Interests Found</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      </motion.div>
-
-      {/* Mood Check */}
-      {!mood && (
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }}>
-          <Card className="border-primary/20 bg-primary/5">
-            <CardHeader className="pb-3">
-              <CardTitle className="text-lg">How are you feeling right now?</CardTitle>
-              <CardDescription>This helps us personalize your exploration</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="flex gap-3 justify-center">
-                {MOODS.map(m => (
-                  <Button key={m.id} variant="outline" className="flex flex-col gap-2 h-auto py-4 px-6" onClick={() => setMood(m.id)}>
-                    <m.icon className={m.color} size={24} />
-                    <span className="text-xs">{m.label}</span>
-                  </Button>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-        </motion.div>
-      )}
-
-      {/* Reflection Modal (inline) */}
-      <AnimatePresence>
-        {showReflection && (
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }}>
-            <Card className="border-accent/40 bg-accent/5">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2 text-lg">
-                  <PenLine className="text-accent-foreground" size={20} />
-                  Capture Your Reflection
-                </CardTitle>
-                <CardDescription>What stood out to you? This saves to your personal journal.</CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                {/* Emotion checkpoint */}
-                <div>
-                  <p className="font-body text-sm text-muted-foreground mb-2">How do you feel after this exploration?</p>
-                  <div className="flex gap-2">
-                    {MOODS.map(m => (
-                      <button
-                        key={m.id}
-                        onClick={() => setMoodCheckpoint(m.id)}
-                        className={`flex flex-col items-center gap-1 px-3 py-2 rounded-lg border transition-all ${moodCheckpoint === m.id ? "border-primary bg-primary/10" : "border-border hover:border-primary/50"}`}
+        {/* Right Side: Special Horizontal Tab Navbar */}
+        <div className="flex flex-col items-stretch lg:items-end gap-3 min-w-0">
+          <div className="flex items-center gap-3 lg:justify-end">
+            <h1 className="font-display text-2xl font-bold text-[#5500cb] tracking-tight">Curiosity Compass</h1>
+          </div>
+          
+          {/* Special Horizontal Tabs List */}
+          <div className="bg-white rounded-full border border-border shadow-md p-1.5 inline-flex items-center gap-1 max-w-full overflow-x-auto scrollbar-none">
+            <TabsList className="flex bg-transparent p-0 gap-1 border-none h-auto w-max">
+              {[
+                { value: "assessment", label: "Discover Yourself", icon: ClipboardCheck },
+                { value: "psychometric", label: "Psychometric", icon: Brain },
+                { value: "explore", label: "Interests", icon: Heart, locked: !bothAssessmentsDone },
+                { value: "quests", label: "Quests", icon: Trophy, locked: !bothAssessmentsDone },
+                { value: "domains", label: "Domains", icon: Target, locked: !bothAssessmentsDone },
+                { value: "insights", label: "Insights & Profile", icon: Sparkles, locked: !bothAssessmentsDone },
+                { value: "behavior", label: "Behavior", icon: Activity, locked: !bothAssessmentsDone },
+              ].map((t) => {
+                const isActive = tab === t.value;
+                const IconComponent = t.icon;
+                return (
+                  <TabsTrigger
+                    key={t.value}
+                    value={t.value}
+                    disabled={t.locked}
+                    className={`flex items-center gap-2 px-3.5 py-2.5 rounded-full transition-all duration-300 font-body text-xs font-bold shadow-none border-none
+                      ${isActive 
+                        ? "bg-[#5500cb] text-white scale-100" 
+                        : "text-muted-foreground hover:bg-muted/50 hover:text-foreground"
+                      }
+                      disabled:opacity-40 disabled:cursor-not-allowed`}
+                    title={t.label}
+                  >
+                    <IconComponent size={16} className="shrink-0" />
+                    {isActive && (
+                      <motion.span 
+                        initial={{ opacity: 0, width: 0 }} 
+                        animate={{ opacity: 1, width: "auto" }}
+                        transition={{ duration: 0.2 }}
+                        className="overflow-hidden whitespace-nowrap"
                       >
-                        <m.icon className={m.color} size={18} />
-                        <span className="text-xs">{m.label}</span>
-                      </button>
-                    ))}
-                  </div>
-                </div>
-                <Textarea
-                  placeholder="This feels exciting because… / I realized that… / I want to explore more about…"
-                  value={reflectionText}
-                  onChange={e => setReflectionText(e.target.value)}
-                  rows={4}
-                />
-                <div className="flex gap-2">
-                  <Button onClick={saveReflection} disabled={!reflectionText.trim()}>
-                    <PenLine size={14} className="mr-2" /> Save to Journal
-                  </Button>
-                  <Button variant="ghost" onClick={() => { setShowReflection(false); getSessionSummary(); }}>
-                    Skip for now
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-          </motion.div>
-        )}
-      </AnimatePresence>
+                        {t.label}
+                      </motion.span>
+                    )}
+                    {t.locked && !isActive && <Lock size={10} className="text-muted-foreground/40" />}
+                  </TabsTrigger>
+                );
+              })}
+            </TabsList>
+          </div>
+        </div>
 
-      {/* Session Summary & Next Steps */}
-      <AnimatePresence>
-        {showNextSteps && sessionSummary && (
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} className="space-y-6">
-            <Card className="border-primary/30 bg-gradient-to-br from-primary/5 to-accent/5">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Sparkles className="text-primary" size={20} />
-                  Exploration Summary
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                {sessionSummary.session_summary && (
-                  <p className="font-body text-sm">{sessionSummary.session_summary}</p>
-                )}
-                {sessionSummary.key_discoveries?.length > 0 && (
-                  <div>
-                    <h4 className="font-display text-sm mb-2">Key Discoveries</h4>
-                    {sessionSummary.key_discoveries.map((d: string, i: number) => (
-                      <div key={i} className="flex items-start gap-2 mb-1">
-                        <Lightbulb size={14} className="text-yellow-500 mt-0.5 shrink-0" />
-                        <p className="font-body text-sm text-muted-foreground">{d}</p>
-                      </div>
-                    ))}
-                  </div>
-                )}
-                {sessionSummary.patterns?.length > 0 && (
-                  <div>
-                    <h4 className="font-display text-sm mb-2">Patterns Observed</h4>
-                    {sessionSummary.patterns.map((p: any, i: number) => (
-                      <div key={i} className="p-3 rounded-lg bg-muted/30 mb-2">
-                        <p className="font-body text-sm font-medium">{p.pattern}</p>
-                        <p className="font-body text-xs text-muted-foreground">{p.meaning}</p>
-                      </div>
-                    ))}
-                  </div>
-                )}
-                {sessionSummary.motivational_note && (
-                  <div className="p-3 rounded-lg bg-success/5 border border-success/20">
-                    <p className="font-body text-sm text-success">{sessionSummary.motivational_note}</p>
-                  </div>
-                )}
-              </CardContent>
-            </Card>
+      </div>
 
-            {/* Next Steps Panel */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <ArrowRight className="text-primary" size={20} />
-                  Your Next Steps
-                </CardTitle>
-                <CardDescription>Based on your exploration, here's what you can do next</CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-6">
-                {/* Domain suggestions from summary */}
-                {sessionSummary.domains_to_pursue?.length > 0 && (
-                  <div>
-                    <h4 className="font-display text-sm mb-3 flex items-center gap-2"><Target size={14} className="text-primary" /> Domains to Explore</h4>
-                    <div className="flex flex-wrap gap-2">
-                      {sessionSummary.domains_to_pursue.map((d: string, i: number) => (
-                        <Badge key={i} variant="secondary" className="px-3 py-1.5">{d}</Badge>
-                      ))}
-                    </div>
-                  </div>
-                )}
-
-                {/* Learning Capsules */}
-                {learningCapsules.length > 0 && (
-                  <div>
-                    <h4 className="font-display text-sm mb-3 flex items-center gap-2"><BookOpen size={14} className="text-primary" /> Suggested Learning</h4>
-                    <div className="grid md:grid-cols-3 gap-3">
-                      {learningCapsules.slice(0, 3).map((capsule: any) => (
-                        <div key={capsule.id} className="p-3 rounded-lg border border-border hover:border-primary/50 transition-colors cursor-pointer">
-                          <p className="font-body text-sm font-medium text-foreground">{capsule.title}</p>
-                          <p className="font-body text-xs text-muted-foreground mt-1">{capsule.duration_minutes || 5} min</p>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
-
-                {/* Peer Circles */}
-                {peerCircles.length > 0 && (
-                  <div>
-                    <h4 className="font-display text-sm mb-3 flex items-center gap-2"><Users size={14} className="text-primary" /> Join a Community</h4>
-                    <div className="grid md:grid-cols-2 gap-3">
-                      {peerCircles.slice(0, 2).map((circle: any) => (
-                        <div key={circle.id} className="p-3 rounded-lg border border-border hover:border-primary/50 transition-colors cursor-pointer">
-                          <p className="font-body text-sm font-medium text-foreground">{circle.name}</p>
-                          <p className="font-body text-xs text-muted-foreground mt-1">{circle.member_count || 0} members</p>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
-
-                {/* Goal Setting CTA */}
-                <div className="p-4 rounded-lg bg-muted/30 border border-border flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <Goal className="text-primary" size={20} />
-                    <div>
-                      <p className="font-body text-sm font-medium">Set an exploration goal</p>
-                      <p className="font-body text-xs text-muted-foreground">"Let's explore 2 domains this week"</p>
-                    </div>
-                  </div>
-                  <Button size="sm" variant="outline">Set Goal</Button>
-                </div>
-
-                <Button className="w-full" onClick={() => { setShowNextSteps(false); setTab("domains"); }}>
-                  View All Recommendations <ArrowRight size={14} className="ml-2" />
-                </Button>
-              </CardContent>
-            </Card>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      {/* Main Tabs */}
-      {!showNextSteps && (
-        <Tabs value={tab} onValueChange={(v) => {
-          // Block locked tabs
-          if (!bothAssessmentsDone && !["assessment", "psychometric"].includes(v)) {
-            toast.info("Complete both assessments first to unlock this section.");
-            return;
-          }
-          setTab(v);
-        }}>
-          <TabsList className="flex overflow-x-auto w-full max-w-3xl gap-1">
-            <TabsTrigger value="assessment">Discover Yourself</TabsTrigger>
-            <TabsTrigger value="psychometric">Psychometric</TabsTrigger>
-            <TabsTrigger value="explore" disabled={!bothAssessmentsDone} className={!bothAssessmentsDone ? "opacity-50" : ""}>
-              {!bothAssessmentsDone && <Lock size={12} className="mr-1" />}Interests
-            </TabsTrigger>
-            <TabsTrigger value="quests" disabled={!bothAssessmentsDone} className={!bothAssessmentsDone ? "opacity-50" : ""}>
-              {!bothAssessmentsDone && <Lock size={12} className="mr-1" />}Quests
-            </TabsTrigger>
-            <TabsTrigger value="domains" disabled={!bothAssessmentsDone} className={!bothAssessmentsDone ? "opacity-50" : ""}>
-              {!bothAssessmentsDone && <Lock size={12} className="mr-1" />}Domains
-            </TabsTrigger>
-            <TabsTrigger value="insights" disabled={!bothAssessmentsDone} className={!bothAssessmentsDone ? "opacity-50" : ""}>
-              {!bothAssessmentsDone && <Lock size={12} className="mr-1" />}Insights & Profile
-            </TabsTrigger>
-            <TabsTrigger value="behavior" disabled={!bothAssessmentsDone} className={!bothAssessmentsDone ? "opacity-50" : ""}>
-              {!bothAssessmentsDone && <Lock size={12} className="mr-1" />}Behavior
-            </TabsTrigger>
-          </TabsList>
-
-          {/* Assessment Gate - shown on locked tabs */}
-          {!bothAssessmentsDone && !["assessment", "psychometric"].includes(tab) && (
-            <div className="mt-6">
-              <AssessmentGate onGoToAssessment={(t) => setTab(t === "discovery" ? "assessment" : "psychometric")} />
-            </div>
-          )}
-
-          {/* ===== Discovery Assessment Tab (renamed from Psychometric Assessment Test) ===== */}
-          <TabsContent value="assessment">
-            <AssessmentTestSection user={user} recordSignal={recordSignal} recordMultipleSignals={recordMultipleSignals} />
-          </TabsContent>
-
-          {/* ===== Psychometric Test Tab (new 22-question test) ===== */}
-          <TabsContent value="psychometric">
-            <PsychometricTest
-              userId={user!.id}
-              onComplete={() => {
-                if (discoveryDone) {
-                  toast.success("Both assessments complete! All sections unlocked 🎉");
-                }
+      <div className="w-full space-y-6">
+        {/* Main Column: Search & Main Interactive Feed */}
+        <main className="w-full space-y-6">
+          
+          {/* Sticky Search Bar (Matches Social Feed Style) */}
+          <div className="bg-background/95 backdrop-blur-sm sticky top-0 lg:top-0 z-10 py-2 border-b border-border/20">
+            <ModuleSearchBar
+              placeholder="Search career domains, job roles, paths..."
+              sources={["careers", "domains", "jobs"]}
+              onSelect={(item) => {
+                recordSignal("curiosity_compass", item.title, "domain_interest", 0.8, { source: "search" });
+                toast.success(`"${item.title}" added to your exploration signals!`);
               }}
-              recordSignal={recordSignal}
             />
-          </TabsContent>
+          </div>
 
-          {/* ===== Interests Assessment Tab (4 modes: Career Cards, Story, Challenge, Visual) ===== */}
-          <TabsContent value="explore" className="space-y-6">
-            {!mode ? (
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2"><Heart size={20} className="text-terracotta" /> Interests Assessment</CardTitle>
-                  <CardDescription>Pick any mode to explore your interests at your own comfort. You can switch modes anytime.</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="grid md:grid-cols-3 gap-4">
-                    {MODES.map(m => (
-                      <button key={m.id} onClick={() => startSession(m.id)} className="p-6 rounded-xl border border-border hover:border-primary/50 hover:bg-primary/5 transition-all text-left group">
-                        <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-4 group-hover:bg-primary/20 transition-colors">
-                          <m.icon className="text-primary" size={24} />
+            {/* Assessment Gate - shown on locked tabs */}
+            {!bothAssessmentsDone && !["assessment", "psychometric"].includes(tab) && (
+              <div className="mt-2">
+                <AssessmentGate onGoToAssessment={(t) => setTab(t === "discovery" ? "assessment" : "psychometric")} />
+              </div>
+            )}
+
+            {/* Reflection Modal (inline journal card) */}
+            <AnimatePresence>
+              {showReflection && (
+                <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -15 }}>
+                  <Card className="border-accent/30 bg-accent/5 overflow-hidden rounded-2xl">
+                    <CardHeader className="pb-3">
+                      <CardTitle className="flex items-center gap-2 text-base font-display">
+                        <PenLine className="text-accent-foreground" size={18} />
+                        Capture Your Reflection
+                      </CardTitle>
+                      <CardDescription className="text-xs">What stood out to you? This saves to your personal journal.</CardDescription>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                      {/* Emotion checkpoint */}
+                      <div>
+                        <p className="font-body text-xs text-muted-foreground mb-2">How do you feel after this exploration?</p>
+                        <div className="flex gap-2 flex-wrap">
+                          {MOODS.map(m => (
+                            <button
+                              key={m.id}
+                              onClick={() => setMoodCheckpoint(m.id)}
+                              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl border transition-all text-xs ${moodCheckpoint === m.id ? "border-primary bg-primary/10 text-primary font-medium" : "border-border hover:border-primary/50 text-muted-foreground"}`}
+                            >
+                              <m.icon className={m.color} size={14} />
+                              <span>{m.label}</span>
+                            </button>
+                          ))}
                         </div>
-                        <h3 className="font-display text-lg text-foreground mb-1">{m.label}</h3>
-                        <p className="font-body text-sm text-muted-foreground">{m.desc}</p>
-                      </button>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
-            ) : mode === "visual" ? (
-              /* Visual Mode */
-              <>
-                <div className="flex items-center justify-between">
-                  <Button variant="ghost" size="sm" onClick={() => setMode(null)}>
-                    <ArrowLeft size={14} className="mr-2" /> Change Mode
-                  </Button>
-                  <Badge variant="secondary">Visual Mode</Badge>
-                </div>
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Pick the icons that resonate with you</CardTitle>
-                    <CardDescription>Select as many as you like — trust your instincts</CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 gap-3">
-                      {VISUAL_ICONS.map(icon => {
-                        const selected = visualSelections.includes(icon.id);
-                        return (
-                          <button
-                            key={icon.id}
-                            onClick={() => handleVisualToggle(icon.id)}
-                            className={`flex flex-col items-center gap-2 p-4 rounded-xl border transition-all ${selected ? "border-primary bg-primary/10 scale-105 shadow-md" : "border-border hover:border-primary/50"}`}
-                          >
-                            <span className="text-3xl">{icon.emoji}</span>
-                            <span className="font-body text-xs text-center">{icon.label}</span>
-                          </button>
-                        );
-                      })}
-                    </div>
-                    {visualSelections.length >= 3 && !showVisualBlueprint && (
-                      <div className="mt-6 flex flex-col sm:flex-row items-center justify-center gap-2">
-                        <Button onClick={finishVisualMode} className="w-full sm:w-auto">
-                          <Brain size={14} className="mr-2" /> Analyze My Choices ({visualSelections.length})
+                      </div>
+                      <Textarea
+                        placeholder="This feels exciting because… / I realized that… / I want to explore more about…"
+                        value={reflectionText}
+                        onChange={e => setReflectionText(e.target.value)}
+                        rows={3}
+                        className="text-sm rounded-xl"
+                      />
+                      <div className="flex gap-2 justify-end">
+                        <Button variant="ghost" size="sm" onClick={() => { setShowReflection(false); getSessionSummary(); }} className="text-xs">
+                          Skip for now
+                        </Button>
+                        <Button onClick={saveReflection} disabled={!reflectionText.trim()} size="sm" className="text-xs rounded-xl">
+                          <PenLine size={12} className="mr-1.5" /> Save to Journal
                         </Button>
                       </div>
-                    )}
-                  </CardContent>
-                </Card>
+                    </CardContent>
+                  </Card>
+                </motion.div>
+              )}
+            </AnimatePresence>
 
-                {showVisualBlueprint && visualBlueprint && (
-                  <BlueprintCard
-                    blueprint={visualBlueprint}
-                    variant="visual"
-                    onGenerateRoadmap={generateVisualRoadmap}
-                    generatingRoadmap={generatingVisualRoadmap}
-                    onClose={() => setShowVisualBlueprint(false)}
-                  />
-                )}
-              </>
-            ) : mode === "story" ? (
-              /* Story Mode — career story cards (95% of this section) */
-              <>
-                <div className="flex items-center justify-between">
-                  <Button variant="ghost" size="sm" onClick={() => setMode(null)}>
-                    <ArrowLeft size={14} className="mr-2" /> Change Mode
-                  </Button>
-                  <Badge variant="secondary">Story Mode</Badge>
-                </div>
-                <StoryModeCards />
-              </>
-            ) : mode === "challenge" ? (
-              /* Challenge Mode — real-world task cards */
-              <>
-                <div className="flex items-center justify-between">
-                  <Button variant="ghost" size="sm" onClick={() => setMode(null)}>
-                    <ArrowLeft size={14} className="mr-2" /> Change Mode
-                  </Button>
-                  <Badge variant="secondary">Challenge Mode</Badge>
-                </div>
-                <ChallengeModeCards />
-              </>
-            ) : mode === "career-cards" ? (
-              /* Career Cards Mode */
-              <>
-                <div className="flex items-center justify-between">
-                  <Button variant="ghost" size="sm" onClick={() => setMode(null)}>
-                    <ArrowLeft size={14} className="mr-2" /> Change Mode
-                  </Button>
-                  <Badge variant="secondary">Career Cards</Badge>
-                </div>
-                <CareerCardDeck />
-              </>
-            ) : null}
-          </TabsContent>
-
-
-
-          {/* ===== Quests Tab ===== */}
-          <TabsContent value="quests" className="space-y-6">
-            <AnimatePresence mode="wait">
-              {activeQuest ? (
-                <motion.div key="active-quest" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
-                  <Card>
-                    <CardHeader>
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <CardTitle>{activeQuest.title}</CardTitle>
-                          <CardDescription>{activeQuest.description}</CardDescription>
-                        </div>
-                        <Badge variant="secondary">{activeQuest.points} pts</Badge>
-                      </div>
-                      <Progress value={(currentPromptIndex / (activeQuest.prompts?.length || 1)) * 100} className="mt-4" />
+            {/* Session Summary & Next Steps Panel */}
+            <AnimatePresence>
+              {showNextSteps && sessionSummary && (
+                <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} className="space-y-6">
+                  <Card className="border-primary/30 bg-gradient-to-br from-primary/5 to-accent/5 rounded-2xl overflow-hidden shadow-sm">
+                    <CardHeader className="pb-3">
+                      <CardTitle className="flex items-center gap-2 text-base font-display">
+                        <Sparkles className="text-primary" size={18} />
+                        Exploration Summary
+                      </CardTitle>
                     </CardHeader>
-                    <CardContent>
-                      {activeQuest.prompts && currentPromptIndex < activeQuest.prompts.length ? (
-                        <div className="space-y-6">
-                          <div className="p-6 rounded-xl bg-muted/30">
-                            <p className="font-display text-lg text-foreground mb-4">{activeQuest.prompts[currentPromptIndex].question}</p>
-                            {activeQuest.prompts[currentPromptIndex].type === "open" && (
-                              <Textarea placeholder="Share your thoughts..." value={questResponses[currentPromptIndex] || ""} onChange={e => handleQuestResponse(currentPromptIndex, e.target.value)} rows={4} />
-                            )}
-                            {activeQuest.prompts[currentPromptIndex].type === "choice" && (
-                              <div className="space-y-2">
-                                {activeQuest.prompts[currentPromptIndex].options?.map((opt: string) => (
-                                  <button key={opt} onClick={() => handleQuestResponse(currentPromptIndex, opt)} className={`w-full p-3 rounded-lg border text-left transition-all ${questResponses[currentPromptIndex] === opt ? "border-primary bg-primary/10" : "border-border hover:border-primary/50"}`}>
-                                    <span className="font-body text-sm">{opt}</span>
-                                  </button>
-                                ))}
+                    <CardContent className="space-y-4">
+                      {sessionSummary.session_summary && (
+                        <p className="font-body text-sm leading-relaxed text-foreground">{sessionSummary.session_summary}</p>
+                      )}
+                      {sessionSummary.key_discoveries?.length > 0 && (
+                        <div className="space-y-2">
+                          <h4 className="font-display text-xs font-semibold text-foreground">Key Discoveries</h4>
+                          <div className="space-y-1.5">
+                            {sessionSummary.key_discoveries.map((d: string, i: number) => (
+                              <div key={i} className="flex items-start gap-2">
+                                <Lightbulb size={14} className="text-yellow-500 mt-0.5 shrink-0" />
+                                <p className="font-body text-xs text-muted-foreground leading-relaxed">{d}</p>
                               </div>
-                            )}
-                            {activeQuest.prompts[currentPromptIndex].type === "multi" && (
-                              <div className="flex flex-wrap gap-2">
-                                {activeQuest.prompts[currentPromptIndex].options?.map((opt: string) => {
-                                  const selected = (questResponses[currentPromptIndex] || []).includes(opt);
-                                  return (
-                                    <button key={opt} onClick={() => {
-                                      const current = questResponses[currentPromptIndex] || [];
-                                      handleQuestResponse(currentPromptIndex, selected ? current.filter((o: string) => o !== opt) : [...current, opt]);
-                                    }} className={`px-4 py-2 rounded-full border transition-all ${selected ? "border-primary bg-primary text-primary-foreground" : "border-border hover:border-primary/50"}`}>
-                                      <span className="font-body text-sm">{opt}</span>
-                                    </button>
-                                  );
-                                })}
-                              </div>
-                            )}
-                          </div>
-                          <div className="flex justify-between">
-                            <Button variant="outline" onClick={() => setCurrentPromptIndex(Math.max(0, currentPromptIndex - 1))} disabled={currentPromptIndex === 0}>
-                              <ArrowLeft size={14} className="mr-2" /> Back
-                            </Button>
-                            <Button onClick={() => {
-                              if (currentPromptIndex < activeQuest.prompts.length - 1) { setCurrentPromptIndex(currentPromptIndex + 1); }
-                              else { completeQuest(); }
-                            }} disabled={!questResponses[currentPromptIndex]}>
-                              {currentPromptIndex < activeQuest.prompts.length - 1 ? "Next" : "Complete"} <ArrowRight size={14} className="ml-2" />
-                            </Button>
+                            ))}
                           </div>
                         </div>
-                      ) : (
-                        <div className="text-center py-8">
-                          <Check className="mx-auto text-success mb-3" size={48} />
-                          <h3 className="font-display text-xl mb-2">Quest Complete!</h3>
-                          <p className="font-body text-muted-foreground">You earned {activeQuest.points} points</p>
+                      )}
+                      {sessionSummary.patterns?.length > 0 && (
+                        <div className="space-y-2">
+                          <h4 className="font-display text-xs font-semibold text-foreground">Patterns Observed</h4>
+                          <div className="grid gap-2">
+                            {sessionSummary.patterns.map((p: any, i: number) => (
+                              <div key={i} className="p-3 rounded-xl bg-muted/40 border border-border/50">
+                                <p className="font-body text-xs font-semibold text-foreground">{p.pattern}</p>
+                                <p className="font-body text-[11px] text-muted-foreground mt-0.5 leading-relaxed">{p.meaning}</p>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                      {sessionSummary.motivational_note && (
+                        <div className="p-3 rounded-xl bg-success/5 border border-success/20">
+                          <p className="font-body text-xs text-success leading-relaxed">{sessionSummary.motivational_note}</p>
                         </div>
                       )}
                     </CardContent>
                   </Card>
+
+                  {/* Next Steps Recommendations */}
+                  <Card className="rounded-2xl shadow-sm overflow-hidden">
+                    <CardHeader className="pb-3">
+                      <CardTitle className="flex items-center gap-2 text-base font-display">
+                        <ArrowRight className="text-primary" size={18} />
+                        Your Next Steps
+                      </CardTitle>
+                      <CardDescription className="text-xs">Based on your recent exploration, here is what you can check out</CardDescription>
+                    </CardHeader>
+                    <CardContent className="space-y-5">
+                      {/* Domain Suggestions */}
+                      {sessionSummary.domains_to_pursue?.length > 0 && (
+                        <div className="space-y-2">
+                          <h4 className="font-display text-xs font-semibold flex items-center gap-1.5 text-foreground"><Target size={12} className="text-primary" /> Domains to Explore</h4>
+                          <div className="flex flex-wrap gap-1.5">
+                            {sessionSummary.domains_to_pursue.map((d: string, i: number) => (
+                              <Badge key={i} variant="secondary" className="px-2.5 py-1 text-xs">{d}</Badge>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Learning Capsules */}
+                      {learningCapsules.length > 0 && (
+                        <div className="space-y-2">
+                          <h4 className="font-display text-xs font-semibold flex items-center gap-1.5 text-foreground"><BookOpen size={12} className="text-primary" /> Suggested Learning</h4>
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                            {learningCapsules.slice(0, 3).map((capsule: any) => (
+                              <div key={capsule.id} className="p-3 rounded-xl border border-border hover:border-primary/50 transition-colors cursor-pointer bg-card">
+                                <p className="font-body text-xs font-semibold text-foreground line-clamp-1">{capsule.title}</p>
+                                <p className="font-body text-[10px] text-muted-foreground mt-0.5">{capsule.duration_minutes || 5} min read</p>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Peer Circles */}
+                      {peerCircles.length > 0 && (
+                        <div className="space-y-2">
+                          <h4 className="font-display text-xs font-semibold flex items-center gap-1.5 text-foreground"><Users size={12} className="text-primary" /> Join a Community</h4>
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                            {peerCircles.slice(0, 2).map((circle: any) => (
+                              <div key={circle.id} className="p-3 rounded-xl border border-border hover:border-primary/50 transition-colors cursor-pointer bg-card">
+                                <p className="font-body text-xs font-semibold text-foreground line-clamp-1">{circle.name}</p>
+                                <p className="font-body text-[10px] text-muted-foreground mt-0.5">{circle.member_count || 0} members</p>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Goal Setting CTA */}
+                      <div className="p-3 rounded-xl bg-muted/40 border border-border/50 flex items-center justify-between gap-3">
+                        <div className="flex items-center gap-2.5">
+                          <Goal className="text-primary" size={16} />
+                          <div>
+                            <p className="font-body text-xs font-semibold">Set an exploration goal</p>
+                            <p className="font-body text-[10px] text-muted-foreground">E.g., "Explore 2 domains this week"</p>
+                          </div>
+                        </div>
+                        <Button size="sm" variant="outline" className="text-xs h-7 px-3 rounded-lg">Set Goal</Button>
+                      </div>
+
+                      <Button className="w-full text-xs" size="sm" onClick={() => { setShowNextSteps(false); setTab("domains"); }}>
+                        View All Recommendations <ArrowRight size={12} className="ml-1.5" />
+                      </Button>
+                    </CardContent>
+                  </Card>
                 </motion.div>
-              ) : (
-                <motion.div key="quest-list" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="grid md:grid-cols-2 gap-4">
-                  {quests.length === 0 ? (
-                    <Card className="col-span-2">
-                      <CardContent className="pt-6 text-center py-12">
-                        <Trophy className="mx-auto text-muted-foreground mb-4" size={48} />
-                        <h3 className="font-display text-xl mb-2">No Quests Available Yet</h3>
-                        <p className="font-body text-muted-foreground">Quests will appear as you progress through exploration.</p>
-                      </CardContent>
-                    </Card>
-                  ) : quests.map((quest, i) => {
-                    const status = getQuestStatus(quest.id);
-                    const isCompleted = status === "completed";
-                    return (
-                      <motion.div key={quest.id} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }}>
-                        <Card className={isCompleted ? "border-success/30 bg-success/5" : ""}>
-                          <CardContent className="pt-6">
-                            <div className="flex items-start gap-3 mb-4">
-                              <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${quest.quest_type === "story" ? "bg-info/10" : quest.quest_type === "challenge" ? "bg-warmth/10" : "bg-indigo/10"}`}>
-                                {quest.quest_type === "story" ? <MessageSquare className="text-info" size={18} /> : quest.quest_type === "challenge" ? <Target className="text-warmth" size={18} /> : <Palette className="text-indigo" size={18} />}
+              )}
+            </AnimatePresence>
+
+            {/* Main Tabs Content Feed */}
+            {!showNextSteps && (
+              <div className="space-y-6">
+                
+                {/* Discover Yourself Assessment */}
+                <TabsContent value="assessment" className="outline-none mt-0">
+                  <div className="bg-white rounded-3xl border border-border shadow-xl p-6 relative overflow-hidden space-y-6">
+                    <div className="absolute inset-0 bg-gradient-to-br from-primary/[0.03] to-transparent pointer-events-none" />
+                    <div className="relative z-10 space-y-6">
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
+                          <ClipboardCheck className="text-primary" size={20} />
+                        </div>
+                        <div>
+                          <h2 className="font-display font-bold text-lg text-foreground">Discovery Mindset Assessment</h2>
+                          <p className="font-body text-xs text-muted-foreground mt-0.5">
+                            Calibrate your profile and discover your archetype by telling us about your study patterns.
+                          </p>
+                        </div>
+                      </div>
+                      <AssessmentTestSection user={user} recordSignal={recordSignal} recordMultipleSignals={recordMultipleSignals} />
+                    </div>
+                  </div>
+                </TabsContent>
+
+                {/* Psychometric Assessment Test */}
+                <TabsContent value="psychometric" className="outline-none mt-0">
+                  <div className="bg-white rounded-3xl border border-border shadow-xl p-6 relative overflow-hidden space-y-6">
+                    <div className="absolute inset-0 bg-gradient-to-br from-[#5500cb]/[0.03] to-transparent pointer-events-none" />
+                    <div className="relative z-10 space-y-6">
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
+                          <Brain className="text-[#5500cb]" size={20} />
+                        </div>
+                        <div>
+                          <h2 className="font-display font-bold text-lg text-foreground">Psychometric Career Calibration</h2>
+                          <p className="font-body text-xs text-muted-foreground mt-0.5">
+                            A deep-dive, 22-question cognitive and behavioral assessment designed to map your core traits.
+                          </p>
+                        </div>
+                      </div>
+                      <PsychometricTest
+                        userId={user!.id}
+                        onComplete={() => {
+                          if (discoveryDone) {
+                            toast.success("Both assessments complete! All sections unlocked 🎉");
+                          }
+                        }}
+                        recordSignal={recordSignal}
+                      />
+                    </div>
+                  </div>
+                </TabsContent>
+
+                {/* Interests Assessment Cards */}
+                <TabsContent value="explore" className="outline-none mt-0 space-y-6">
+                  {!mode ? (
+                    <div className="bg-white rounded-3xl border border-border shadow-xl p-6 sm:p-8 relative overflow-hidden space-y-8">
+                      <div className="absolute inset-0 bg-gradient-to-br from-primary/[0.03] to-transparent pointer-events-none" />
+                      <div className="relative z-10 space-y-2">
+                        <div className="flex items-center gap-3">
+                          <div className="w-10 h-10 rounded-xl bg-terracotta/10 flex items-center justify-center">
+                            <Heart size={20} className="text-terracotta" />
+                          </div>
+                          <div>
+                            <h2 className="font-display font-bold text-lg text-foreground">Interests Exploration</h2>
+                            <p className="font-body text-xs text-muted-foreground mt-0.5">
+                              Choose how you'd like to discover domains. Swap modes at any point. Your decisions enrich your interest mapping.
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 relative z-10">
+                        {MODES.map(m => {
+                          const IconComp = m.icon;
+                          return (
+                            <button
+                              key={m.id}
+                              onClick={() => startSession(m.id)}
+                              className="group relative flex flex-col items-start p-6 rounded-2xl border-2 border-border/80 bg-card hover:border-primary hover:shadow-lg transition-all duration-300 text-left w-full gap-4 overflow-hidden"
+                            >
+                              <div className="absolute top-0 right-0 w-24 h-24 bg-primary/[0.02] rounded-full translate-x-8 -translate-y-8 group-hover:bg-primary/[0.05] group-hover:scale-110 transition-all duration-300" />
+                              <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center group-hover:bg-primary text-primary group-hover:text-white transition-all duration-300">
+                                <IconComp size={24} />
                               </div>
-                              <div className="flex-1">
-                                <h3 className="font-display text-lg text-foreground">{quest.title}</h3>
-                                <p className="font-body text-sm text-muted-foreground">{quest.description}</p>
+                              <div className="space-y-1 z-10">
+                                <h3 className="font-display font-bold text-base text-foreground group-hover:text-primary transition-colors flex items-center gap-1.5">
+                                  {m.label}
+                                  <ChevronRight size={14} className="opacity-0 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all" />
+                                </h3>
+                                <p className="font-body text-xs text-muted-foreground leading-relaxed">{m.desc}</p>
                               </div>
-                              <Badge variant={isCompleted ? "default" : "secondary"}>{isCompleted ? "Done" : `${quest.points} pts`}</Badge>
-                            </div>
-                            {!isCompleted && (
-                              <Button onClick={() => startQuest(quest)} className="w-full">
-                                <Play size={14} className="mr-2" /> {status === "in_progress" ? "Continue" : "Start Quest"}
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  ) : mode === "visual" ? (
+                    <div className="space-y-6">
+                      <div className="flex items-center justify-between">
+                        <Button variant="ghost" size="sm" onClick={() => setMode(null)} className="h-9 text-xs rounded-full border border-border/80 hover:bg-muted/10">
+                          <ArrowLeft size={14} className="mr-1.5" /> Back to Modes
+                        </Button>
+                        <Badge variant="outline" className="text-xs px-3 py-1 rounded-full bg-background/50 border-border">Visual Exploration</Badge>
+                      </div>
+                      
+                      <Card className="rounded-3xl border-border shadow-xl overflow-hidden bg-white">
+                        <CardHeader className="pb-6 border-b border-border/40 bg-muted/10">
+                          <CardTitle className="text-lg font-display font-bold text-foreground">Pick matching icons that spark curiosity</CardTitle>
+                          <CardDescription className="text-xs text-muted-foreground mt-1">Choose whatever stands out. Trust your gut.</CardDescription>
+                        </CardHeader>
+                        <CardContent className="p-6 space-y-6">
+                          <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-8 gap-3">
+                            {VISUAL_ICONS.map(icon => {
+                              const selected = visualSelections.includes(icon.id);
+                              return (
+                                <button
+                                  key={icon.id}
+                                  onClick={() => handleVisualToggle(icon.id)}
+                                  className={`flex flex-col items-center justify-center gap-2 p-4 rounded-2xl border-2 transition-all duration-300 ${
+                                    selected 
+                                      ? "border-primary bg-primary/[0.04] scale-102 shadow-md font-semibold text-primary" 
+                                      : "border-border/80 bg-card hover:border-primary/40 hover:bg-muted/10 text-foreground"
+                                  }`}
+                                >
+                                  <span className="text-3xl filter drop-shadow-sm group-hover:scale-110 transition-transform">{icon.emoji}</span>
+                                  <span className="font-body text-[10px] text-center font-medium leading-tight line-clamp-1">{icon.label}</span>
+                                </button>
+                              );
+                            })}
+                          </div>
+                          {visualSelections.length >= 3 && !showVisualBlueprint && (
+                            <div className="flex justify-center pt-2">
+                              <Button 
+                                onClick={finishVisualMode} 
+                                size="sm" 
+                                className="w-full sm:w-auto text-xs font-semibold rounded-full px-8 py-5 h-auto bg-primary text-white hover:bg-primary/95 shadow-md"
+                              >
+                                <Brain size={16} className="mr-2" /> Analyze Selections ({visualSelections.length})
                               </Button>
+                            </div>
+                          )}
+                        </CardContent>
+                      </Card>
+
+                      {showVisualBlueprint && visualBlueprint && (
+                        <BlueprintCard
+                          blueprint={visualBlueprint}
+                          variant="visual"
+                          onGenerateRoadmap={generateVisualRoadmap}
+                          generatingRoadmap={generatingVisualRoadmap}
+                          onClose={() => setShowVisualBlueprint(false)}
+                        />
+                      )}
+                    </div>
+                  ) : mode === "story" ? (
+                    <div className="space-y-6">
+                      <div className="flex items-center justify-between">
+                        <Button variant="ghost" size="sm" onClick={() => setMode(null)} className="h-9 text-xs rounded-full border border-border/80 hover:bg-muted/10">
+                          <ArrowLeft size={14} className="mr-1.5" /> Back to Modes
+                        </Button>
+                        <Badge variant="outline" className="text-xs px-3 py-1 rounded-full bg-background/50 border-border">Story Mode</Badge>
+                      </div>
+                      <StoryModeCards />
+                    </div>
+                  ) : mode === "challenge" ? (
+                    <div className="space-y-6">
+                      <div className="flex items-center justify-between">
+                        <Button variant="ghost" size="sm" onClick={() => setMode(null)} className="h-9 text-xs rounded-full border border-border/80 hover:bg-muted/10">
+                          <ArrowLeft size={14} className="mr-1.5" /> Back to Modes
+                        </Button>
+                        <Badge variant="outline" className="text-xs px-3 py-1 rounded-full bg-background/50 border-border">Challenge Mode</Badge>
+                      </div>
+                      <ChallengeModeCards />
+                    </div>
+                  ) : mode === "career-cards" ? (
+                    <div className="space-y-6">
+                      <div className="flex items-center justify-between">
+                        <Button variant="ghost" size="sm" onClick={() => setMode(null)} className="h-9 text-xs rounded-full border border-border/80 hover:bg-muted/10">
+                          <ArrowLeft size={14} className="mr-1.5" /> Back to Modes
+                        </Button>
+                        <Badge variant="outline" className="text-xs px-3 py-1 rounded-full bg-background/50 border-border">Career Cards</Badge>
+                      </div>
+                      <CareerCardDeck />
+                    </div>
+                  ) : null}
+                </TabsContent>
+
+                {/* Quests Tab */}
+                <TabsContent value="quests" className="outline-none mt-0 space-y-6">
+                  <AnimatePresence mode="wait">
+                    {activeQuest ? (
+                      <motion.div key="active-quest" initial={{ opacity: 0, scale: 0.98 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0 }}>
+                        <Card className="rounded-3xl border-border shadow-xl overflow-hidden bg-white">
+                          <CardHeader className="p-6 pb-4 border-b border-border/40 bg-muted/10">
+                            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                              <div className="space-y-1">
+                                <CardTitle className="text-lg font-display font-bold text-foreground">{activeQuest.title}</CardTitle>
+                                <CardDescription className="text-xs text-muted-foreground">{activeQuest.description}</CardDescription>
+                              </div>
+                              <Badge variant="secondary" className="text-xs shrink-0 px-3 py-1 font-semibold text-primary bg-primary/10 border-none rounded-full">{activeQuest.points} pts</Badge>
+                            </div>
+                            <Progress value={(currentPromptIndex / (activeQuest.prompts?.length || 1)) * 100} className="mt-4 h-1.5" />
+                          </CardHeader>
+                          <CardContent className="p-6 space-y-6">
+                            {activeQuest.prompts && currentPromptIndex < activeQuest.prompts.length ? (
+                              <div className="space-y-6">
+                                <div className="p-6 rounded-2xl bg-muted/30 border border-border/50 space-y-4">
+                                  <p className="font-display text-sm sm:text-base font-semibold text-foreground leading-snug">
+                                    {activeQuest.prompts[currentPromptIndex].question}
+                                  </p>
+                                  
+                                  {activeQuest.prompts[currentPromptIndex].type === "open" && (
+                                    <Textarea
+                                      placeholder="Share your thoughts..."
+                                      value={questResponses[currentPromptIndex] || ""}
+                                      onChange={e => handleQuestResponse(currentPromptIndex, e.target.value)}
+                                      rows={4}
+                                      className="text-sm rounded-xl bg-white border border-border focus:border-primary focus:ring-1 focus:ring-primary/20"
+                                    />
+                                  )}
+                                  
+                                  {activeQuest.prompts[currentPromptIndex].type === "choice" && (
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                      {activeQuest.prompts[currentPromptIndex].options?.map((opt: string) => {
+                                        const isSelected = questResponses[currentPromptIndex] === opt;
+                                        return (
+                                          <button
+                                            key={opt}
+                                            onClick={() => handleQuestResponse(currentPromptIndex, opt)}
+                                            className={`group flex items-center justify-between p-4 rounded-xl border-2 text-left transition-all duration-300 font-body text-xs sm:text-sm ${
+                                              isSelected 
+                                                ? "border-primary bg-primary/[0.03] shadow-md font-semibold text-primary" 
+                                                : "border-border bg-white hover:border-primary/40 hover:bg-muted/10 text-foreground"
+                                            }`}
+                                          >
+                                            <div className="flex items-center gap-3">
+                                              <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center transition-all ${
+                                                isSelected ? "border-primary bg-primary text-white" : "border-muted-foreground/30 group-hover:border-primary/50"
+                                              }`}>
+                                                {isSelected && <Check size={8} strokeWidth={3} />}
+                                              </div>
+                                              <span className="font-medium">{opt}</span>
+                                            </div>
+                                          </button>
+                                        );
+                                      })}
+                                    </div>
+                                  )}
+                                  
+                                  {activeQuest.prompts[currentPromptIndex].type === "multi" && (
+                                    <div className="flex flex-wrap gap-2.5">
+                                      {activeQuest.prompts[currentPromptIndex].options?.map((opt: string) => {
+                                        const selected = (questResponses[currentPromptIndex] || []).includes(opt);
+                                        return (
+                                          <button
+                                            key={opt}
+                                            onClick={() => {
+                                              const current = questResponses[currentPromptIndex] || [];
+                                              handleQuestResponse(currentPromptIndex, selected ? current.filter((o: string) => o !== opt) : [...current, opt]);
+                                            }}
+                                            className={`px-4 py-2 rounded-full border-2 transition-all duration-300 text-xs font-body font-medium flex items-center gap-1.5 ${
+                                              selected 
+                                                ? "border-primary bg-primary text-white font-semibold" 
+                                                : "border-border bg-white hover:border-primary/40 text-muted-foreground"
+                                            }`}
+                                          >
+                                            {selected && <Check size={10} strokeWidth={3} />}
+                                            {opt}
+                                          </button>
+                                        );
+                                      })}
+                                    </div>
+                                  )}
+                                </div>
+                                
+                                <div className="flex justify-between items-center pt-2">
+                                  <Button 
+                                    variant="outline" 
+                                    size="sm" 
+                                    onClick={() => setCurrentPromptIndex(Math.max(0, currentPromptIndex - 1))} 
+                                    disabled={currentPromptIndex === 0} 
+                                    className="text-xs rounded-full px-5 h-9"
+                                  >
+                                    <ArrowLeft size={14} className="mr-1.5" /> Back
+                                  </Button>
+                                  <Button 
+                                    onClick={() => {
+                                      if (currentPromptIndex < activeQuest.prompts.length - 1) { setCurrentPromptIndex(currentPromptIndex + 1); }
+                                      else { completeQuest(); }
+                                    }} 
+                                    disabled={!questResponses[currentPromptIndex]} 
+                                    size="sm" 
+                                    className="text-xs rounded-full px-6 h-9 bg-primary text-white hover:bg-primary/95 font-semibold"
+                                  >
+                                    {currentPromptIndex < activeQuest.prompts.length - 1 ? "Next Question" : "Complete Quest"} <ArrowRight size={14} className="ml-1.5" />
+                                  </Button>
+                                </div>
+                              </div>
+                            ) : (
+                              <div className="text-center py-8 space-y-4">
+                                <div className="w-16 h-16 rounded-full bg-success/10 flex items-center justify-center mx-auto">
+                                  <Check className="text-success w-8 h-8" />
+                                </div>
+                                <div className="space-y-1">
+                                  <h3 className="font-display text-lg font-bold">Quest Complete!</h3>
+                                  <p className="font-body text-xs text-muted-foreground">You earned {activeQuest.points} points</p>
+                                </div>
+                                <Button size="sm" onClick={() => setActiveQuest(null)} className="rounded-full px-6 text-xs font-semibold">
+                                  Back to Quests
+                                </Button>
+                              </div>
                             )}
                           </CardContent>
                         </Card>
                       </motion.div>
-                    );
-                  })}
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </TabsContent>
+                    ) : (
+                      <motion.div key="quest-list" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        {quests.length === 0 ? (
+                          <Card className="rounded-3xl border-border bg-white shadow-xl col-span-full">
+                            <CardContent className="pt-8 text-center py-12 space-y-4">
+                              <div className="w-14 h-14 rounded-full bg-muted flex items-center justify-center mx-auto opacity-60">
+                                <Trophy className="text-muted-foreground w-6 h-6" />
+                              </div>
+                              <div className="space-y-1">
+                                <h3 className="font-display text-base font-bold text-foreground">No Quests Available Yet</h3>
+                                <p className="font-body text-xs text-muted-foreground max-w-sm mx-auto">Quests will unlock dynamically as you share signals in other sections.</p>
+                              </div>
+                            </CardContent>
+                          </Card>
+                        ) : (
+                          quests.map((quest, i) => {
+                            const status = getQuestStatus(quest.id);
+                            const isCompleted = status === "completed";
+                            return (
+                              <motion.div key={quest.id} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.04 }}>
+                                <div className={`bg-white rounded-3xl border-2 shadow-md p-6 relative overflow-hidden transition-all duration-300 hover:shadow-xl hover:translate-y-[-2px] flex flex-col justify-between h-full ${
+                                  isCompleted ? "border-success/20 bg-success/[0.01]" : "border-border/80 hover:border-primary/40"
+                                }`}>
+                                  <div className={`absolute inset-0 bg-gradient-to-b ${isCompleted ? "from-success/[0.02]" : "from-primary/[0.02]"} to-transparent pointer-events-none`} />
+                                  <div className="relative z-10 space-y-4 flex-1 flex flex-col justify-between">
+                                    <div className="flex items-start gap-4">
+                                      <div className={`w-12 h-12 rounded-2xl flex items-center justify-center shrink-0 shadow-sm ${
+                                        quest.quest_type === "story" ? "bg-blue/10" : quest.quest_type === "challenge" ? "bg-warmth/10" : "bg-indigo/10"
+                                      }`}>
+                                        {quest.quest_type === "story" ? <MessageSquare className="text-blue" size={22} /> : quest.quest_type === "challenge" ? <Target className="text-warmth" size={22} /> : <Palette className="text-indigo" size={22} />}
+                                      </div>
+                                      <div className="space-y-1 flex-1 min-w-0">
+                                        <h3 className="font-display font-bold text-sm sm:text-base text-foreground truncate">{quest.title}</h3>
+                                        <p className="font-body text-xs text-muted-foreground leading-relaxed line-clamp-2">{quest.description}</p>
+                                      </div>
+                                    </div>
+                                    <div className="flex items-center justify-between pt-4 border-t border-border/40 gap-4 mt-auto">
+                                      <Badge variant={isCompleted ? "default" : "secondary"} className={`text-[10px] uppercase font-bold rounded-full px-2.5 py-0.5 ${
+                                        isCompleted ? "bg-success text-white hover:bg-success" : "text-primary bg-primary/10"
+                                      }`}>{isCompleted ? "Completed" : `+${quest.points} pts`}</Badge>
+                                      {!isCompleted && (
+                                        <Button onClick={() => startQuest(quest)} size="sm" className="text-xs h-8 px-4 rounded-full bg-primary text-white font-body font-semibold">
+                                          <Play size={10} className="mr-1" /> {status === "in_progress" ? "Resume" : "Start"}
+                                        </Button>
+                                      )}
+                                    </div>
+                                  </div>
+                                </div>
+                              </motion.div>
+                            );
+                          })
+                        )}
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </TabsContent>
 
-          {/* ===== Domains Tab ===== */}
-          <TabsContent value="domains" className="space-y-6">
-            {domains.length === 0 ? (
-              <Card>
-                <CardContent className="pt-6 text-center py-12">
-                  <Brain className="mx-auto text-muted-foreground mb-4" size={48} />
-                  <h3 className="font-display text-xl mb-2">No Recommendations Yet</h3>
-                  <p className="font-body text-muted-foreground mb-4">Like at least 3 career cards to get AI-powered domain recommendations</p>
-                  <Button variant="outline" onClick={() => setTab("explore")}>Start Exploring <ArrowRight size={14} className="ml-2" /></Button>
-                </CardContent>
-              </Card>
-            ) : (
-              <div className="space-y-4">
-                {domains.map((domain, i) => (
-                  <motion.div key={domain.id} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }}>
-                    <Card>
-                      <CardContent className="pt-6">
-                        <div className="flex items-start gap-4">
-                          <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary to-accent flex items-center justify-center shrink-0">
-                            <span className="text-2xl">🎯</span>
-                          </div>
-                          <div className="flex-1">
-                            <div className="flex items-center gap-2 mb-1">
-                              <h3 className="font-display text-lg text-foreground">{domain.domain_name}</h3>
-                              <Badge variant="secondary">{Math.round(domain.match_score * 100)}% match</Badge>
+                {/* Domains Recommendations Tab */}
+                <TabsContent value="domains" className="outline-none mt-0 space-y-6">
+                  {domains.length === 0 ? (
+                    <Card className="rounded-3xl border-border bg-white shadow-xl">
+                      <CardContent className="pt-8 text-center py-12 space-y-4">
+                        <div className="w-14 h-14 rounded-full bg-muted flex items-center justify-center mx-auto opacity-60">
+                          <Brain className="text-muted-foreground w-6 h-6" />
+                        </div>
+                        <div className="space-y-2">
+                          <h3 className="font-display text-base font-bold text-foreground">No Recommendations Yet</h3>
+                          <p className="font-body text-xs text-muted-foreground max-w-sm mx-auto">Like at least 3 career cards or complete assessments to trigger recommendation mapping.</p>
+                        </div>
+                        <Button variant="outline" size="sm" onClick={() => setTab("explore")} className="text-xs rounded-full px-6 h-9">
+                          Start Exploring <ArrowRight size={12} className="ml-1.5" />
+                        </Button>
+                      </CardContent>
+                    </Card>
+                  ) : (
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      {domains.map((domain, i) => (
+                        <motion.div key={domain.id} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.04 }}>
+                          <div className="bg-white rounded-3xl border-2 border-border/80 shadow-md p-6 relative overflow-hidden hover:border-primary/40 hover:shadow-xl transition-all duration-300 flex flex-col justify-between h-full space-y-6">
+                            <div className="absolute inset-0 bg-gradient-to-br from-primary/[0.02] to-transparent pointer-events-none" />
+                            <div className="relative z-10 flex items-start gap-4 flex-1">
+                              <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-primary to-accent flex items-center justify-center shrink-0 text-white text-lg shadow-sm">
+                                🎯
+                              </div>
+                              <div className="flex-1 min-w-0 space-y-4">
+                                <div className="space-y-1">
+                                  <div className="flex items-center gap-2 flex-wrap">
+                                    <h3 className="font-display font-bold text-base text-foreground leading-tight">{domain.domain_name}</h3>
+                                    <Badge className="text-[10px] rounded-full px-2.5 py-0.5 bg-primary/10 text-primary border-none shadow-none font-bold">
+                                      {Math.round(domain.match_score * 100)}% Match
+                                    </Badge>
+                                  </div>
+                                  <p className="font-body text-xs text-muted-foreground leading-relaxed line-clamp-3">{domain.description}</p>
+                                </div>
+                                
+                                {domain.reasons?.length > 0 && (
+                                  <div className="space-y-2 bg-muted/40 p-4 rounded-2xl border border-border/40">
+                                    <p className="font-body text-[10px] uppercase tracking-wider text-muted-foreground font-bold">Why it matches you:</p>
+                                    <div className="space-y-1.5">
+                                      {domain.reasons.slice(0, 3).map((reason: string, j: number) => (
+                                        <p key={j} className="font-body text-[11px] text-muted-foreground flex items-start gap-2 leading-relaxed">
+                                          <Check size={12} className="text-success shrink-0 mt-0.5" />
+                                          <span className="line-clamp-2">{reason}</span>
+                                        </p>
+                                      ))}
+                                    </div>
+                                  </div>
+                                )}
+                              </div>
                             </div>
-                            <p className="font-body text-sm text-muted-foreground mb-3">{domain.description}</p>
-                            {domain.reasons?.length > 0 && (
-                              <div className="space-y-1 mb-3">
-                                {domain.reasons.slice(0, 3).map((reason: string, j: number) => (
-                                  <p key={j} className="font-body text-xs text-muted-foreground flex items-center gap-2"><Check size={12} className="text-success" /> {reason}</p>
-                                ))}
+                            
+                            <div className="flex gap-2 justify-end pt-4 border-t border-border/40 mt-auto">
+                              {domain.status !== "saved" && (
+                                <Button variant="outline" size="sm" onClick={() => saveDomain(domain.id)} className="h-9 text-xs rounded-full font-body font-semibold px-4 border-border/60 hover:bg-muted/10">
+                                  <BookmarkPlus size={14} className="mr-1.5 text-primary" /> Save Domain
+                                </Button>
+                              )}
+                              <Button variant="ghost" size="sm" className="h-9 text-xs rounded-full font-body font-semibold px-4 text-primary hover:text-primary hover:bg-primary/5 bg-primary/5">
+                                Explore Paths <ChevronRight size={14} className="ml-0.5" />
+                              </Button>
+                            </div>
+                          </div>
+                        </motion.div>
+                      ))}
+                    </div>
+                  )}
+                </TabsContent>
+
+                {/* Insights Tab */}
+                <TabsContent value="insights" className="outline-none mt-0 space-y-8">
+                  <InsightsView
+                    conclusion={conclusion}
+                    loading={conclusionLoading}
+                    regenerate={regenerateConclusion}
+                    regenerating={regeneratingConclusion}
+                  />
+
+                  {/* Interests Map & AI Compass Insights in 2-column grid on desktop */}
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 w-full">
+                    {/* Interests Map */}
+                    <div className="bg-white rounded-3xl border border-border shadow-xl p-6 sm:p-8 relative overflow-hidden space-y-6 flex flex-col justify-between">
+                      <div className="absolute inset-0 bg-gradient-to-b from-primary/[0.01] to-transparent pointer-events-none" />
+                      <div className="relative z-10 space-y-2">
+                        <div className="flex items-center gap-2">
+                          <Sparkles className="text-primary w-5 h-5" />
+                          <span className="font-body text-[10px] text-primary uppercase tracking-wider font-extrabold">Active Vectors</span>
+                        </div>
+                        <h3 className="font-display text-lg font-bold text-foreground">
+                          Your Interest Blueprint
+                        </h3>
+                        <p className="font-body text-xs text-muted-foreground">Live maps synthesized from assessments, article engagement, and curiosity choices.</p>
+                      </div>
+
+                      <div className="relative z-10 flex-1 flex flex-col justify-center min-h-[180px] pt-4">
+                        {interests.length === 0 ? (
+                          <div className="text-center py-8 border border-dashed border-border/80 rounded-2xl">
+                            <p className="text-xs text-muted-foreground font-body leading-relaxed">
+                              Explore more topics or finish assessment questions to begin building your interest cloud.
+                            </p>
+                          </div>
+                        ) : (
+                          <div className="space-y-5">
+                            {Object.entries(
+                              interests.reduce<Record<string, any[]>>((acc, it) => {
+                                const key = it.category || it.source || "general";
+                                (acc[key] ||= []).push(it);
+                                return acc;
+                              }, {})
+                            ).map(([cat, items]) => (
+                              <div key={cat} className="space-y-2">
+                                <p className="font-body text-[10px] uppercase tracking-wider text-muted-foreground font-bold">{cat}</p>
+                                <div className="flex flex-wrap gap-2">
+                                  {items.map((it: any) => {
+                                    const strength = Math.round((it.strength || 0.5) * 100);
+                                    return (
+                                      <motion.div
+                                        key={it.id}
+                                        whileHover={{ y: -2 }}
+                                        className="px-3.5 py-2 rounded-2xl bg-white border border-border/80 shadow-sm flex items-center gap-2 text-xs font-body font-semibold text-foreground"
+                                      >
+                                        <span className={`w-1.5 h-1.5 rounded-full ${strength >= 80 ? "bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)]" : strength >= 50 ? "bg-primary" : "bg-muted-foreground"}`} />
+                                        <span>{it.name}</span>
+                                        <span className="opacity-60 text-[10px] font-bold text-primary">{strength}%</span>
+                                      </motion.div>
+                                    );
+                                  })}
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* AI Insights Panel */}
+                    <div className="bg-white rounded-3xl border border-border shadow-xl p-6 sm:p-8 relative overflow-hidden space-y-6 flex flex-col justify-between">
+                      <div className="absolute inset-0 bg-gradient-to-b from-primary/[0.01] to-transparent pointer-events-none" />
+                      <div className="relative z-10 space-y-2">
+                        <div className="flex items-center gap-2">
+                          <Bot className="text-primary w-5 h-5" />
+                          <span className="font-body text-[10px] text-primary uppercase tracking-wider font-extrabold">Cognitive Analysis</span>
+                        </div>
+                        <h3 className="font-display text-lg font-bold text-foreground">
+                          AI Mindset Insights
+                        </h3>
+                        <p className="font-body text-xs text-muted-foreground">Automated behavioral mapping calculated from interaction friction and choices.</p>
+                      </div>
+
+                      <div className="relative z-10 flex-1 flex flex-col justify-center min-h-[180px] pt-2">
+                        {aiInsights ? (
+                          <div className="space-y-6">
+                            {aiInsights.acknowledgment && (
+                              <div className="p-4 rounded-2xl bg-primary/[0.02] border border-primary/10">
+                                <p className="font-body text-xs leading-relaxed text-foreground">{aiInsights.acknowledgment}</p>
                               </div>
                             )}
-                            <div className="flex gap-2">
-                              {domain.status !== "saved" && (
-                                <Button variant="outline" size="sm" onClick={() => saveDomain(domain.id)}><BookmarkPlus size={14} className="mr-2" /> Save</Button>
-                              )}
-                              <Button variant="ghost" size="sm">Explore More <ChevronRight size={14} className="ml-1" /></Button>
+                            <div className="space-y-3">
+                              {aiInsights.insights?.slice(0, 3).map((insight: string, i: number) => (
+                                <div key={i} className="flex items-start gap-3 p-3 bg-muted/20 rounded-2xl border border-border/50">
+                                  <div className="w-6 h-6 rounded-lg bg-accent/10 flex items-center justify-center shrink-0 mt-0.5">
+                                    <Lightbulb className="text-accent w-3.5 h-3.5" />
+                                  </div>
+                                  <p className="font-body text-xs text-muted-foreground leading-relaxed flex-1">{insight}</p>
+                                </div>
+                              ))}
                             </div>
+                            {aiInsights.strengths_detected && (
+                              <div className="space-y-2.5">
+                                <h4 className="font-display text-xs font-bold uppercase tracking-wider text-foreground">Strengths Detected</h4>
+                                <div className="flex flex-wrap gap-1.5">
+                                  {aiInsights.strengths_detected.map((s: string, i: number) => (
+                                    <Badge key={i} variant="secondary" className="text-[10px] rounded-full px-3 py-1 font-body font-semibold">{s}</Badge>
+                                  ))}
+                                </div>
+                              </div>
+                            )}
                           </div>
+                        ) : (
+                          <div className="text-center py-8 space-y-4">
+                            <div className="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center mx-auto">
+                              <Sparkles className="text-primary w-6 h-6" />
+                            </div>
+                            <div className="space-y-1">
+                              <h4 className="font-display text-sm font-bold text-foreground">Awaiting Generation</h4>
+                              <p className="font-body text-xs text-muted-foreground max-w-xs mx-auto leading-relaxed">
+                                Synthesize your cross-platform responses to generate deeper preference evaluations.
+                              </p>
+                            </div>
+                            <Button 
+                              size="sm" 
+                              onClick={getAIRecommendations} 
+                              disabled={aiLoading} 
+                              className="text-xs rounded-full px-6 bg-primary text-white font-body font-bold h-10 shadow-md transition-all hover:bg-[#4300a3]"
+                            >
+                              {aiLoading ? "Generating AI Insights..." : "Generate AI Insights"}
+                            </Button>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Adaptive Prompts */}
+                  {adaptivePrompts && (
+                    <Card className="rounded-3xl border-border bg-white shadow-xl overflow-hidden w-full">
+                      <CardHeader className="pb-4 border-b border-border/40 bg-muted/10">
+                        <CardTitle className="font-display text-base font-bold flex items-center gap-2">
+                          <Zap className="text-accent w-4 h-4" /> Recommended Reflections
+                        </CardTitle>
+                        <CardDescription className="text-xs text-muted-foreground mt-0.5">Targeted writing prompts based on curiosity triggers</CardDescription>
+                      </CardHeader>
+                      <CardContent className="p-6">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          {adaptivePrompts.prompts?.map((p: any, i: number) => (
+                            <motion.div 
+                              key={i} 
+                              whileHover={{ y: -2 }}
+                              className="p-5 rounded-2xl border border-border hover:border-primary/30 bg-card hover:shadow-md transition-all cursor-pointer space-y-2 flex flex-col justify-between"
+                            >
+                              <p className="font-body text-xs font-bold text-foreground leading-relaxed">{p.question}</p>
+                              <p className="font-body text-[10px] text-muted-foreground leading-relaxed bg-muted/20 p-2 rounded-xl border border-border/40">{p.why}</p>
+                            </motion.div>
+                          ))}
                         </div>
                       </CardContent>
                     </Card>
-                  </motion.div>
-                ))}
-              </div>
-            )}
-          </TabsContent>
+                  )}
+                </TabsContent>
 
-          {/* ===== Insights Tab ===== */}
-          <TabsContent value="insights" className="space-y-6">
-            {/* Synthesized profile from assessments — replaces former "Your Profile" tab */}
-            <InsightsView />
-
-            {/* Real-time interest map grouped by source */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2"><Sparkles className="text-primary" size={18} /> Your Interest Map</CardTitle>
-                <CardDescription>Built live from your selections across cards, stories, challenges, visuals, and quests.</CardDescription>
-              </CardHeader>
-              <CardContent>
-                {interests.length === 0 ? (
-                  <p className="text-center text-muted-foreground py-4">Start exploring to build your interest map.</p>
-                ) : (
-                  <div className="space-y-4">
-                    {Object.entries(
-                      interests.reduce<Record<string, any[]>>((acc, it) => {
-                        const key = it.category || it.source || "general";
-                        (acc[key] ||= []).push(it);
-                        return acc;
-                      }, {})
-                    ).map(([cat, items]) => (
-                      <div key={cat}>
-                        <p className="font-body text-xs uppercase tracking-wider text-muted-foreground mb-2">{cat}</p>
-                        <div className="flex flex-wrap gap-1.5">
-                          {items.map((it: any) => (
-                            <Badge key={it.id} variant="outline" className="px-2.5 py-1 text-xs">
-                              {it.name}
-                              <span className="ml-1 opacity-50 text-[10px]">{Math.round((it.strength || 0.5) * 100)}%</span>
-                            </Badge>
-                          ))}
+                {/* Behavior Tab */}
+                <TabsContent value="behavior" className="outline-none mt-0 space-y-8">
+                  {/* Archetype Hero Card Shifted from Insights & Profile */}
+                  {conclusion && (
+                    <div className="bg-white rounded-3xl border border-border shadow-xl p-6 sm:p-8 relative overflow-hidden space-y-6">
+                      <div className="absolute inset-0 bg-gradient-to-r from-primary/[0.02] to-accent/[0.02] pointer-events-none" />
+                      <div className="relative z-10 space-y-6">
+                        <div className="flex items-start justify-between gap-4 flex-wrap">
+                          <div className="flex items-center gap-4">
+                            <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-primary to-accent flex items-center justify-center shadow-lg text-white">
+                              <Sparkles size={26} />
+                            </div>
+                            <div className="min-w-0">
+                              <p className="font-body text-[10px] uppercase tracking-wider text-muted-foreground font-extrabold">Your Calibration Archetype</p>
+                              <h2 className="font-display text-2xl text-foreground font-extrabold leading-tight tracking-tight">
+                                {conclusion.archetype || "The Explorer"}
+                              </h2>
+                            </div>
+                          </div>
+                          <Button 
+                            size="sm" 
+                            variant="outline" 
+                            onClick={regenerateConclusion} 
+                            disabled={regeneratingConclusion} 
+                            className="rounded-full h-10 px-5 text-xs font-bold border-border/80 hover:bg-muted/10 bg-white shadow-sm flex items-center gap-2"
+                          >
+                            <RefreshCw size={13} className={`${regeneratingConclusion ? "animate-spin" : ""}`} />
+                            {regeneratingConclusion ? "Synthesizing…" : "Regenerate Profile"}
+                          </Button>
+                        </div>
+                        {conclusion.archetype_description && (
+                          <p className="font-body text-xs sm:text-sm text-foreground/85 leading-relaxed max-w-4xl bg-muted/10 p-4 rounded-2xl border border-border/50">{conclusion.archetype_description}</p>
+                        )}
+                        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 pt-2">
+                          <div className="rounded-2xl border border-border/80 bg-white p-4 shadow-sm hover:shadow transition-shadow">
+                            <div className="flex items-center gap-1.5 text-muted-foreground mb-1">
+                              <Brain size={14} className="text-primary" />
+                              <span className="font-body text-[10px] uppercase tracking-wide font-extrabold">Cognitive Style</span>
+                            </div>
+                            <p className="font-display text-xs sm:text-sm text-foreground font-bold leading-tight">{conclusion.cognitive_style || "—"}</p>
+                          </div>
+                          <div className="rounded-2xl border border-border/80 bg-white p-4 shadow-sm hover:shadow transition-shadow">
+                            <div className="flex items-center gap-1.5 text-muted-foreground mb-1">
+                              <Heart size={14} className="text-rose-500" />
+                              <span className="font-body text-[10px] uppercase tracking-wide font-extrabold">Motivation</span>
+                            </div>
+                            <p className="font-display text-xs sm:text-sm text-foreground font-bold leading-tight">{conclusion.motivation_type || "—"}</p>
+                          </div>
+                          <div className="rounded-2xl border border-border/80 bg-white p-4 shadow-sm hover:shadow transition-shadow">
+                            <div className="flex items-center gap-1.5 text-muted-foreground mb-1">
+                              <Target size={14} className="text-sky-500" />
+                              <span className="font-body text-[10px] uppercase tracking-wide font-extrabold">Work Style</span>
+                            </div>
+                            <p className="font-display text-xs sm:text-sm text-foreground font-bold leading-tight">{conclusion.work_style || "—"}</p>
+                          </div>
+                          <div className="rounded-2xl border border-border/80 bg-white p-4 shadow-sm hover:shadow transition-shadow">
+                            <div className="flex items-center gap-1.5 text-muted-foreground mb-1">
+                              <Compass size={14} className="text-amber-500" />
+                              <span className="font-body text-[10px] uppercase tracking-wide font-extrabold">Match Confidence</span>
+                            </div>
+                            <p className="font-display text-xs sm:text-sm text-foreground font-bold leading-tight">{`${Math.round((conclusion.confidence_score || 0.7) * 100)}%`}</p>
+                          </div>
                         </div>
                       </div>
-                    ))}
-                  </div>
-                )}
-              </CardContent>
-            </Card>
-
-            {/* AI-generated insights from real Compass interactions */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2"><Bot className="text-primary" size={20} /> AI Insights</CardTitle>
-                <CardDescription>Personalized analysis based on your real exploration data.</CardDescription>
-              </CardHeader>
-              <CardContent>
-                {aiInsights ? (
-                  <div className="space-y-6">
-                    {aiInsights.acknowledgment && (
-                      <div className="p-4 rounded-lg bg-primary/5 border border-primary/20">
-                        <p className="font-body text-sm">{aiInsights.acknowledgment}</p>
-                      </div>
-                    )}
-                    {aiInsights.insights?.map((insight: string, i: number) => (
-                      <div key={i} className="flex items-start gap-3"><Lightbulb className="text-accent mt-0.5" size={16} /><p className="font-body text-sm">{insight}</p></div>
-                    ))}
-                    {aiInsights.strengths_detected && (
-                      <div>
-                        <h4 className="font-display text-sm mb-2">Strengths Detected</h4>
-                        <div className="flex flex-wrap gap-2">{aiInsights.strengths_detected.map((s: string, i: number) => <Badge key={i} variant="secondary">{s}</Badge>)}</div>
-                      </div>
-                    )}
-                    {aiInsights.encouragement && (
-                      <div className="p-4 rounded-lg bg-success/5 border border-success/20"><p className="font-body text-sm text-success">{aiInsights.encouragement}</p></div>
-                    )}
-                    {aiInsights.reflection_prompt && (
-                      <div className="p-4 rounded-lg bg-accent/5 border border-accent/20">
-                        <p className="font-body text-sm font-medium mb-2">Reflection Prompt:</p>
-                        <p className="font-body text-sm text-muted-foreground">{aiInsights.reflection_prompt}</p>
-                      </div>
-                    )}
-                  </div>
-                ) : (
-                  <div className="text-center py-8">
-                    <Sparkles className="mx-auto text-muted-foreground mb-3" size={40} />
-                    <p className="font-body text-muted-foreground mb-4">Generate fresh insights from your latest Compass data.</p>
-                    <Button variant="outline" onClick={getAIRecommendations} disabled={aiLoading}>{aiLoading ? "Analyzing..." : "Generate Insights"}</Button>
-                  </div>
-                )}
-              </CardContent>
-            </Card>
-
-            {/* Adaptive Prompts */}
-            {adaptivePrompts && (
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2"><Zap className="text-accent" size={18} /> Suggested Prompts</CardTitle>
-                  <CardDescription>AI-generated prompts based on your engagement</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-3">
-                    {adaptivePrompts.prompts?.map((p: any, i: number) => (
-                      <div key={i} className="p-3 rounded-lg border border-border hover:border-primary/50 transition-colors cursor-pointer">
-                        <p className="font-body text-sm font-medium">{p.question}</p>
-                        <p className="font-body text-xs text-muted-foreground mt-1">{p.why}</p>
-                      </div>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
-            )}
-          </TabsContent>
-
-          {/* ===== Behavior Tab ===== */}
-          <TabsContent value="behavior" className="space-y-6">
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2"><Activity className="text-primary" size={20} /> Behavioral Insights</CardTitle>
-                <CardDescription>Deeper self-awareness from your exploration patterns</CardDescription>
-              </CardHeader>
-              <CardContent>
-                {behaviorInsights ? (
-                  <div className="space-y-6">
-                    {/* Career Archetype */}
-                    {behaviorInsights.career_archetype && (
-                      <div className="p-4 rounded-xl bg-gradient-to-r from-primary/10 to-accent/10 border border-primary/20 text-center">
-                        <p className="font-body text-xs text-muted-foreground mb-1">Your Career Archetype</p>
-                        <p className="font-display text-2xl text-foreground">{behaviorInsights.career_archetype}</p>
-                      </div>
-                    )}
-
-                    {/* Cognitive Style & Motivation */}
-                    <div className="grid md:grid-cols-2 gap-4">
-                      {behaviorInsights.cognitive_style && (
-                        <div className="p-4 rounded-lg border border-border">
-                          <p className="font-body text-xs text-muted-foreground mb-1">Cognitive Style</p>
-                          <p className="font-body text-sm font-medium">{behaviorInsights.cognitive_style}</p>
-                        </div>
-                      )}
-                      {behaviorInsights.motivation_type && (
-                        <div className="p-4 rounded-lg border border-border">
-                          <p className="font-body text-xs text-muted-foreground mb-1">Motivation Type</p>
-                          <p className="font-body text-sm font-medium">{behaviorInsights.motivation_type}</p>
-                        </div>
-                      )}
                     </div>
+                  )}
 
-                    {/* Ideal Work Environment */}
-                    {behaviorInsights.ideal_work_environment && (
-                      <div className="p-4 rounded-lg border border-border">
-                        <p className="font-body text-xs text-muted-foreground mb-1">Ideal Work Environment</p>
-                        <p className="font-body text-sm">{behaviorInsights.ideal_work_environment}</p>
+                  {/* Behavioral Details Card */}
+                  <div className="bg-white rounded-3xl border border-border shadow-xl p-6 sm:p-8 relative overflow-hidden space-y-6">
+                    <div className="absolute inset-0 bg-gradient-to-b from-primary/[0.01] to-transparent pointer-events-none" />
+                    <div className="relative z-10 space-y-6">
+                      <div className="space-y-1">
+                        <h3 className="font-display text-base font-bold text-foreground flex items-center gap-2">
+                          <Activity className="text-primary" size={18} />
+                          Behavioral Blueprint Insights
+                        </h3>
+                        <p className="font-body text-xs text-muted-foreground">Mindset calibration mapping response speed, skipping patterns, and active choices.</p>
                       </div>
-                    )}
 
-                    {/* Behavioral Patterns */}
-                    {behaviorInsights.behavioral_patterns?.length > 0 && (
-                      <div>
-                        <h4 className="font-display text-sm mb-3">Patterns Detected</h4>
-                        <div className="space-y-3">
-                          {behaviorInsights.behavioral_patterns.map((bp: any, i: number) => (
-                            <div key={i} className="flex items-start gap-3 p-3 rounded-lg bg-muted/30">
-                              <div className={`w-2 h-2 rounded-full mt-1.5 shrink-0 ${bp.strength === "strong" ? "bg-success" : bp.strength === "moderate" ? "bg-accent" : "bg-primary"}`} />
-                              <div>
-                                <p className="font-body text-sm font-medium">{bp.pattern}</p>
-                                <p className="font-body text-xs text-muted-foreground">{bp.interpretation}</p>
+                      {behaviorInsights ? (
+                        <div className="space-y-6 pt-1">
+                          {/* Career Archetype */}
+                          {behaviorInsights.career_archetype && (
+                            <div className="p-5 rounded-2xl bg-gradient-to-r from-primary/5 to-accent/5 border border-primary/10 text-center space-y-1.5 shadow-inner">
+                              <p className="font-body text-[10px] text-muted-foreground uppercase tracking-wider font-extrabold">Behavioral Career Archetype</p>
+                              <p className="font-display text-xl sm:text-2xl font-extrabold text-primary">{behaviorInsights.career_archetype}</p>
+                            </div>
+                          )}
+
+                          {/* Cognitive Style & Motivation */}
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            {behaviorInsights.cognitive_style && (
+                              <div className="p-4 rounded-2xl border border-border bg-muted/10 space-y-1.5">
+                                <p className="font-body text-[10px] text-muted-foreground font-extrabold uppercase tracking-wide">Cognitive Profile</p>
+                                <p className="font-body text-xs sm:text-sm font-semibold text-foreground">{behaviorInsights.cognitive_style}</p>
+                              </div>
+                            )}
+                            {behaviorInsights.motivation_type && (
+                              <div className="p-4 rounded-2xl border border-border bg-muted/10 space-y-1.5">
+                                <p className="font-body text-[10px] text-muted-foreground font-extrabold uppercase tracking-wide">Primary Motivator</p>
+                                <p className="font-body text-xs sm:text-sm font-semibold text-foreground">{behaviorInsights.motivation_type}</p>
+                              </div>
+                            )}
+                          </div>
+
+                          {/* Ideal Work Environment */}
+                          {behaviorInsights.ideal_work_environment && (
+                            <div className="p-4 rounded-2xl border border-border bg-muted/10 space-y-1.5">
+                              <p className="font-body text-[10px] text-muted-foreground font-extrabold uppercase tracking-wide">Optimized Work Environment</p>
+                              <p className="font-body text-xs sm:text-sm text-foreground leading-relaxed">{behaviorInsights.ideal_work_environment}</p>
+                            </div>
+                          )}
+
+                          {/* Behavioral Patterns */}
+                          {behaviorInsights.behavioral_patterns?.length > 0 && (
+                            <div className="space-y-4">
+                              <h4 className="font-display text-xs font-bold uppercase tracking-wider text-foreground">Signals Detected</h4>
+                              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                {behaviorInsights.behavioral_patterns.map((bp: any, i: number) => {
+                                  const isStrong = bp.strength === "strong";
+                                  const isModerate = bp.strength === "moderate";
+                                  return (
+                                    <div key={i} className={`flex items-start gap-3.5 p-4 rounded-2xl bg-white border shadow-sm transition-all hover:shadow-md
+                                      ${isStrong ? "border-emerald-500/20" : isModerate ? "border-primary/20" : "border-border/80"}`}
+                                    >
+                                      <div className={`w-2 h-2 rounded-full mt-1.5 shrink-0
+                                        ${isStrong ? "bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)]" : isModerate ? "bg-primary shadow-[0_0_8px_rgba(85,0,203,0.3)]" : "bg-muted-foreground"}`}
+                                      />
+                                      <div className="min-w-0 space-y-1">
+                                        <p className="font-body text-xs sm:text-sm font-bold text-foreground">{bp.pattern}</p>
+                                        <p className="font-body text-[11px] text-muted-foreground leading-relaxed">{bp.interpretation}</p>
+                                      </div>
+                                    </div>
+                                  );
+                                })}
                               </div>
                             </div>
-                          ))}
+                          )}
+
+                          {/* Action Buttons */}
+                          <div className="flex flex-col sm:flex-row gap-4 pt-4 border-t border-border/40">
+                            <Button
+                              onClick={() => { setTab("insights"); getAIRecommendations(); }}
+                              variant="outline"
+                              size="sm"
+                              className="flex-1 text-xs h-11 rounded-full font-body font-bold border-border/80 hover:bg-muted/10 bg-white"
+                            >
+                              <Sparkles size={14} className="mr-1.5 text-primary animate-pulse" /> Synthesis Intelligence Report
+                            </Button>
+                            <Button
+                              onClick={async () => {
+                                if (behaviorInsights.areas_of_resonance) {
+                                  await recordMultipleSignals("curiosity_compass", behaviorInsights.areas_of_resonance, "domain_interest", 0.8);
+                                }
+                                if (behaviorInsights.career_archetype) {
+                                  await recordSignal("curiosity_compass", behaviorInsights.career_archetype, "preference", 0.9);
+                                }
+                                toast.success("Transferring insights to AI Roadmaps...");
+                                navigate("/dashboard/roadmap?source=behavior_analysis");
+                              }}
+                              size="sm"
+                              className="flex-1 text-xs h-11 rounded-full font-body font-bold bg-primary text-white hover:bg-[#4300a3]"
+                            >
+                              <Route size={14} className="mr-1.5" /> Construct AI Career Roadmap
+                            </Button>
+                          </div>
+                        </div>
+                      ) : (
+                        <div className="text-center py-8 space-y-4">
+                          <div className="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center mx-auto">
+                            <Activity className="text-primary w-6 h-6" />
+                          </div>
+                          <div className="space-y-1">
+                            <h4 className="font-display text-sm font-bold text-foreground">Telemetry Analysis Available</h4>
+                            <p className="font-body text-xs text-muted-foreground max-w-xs mx-auto leading-relaxed">
+                              Obtain detailed behavioral profiling by analyzing decision speed, choice depth, and active interests.
+                            </p>
+                          </div>
+                          <Button 
+                            size="sm" 
+                            onClick={getBehaviorInsights} 
+                            disabled={aiLoading} 
+                            className="text-xs rounded-full px-6 h-10 bg-primary text-white font-body font-bold shadow-md transition-all hover:bg-[#4300a3]"
+                          >
+                            {aiLoading ? "Analyzing Telemetry..." : "Analyze My Behavior"}
+                          </Button>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Strengths & Growth Areas Card Grid */}
+                  {conclusion && (
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 w-full">
+                      <div className="bg-white rounded-3xl border border-border shadow-xl p-6 relative overflow-hidden flex flex-col justify-between">
+                        <div className="absolute inset-0 bg-gradient-to-b from-emerald-500/[0.01] to-transparent pointer-events-none" />
+                        <div className="relative z-10 space-y-4">
+                          <h3 className="font-display text-base font-bold text-emerald-600 flex items-center gap-2">
+                            <Trophy size={18} /> core Strengths
+                          </h3>
+                          <div className="space-y-2 pt-1">
+                            {(conclusion.strengths || []).map((s: string, i: number) => (
+                              <div key={i} className="flex items-start gap-2.5 p-2 bg-emerald-500/[0.03] rounded-xl border border-emerald-500/10 text-foreground font-body text-xs leading-relaxed">
+                                <span className="text-emerald-500 mt-0.5 font-bold">✓</span>
+                                <span>{s}</span>
+                              </div>
+                            ))}
+                            {!(conclusion.strengths?.length) && (
+                              <p className="font-body text-xs text-muted-foreground">Complete assessments to unlock strength mapping.</p>
+                            )}
+                          </div>
                         </div>
                       </div>
-                    )}
 
-                    {/* Areas of Resonance & Blind Spots */}
-                    <div className="grid md:grid-cols-2 gap-4">
-                      {behaviorInsights.areas_of_resonance?.length > 0 && (
-                        <div>
-                          <h4 className="font-display text-sm mb-2 flex items-center gap-2"><TrendingUp size={14} className="text-success" /> Areas of Resonance</h4>
-                          <div className="flex flex-wrap gap-1.5">
-                            {behaviorInsights.areas_of_resonance.map((a: string, i: number) => <Badge key={i} variant="secondary">{a}</Badge>)}
+                      <div className="bg-white rounded-3xl border border-border shadow-xl p-6 relative overflow-hidden flex flex-col justify-between">
+                        <div className="absolute inset-0 bg-gradient-to-b from-amber-500/[0.01] to-transparent pointer-events-none" />
+                        <div className="relative z-10 space-y-4">
+                          <h3 className="font-display text-base font-bold text-amber-600 flex items-center gap-2">
+                            <Lightbulb size={18} /> Development Edges
+                          </h3>
+                          <div className="space-y-2 pt-1">
+                            {(conclusion.growth_areas || []).map((s: string, i: number) => (
+                              <div key={i} className="flex items-start gap-2.5 p-2 bg-amber-500/[0.03] rounded-xl border border-amber-500/10 text-foreground font-body text-xs leading-relaxed">
+                                <span className="text-amber-500 mt-0.5 font-bold">✦</span>
+                                <span>{s}</span>
+                              </div>
+                            ))}
+                            {!(conclusion.growth_areas?.length) && (
+                              <p className="font-body text-xs text-muted-foreground">Complete assessments to unlock expansion areas.</p>
+                            )}
                           </div>
                         </div>
-                      )}
-                      {behaviorInsights.blind_spots?.length > 0 && (
-                        <div>
-                          <h4 className="font-display text-sm mb-2 flex items-center gap-2"><Eye size={14} className="text-warmth" /> Blind Spots</h4>
-                          <div className="flex flex-wrap gap-1.5">
-                            {behaviorInsights.blind_spots.map((b: string, i: number) => <Badge key={i} variant="outline">{b}</Badge>)}
-                          </div>
-                        </div>
-                      )}
+                      </div>
                     </div>
+                  )}
+                </TabsContent>
 
-                    {/* ACTION BUTTONS: Generate Insights & Create AI Roadmaps */}
-                    <div className="flex flex-col sm:flex-row gap-3 pt-4 border-t border-border">
-                      <Button
-                        onClick={() => { setTab("insights"); getAIRecommendations(); }}
-                        variant="outline"
-                        className="flex-1 gap-2"
-                      >
-                        <Sparkles size={16} /> Generate Insights
-                      </Button>
-                      <Button
-                        onClick={async () => {
-                          // Record behavior signals, then navigate to roadmap
-                          if (behaviorInsights.areas_of_resonance) {
-                            await recordMultipleSignals("curiosity_compass", behaviorInsights.areas_of_resonance, "domain_interest", 0.8);
-                          }
-                          if (behaviorInsights.career_archetype) {
-                            await recordSignal("curiosity_compass", behaviorInsights.career_archetype, "preference", 0.9);
-                          }
-                          toast.success("Transferring insights to AI Roadmaps...");
-                          navigate("/dashboard/roadmap?source=behavior_analysis");
-                        }}
-                        className="flex-1 gap-2"
-                      >
-                        <Route size={16} /> Create AI Roadmaps
-                      </Button>
-                    </div>
-                  </div>
-                ) : (
-                  <div className="text-center py-8">
-                    <Activity className="mx-auto text-muted-foreground mb-3" size={40} />
-                    <p className="font-body text-muted-foreground mb-4">Get a deep behavioral analysis based on your exploration patterns</p>
-                    <Button onClick={getBehaviorInsights} disabled={aiLoading}>
-                      {aiLoading ? "Analyzing..." : "Analyze My Behavior"}
-                    </Button>
-                  </div>
-                )}
-              </CardContent>
-            </Card>
-          </TabsContent>
-        </Tabs>
-      )}
+              </div>
+            )}
+          </main>
 
-      {/* Global persistent action card removed — actions now live inside each Compass sub-page (Story/Challenge/Visual/Cards) and the Insights & Behavior tabs. */}
+
+
+        </div>
+      </Tabs>
     </div>
   );
 };

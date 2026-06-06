@@ -184,140 +184,150 @@ const CareerCardDeck = () => {
   return (
     <div className="space-y-6">
       {/* Stats Bar */}
-      <div className="flex items-center justify-between flex-wrap gap-3">
-        <div className="flex items-center gap-3 sm:gap-4 flex-wrap">
-          <div className="flex items-center gap-1.5 text-sm">
-            <ThumbsUp size={14} className="text-primary" /> <span className="font-body text-muted-foreground">{stats.liked}</span>
-          </div>
-          <div className="flex items-center gap-1.5 text-sm">
-            <Heart size={14} className="text-terracotta" /> <span className="font-body text-muted-foreground">{stats.loved}</span>
-          </div>
-          <div className="flex items-center gap-1.5 text-sm">
-            <Bookmark size={14} className="text-blue-primary" /> <span className="font-body text-muted-foreground">{stats.bookmarked}</span>
-          </div>
-          <div className="flex items-center gap-1.5 text-sm">
-            <XCircle size={14} className="text-grey-meta" /> <span className="font-body text-muted-foreground">{stats.skipped}</span>
-          </div>
+      <div className="bg-card border border-border rounded-2xl p-4 shadow-sm flex items-center justify-between flex-wrap gap-3">
+        <div className="flex items-center gap-4">
+          <span className="flex items-center gap-1.5 text-xs text-muted-foreground">
+            <Heart size={14} className="text-terracotta fill-terracotta" />
+            <span className="font-body font-semibold text-foreground">{stats.loved}</span> loved
+          </span>
+          <span className="flex items-center gap-1.5 text-xs text-muted-foreground">
+            <ThumbsUp size={14} className="text-primary fill-primary/10" />
+            <span className="font-body font-semibold text-foreground">{stats.liked}</span> liked
+          </span>
+          <span className="flex items-center gap-1.5 text-xs text-muted-foreground">
+            <Bookmark size={14} className="text-blue-500 fill-blue-500/10" />
+            <span className="font-body font-semibold text-foreground">{stats.bookmarked}</span> saved
+          </span>
+          <span className="flex items-center gap-1.5 text-xs text-muted-foreground">
+            <XCircle size={14} className="text-muted-foreground" />
+            <span className="font-body font-semibold text-foreground">{stats.skipped}</span> skipped
+          </span>
         </div>
         {interactionCount >= 3 && !showBlueprint && (
-          <Button size="sm" variant="outline" onClick={runAnalysis} disabled={analyzing}>
-            {analyzing ? <><Loader2 size={14} className="mr-2 animate-spin" /> Analyzing...</> : <><Brain size={14} className="mr-2" /> Analyze My Choices</>}
+          <Button size="sm" variant="outline" onClick={runAnalysis} disabled={analyzing} className="h-8 text-xs rounded-full px-4 border-primary/20 hover:bg-primary/5 hover:text-primary">
+            {analyzing ? <><Loader2 size={12} className="mr-1.5 animate-spin" /> Analyzing...</> : <><Brain size={12} className="mr-1.5" /> Analyze Vibes</>}
           </Button>
         )}
       </div>
 
-      {/* Domain Filter (multi-select dropdown) */}
-      <div className="flex items-center gap-2 flex-wrap">
-        <span className="font-body text-xs text-muted-foreground">Filter by domain:</span>
-        <MultiSelect
-          options={domains}
-          selected={filterDomains}
-          onChange={(next) => { setFilterDomains(next); setCurrentIndex(0); }}
-          label="domains"
-          placeholder="All domains"
-          totalCount={paths.length}
-        />
-      </div>
-
-      {/* Progress */}
-      <div className="flex items-center justify-between">
-        <span className="font-body text-sm text-muted-foreground">Card {currentIndex + 1} of {filtered.length}</span>
-        <div className="flex gap-1">
-          {filtered.slice(Math.max(0, currentIndex - 3), currentIndex + 4).map((_, i) => {
-            const idx = Math.max(0, currentIndex - 3) + i;
-            return <div key={idx} className={`w-2 h-2 rounded-full transition-colors ${idx === currentIndex ? "bg-primary" : interactions[filtered[idx]?.id] ? "bg-accent" : "bg-muted"}`} />;
-          })}
+      {/* Domain Filter & Progress Card */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-center bg-card/60 border border-border rounded-2xl p-4 shadow-sm">
+        <div className="flex items-center gap-2">
+          <span className="font-body text-xs text-muted-foreground shrink-0">Filter by domain:</span>
+          <MultiSelect
+            options={domains}
+            selected={filterDomains}
+            onChange={(next) => { setFilterDomains(next); setCurrentIndex(0); }}
+            label="domains"
+            placeholder="All domains"
+            totalCount={paths.length}
+          />
+        </div>
+        <div className="flex items-center justify-between gap-4 md:justify-end">
+          <span className="font-body text-xs text-muted-foreground">Card {currentIndex + 1} of {filtered.length}</span>
+          <div className="flex gap-1 shrink-0">
+            {filtered.slice(Math.max(0, currentIndex - 3), currentIndex + 4).map((_, i) => {
+              const idx = Math.max(0, currentIndex - 3) + i;
+              return <div key={idx} className={`w-1.5 h-1.5 rounded-full transition-all duration-300 ${idx === currentIndex ? "bg-primary w-3" : interactions[filtered[idx]?.id] ? "bg-primary/45" : "bg-muted"}`} />;
+            })}
+          </div>
         </div>
       </div>
 
       {/* Card */}
       <AnimatePresence mode="wait">
         {current && (
-          <motion.div key={current.id} initial={{ opacity: 0, x: 40 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -40 }} transition={{ duration: 0.25 }}>
-            <Card className={`overflow-hidden transition-all ${
-              interactions[current.id] === "love" ? "border-terracotta/50 ring-1 ring-terracotta/20" :
-              interactions[current.id] === "like" ? "border-primary/50 ring-1 ring-primary/20" :
-              interactions[current.id] === "bookmark" ? "border-blue-primary/50 ring-1 ring-blue-primary/20" :
-              interactions[current.id] === "not_for_me" ? "opacity-60" : ""
+          <motion.div key={current.id} initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -15 }} transition={{ duration: 0.25 }}>
+            <Card className={`overflow-hidden transition-all duration-300 rounded-2xl border shadow-md hover:shadow-lg ${
+              interactions[current.id] === "love" ? "border-terracotta/40 ring-1 ring-terracotta/10" :
+              interactions[current.id] === "like" ? "border-primary/40 ring-1 ring-primary/10" :
+              interactions[current.id] === "bookmark" ? "border-blue-500/40 ring-1 ring-blue-500/10" :
+              interactions[current.id] === "not_for_me" ? "opacity-75" : ""
             }`}>
+              
               {/* Header */}
-              <div className="bg-gradient-to-r from-primary/10 via-accent/5 to-transparent p-6">
+              <div className="bg-gradient-to-r from-primary/5 via-accent/5 to-transparent p-6 border-b border-border/40">
                 <div className="flex items-start gap-4">
-                  <span className="text-4xl">{current.icon_emoji || "💼"}</span>
-                  <div className="flex-1 min-w-0">
-                    <h2 className="font-display text-2xl text-foreground">{current.title}</h2>
-                    <div className="flex flex-wrap gap-1.5 mt-1.5">
-                      <Badge variant="secondary">🌐 {current.domain}</Badge>
-                      {current.industry && <Badge variant="secondary">🏭 {current.industry}</Badge>}
-                      {current.sector && <Badge variant="secondary">📊 {current.sector}</Badge>}
-                      {current.difficulty && <Badge variant="outline">{current.difficulty}</Badge>}
-                      {current.demand_level && <Badge variant="outline">📈 {current.demand_level}</Badge>}
-                      {current.avg_salary_usd && <Badge variant="outline">💰 {current.avg_salary_usd}</Badge>}
+                  <div className="w-14 h-14 rounded-2xl bg-card border border-border flex items-center justify-center text-3xl shadow-sm shrink-0">
+                    {current.icon_emoji || "💼"}
+                  </div>
+                  <div className="flex-1 min-w-0 space-y-1">
+                    <h2 className="font-display text-lg font-bold text-foreground leading-snug">{current.title}</h2>
+                    <div className="flex flex-wrap gap-1.5 mt-1">
+                      <Badge variant="secondary" className="px-2 py-0.5 text-[10px]">🌐 {current.domain}</Badge>
+                      {current.industry && <Badge variant="secondary" className="px-2 py-0.5 text-[10px]">🏭 {current.industry}</Badge>}
+                      {current.sector && <Badge variant="secondary" className="px-2 py-0.5 text-[10px]">📊 {current.sector}</Badge>}
+                      {current.difficulty && <Badge variant="outline" className="px-2 py-0.5 text-[10px]">{current.difficulty}</Badge>}
+                      {current.demand_level && <Badge variant="outline" className="px-2 py-0.5 text-[10px]">📈 {current.demand_level}</Badge>}
+                      {current.avg_salary_usd && <Badge variant="outline" className="px-2 py-0.5 text-[10px]">💰 {current.avg_salary_usd}</Badge>}
                     </div>
                   </div>
                 </div>
               </div>
 
-              <CardContent className="pt-4 space-y-5">
+              <CardContent className="p-3.5 sm:p-6 space-y-4 sm:space-y-5">
                 {/* Description */}
                 {current.description && (
-                  <p className="font-body text-sm text-foreground leading-relaxed">{current.description}</p>
+                  <p className="font-body text-sm text-foreground leading-relaxed whitespace-pre-line">{current.description}</p>
                 )}
 
                 {/* Key Info Grid */}
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
                   {current.salary_range && (
-                    <div className="p-3 rounded-lg bg-muted/30 border border-border">
-                      <div className="flex items-center gap-2 mb-1">
-                        <DollarSign size={14} className="text-accent-foreground" />
-                        <span className="font-body text-xs text-muted-foreground">Salary</span>
+                    <div className="p-3.5 rounded-xl bg-card border border-border/60 space-y-0.5 shadow-sm">
+                      <div className="flex items-center gap-1.5">
+                        <DollarSign size={13} className="text-accent-foreground" />
+                        <span className="font-body text-[10px] text-muted-foreground uppercase tracking-wider font-semibold">Salary Range</span>
                       </div>
-                      <p className="font-display text-sm text-foreground">{current.salary_range}</p>
+                      <p className="font-display text-xs font-bold text-foreground">{current.salary_range}</p>
                     </div>
                   )}
                   {current.demand_level && (
-                    <div className="p-3 rounded-lg bg-muted/30 border border-border">
-                      <div className="flex items-center gap-2 mb-1">
-                        <TrendingUp size={14} className={demandColor(current.demand_level)} />
-                        <span className="font-body text-xs text-muted-foreground">Demand</span>
+                    <div className="p-3.5 rounded-xl bg-card border border-border/60 space-y-0.5 shadow-sm">
+                      <div className="flex items-center gap-1.5">
+                        <TrendingUp size={13} className={demandColor(current.demand_level)} />
+                        <span className="font-body text-[10px] text-muted-foreground uppercase tracking-wider font-semibold">Market Demand</span>
                       </div>
-                      <p className={`font-display text-sm ${demandColor(current.demand_level)}`}>{current.demand_level}</p>
+                      <p className={`font-display text-xs font-bold ${demandColor(current.demand_level)}`}>{current.demand_level}</p>
                     </div>
                   )}
                   {current.growth_trajectory && (
-                    <div className="p-3 rounded-lg bg-muted/30 border border-border">
-                      <div className="flex items-center gap-2 mb-1">
-                        <Zap size={14} className="text-primary" />
-                        <span className="font-body text-xs text-muted-foreground">Growth</span>
+                    <div className="p-3.5 rounded-xl bg-card border border-border/60 space-y-0.5 shadow-sm">
+                      <div className="flex items-center gap-1.5">
+                        <Zap size={13} className="text-primary" />
+                        <span className="font-body text-[10px] text-muted-foreground uppercase tracking-wider font-semibold">Growth Potential</span>
                       </div>
-                      <p className="font-display text-sm text-foreground">{current.growth_trajectory}</p>
+                      <p className="font-display text-xs font-bold text-foreground">{current.growth_trajectory}</p>
                     </div>
                   )}
                 </div>
 
                 {/* Day in the life */}
                 {current.day_to_day && (
-                  <div className="p-4 rounded-lg bg-secondary border border-border">
-                    <div className="flex items-center gap-2 mb-2">
+                  <div className="p-4 rounded-2xl bg-muted/30 border border-border/50">
+                    <div className="flex items-center gap-2 mb-1.5">
                       <Clock size={14} className="text-primary" />
-                      <span className="font-display text-sm text-foreground">A Typical Day</span>
+                      <span className="font-display text-xs font-semibold text-foreground uppercase tracking-wider">A Typical Day</span>
                     </div>
-                    <p className="font-body text-sm text-muted-foreground leading-relaxed">{current.day_to_day}</p>
+                    <p className="font-body text-xs text-muted-foreground leading-relaxed">{current.day_to_day}</p>
                   </div>
                 )}
 
-                {/* Expandable sections */}
-                <button onClick={() => setExpanded(!expanded)} className="w-full text-center font-body text-sm text-primary hover:underline py-1">
-                  {expanded ? "Show less ↑" : "Show more details ↓"}
+                {/* Expandable CTA */}
+                <button
+                  onClick={() => setExpanded(!expanded)}
+                  className="w-full text-center font-body text-xs text-primary font-medium hover:underline py-1.5 border-t border-border/20"
+                >
+                  {expanded ? "Collapse detailed breakdown ↑" : "Reveal detailed requirements (skills, trends, courses) ↓"}
                 </button>
 
                 <AnimatePresence>
                   {expanded && (
-                    <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} exit={{ height: 0, opacity: 0 }} className="space-y-4 overflow-hidden">
+                    <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} exit={{ height: 0, opacity: 0 }} className="space-y-4 overflow-hidden pt-2">
                       {/* Skills */}
                       {current.related_skills && current.related_skills.length > 0 && (
-                        <div>
-                          <h4 className="font-display text-sm mb-2 flex items-center gap-2"><Brain size={14} className="text-primary" /> Skills Required</h4>
+                        <div className="space-y-1.5">
+                          <h4 className="font-display text-xs font-semibold flex items-center gap-1.5 text-foreground"><Brain size={13} className="text-primary" /> Skills Required</h4>
                           <div className="flex flex-wrap gap-1.5">
                             {current.related_skills.map(s => <Badge key={s} variant="outline" className="text-xs">{s}</Badge>)}
                           </div>
@@ -326,8 +336,8 @@ const CareerCardDeck = () => {
 
                       {/* Tools */}
                       {current.tools_certifications && current.tools_certifications.length > 0 && (
-                        <div>
-                          <h4 className="font-display text-sm mb-2 flex items-center gap-2"><Star size={14} className="text-accent-foreground" /> Tools & Certifications</h4>
+                        <div className="space-y-1.5">
+                          <h4 className="font-display text-xs font-semibold flex items-center gap-1.5 text-foreground"><Star size={13} className="text-accent-foreground" /> Tools & Certifications</h4>
                           <div className="flex flex-wrap gap-1.5">
                             {current.tools_certifications.map(t => <Badge key={t} variant="secondary" className="text-xs">{t}</Badge>)}
                           </div>
@@ -336,19 +346,19 @@ const CareerCardDeck = () => {
 
                       {/* Industry Trends */}
                       {current.industry_trends && (
-                        <div className="p-4 rounded-lg bg-accent/10 border border-accent/20">
-                          <div className="flex items-center gap-2 mb-2">
-                            <TrendingUp size={14} className="text-accent-foreground" />
-                            <span className="font-display text-sm text-foreground">Industry Trends</span>
+                        <div className="p-3.5 rounded-xl bg-accent/5 border border-accent/15 space-y-1.5">
+                          <div className="flex items-center gap-2">
+                            <TrendingUp size={13} className="text-accent-foreground" />
+                            <span className="font-display text-xs font-semibold text-foreground uppercase tracking-wider">Industry Trends</span>
                           </div>
-                          <p className="font-body text-sm text-muted-foreground">{current.industry_trends}</p>
+                          <p className="font-body text-xs text-muted-foreground leading-relaxed">{current.industry_trends}</p>
                         </div>
                       )}
 
                       {/* Soft Skills */}
                       {current.soft_skills && current.soft_skills.length > 0 && (
-                        <div>
-                          <h4 className="font-display text-sm mb-2">💬 Soft Skills</h4>
+                        <div className="space-y-1.5">
+                          <h4 className="font-display text-xs font-semibold flex items-center gap-1.5 text-foreground">💬 Soft Skills</h4>
                           <div className="flex flex-wrap gap-1.5">
                             {current.soft_skills.map(s => <Badge key={s} variant="outline" className="text-xs">{s}</Badge>)}
                           </div>
@@ -357,8 +367,8 @@ const CareerCardDeck = () => {
 
                       {/* Interests */}
                       {current.interests && current.interests.length > 0 && (
-                        <div>
-                          <h4 className="font-display text-sm mb-2">✨ You'll love this if you're interested in</h4>
+                        <div className="space-y-1.5">
+                          <h4 className="font-display text-xs font-semibold flex items-center gap-1.5 text-foreground">✨ Fit indicators</h4>
                           <div className="flex flex-wrap gap-1.5">
                             {current.interests.map(s => <Badge key={s} variant="secondary" className="text-xs">{s}</Badge>)}
                           </div>
@@ -367,8 +377,8 @@ const CareerCardDeck = () => {
 
                       {/* Countries in demand */}
                       {current.countries_in_demand && current.countries_in_demand.length > 0 && (
-                        <div>
-                          <h4 className="font-display text-sm mb-2">🌍 Countries in Demand</h4>
+                        <div className="space-y-1.5">
+                          <h4 className="font-display text-xs font-semibold flex items-center gap-1.5 text-foreground">🌍 Global Demand Locations</h4>
                           <div className="flex flex-wrap gap-1.5">
                             {current.countries_in_demand.map(c => <Badge key={c} variant="outline" className="text-xs">{c}</Badge>)}
                           </div>
@@ -377,8 +387,8 @@ const CareerCardDeck = () => {
 
                       {/* Related job roles */}
                       {current.related_job_roles && current.related_job_roles.length > 0 && (
-                        <div>
-                          <h4 className="font-display text-sm mb-2">👔 Related Job Roles</h4>
+                        <div className="space-y-1.5">
+                          <h4 className="font-display text-xs font-semibold flex items-center gap-1.5 text-foreground">👔 Related Job Titles</h4>
                           <div className="flex flex-wrap gap-1.5">
                             {current.related_job_roles.map(r => <Badge key={r} variant="outline" className="text-xs">{r}</Badge>)}
                           </div>
@@ -387,8 +397,8 @@ const CareerCardDeck = () => {
 
                       {/* Related subjects */}
                       {current.related_subjects && current.related_subjects.length > 0 && (
-                        <div>
-                          <h4 className="font-display text-sm mb-2">📚 Related Subjects</h4>
+                        <div className="space-y-1.5">
+                          <h4 className="font-display text-xs font-semibold flex items-center gap-1.5 text-foreground">📚 Related Academic Subjects</h4>
                           <div className="flex flex-wrap gap-1.5">
                             {current.related_subjects.map(s => <Badge key={s} variant="outline" className="text-xs">{s}</Badge>)}
                           </div>
@@ -397,8 +407,8 @@ const CareerCardDeck = () => {
 
                       {/* Related universities */}
                       {current.related_universities && current.related_universities.length > 0 && (
-                        <div>
-                          <h4 className="font-display text-sm mb-2">🎓 Related Universities</h4>
+                        <div className="space-y-1.5">
+                          <h4 className="font-display text-xs font-semibold flex items-center gap-1.5 text-foreground">🎓 Key Target Universities</h4>
                           <div className="flex flex-wrap gap-1.5">
                             {current.related_universities.slice(0, 12).map(u => <Badge key={u} variant="outline" className="text-xs">{u}</Badge>)}
                           </div>
@@ -407,8 +417,8 @@ const CareerCardDeck = () => {
 
                       {/* Related courses */}
                       {current.related_courses && current.related_courses.length > 0 && (
-                        <div>
-                          <h4 className="font-display text-sm mb-2">💻 Related Courses</h4>
+                        <div className="space-y-1.5">
+                          <h4 className="font-display text-xs font-semibold flex items-center gap-1.5 text-foreground">💻 Suggested Learning Courses</h4>
                           <div className="flex flex-wrap gap-1.5">
                             {current.related_courses.slice(0, 12).map(c => <Badge key={c} variant="outline" className="text-xs">{c}</Badge>)}
                           </div>
@@ -418,49 +428,36 @@ const CareerCardDeck = () => {
                   )}
                 </AnimatePresence>
 
-                {/* Action Buttons */}
-                <div className="grid grid-cols-4 gap-2 pt-2">
-                  <Button
-                    variant={interactions[current.id] === "like" ? "default" : "outline"}
-                    className="flex flex-col items-center gap-1 h-auto py-3"
-                    onClick={() => handleInteraction(current.id, "like")}
-                  >
-                    <ThumbsUp size={18} className={interactions[current.id] === "like" ? "fill-current" : ""} />
-                    <span className="text-xs">Like</span>
-                  </Button>
-                  <Button
-                    variant={interactions[current.id] === "love" ? "default" : "outline"}
-                    className={`flex flex-col items-center gap-1 h-auto py-3 ${interactions[current.id] === "love" ? "bg-terracotta hover:bg-terracotta/90 border-terracotta" : ""}`}
-                    onClick={() => handleInteraction(current.id, "love")}
-                  >
-                    <Heart size={18} className={interactions[current.id] === "love" ? "fill-current" : ""} />
-                    <span className="text-xs">Love</span>
-                  </Button>
-                  <Button
-                    variant={interactions[current.id] === "bookmark" ? "default" : "outline"}
-                    className={`flex flex-col items-center gap-1 h-auto py-3 ${interactions[current.id] === "bookmark" ? "bg-[hsl(var(--blue-primary))] hover:bg-[hsl(var(--blue-primary))]/90 border-[hsl(var(--blue-primary))]" : ""}`}
-                    onClick={() => handleInteraction(current.id, "bookmark")}
-                  >
-                    <Bookmark size={18} className={interactions[current.id] === "bookmark" ? "fill-current" : ""} />
-                    <span className="text-xs">Save</span>
-                  </Button>
-                  <Button
-                    variant={interactions[current.id] === "not_for_me" ? "default" : "outline"}
-                    className={`flex flex-col items-center gap-1 h-auto py-3 ${interactions[current.id] === "not_for_me" ? "bg-muted-foreground hover:bg-muted-foreground/90" : ""}`}
-                    onClick={() => handleInteraction(current.id, "not_for_me")}
-                  >
-                    <XCircle size={18} />
-                    <span className="text-xs">Not me</span>
-                  </Button>
+                {/* Interaction Buttons */}
+                <div className="grid grid-cols-4 gap-1 sm:gap-2 pt-4 border-t border-border/50 font-body">
+                  {([
+                    { type: "like" as InteractionType, icon: ThumbsUp, label: "Like", activeClass: "bg-primary hover:bg-primary/90 border-primary text-primary-foreground font-semibold" },
+                    { type: "love" as InteractionType, icon: Heart, label: "Love", activeClass: "bg-terracotta hover:bg-terracotta/90 border-terracotta text-primary-foreground font-semibold" },
+                    { type: "bookmark" as InteractionType, icon: Bookmark, label: "Save", activeClass: "bg-blue-500 hover:bg-blue-600 border-blue-500 text-white font-semibold" },
+                    { type: "not_for_me" as InteractionType, icon: XCircle, label: "Not Me", activeClass: "bg-muted-foreground hover:bg-muted-foreground/90 text-primary-foreground font-semibold" },
+                  ]).map(btn => {
+                    const active = interactions[current.id] === btn.type;
+                    return (
+                      <Button
+                        key={btn.type}
+                        variant={active ? "default" : "outline"}
+                        className={`flex flex-col items-center gap-1.5 h-auto py-2 sm:py-2.5 px-0.5 sm:px-2 rounded-xl transition-all ${active ? btn.activeClass : "border-border/80 hover:bg-muted/40 hover:border-primary/30"}`}
+                        onClick={() => handleInteraction(current.id, btn.type)}
+                      >
+                        <btn.icon size={16} className={active ? "fill-current" : ""} />
+                        <span className="text-[10px] uppercase tracking-wider">{btn.label}</span>
+                      </Button>
+                    );
+                  })}
                 </div>
 
-                {/* Navigation */}
-                <div className="flex justify-between pt-2">
-                  <Button variant="ghost" size="sm" onClick={() => { setCurrentIndex(Math.max(0, currentIndex - 1)); setExpanded(false); }} disabled={currentIndex === 0}>
-                    <ChevronLeft size={16} className="mr-1" /> Previous
+                {/* Navigation Controls */}
+                <div className="flex justify-between pt-1 border-t border-border/10">
+                  <Button variant="ghost" size="sm" onClick={() => { setCurrentIndex(Math.max(0, currentIndex - 1)); setExpanded(false); }} disabled={currentIndex === 0} className="text-xs rounded-full h-[36px] px-4">
+                    <ChevronLeft size={14} className="mr-1.5" /> Previous
                   </Button>
-                  <Button variant="ghost" size="sm" onClick={() => { setCurrentIndex(Math.min(filtered.length - 1, currentIndex + 1)); setExpanded(false); }} disabled={currentIndex >= filtered.length - 1}>
-                    Next <ChevronRight size={16} className="ml-1" />
+                  <Button variant="ghost" size="sm" onClick={() => { setCurrentIndex(Math.min(filtered.length - 1, currentIndex + 1)); setExpanded(false); }} disabled={currentIndex >= filtered.length - 1} className="text-xs rounded-full h-[36px] px-4">
+                    Next <ChevronRight size={14} className="ml-1.5" />
                   </Button>
                 </div>
               </CardContent>

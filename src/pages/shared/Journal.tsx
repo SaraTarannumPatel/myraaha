@@ -50,7 +50,24 @@ const Journal = () => {
   const [actionSuggestions, setActionSuggestions] = useState<any[]>([]);
   const [moodAnalysis, setMoodAnalysis] = useState<any>(null);
   const [correlationInsights, setCorrelationInsights] = useState<any>(null);
-  const [monthlySummary, setMonthlySummary] = useState<any>(null);
+  const [quickMood, setQuickMood] = useState<string | null>(null);
+
+  const handleQuickMood = async (moodLabel: string) => {
+    setQuickMood(moodLabel);
+    const selectedMood = moods.find(m => m.label === moodLabel) || moods[0];
+    const { error } = await supabase.from("mood_checkins").insert({
+      user_id: user!.id,
+      mood: `${selectedMood.emoji} ${selectedMood.label}`,
+      energy_level: Math.round(selectedMood.value * 2), // Map to 1-10 range
+      confidence_level: Math.round(selectedMood.value * 2), // Map to 1-10 range
+    });
+    if (error) {
+      toast.error("Failed to save mood");
+      return;
+    }
+    toast.success("Vibe checked! 🎯");
+    fetchAll();
+  };
 
   const fetchAll = useCallback(async () => {
     if (!user) return;
@@ -283,75 +300,123 @@ const Journal = () => {
         <>
           {/* JOURNAL TAB */}
           {activeTab === "Journal" && (
-            <div className="space-y-4">
-              <div className="flex justify-end">
-                <Button onClick={() => setShowForm(!showForm)} className="gap-1">
-                  <Plus size={16} /> New Entry
-                </Button>
-              </div>
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+              <div className="lg:col-span-8 space-y-4">
+                <div className="flex justify-end">
+                  <Button onClick={() => setShowForm(!showForm)} className="gap-1">
+                    <Plus size={16} /> New Entry
+                  </Button>
+                </div>
 
-              {showForm && (
-                <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="bg-card rounded-xl border border-border p-6 space-y-4">
-                  <Input placeholder="Title (optional)" value={form.title} onChange={e => setForm({ ...form, title: e.target.value })} />
-                  <div className="flex gap-2 flex-wrap">
-                    {moods.map(m => (
-                      <button key={m.label} onClick={() => setForm({ ...form, mood: `${m.emoji} ${m.label}` })}
-                        className={`px-3 py-1.5 rounded-full font-body text-xs transition-all ${form.mood === `${m.emoji} ${m.label}` ? m.color + " ring-1 ring-current" : "bg-muted text-muted-foreground"}`}>
-                        {m.emoji} {m.label}
+                {showForm && (
+                  <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="bg-card rounded-xl border border-border p-6 space-y-4">
+                    <Input placeholder="Title (optional)" value={form.title} onChange={e => setForm({ ...form, title: e.target.value })} />
+                    <div className="flex gap-2 flex-wrap">
+                      {moods.map(m => (
+                        <button key={m.label} onClick={() => setForm({ ...form, mood: `${m.emoji} ${m.label}` })}
+                          className={`px-3 py-1.5 rounded-full font-body text-xs transition-all ${form.mood === `${m.emoji} ${m.label}` ? m.color + " ring-1 ring-current" : "bg-muted text-muted-foreground"}`}>
+                          {m.emoji} {m.label}
+                        </button>
+                      ))}
+                    </div>
+                    <Textarea placeholder="What's on your mind? Reflect on your wins, challenges, or just how you're feeling..." value={form.content} onChange={e => setForm({ ...form, content: e.target.value })} rows={5} />
+                    <Input placeholder="Tags (comma-separated)" value={form.tags} onChange={e => setForm({ ...form, tags: e.target.value })} />
+                    <div className="flex items-center justify-between">
+                      <button onClick={() => setForm({ ...form, is_private: !form.is_private })}
+                        className="flex items-center gap-2 font-body text-xs text-muted-foreground hover:text-foreground transition-colors">
+                        {form.is_private ? <EyeOff size={14} /> : <Eye size={14} />}
+                        {form.is_private ? "Private" : "Shareable with mentors/peers"}
                       </button>
+                      <div className="flex gap-2">
+                        <Button onClick={addEntry}>Save</Button>
+                        <Button onClick={() => setShowForm(false)} variant="ghost">Cancel</Button>
+                      </div>
+                    </div>
+                  </motion.div>
+                )}
+
+                {entries.length === 0 ? (
+                  <div className="text-center py-12 bg-card rounded-xl border border-border">
+                    <Sparkles className="mx-auto text-muted-foreground mb-3" size={40} />
+                    <h3 className="font-display text-xl text-foreground mb-2">No entries yet</h3>
+                    <p className="font-body text-muted-foreground">Start journaling to track your growth!</p>
+                  </div>
+                ) : (
+                  <div className="space-y-3">
+                    {entries.map((entry, i) => (
+                      <motion.div key={entry.id} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.03 }}
+                        className="bg-card rounded-xl border border-border p-5">
+                        <div className="flex items-center justify-between mb-2">
+                          <div className="flex items-center gap-2">
+                            {entry.mood && <span className="text-sm">{entry.mood.split(" ")[0]}</span>}
+                            {entry.title && <h3 className="font-display text-base text-foreground">{entry.title}</h3>}
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <button onClick={() => togglePrivacy(entry.id, entry.is_private)} className="text-muted-foreground hover:text-foreground transition-colors" title={entry.is_private ? "Make shareable" : "Make private"}>
+                              {entry.is_private ? <EyeOff size={12} /> : <Eye size={12} />}
+                            </button>
+                            <span className="font-body text-xs text-muted-foreground">{new Date(entry.created_at).toLocaleDateString()}</span>
+                          </div>
+                        </div>
+                        <p className="font-body text-sm text-foreground whitespace-pre-wrap">{entry.content}</p>
+                        {entry.tags?.length > 0 && (
+                          <div className="flex gap-1 mt-3 flex-wrap">
+                            {entry.tags.map((tag: string) => (
+                              <span key={tag} className="px-2 py-0.5 rounded bg-muted text-muted-foreground font-body text-[10px]">{tag}</span>
+                            ))}
+                          </div>
+                        )}
+                      </motion.div>
                     ))}
                   </div>
-                  <Textarea placeholder="What's on your mind? Reflect on your wins, challenges, or just how you're feeling..." value={form.content} onChange={e => setForm({ ...form, content: e.target.value })} rows={5} />
-                  <Input placeholder="Tags (comma-separated)" value={form.tags} onChange={e => setForm({ ...form, tags: e.target.value })} />
-                  <div className="flex items-center justify-between">
-                    <button onClick={() => setForm({ ...form, is_private: !form.is_private })}
-                      className="flex items-center gap-2 font-body text-xs text-muted-foreground hover:text-foreground transition-colors">
-                      {form.is_private ? <EyeOff size={14} /> : <Eye size={14} />}
-                      {form.is_private ? "Private" : "Shareable with mentors/peers"}
-                    </button>
-                    <div className="flex gap-2">
-                      <Button onClick={addEntry}>Save</Button>
-                      <Button onClick={() => setShowForm(false)} variant="ghost">Cancel</Button>
-                    </div>
-                  </div>
-                </motion.div>
-              )}
+                )}
+              </div>
 
-              {entries.length === 0 ? (
-                <div className="text-center py-12 bg-card rounded-xl border border-border">
-                  <Sparkles className="mx-auto text-muted-foreground mb-3" size={40} />
-                  <h3 className="font-display text-xl text-foreground mb-2">No entries yet</h3>
-                  <p className="font-body text-muted-foreground">Start journaling to track your growth!</p>
-                </div>
-              ) : (
-                <div className="space-y-3">
-                  {entries.map((entry, i) => (
-                    <motion.div key={entry.id} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.03 }}
-                      className="bg-card rounded-xl border border-border p-5">
-                      <div className="flex items-center justify-between mb-2">
+              {/* Right Column: Vibe Check Widget */}
+              <div className="lg:col-span-4 space-y-6 lg:sticky lg:top-6 self-start w-full">
+                <Card className="rounded-2xl overflow-hidden border border-border shadow-sm">
+                  <CardHeader className="pb-3 bg-muted/10">
+                    <CardTitle className="text-xs font-display flex items-center gap-1.5 text-foreground">
+                      <TrendingUp size={14} className="text-primary" />
+                      {quickMood ? "Your Vibe Today" : "How's your vibe today?"}
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="pt-3">
+                    {quickMood ? (
+                      <div className="flex items-center justify-between">
                         <div className="flex items-center gap-2">
-                          {entry.mood && <span className="text-sm">{entry.mood.split(" ")[0]}</span>}
-                          {entry.title && <h3 className="font-display text-base text-foreground">{entry.title}</h3>}
+                          {(() => {
+                            const m = moods.find(x => x.label.toLowerCase() === quickMood.toLowerCase()) || moods[0];
+                            return (
+                              <>
+                                <span className="text-2xl">{m.emoji}</span>
+                                <span className="font-body text-xs font-medium text-foreground">{m.label}</span>
+                              </>
+                            );
+                          })()}
                         </div>
-                        <div className="flex items-center gap-2">
-                          <button onClick={() => togglePrivacy(entry.id, entry.is_private)} className="text-muted-foreground hover:text-foreground transition-colors" title={entry.is_private ? "Make shareable" : "Make private"}>
-                            {entry.is_private ? <EyeOff size={12} /> : <Eye size={12} />}
-                          </button>
-                          <span className="font-body text-xs text-muted-foreground">{new Date(entry.created_at).toLocaleDateString()}</span>
-                        </div>
+                        <Button variant="ghost" size="sm" onClick={() => setQuickMood(null)} className="h-6 text-[10px] text-muted-foreground">
+                          Reset
+                        </Button>
                       </div>
-                      <p className="font-body text-sm text-foreground whitespace-pre-wrap">{entry.content}</p>
-                      {entry.tags?.length > 0 && (
-                        <div className="flex gap-1 mt-3 flex-wrap">
-                          {entry.tags.map((tag: string) => (
-                            <span key={tag} className="px-2 py-0.5 rounded bg-muted text-muted-foreground font-body text-[10px]">{tag}</span>
-                          ))}
-                        </div>
-                      )}
-                    </motion.div>
-                  ))}
-                </div>
-              )}
+                    ) : (
+                      <div className="grid grid-cols-2 gap-2">
+                        {moods.slice(0, 6).map(m => (
+                          <Button
+                            key={m.label}
+                            variant="outline"
+                            onClick={() => handleQuickMood(m.label)}
+                            className="flex items-center gap-1.5 justify-start h-8 px-2.5 text-xs hover:border-primary/40 hover:bg-primary/5 rounded-xl"
+                          >
+                            <span>{m.emoji}</span>
+                            <span>{m.label}</span>
+                          </Button>
+                        ))}
+                      </div>
+                    )}
+                  </CardContent>
+                </Card>
+              </div>
             </div>
           )}
 
