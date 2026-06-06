@@ -1,26 +1,29 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
-import { ArrowLeft, Mail, CheckCircle2, RefreshCw } from "lucide-react";
+import { ArrowLeft, Mail, RefreshCw } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import OnboardingProgressBar from "@/components/onboarding/OnboardingProgressBar";
 import OnboardingRewardBanner from "@/components/onboarding/OnboardingRewardBanner";
 import otpIllustration from "@/assets/auth-signup-illustration.png";
 
+const CODE_LEN = 6;
+
 const OTPVerification = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { email } = (location.state as { email?: string }) || {};
 
+  const [code, setCode] = useState<string[]>(Array(CODE_LEN).fill(""));
   const [resendTimer, setResendTimer] = useState(30);
   const [resending, setResending] = useState(false);
-  const [checking, setChecking] = useState(false);
+  const [verifying, setVerifying] = useState(false);
+  const inputsRef = useRef<Array<HTMLInputElement | null>>([]);
 
   useEffect(() => {
-    if (!email) {
-      navigate("/auth", { replace: true });
-    }
+    if (!email) navigate("/auth", { replace: true });
+    else inputsRef.current[0]?.focus();
   }, [email, navigate]);
 
   useEffect(() => {
@@ -30,94 +33,83 @@ const OTPVerification = () => {
     }
   }, [resendTimer]);
 
-  // Detect verification across windows. The email may be verified in another browser tab,
-  // a different browser, or even on the user's phone — in all cases, this page should detect it.
-  useEffect(() => {
-    let cancelled = false;
+  const handleChange = (idx: number, val: string) => {
+    const digit = val.replace(/\D/g, "").slice(-1);
+    const next = [...code];
+    next[idx] = digit;
+    setCode(next);
+    if (digit && idx < CODE_LEN - 1) inputsRef.current[idx + 1]?.focus();
+    if (next.every((d) => d) && next.join("").length === CODE_LEN) {
+      void verify(next.join(""));
+    }
+  };
 
-    const checkVerified = async (): Promise<boolean> => {
-      try {
-        // refreshSession forces Supabase to re-fetch the latest auth state from the server,
-        // which is essential when the verification happened in a different window/device.
-        const [{ data: refreshed }, { data: rpcVerified }] = await Promise.all([
-          supabase.auth.refreshSession(),
-          email ? (supabase as any).rpc("is_email_verified", { _email: email }) : Promise.resolve({ data: false }),
-        ]);
-        const confirmedAt =
-          refreshed?.user?.email_confirmed_at ??
-          (await supabase.auth.getUser()).data?.user?.email_confirmed_at;
-        if ((confirmedAt || rpcVerified === true) && !cancelled) {
-          toast.success("Email verified! 🎉");
-          setTimeout(() => navigate("/auth", { replace: true }), 1200);
-          return true;
-        }
-      } catch {
-        /* ignore network errors during polling */
+  const handleKeyDown = (idx: number, e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Backspace" && !code[idx] && idx > 0) inputsRef.current[idx - 1]?.focus();
+    if (e.key === "ArrowLeft" && idx > 0) inputsRef.current[idx - 1]?.focus();
+    if (e.key === "ArrowRight" && idx < CODE_LEN - 1) inputsRef.current[idx + 1]?.focus();
+  };
+
+  const handlePaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
+    const pasted = e.clipboardData.getData("text").replace(/\D/g, "").slice(0, CODE_LEN);
+    if (!pasted) return;
+    e.preventDefault();
+    const next = pasted.split("").concat(Array(CODE_LEN).fill("")).slice(0, CODE_LEN);
+    setCode(next);
+    inputsRef.current[Math.min(pasted.length, CODE_LEN - 1)]?.focus();
+    if (pasted.length === CODE_LEN) void verify(pasted);
+  };
+
+  const verify = async (token: string) => {
+    if (!email || verifying) return;
+    setVerifying(true);
+    try {
+      const { error } = await supabase.auth.verifyOtp({ email, token, type: "email" });
+      if (error) {
+        toast.error(error.message || "Invalid code. Try again.");
+        setCode(Array(CODE_LEN).fill(""));
+        inputsRef.current[0]?.focus();
+        return;
       }
-      return false;
-    };
 
-    // 1. React to in-window auth state changes (same-tab verification)
-    const { data: sub } = supabase.auth.onAuthStateChange((_event, session) => {
-      if (session?.user?.email_confirmed_at && !cancelled) {
-        toast.success("Email verified! 🎉");
-        setTimeout(() => navigate("/auth", { replace: true }), 1200);
+      // Persist the password the user chose on signup so they can log in normally later.
+      const pendingPwd = sessionStorage.getItem("myraaha_pending_password");
+      const pendingPhone = sessionStorage.getItem("myraaha_pending_phone");
+      if (pendingPwd) {
+        await supabase.auth.updateUser({
+          password: pendingPwd,
+          data: pendingPhone ? { phone: pendingPhone, pending_password_set: false } : { pending_password_set: false },
+        });
+        sessionStorage.removeItem("myraaha_pending_password");
+        sessionStorage.removeItem("myraaha_pending_phone");
       }
-    });
 
-    // 2. Poll the server every 4s — catches verification done on another device/window
-    const pollInterval = setInterval(checkVerified, 4000);
-
-    // 3. Re-check immediately when the user returns focus / tab becomes visible
-    const onFocus = () => { void checkVerified(); };
-    const onVisibility = () => { if (document.visibilityState === "visible") void checkVerified(); };
-    window.addEventListener("focus", onFocus);
-    document.addEventListener("visibilitychange", onVisibility);
-
-    // 4. Initial check on mount
-    void checkVerified();
-
-    return () => {
-      cancelled = true;
-      sub.subscription.unsubscribe();
-      clearInterval(pollInterval);
-      window.removeEventListener("focus", onFocus);
-      document.removeEventListener("visibilitychange", onVisibility);
-    };
-  }, [email, navigate]);
+      toast.success("Email verified! 🎉");
+      // AuthContext will pick up the session; ProtectedRoute routes to /onboarding (new users)
+      // or /dashboard (returning users with completed onboarding).
+      navigate("/onboarding", { replace: true });
+    } finally {
+      setVerifying(false);
+    }
+  };
 
   const handleResend = async () => {
     if (resendTimer > 0 || !email) return;
     setResending(true);
     try {
-      const { error } = await supabase.auth.resend({ type: "signup", email });
+      const { error } = await supabase.auth.signInWithOtp({
+        email,
+        options: { shouldCreateUser: false },
+      });
       if (error) throw error;
-      toast.success("Verification email sent again!");
+      toast.success("New 6-digit code sent!");
       setResendTimer(30);
+      setCode(Array(CODE_LEN).fill(""));
+      inputsRef.current[0]?.focus();
     } catch (err: any) {
       toast.error(err.message || "Failed to resend");
     } finally {
       setResending(false);
-    }
-  };
-
-  const handleICheckedIt = async () => {
-    setChecking(true);
-    try {
-      // Force a session refresh first so we pick up verification done in another window/device
-      const [{ data }, { data: rpcVerified }] = await Promise.all([
-        supabase.auth.getUser(),
-        email ? (supabase as any).rpc("is_email_verified", { _email: email }) : Promise.resolve({ data: false }),
-      ]);
-      await supabase.auth.refreshSession();
-      if (data?.user?.email_confirmed_at || rpcVerified === true) {
-        toast.success("Email verified! 🎉");
-        navigate("/auth", { replace: true });
-      } else {
-        toast.info("Not verified yet. Please click the link in your inbox.");
-      }
-    } finally {
-      setChecking(false);
     }
   };
 
@@ -140,51 +132,47 @@ const OTPVerification = () => {
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.5 }}
-          className="w-[45%] max-w-[180px] mb-4"
+          className="w-[40%] max-w-[160px] mb-4"
         >
           <img src={otpIllustration} alt="" className="w-full h-auto object-contain" />
         </motion.div>
 
         <div className="flex items-center gap-2 mb-2">
           <Mail size={20} className="text-primary" />
-          <h1 className="font-display text-2xl text-primary">Verify your email</h1>
+          <h1 className="font-display text-2xl text-primary">Enter your code</h1>
         </div>
 
         <p className="font-body text-sm text-muted-foreground mb-1 text-center">
-          We sent a verification link to
+          We sent a 6-digit code to
         </p>
         <p className="font-body text-sm font-semibold text-primary mb-6 text-center break-all">
           {email}
         </p>
 
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
-          className="w-full p-5 rounded-2xl bg-accent/20 border border-accent/60 mb-6"
-        >
-          <div className="flex items-start gap-3">
-            <CheckCircle2 size={20} className="text-primary shrink-0 mt-0.5" />
-            <div className="space-y-1">
-              <p className="font-display text-sm font-bold text-primary">
-                Check your inbox
-              </p>
-              <p className="font-body text-xs text-muted-foreground leading-relaxed">
-                Open the email from us and tap the <span className="font-semibold">"Verify your email"</span> button. Then come back here — we'll detect it automatically.
-              </p>
-              <p className="font-body text-xs text-muted-foreground leading-relaxed pt-1">
-                💡 Don't see it? Check spam/promotions folder.
-              </p>
-            </div>
-          </div>
-        </motion.div>
+        <div className="flex items-center justify-center gap-2 mb-6" onPaste={handlePaste}>
+          {code.map((d, i) => (
+            <input
+              key={i}
+              ref={(el) => (inputsRef.current[i] = el)}
+              type="text"
+              inputMode="numeric"
+              autoComplete="one-time-code"
+              maxLength={1}
+              value={d}
+              onChange={(e) => handleChange(i, e.target.value)}
+              onKeyDown={(e) => handleKeyDown(i, e)}
+              disabled={verifying}
+              className="w-11 h-14 sm:w-12 sm:h-14 text-center font-display text-2xl rounded-xl bg-muted border-2 border-transparent focus:border-primary focus:outline-none transition-all disabled:opacity-50"
+            />
+          ))}
+        </div>
 
         <button
-          onClick={handleICheckedIt}
-          disabled={checking}
+          onClick={() => verify(code.join(""))}
+          disabled={verifying || code.some((d) => !d)}
           className="w-full py-4 rounded-full bg-primary font-body text-base font-semibold text-white hover:bg-primary/95 transition-colors disabled:opacity-50 mb-3"
         >
-          {checking ? "Checking..." : "I've verified my email"}
+          {verifying ? "Verifying..." : "Verify"}
         </button>
 
         <div className="flex items-center gap-2 font-body text-sm">
@@ -199,9 +187,13 @@ const OTPVerification = () => {
             }`}
           >
             <RefreshCw size={12} className={resending ? "animate-spin" : ""} />
-            {resendTimer > 0 ? `Resend in ${resendTimer}s` : "Resend email"}
+            {resendTimer > 0 ? `Resend in ${resendTimer}s` : "Resend code"}
           </button>
         </div>
+
+        <p className="font-body text-[11px] text-muted-foreground mt-4 text-center">
+          💡 Don't see it? Check spam/promotions folder.
+        </p>
       </div>
     </div>
   );
