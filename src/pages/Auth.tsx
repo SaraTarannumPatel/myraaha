@@ -34,7 +34,9 @@ const Auth = () => {
   useEffect(() => {
     if (user && profile) {
       if (profile.onboarding_status === "complete") {
-        navigate("/dashboard/curiosity-compass", { replace: true });
+        // Returning users land on their dashboard (resumes their saved history),
+        // NOT on the Curiosity Compass as if it were their first session.
+        navigate("/dashboard", { replace: true });
       } else {
         navigate("/onboarding", { replace: true });
       }

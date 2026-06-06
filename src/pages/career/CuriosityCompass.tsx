@@ -228,20 +228,50 @@ const AssessmentTestSection = ({ user, recordSignal, recordMultipleSignals }: { 
   const currentTotal = phase === "variant" ? variantStep : variantQs.length + journeyStep;
 
   if (completed) {
+    // Preview saved answers (read-only). "Retake Assessment" intentionally removed —
+    // discovery results are one-time-per-user; users can review but not reset.
+    const allAnswers: Array<{ q: string; a: string }> = [];
+    variantQs.forEach((vq) => {
+      const v = variantAnswers[vq.id] ?? profile?.journey_responses?.variant_answers?.[vq.id];
+      if (v) {
+        const lbl = vq.options.find((o: any) => o.value === v)?.label || String(v);
+        allAnswers.push({ q: vq.question, a: lbl });
+      }
+    });
+    journeyQs.forEach((jq) => {
+      const v = journeyAnswers[jq.id] ?? profile?.journey_responses?.journey_answers?.[jq.id];
+      if (v) {
+        const lbl = Array.isArray(v)
+          ? v.map((x) => jq.options.find((o: any) => o.value === x)?.label || x).join(", ")
+          : (jq.options.find((o: any) => o.value === v)?.label || String(v));
+        allAnswers.push({ q: jq.question, a: lbl });
+      }
+    });
+
     return (
       <Card className="border-primary/20 bg-primary/5">
-        <CardContent className="pt-6 text-center space-y-4">
-          <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center mx-auto">
-            <CheckCircle2 size={32} className="text-primary" />
+        <CardContent className="pt-6 space-y-4">
+          <div className="text-center space-y-3">
+            <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center mx-auto">
+              <CheckCircle2 size={32} className="text-primary" />
+            </div>
+            <h3 className="font-display text-xl">Assessment Complete ✨</h3>
+            <p className="font-body text-sm text-muted-foreground">
+              Your Curiosity Compass has been calibrated. Journey:{" "}
+              <Badge variant="secondary">{meta?.title || journeyId}</Badge>
+            </p>
           </div>
-          <h3 className="font-display text-xl">Assessment Complete ✨</h3>
-          <p className="font-body text-sm text-muted-foreground">
-            Your Curiosity Compass has been calibrated based on your psychometric signals.
-            Your journey: <Badge variant="secondary">{meta?.title || journeyId}</Badge>
-          </p>
-          <Button variant="outline" onClick={() => { setCompleted(false); setPhase("variant"); setVariantStep(0); setVariantAnswers({}); setJourneyStep(0); setJourneyAnswers({}); }}>
-            Retake Assessment
-          </Button>
+          {allAnswers.length > 0 && (
+            <div className="mt-4 border-t border-border pt-4 space-y-3 max-h-[40vh] overflow-y-auto">
+              <h4 className="font-display text-sm text-primary">Your Answers</h4>
+              {allAnswers.map((item, i) => (
+                <div key={i} className="text-left">
+                  <p className="font-body text-xs text-muted-foreground">{item.q}</p>
+                  <p className="font-body text-sm font-semibold text-foreground mt-0.5">{item.a}</p>
+                </div>
+              ))}
+            </div>
+          )}
         </CardContent>
       </Card>
     );
