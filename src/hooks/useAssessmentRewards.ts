@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 
@@ -106,14 +106,18 @@ export const useAssessmentRewards = () => {
             fetchAll();
             return;
           }
-          setPendingUnlocks((prev) => [nextEvent, ...prev.filter((e) => e.id !== nextEvent.id)]);
+          setPendingUnlocks((prev) => {
+            // Race-guard: if this id is currently being acknowledged, don't re-add it.
+            if (ackInFlightRef.current.has(nextEvent.id)) return prev;
+            return [nextEvent, ...prev.filter((e) => e.id !== nextEvent.id)];
+          });
         }
       )
       .subscribe();
     return () => {
       supabase.removeChannel(channel);
     };
-  }, [user]);
+  }, [user, fetchAll]);
 
   /** Update progress and auto-unlock crossed milestones */
   const updateProgress = useCallback(
