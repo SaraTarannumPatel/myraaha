@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 
@@ -54,6 +54,8 @@ export const useAssessmentRewards = () => {
   const [milestones, setMilestones] = useState<RewardMilestone[]>([]);
   const [pendingUnlocks, setPendingUnlocks] = useState<UnlockEvent[]>([]);
   const [loading, setLoading] = useState(true);
+  // Race-condition guard (declared early so realtime effect below can read it).
+  const ackInFlightRef = useRef<Set<string>>(new Set());
 
   const fetchAll = useCallback(async () => {
     if (!user) {
@@ -106,14 +108,18 @@ export const useAssessmentRewards = () => {
             fetchAll();
             return;
           }
-          setPendingUnlocks((prev) => [nextEvent, ...prev.filter((e) => e.id !== nextEvent.id)]);
+          setPendingUnlocks((prev) => {
+            // Race-guard: if this id is currently being acknowledged, don't re-add it.
+            if (ackInFlightRef.current.has(nextEvent.id)) return prev;
+            return [nextEvent, ...prev.filter((e) => e.id !== nextEvent.id)];
+          });
         }
       )
       .subscribe();
     return () => {
       supabase.removeChannel(channel);
     };
-  }, [user]);
+  }, [user, fetchAll]);
 
   /** Update progress and auto-unlock crossed milestones */
   const updateProgress = useCallback(
@@ -138,13 +144,26 @@ export const useAssessmentRewards = () => {
     [user, fetchAll]
   );
 
+  // Race-condition guard: prevent the same unlock from re-appearing if the realtime
+  // INSERT event lands after the user has already tapped Continue but before the DB
+  // UPDATE (acknowledged=true) has propagated back. (ackInFlightRef declared above.)
+
   const acknowledgeUnlock = useCallback(
     async (id: string) => {
-      await supabase
-        .from("reward_unlock_events" as any)
-        .update({ acknowledged: true })
-        .eq("id", id);
+      if (ackInFlightRef.current.has(id)) return;
+      ackInFlightRef.current.add(id);
+      // Optimistic removal first so the popup closes immediately.
       setPendingUnlocks((prev) => prev.filter((u) => u.id !== id));
+      try {
+        await supabase
+          .from("reward_unlock_events" as any)
+          .update({ acknowledged: true })
+          .eq("id", id);
+      } finally {
+        // Keep the id in the in-flight set briefly so any late realtime INSERT
+        // for the same event id is ignored, then drop it.
+        setTimeout(() => ackInFlightRef.current.delete(id), 5000);
+      }
     },
     []
   );
