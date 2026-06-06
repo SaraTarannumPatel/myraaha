@@ -145,12 +145,12 @@ export const useAssessmentRewards = () => {
   // Race-condition guard: prevent the same unlock from re-appearing if the realtime
   // INSERT event lands after the user has already tapped Continue but before the DB
   // UPDATE (acknowledged=true) has propagated back.
-  const ackInFlight = useState<Set<string>>(() => new Set<string>())[0];
+  const ackInFlightRef = useRef<Set<string>>(new Set());
 
   const acknowledgeUnlock = useCallback(
     async (id: string) => {
-      if (ackInFlight.has(id)) return;
-      ackInFlight.add(id);
+      if (ackInFlightRef.current.has(id)) return;
+      ackInFlightRef.current.add(id);
       // Optimistic removal first so the popup closes immediately.
       setPendingUnlocks((prev) => prev.filter((u) => u.id !== id));
       try {
@@ -161,10 +161,10 @@ export const useAssessmentRewards = () => {
       } finally {
         // Keep the id in the in-flight set briefly so any late realtime INSERT
         // for the same event id is ignored, then drop it.
-        setTimeout(() => ackInFlight.delete(id), 5000);
+        setTimeout(() => ackInFlightRef.current.delete(id), 5000);
       }
     },
-    [ackInFlight]
+    []
   );
 
   const milestonesForTest = useCallback(
