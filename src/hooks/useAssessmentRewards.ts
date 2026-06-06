@@ -54,6 +54,8 @@ export const useAssessmentRewards = () => {
   const [milestones, setMilestones] = useState<RewardMilestone[]>([]);
   const [pendingUnlocks, setPendingUnlocks] = useState<UnlockEvent[]>([]);
   const [loading, setLoading] = useState(true);
+  // Race-condition guard (declared early so realtime effect below can read it).
+  const ackInFlightRef = useRef<Set<string>>(new Set());
 
   const fetchAll = useCallback(async () => {
     if (!user) {
@@ -144,8 +146,7 @@ export const useAssessmentRewards = () => {
 
   // Race-condition guard: prevent the same unlock from re-appearing if the realtime
   // INSERT event lands after the user has already tapped Continue but before the DB
-  // UPDATE (acknowledged=true) has propagated back.
-  const ackInFlightRef = useRef<Set<string>>(new Set());
+  // UPDATE (acknowledged=true) has propagated back. (ackInFlightRef declared above.)
 
   const acknowledgeUnlock = useCallback(
     async (id: string) => {
