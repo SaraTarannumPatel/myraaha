@@ -57,16 +57,17 @@ const MODULE_ROUTES: Record<string, { path: string; label: string; icon: any; co
 };
 
 const InsightsView = ({
-  conclusion,
-  loading,
+  conclusion = null,
+  loading = false,
   regenerate,
-  regenerating,
+  regenerating = false,
 }: {
-  conclusion: Conclusion | null;
-  loading: boolean;
-  regenerate: () => Promise<void>;
-  regenerating: boolean;
-}) => {
+  conclusion?: Conclusion | null;
+  loading?: boolean;
+  regenerate?: () => Promise<void>;
+  regenerating?: boolean;
+} = {}) => {
+
   const { profile } = useAuth();
   const navigate = useNavigate();
 

@@ -51,6 +51,8 @@ const Journal = () => {
   const [moodAnalysis, setMoodAnalysis] = useState<any>(null);
   const [correlationInsights, setCorrelationInsights] = useState<any>(null);
   const [quickMood, setQuickMood] = useState<string | null>(null);
+  const [monthlySummary, setMonthlySummary] = useState<any>(null);
+
 
   const handleQuickMood = async (moodLabel: string) => {
     setQuickMood(moodLabel);
