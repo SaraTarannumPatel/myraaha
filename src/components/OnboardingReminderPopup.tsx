@@ -45,7 +45,7 @@ const onboardingSteps: SkippedStep[] = [
     color: "text-terracotta",
     bgColor: "bg-terracotta/10",
     route: "/onboarding/intent",
-    checkFn: (p) => !p.active_intent || p.active_intent === "career",
+    checkFn: (p) => !p.active_intent,
   },
   {
     key: "consent",
@@ -55,7 +55,12 @@ const onboardingSteps: SkippedStep[] = [
     color: "text-primary",
     bgColor: "bg-primary/10",
     route: "/onboarding/consent",
-    checkFn: (p) => p.consent_data_usage === false && p.consent_mentor_sharing === false,
+    // Only flag consent if the user has NEVER touched the consent step.
+    // consent fields default to false; treat null/undefined as "not seen".
+    checkFn: (p) =>
+      p.consent_data_usage == null &&
+      p.consent_mentor_sharing == null &&
+      p.consent_community_visibility == null,
   },
 ];
 
