@@ -77,13 +77,17 @@ const OnboardingReminderPopup = () => {
 
   const getSkippedSteps = useCallback(() => {
     if (!profile || profile.onboarding_status !== "complete") return [];
-    
-    // Check if user has genuinely completed everything - if so, return empty
+
+    // Truly complete = has all primary onboarding fields. If yes, never show popup.
     const hasUserType = !!profile.user_type;
     const hasJourney = !!profile.journey_variant;
-    const hasConsent = profile.consent_data_usage || profile.consent_mentor_sharing;
-    if (hasUserType && hasJourney && hasConsent) return [];
-    
+    const hasIntent = !!profile.active_intent;
+    const hasTouchedConsent =
+      profile.consent_data_usage != null ||
+      profile.consent_mentor_sharing != null ||
+      profile.consent_community_visibility != null;
+    if (hasUserType && hasJourney && hasIntent && hasTouchedConsent) return [];
+
     const dismissed: string[] = JSON.parse(localStorage.getItem(DISMISSED_KEY) || "[]");
     return onboardingSteps.filter(
       (step) => step.checkFn(profile) && !dismissed.includes(step.key)
