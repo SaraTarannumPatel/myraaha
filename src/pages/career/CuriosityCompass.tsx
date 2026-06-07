@@ -293,11 +293,6 @@ const AssessmentTestSection = ({ user, recordSignal, recordMultipleSignals }: { 
               </p>
             )}
           </div>
-          <div className="pt-2">
-            <Button variant="outline" className="rounded-full px-6 font-body text-xs font-semibold" onClick={() => { setCompleted(false); setPhase("variant"); setVariantStep(0); setVariantAnswers({}); setJourneyStep(0); setJourneyAnswers({}); }}>
-              Retake Assessment
-            </Button>
-          </div>
           {allAnswers.length > 0 && (
             <div className="mt-6 border-t border-border/60 pt-6 space-y-4 max-h-[30vh] overflow-y-auto pr-2">
               <h4 className="font-display text-sm font-bold text-primary text-left">Your Profile Answers</h4>
