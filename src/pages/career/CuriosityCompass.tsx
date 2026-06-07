@@ -128,12 +128,35 @@ const AssessmentTestSection = ({ user, recordSignal, recordMultipleSignals }: { 
     await updateProgress("discovery", Math.min(completedCount, totalDiscoveryQs), totalDiscoveryQs);
   };
 
+  // Discovery conclusion (real archetype synthesized from answers)
+  const [discoveryConclusion, setDiscoveryConclusion] = useState<{ archetype: string; archetype_description?: string } | null>(null);
+
   // Check if already completed
   useEffect(() => {
     if (profile?.journey_responses?.assessment_completed) {
       setCompleted(true);
     }
   }, [profile]);
+
+  // Load (and refresh) the synthesized discovery conclusion to show the real archetype
+  useEffect(() => {
+    if (!completed || !user?.id) return;
+    let cancelled = false;
+    const load = async () => {
+      const { data } = await supabase
+        .from("assessment_conclusions" as any)
+        .select("archetype, archetype_description")
+        .eq("user_id", user.id)
+        .eq("test_type", "discovery")
+        .maybeSingle();
+      if (!cancelled && data) setDiscoveryConclusion(data as any);
+    };
+    load();
+    // Poll briefly in case the synthesizer is still running
+    const t1 = setTimeout(load, 2500);
+    const t2 = setTimeout(load, 6000);
+    return () => { cancelled = true; clearTimeout(t1); clearTimeout(t2); };
+  }, [completed, user?.id]);
 
   const currentVariantQ = variantQs[variantStep];
   const currentJourneyQ = journeyQs[journeyStep];
