@@ -282,9 +282,16 @@ const AssessmentTestSection = ({ user, recordSignal, recordMultipleSignals }: { 
               Your Curiosity Compass has been successfully calibrated! All career paths and exploration modules are now tuned to your profile.
             </p>
           </div>
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-border bg-white shadow-sm">
-            <span className="font-body text-xs font-semibold text-muted-foreground">Your Journey Archetype:</span>
-            <Badge variant="secondary" className="font-display text-xs px-2.5 py-0.5 text-primary bg-primary/10">{meta?.title || journeyId}</Badge>
+          <div className="inline-flex flex-col items-center gap-2 px-5 py-3 rounded-2xl border border-border bg-white shadow-sm max-w-lg mx-auto">
+            <span className="font-body text-[10px] uppercase tracking-wider font-semibold text-muted-foreground">Your Career Archetype</span>
+            <Badge variant="secondary" className="font-display text-sm px-3 py-1 text-primary bg-primary/10">
+              {discoveryConclusion?.archetype || "Calibrating your archetype…"}
+            </Badge>
+            {discoveryConclusion?.archetype_description && (
+              <p className="font-body text-xs text-muted-foreground leading-relaxed mt-1 text-center">
+                {discoveryConclusion.archetype_description}
+              </p>
+            )}
           </div>
           <div className="pt-2">
             <Button variant="outline" className="rounded-full px-6 font-body text-xs font-semibold" onClick={() => { setCompleted(false); setPhase("variant"); setVariantStep(0); setVariantAnswers({}); setJourneyStep(0); setJourneyAnswers({}); }}>
