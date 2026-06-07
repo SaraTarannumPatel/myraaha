@@ -58,9 +58,7 @@ const onboardingSteps: SkippedStep[] = [
     // Only flag consent if the user has NEVER touched the consent step.
     // consent fields default to false; treat null/undefined as "not seen".
     checkFn: (p) =>
-      p.consent_data_usage == null &&
-      p.consent_mentor_sharing == null &&
-      ,
+      p.consent_data_usage == null && p.consent_mentor_sharing == null,
   },
 ];
 
