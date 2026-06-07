@@ -60,7 +60,7 @@ const onboardingSteps: SkippedStep[] = [
     checkFn: (p) =>
       p.consent_data_usage == null &&
       p.consent_mentor_sharing == null &&
-      p.consent_community_visibility == null,
+      ,
   },
 ];
 
