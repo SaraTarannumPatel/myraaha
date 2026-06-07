@@ -125,8 +125,8 @@ const Auth = () => {
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
-      <OnboardingProgressBar progress={5} />
-      <OnboardingRewardBanner currentProgress={5} />
+      {!isLogin && <OnboardingProgressBar progress={5} />}
+      {!isLogin && <OnboardingRewardBanner currentProgress={5} />}
 
       <div className="flex-1 flex flex-col items-center justify-center px-4 py-2 pb-4">
         <div className="flex flex-col w-full max-w-md">

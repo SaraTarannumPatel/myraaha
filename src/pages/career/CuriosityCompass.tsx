@@ -128,12 +128,35 @@ const AssessmentTestSection = ({ user, recordSignal, recordMultipleSignals }: { 
     await updateProgress("discovery", Math.min(completedCount, totalDiscoveryQs), totalDiscoveryQs);
   };
 
+  // Discovery conclusion (real archetype synthesized from answers)
+  const [discoveryConclusion, setDiscoveryConclusion] = useState<{ archetype: string; archetype_description?: string } | null>(null);
+
   // Check if already completed
   useEffect(() => {
     if (profile?.journey_responses?.assessment_completed) {
       setCompleted(true);
     }
   }, [profile]);
+
+  // Load (and refresh) the synthesized discovery conclusion to show the real archetype
+  useEffect(() => {
+    if (!completed || !user?.id) return;
+    let cancelled = false;
+    const load = async () => {
+      const { data } = await supabase
+        .from("assessment_conclusions" as any)
+        .select("archetype, archetype_description")
+        .eq("user_id", user.id)
+        .eq("test_type", "discovery")
+        .maybeSingle();
+      if (!cancelled && data) setDiscoveryConclusion(data as any);
+    };
+    load();
+    // Poll briefly in case the synthesizer is still running
+    const t1 = setTimeout(load, 2500);
+    const t2 = setTimeout(load, 6000);
+    return () => { cancelled = true; clearTimeout(t1); clearTimeout(t2); };
+  }, [completed, user?.id]);
 
   const currentVariantQ = variantQs[variantStep];
   const currentJourneyQ = journeyQs[journeyStep];
@@ -259,14 +282,16 @@ const AssessmentTestSection = ({ user, recordSignal, recordMultipleSignals }: { 
               Your Curiosity Compass has been successfully calibrated! All career paths and exploration modules are now tuned to your profile.
             </p>
           </div>
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-border bg-white shadow-sm">
-            <span className="font-body text-xs font-semibold text-muted-foreground">Your Journey Archetype:</span>
-            <Badge variant="secondary" className="font-display text-xs px-2.5 py-0.5 text-primary bg-primary/10">{meta?.title || journeyId}</Badge>
-          </div>
-          <div className="pt-2">
-            <Button variant="outline" className="rounded-full px-6 font-body text-xs font-semibold" onClick={() => { setCompleted(false); setPhase("variant"); setVariantStep(0); setVariantAnswers({}); setJourneyStep(0); setJourneyAnswers({}); }}>
-              Retake Assessment
-            </Button>
+          <div className="inline-flex flex-col items-center gap-2 px-5 py-3 rounded-2xl border border-border bg-white shadow-sm max-w-lg mx-auto">
+            <span className="font-body text-[10px] uppercase tracking-wider font-semibold text-muted-foreground">Your Career Archetype</span>
+            <Badge variant="secondary" className="font-display text-sm px-3 py-1 text-primary bg-primary/10">
+              {discoveryConclusion?.archetype || "Calibrating your archetype…"}
+            </Badge>
+            {discoveryConclusion?.archetype_description && (
+              <p className="font-body text-xs text-muted-foreground leading-relaxed mt-1 text-center">
+                {discoveryConclusion.archetype_description}
+              </p>
+            )}
           </div>
           {allAnswers.length > 0 && (
             <div className="mt-6 border-t border-border/60 pt-6 space-y-4 max-h-[30vh] overflow-y-auto pr-2">
