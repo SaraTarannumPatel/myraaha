@@ -82,8 +82,7 @@ const OnboardingReminderPopup = () => {
     const hasIntent = !!profile.active_intent;
     const hasTouchedConsent =
       profile.consent_data_usage != null ||
-      profile.consent_mentor_sharing != null ||
-      profile.consent_community_visibility != null;
+      profile.consent_mentor_sharing != null;
     if (hasUserType && hasJourney && hasIntent && hasTouchedConsent) return [];
 
     const dismissed: string[] = JSON.parse(localStorage.getItem(DISMISSED_KEY) || "[]");
