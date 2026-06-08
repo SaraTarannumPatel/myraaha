@@ -1490,6 +1490,9 @@ export type Database = {
         Row: {
           career_cluster: string | null
           career_pathway_cluster: string | null
+          cluster_id: number | null
+          coord_x: number | null
+          coord_y: number | null
           created_at: string
           domain_name: string | null
           function_name: string | null
@@ -1498,6 +1501,7 @@ export type Database = {
           industry_name: string | null
           job_family: string | null
           role_name: string
+          role_uuid: string
           sector_name: string
           source_workbook: string
           sub_domain_name: string | null
@@ -1506,6 +1510,9 @@ export type Database = {
         Insert: {
           career_cluster?: string | null
           career_pathway_cluster?: string | null
+          cluster_id?: number | null
+          coord_x?: number | null
+          coord_y?: number | null
           created_at?: string
           domain_name?: string | null
           function_name?: string | null
@@ -1514,6 +1521,7 @@ export type Database = {
           industry_name?: string | null
           job_family?: string | null
           role_name: string
+          role_uuid?: string
           sector_name: string
           source_workbook: string
           sub_domain_name?: string | null
@@ -1522,6 +1530,9 @@ export type Database = {
         Update: {
           career_cluster?: string | null
           career_pathway_cluster?: string | null
+          cluster_id?: number | null
+          coord_x?: number | null
+          coord_y?: number | null
           created_at?: string
           domain_name?: string | null
           function_name?: string | null
@@ -1530,6 +1541,7 @@ export type Database = {
           industry_name?: string | null
           job_family?: string | null
           role_name?: string
+          role_uuid?: string
           sector_name?: string
           source_workbook?: string
           sub_domain_name?: string | null
@@ -7404,8 +7416,8 @@ export type Database = {
             foreignKeyName: "role_ksao_vectors_role_id_fkey"
             columns: ["role_id"]
             isOneToOne: false
-            referencedRelation: "taxonomy_nodes"
-            referencedColumns: ["id"]
+            referencedRelation: "career_taxonomy"
+            referencedColumns: ["role_uuid"]
           },
         ]
       }
