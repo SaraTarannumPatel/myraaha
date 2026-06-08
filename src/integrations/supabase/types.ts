@@ -7416,8 +7416,8 @@ export type Database = {
             foreignKeyName: "role_ksao_vectors_role_id_fkey"
             columns: ["role_id"]
             isOneToOne: false
-            referencedRelation: "taxonomy_nodes"
-            referencedColumns: ["id"]
+            referencedRelation: "career_taxonomy"
+            referencedColumns: ["role_uuid"]
           },
         ]
       }
