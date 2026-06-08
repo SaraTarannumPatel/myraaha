@@ -19,15 +19,22 @@ import { supabase } from "@/integrations/supabase/client";
 export default function CareerMap() {
   const [sectorCount, setSectorCount] = useState<number | null>(null);
   const [roleCount, setRoleCount] = useState<number | null>(null);
+  const [plottedCount, setPlottedCount] = useState<number | null>(null);
+  const [clusterCount, setClusterCount] = useState<number | null>(null);
 
   useEffect(() => {
     (async () => {
-      const [{ count: secs }, { count: roles }] = await Promise.all([
+      const [{ count: secs }, { count: roles }, plotted, clusters] = await Promise.all([
         supabase.from("taxonomy_nodes").select("*", { count: "exact", head: true }).eq("level", "sector"),
-        supabase.from("taxonomy_nodes").select("*", { count: "exact", head: true }).eq("level", "role"),
+        supabase.from("career_taxonomy").select("*", { count: "exact", head: true }),
+        supabase.from("career_taxonomy").select("*", { count: "exact", head: true }).not("coord_x", "is", null),
+        supabase.from("career_taxonomy").select("cluster_id").not("cluster_id", "is", null),
       ]);
       setSectorCount(secs ?? 0);
       setRoleCount(roles ?? 0);
+      setPlottedCount(plotted.count ?? 0);
+      const unique = new Set((clusters.data ?? []).map((r: any) => r.cluster_id));
+      setClusterCount(unique.size);
     })();
   }, []);
 
