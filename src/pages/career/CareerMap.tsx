@@ -24,17 +24,15 @@ export default function CareerMap() {
 
   useEffect(() => {
     (async () => {
-      const [{ count: secs }, { count: roles }, plotted, clusters] = await Promise.all([
+      const [{ count: secs }, statsRes] = await Promise.all([
         supabase.from("taxonomy_nodes").select("*", { count: "exact", head: true }).eq("level", "sector"),
-        supabase.from("career_taxonomy").select("*", { count: "exact", head: true }),
-        supabase.from("career_taxonomy").select("*", { count: "exact", head: true }).not("coord_x", "is", null),
-        supabase.from("career_taxonomy").select("cluster_id").not("cluster_id", "is", null),
+        supabase.rpc("get_career_map_stats"),
       ]);
       setSectorCount(secs ?? 0);
-      setRoleCount(roles ?? 0);
-      setPlottedCount(plotted.count ?? 0);
-      const unique = new Set((clusters.data ?? []).map((r: any) => r.cluster_id));
-      setClusterCount(unique.size);
+      const stats = (statsRes.data as any[] | null)?.[0];
+      setRoleCount(Number(stats?.total_roles ?? 0));
+      setPlottedCount(Number(stats?.plotted_roles ?? 0));
+      setClusterCount(Number(stats?.cluster_count ?? 0));
     })();
   }, []);
 

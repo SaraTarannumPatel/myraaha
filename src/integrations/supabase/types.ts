@@ -9424,6 +9424,14 @@ export type Database = {
         Returns: boolean
       }
       ensure_profile_public_uid: { Args: never; Returns: string }
+      get_career_map_stats: {
+        Args: never
+        Returns: {
+          cluster_count: number
+          plotted_roles: number
+          total_roles: number
+        }[]
+      }
       has_active_entitlement: {
         Args: { _entitlement_key: string }
         Returns: boolean
