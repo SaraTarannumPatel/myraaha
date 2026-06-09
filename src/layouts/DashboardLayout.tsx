@@ -58,6 +58,7 @@ const careerNav = [
   { label: "Dashboard", icon: LayoutDashboard, path: "/dashboard", color: "blue" },
   { label: "Curiosity Compass", icon: Compass, path: "/dashboard/curiosity-compass", color: "blue" },
   { label: "AI Roadmap", icon: Map, path: "/dashboard/roadmap", color: "indigo" },
+  { label: "CareerMap", icon: Globe, path: "/dashboard/careermap", color: "blue" },
   { label: "SelfGraph™", icon: Brain, path: "/dashboard/selfgraph", color: "terracotta" },
   { label: "SkillStacker", icon: Zap, path: "/dashboard/skill-stacker", color: "blue" },
   { label: "Content Library", icon: BookOpen, path: "/dashboard/content-library", color: "indigo" },
