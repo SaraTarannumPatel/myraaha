@@ -12,11 +12,21 @@ export interface Entity {
   skills?: string[];
 }
 
+export type ResourceFormat =
+  | "youtube" | "video" | "course" | "book" | "article" | "blog"
+  | "podcast" | "research_paper" | "interview" | "image" | "community" | "company";
+
 export interface WebResource {
   title: string;
   link: string;
   snippet: string;
   displayLink?: string;
+  format?: ResourceFormat;
+  platform?: string;
+  thumbnail?: string;
+  author?: string;
+  duration?: string;
+  badge?: string;
 }
 
 export interface SubStep {
