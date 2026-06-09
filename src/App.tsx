@@ -38,7 +38,7 @@ import Dashboard from "./pages/Dashboard";
 import Insights from "./pages/Insights";
 // Career
 import CuriosityCompass from "./pages/career/CuriosityCompass";
-import CareerMap from "./pages/career/CareerMap";
+import Roadmap from "./pages/career/Roadmap";
 import SelfGraph from "./pages/career/SelfGraph";
 import LivingResume from "./pages/career/LivingResume";
 import Explore from "./pages/career/Explore";
