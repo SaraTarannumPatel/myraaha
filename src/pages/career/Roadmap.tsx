@@ -359,11 +359,27 @@ export default function Roadmap() {
           <h1 className="text-2xl md:text-3xl font-bold">AI Roadmaps</h1>
           <p className="text-sm text-muted-foreground">Adaptive learning paths built from what you liked, loved, and bookmarked.</p>
         </div>
-        <div className="flex gap-2">
+        <div className="flex gap-2 items-center">
+          <Badge variant={demoMode ? "default" : "outline"} className="text-[10px]">
+            {demoMode ? "Demo Mode ON" : "Live Mode"}
+          </Badge>
+          <Button
+            variant="outline" size="sm"
+            onClick={() => {
+              setCoachNote(MOCK_COACH_NOTE);
+              setTherapistAdjust(MOCK_THERAPIST_ADJUST);
+              setSmartNavApplied(true);
+              toast.success("Demo banners re-seeded");
+            }}
+          >
+            Replay Demo
+          </Button>
           <Button variant="outline" size="sm" onClick={goToContentLibrary} disabled={!activeEntity}>
             <Library size={14} className="mr-1" /> Content Library
           </Button>
-          <Button variant="ghost" size="icon"><SettingsIcon size={16} /></Button>
+          <Button variant="ghost" size="icon" onClick={() => setDemoMode((v) => !v)}>
+            <SettingsIcon size={16} />
+          </Button>
         </div>
       </div>
 
