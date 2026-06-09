@@ -530,19 +530,79 @@ function StatCard({ icon: Icon, label, value }: { icon: any; label: string; valu
   );
 }
 
+// ─── Resource cards: grouped by format, horizontally scrollable ──────────
+const FORMAT_META: Record<string, { label: string; icon: any; tint: string; ring: string }> = {
+  youtube:        { label: "YouTube",         icon: Youtube,        tint: "from-red-500/15 to-rose-500/10",      ring: "ring-red-200" },
+  video:          { label: "Talks & Videos",  icon: Video,          tint: "from-purple-500/15 to-fuchsia-500/10", ring: "ring-purple-200" },
+  course:         { label: "Courses",         icon: GraduationCap,  tint: "from-blue-500/15 to-sky-500/10",      ring: "ring-blue-200" },
+  book:           { label: "Books",           icon: BookOpen,       tint: "from-amber-500/15 to-orange-500/10",  ring: "ring-amber-200" },
+  article:        { label: "Articles",        icon: Newspaper,      tint: "from-slate-500/15 to-zinc-500/10",    ring: "ring-slate-200" },
+  blog:           { label: "Blogs",           icon: ScrollText,     tint: "from-emerald-500/15 to-teal-500/10",  ring: "ring-emerald-200" },
+  podcast:        { label: "Podcasts",        icon: Mic,            tint: "from-indigo-500/15 to-violet-500/10", ring: "ring-indigo-200" },
+  research_paper: { label: "Research Papers", icon: FileText,       tint: "from-cyan-500/15 to-sky-500/10",      ring: "ring-cyan-200" },
+  interview:      { label: "Interviews",      icon: MessageSquare,  tint: "from-pink-500/15 to-rose-500/10",     ring: "ring-pink-200" },
+  image:          { label: "Visual References", icon: ImageIcon,    tint: "from-yellow-500/15 to-amber-500/10",  ring: "ring-yellow-200" },
+  community:      { label: "Communities",     icon: Users,          tint: "from-lime-500/15 to-green-500/10",    ring: "ring-lime-200" },
+  company:        { label: "Companies",       icon: Building2,      tint: "from-stone-500/15 to-neutral-500/10", ring: "ring-stone-200" },
+};
+const FORMAT_ORDER = ["youtube", "course", "book", "podcast", "research_paper", "interview", "company", "blog", "article", "image", "video", "community"];
+
 function ResourceList({ resources }: { resources: WebResource[] }) {
   if (!resources.length) return <p className="text-xs text-muted-foreground mt-2">No results.</p>;
+  const grouped = resources.reduce<Record<string, WebResource[]>>((acc, r) => {
+    const key = r.format || "article";
+    (acc[key] = acc[key] || []).push(r);
+    return acc;
+  }, {});
+  const orderedKeys = FORMAT_ORDER.filter((k) => grouped[k]?.length);
   return (
-    <ul className="space-y-2 mt-2">
-      {resources.map((r, i) => (
-        <li key={i} className="text-xs">
-          <a href={r.link} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline font-medium inline-flex items-center gap-1">
-            {r.title} <ExternalLink size={10} />
-          </a>
-          {r.displayLink && <span className="text-muted-foreground"> · {r.displayLink}</span>}
-          {r.snippet && <p className="text-muted-foreground mt-0.5 leading-snug">{r.snippet}</p>}
-        </li>
-      ))}
-    </ul>
+    <div className="space-y-4 mt-2">
+      {orderedKeys.map((key) => {
+        const meta = FORMAT_META[key] || FORMAT_META.article;
+        const Icon = meta.icon;
+        const items = grouped[key];
+        return (
+          <div key={key}>
+            <div className="flex items-center gap-2 mb-2">
+              <Icon size={14} className="text-foreground/70" />
+              <p className="text-xs font-semibold uppercase tracking-wide">{meta.label}</p>
+              <span className="text-[10px] text-muted-foreground">· {items.length}</span>
+            </div>
+            <div className="flex gap-3 overflow-x-auto pb-2 -mx-1 px-1 snap-x snap-mandatory">
+              {items.map((r, i) => (
+                <a
+                  key={i}
+                  href={r.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`snap-start shrink-0 w-[260px] rounded-xl border bg-card hover:shadow-md transition-all overflow-hidden group ring-1 ${meta.ring}`}
+                >
+                  <div className={`h-20 bg-gradient-to-br ${meta.tint} flex items-center justify-center relative`}>
+                    <Icon size={28} className="text-foreground/40 group-hover:scale-110 transition-transform" />
+                    {r.duration && (
+                      <span className="absolute bottom-1 right-1 text-[10px] bg-background/80 px-1.5 py-0.5 rounded">{r.duration}</span>
+                    )}
+                    {r.badge && (
+                      <span className="absolute top-1 left-1 text-[9px] uppercase tracking-wider bg-background/80 px-1.5 py-0.5 rounded font-semibold">{r.badge}</span>
+                    )}
+                  </div>
+                  <div className="p-3 space-y-1">
+                    <p className="text-xs font-semibold leading-snug line-clamp-2 group-hover:text-primary">{r.title}</p>
+                    {r.snippet && <p className="text-[11px] text-muted-foreground line-clamp-2 leading-snug">{r.snippet}</p>}
+                    <div className="flex items-center justify-between pt-1">
+                      <span className="text-[10px] text-muted-foreground truncate">
+                        {r.author ? `${r.author} · ` : ""}{r.platform || r.displayLink}
+                      </span>
+                      <ExternalLink size={10} className="text-muted-foreground shrink-0" />
+                    </div>
+                  </div>
+                </a>
+              ))}
+            </div>
+          </div>
+        );
+      })}
+    </div>
   );
 }
+
