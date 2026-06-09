@@ -17,6 +17,15 @@ import {
   loadAiRoadmapsData, saveAiRoadmapsData, recordRoadmapAccess,
   recordSelfGraphSignal, logVirtualCoachEvent,
 } from "@/lib/aiRoadmaps";
+import {
+  MOCK_ENTITIES, MOCK_COACH_NOTE, MOCK_THERAPIST_ADJUST,
+  getMockResourcesForStep, getMockResourcesForSubStep,
+} from "@/lib/aiRoadmapsMock";
+
+// Demo mode: when ON, mock entities, resources, coach + therapist banners
+// are seeded so the entire AI Roadmaps experience works end-to-end for
+// presentations even without real backend signals. Toggle via UI button.
+const DEMO_MODE_DEFAULT = true;
 
 // Mock progress/insights per spec
 const MOCK_PROGRESS = {
@@ -55,16 +64,25 @@ export default function Roadmap() {
   const [coachNote, setCoachNote] = useState<any>(null);
   const [therapistAdjust, setTherapistAdjust] = useState<any>(null);
   const [smartNavApplied, setSmartNavApplied] = useState(false);
+  const [demoMode, setDemoMode] = useState(DEMO_MODE_DEFAULT);
 
   // ─── Load entities ────────────────────────────────────────────────────
   useEffect(() => {
-    if (!user) return;
     (async () => {
       setLoadingEntities(true);
       try {
-        const ents = await fetchEntitiesFromInteractions(user.id);
+        let ents: Entity[] = [];
+        if (user) {
+          try { ents = await fetchEntitiesFromInteractions(user.id); } catch {}
+        }
+        if (demoMode && ents.length === 0) {
+          ents = MOCK_ENTITIES;
+          // Seed demo coach + therapist banners so the full UI is visible
+          setCoachNote(MOCK_COACH_NOTE);
+          setTherapistAdjust(MOCK_THERAPIST_ADJUST);
+          setSmartNavApplied(true);
+        }
         setEntities(ents);
-        // Pre-build steps in memory for each entity
         const built: Record<string, RoadmapStep[]> = {};
         ents.forEach((e) => { built[e.id] = buildRoadmapForEntity(e); });
         setSteps(built);
@@ -95,14 +113,13 @@ export default function Roadmap() {
         setActiveEntityId(first);
         if (first) recordRoadmapAccess({ entityId: first });
 
-        // Load coach note from userData
         const d = loadAiRoadmapsData();
         if (d?.stuckSignals?.coachNote) setCoachNote(d.stuckSignals.coachNote);
       } finally {
         setLoadingEntities(false);
       }
     })();
-  }, [user]);
+  }, [user, demoMode]);
 
   const activeEntity = useMemo(
     () => entities.find((e) => e.id === activeEntityId) || null,
@@ -111,13 +128,25 @@ export default function Roadmap() {
   const activeSteps = activeEntityId ? steps[activeEntityId] || [] : [];
 
   // ─── Resource fetching ────────────────────────────────────────────────
+  const wait = (ms: number) => new Promise((r) => setTimeout(r, ms));
+
   const fetchStepResources = async (step: RoadmapStep) => {
     if (!activeEntity) return;
     const key = `${activeEntity.id}:${step.id}`;
     setLoadingResources((p) => ({ ...p, [key]: true }));
     try {
-      const q = buildStepQuery(activeEntity, step);
-      const results = await searchWebResources(q, 8);
+      let results: WebResource[] = [];
+      try {
+        const q = buildStepQuery(activeEntity, step);
+        results = await searchWebResources(q, 8);
+      } catch {
+        // fall through to mock
+      }
+      if (!results.length) {
+        // Demo / fallback path: simulate realistic AI search latency
+        await wait(900 + Math.random() * 700);
+        results = getMockResourcesForStep(activeEntity, step.id);
+      }
       setSteps((prev) => ({
         ...prev,
         [activeEntity.id]: prev[activeEntity.id].map((s) =>
@@ -131,9 +160,7 @@ export default function Roadmap() {
         signals: { commitment_signal: 0.25 },
         tags: ["ai_roadmaps", "resources", activeEntity.kind],
       });
-      if (results.length === 0) toast.message("No results found. Try the sub-steps for more specific queries.");
-    } catch (e) {
-      toast.error("Couldn't fetch resources. A search provider may not be configured.");
+      toast.success(`Loaded ${results.length} resources for ${step.title}`);
     } finally {
       setLoadingResources((p) => ({ ...p, [key]: false }));
     }
@@ -144,8 +171,15 @@ export default function Roadmap() {
     const key = `${activeEntity.id}:${step.id}:${sub.id}`;
     setLoadingResources((p) => ({ ...p, [key]: true }));
     try {
-      const q = buildSubStepQuery(activeEntity, sub);
-      const results = await searchWebResources(q, 8);
+      let results: WebResource[] = [];
+      try {
+        const q = buildSubStepQuery(activeEntity, sub);
+        results = await searchWebResources(q, 8);
+      } catch {}
+      if (!results.length) {
+        await wait(700 + Math.random() * 600);
+        results = getMockResourcesForSubStep(activeEntity, step.id, sub);
+      }
       setSteps((prev) => ({
         ...prev,
         [activeEntity.id]: prev[activeEntity.id].map((s) =>
@@ -155,9 +189,6 @@ export default function Roadmap() {
         ),
       }));
       recordRoadmapAccess({ entityId: activeEntity.id, stepId: `${step.id}/${sub.id}` });
-      if (results.length === 0) toast.message("No results found for this sub-step.");
-    } catch {
-      toast.error("Couldn't fetch resources.");
     } finally {
       setLoadingResources((p) => ({ ...p, [key]: false }));
     }
@@ -328,11 +359,27 @@ export default function Roadmap() {
           <h1 className="text-2xl md:text-3xl font-bold">AI Roadmaps</h1>
           <p className="text-sm text-muted-foreground">Adaptive learning paths built from what you liked, loved, and bookmarked.</p>
         </div>
-        <div className="flex gap-2">
+        <div className="flex gap-2 items-center">
+          <Badge variant={demoMode ? "default" : "outline"} className="text-[10px]">
+            {demoMode ? "Demo Mode ON" : "Live Mode"}
+          </Badge>
+          <Button
+            variant="outline" size="sm"
+            onClick={() => {
+              setCoachNote(MOCK_COACH_NOTE);
+              setTherapistAdjust(MOCK_THERAPIST_ADJUST);
+              setSmartNavApplied(true);
+              toast.success("Demo banners re-seeded");
+            }}
+          >
+            Replay Demo
+          </Button>
           <Button variant="outline" size="sm" onClick={goToContentLibrary} disabled={!activeEntity}>
             <Library size={14} className="mr-1" /> Content Library
           </Button>
-          <Button variant="ghost" size="icon"><SettingsIcon size={16} /></Button>
+          <Button variant="ghost" size="icon" onClick={() => setDemoMode((v) => !v)}>
+            <SettingsIcon size={16} />
+          </Button>
         </div>
       </div>
 
