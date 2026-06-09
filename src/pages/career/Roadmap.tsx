@@ -18,7 +18,7 @@ import {
   TrendingUp, MessageSquare, Award, RefreshCw, ArrowRight, Lightbulb,
   PenLine, Meh, HelpCircle, Heart, Link, ExternalLink
 } from "lucide-react";
-import RoadmapStepDetail from "../components/roadmap/RoadmapStepDetail";
+import RoadmapStepDetail from "@/components/roadmap/RoadmapStepDetail";
 import ModuleSearchBar from "@/components/search/ModuleSearchBar";
 import EntitlementBanner from "@/components/curiositycompass/EntitlementBanner";
 import { useEntitlement } from "@/hooks/useAssessmentRewards";
