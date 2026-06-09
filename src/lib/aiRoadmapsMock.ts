@@ -307,11 +307,21 @@ const CTX: Record<string, EntityContext> = {
 
 // ─── Step intents — used to write entity+step-specific snippets ───────────
 const STEP_INTENT: Record<string, { label: string; verb: string; snippetTail: (e: string) => string }> = {
-  step1: { label: "Foundation",  verb: "fundamentals of",      snippetTail: (e) => `to build a rock-solid foundation in ${e}.` },
-  step2: { label: "Core Skills", verb: "core day-to-day skills for", snippetTail: (e) => `that real ${e}s rely on every single day.` },
-  step3: { label: "Projects",    verb: "portfolio-quality projects for", snippetTail: (e) => `to ship real, hireable ${e} work.` },
-  step4: { label: "Advanced",    verb: "advanced, specialist techniques in", snippetTail: (e) => `that separate senior ${e}s from the rest.` },
-  step5: { label: "Interviews",  verb: "interview prep and job-search tactics for", snippetTail: (e) => `to land your first (or next) ${e} role.` },
+  step1:  { label: "Self-Discovery",       verb: "self-discovery and fit-checking for",          snippetTail: (e) => `to confirm ${e} actually matches who you are.` },
+  step2:  { label: "Foundation",           verb: "fundamentals of",                              snippetTail: (e) => `to build a rock-solid foundation in ${e}.` },
+  step3:  { label: "Skill Stack",          verb: "designing the core/supporting skill stack for", snippetTail: (e) => `that a working ${e} actually needs.` },
+  step4:  { label: "Core Skills",          verb: "daily-practice core skills for",               snippetTail: (e) => `that real ${e}s rely on every single day.` },
+  step5:  { label: "Industry Immersion",   verb: "mapping the industry landscape around",        snippetTail: (e) => `— sectors, companies, salaries, geographies for ${e}.` },
+  step6:  { label: "Projects",             verb: "portfolio-quality projects for",               snippetTail: (e) => `to ship real, hireable ${e} work.` },
+  step7:  { label: "Peer Circles",         verb: "finding peer circles and study groups for",    snippetTail: (e) => `so you don't grow as a ${e} in isolation.` },
+  step8:  { label: "Mentorship",           verb: "finding mentors and coaching for",             snippetTail: (e) => `to compress years of ${e} learning into months.` },
+  step9:  { label: "Advanced",             verb: "advanced, specialist techniques in",           snippetTail: (e) => `that separate senior ${e}s from the rest.` },
+  step10: { label: "Wellbeing & Pace",     verb: "sustaining a healthy pace while becoming a",   snippetTail: (e) => `so you don't burn out on the road to ${e}.` },
+  step11: { label: "Inspiration",          verb: "real-life stories and role models of",         snippetTail: (e) => `that prove ${e} is possible for people like you.` },
+  step12: { label: "Living Resume",        verb: "building a living resume and showcase for a",  snippetTail: (e) => `so your ${e} work is always job-ready.` },
+  step13: { label: "Interviews & Jobs",    verb: "interview prep and job-search tactics for",    snippetTail: (e) => `to land your first (or next) ${e} role.` },
+  step14: { label: "Transition Planning",  verb: "planning a safe transition into",              snippetTail: (e) => `with phased pivots and fail-safe backtracks for ${e}.` },
+  step15: { label: "Achievements",         verb: "milestone systems and recognition for",        snippetTail: (e) => `to lock in your identity as a ${e}.` },
 };
 
 const hostnameOf = (u: string) => { try { return new URL(u).hostname.replace(/^www\./, ""); } catch { return u; } };
