@@ -44,6 +44,11 @@ export interface RoadmapStep {
   keywords: string[];
   resources?: WebResource[];
   subSteps?: SubStep[];
+  // Cross-module linkage — every roadmap step ties back to a real module
+  // in the app so the user can act on it immediately.
+  linkedModule?: string;          // human label, e.g. "Curiosity Compass"
+  linkedRoute?: string;           // in-app path, e.g. "/dashboard/curiosity-compass"
+  formula?: string;               // short explanation of the signal/logic
 }
 
 export interface VirtualCoachRoadmapEvent {
