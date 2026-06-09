@@ -474,8 +474,8 @@ export default function Roadmap() {
                       </div>
                     </div>
                     <Button size="sm" variant="outline" disabled={isLoading} onClick={() => fetchStepResources(step)}>
-                      {isLoading ? <Loader2 size={12} className="animate-spin mr-1" /> : <RefreshCw size={12} className="mr-1" />}
-                      {step.resources ? "Refresh Resources" : "Get Resources"}
+                      {isLoading ? <Loader2 size={12} className="animate-spin mr-1" /> : <Wand2 size={12} className="mr-1" />}
+                      {isLoading ? <LoadingMicrocopy /> : step.resources ? "Re-curate with AI" : "Curate with AI"}
                     </Button>
                   </div>
                 </CardHeader>
