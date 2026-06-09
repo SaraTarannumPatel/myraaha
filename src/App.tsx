@@ -127,8 +127,7 @@ const App = () => (
               <Route path="insights" element={<Insights />} />
               {/* Career */}
               <Route path="curiosity-compass" element={<CuriosityCompass />} />
-              <Route path="roadmap" element={<CareerMap />} />
-              <Route path="careermap" element={<CareerMap />} />
+              <Route path="roadmap" element={<Roadmap />} />
 
               <Route path="selfgraph" element={<SelfGraph />} />
               <Route path="living-resume" element={<LivingResume />} />
