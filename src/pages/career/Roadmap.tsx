@@ -449,7 +449,7 @@ export default function Roadmap() {
             <div className="flex items-center justify-between">
               <div>
                 <h2 className="text-lg font-semibold">{activeEntity.label}</h2>
-                <p className="text-xs text-muted-foreground">5-stage adaptive roadmap</p>
+                <p className="text-xs text-muted-foreground">15-stage adaptive roadmap · linked to every module in the app</p>
               </div>
               <button onClick={goToContentLibrary} className="text-xs text-blue-600 hover:underline flex items-center gap-1">
                 Go to Learning Library <ArrowRight size={12} />
