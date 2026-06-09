@@ -471,6 +471,20 @@ export default function Roadmap() {
                       <div>
                         <CardTitle className="text-base">{step.title}</CardTitle>
                         <p className="text-xs text-muted-foreground mt-0.5">{step.description}</p>
+                        {step.linkedModule && (
+                          <div className="flex flex-wrap items-center gap-2 mt-1.5">
+                            <button
+                              type="button"
+                              onClick={(e) => { e.stopPropagation(); if (step.linkedRoute) navigate(step.linkedRoute); }}
+                              className="inline-flex items-center gap-1 text-[10px] px-2 py-0.5 rounded-full bg-indigo-50 text-indigo-700 border border-indigo-200 hover:bg-indigo-100"
+                            >
+                              <ArrowRight size={10} /> Linked to: {step.linkedModule}
+                            </button>
+                            {step.formula && (
+                              <span className="text-[10px] text-muted-foreground font-mono">ƒ {step.formula}</span>
+                            )}
+                          </div>
+                        )}
                       </div>
                     </div>
                     <Button size="sm" variant="outline" disabled={isLoading} onClick={() => fetchStepResources(step)}>
