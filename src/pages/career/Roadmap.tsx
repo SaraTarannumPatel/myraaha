@@ -492,8 +492,8 @@ export default function Roadmap() {
                             <p className="text-xs text-muted-foreground">{sub.description}</p>
                           </div>
                           <Button size="sm" variant="ghost" disabled={subLoading} onClick={() => fetchSubStepResources(step, sub)}>
-                            {subLoading ? <Loader2 size={12} className="animate-spin mr-1" /> : <BookOpen size={12} className="mr-1" />}
-                            {sub.resources ? "Refresh" : "Get Resources"}
+                            {subLoading ? <Loader2 size={12} className="animate-spin mr-1" /> : <Wand2 size={12} className="mr-1" />}
+                            {subLoading ? <LoadingMicrocopy /> : sub.resources ? "Re-curate" : "Curate with AI"}
                           </Button>
                         </div>
                         {sub.resources && <ResourceList resources={sub.resources} />}
