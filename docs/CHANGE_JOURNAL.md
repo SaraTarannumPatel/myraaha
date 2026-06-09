@@ -85,3 +85,11 @@ CareerMap-CareerScape spec.
 **Why:** Unblock real-time password reset, broaden sign-in options to the providers Lovable Cloud actually supports, and complete the first end-to-end vertical slice data load for the new CareerMap-CareerScape module.
 
 **Files:** `src/pages/Auth.tsx`, `tsconfig.app.json`, `src/components/MyRaahaNewsletter.tsx`, `src/pages/MyRaahaContact.tsx`, `src/components/TrustSections.tsx`, `src/pages/MyRaahaPartnerships.tsx`, `src/pages/career/{CoreTeam,Facilitator,Intern,Volunteer}.tsx`, `src/integrations/lovable/index.ts`.
+
+## CareerMap MVP — Google Maps for Careers
+**What:** Built `/dashboard/careermap` — interactive canvas rendering all 18,033 plotted roles on a 2D KSAO-derived map with sector convex hulls, pan/zoom, search, hover tooltips, layer toggles, and a Role Deep Dive sheet (Overview, Pathway, KSAO bars, Nearby roles).
+**Why:** Implements the CareerMap/CareerScape vision — every career visible at once, similarity = proximity, and a single click to launch turn-by-turn PathFinder via the existing AI Roadmaps module.
+**Before:** CareerMap module had been deleted; the 18,033-role KSAO+UMAP data layer existed in the DB but had no UI consumer.
+**Benefit:** Users can now visually explore the career universe, see how sectors cluster (FinTech/HealthTech overlaps emerge naturally), find their "You Are Here" pin from signals, and route to any role via the existing roadmap engine.
+**Files:** `src/lib/careerMap.ts` (data + hulls + viewport math), `src/pages/career/CareerMap.tsx` (page), `src/App.tsx` (route), `src/layouts/DashboardLayout.tsx` (nav).
+**Next slices:** Exam-gate overlays, hiring-pulse heat layer, KSAO-distance PathFinder routing, Pioneer reviews, Dream Board persistence.
