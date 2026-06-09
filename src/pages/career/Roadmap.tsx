@@ -530,6 +530,25 @@ function StatCard({ icon: Icon, label, value }: { icon: any; label: string; valu
   );
 }
 
+// Cycling AI-powered microcopy that hints "this is intelligence at work"
+const LOADING_PHRASES = [
+  "Reading your signals…",
+  "Scanning the open web…",
+  "Stitching books, videos, papers…",
+  "Asking the experts…",
+  "Tasting your taste…",
+  "Hand-picking what matters…",
+  "Almost there — polishing picks…",
+];
+function LoadingMicrocopy() {
+  const [i, setI] = useState(0);
+  useEffect(() => {
+    const id = setInterval(() => setI((v) => (v + 1) % LOADING_PHRASES.length), 1100);
+    return () => clearInterval(id);
+  }, []);
+  return <span className="text-[11px]">{LOADING_PHRASES[i]}</span>;
+}
+
 // ─── Resource cards: grouped by format, horizontally scrollable ──────────
 const FORMAT_META: Record<string, { label: string; icon: any; tint: string; ring: string }> = {
   youtube:        { label: "YouTube",         icon: Youtube,        tint: "from-red-500/15 to-rose-500/10",      ring: "ring-red-200" },
