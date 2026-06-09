@@ -8,7 +8,9 @@ import { Progress } from "@/components/ui/progress";
 import { toast } from "sonner";
 import {
   Sparkles, RefreshCw, ExternalLink, Library, Settings as SettingsIcon,
-  Target, Zap, Flame, TrendingUp, ArrowRight, Loader2, BookOpen,
+  Target, Zap, Flame, TrendingUp, ArrowRight, Loader2, BookOpen, Wand2,
+  Youtube, GraduationCap, Mic, FileText, Newspaper, Image as ImageIcon,
+  Building2, Users, Video, ScrollText, MessageSquare,
 } from "lucide-react";
 import {
   Entity, RoadmapStep, SubStep, WebResource,
