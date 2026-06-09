@@ -68,13 +68,21 @@ export default function Roadmap() {
 
   // ─── Load entities ────────────────────────────────────────────────────
   useEffect(() => {
-    if (!user) return;
     (async () => {
       setLoadingEntities(true);
       try {
-        const ents = await fetchEntitiesFromInteractions(user.id);
+        let ents: Entity[] = [];
+        if (user) {
+          try { ents = await fetchEntitiesFromInteractions(user.id); } catch {}
+        }
+        if (demoMode && ents.length === 0) {
+          ents = MOCK_ENTITIES;
+          // Seed demo coach + therapist banners so the full UI is visible
+          setCoachNote(MOCK_COACH_NOTE);
+          setTherapistAdjust(MOCK_THERAPIST_ADJUST);
+          setSmartNavApplied(true);
+        }
         setEntities(ents);
-        // Pre-build steps in memory for each entity
         const built: Record<string, RoadmapStep[]> = {};
         ents.forEach((e) => { built[e.id] = buildRoadmapForEntity(e); });
         setSteps(built);
@@ -105,14 +113,13 @@ export default function Roadmap() {
         setActiveEntityId(first);
         if (first) recordRoadmapAccess({ entityId: first });
 
-        // Load coach note from userData
         const d = loadAiRoadmapsData();
         if (d?.stuckSignals?.coachNote) setCoachNote(d.stuckSignals.coachNote);
       } finally {
         setLoadingEntities(false);
       }
     })();
-  }, [user]);
+  }, [user, demoMode]);
 
   const activeEntity = useMemo(
     () => entities.find((e) => e.id === activeEntityId) || null,
