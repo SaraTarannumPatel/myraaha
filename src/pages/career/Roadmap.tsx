@@ -64,6 +64,7 @@ export default function Roadmap() {
   const [coachNote, setCoachNote] = useState<any>(null);
   const [therapistAdjust, setTherapistAdjust] = useState<any>(null);
   const [smartNavApplied, setSmartNavApplied] = useState(false);
+  const [demoMode, setDemoMode] = useState(DEMO_MODE_DEFAULT);
 
   // ─── Load entities ────────────────────────────────────────────────────
   useEffect(() => {
