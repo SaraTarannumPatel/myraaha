@@ -265,7 +265,7 @@ const DashboardLayout = () => {
             ? "max-w-none w-full p-0 overflow-visible"
             : location.pathname === "/dashboard/curiosity-compass"
               ? "py-4 sm:py-5 md:py-6 lg:py-8 max-w-none w-full px-0 sm:px-0 lg:px-0 overflow-visible overflow-x-hidden"
-            : "max-w-6xl px-3 sm:px-5 md:px-6 lg:px-8 overflow-x-hidden"
+            : "py-4 sm:py-5 md:py-6 lg:py-8 max-w-6xl px-3 sm:px-5 md:px-6 lg:px-8 overflow-x-hidden"
         }`}>
           <Outlet />
         </div>

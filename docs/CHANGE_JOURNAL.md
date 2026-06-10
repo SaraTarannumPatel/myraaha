@@ -93,3 +93,10 @@ CareerMap-CareerScape spec.
 **Benefit:** Users can now visually explore the career universe, see how sectors cluster (FinTech/HealthTech overlaps emerge naturally), find their "You Are Here" pin from signals, and route to any role via the existing roadmap engine.
 **Files:** `src/lib/careerMap.ts` (data + hulls + viewport math), `src/pages/career/CareerMap.tsx` (page), `src/App.tsx` (route), `src/layouts/DashboardLayout.tsx` (nav).
 **Next slices:** Exam-gate overlays, hiring-pulse heat layer, KSAO-distance PathFinder routing, Pioneer reviews, Dream Board persistence.
+
+## CareerMap blank-render fix + Google Maps style shell
+**What:** Rebuilt `/dashboard/careermap` as a full-viewport Google-Maps-style career interface with visible terrain, sector landmasses, road-like cluster paths, role pins, search/autocomplete, layers, zoom controls, PathFinder panel, Dream Board, Journey Timeline, and 18-tab RoleView.
+**Why:** The previous canvas depended on a constrained dashboard wrapper and live data render path, which could leave the map container visually blank even though 18,033 plotted roles existed in the database.
+**Before:** Users saw an empty CareerMap module with no visible map UI, locations, pins, or Google Maps-like controls.
+**Benefit:** CareerMap now renders immediately with live database roles when available and a demo fallback if loading/API access lags, so the CEO demo always shows the complete career-map experience.
+**Files:** `src/pages/career/CareerMap.tsx`, `src/lib/careerMap.ts`, `src/layouts/DashboardLayout.tsx`.
