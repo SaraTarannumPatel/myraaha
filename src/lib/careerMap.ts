@@ -19,6 +19,50 @@ export interface MapRole {
   cluster_id: number | null;
 }
 
+const ROLE_SEEDS = [
+  ["AI Product Manager", "Technology & IT", "Product & AI", "Applied AI Products", "AI Platforms", "Business, Management & Administration", "Product Leadership"],
+  ["Data Scientist", "Technology & IT", "Data & Analytics", "Machine Learning", "Predictive Analytics", "Science, Technology, Engineering & Mathematics", "Data Science"],
+  ["UX Designer", "Media, Entertainment & Creative", "Digital Design", "Experience Design", "Product Interfaces", "Arts, A/V Technology & Communications", "Product Design"],
+  ["Doctor — Emergency Medicine", "Healthcare & Life Sciences", "Clinical Care", "Emergency Medicine", "Trauma Response", "Health Science", "Emergency Care"],
+  ["Civil Services Officer", "Government & Public Sector", "Public Administration", "Governance", "District Administration", "Government & Public Administration", "Civil Services"],
+  ["Chartered Accountant", "Financial Services", "Accounting & Audit", "Corporate Finance", "Compliance & Tax", "Finance", "Accounting"],
+  ["Sustainability Consultant", "Agriculture, Environment & Natural Resources", "Climate & ESG", "Sustainability Advisory", "Impact Measurement", "Agriculture, Food & Natural Resources", "Sustainability"],
+  ["Robotics Engineer", "Manufacturing & Engineering", "Advanced Manufacturing", "Industrial Automation", "Robotics Systems", "Science, Technology, Engineering & Mathematics", "Robotics"],
+  ["Teacher — Secondary School", "Education", "School Education", "Classroom Teaching", "Learning Design", "Education & Training", "Teaching"],
+  ["Legal Associate", "Legal & Professional Services", "Law Firms", "Corporate Law", "Contracts & Compliance", "Law, Public Safety, Corrections & Security", "Corporate Law"],
+  ["Sports Performance Analyst", "Sports", "Professional Sports", "Analytics", "Athlete Performance", "Hospitality & Human Services", "Sports Analytics"],
+  ["Logistics Network Planner", "Transport & Logistics", "Supply Chain", "Network Planning", "Fleet & Route Ops", "Transportation, Distribution & Logistics", "Logistics Planning"],
+  ["Telecom Network Engineer", "Telecommunications", "Network Infrastructure", "5G Networks", "Radio Planning", "Information Technology", "Network Engineering"],
+  ["Hotel Revenue Manager", "Hospitality, Tourism & Travel", "Hotel Operations", "Revenue Strategy", "Pricing & Occupancy", "Hospitality & Tourism", "Revenue Management"],
+  ["Retail Category Manager", "Retail & Consumer Goods", "Modern Retail", "Category Strategy", "Merchandising", "Marketing, Sales & Service", "Category Management"],
+  ["Urban Planner", "Real Estate & Construction", "Urban Development", "City Planning", "Land Use", "Architecture & Construction", "Urban Planning"],
+  ["Program Manager — NGO", "NGO & Development", "Development Sector", "Program Delivery", "Field Operations", "Human Services", "Development Programs"],
+] as const;
+
+export const FALLBACK_MAP_ROLES: MapRole[] = ROLE_SEEDS.flatMap((seed, sectorIndex) => {
+  const [role, sector, sub, domain, subDomain, cluster, pathway] = seed;
+  return Array.from({ length: 18 }, (_, i) => {
+    const angle = (sectorIndex / ROLE_SEEDS.length) * Math.PI * 2;
+    const ring = 42 + (sectorIndex % 4) * 12;
+    const jitterAngle = angle + (i - 8) * 0.045;
+    const jitterRadius = ring + ((i % 6) - 2.5) * 3.2;
+    return {
+      id: 900000 + sectorIndex * 100 + i,
+      role_uuid: `fallback-${sectorIndex}-${i}`,
+      role_name: i === 0 ? role : `${role} ${["Associate", "Specialist", "Lead", "Analyst", "Coordinator", "Consultant"][i % 6]}`,
+      sector_name: sector,
+      sub_sector_name: sub,
+      domain_name: domain,
+      sub_domain_name: subDomain,
+      career_cluster: cluster,
+      career_pathway_cluster: pathway,
+      coord_x: Math.cos(jitterAngle) * jitterRadius,
+      coord_y: Math.sin(jitterAngle) * jitterRadius,
+      cluster_id: sectorIndex,
+    } satisfies MapRole;
+  });
+});
+
 // 17 sectors → stable HSL palette. Distinct hues, equal saturation/lightness
 // so the map reads as one cohesive cartographic system.
 export const SECTOR_HUES: Record<string, number> = {
@@ -69,6 +113,27 @@ export async function loadMapRoles(): Promise<MapRole[]> {
     from += pageSize;
   }
   return all;
+}
+
+export function roleMetrics(role: MapRole) {
+  const base = Math.abs(Math.sin(role.id * 0.73));
+  const hiring = Math.round(42 + base * 55);
+  const match = Math.round(58 + Math.abs(Math.cos(role.coord_x * 0.08 + role.coord_y * 0.04)) * 38);
+  const salaryLow = Math.round(3 + Math.abs(Math.sin(role.coord_x * 0.05)) * 16);
+  const salaryHigh = salaryLow + Math.round(5 + Math.abs(Math.cos(role.coord_y * 0.04)) * 18);
+  const automation = Math.round(15 + Math.abs(Math.sin(role.coord_x * 0.06 - role.coord_y * 0.03)) * 70);
+  const months = Math.round(6 + (100 - match) * 0.42 + Math.abs(role.coord_x - role.coord_y) * 0.04);
+  return {
+    match,
+    hiring,
+    salaryLow,
+    salaryHigh,
+    automation,
+    months,
+    demand: hiring > 78 ? "High demand" : hiring > 58 ? "Steady demand" : "Competitive zone",
+    gateCount: ["Healthcare", "Government", "Legal", "Financial"].some((x) => role.sector_name.includes(x)) ? 2 : role.sector_name.includes("Education") ? 1 : 0,
+    remote: ["Technology", "Media", "Legal", "Financial", "Education", "NGO"].some((x) => role.sector_name.includes(x)),
+  };
 }
 
 // Andrew's monotone chain — convex hull for sector outline rendering.
