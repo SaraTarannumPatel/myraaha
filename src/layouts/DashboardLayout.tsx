@@ -58,7 +58,6 @@ const careerNav = [
   { label: "Dashboard", icon: LayoutDashboard, path: "/dashboard", color: "blue" },
   { label: "Curiosity Compass", icon: Compass, path: "/dashboard/curiosity-compass", color: "blue" },
   { label: "AI Roadmap", icon: Map, path: "/dashboard/roadmap", color: "indigo" },
-  { label: "CareerMap", icon: Globe, path: "/dashboard/careermap", color: "blue" },
   { label: "SelfGraph™", icon: Brain, path: "/dashboard/selfgraph", color: "terracotta" },
   { label: "SkillStacker", icon: Zap, path: "/dashboard/skill-stacker", color: "blue" },
   { label: "Content Library", icon: BookOpen, path: "/dashboard/content-library", color: "indigo" },
@@ -260,12 +259,10 @@ const DashboardLayout = () => {
       </div>
 
       <main className="flex-1 min-w-0 lg:ml-64 mt-14 lg:mt-0 pb-20 lg:pb-0">
-        <div className={`mx-auto min-w-0 responsive-page ${
-          location.pathname === "/dashboard/careermap"
-            ? "max-w-none w-full p-0 overflow-visible"
-            : location.pathname === "/dashboard/curiosity-compass"
-              ? "py-4 sm:py-5 md:py-6 lg:py-8 max-w-none w-full px-0 sm:px-0 lg:px-0 overflow-visible overflow-x-hidden"
-            : "py-4 sm:py-5 md:py-6 lg:py-8 max-w-6xl px-3 sm:px-5 md:px-6 lg:px-8 overflow-x-hidden"
+        <div className={`py-4 sm:py-5 md:py-6 lg:py-8 mx-auto min-w-0 responsive-page ${
+          location.pathname === "/dashboard/curiosity-compass"
+            ? "max-w-none w-full px-3 sm:px-5 lg:px-6 lg:overflow-x-visible overflow-x-hidden"
+            : "max-w-6xl px-3 sm:px-5 md:px-6 lg:px-8 overflow-x-hidden"
         }`}>
           <Outlet />
         </div>

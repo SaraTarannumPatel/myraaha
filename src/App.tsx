@@ -55,7 +55,6 @@ import CareerInspirations from "./pages/career/CareerInspirations";
 import TransitionPlanner from "./pages/career/TransitionPlanner";
 import CareerCardCollections from "./pages/career/CareerCardCollections";
 import CareerBlueprint from "./pages/career/CareerBlueprint";
-import CareerMap from "./pages/career/CareerMap";
 import TaxonomySearch from "./pages/shared/TaxonomySearch";
 // Entrepreneurship
 import StartupSparks from "./pages/entrepreneurship/StartupSparks";
@@ -146,7 +145,6 @@ const App = () => (
               <Route path="transition-planner" element={<TransitionPlanner />} />
               <Route path="career-collections" element={<CareerCardCollections />} />
               <Route path="blueprint" element={<CareerBlueprint />} />
-              <Route path="careermap" element={<CareerMap />} />
               <Route path="taxonomy" element={<TaxonomySearch />} />
               {/* Entrepreneurship */}
               <Route path="startup-sparks" element={<StartupSparks />} />
