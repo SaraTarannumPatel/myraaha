@@ -1,7 +1,7 @@
 // CareerMap — Google Maps for Careers.
 // Full-viewport canvas map with Google-Maps-style search, layers, pins,
 // PathFinder routes, RoleView, Dream Board, and Journey Timeline surfaces.
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState, type ReactNode, type PointerEvent } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import {
@@ -221,12 +221,12 @@ export default function CareerMap() {
     setVp((v) => ({ ...v, zoom: 3.2, panX: -youAreHere.x, panY: -youAreHere.y }));
   };
 
-  const onPointerDown = (event: React.PointerEvent<HTMLDivElement>) => {
+  const onPointerDown = (event: PointerEvent<HTMLDivElement>) => {
     dragRef.current = { x: event.clientX, y: event.clientY, panX: vp.panX, panY: vp.panY };
     event.currentTarget.setPointerCapture(event.pointerId);
   };
 
-  const onPointerMove = (event: React.PointerEvent<HTMLDivElement>) => {
+  const onPointerMove = (event: PointerEvent<HTMLDivElement>) => {
     const rect = event.currentTarget.getBoundingClientRect();
     const sx = event.clientX - rect.left;
     const sy = event.clientY - rect.top;
@@ -243,7 +243,7 @@ export default function CareerMap() {
     setHoverRole(nearestRole(visibleRoles, world.x, world.y, Math.max(1.5, 5 / vp.zoom)));
   };
 
-  const onPointerUp = (event: React.PointerEvent<HTMLDivElement>) => {
+  const onPointerUp = (event: PointerEvent<HTMLDivElement>) => {
     const moved = dragRef.current && (Math.abs(event.clientX - dragRef.current.x) > 4 || Math.abs(event.clientY - dragRef.current.y) > 4);
     dragRef.current = null;
     if (moved) return;
@@ -634,7 +634,7 @@ function ExploreNearby({ roles, onPick }: { roles: MapRole[]; onPick: (role: Map
   );
 }
 
-function IconButton({ icon, label, active, onClick }: { icon: React.ReactNode; label: string; active?: boolean; onClick: () => void }) {
+function IconButton({ icon, label, active, onClick }: { icon: ReactNode; label: string; active?: boolean; onClick: () => void }) {
   return (
     <button onClick={onClick} title={label} aria-label={label} className={`grid h-11 w-11 place-items-center rounded-full border shadow-lg backdrop-blur ${active ? "bg-primary text-primary-foreground" : "bg-card/95 hover:bg-accent"}`}>
       {icon}
