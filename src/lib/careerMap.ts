@@ -36,7 +36,7 @@ const ROLE_SEEDS = [
   ["Hotel Revenue Manager", "Hospitality, Tourism & Travel", "Hotel Operations", "Revenue Strategy", "Pricing & Occupancy", "Hospitality & Tourism", "Revenue Management"],
   ["Retail Category Manager", "Retail & Consumer Goods", "Modern Retail", "Category Strategy", "Merchandising", "Marketing, Sales & Service", "Category Management"],
   ["Urban Planner", "Real Estate & Construction", "Urban Development", "City Planning", "Land Use", "Architecture & Construction", "Urban Planning"],
-  ["Program Manager — NGO", "NGO & Development", "Development Sector", "Program Delivery", "Field Operations", "Human Services", "Development Programs"],
+  ["Program Manager — NGO", "Non-Profit, NGO & Development Sector", "Development Sector", "Program Delivery", "Field Operations", "Human Services", "Development Programs"],
 ] as const;
 
 export const FALLBACK_MAP_ROLES: MapRole[] = ROLE_SEEDS.flatMap((seed, sectorIndex) => {
@@ -77,7 +77,7 @@ export const SECTOR_HUES: Record<string, number> = {
   "Agriculture, Environment & Natural Resources": 95,
   "Energy & Utilities": 50,
   "Hospitality, Tourism & Travel": 15,
-  "NGO & Development": 165,
+  "Non-Profit, NGO & Development Sector": 165,
   "Real Estate & Construction": 30,
   "Retail & Consumer Goods": 350,
   "Sports": 110,
