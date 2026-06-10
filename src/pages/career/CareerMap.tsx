@@ -643,7 +643,7 @@ function IconButton({ icon, label, active, onClick }: { icon: ReactNode; label: 
 }
 
 function LayersPanel({ viewMode, setViewMode, activeOverlays, toggleOverlay, activeSectors, setActiveSectors, close }: { viewMode: ViewMode; setViewMode: (mode: ViewMode) => void; activeOverlays: Set<Overlay>; toggleOverlay: (overlay: Overlay) => void; activeSectors: Set<string>; setActiveSectors: (value: Set<string>) => void; close: () => void }) {
-  const overlays: { id: Overlay; label: string; icon: React.ReactNode }[] = [
+  const overlays: { id: Overlay; label: string; icon: ReactNode }[] = [
     { id: "hiring", label: "Live Hiring Pulse", icon: <Activity className="h-4 w-4" /> },
     { id: "salary", label: "Salary Heat", icon: <IndianRupee className="h-4 w-4" /> },
     { id: "automation", label: "AI Risk", icon: <ShieldAlert className="h-4 w-4" /> },
