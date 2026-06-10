@@ -686,7 +686,7 @@ function LayersPanel({ viewMode, setViewMode, activeOverlays, toggleOverlay, act
   );
 }
 
-function FloatingCollection({ title, icon, roles, onPick, onClose }: { title: string; icon: React.ReactNode; roles: MapRole[]; onPick: (role: MapRole) => void; onClose: () => void }) {
+function FloatingCollection({ title, icon, roles, onPick, onClose }: { title: string; icon: ReactNode; roles: MapRole[]; onPick: (role: MapRole) => void; onClose: () => void }) {
   return (
     <div className="absolute bottom-24 left-4 right-4 z-30 rounded-2xl border bg-card/98 p-4 shadow-2xl backdrop-blur md:left-auto md:right-20 md:top-[360px] md:h-fit md:w-96">
       <div className="mb-3 flex items-center justify-between">
@@ -762,7 +762,7 @@ function RoleView({ role, onRoute, onRoadmap }: { role: MapRole; onRoute: (role:
   );
 }
 
-function HeroMetric({ icon, label, value }: { icon: React.ReactNode; label: string; value: string }) {
+function HeroMetric({ icon, label, value }: { icon: ReactNode; label: string; value: string }) {
   return <div className="rounded-xl border border-primary-foreground/20 bg-primary-foreground/10 p-3 backdrop-blur"><div className="mb-1 flex items-center gap-1 text-primary-foreground/80">{icon}<span className="text-[10px] uppercase">{label}</span></div><div className="font-bold">{value}</div></div>;
 }
 
@@ -852,7 +852,7 @@ function LifestyleTab() {
   return <div className="grid gap-3 sm:grid-cols-2"><ProgressRow label="Work-life balance" sub="Typical weekly rhythm" value={72} /><ProgressRow label="Collaboration" sub="People intensity" value={78} /><ProgressRow label="Travel" sub="Location movement" value={34} /><ProgressRow label="Stress" sub="Pressure cycles" value={58} /></div>;
 }
 
-function MediaTab({ title, icon, text }: { title: string; icon: React.ReactNode; text: string }) {
+function MediaTab({ title, icon, text }: { title: string; icon: ReactNode; text: string }) {
   return <div className="rounded-2xl border bg-muted/40 p-4"><div className="mb-3 flex h-40 items-center justify-center rounded-xl bg-card"><div className="text-center"><div className="mx-auto mb-2 grid h-12 w-12 place-items-center rounded-full bg-primary/10 text-primary">{icon}</div><div className="font-bold">{title}</div><div className="mt-1 flex items-center justify-center gap-2 text-xs text-muted-foreground"><Play className="h-3 w-3" /> video <HeadphonesIcon /> audio <Camera className="h-3 w-3" /> 360°</div></div></div><p className="text-sm leading-relaxed text-muted-foreground">{text}</p></div>;
 }
 
@@ -860,7 +860,7 @@ function HeadphonesIcon() {
   return <span className="inline-flex items-center gap-1"><span className="h-3 w-3 rounded-full border" /></span>;
 }
 
-function CardGrid({ items, icon }: { items: string[]; icon: React.ReactNode }) {
+function CardGrid({ items, icon }: { items: string[]; icon: ReactNode }) {
   return <div className="grid gap-3 sm:grid-cols-2">{items.map((item) => <div key={item} className="flex items-center gap-3 rounded-xl border p-3"><span className="grid h-9 w-9 place-items-center rounded-full bg-primary/10 text-primary">{icon}</span><span className="text-sm font-medium">{item}</span></div>)}</div>;
 }
 
