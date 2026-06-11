@@ -257,7 +257,7 @@ const JourneyDiscovery = () => {
 
   const currentQ = demographicQuestions[step];
   const totalSteps = demographicQuestions.length;
-  const progressPercent = 25 + Math.round((step / totalSteps) * 40);
+  const progressPercent = 25 + Math.round((step / totalSteps) * 30);
 
   const canNext = !!answers[currentQ.id]?.trim();
 
