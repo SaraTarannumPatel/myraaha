@@ -31,6 +31,7 @@ import Welcome from "./pages/onboarding/Welcome";
 import UserTypeSelection from "./pages/onboarding/UserTypeSelection";
 import ConsentStep from "./pages/onboarding/ConsentStep";
 import JourneyDiscovery from "./pages/onboarding/JourneyDiscovery";
+import EducationalStatus from "./pages/onboarding/EducationalStatus";
 import OTPVerification from "./pages/OTPVerification";
 import ResetPassword from "./pages/ResetPassword";
 import DashboardLayout from "./layouts/DashboardLayout";
