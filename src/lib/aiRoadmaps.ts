@@ -238,25 +238,85 @@ export async function fetchEntitiesFromInteractions(userId: string): Promise<Ent
 // can act on it immediately. Order follows the Discover → Build → Connect →
 // Evolve loop. Formulas describe the signal logic that ties each step back
 // into the live SelfGraph / useUserSignals engine.
-export function buildRoadmapForEntity(entity: Entity): RoadmapStep[] {
+export interface RoadmapBuildContext {
+  educationalStatus?: string | null; // e.g. "school_1_10", "class_11", "class_12", "diploma", "undergraduate", "completed_ug"
+  highestEducation?: string | null;  // mirror from profile
+}
+
+export function buildRoadmapForEntity(entity: Entity, ctx: RoadmapBuildContext = {}): RoadmapStep[] {
   const baseKw = [entity.label, entity.kind, "career roadmap", "how to become"];
   const k = (...extra: string[]) => [...baseKw, ...extra];
 
-  return [
-    {
-      id: "step1",
-      title: "Self-Discovery & Fit",
-      description: `Confirm that ${entity.label} actually matches who you are using your Curiosity Compass + SelfGraph signals.`,
-      keywords: k("self discovery", "career fit", "personality", "values"),
-      linkedModule: "Curiosity Compass + SelfGraph",
-      linkedRoute: "/dashboard/curiosity-compass",
-      formula: "fit_score = 0.4·affinity + 0.3·values_overlap + 0.3·strength_match",
+  const status = (ctx.educationalStatus || ctx.highestEducation || "").toLowerCase();
+  const isSchool = ["school_1_10", "class_9_10", "class_11", "class_12", "class_11_12"].some(s => status.includes(s.replace("_", "")) || status === s);
+  const isUGOrLater = ["undergraduate", "completed_ug", "graduate", "diploma"].some(s => status === s);
+  const hasGraduated = ["completed_ug", "graduate"].some(s => status === s);
+
+  // ─── Education-prerequisite stages (only for those who still need them)
+  const eduStages: RoadmapStep[] = [];
+  if (isSchool) {
+    eduStages.push(
+      {
+        id: "stepEdu1",
+        title: "Stream & Subject Choice",
+        description: `Pick the right Class 11/12 stream and subjects that keep ${entity.label} achievable.`,
+        keywords: k("stream selection", "subject choice", "class 11 12", "career stream"),
+        linkedModule: "Curiosity Compass + Explore",
+        linkedRoute: "/dashboard/explore",
+        formula: "stream_fit = subject_alignment × career_pathway_overlap",
+        subSteps: [
+          { id: "stepEdu1-sub1", title: "Map subjects to your target", description: `Which subjects unlock ${entity.label}?`, keywords: k("subject mapping") },
+          { id: "stepEdu1-sub2", title: "Compare 2 stream options", description: "Pros, cons, and exit paths of each stream.", keywords: k("stream compare") },
+          { id: "stepEdu1-sub3", title: "Talk to 1 senior who took it", description: "Real perspective beats hypothetical advice.", keywords: k("senior talk", "mentor") },
+        ],
+      },
+      {
+        id: "stepEdu2",
+        title: "Entrance Exam Plan",
+        description: `Identify the entrance exams (JEE, NEET, CUET, CLAT, etc.) that lead to ${entity.label}.`,
+        keywords: k("entrance exam", "JEE NEET CUET CLAT", "exam prep"),
+        linkedModule: "Content Library + AI Coach",
+        linkedRoute: "/dashboard/content-library",
+        formula: "exam_readiness = syllabus_coverage × mock_test_avg",
+        subSteps: [
+          { id: "stepEdu2-sub1", title: "Shortlist 2–3 exams", description: "Match exams to the courses that lead to your goal.", keywords: k("entrance exam shortlist") },
+          { id: "stepEdu2-sub2", title: "Build a study calendar", description: "Weekly study + revision plan tailored to your hours.", keywords: k("study plan") },
+          { id: "stepEdu2-sub3", title: "Take 1 baseline mock", description: "Know where you stand before you sprint.", keywords: k("mock test", "baseline") },
+        ],
+      },
+      {
+        id: "stepEdu3",
+        title: "College & Course Shortlist",
+        description: `Shortlist Indian + global colleges and degree programs that lead into ${entity.label}.`,
+        keywords: k("college shortlist", "degree course", "university selection"),
+        linkedModule: "Explore (Universities + Courses)",
+        linkedRoute: "/dashboard/explore",
+        formula: "shortlist_score = course_fit × admission_realism × affordability",
+        subSteps: [
+          { id: "stepEdu3-sub1", title: "Pick 8–10 colleges", description: "Mix of reach / fit / safety options.", keywords: k("college list") },
+          { id: "stepEdu3-sub2", title: "Map cut-offs & fees in INR", description: "Know the bar and the budget upfront.", keywords: k("cutoffs", "fees INR") },
+          { id: "stepEdu3-sub3", title: "Save 3 alumni stories", description: "Read what graduates of those colleges actually do.", keywords: k("alumni stories") },
+        ],
+      },
+    );
+  } else if (isUGOrLater && !hasGraduated) {
+    eduStages.push({
+      id: "stepEdu4",
+      title: "Specialization & Higher Studies",
+      description: `Pick electives, minors, or PG paths (MS / MBA / MA / PG diploma) that bend your degree toward ${entity.label}.`,
+      keywords: k("specialization", "electives", "higher studies", "PG"),
+      linkedModule: "Content Library + Explore",
+      linkedRoute: "/dashboard/explore",
+      formula: "edu_alignment = elective_overlap + pg_path_signal",
       subSteps: [
-        { id: "step1-sub1", title: "Run a fit check", description: `Use Curiosity Compass to test your real attraction to ${entity.label}.`, keywords: k("fit check", "curiosity compass") },
-        { id: "step1-sub2", title: "Map your KSAO baseline", description: "Snapshot your knowledge, skills, abilities and other traits.", keywords: k("KSAO", "self assessment") },
-        { id: "step1-sub3", title: "Log a 'why' reflection", description: "Write 3 lines on why this path interests you — feeds SelfGraph.", keywords: k("reflection", "journal", "why") },
+        { id: "stepEdu4-sub1", title: "Pick 2 electives that matter", description: `Electives that build ${entity.label} skills.`, keywords: k("electives") },
+        { id: "stepEdu4-sub2", title: "Decide PG vs work-first", description: "Compare ROI of higher studies vs jumping into work.", keywords: k("PG vs work") },
+        { id: "stepEdu4-sub3", title: "Shortlist 5 PG programs", description: "Even if you don't apply now, know the options.", keywords: k("PG programs") },
       ],
-    },
+    });
+  }
+
+  const baseStages: RoadmapStep[] = [
     {
       id: "step2",
       title: "Foundation",
