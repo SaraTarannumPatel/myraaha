@@ -114,9 +114,11 @@ const DashboardLayout = () => {
   const navigate = useNavigate();
   const [mobileOpen, setMobileOpen] = useState(false);
 
-  const isCareer = profile?.active_intent === "career";
-  const isEntrepreneurship = profile?.active_intent === "entrepreneurship";
-  const isBoth = profile?.active_intent === "both";
+  // Default to career view when no intent is set yet — prevents empty sidebar.
+  const intent = profile?.active_intent || "career";
+  const isCareer = intent === "career";
+  const isEntrepreneurship = intent === "entrepreneurship";
+  const isBoth = intent === "both";
 
   const switchIntent = async () => {
     if (isBoth) return;
