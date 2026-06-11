@@ -9060,6 +9060,120 @@ export type Database = {
           },
         ]
       }
+      user_activities: {
+        Row: {
+          achievement: string | null
+          activity_type: string
+          created_at: string
+          id: string
+          role: string | null
+          title: string
+          user_id: string
+          year: string | null
+        }
+        Insert: {
+          achievement?: string | null
+          activity_type: string
+          created_at?: string
+          id?: string
+          role?: string | null
+          title: string
+          user_id: string
+          year?: string | null
+        }
+        Update: {
+          achievement?: string | null
+          activity_type?: string
+          created_at?: string
+          id?: string
+          role?: string | null
+          title?: string
+          user_id?: string
+          year?: string | null
+        }
+        Relationships: []
+      }
+      user_certifications: {
+        Row: {
+          certificate_url: string | null
+          completion_year: string | null
+          course_name: string
+          created_at: string
+          id: string
+          platform: string | null
+          user_id: string
+        }
+        Insert: {
+          certificate_url?: string | null
+          completion_year?: string | null
+          course_name: string
+          created_at?: string
+          id?: string
+          platform?: string | null
+          user_id: string
+        }
+        Update: {
+          certificate_url?: string | null
+          completion_year?: string | null
+          course_name?: string
+          created_at?: string
+          id?: string
+          platform?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      user_education_status: {
+        Row: {
+          board_or_university_type: string | null
+          career_domains: string[] | null
+          course_program: string | null
+          created_at: string
+          curious_careers: string | null
+          educational_status: string
+          id: string
+          institution_name: string | null
+          looking_for_help: string[] | null
+          prepping_for: string[] | null
+          stream: string | null
+          updated_at: string
+          user_id: string
+          year_of_study: string | null
+        }
+        Insert: {
+          board_or_university_type?: string | null
+          career_domains?: string[] | null
+          course_program?: string | null
+          created_at?: string
+          curious_careers?: string | null
+          educational_status: string
+          id?: string
+          institution_name?: string | null
+          looking_for_help?: string[] | null
+          prepping_for?: string[] | null
+          stream?: string | null
+          updated_at?: string
+          user_id: string
+          year_of_study?: string | null
+        }
+        Update: {
+          board_or_university_type?: string | null
+          career_domains?: string[] | null
+          course_program?: string | null
+          created_at?: string
+          curious_careers?: string | null
+          educational_status?: string
+          id?: string
+          institution_name?: string | null
+          looking_for_help?: string[] | null
+          prepping_for?: string[] | null
+          stream?: string | null
+          updated_at?: string
+          user_id?: string
+          year_of_study?: string | null
+        }
+        Relationships: []
+      }
       user_entitlements: {
         Row: {
           entitlement_key: string
@@ -9146,6 +9260,36 @@ export type Database = {
           },
         ]
       }
+      user_leadership: {
+        Row: {
+          created_at: string
+          description: string | null
+          duration: string | null
+          id: string
+          organization: string | null
+          position_title: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          duration?: string | null
+          id?: string
+          organization?: string | null
+          position_title: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          duration?: string | null
+          id?: string
+          organization?: string | null
+          position_title?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       user_learning_progress: {
         Row: {
           completed_at: string | null
@@ -9178,6 +9322,36 @@ export type Database = {
           notes?: string | null
           score?: number | null
           status?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      user_projects_profile: {
+        Row: {
+          created_at: string
+          description: string | null
+          id: string
+          link: string | null
+          project_name: string
+          skills_used: string[] | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          link?: string | null
+          project_name: string
+          skills_used?: string[] | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          link?: string | null
+          project_name?: string
+          skills_used?: string[] | null
           user_id?: string
         }
         Relationships: []
@@ -9233,6 +9407,30 @@ export type Database = {
         }
         Relationships: []
       }
+      user_skills_profile: {
+        Row: {
+          confidence: string | null
+          created_at: string
+          id: string
+          skill_name: string
+          user_id: string
+        }
+        Insert: {
+          confidence?: string | null
+          created_at?: string
+          id?: string
+          skill_name: string
+          user_id: string
+        }
+        Update: {
+          confidence?: string | null
+          created_at?: string
+          id?: string
+          skill_name?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       user_streaks: {
         Row: {
           current_streak: number | null
@@ -9262,6 +9460,30 @@ export type Database = {
           started_at?: string | null
           streak_type?: string | null
           updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      user_subjects: {
+        Row: {
+          created_at: string
+          id: string
+          relation: string
+          subject_name: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          relation: string
+          subject_name: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          relation?: string
+          subject_name?: string
           user_id?: string
         }
         Relationships: []

@@ -73,6 +73,8 @@ const careerNav = [
   { label: "Transition Planner", icon: RefreshCw, path: "/dashboard/transition-planner", color: "maroon" },
   { label: "My Collections", icon: Heart, path: "/dashboard/career-collections", color: "terracotta" },
   { label: "Explore", icon: Sparkles, path: "/dashboard/explore", color: "primary" },
+  { label: "Blueprint", icon: FileText, path: "/dashboard/blueprint", color: "indigo" },
+  { label: "Taxonomy Search", icon: Globe, path: "/dashboard/taxonomy", color: "blue" },
 ];
 
 const entrepreneurshipNav = [
@@ -114,9 +116,11 @@ const DashboardLayout = () => {
   const navigate = useNavigate();
   const [mobileOpen, setMobileOpen] = useState(false);
 
-  const isCareer = profile?.active_intent === "career";
-  const isEntrepreneurship = profile?.active_intent === "entrepreneurship";
-  const isBoth = profile?.active_intent === "both";
+  // Default to career view when no intent is set yet — prevents empty sidebar.
+  const intent = profile?.active_intent || "career";
+  const isCareer = intent === "career";
+  const isEntrepreneurship = intent === "entrepreneurship";
+  const isBoth = intent === "both";
 
   const switchIntent = async () => {
     if (isBoth) return;

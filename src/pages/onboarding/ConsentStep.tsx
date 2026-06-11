@@ -199,7 +199,7 @@ const ConsentStep = () => {
           </div>
 
           <div className="flex justify-between items-center">
-            <Button variant="ghost" onClick={() => navigate("/onboarding/journey")} className="font-body h-[48px] min-h-[48px] px-4 rounded-full">
+            <Button variant="ghost" onClick={() => navigate("/onboarding/educational-status")} className="font-body h-[48px] min-h-[48px] px-4 rounded-full">
               <ArrowLeft size={18} className="mr-1.5" /> Back
             </Button>
             <Button onClick={handleContinue} disabled={submitting}
