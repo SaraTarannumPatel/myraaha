@@ -73,6 +73,8 @@ const careerNav = [
   { label: "Transition Planner", icon: RefreshCw, path: "/dashboard/transition-planner", color: "maroon" },
   { label: "My Collections", icon: Heart, path: "/dashboard/career-collections", color: "terracotta" },
   { label: "Explore", icon: Sparkles, path: "/dashboard/explore", color: "primary" },
+  { label: "Blueprint", icon: FileText, path: "/dashboard/blueprint", color: "indigo" },
+  { label: "Taxonomy Search", icon: Globe, path: "/dashboard/taxonomy", color: "blue" },
 ];
 
 const entrepreneurshipNav = [
