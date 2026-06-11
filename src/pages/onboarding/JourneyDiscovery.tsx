@@ -314,9 +314,9 @@ const JourneyDiscovery = () => {
         demographic_answers: answers,
         user_type: profile?.user_type,
       },
-      onboarding_status: "consent" as any,
+      onboarding_status: "educational_status" as any,
     } as any);
-    navigate("/onboarding/consent");
+    navigate("/onboarding/educational-status");
   };
 
   const sectionLabel = currentQ.section;
