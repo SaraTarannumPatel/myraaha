@@ -1,55 +1,64 @@
-## What you'll get after this slice
+# Plan: Education-aware Roadmaps + new onboarding module + sidebar fix
 
-- Every one of the **18,033 roles** in `career_taxonomy` has a 325-dimensional sparse KSAO weight vector stored in the database.
-- Every role has 2D map coordinates (`coord_x`, `coord_y`) + a `cluster_id` so the CareerMap canvas can render the natural landmasses on day one.
-- A reusable backend pipeline so when real role-level KSAO scores arrive later (Option B), we just swap the scoring step — the rest of the map keeps working.
+Five tightly-scoped workstreams. I'll ship them in this order so each builds on the previous.
 
-## Current state I verified in the DB
+## 1. Backend — new tables for Current Educational Status
 
-- `career_taxonomy` — **18,033 rows** with full 11-column taxonomy (sector → sub_sector → industry → domain → sub_domain → function → job_family → cluster → pathway_cluster → role_name). Primary key is `bigint id`.
-- `ksao_dimensions` — **325 dimensions** already seeded (superset of the 229 in your doc — fine, we'll use all of them).
-- `role_ksao_vectors` — **0 rows**, but its `role_id` is `uuid` and points to a different roles table than `career_taxonomy`. **Schema mismatch — has to be reconciled before anything else.**
-- `taxonomy_nodes` — 11,747 nodes, separate hierarchy. Untouched by this slice.
+One migration creating user-scoped tables (RLS + GRANTs included):
 
-## Plan
+- `user_education_status` — one row per user. Stores: educational_status, institution_name, board_or_university_type, stream (11/12), course_program (UG), year_of_study, looking_for_help[], career_domains[], curious_careers (text), prepping_for[].
+- `user_subjects` — many per user: subject_name, relation ('current' | 'favorite' | 'difficult').
+- `user_skills_profile` — many per user: skill_name, confidence ('beginner'|'intermediate'|'advanced').
+- `user_certifications` — name, platform, year, certificate_url (nullable).
+- `user_projects_profile` — name, description, skills_used[], link.
+- `user_activities` — activity_type, title, role, year, achievement.
+- `user_leadership` — position_title, organization, duration, description.
 
-### Step 1 — Schema reconciliation (migration)
-- Add `role_uuid uuid DEFAULT gen_random_uuid() UNIQUE` to `career_taxonomy` so every role has a stable uuid that `role_ksao_vectors.role_id` can point at.
-- Add `coord_x double precision`, `coord_y double precision`, `cluster_id smallint` to `career_taxonomy` for 2D placement.
-- Add index on `(cluster_id)` and a GiST/BTree on `(coord_x, coord_y)` for spatial-ish queries.
-- Confirm `role_ksao_vectors` GRANTs are correct for service_role writes + authenticated reads.
+All tables: `user_id uuid not null` referencing auth user, `created_at`, `updated_at`, RLS `auth.uid() = user_id`, GRANT to authenticated + service_role.
 
-### Step 2 — Approximate KSAO scoring (offline Python script, one-shot)
-Run locally via `code--exec` with `psql`. Logic:
-1. Pull all 18,033 roles + all 325 ksao_dimensions (name + description).
-2. For each role, build a "context bag" from its taxonomy strings (sector + sub_sector + domain + sub_domain + function + job_family + cluster + pathway_cluster + role_name).
-3. TF-IDF the context bag against each KSAO dimension's `name + description`. Top-K (≈40) dimensions per role get non-zero weights, normalized to sum=1. This gives a **sparse approximate 325-dim vector per role**.
-4. Bulk insert into `role_ksao_vectors` (≈720K rows: 18,033 × 40).
+## 2. Frontend — new onboarding step `EducationalStatus`
 
-### Step 3 — 2D projection (same script)
-1. Build the sparse role×dimension matrix (scipy.sparse).
-2. Run **UMAP** (`umap-learn`) → 2D coords. Falls back to PCA if UMAP install fails in sandbox.
-3. Run **HDBSCAN** on the 2D coords to detect natural landmasses (your "6–8 continents" insight) → `cluster_id`.
-4. Write `coord_x`, `coord_y`, `cluster_id` back to `career_taxonomy` via bulk UPDATE.
+- New page `src/pages/onboarding/EducationalStatus.tsx` covering the 23 questions in 10 sectioned screens (single conditional flow — stream questions only show for 11/12, course/year only for UG).
+- Inserted into onboarding sequence between `JourneyDiscovery` (demographics) and `ConsentStep`.
+- Update `onboarding_status` enum value usage: add `'educational_status'` to `ProtectedRoute.onboardingRoutes` map and to `JourneyDiscovery`'s `handleFinish` (set next status to `educational_status` instead of `consent`).
+- Persists answers to the new tables on Finish, then advances to `/onboarding/consent`.
+- Uses existing `OnboardingProgressBar` + `OnboardingRewardBanner`.
 
-### Step 4 — Sanity check
-- Quick query: count of roles per cluster, count of distinct sectors per cluster (confirms FinTech/HealthTech-style merging is happening).
-- Print 5 sample roles per cluster so you can eyeball that the clustering is meaningful.
+## 3. Rewards recalibration
 
-### Step 5 — Expose to frontend (tiny)
-- Update `CareerMap.tsx` stat card to show **"18,033 roles plotted • N clusters detected"** instead of the current `Building…` placeholder.
-- No map canvas yet — that's the next slice you queued behind this one.
+- Total onboarding weight redistributed across: Welcome → User Type → Journey/Demographics → **Educational Status (new)** → Consent.
+- Update progress % math in `JourneyDiscovery` (currently `25 + step/total*40`) and add matching math in `EducationalStatus` so the bar hits 30/60/90 milestones at meaningful points.
+- No DB change for `reward_milestones` keys (they still trigger by % via `update_assessment_progress`/onboarding banner rules).
+
+## 4. AI Roadmaps restructure (education-aware)
+
+Edit `src/lib/aiRoadmaps.ts`:
+
+- Remove stage **Self-Discovery & Fit** (already in Curiosity Compass).
+- Prepend education-prerequisite stages, dynamically based on user's `educational_status`:
+  - For School/Class 11/12 → "Stream & Subject Choice", "Entrance Exam Plan", "College & Course Shortlist".
+  - For Diploma/UG-in-progress → "Specialization & Electives", "Higher Studies Options (PG/Exams)".
+  - For graduated/working → skip prereq stages entirely.
+- Stage **Advanced & Specialization** now gated: only included when `educational_status ∈ {undergraduate, completed_ug, graduate}`.
+- `buildRoadmapForEntity(entity, { educationStatus })` reads from the new `user_education_status` table (or accepts as arg) and assembles the final ordered stage list.
+- Add matching `STEP_INTENT` entries in `src/lib/aiRoadmapsMock.ts` for each new prereq stage so "Curate with AI" returns context-appropriate resources (colleges, exams, subject guides, etc.).
+- `Roadmap.tsx` fetches `user_education_status` on mount and passes it to the builder; shows a small "Tailored to your current education: …" chip.
+
+## 5. Sidebar fix (desktop)
+
+- Audit `DashboardLayout.tsx` + the sidebar component it renders. Symptom: not all modules displayed on desktop. Likely causes: `collapsible="offcanvas"` hiding items, missing `w-full` on provider wrapper, or items array filtered by an intent that drops entries.
+- Fix by ensuring every route in `App.tsx`'s dashboard children has a corresponding sidebar item, using `collapsible="icon"` with a persistent `SidebarTrigger` in the header, and `w-full` on the provider wrapper per the shadcn guideline.
+
+---
+
+## Out of scope (won't touch)
+
+- No changes to Curiosity Compass logic.
+- No changes to existing demographics questions.
+- No edits to `reward_milestones` rows — only the % math that feeds them.
 
 ## Technical notes
 
-- **Scoring approach trade-off**: pure TF-IDF on taxonomy strings is crude but defensible at this stage. It produces vectors good enough for UMAP to surface real cluster structure (similar role names → similar context bag → nearby in 2D). When Option B (real per-role KSAO matrix) arrives, only Step 2 is replaced — Steps 1, 3, 4, 5 stay identical.
-- **Why offline Python, not an edge function**: 18k roles × 325 dims TF-IDF + UMAP + HDBSCAN is heavy; doing it once locally and bulk-inserting is far simpler than streaming through Deno.
-- **Idempotency**: script wipes and rewrites `role_ksao_vectors` + the 3 new columns each run, so we can re-tune weights without DB drift.
-- **No frontend rewrite this turn** — the map canvas, role deep dive, and PathFinder all sit downstream and depend on this data layer existing first.
-
-## Out of scope (next slices, already queued)
-
-- Map canvas + "You Are Here" dot (slice 2 in your earlier answer)
-- 18-tab Role Deep Dive
-- Fastest / Safest / No-cost PathFinder routes
-- Sector overlay polygons (Voronoi/convex hull rendering)
+- Migration is one file, ~7 CREATE TABLE blocks each followed by GRANT + RLS + policy.
+- Onboarding status string `educational_status` is stored as text in `profiles.onboarding_status` (already text per current usage), so no enum migration needed.
+- Roadmap builder change is additive — existing entities still work; education context is optional.
