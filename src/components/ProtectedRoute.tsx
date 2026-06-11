@@ -7,6 +7,7 @@ const onboardingRoutes: Record<string, string> = {
   journey_discovery: "/onboarding/journey",
   intent: "/onboarding/intent",
   guided: "/onboarding/guided",
+  educational_status: "/onboarding/educational-status",
   consent: "/onboarding/consent",
 };
 
