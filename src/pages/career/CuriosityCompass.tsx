@@ -1479,6 +1479,36 @@ const CuriosityCompass = () => {
                   </div>
                 </TabsContent>
 
+                {/* Holistic Interests Assessment (12 Qs) */}
+                <TabsContent value="interests" className="outline-none mt-0">
+                  <div className="bg-white rounded-3xl border border-border shadow-xl p-6 relative overflow-hidden space-y-6">
+                    <div className="absolute inset-0 bg-gradient-to-br from-[#5500cb]/[0.03] to-transparent pointer-events-none" />
+                    <div className="relative z-10 space-y-6">
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
+                          <Heart className="text-[#5500cb]" size={20} />
+                        </div>
+                        <div>
+                          <h2 className="font-display font-bold text-lg text-foreground">Holistic Interests Assessment</h2>
+                          <p className="font-body text-xs text-muted-foreground mt-0.5">
+                            A 12-question deep-map of what you're curious about — feeds Career Cards, Story Mode, Challenge Mode, and Audio/Visual exploration.
+                          </p>
+                        </div>
+                      </div>
+                      <InterestsAssessment
+                        userId={user!.id}
+                        onComplete={() => {
+                          if (discoveryDone && psychometricDone) {
+                            toast.success("All three assessments complete! Every section unlocked 🎉");
+                          }
+                        }}
+                        recordSignal={recordSignal}
+                      />
+                    </div>
+                  </div>
+                </TabsContent>
+
+
                 {/* Interests Assessment Cards */}
                 <TabsContent value="explore" className="outline-none mt-0 space-y-6">
                   {!mode ? (
