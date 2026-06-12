@@ -82,7 +82,7 @@ const Auth = () => {
 
       // Phase 3: signup uses 6-digit email OTP (not a confirmation link).
       // signInWithOtp(shouldCreateUser:true) creates the user AND sends a 6-digit code.
-      // Password is set after OTP verification (stashed in sessionStorage for the verify screen).
+      // Password is set after OTP verification — passed via in-memory router state (NOT sessionStorage).
       const { error } = await supabase.auth.signInWithOtp({
         email,
         options: {
@@ -93,11 +93,10 @@ const Auth = () => {
       if (error) {
         toast.error(error.message);
       } else {
-        sessionStorage.setItem("myraaha_pending_password", password);
-        sessionStorage.setItem("myraaha_pending_phone", cleanPhone);
         toast.success("We sent a 6-digit code to your email.");
-        navigate("/verify-otp", { state: { email } });
+        navigate("/verify-otp", { state: { email, pendingPassword: password, pendingPhone: cleanPhone } });
       }
+
     }
     setSubmitting(false);
   };
