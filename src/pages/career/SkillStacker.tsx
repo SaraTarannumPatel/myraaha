@@ -116,9 +116,8 @@ const SkillStacker = () => {
   // Badge milestones
   useEffect(() => {
     if (!user || completedCount === 0) return;
-    const milestones: Record<number, string> = { 3: "Skill Builder", 5: "Capability Architect", 10: "Skill Master" };
     // Badges awarded server-side via Achievements scanner — no direct client insert.
-    void badge;
+
 
   }, [completedCount]);
 
