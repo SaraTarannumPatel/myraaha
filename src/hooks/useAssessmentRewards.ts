@@ -48,6 +48,7 @@ export const useAssessmentRewards = () => {
   const [progress, setProgress] = useState<Record<TestType, AssessmentProgress | null>>({
     discovery: null,
     psychometric: null,
+    interests: null,
     skillstacker: null,
     roadmap: null,
     entrep_onboarding: null,
