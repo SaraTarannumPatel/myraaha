@@ -28,7 +28,7 @@ const MyRaahaInsightsDetail = () => {
         try {
           const dbId = slug.substring('community-'.length);
           const { data, error } = await supabase
-            .from('insights_submissions')
+            .from('public_insights' as any)
             .select('*')
             .eq('id', dbId)
             .single();
