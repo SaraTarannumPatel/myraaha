@@ -26,6 +26,7 @@ import { useUserSignals } from "@/hooks/useUserSignals";
 import { useNavigate } from "react-router-dom";
 import ModuleSearchBar from "@/components/search/ModuleSearchBar";
 import PsychometricTest from "@/components/curiositycompass/PsychometricTest";
+import InterestsAssessment from "@/components/curiositycompass/InterestsAssessment";
 import AssessmentGate from "@/components/curiositycompass/AssessmentGate";
 import OnboardingCelebration from "@/components/curiositycompass/OnboardingCelebration";
 import InsightsView from "@/components/curiositycompass/InsightsView";
@@ -653,7 +654,8 @@ const CuriosityCompass = () => {
   // Check if both assessments are completed
   const discoveryDone = !!profile?.journey_responses?.assessment_completed;
   const psychometricDone = !!profile?.journey_responses?.psychometric_completed;
-  const bothAssessmentsDone = discoveryDone && psychometricDone;
+  const interestsDone = !!profile?.journey_responses?.interests_completed;
+  const bothAssessmentsDone = discoveryDone && psychometricDone && interestsDone;
   const [mode, setMode] = useState<string | null>(null);
   const [careerCards, setCareerCards] = useState<any[]>([]);
   const [interactions, setInteractions] = useState<Record<string, string>>({});
@@ -1134,7 +1136,7 @@ const CuriosityCompass = () => {
 
       <Tabs value={tab} onValueChange={(v) => {
         // Block locked tabs
-        if (!bothAssessmentsDone && !["assessment", "psychometric"].includes(v)) {
+        if (!bothAssessmentsDone && !["assessment", "psychometric", "interests"].includes(v)) {
           toast.info("Complete both assessments first to unlock this section.");
           return;
         }
@@ -1185,7 +1187,8 @@ const CuriosityCompass = () => {
               {[
                 { value: "assessment", label: "Discover Yourself", icon: ClipboardCheck },
                 { value: "psychometric", label: "Psychometric", icon: Brain },
-                { value: "explore", label: "Interests", icon: Heart, locked: !bothAssessmentsDone },
+                { value: "interests", label: "Interests Test", icon: Heart },
+                { value: "explore", label: "Explore Interests", icon: Heart, locked: !bothAssessmentsDone },
                 { value: "quests", label: "Quests", icon: Trophy, locked: !bothAssessmentsDone },
                 { value: "domains", label: "Domains", icon: Target, locked: !bothAssessmentsDone },
                 { value: "insights", label: "Insights & Profile", icon: Sparkles, locked: !bothAssessmentsDone },
@@ -1244,9 +1247,9 @@ const CuriosityCompass = () => {
           </div>
 
             {/* Assessment Gate - shown on locked tabs */}
-            {!bothAssessmentsDone && !["assessment", "psychometric"].includes(tab) && (
+            {!bothAssessmentsDone && !["assessment", "psychometric", "interests"].includes(tab) && (
               <div className="mt-2">
-                <AssessmentGate onGoToAssessment={(t) => setTab(t === "discovery" ? "assessment" : "psychometric")} />
+                <AssessmentGate onGoToAssessment={(t) => setTab(t === "discovery" ? "assessment" : t)} />
               </div>
             )}
 
