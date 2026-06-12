@@ -5,6 +5,7 @@ import { useAuth } from "@/contexts/AuthContext";
 export type TestType =
   | "discovery"
   | "psychometric"
+  | "interests"
   | "skillstacker"
   | "roadmap"
   | "entrep_onboarding";
