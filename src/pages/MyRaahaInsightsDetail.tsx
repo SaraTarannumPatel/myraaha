@@ -36,29 +36,31 @@ const MyRaahaInsightsDetail = () => {
           if (error) throw error;
 
           if (data) {
+            const d = data as any;
             // Split flat string content by newlines and format into standard rendering blocks
-            const paragraphs = data.content
+            const paragraphs = d.content
               .split('\n')
               .map((p: string) => p.trim())
               .filter((p: string) => p.length > 0)
               .map((text: string) => ({ type: 'p', text }));
 
             setPost({
-              slug: `community-${data.id}`,
-              title: data.title,
-              category: data.category,
-              date: new Date(data.created_at).toLocaleDateString('en-US', {
+              slug: `community-${d.id}`,
+              title: d.title,
+              category: d.category,
+              date: new Date(d.created_at).toLocaleDateString('en-US', {
                 month: 'long',
                 day: 'numeric',
                 year: 'numeric'
               }),
-              excerpt: data.excerpt,
-              image: data.cover_image_url || 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=800',
-              author: data.author_name + (data.author_title ? `, ${data.author_title}` : ''),
-              readTime: `${Math.max(2, Math.ceil(data.content.split(/\s+/).length / 200))} min`,
+              excerpt: d.excerpt,
+              image: d.cover_image_url || 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=800',
+              author: d.author_name + (d.author_title ? `, ${d.author_title}` : ''),
+              readTime: `${Math.max(2, Math.ceil(d.content.split(/\s+/).length / 200))} min`,
               content: paragraphs,
               relatedReadingSlugs: []
             });
+
           } else {
             setPost(null);
           }
