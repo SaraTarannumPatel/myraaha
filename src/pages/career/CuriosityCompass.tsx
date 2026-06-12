@@ -1090,13 +1090,8 @@ const CuriosityCompass = () => {
       completed_at: new Date().toISOString(),
       analysis_results: analysisResults,
     }, { onConflict: "user_id,quest_id" });
-    await supabase.from("achievements").insert({
-      user_id: user!.id,
-      achievement_type: "quest_completed",
-      title: `Completed: ${activeQuest.title}`,
-      description: `Finished the "${activeQuest.title}" quest`,
-      points: activeQuest.points || 10,
-    });
+    // Quest completion badge is awarded server-side by the Achievements scanner.
+
     toast.success(`Quest completed! +${activeQuest.points || 10} points 🎉`);
     setActiveQuest(null);
     setShowReflection(true);
