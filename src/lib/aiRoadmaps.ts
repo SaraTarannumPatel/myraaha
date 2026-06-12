@@ -514,6 +514,12 @@ export function buildRoadmapForEntity(entity: Entity, ctx: RoadmapBuildContext =
       ],
     },
   ];
+
+  // Gate "Advanced & Specialization" — only meaningful once formal foundation exists.
+  const allowAdvanced = isUGOrLater || hasGraduated;
+  const filteredBase = allowAdvanced ? baseStages : baseStages.filter(s => s.id !== "step9");
+
+  return [...eduStages, ...filteredBase];
 }
 
 export function buildStepQuery(entity: Entity, step: RoadmapStep): string {
