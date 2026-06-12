@@ -135,20 +135,8 @@ const Journal = () => {
         is_private: true,
       });
     }
+    // Check-in streak badges are awarded server-side via Achievements scanner.
 
-    // Check-in streak badges
-    const totalCheckins = checkins.length + 1;
-    if (totalCheckins === 7 || totalCheckins === 30) {
-      const badgeTitle = totalCheckins === 7 ? "Week of Awareness" : "Month of Mindfulness";
-      const existing = await supabase.from("achievements").select("id").eq("user_id", user!.id).eq("title", badgeTitle).maybeSingle();
-      if (!existing.data) {
-        await supabase.from("achievements").insert({
-          user_id: user!.id, title: badgeTitle, achievement_type: "consistency",
-          description: `Completed ${totalCheckins} mood check-ins`, points: totalCheckins * 5,
-        });
-        toast.success(`🏅 Badge unlocked: ${badgeTitle}!`);
-      }
-    }
 
     setCheckinForm({ mood: "", energy: 5, confidence: 5, triggers: "", wins: "", challenges: "" });
     fetchAll();
