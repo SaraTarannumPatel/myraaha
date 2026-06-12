@@ -97,20 +97,9 @@ const Journal = () => {
       is_private: form.is_private,
     });
     if (error) { toast.error("Failed to save"); return; }
+    // Badges for journaling milestones are now awarded server-side via the
+    // central Achievements scanner (badge_templates → award-achievements edge fn).
 
-    // Check journal streak for badges
-    const totalEntries = entries.length + 1;
-    if (totalEntries === 5 || totalEntries === 20 || totalEntries === 50) {
-      const badgeTitle = totalEntries === 5 ? "Reflective Starter" : totalEntries === 20 ? "Journaling Habit" : "Master Reflector";
-      const existing = await supabase.from("achievements").select("id").eq("user_id", user!.id).eq("title", badgeTitle).maybeSingle();
-      if (!existing.data) {
-        await supabase.from("achievements").insert({
-          user_id: user!.id, title: badgeTitle, achievement_type: "journaling",
-          description: `Wrote ${totalEntries} journal entries`, points: totalEntries * 3,
-        });
-        toast.success(`🏅 Badge unlocked: ${badgeTitle}!`);
-      }
-    }
 
     setForm({ title: "", content: "", mood: "", tags: "", is_private: true });
     setShowForm(false);
