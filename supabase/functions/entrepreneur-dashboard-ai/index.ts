@@ -100,8 +100,7 @@ Be specific, actionable, and empathetic. Use Gen Z language naturally. Return ON
     });
   } catch (e) {
     console.error("dashboard-ai error:", e);
-    return new Response(JSON.stringify({ error: e instanceof Error ? e.message : "Unknown error" }), {
-      status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" },
+    return new Response(JSON.stringify({ error: "Internal server error" }), { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   }
 });
