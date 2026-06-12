@@ -74,8 +74,17 @@ export default function Roadmap() {
       setLoadingEntities(true);
       try {
         let ents: Entity[] = [];
+        let eduStatus: string | null = null;
         if (user) {
           try { ents = await fetchEntitiesFromInteractions(user.id); } catch {}
+          try {
+            const { data: eduRow } = await supabase
+              .from("user_education_status")
+              .select("educational_status")
+              .eq("user_id", user.id)
+              .maybeSingle();
+            eduStatus = (eduRow as any)?.educational_status || null;
+          } catch {}
         }
         if (demoMode && ents.length === 0) {
           ents = MOCK_ENTITIES;
@@ -83,10 +92,11 @@ export default function Roadmap() {
           setCoachNote(MOCK_COACH_NOTE);
           setTherapistAdjust(MOCK_THERAPIST_ADJUST);
           setSmartNavApplied(true);
+          if (!eduStatus) eduStatus = "class_12"; // demo: show education prerequisite stages
         }
         setEntities(ents);
         const built: Record<string, RoadmapStep[]> = {};
-        ents.forEach((e) => { built[e.id] = buildRoadmapForEntity(e); });
+        ents.forEach((e) => { built[e.id] = buildRoadmapForEntity(e, { educationalStatus: eduStatus }); });
         setSteps(built);
 
         // Smart navigation pre-select
