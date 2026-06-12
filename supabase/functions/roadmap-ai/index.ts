@@ -389,8 +389,7 @@ Time taken: ${context.timeTaken || "unknown"}.`;
     });
   } catch (e) {
     console.error("roadmap-ai error:", e);
-    return new Response(JSON.stringify({ error: e instanceof Error ? e.message : "Unknown error" }), {
-      status: 500,
+    return new Response(JSON.stringify({ error: "Internal server error" }), { status: 500,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   }

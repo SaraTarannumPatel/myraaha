@@ -251,8 +251,7 @@ Using ALL the above context, generate a deeply specific, actionable, and resourc
     });
   } catch (e) {
     console.error("roadmap-step-details error:", e);
-    return new Response(JSON.stringify({ error: e instanceof Error ? e.message : "Unknown error" }), {
-      status: 500,
+    return new Response(JSON.stringify({ error: "Internal server error" }), { status: 500,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   }

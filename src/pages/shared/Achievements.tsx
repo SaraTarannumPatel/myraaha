@@ -288,24 +288,18 @@ const Achievements = () => {
     }
 
     if (toAward.length > 0) {
-      await supabase.from("achievements").insert(
-        toAward.map(b => ({ user_id: user.id, achievement_type: b.type, title: b.title, description: b.description, points: b.points }))
-      );
-      for (const b of toAward) {
-        await supabase.from("milestone_celebrations").insert({
-          user_id: user.id, milestone_type: "badge_earned", title: `🎉 ${b.title} Unlocked!`, description: b.description,
-          celebration_data: { badge_type: b.type, icon: b.icon, points: b.points },
-        });
+      // Server validates types against badge_templates, inserts achievements,
+      // and recomputes leaderboard authoritatively. Clients can no longer
+      // self-award arbitrary types/points.
+      const { data: result, error: awardErr } = await supabase.functions.invoke("award-achievements", {
+        body: { types: toAward.map(b => b.type) },
+      });
+      if (!awardErr && result?.awarded?.length) {
+        fetchAll();
+        (result.awarded as any[]).forEach((b: any) => toast.success(`🎉 Badge Earned: ${b.title}!`));
       }
-      const newTotal = currentPts + toAward.reduce((s, b) => s + b.points, 0);
-      const newCount = (existing?.length || 0) + toAward.length;
-      await supabase.from("leaderboard_entries").upsert({
-        user_id: user.id, scope: "global", scope_id: "career",
-        total_points: newTotal, badge_count: newCount, updated_at: new Date().toISOString(),
-      }, { onConflict: "user_id,scope,scope_id" } as any);
-      fetchAll();
-      toAward.forEach(b => toast.success(`🎉 Badge Earned: ${b.title}!`));
     }
+
 
     // Update daily streak
     const today = new Date().toISOString().split("T")[0];

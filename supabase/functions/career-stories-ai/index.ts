@@ -235,8 +235,7 @@ Return JSON:
 
     throw new Error(`Unknown type: ${type}`);
   } catch (error: any) {
-    return new Response(JSON.stringify({ error: error.message }), {
-      status: 500,
+    return new Response(JSON.stringify({ error: "Internal server error" }), { status: 500,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   }

@@ -13,7 +13,7 @@ const CODE_LEN = 6;
 const OTPVerification = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { email } = (location.state as { email?: string }) || {};
+  const { email, pendingPassword, pendingPhone } = (location.state as { email?: string; pendingPassword?: string; pendingPhone?: string }) || {};
 
   const [code, setCode] = useState<string[]>(Array(CODE_LEN).fill(""));
   const [resendTimer, setResendTimer] = useState(30);
@@ -73,16 +73,14 @@ const OTPVerification = () => {
       }
 
       // Persist the password the user chose on signup so they can log in normally later.
-      const pendingPwd = sessionStorage.getItem("myraaha_pending_password");
-      const pendingPhone = sessionStorage.getItem("myraaha_pending_phone");
-      if (pendingPwd) {
+      // Credentials are held in in-memory router state only (never written to sessionStorage).
+      if (pendingPassword) {
         await supabase.auth.updateUser({
-          password: pendingPwd,
+          password: pendingPassword,
           data: pendingPhone ? { phone: pendingPhone, pending_password_set: false } : { pending_password_set: false },
         });
-        sessionStorage.removeItem("myraaha_pending_password");
-        sessionStorage.removeItem("myraaha_pending_phone");
       }
+
 
       toast.success("Email verified! 🎉");
       // AuthContext will pick up the session; ProtectedRoute routes to /onboarding (new users)

@@ -118,18 +118,9 @@ export default function TransitionPlanner() {
       5: "Path Navigator",
       8: "Transition Master",
     };
-    const badge = milestones[completedSteps.length];
-    if (badge) {
-      supabase.from("achievements").insert({
-        user_id: user.id,
-        title: badge,
-        achievement_type: "transition",
-        description: `Completed ${completedSteps.length} transition planning steps`,
-        points: completedSteps.length * 15,
-      }).then(() => {
-        toast({ title: `🏆 Badge unlocked: ${badge}!` });
-      });
-    }
+    // Transition badges are awarded server-side via the Achievements scanner.
+    void completedSteps.length;
+
   }, [completedSteps.length]);
 
   const loadPlan = async () => {

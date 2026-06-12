@@ -146,8 +146,7 @@ Generate meaningful reflection prompts.`;
     });
   } catch (e) {
     console.error("job-matching-ai error:", e);
-    return new Response(JSON.stringify({ error: e.message }), {
-      status: 500,
+    return new Response(JSON.stringify({ error: "Internal server error" }), { status: 500,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   }

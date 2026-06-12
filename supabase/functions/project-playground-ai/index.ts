@@ -130,8 +130,7 @@ Break this into manageable, progressive tasks.`;
     });
   } catch (e) {
     console.error("project-playground-ai error:", e);
-    return new Response(JSON.stringify({ error: e.message }), {
-      status: 500,
+    return new Response(JSON.stringify({ error: "Internal server error" }), { status: 500,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   }

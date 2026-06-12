@@ -116,14 +116,9 @@ const SkillStacker = () => {
   // Badge milestones
   useEffect(() => {
     if (!user || completedCount === 0) return;
-    const milestones: Record<number, string> = { 3: "Skill Builder", 5: "Capability Architect", 10: "Skill Master" };
-    const badge = milestones[completedCount];
-    if (badge) {
-      supabase.from("achievements").insert({
-        user_id: user.id, title: badge, achievement_type: "skillstacker",
-        description: `Validated ${completedCount} skills in SkillStacker`, points: completedCount * 10,
-      }).then(() => toast.success(`🏆 Badge unlocked: ${badge}!`));
-    }
+    // Badges awarded server-side via Achievements scanner — no direct client insert.
+
+
   }, [completedCount]);
 
   // Report SkillStacker milestone progress (25/50/75/100%) — additive, triggers

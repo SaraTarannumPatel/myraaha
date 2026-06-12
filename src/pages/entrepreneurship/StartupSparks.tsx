@@ -274,12 +274,11 @@ const StartupSparks = () => {
         status: "completed", response: questResponse, completed_at: new Date().toISOString(), points_earned: pointsEarned,
       }).eq("user_id", user.id).eq("quest_id", quest.id);
 
-      await supabase.from("achievements").insert({
-        user_id: user.id, title: `Quest Complete: ${quest.title}`,
-        description: `Earned ${pointsEarned} points`, achievement_type: "quest", points: pointsEarned,
-      });
+      // Quest completion is recorded in quest_progress; badge points are
+      // awarded server-side by the Achievements scanner (no direct client insert).
 
       toast.success(`Quest completed! +${pointsEarned} points 🏆`);
+
       setQuestResponse("");
       setActiveQuest(null);
       fetchQuests();

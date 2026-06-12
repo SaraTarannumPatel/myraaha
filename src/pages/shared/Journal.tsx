@@ -97,20 +97,9 @@ const Journal = () => {
       is_private: form.is_private,
     });
     if (error) { toast.error("Failed to save"); return; }
+    // Badges for journaling milestones are now awarded server-side via the
+    // central Achievements scanner (badge_templates → award-achievements edge fn).
 
-    // Check journal streak for badges
-    const totalEntries = entries.length + 1;
-    if (totalEntries === 5 || totalEntries === 20 || totalEntries === 50) {
-      const badgeTitle = totalEntries === 5 ? "Reflective Starter" : totalEntries === 20 ? "Journaling Habit" : "Master Reflector";
-      const existing = await supabase.from("achievements").select("id").eq("user_id", user!.id).eq("title", badgeTitle).maybeSingle();
-      if (!existing.data) {
-        await supabase.from("achievements").insert({
-          user_id: user!.id, title: badgeTitle, achievement_type: "journaling",
-          description: `Wrote ${totalEntries} journal entries`, points: totalEntries * 3,
-        });
-        toast.success(`🏅 Badge unlocked: ${badgeTitle}!`);
-      }
-    }
 
     setForm({ title: "", content: "", mood: "", tags: "", is_private: true });
     setShowForm(false);
@@ -146,20 +135,8 @@ const Journal = () => {
         is_private: true,
       });
     }
+    // Check-in streak badges are awarded server-side via Achievements scanner.
 
-    // Check-in streak badges
-    const totalCheckins = checkins.length + 1;
-    if (totalCheckins === 7 || totalCheckins === 30) {
-      const badgeTitle = totalCheckins === 7 ? "Week of Awareness" : "Month of Mindfulness";
-      const existing = await supabase.from("achievements").select("id").eq("user_id", user!.id).eq("title", badgeTitle).maybeSingle();
-      if (!existing.data) {
-        await supabase.from("achievements").insert({
-          user_id: user!.id, title: badgeTitle, achievement_type: "consistency",
-          description: `Completed ${totalCheckins} mood check-ins`, points: totalCheckins * 5,
-        });
-        toast.success(`🏅 Badge unlocked: ${badgeTitle}!`);
-      }
-    }
 
     setCheckinForm({ mood: "", energy: 5, confidence: 5, triggers: "", wins: "", challenges: "" });
     fetchAll();
