@@ -1,64 +1,125 @@
-# Plan: Education-aware Roadmaps + new onboarding module + sidebar fix
 
-Five tightly-scoped workstreams. I'll ship them in this order so each builds on the previous.
+This is purely additive — no existing question, screen, or flow is removed or rewritten. Everything below sits on top of the current 2-assessment system.
 
-## 1. Backend — new tables for Current Educational Status
+## 1. New "Holistic Interests Assessment" (12 Qs)
 
-One migration creating user-scoped tables (RLS + GRANTs included):
+Extracted from doc §CURIOSITY/INTEREST QUESTIONS (Q26–Q37):
+- Q26 Science curiosity (1–5)
+- Q27 Mathematics curiosity (1–5)
+- Q28 Technology curiosity (1–5)
+- Q29 Business curiosity (1–5)
+- Q30 Humanities curiosity (1–5)
+- Q31 Arts curiosity (1–5)
+- Q32 Which problems do you enjoy solving? (A Analytical / B Technical / C Business / D Social / E Creative)
+- Q33 Which activity excites you most? (Building / Analyzing / Leading / Designing / Writing)
+- Q34 What kind of impact would you like to create? (Tech / Business / Social / Creative)
+- Q35 Experimentation curiosity (1–5)
+- Q36 Exploration curiosity (1–5)
+- Q37 Discovery curiosity (1–5)
 
-- `user_education_status` — one row per user. Stores: educational_status, institution_name, board_or_university_type, stream (11/12), course_program (UG), year_of_study, looking_for_help[], career_domains[], curious_careers (text), prepping_for[].
-- `user_subjects` — many per user: subject_name, relation ('current' | 'favorite' | 'difficult').
-- `user_skills_profile` — many per user: skill_name, confidence ('beginner'|'intermediate'|'advanced').
-- `user_certifications` — name, platform, year, certificate_url (nullable).
-- `user_projects_profile` — name, description, skills_used[], link.
-- `user_activities` — activity_type, title, role, year, achievement.
-- `user_leadership` — position_title, organization, duration, description.
+Built as new component `src/components/curiositycompass/InterestsAssessment.tsx` mirroring `PsychometricTest.tsx` behavior:
+- Per-question signal map entry in `src/lib/assessmentSignalMap.ts` (new `INTERESTS_SIGNAL_MAP`).
+- Writes to `user_signals` + `assessment_question_signals` per answer.
+- Calls `useModuleProgress.report("interests", completed, total)`.
+- Stores conclusion in `assessment_conclusions` with `assessment_type="interests"`.
 
-All tables: `user_id uuid not null` referencing auth user, `created_at`, `updated_at`, RLS `auth.uid() = user_id`, GRANT to authenticated + service_role.
+## 2. Gating: 3 assessments instead of 2
 
-## 2. Frontend — new onboarding step `EducationalStatus`
+- `AssessmentGate.tsx` adds a third row "Map Your Curiosities" with `interests_completed` flag in `profile.journey_responses`.
+- All explore/quests/domains/insights/behavior tabs stay locked until all three are done.
+- Intro slides for Curiosity Compass mention the third assessment.
 
-- New page `src/pages/onboarding/EducationalStatus.tsx` covering the 23 questions in 10 sectioned screens (single conditional flow — stream questions only show for 11/12, course/year only for UG).
-- Inserted into onboarding sequence between `JourneyDiscovery` (demographics) and `ConsentStep`.
-- Update `onboarding_status` enum value usage: add `'educational_status'` to `ProtectedRoute.onboardingRoutes` map and to `JourneyDiscovery`'s `handleFinish` (set next status to `educational_status` instead of `consent`).
-- Persists answers to the new tables on Finish, then advances to `/onboarding/consent`.
-- Uses existing `OnboardingProgressBar` + `OnboardingRewardBanner`.
+## 3. Rewards parity
 
-## 3. Rewards recalibration
+- New `TestType` value `"interests"` added to `useAssessmentRewards`.
+- Seed 4 rows in `reward_milestones` (25/50/75/100) for `test_type='interests'` with entitlement keys `interests_25` … `interests_100`.
+- Onboarding rewards list ("what you unlock by completing onboarding") gains an "Interests Assessment unlocked (₹-value test, free on MyRaaha)" card.
 
-- Total onboarding weight redistributed across: Welcome → User Type → Journey/Demographics → **Educational Status (new)** → Consent.
-- Update progress % math in `JourneyDiscovery` (currently `25 + step/total*40`) and add matching math in `EducationalStatus` so the bar hits 30/60/90 milestones at meaningful points.
-- No DB change for `reward_milestones` keys (they still trigger by % via `update_assessment_progress`/onboarding banner rules).
+## 4. Backend (new tables + functions)
 
-## 4. AI Roadmaps restructure (education-aware)
+Migration adds:
+- `interests_assessment_responses(user_id, question_id, answer_value, answer_label, construct, created_at)` — RLS owner-only.
+- `user_interest_profile(user_id, science, mathematics, technology, business, humanities, arts, experimentation, exploration, discovery, problem_style, activity_style, impact_style, last_updated)` — recomputed via trigger after each insert.
+- `user_onboarding_sectors(user_id, sector_slug, rank, created_at)` — for the 18-sector multi-select.
+- `assessment_conclusion_keywords(user_id, keyword, weight, source_assessment)` — flat keyword bag used for matching.
+- `explore_entity_keywords(entity_type, entity_id, keyword, weight)` — keyword index over sectors / industries / domains / roles / universities / subjects / skills / colleges / paths.
 
-Edit `src/lib/aiRoadmaps.ts`:
+Extends `update_assessment_progress` to accept `interests`. Adds RPC `match_explore_entities_for_user(user_id, entity_type, limit)` returning ranked entities by keyword overlap × sector filter.
 
-- Remove stage **Self-Discovery & Fit** (already in Curiosity Compass).
-- Prepend education-prerequisite stages, dynamically based on user's `educational_status`:
-  - For School/Class 11/12 → "Stream & Subject Choice", "Entrance Exam Plan", "College & Course Shortlist".
-  - For Diploma/UG-in-progress → "Specialization & Electives", "Higher Studies Options (PG/Exams)".
-  - For graduated/working → skip prereq stages entirely.
-- Stage **Advanced & Specialization** now gated: only included when `educational_status ∈ {undergraduate, completed_ug, graduate}`.
-- `buildRoadmapForEntity(entity, { educationStatus })` reads from the new `user_education_status` table (or accepts as arg) and assembles the final ordered stage list.
-- Add matching `STEP_INTENT` entries in `src/lib/aiRoadmapsMock.ts` for each new prereq stage so "Curate with AI" returns context-appropriate resources (colleges, exams, subject guides, etc.).
-- `Roadmap.tsx` fetches `user_education_status` on mount and passes it to the builder; shows a small "Tailored to your current education: …" chip.
+GRANTs to `authenticated` + `service_role`; full RLS.
 
-## 5. Sidebar fix (desktop)
+## 5. "Current State" onboarding — 18 sectors multi-select
 
-- Audit `DashboardLayout.tsx` + the sidebar component it renders. Symptom: not all modules displayed on desktop. Likely causes: `collapsible="offcanvas"` hiding items, missing `w-full` on provider wrapper, or items array filtered by an intent that drops entries.
-- Fix by ensuring every route in `App.tsx`'s dashboard children has a corresponding sidebar item, using `collapsible="icon"` with a persistent `SidebarTrigger` in the header, and `w-full` on the provider wrapper per the shadcn guideline.
+`EducationalStatus.tsx` gains a new section "Which sectors spark your curiosity?" listing the 18 sectors already in `career_intel_*` tables. Stored in `user_onboarding_sectors`.
 
----
+## 6. Curiosity Compass 4 sections filtered by sectors + assessments
 
-## Out of scope (won't touch)
+`StoryModeCards`, `ChallengeModeCards`, `CareerCardDeck`, and audio/visual mode all read:
+1. `user_onboarding_sectors` (hard filter)
+2. `assessment_conclusion_keywords` (soft ranking)
+3. Call new RPC `match_explore_entities_for_user` for the curated subset.
 
-- No changes to Curiosity Compass logic.
-- No changes to existing demographics questions.
-- No edits to `reward_milestones` rows — only the % math that feeds them.
+Edge function `curiosity-compass-curated` orchestrates: pulls sectors + keywords → queries Explore taxonomy → returns AI-summarized cards.
 
-## Technical notes
+## 7. Explore keyword tagging
 
-- Migration is one file, ~7 CREATE TABLE blocks each followed by GRANT + RLS + policy.
-- Onboarding status string `educational_status` is stored as text in `profiles.onboarding_status` (already text per current usage), so no enum migration needed.
-- Roadmap builder change is additive — existing entities still work; education context is optional.
+Background edge function `tag-explore-entities` (one-shot, admin-triggered) walks each Explore source table and populates `explore_entity_keywords` from existing fields (description, tags, skills_required). Re-runnable; idempotent.
+
+## 8. Doc cross-check — missing questions
+
+Diff vs. current code:
+- **Demographics onboarding (already present):** name, gender, age, life stage, board, location, language, decision-support, device, digital comfort, subjects/performance → add only if any are missing in `EducationalStatus.tsx`.
+- **Psychometric (current ~22 Qs vs doc's 45):** add the missing Knowledge (Q1–Q5), Skills (Q6–Q15), Cognitive (Q16–Q25), Values (Q38–Q41), Personality (Q42–Q45) — only the ones not already represented. New questions appended to existing `PSYCHOMETRIC_SIGNAL_MAP` with new construct tags, and to `PsychometricTest.tsx` items. Each new Q also seeds `assessment_question_signals` so its answer feeds the right modules.
+- **Discovery:** doc has the same subject-exposure & experience/certifications blocks already in onboarding; nothing new to add unless a gap appears on re-read.
+
+Total: ~30 new psychometric items appended (no replacement). Question IDs prefixed `doc_` to avoid colliding with existing IDs.
+
+## 9. Data flow algorithm
+
+`src/lib/personalizationPipeline.ts` (new) — single function `runUserPersonalization(userId)`:
+1. Pull latest answers from all 3 assessments + sector picks.
+2. Derive keyword bag (constructs + answer labels + sector slugs).
+3. Upsert `assessment_conclusion_keywords`.
+4. Invoke `match_explore_entities_for_user` per entity type, cache results in `ai_cache` keyed by `user_personalization_v1`.
+5. Triggered: after each assessment completion, after sector save, and on dashboard load (debounced 6h).
+
+Consumed by: Curiosity Compass 4 sections, Roadmap suggestions, Job Matching, Mentor Matchmaking, Content Library, Skill Stacker.
+
+## Files (high level)
+
+**New**
+- `src/components/curiositycompass/InterestsAssessment.tsx`
+- `src/lib/personalizationPipeline.ts`
+- `supabase/migrations/<ts>_interests_assessment.sql`
+- `supabase/functions/curiosity-compass-curated/index.ts`
+- `supabase/functions/tag-explore-entities/index.ts`
+
+**Edited (additive only)**
+- `src/lib/assessmentSignalMap.ts` (append INTERESTS_SIGNAL_MAP + new psychometric IDs)
+- `src/components/curiositycompass/PsychometricTest.tsx` (append new Qs)
+- `src/components/curiositycompass/AssessmentGate.tsx` (3rd row)
+- `src/components/curiositycompass/RewardProgressTracker.tsx` (3rd track)
+- `src/hooks/useAssessmentRewards.ts` (add `interests` TestType)
+- `src/pages/career/CuriosityCompass.tsx` (route the 3rd tab, gating)
+- `src/pages/onboarding/EducationalStatus.tsx` (sector multi-select)
+- `src/components/onboarding/OnboardingRewardBanner.tsx` (Interests reward card)
+- `src/pages/career/Explore.tsx` filters fed by sectors
+- The 4 Curiosity Compass section components (Story/Challenge/CareerDeck/AudioVisual) to call the curated edge function
+
+## Order of execution
+
+1. Migration (tables + RPC + milestone seed).
+2. `InterestsAssessment.tsx` + signal map + rewards hook.
+3. Gate / tracker / intro slides updates.
+4. Sector multi-select in EducationalStatus + reward banner.
+5. Doc cross-check: append missing psychometric Qs + signal mappings + DB rows.
+6. Personalization pipeline + curated edge function.
+7. Tag-explore-entities backfill function.
+8. Wire 4 Curiosity Compass sections to curated output.
+
+## Out of scope (confirm if you want these too)
+
+- Replacing existing card/story content with AI-regenerated content (current cards stay; only the *filter* is new).
+- Building admin UI for re-running `tag-explore-entities` (will be invocable from a hidden settings action).
+
+Confirm and I'll execute in the order above.

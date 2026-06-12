@@ -26,6 +26,7 @@ import { useUserSignals } from "@/hooks/useUserSignals";
 import { useNavigate } from "react-router-dom";
 import ModuleSearchBar from "@/components/search/ModuleSearchBar";
 import PsychometricTest from "@/components/curiositycompass/PsychometricTest";
+import InterestsAssessment from "@/components/curiositycompass/InterestsAssessment";
 import AssessmentGate from "@/components/curiositycompass/AssessmentGate";
 import OnboardingCelebration from "@/components/curiositycompass/OnboardingCelebration";
 import InsightsView from "@/components/curiositycompass/InsightsView";
@@ -653,7 +654,8 @@ const CuriosityCompass = () => {
   // Check if both assessments are completed
   const discoveryDone = !!profile?.journey_responses?.assessment_completed;
   const psychometricDone = !!profile?.journey_responses?.psychometric_completed;
-  const bothAssessmentsDone = discoveryDone && psychometricDone;
+  const interestsDone = !!profile?.journey_responses?.interests_completed;
+  const bothAssessmentsDone = discoveryDone && psychometricDone && interestsDone;
   const [mode, setMode] = useState<string | null>(null);
   const [careerCards, setCareerCards] = useState<any[]>([]);
   const [interactions, setInteractions] = useState<Record<string, string>>({});
@@ -1134,7 +1136,7 @@ const CuriosityCompass = () => {
 
       <Tabs value={tab} onValueChange={(v) => {
         // Block locked tabs
-        if (!bothAssessmentsDone && !["assessment", "psychometric"].includes(v)) {
+        if (!bothAssessmentsDone && !["assessment", "psychometric", "interests"].includes(v)) {
           toast.info("Complete both assessments first to unlock this section.");
           return;
         }
@@ -1185,7 +1187,8 @@ const CuriosityCompass = () => {
               {[
                 { value: "assessment", label: "Discover Yourself", icon: ClipboardCheck },
                 { value: "psychometric", label: "Psychometric", icon: Brain },
-                { value: "explore", label: "Interests", icon: Heart, locked: !bothAssessmentsDone },
+                { value: "interests", label: "Interests Test", icon: Heart },
+                { value: "explore", label: "Explore Interests", icon: Heart, locked: !bothAssessmentsDone },
                 { value: "quests", label: "Quests", icon: Trophy, locked: !bothAssessmentsDone },
                 { value: "domains", label: "Domains", icon: Target, locked: !bothAssessmentsDone },
                 { value: "insights", label: "Insights & Profile", icon: Sparkles, locked: !bothAssessmentsDone },
@@ -1244,9 +1247,9 @@ const CuriosityCompass = () => {
           </div>
 
             {/* Assessment Gate - shown on locked tabs */}
-            {!bothAssessmentsDone && !["assessment", "psychometric"].includes(tab) && (
+            {!bothAssessmentsDone && !["assessment", "psychometric", "interests"].includes(tab) && (
               <div className="mt-2">
-                <AssessmentGate onGoToAssessment={(t) => setTab(t === "discovery" ? "assessment" : "psychometric")} />
+                <AssessmentGate onGoToAssessment={(t) => setTab(t === "discovery" ? "assessment" : t)} />
               </div>
             )}
 
@@ -1475,6 +1478,36 @@ const CuriosityCompass = () => {
                     </div>
                   </div>
                 </TabsContent>
+
+                {/* Holistic Interests Assessment (12 Qs) */}
+                <TabsContent value="interests" className="outline-none mt-0">
+                  <div className="bg-white rounded-3xl border border-border shadow-xl p-6 relative overflow-hidden space-y-6">
+                    <div className="absolute inset-0 bg-gradient-to-br from-[#5500cb]/[0.03] to-transparent pointer-events-none" />
+                    <div className="relative z-10 space-y-6">
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
+                          <Heart className="text-[#5500cb]" size={20} />
+                        </div>
+                        <div>
+                          <h2 className="font-display font-bold text-lg text-foreground">Holistic Interests Assessment</h2>
+                          <p className="font-body text-xs text-muted-foreground mt-0.5">
+                            A 12-question deep-map of what you're curious about — feeds Career Cards, Story Mode, Challenge Mode, and Audio/Visual exploration.
+                          </p>
+                        </div>
+                      </div>
+                      <InterestsAssessment
+                        userId={user!.id}
+                        onComplete={() => {
+                          if (discoveryDone && psychometricDone) {
+                            toast.success("All three assessments complete! Every section unlocked 🎉");
+                          }
+                        }}
+                        recordSignal={recordSignal}
+                      />
+                    </div>
+                  </div>
+                </TabsContent>
+
 
                 {/* Interests Assessment Cards */}
                 <TabsContent value="explore" className="outline-none mt-0 space-y-6">

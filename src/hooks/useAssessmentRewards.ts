@@ -5,6 +5,7 @@ import { useAuth } from "@/contexts/AuthContext";
 export type TestType =
   | "discovery"
   | "psychometric"
+  | "interests"
   | "skillstacker"
   | "roadmap"
   | "entrep_onboarding";
@@ -47,6 +48,7 @@ export const useAssessmentRewards = () => {
   const [progress, setProgress] = useState<Record<TestType, AssessmentProgress | null>>({
     discovery: null,
     psychometric: null,
+    interests: null,
     skillstacker: null,
     roadmap: null,
     entrep_onboarding: null,
@@ -59,7 +61,7 @@ export const useAssessmentRewards = () => {
 
   const fetchAll = useCallback(async () => {
     if (!user) {
-      setProgress({ discovery: null, psychometric: null, skillstacker: null, roadmap: null, entrep_onboarding: null });
+      setProgress({ discovery: null, psychometric: null, interests: null, skillstacker: null, roadmap: null, entrep_onboarding: null });
       setMilestones([]);
       setPendingUnlocks([]);
       setLoading(false);
@@ -77,7 +79,7 @@ export const useAssessmentRewards = () => {
         .order("unlocked_at", { ascending: false }),
     ]);
 
-    const progMap: Record<TestType, AssessmentProgress | null> = { discovery: null, psychometric: null, skillstacker: null, roadmap: null, entrep_onboarding: null };
+    const progMap: Record<TestType, AssessmentProgress | null> = { discovery: null, psychometric: null, interests: null, skillstacker: null, roadmap: null, entrep_onboarding: null };
     ((progressRes.data as any[]) || []).forEach((p: any) => {
       const tt = p.test_type as TestType;
       if (tt in progMap) {
