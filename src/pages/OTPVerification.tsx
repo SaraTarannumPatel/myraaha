@@ -13,7 +13,7 @@ const CODE_LEN = 6;
 const OTPVerification = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { email } = (location.state as { email?: string }) || {};
+  const { email, pendingPassword, pendingPhone } = (location.state as { email?: string; pendingPassword?: string; pendingPhone?: string }) || {};
 
   const [code, setCode] = useState<string[]>(Array(CODE_LEN).fill(""));
   const [resendTimer, setResendTimer] = useState(30);
