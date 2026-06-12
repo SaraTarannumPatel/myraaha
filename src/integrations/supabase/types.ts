@@ -77,6 +77,33 @@ export type Database = {
         }
         Relationships: []
       }
+      assessment_conclusion_keywords: {
+        Row: {
+          created_at: string
+          id: string
+          keyword: string
+          source_assessment: string
+          user_id: string
+          weight: number
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          keyword: string
+          source_assessment: string
+          user_id: string
+          weight?: number
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          keyword?: string
+          source_assessment?: string
+          user_id?: string
+          weight?: number
+        }
+        Relationships: []
+      }
       assessment_conclusions: {
         Row: {
           archetype: string | null
@@ -2917,6 +2944,36 @@ export type Database = {
         }
         Relationships: []
       }
+      explore_entity_keywords: {
+        Row: {
+          created_at: string
+          entity_id: string
+          entity_name: string | null
+          entity_type: string
+          id: string
+          keyword: string
+          weight: number
+        }
+        Insert: {
+          created_at?: string
+          entity_id: string
+          entity_name?: string | null
+          entity_type: string
+          id?: string
+          keyword: string
+          weight?: number
+        }
+        Update: {
+          created_at?: string
+          entity_id?: string
+          entity_name?: string | null
+          entity_type?: string
+          id?: string
+          keyword?: string
+          weight?: number
+        }
+        Relationships: []
+      }
       founder_profiles: {
         Row: {
           created_at: string
@@ -3575,6 +3632,39 @@ export type Database = {
           source?: string | null
           strength?: number | null
           updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      interests_assessment_responses: {
+        Row: {
+          answer_label: string
+          answer_value: string
+          construct: string | null
+          created_at: string
+          id: string
+          question_id: string
+          question_text: string
+          user_id: string
+        }
+        Insert: {
+          answer_label: string
+          answer_value: string
+          construct?: string | null
+          created_at?: string
+          id?: string
+          question_id: string
+          question_text: string
+          user_id: string
+        }
+        Update: {
+          answer_label?: string
+          answer_value?: string
+          construct?: string | null
+          created_at?: string
+          id?: string
+          question_id?: string
+          question_text?: string
           user_id?: string
         }
         Relationships: []
@@ -9219,6 +9309,60 @@ export type Database = {
         }
         Relationships: []
       }
+      user_interest_profile: {
+        Row: {
+          activity_style: string | null
+          arts: number | null
+          business: number | null
+          discovery: number | null
+          experimentation: number | null
+          exploration: number | null
+          humanities: number | null
+          impact_style: string | null
+          last_updated: string
+          mathematics: number | null
+          problem_style: string | null
+          raw: Json
+          science: number | null
+          technology: number | null
+          user_id: string
+        }
+        Insert: {
+          activity_style?: string | null
+          arts?: number | null
+          business?: number | null
+          discovery?: number | null
+          experimentation?: number | null
+          exploration?: number | null
+          humanities?: number | null
+          impact_style?: string | null
+          last_updated?: string
+          mathematics?: number | null
+          problem_style?: string | null
+          raw?: Json
+          science?: number | null
+          technology?: number | null
+          user_id: string
+        }
+        Update: {
+          activity_style?: string | null
+          arts?: number | null
+          business?: number | null
+          discovery?: number | null
+          experimentation?: number | null
+          exploration?: number | null
+          humanities?: number | null
+          impact_style?: string | null
+          last_updated?: string
+          mathematics?: number | null
+          problem_style?: string | null
+          raw?: Json
+          science?: number | null
+          technology?: number | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       user_ksao_vectors: {
         Row: {
           confidence: number
@@ -9322,6 +9466,33 @@ export type Database = {
           notes?: string | null
           score?: number | null
           status?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      user_onboarding_sectors: {
+        Row: {
+          created_at: string
+          id: string
+          rank: number
+          sector_name: string
+          sector_slug: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          rank?: number
+          sector_name: string
+          sector_slug: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          rank?: number
+          sector_name?: string
+          sector_slug?: string
           user_id?: string
         }
         Relationships: []
@@ -9666,6 +9837,14 @@ export type Database = {
         Returns: boolean
       }
       is_email_verified: { Args: { _email: string }; Returns: boolean }
+      match_explore_entities_for_user: {
+        Args: { _entity_type: string; _limit?: number }
+        Returns: {
+          entity_id: string
+          entity_name: string
+          score: number
+        }[]
+      }
       show_limit: { Args: never; Returns: number }
       show_trgm: { Args: { "": string }; Returns: string[] }
       unlock_reward: { Args: { _milestone_key: string }; Returns: Json }
