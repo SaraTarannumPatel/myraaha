@@ -42,7 +42,7 @@ const MyRaahaInsights = () => {
         if (error) throw error;
 
         if (data) {
-          const formatted = data.map(item => ({
+          const formatted = (data as any[]).map((item: any) => ({
             slug: `community-${item.id}`,
             title: item.title,
             category: item.category,
@@ -57,6 +57,7 @@ const MyRaahaInsights = () => {
           }));
           setDbArticles(formatted);
         }
+
       } catch (err) {
         console.warn('Fallback to static data. Error fetching community insights:', err);
       } finally {
