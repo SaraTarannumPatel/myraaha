@@ -209,18 +209,10 @@ const CareerMoodboard = () => {
     toast.success("Item removed");
   };
 
-  const checkMilestones = async (action: string) => {
-    if (!user) return;
-    const totalItems = allItems.length + 1;
-    const totalBoards = boards.length + (action === "board_created" ? 1 : 0);
-    const milestones: Record<number, string> = { 5: "Moodboard Explorer", 15: "Vision Architect", 30: "Dream Curator", 50: "Aspiration Master" };
-    const boardMilestones: Record<number, string> = { 3: "Board Builder", 5: "Portfolio Designer" };
-    const m = action === "item_added" ? milestones[totalItems] : boardMilestones[totalBoards];
-    if (m) {
-      await supabase.from("achievements").insert({ user_id: user.id, title: m, achievement_type: "moodboard", description: `Reached ${action === "item_added" ? totalItems + " items" : totalBoards + " boards"} on Career Moodboard`, points: action === "item_added" ? totalItems * 2 : totalBoards * 5 } as any);
-      toast.success(`🏆 Badge earned: ${m}!`);
-    }
+  const checkMilestones = async (_action: string) => {
+    // Moodboard milestone badges are awarded server-side via the Achievements scanner.
   };
+
 
   const callAI = async (mode: string, extra?: any) => {
     setAiLoading(true);
