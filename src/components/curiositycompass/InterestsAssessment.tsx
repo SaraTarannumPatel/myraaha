@@ -91,6 +91,8 @@ const InterestsAssessment = ({ userId, onComplete, recordSignal }: Props) => {
     try {
       await supabase.functions.invoke("assessment-synthesizer", { body: { test_type: "interests" } });
       await supabase.functions.invoke("assessment-synthesizer", { body: { test_type: "combined" } });
+      const { runUserPersonalization } = await import("@/lib/personalizationPipeline");
+      runUserPersonalization(userId, { force: true }).catch(() => {});
     } catch (e) {
       console.warn("Synthesis failed", e);
     }
