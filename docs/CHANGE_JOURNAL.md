@@ -85,3 +85,15 @@ CareerMap-CareerScape spec.
 **Why:** Unblock real-time password reset, broaden sign-in options to the providers Lovable Cloud actually supports, and complete the first end-to-end vertical slice data load for the new CareerMap-CareerScape module.
 
 **Files:** `src/pages/Auth.tsx`, `tsconfig.app.json`, `src/components/MyRaahaNewsletter.tsx`, `src/pages/MyRaahaContact.tsx`, `src/components/TrustSections.tsx`, `src/pages/MyRaahaPartnerships.tsx`, `src/pages/career/{CoreTeam,Facilitator,Intern,Volunteer}.tsx`, `src/integrations/lovable/index.ts`.
+
+## 2026-06-13 — Holistic Interests Assessment + Personalization Pipeline
+
+**What:** Added 3rd Curiosity Compass assessment ("Holistic Interests", 12 Qs from source doc), an 18-sector multi-select in `EducationalStatus` onboarding step, and a unified `runUserPersonalization` pipeline that derives a keyword bag from all 3 assessments + sectors and ranks Explore entities via the new `match_explore_entities_for_user` RPC.
+
+**Why:** Curiosity Compass needed a personalized lens distinct from the global Explore module. Without an interests profile + sector filter the 4 modes (Story, Challenge, Career Cards, Audio/Visual) were generic.
+
+**Before:** Only Discovery + Psychometric existed; Curiosity Compass sections were globally ranked.
+
+**Benefit:** Each user now has a cached `user_personalization_v1` payload feeding Curiosity Compass, Roadmap, Job Matching, Mentor Match, Content Library, SkillStacker. Recomputed on each assessment completion / sector save (6h TTL).
+
+**Files:** `src/lib/personalizationPipeline.ts` (new), `src/components/curiositycompass/InterestsAssessment.tsx` (new), `src/pages/onboarding/EducationalStatus.tsx`, `src/components/curiositycompass/{PsychometricTest,AssessmentGate}.tsx`, `src/pages/career/CuriosityCompass.tsx`, `src/hooks/useAssessmentRewards.ts`, `src/lib/assessmentSignalMap.ts`, migration `20260612035047_…interests…sql`.
