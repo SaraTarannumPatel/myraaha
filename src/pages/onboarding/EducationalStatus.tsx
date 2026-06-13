@@ -178,7 +178,7 @@ const EducationalStatus = () => {
       case 6: return true;
       case 7: return hasLead !== null;
       case 8: return helpWith.length > 0;
-      case 9: return domains.length > 0;
+      case 9: return domains.length > 0 && sectors.length > 0;
       default: return true;
     }
   };
@@ -283,6 +283,20 @@ const EducationalStatus = () => {
         ...(highest ? { highest_education: highest } as any : {}),
         onboarding_status: "consent" as any,
       } as any);
+
+      // Sectors of curiosity — wipe + insert, then trigger personalization
+      try {
+        await (supabase as any).from("user_onboarding_sectors").delete().eq("user_id", user.id);
+        if (sectors.length) {
+          await (supabase as any).from("user_onboarding_sectors").insert(
+            sectors.map((slug, i) => ({ user_id: user.id, sector_slug: slug, rank: i + 1 }))
+          );
+        }
+        const { runUserPersonalization } = await import("@/lib/personalizationPipeline");
+        runUserPersonalization(user.id).catch(() => {});
+      } catch (e) {
+        console.warn("Sector save failed", e);
+      }
 
       toast.success("Your education profile is saved 🎓");
       navigate("/onboarding/consent");
@@ -591,11 +605,19 @@ const EducationalStatus = () => {
               {/* SECTION 9 — Future Interests */}
               {section === 9 && (
                 <>
-                  <SectionHeader icon={Compass} title="Where does your curiosity lean?" subtitle="Pick the career domains that pull you — even slightly." />
+                  <SectionHeader icon={Compass} title="Where does your curiosity lean?" subtitle="Pick the career domains and sectors that pull you — even slightly." />
                   <div>
                     <label className="text-sm font-body text-foreground mb-2 block">Career domains of interest *</label>
                     <div className="flex flex-wrap gap-2">
                       {DOMAIN_OPTIONS.map(d => <Chip key={d} active={domains.includes(d)} onClick={() => toggleArr(domains, d, setDomains)}>{d}</Chip>)}
+                    </div>
+                  </div>
+                  <div>
+                    <label className="text-sm font-body text-foreground mb-2 block">Which sectors spark your curiosity? * <span className="text-muted-foreground font-normal">(pick any that interest you)</span></label>
+                    <div className="flex flex-wrap gap-2">
+                      {SECTOR_OPTIONS.map(s => (
+                        <Chip key={s.slug} active={sectors.includes(s.slug)} onClick={() => toggleArr(sectors, s.slug, setSectors)}>{s.label}</Chip>
+                      ))}
                     </div>
                   </div>
                   <div>
