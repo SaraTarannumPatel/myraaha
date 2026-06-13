@@ -48,6 +48,27 @@ const DOMAIN_OPTIONS = [
   "Education", "Media & Creative", "Sports", "Sustainability", "Public Policy",
 ];
 
+// 17 industry sectors mapped 1:1 to the career_intel_* tables in the DB.
+const SECTOR_OPTIONS: { slug: string; label: string }[] = [
+  { slug: "agri_env_natural_resources", label: "Agriculture, Environment & Natural Resources" },
+  { slug: "education", label: "Education" },
+  { slug: "energy_utilities", label: "Energy & Utilities" },
+  { slug: "financial_services", label: "Financial Services" },
+  { slug: "govt_public_sector", label: "Government & Public Sector" },
+  { slug: "healthcare_life_sciences", label: "Healthcare & Life Sciences" },
+  { slug: "hospitality_tourism_travel", label: "Hospitality, Tourism & Travel" },
+  { slug: "legal_prof_services", label: "Legal & Professional Services" },
+  { slug: "manufacturing_engineering", label: "Manufacturing & Engineering" },
+  { slug: "media_ent_creative", label: "Media, Entertainment & Creative" },
+  { slug: "ngo_development", label: "NGO & Social Development" },
+  { slug: "real_estate_construction", label: "Real Estate & Construction" },
+  { slug: "retail_consumer_goods", label: "Retail & Consumer Goods" },
+  { slug: "sports", label: "Sports" },
+  { slug: "tech_it", label: "Technology & IT" },
+  { slug: "telecommunications", label: "Telecommunications" },
+  { slug: "transport_logistics", label: "Transport & Logistics" },
+];
+
 interface SkillItem { name: string; confidence: typeof CONFIDENCE[number] | "" }
 interface CertItem { course_name: string; platform: string; completion_year: string }
 interface ProjectItem { project_name: string; description: string; skills_used: string; link: string }
@@ -128,6 +149,7 @@ const EducationalStatus = () => {
   const [helpWith, setHelpWith] = useState<string[]>([]);
   // 10. Future interests
   const [domains, setDomains] = useState<string[]>([]);
+  const [sectors, setSectors] = useState<string[]>([]);
   const [curious, setCurious] = useState("");
 
   const total = SECTION_LABELS.length;
@@ -156,7 +178,7 @@ const EducationalStatus = () => {
       case 6: return true;
       case 7: return hasLead !== null;
       case 8: return helpWith.length > 0;
-      case 9: return domains.length > 0;
+      case 9: return domains.length > 0 && sectors.length > 0;
       default: return true;
     }
   };
@@ -261,6 +283,20 @@ const EducationalStatus = () => {
         ...(highest ? { highest_education: highest } as any : {}),
         onboarding_status: "consent" as any,
       } as any);
+
+      // Sectors of curiosity — wipe + insert, then trigger personalization
+      try {
+        await (supabase as any).from("user_onboarding_sectors").delete().eq("user_id", user.id);
+        if (sectors.length) {
+          await (supabase as any).from("user_onboarding_sectors").insert(
+            sectors.map((slug, i) => ({ user_id: user.id, sector_slug: slug, rank: i + 1 }))
+          );
+        }
+        const { runUserPersonalization } = await import("@/lib/personalizationPipeline");
+        runUserPersonalization(user.id).catch(() => {});
+      } catch (e) {
+        console.warn("Sector save failed", e);
+      }
 
       toast.success("Your education profile is saved 🎓");
       navigate("/onboarding/consent");
@@ -569,11 +605,19 @@ const EducationalStatus = () => {
               {/* SECTION 9 — Future Interests */}
               {section === 9 && (
                 <>
-                  <SectionHeader icon={Compass} title="Where does your curiosity lean?" subtitle="Pick the career domains that pull you — even slightly." />
+                  <SectionHeader icon={Compass} title="Where does your curiosity lean?" subtitle="Pick the career domains and sectors that pull you — even slightly." />
                   <div>
                     <label className="text-sm font-body text-foreground mb-2 block">Career domains of interest *</label>
                     <div className="flex flex-wrap gap-2">
                       {DOMAIN_OPTIONS.map(d => <Chip key={d} active={domains.includes(d)} onClick={() => toggleArr(domains, d, setDomains)}>{d}</Chip>)}
+                    </div>
+                  </div>
+                  <div>
+                    <label className="text-sm font-body text-foreground mb-2 block">Which sectors spark your curiosity? * <span className="text-muted-foreground font-normal">(pick any that interest you)</span></label>
+                    <div className="flex flex-wrap gap-2">
+                      {SECTOR_OPTIONS.map(s => (
+                        <Chip key={s.slug} active={sectors.includes(s.slug)} onClick={() => toggleArr(sectors, s.slug, setSectors)}>{s.label}</Chip>
+                      ))}
                     </div>
                   </div>
                   <div>
