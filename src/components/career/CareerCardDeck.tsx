@@ -10,6 +10,7 @@ import MultiSelect from "@/components/ui/multi-select";
 import BlueprintCard, { type Blueprint } from "@/components/career/BlueprintCard";
 import { buildBlueprintFromInteractions } from "@/lib/buildBlueprint";
 import { generateBlueprintRoadmap } from "@/lib/blueprintRoadmap";
+import { useCuratedCompassFilter } from "@/hooks/useCuratedCompassFilter";
 import { toast } from "sonner";
 import {
   Heart, Sparkles, Bookmark, XCircle, ChevronLeft, ChevronRight,
@@ -146,8 +147,12 @@ const CareerCardDeck = () => {
     }
   };
 
+  const { scoreEntity, hasPersonalization } = useCuratedCompassFilter();
   const domains = [...new Set(paths.map(p => p.domain))].sort();
-  const filtered = filterDomains.length > 0 ? paths.filter(p => filterDomains.includes(p.domain)) : paths;
+  const base = filterDomains.length > 0 ? paths.filter(p => filterDomains.includes(p.domain)) : paths;
+  const filtered = hasPersonalization
+    ? [...base].sort((a, b) => scoreEntity(b as any) - scoreEntity(a as any))
+    : base;
   const current = filtered[currentIndex];
 
   const stats = {

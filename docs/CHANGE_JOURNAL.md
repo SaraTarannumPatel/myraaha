@@ -97,3 +97,15 @@ CareerMap-CareerScape spec.
 **Benefit:** Each user now has a cached `user_personalization_v1` payload feeding Curiosity Compass, Roadmap, Job Matching, Mentor Match, Content Library, SkillStacker. Recomputed on each assessment completion / sector save (6h TTL).
 
 **Files:** `src/lib/personalizationPipeline.ts` (new), `src/components/curiositycompass/InterestsAssessment.tsx` (new), `src/pages/onboarding/EducationalStatus.tsx`, `src/components/curiositycompass/{PsychometricTest,AssessmentGate}.tsx`, `src/pages/career/CuriosityCompass.tsx`, `src/hooks/useAssessmentRewards.ts`, `src/lib/assessmentSignalMap.ts`, migration `20260612035047_…interests…sql`.
+
+## 2026-06-13 (cont) — Compass Curated Edge + Sector-Aware Card Deck
+
+**What:** Added `supabase/functions/curiosity-compass-curated/index.ts` (orchestrator that returns AI-summarized, sector+keyword-ranked entity buckets for each Compass mode) and `src/hooks/useCuratedCompassFilter.ts` (client-side scoring helper). `CareerCardDeck` now re-ranks its global path list by the user's cached personalization so picks matching their chosen sectors and assessment keywords surface first.
+
+**Why:** Without per-user re-ranking, Compass modes felt identical to the global Explore module. The user explicitly requested that Compass be specialised to the individual.
+
+**Before:** Compass card deck displayed `career_paths` in alphabetical title order; no signal from sectors or assessments influenced ordering.
+
+**Benefit:** Foundation for end-to-end personalization across all 4 Compass modes. Falls back gracefully to original ordering when personalization is empty (guests / new users).
+
+**Files:** `supabase/functions/curiosity-compass-curated/index.ts` (new), `src/hooks/useCuratedCompassFilter.ts` (new), `src/components/career/CareerCardDeck.tsx`.
