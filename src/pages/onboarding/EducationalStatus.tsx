@@ -48,6 +48,27 @@ const DOMAIN_OPTIONS = [
   "Education", "Media & Creative", "Sports", "Sustainability", "Public Policy",
 ];
 
+// 17 industry sectors mapped 1:1 to the career_intel_* tables in the DB.
+const SECTOR_OPTIONS: { slug: string; label: string }[] = [
+  { slug: "agri_env_natural_resources", label: "Agriculture, Environment & Natural Resources" },
+  { slug: "education", label: "Education" },
+  { slug: "energy_utilities", label: "Energy & Utilities" },
+  { slug: "financial_services", label: "Financial Services" },
+  { slug: "govt_public_sector", label: "Government & Public Sector" },
+  { slug: "healthcare_life_sciences", label: "Healthcare & Life Sciences" },
+  { slug: "hospitality_tourism_travel", label: "Hospitality, Tourism & Travel" },
+  { slug: "legal_prof_services", label: "Legal & Professional Services" },
+  { slug: "manufacturing_engineering", label: "Manufacturing & Engineering" },
+  { slug: "media_ent_creative", label: "Media, Entertainment & Creative" },
+  { slug: "ngo_development", label: "NGO & Social Development" },
+  { slug: "real_estate_construction", label: "Real Estate & Construction" },
+  { slug: "retail_consumer_goods", label: "Retail & Consumer Goods" },
+  { slug: "sports", label: "Sports" },
+  { slug: "tech_it", label: "Technology & IT" },
+  { slug: "telecommunications", label: "Telecommunications" },
+  { slug: "transport_logistics", label: "Transport & Logistics" },
+];
+
 interface SkillItem { name: string; confidence: typeof CONFIDENCE[number] | "" }
 interface CertItem { course_name: string; platform: string; completion_year: string }
 interface ProjectItem { project_name: string; description: string; skills_used: string; link: string }
@@ -128,6 +149,7 @@ const EducationalStatus = () => {
   const [helpWith, setHelpWith] = useState<string[]>([]);
   // 10. Future interests
   const [domains, setDomains] = useState<string[]>([]);
+  const [sectors, setSectors] = useState<string[]>([]);
   const [curious, setCurious] = useState("");
 
   const total = SECTION_LABELS.length;
