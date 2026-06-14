@@ -68,6 +68,44 @@ export default function Roadmap() {
   const [therapistAdjust, setTherapistAdjust] = useState<any>(null);
   const [smartNavApplied, setSmartNavApplied] = useState(false);
   const [demoMode, setDemoMode] = useState(DEMO_MODE_DEFAULT);
+  const [aiGenerating, setAiGenerating] = useState(false);
+
+  const generateAiRoadmap = async () => {
+    if (!activeEntityId) return;
+    const ent = entities.find((e) => e.id === activeEntityId);
+    if (!ent) return;
+    setAiGenerating(true);
+    try {
+      let eduStatus: string | null = null;
+      if (user) {
+        try {
+          const { data } = await supabase
+            .from("user_education_status")
+            .select("educational_status")
+            .eq("user_id", user.id)
+            .maybeSingle();
+          eduStatus = (data as any)?.educational_status || null;
+        } catch {}
+      }
+      const aiSteps = await generateLiveRoadmapForEntity(ent, { educationalStatus: eduStatus });
+      if (aiSteps && aiSteps.length) {
+        setSteps((prev) => ({ ...prev, [ent.id]: aiSteps }));
+        recordSelfGraphSignal({
+          source: "learning",
+          summary: `Generated live AI roadmap for ${ent.label}`,
+          signals: { commitment_signal: 0.5 },
+          tags: ["ai_roadmaps", "ai_generated", ent.kind],
+        });
+        toast.success(`Generated a fresh AI roadmap with ${aiSteps.length} steps.`);
+      } else {
+        toast.error("AI couldn't build a roadmap right now. Try again in a moment.");
+      }
+    } catch (e: any) {
+      toast.error(e?.message || "AI roadmap generation failed.");
+    } finally {
+      setAiGenerating(false);
+    }
+  };
 
   // ─── Load entities ────────────────────────────────────────────────────
   useEffect(() => {
