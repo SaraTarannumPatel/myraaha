@@ -537,3 +537,90 @@ export async function searchWebResources(query: string, num = 8): Promise<WebRes
   if (error) throw error;
   return (data?.results || []) as WebResource[];
 }
+
+// ─── Personalization-driven entity fallback ────────────────────────────────
+// When a user has no card/path/challenge/story interactions yet, derive
+// entities from the cached personalization pipeline (sectors + ranked roles
+// + ranked domains) so Roadmaps is useful right after onboarding + assessments.
+export async function fetchEntitiesFromPersonalization(userId: string): Promise<Entity[]> {
+  try {
+    const { getCachedPersonalization, runUserPersonalization } = await import("./personalizationPipeline");
+    let cached = await getCachedPersonalization(userId);
+    if (!cached) cached = await runUserPersonalization(userId);
+    if (!cached) return [];
+    const out: Entity[] = [];
+    const seen = new Set<string>();
+    const push = (label: string, kind: EntityKind) => {
+      if (!label) return;
+      const id = `${kind}:${label}`;
+      if (seen.has(id)) return;
+      seen.add(id);
+      out.push({ id, label, kind, source: "other" });
+    };
+    (cached.ranked?.role || []).slice(0, 5).forEach((r: any) => push(r.entity_name, "role"));
+    (cached.ranked?.domain || []).slice(0, 4).forEach((r: any) => push(r.entity_name, "domain"));
+    (cached.ranked?.sector || []).slice(0, 3).forEach((r: any) => push(r.entity_name, "domain"));
+    return out;
+  } catch (e) {
+    console.warn("[aiRoadmaps] personalization fallback failed:", e);
+    return [];
+  }
+}
+
+// ─── Live AI roadmap generation (replaces template for a single entity) ────
+// Calls the `roadmap-ai` edge function with `generate_roadmap`. It enriches
+// with profile, signals, interests, skills + Firecrawl grounding and returns
+// phased steps. We map them into our RoadmapStep shape so the existing UI
+// renders them with the same cards & resource layout.
+export async function generateLiveRoadmapForEntity(
+  entity: Entity,
+  extra: { educationalStatus?: string | null } = {}
+): Promise<RoadmapStep[] | null> {
+  try {
+    const { data, error } = await supabase.functions.invoke("roadmap-ai", {
+      body: {
+        type: "generate_roadmap",
+        context: {
+          areasOfFocus: [entity.label],
+          interests: [entity.label, entity.kind],
+          skills: entity.skills || [],
+          careerStage: extra.educationalStatus || "exploring",
+        },
+      },
+    });
+    if (error) throw error;
+    const phases = (data?.phases || []) as any[];
+    if (!phases.length) return null;
+    const steps: RoadmapStep[] = [];
+    phases.forEach((phase: any, pi: number) => {
+      (phase.steps || []).forEach((s: any, si: number) => {
+        const resources: WebResource[] = s.resource_url
+          ? [{
+              title: s.resource_title || s.resource_url,
+              link: s.resource_url,
+              snippet: (s.description || "").slice(0, 160),
+              displayLink: (() => { try { return new URL(s.resource_url).hostname; } catch { return ""; } })(),
+              format: "course",
+            }]
+          : [];
+        steps.push({
+          id: `ai-${pi}-${si}`,
+          title: s.title || `Step ${steps.length + 1}`,
+          description: [
+            s.description || "",
+            s.estimated_duration ? `\nDuration: ${s.estimated_duration}` : "",
+            s.skill_tags?.length ? `\nSkills: ${s.skill_tags.join(", ")}` : "",
+          ].join(""),
+          keywords: [entity.label, ...(s.skill_tags || []), phase.name].filter(Boolean),
+          resources,
+          linkedModule: `Phase: ${phase.name}`,
+          formula: `priority=${s.priority || "medium"} · ${s.action_type || s.category || ""}`,
+        });
+      });
+    });
+    return steps;
+  } catch (e) {
+    console.warn("[aiRoadmaps] generateLiveRoadmapForEntity failed:", e);
+    return null;
+  }
+}
