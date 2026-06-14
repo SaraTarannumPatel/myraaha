@@ -78,6 +78,11 @@ export default function Roadmap() {
         let eduStatus: string | null = null;
         if (user) {
           try { ents = await fetchEntitiesFromInteractions(user.id); } catch {}
+          // Live fallback: derive entities from personalization pipeline
+          // (sectors + ranked roles/domains from onboarding + assessments)
+          if (!demoMode && ents.length === 0) {
+            try { ents = await fetchEntitiesFromPersonalization(user.id); } catch {}
+          }
           try {
             const { data: eduRow } = await supabase
               .from("user_education_status")
