@@ -18,6 +18,7 @@ import {
   Loader2, RefreshCw, ArrowRight, BarChart3, Shield, Star,
   TrendingUp
 } from "lucide-react";
+import { useCuratedCompassFilter } from "@/hooks/useCuratedCompassFilter";
 
 type InteractionType = "like" | "love" | "bookmark" | "not_for_me";
 
