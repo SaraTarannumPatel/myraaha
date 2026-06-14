@@ -15,6 +15,7 @@ import {
   CheckCircle2, AlertTriangle, User, Briefcase, Loader2, RefreshCw,
   ArrowRight, Zap
 } from "lucide-react";
+import { useCuratedCompassFilter } from "@/hooks/useCuratedCompassFilter";
 
 type InteractionType = "like" | "love" | "bookmark" | "not_for_me";
 
@@ -292,8 +293,12 @@ const StoryModeCards = () => {
   };
 
 
+  const { scoreEntity, hasPersonalization } = useCuratedCompassFilter();
   const domains = allDomains;
-  const filtered = stories; // server already filtered when filterDomains set
+  const baseList = stories; // server already filtered when filterDomains set
+  const filtered = hasPersonalization
+    ? [...baseList].sort((a, b) => scoreEntity(b as any) - scoreEntity(a as any))
+    : baseList;
   const current = filtered[currentIndex];
 
   const interactionCount = Object.keys(interactions).length;

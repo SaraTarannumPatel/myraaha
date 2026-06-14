@@ -109,3 +109,9 @@ CareerMap-CareerScape spec.
 **Benefit:** Foundation for end-to-end personalization across all 4 Compass modes. Falls back gracefully to original ordering when personalization is empty (guests / new users).
 
 **Files:** `supabase/functions/curiosity-compass-curated/index.ts` (new), `src/hooks/useCuratedCompassFilter.ts` (new), `src/components/career/CareerCardDeck.tsx`.
+
+## Curated Compass: Story/Challenge re-rank + Extended Psychometric Battery
+- **What:** Wired `useCuratedCompassFilter` into `StoryModeCards` and `ChallengeModeCards` so cards are re-ranked by user sectors + assessment keywords (safe fallback when no personalization).
+- **What:** Appended 30 additional psychometric questions (sections R–AN) covering Risk Appetite, Autonomy, Identity Clarity, Future Orientation, Energy/Recovery, Conflict, Self-Awareness, Curiosity Style, Focus, Achievement Drive, Social Comfort, Leadership, Planning, Structure, Skill Breadth, Learning Pace, Communication, Mentorship, Ownership, Exploration Breadth. Each is mapped in `PSYCHOMETRIC_SIGNAL_MAP` to its target modules so answers feed the unified signal engine.
+- **Why:** Closes the Curiosity Compass personalization loop across all 4 modes and deepens the psychometric profile feeding SelfGraph, Roadmap, SkillStacker, Mentor Match, Job Matching, etc.
+- **Files:** `src/components/career/StoryModeCards.tsx`, `src/components/career/ChallengeModeCards.tsx`, `src/components/curiositycompass/PsychometricTest.tsx`, `src/lib/assessmentSignalMap.ts`.

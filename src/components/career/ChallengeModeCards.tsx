@@ -18,6 +18,7 @@ import {
   Loader2, RefreshCw, ArrowRight, BarChart3, Shield, Star,
   TrendingUp
 } from "lucide-react";
+import { useCuratedCompassFilter } from "@/hooks/useCuratedCompassFilter";
 
 type InteractionType = "like" | "love" | "bookmark" | "not_for_me";
 
@@ -199,8 +200,12 @@ const ChallengeModeCards = () => {
     } finally { setGeneratingRoadmap(false); }
   };
 
+  const { scoreEntity, hasPersonalization } = useCuratedCompassFilter();
   const domains = [...new Set(challenges.map(c => c.domain))].sort();
-  const filtered = filterDomains.length > 0 ? challenges.filter(c => filterDomains.includes(c.domain)) : challenges;
+  const baseList = filterDomains.length > 0 ? challenges.filter(c => filterDomains.includes(c.domain)) : challenges;
+  const filtered = hasPersonalization
+    ? [...baseList].sort((a, b) => scoreEntity(b as any) - scoreEntity(a as any))
+    : baseList;
   const current = filtered[currentIndex];
   const interactionCount = Object.keys(interactions).length;
   const stats = {
