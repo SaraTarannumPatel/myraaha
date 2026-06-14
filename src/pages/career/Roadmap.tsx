@@ -19,16 +19,16 @@ import {
   buildStepQuery, buildSubStepQuery, searchWebResources,
   loadAiRoadmapsData, saveAiRoadmapsData, recordRoadmapAccess,
   recordSelfGraphSignal, logVirtualCoachEvent,
+  fetchEntitiesFromPersonalization, generateLiveRoadmapForEntity,
 } from "@/lib/aiRoadmaps";
 import {
   MOCK_ENTITIES, MOCK_COACH_NOTE, MOCK_THERAPIST_ADJUST,
   getMockResourcesForStep, getMockResourcesForSubStep,
 } from "@/lib/aiRoadmapsMock";
 
-// Demo mode: when ON, mock entities, resources, coach + therapist banners
-// are seeded so the entire AI Roadmaps experience works end-to-end for
-// presentations even without real backend signals. Toggle via UI button.
-const DEMO_MODE_DEFAULT = true;
+// Live by default. "Replay Demo" button still seeds mock entities, coach
+// notes, therapist adjustments and progress for presentations.
+const DEMO_MODE_DEFAULT = false;
 
 // Mock progress/insights per spec
 const MOCK_PROGRESS = {
