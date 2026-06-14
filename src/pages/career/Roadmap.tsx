@@ -500,14 +500,20 @@ export default function Roadmap() {
         {/* Steps */}
         <div className="lg:col-span-3 space-y-3">
           {activeEntity && (
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between gap-2 flex-wrap">
               <div>
                 <h2 className="text-lg font-semibold">{activeEntity.label}</h2>
-                <p className="text-xs text-muted-foreground">15-stage adaptive roadmap · linked to every module in the app</p>
+                <p className="text-xs text-muted-foreground">Adaptive roadmap · live AI + web-grounded resources</p>
               </div>
-              <button onClick={goToContentLibrary} className="text-xs text-blue-600 hover:underline flex items-center gap-1">
-                Go to Learning Library <ArrowRight size={12} />
-              </button>
+              <div className="flex items-center gap-2">
+                <Button size="sm" onClick={generateAiRoadmap} disabled={aiGenerating}>
+                  {aiGenerating ? <Loader2 size={12} className="animate-spin mr-1" /> : <Sparkles size={12} className="mr-1" />}
+                  {aiGenerating ? "Generating…" : "Generate AI Roadmap"}
+                </Button>
+                <button onClick={goToContentLibrary} className="text-xs text-blue-600 hover:underline flex items-center gap-1">
+                  Go to Learning Library <ArrowRight size={12} />
+                </button>
+              </div>
             </div>
           )}
           {!activeEntity && !loadingEntities && (
