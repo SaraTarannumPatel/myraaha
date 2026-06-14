@@ -19,16 +19,16 @@ import {
   buildStepQuery, buildSubStepQuery, searchWebResources,
   loadAiRoadmapsData, saveAiRoadmapsData, recordRoadmapAccess,
   recordSelfGraphSignal, logVirtualCoachEvent,
+  fetchEntitiesFromPersonalization, generateLiveRoadmapForEntity,
 } from "@/lib/aiRoadmaps";
 import {
   MOCK_ENTITIES, MOCK_COACH_NOTE, MOCK_THERAPIST_ADJUST,
   getMockResourcesForStep, getMockResourcesForSubStep,
 } from "@/lib/aiRoadmapsMock";
 
-// Demo mode: when ON, mock entities, resources, coach + therapist banners
-// are seeded so the entire AI Roadmaps experience works end-to-end for
-// presentations even without real backend signals. Toggle via UI button.
-const DEMO_MODE_DEFAULT = true;
+// Live by default. "Replay Demo" button still seeds mock entities, coach
+// notes, therapist adjustments and progress for presentations.
+const DEMO_MODE_DEFAULT = false;
 
 // Mock progress/insights per spec
 const MOCK_PROGRESS = {
@@ -68,6 +68,44 @@ export default function Roadmap() {
   const [therapistAdjust, setTherapistAdjust] = useState<any>(null);
   const [smartNavApplied, setSmartNavApplied] = useState(false);
   const [demoMode, setDemoMode] = useState(DEMO_MODE_DEFAULT);
+  const [aiGenerating, setAiGenerating] = useState(false);
+
+  const generateAiRoadmap = async () => {
+    if (!activeEntityId) return;
+    const ent = entities.find((e) => e.id === activeEntityId);
+    if (!ent) return;
+    setAiGenerating(true);
+    try {
+      let eduStatus: string | null = null;
+      if (user) {
+        try {
+          const { data } = await supabase
+            .from("user_education_status")
+            .select("educational_status")
+            .eq("user_id", user.id)
+            .maybeSingle();
+          eduStatus = (data as any)?.educational_status || null;
+        } catch {}
+      }
+      const aiSteps = await generateLiveRoadmapForEntity(ent, { educationalStatus: eduStatus });
+      if (aiSteps && aiSteps.length) {
+        setSteps((prev) => ({ ...prev, [ent.id]: aiSteps }));
+        recordSelfGraphSignal({
+          source: "learning",
+          summary: `Generated live AI roadmap for ${ent.label}`,
+          signals: { commitment_signal: 0.5 },
+          tags: ["ai_roadmaps", "ai_generated", ent.kind],
+        });
+        toast.success(`Generated a fresh AI roadmap with ${aiSteps.length} steps.`);
+      } else {
+        toast.error("AI couldn't build a roadmap right now. Try again in a moment.");
+      }
+    } catch (e: any) {
+      toast.error(e?.message || "AI roadmap generation failed.");
+    } finally {
+      setAiGenerating(false);
+    }
+  };
 
   // ─── Load entities ────────────────────────────────────────────────────
   useEffect(() => {
@@ -78,6 +116,11 @@ export default function Roadmap() {
         let eduStatus: string | null = null;
         if (user) {
           try { ents = await fetchEntitiesFromInteractions(user.id); } catch {}
+          // Live fallback: derive entities from personalization pipeline
+          // (sectors + ranked roles/domains from onboarding + assessments)
+          if (!demoMode && ents.length === 0) {
+            try { ents = await fetchEntitiesFromPersonalization(user.id); } catch {}
+          }
           try {
             const { data: eduRow } = await supabase
               .from("user_education_status")
@@ -457,14 +500,20 @@ export default function Roadmap() {
         {/* Steps */}
         <div className="lg:col-span-3 space-y-3">
           {activeEntity && (
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between gap-2 flex-wrap">
               <div>
                 <h2 className="text-lg font-semibold">{activeEntity.label}</h2>
-                <p className="text-xs text-muted-foreground">15-stage adaptive roadmap · linked to every module in the app</p>
+                <p className="text-xs text-muted-foreground">Adaptive roadmap · live AI + web-grounded resources</p>
               </div>
-              <button onClick={goToContentLibrary} className="text-xs text-blue-600 hover:underline flex items-center gap-1">
-                Go to Learning Library <ArrowRight size={12} />
-              </button>
+              <div className="flex items-center gap-2">
+                <Button size="sm" onClick={generateAiRoadmap} disabled={aiGenerating}>
+                  {aiGenerating ? <Loader2 size={12} className="animate-spin mr-1" /> : <Sparkles size={12} className="mr-1" />}
+                  {aiGenerating ? "Generating…" : "Generate AI Roadmap"}
+                </Button>
+                <button onClick={goToContentLibrary} className="text-xs text-blue-600 hover:underline flex items-center gap-1">
+                  Go to Learning Library <ArrowRight size={12} />
+                </button>
+              </div>
             </div>
           )}
           {!activeEntity && !loadingEntities && (
