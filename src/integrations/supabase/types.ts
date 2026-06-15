@@ -77,6 +77,123 @@ export type Database = {
         }
         Relationships: []
       }
+      ai_roadmap_exam_status: {
+        Row: {
+          created_at: string
+          exam_code: string
+          id: string
+          notes: string | null
+          status: string
+          target_year: number | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          exam_code: string
+          id?: string
+          notes?: string | null
+          status?: string
+          target_year?: number | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          exam_code?: string
+          id?: string
+          notes?: string | null
+          status?: string
+          target_year?: number | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      ai_roadmap_module_engagements: {
+        Row: {
+          created_at: string
+          entity_id: string
+          first_opened_at: string
+          id: string
+          last_opened_at: string
+          module_name: string
+          module_route: string
+          open_count: number
+          stage_id: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          entity_id: string
+          first_opened_at?: string
+          id?: string
+          last_opened_at?: string
+          module_name: string
+          module_route: string
+          open_count?: number
+          stage_id: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          entity_id?: string
+          first_opened_at?: string
+          id?: string
+          last_opened_at?: string
+          module_name?: string
+          module_route?: string
+          open_count?: number
+          stage_id?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      ai_roadmap_stage_progress: {
+        Row: {
+          completed_at: string | null
+          created_at: string
+          entity_id: string
+          entity_label: string | null
+          id: string
+          notes_count: number
+          stage_id: string
+          started_at: string | null
+          status: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          completed_at?: string | null
+          created_at?: string
+          entity_id: string
+          entity_label?: string | null
+          id?: string
+          notes_count?: number
+          stage_id: string
+          started_at?: string | null
+          status?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          completed_at?: string | null
+          created_at?: string
+          entity_id?: string
+          entity_label?: string | null
+          id?: string
+          notes_count?: number
+          stage_id?: string
+          started_at?: string | null
+          status?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       assessment_conclusion_keywords: {
         Row: {
           created_at: string
@@ -7420,6 +7537,60 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      role_education_requirements: {
+        Row: {
+          alternative_entry_paths: string[]
+          created_at: string
+          entrance_exam_codes: string[]
+          id: string
+          minimum_education_level: string
+          notes: string | null
+          preferred_degree_types: string[]
+          preferred_education_level: string | null
+          required_degree_types: string[]
+          required_stream_class12: string | null
+          required_subjects_class12: string[]
+          required_subjects_undergraduate: string[]
+          role_id: string | null
+          role_label: string
+          updated_at: string
+        }
+        Insert: {
+          alternative_entry_paths?: string[]
+          created_at?: string
+          entrance_exam_codes?: string[]
+          id?: string
+          minimum_education_level: string
+          notes?: string | null
+          preferred_degree_types?: string[]
+          preferred_education_level?: string | null
+          required_degree_types?: string[]
+          required_stream_class12?: string | null
+          required_subjects_class12?: string[]
+          required_subjects_undergraduate?: string[]
+          role_id?: string | null
+          role_label: string
+          updated_at?: string
+        }
+        Update: {
+          alternative_entry_paths?: string[]
+          created_at?: string
+          entrance_exam_codes?: string[]
+          id?: string
+          minimum_education_level?: string
+          notes?: string | null
+          preferred_degree_types?: string[]
+          preferred_education_level?: string | null
+          required_degree_types?: string[]
+          required_stream_class12?: string | null
+          required_subjects_class12?: string[]
+          required_subjects_undergraduate?: string[]
+          role_id?: string | null
+          role_label?: string
+          updated_at?: string
+        }
+        Relationships: []
       }
       role_exam_gate_edges: {
         Row: {
