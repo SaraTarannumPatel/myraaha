@@ -80,21 +80,22 @@ const Auth = () => {
         return;
       }
 
-      // Phase 3: signup uses 6-digit email OTP (not a confirmation link).
-      // signInWithOtp(shouldCreateUser:true) creates the user AND sends a 6-digit code.
-      // Password is set after OTP verification — passed via in-memory router state (NOT sessionStorage).
-      const { error } = await supabase.auth.signInWithOtp({
+      // [ARCHIVED] Email OTP + phone OTP flow paused. Using default email verification link.
+      // Phone number is collected as profile metadata only (must be the one registered with
+      // the user's school / college / university — i.e. their official institutional number).
+      const { error } = await supabase.auth.signUp({
         email,
+        password,
         options: {
-          shouldCreateUser: true,
-          data: { full_name: email.split("@")[0], phone: cleanPhone, pending_password_set: true },
+          emailRedirectTo: `${window.location.origin}/auth`,
+          data: { full_name: email.split("@")[0], phone: cleanPhone },
         },
       });
       if (error) {
         toast.error(error.message);
       } else {
-        toast.success("We sent a 6-digit code to your email.");
-        navigate("/verify-otp", { state: { email, pendingPassword: password, pendingPhone: cleanPhone } });
+        toast.success("Verification email sent! Check your inbox to confirm your account, then log in.");
+        setIsLogin(true);
       }
 
     }
@@ -212,15 +213,20 @@ const Auth = () => {
             />
 
             {!isLogin && (
-              <input
-                type="tel"
-                value={phone}
-                onChange={(e) => handlePhoneChange(e.target.value)}
-                placeholder="+91 XXXXX XXXXX"
-                required
-                className="w-full h-12 md:h-12 md:min-h-[48px] min-h-[52px] rounded-md bg-muted px-4 font-body text-base placeholder:text-muted-foreground outline-none border-none focus:ring-2 focus:ring-primary transition-all"
-                onFocus={() => !phone && setPhone("+91 ")}
-              />
+              <>
+                <input
+                  type="tel"
+                  value={phone}
+                  onChange={(e) => handlePhoneChange(e.target.value)}
+                  placeholder="+91 XXXXX XXXXX"
+                  required
+                  className="w-full h-12 md:h-12 md:min-h-[48px] min-h-[52px] rounded-md bg-muted px-4 font-body text-base placeholder:text-muted-foreground outline-none border-none focus:ring-2 focus:ring-primary transition-all"
+                  onFocus={() => !phone && setPhone("+91 ")}
+                />
+                <p className="font-body text-[11px] text-muted-foreground px-1 -mt-1">
+                  📌 Please enter the official phone number registered with your school, college, or university.
+                </p>
+              </>
             )}
 
             <input

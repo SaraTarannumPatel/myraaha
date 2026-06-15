@@ -32,7 +32,8 @@ import UserTypeSelection from "./pages/onboarding/UserTypeSelection";
 import ConsentStep from "./pages/onboarding/ConsentStep";
 import JourneyDiscovery from "./pages/onboarding/JourneyDiscovery";
 import EducationalStatus from "./pages/onboarding/EducationalStatus";
-import OTPVerification from "./pages/OTPVerification";
+// [ARCHIVED] OTP verification flow paused — kept in repo but not routed.
+// import OTPVerification from "./pages/OTPVerification";
 import ResetPassword from "./pages/ResetPassword";
 import DashboardLayout from "./layouts/DashboardLayout";
 import Dashboard from "./pages/Dashboard";
@@ -118,7 +119,7 @@ const App = () => (
             <Route path="/intro" element={<IntroSlides />} />
             <Route path="/auth" element={<Auth />} />
             <Route path="/guest" element={<GuestEntry />} />
-            <Route path="/verify-otp" element={<OTPVerification />} />
+            {/* [ARCHIVED] <Route path="/verify-otp" element={<OTPVerification />} /> */}
             <Route path="/onboarding" element={<ProtectedRoute><Welcome /></ProtectedRoute>} />
             <Route path="/onboarding/user-type" element={<ProtectedRoute><UserTypeSelection /></ProtectedRoute>} />
             <Route path="/onboarding/journey" element={<ProtectedRoute><JourneyDiscovery /></ProtectedRoute>} />
