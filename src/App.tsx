@@ -32,7 +32,8 @@ import UserTypeSelection from "./pages/onboarding/UserTypeSelection";
 import ConsentStep from "./pages/onboarding/ConsentStep";
 import JourneyDiscovery from "./pages/onboarding/JourneyDiscovery";
 import EducationalStatus from "./pages/onboarding/EducationalStatus";
-import OTPVerification from "./pages/OTPVerification";
+// [ARCHIVED] OTP verification flow paused — kept in repo but not routed.
+// import OTPVerification from "./pages/OTPVerification";
 import ResetPassword from "./pages/ResetPassword";
 import DashboardLayout from "./layouts/DashboardLayout";
 import Dashboard from "./pages/Dashboard";
