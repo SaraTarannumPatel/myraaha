@@ -213,15 +213,20 @@ const Auth = () => {
             />
 
             {!isLogin && (
-              <input
-                type="tel"
-                value={phone}
-                onChange={(e) => handlePhoneChange(e.target.value)}
-                placeholder="+91 XXXXX XXXXX"
-                required
-                className="w-full h-12 md:h-12 md:min-h-[48px] min-h-[52px] rounded-md bg-muted px-4 font-body text-base placeholder:text-muted-foreground outline-none border-none focus:ring-2 focus:ring-primary transition-all"
-                onFocus={() => !phone && setPhone("+91 ")}
-              />
+              <>
+                <input
+                  type="tel"
+                  value={phone}
+                  onChange={(e) => handlePhoneChange(e.target.value)}
+                  placeholder="+91 XXXXX XXXXX"
+                  required
+                  className="w-full h-12 md:h-12 md:min-h-[48px] min-h-[52px] rounded-md bg-muted px-4 font-body text-base placeholder:text-muted-foreground outline-none border-none focus:ring-2 focus:ring-primary transition-all"
+                  onFocus={() => !phone && setPhone("+91 ")}
+                />
+                <p className="font-body text-[11px] text-muted-foreground px-1 -mt-1">
+                  📌 Please enter the official phone number registered with your school, college, or university.
+                </p>
+              </>
             )}
 
             <input
