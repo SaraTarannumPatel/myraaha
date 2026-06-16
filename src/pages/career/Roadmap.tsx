@@ -11,7 +11,7 @@ import {
   Sparkles, RefreshCw, ExternalLink, Library, Settings as SettingsIcon,
   Target, Zap, Flame, TrendingUp, ArrowRight, Loader2, BookOpen, Wand2,
   Youtube, GraduationCap, Mic, FileText, Newspaper, Image as ImageIcon,
-  Building2, Users, Video, ScrollText, MessageSquare,
+  Building2, Users, Video, ScrollText, MessageSquare, CheckCircle2,
 } from "lucide-react";
 import {
   Entity, RoadmapStep, SubStep, WebResource,
@@ -20,6 +20,7 @@ import {
   loadAiRoadmapsData, saveAiRoadmapsData, recordRoadmapAccess,
   recordSelfGraphSignal, logVirtualCoachEvent,
   fetchEntitiesFromPersonalization, generateLiveRoadmapForEntity,
+  getCompassCompletionStateFromProfile, buildSelfDiscoveryFitStep, syncSelfDiscoveryStageForEntity,
 } from "@/lib/aiRoadmaps";
 import {
   MOCK_ENTITIES, MOCK_COACH_NOTE, MOCK_THERAPIST_ADJUST,
@@ -55,7 +56,7 @@ const KIND_COLORS: Record<string, string> = {
 };
 
 export default function Roadmap() {
-  const { user } = useAuth();
+  const { user, profile } = useAuth();
   const navigate = useNavigate();
 
   const [entities, setEntities] = useState<Entity[]>([]);
@@ -69,6 +70,8 @@ export default function Roadmap() {
   const [smartNavApplied, setSmartNavApplied] = useState(false);
   const [demoMode, setDemoMode] = useState(DEMO_MODE_DEFAULT);
   const [aiGenerating, setAiGenerating] = useState(false);
+  const compassCompletion = useMemo(() => getCompassCompletionStateFromProfile(profile), [profile]);
+  const selfDiscoveryComplete = demoMode || compassCompletion.allDone;
 
   const generateAiRoadmap = async () => {
     if (!activeEntityId) return;
