@@ -541,7 +541,14 @@ export default function Roadmap() {
                     <div className="flex items-start gap-2">
                       <span className="shrink-0 w-7 h-7 rounded-full bg-primary/10 flex items-center justify-center text-xs font-bold text-primary">{idx + 1}</span>
                       <div>
-                        <CardTitle className="text-base">{step.title}</CardTitle>
+                        <div className="flex flex-wrap items-center gap-2">
+                          <CardTitle className="text-base">{step.title}</CardTitle>
+                          {step.completionStatus === "completed" && (
+                            <Badge variant="secondary" className="text-[10px] bg-primary/10 text-primary border-primary/20">
+                              <CheckCircle2 size={11} className="mr-1" /> Complete
+                            </Badge>
+                          )}
+                        </div>
                         <p className="text-xs text-muted-foreground mt-0.5">{step.description}</p>
                         {step.linkedModule && (
                           <div className="flex flex-wrap items-center gap-2 mt-1.5">
