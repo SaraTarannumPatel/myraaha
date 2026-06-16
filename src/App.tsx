@@ -34,8 +34,6 @@ import JourneyDiscovery from "./pages/onboarding/JourneyDiscovery";
 import EducationalStatus from "./pages/onboarding/EducationalStatus";
 import IntentSelection from "./pages/onboarding/IntentSelection";
 import GuidedOnboarding from "./pages/onboarding/GuidedOnboarding";
-// [ARCHIVED] OTP verification flow paused — kept in repo but not routed.
-// import OTPVerification from "./pages/OTPVerification";
 import ResetPassword from "./pages/ResetPassword";
 import DashboardLayout from "./layouts/DashboardLayout";
 import Dashboard from "./pages/Dashboard";
@@ -121,6 +119,7 @@ const App = () => (
             <Route path="/intro" element={<IntroSlides />} />
             <Route path="/auth" element={<Auth />} />
             <Route path="/guest" element={<GuestEntry />} />
+            {/* Legacy OTP deep links are archived and safely returned to auth. */}
             <Route path="/verify-otp" element={<Navigate to="/auth" replace />} />
             <Route path="/onboarding" element={<ProtectedRoute><Welcome /></ProtectedRoute>} />
             <Route path="/onboarding/user-type" element={<ProtectedRoute><UserTypeSelection /></ProtectedRoute>} />
