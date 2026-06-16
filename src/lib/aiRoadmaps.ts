@@ -626,7 +626,7 @@ export async function fetchEntitiesFromPersonalization(userId: string): Promise<
 // renders them with the same cards & resource layout.
 export async function generateLiveRoadmapForEntity(
   entity: Entity,
-  extra: { educationalStatus?: string | null } = {}
+  extra: { educationalStatus?: string | null; selfDiscoveryCompleted?: boolean } = {}
 ): Promise<RoadmapStep[] | null> {
   try {
     const { data, error } = await supabase.functions.invoke("roadmap-ai", {
@@ -637,6 +637,7 @@ export async function generateLiveRoadmapForEntity(
           interests: [entity.label, entity.kind],
           skills: entity.skills || [],
           careerStage: extra.educationalStatus || "exploring",
+          selfDiscoveryCompleted: !!extra.selfDiscoveryCompleted,
         },
       },
     });
