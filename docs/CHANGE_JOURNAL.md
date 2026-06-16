@@ -115,3 +115,15 @@ CareerMap-CareerScape spec.
 - **What:** Appended 30 additional psychometric questions (sections R–AN) covering Risk Appetite, Autonomy, Identity Clarity, Future Orientation, Energy/Recovery, Conflict, Self-Awareness, Curiosity Style, Focus, Achievement Drive, Social Comfort, Leadership, Planning, Structure, Skill Breadth, Learning Pace, Communication, Mentorship, Ownership, Exploration Breadth. Each is mapped in `PSYCHOMETRIC_SIGNAL_MAP` to its target modules so answers feed the unified signal engine.
 - **Why:** Closes the Curiosity Compass personalization loop across all 4 modes and deepens the psychometric profile feeding SelfGraph, Roadmap, SkillStacker, Mentor Match, Job Matching, etc.
 - **Files:** `src/components/career/StoryModeCards.tsx`, `src/components/career/ChallengeModeCards.tsx`, `src/components/curiositycompass/PsychometricTest.tsx`, `src/lib/assessmentSignalMap.ts`.
+
+## 2026-06-16 — Auth OTP archive fix + Roadmap Self-Discovery sync
+
+**What:** Archived the old OTP verification page outside the compiled source tree, redirected legacy `/verify-otp` links back to `/auth`, restored missing onboarding routes, and made auth resume incomplete users from their saved onboarding step instead of restarting at the welcome screen.
+
+**Why:** The OTP flow had been paused but stale OTP code was still compiled, and legacy onboarding statuses could point at routes that were no longer mounted, causing users to bounce back to the start.
+
+**Before:** Onboarding could restart incorrectly after auth/session refresh. AI Roadmaps also lacked a real Step 1 completion signal for “Self-Discovery & Fit”.
+
+**Benefit:** Onboarding now progresses safely, legacy OTP deep links no longer break the flow, and AI Roadmaps Step 1 is marked complete from the three Curiosity Compass assessment completion flags.
+
+**Files:** `src/App.tsx`, `src/pages/Auth.tsx`, `src/components/ProtectedRoute.tsx`, `src/lib/aiRoadmaps.ts`, `src/pages/career/Roadmap.tsx`, `supabase/functions/roadmap-ai/index.ts`, migration adding `has_completed_curiosity_compass` + roadmap self-discovery sync functions/triggers.

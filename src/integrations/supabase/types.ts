@@ -10000,6 +10000,10 @@ export type Database = {
         Args: { _entitlement_key: string }
         Returns: boolean
       }
+      has_completed_curiosity_compass: {
+        Args: { _user_id: string }
+        Returns: boolean
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
@@ -10018,6 +10022,10 @@ export type Database = {
       }
       show_limit: { Args: never; Returns: number }
       show_trgm: { Args: { "": string }; Returns: string[] }
+      sync_ai_roadmap_self_discovery_stage: {
+        Args: { _entity_id?: string; _entity_label?: string; _user_id?: string }
+        Returns: boolean
+      }
       unlock_reward: { Args: { _milestone_key: string }; Returns: Json }
       update_assessment_progress: {
         Args: { _completed: number; _test_type: string; _total: number }

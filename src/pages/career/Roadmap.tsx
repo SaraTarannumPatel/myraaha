@@ -11,7 +11,7 @@ import {
   Sparkles, RefreshCw, ExternalLink, Library, Settings as SettingsIcon,
   Target, Zap, Flame, TrendingUp, ArrowRight, Loader2, BookOpen, Wand2,
   Youtube, GraduationCap, Mic, FileText, Newspaper, Image as ImageIcon,
-  Building2, Users, Video, ScrollText, MessageSquare,
+  Building2, Users, Video, ScrollText, MessageSquare, CheckCircle2,
 } from "lucide-react";
 import {
   Entity, RoadmapStep, SubStep, WebResource,
@@ -20,6 +20,7 @@ import {
   loadAiRoadmapsData, saveAiRoadmapsData, recordRoadmapAccess,
   recordSelfGraphSignal, logVirtualCoachEvent,
   fetchEntitiesFromPersonalization, generateLiveRoadmapForEntity,
+  getCompassCompletionStateFromProfile, buildSelfDiscoveryFitStep, syncSelfDiscoveryStageForEntity,
 } from "@/lib/aiRoadmaps";
 import {
   MOCK_ENTITIES, MOCK_COACH_NOTE, MOCK_THERAPIST_ADJUST,
@@ -55,7 +56,7 @@ const KIND_COLORS: Record<string, string> = {
 };
 
 export default function Roadmap() {
-  const { user } = useAuth();
+  const { user, profile } = useAuth();
   const navigate = useNavigate();
 
   const [entities, setEntities] = useState<Entity[]>([]);
@@ -69,6 +70,8 @@ export default function Roadmap() {
   const [smartNavApplied, setSmartNavApplied] = useState(false);
   const [demoMode, setDemoMode] = useState(DEMO_MODE_DEFAULT);
   const [aiGenerating, setAiGenerating] = useState(false);
+  const compassCompletion = useMemo(() => getCompassCompletionStateFromProfile(profile), [profile]);
+  const selfDiscoveryComplete = demoMode || compassCompletion.allDone;
 
   const generateAiRoadmap = async () => {
     if (!activeEntityId) return;
@@ -87,9 +90,14 @@ export default function Roadmap() {
           eduStatus = (data as any)?.educational_status || null;
         } catch {}
       }
-      const aiSteps = await generateLiveRoadmapForEntity(ent, { educationalStatus: eduStatus });
+      const aiSteps = await generateLiveRoadmapForEntity(ent, {
+        educationalStatus: eduStatus,
+        selfDiscoveryCompleted: selfDiscoveryComplete,
+      });
       if (aiSteps && aiSteps.length) {
-        setSteps((prev) => ({ ...prev, [ent.id]: aiSteps }));
+        const selfDiscoveryStep = buildSelfDiscoveryFitStep(ent, selfDiscoveryComplete);
+        setSteps((prev) => ({ ...prev, [ent.id]: [selfDiscoveryStep, ...aiSteps.filter((s) => s.id !== "step1")] }));
+        if (user) void syncSelfDiscoveryStageForEntity(ent, selfDiscoveryComplete);
         recordSelfGraphSignal({
           source: "learning",
           summary: `Generated live AI roadmap for ${ent.label}`,
@@ -139,9 +147,13 @@ export default function Roadmap() {
           if (!eduStatus) eduStatus = "class_12"; // demo: show education prerequisite stages
         }
         setEntities(ents);
+        const completedSelfDiscovery = demoMode || compassCompletion.allDone;
         const built: Record<string, RoadmapStep[]> = {};
-        ents.forEach((e) => { built[e.id] = buildRoadmapForEntity(e, { educationalStatus: eduStatus }); });
+        ents.forEach((e) => { built[e.id] = buildRoadmapForEntity(e, { educationalStatus: eduStatus, selfDiscoveryCompleted: completedSelfDiscovery }); });
         setSteps(built);
+        if (user && completedSelfDiscovery) {
+          void Promise.all(ents.map((e) => syncSelfDiscoveryStageForEntity(e, completedSelfDiscovery)));
+        }
 
         // Smart navigation pre-select
         let preselect: string | null = null;
@@ -175,7 +187,7 @@ export default function Roadmap() {
         setLoadingEntities(false);
       }
     })();
-  }, [user, demoMode]);
+  }, [user, demoMode, compassCompletion.allDone, selfDiscoveryComplete]);
 
   const activeEntity = useMemo(
     () => entities.find((e) => e.id === activeEntityId) || null,
@@ -529,7 +541,14 @@ export default function Roadmap() {
                     <div className="flex items-start gap-2">
                       <span className="shrink-0 w-7 h-7 rounded-full bg-primary/10 flex items-center justify-center text-xs font-bold text-primary">{idx + 1}</span>
                       <div>
-                        <CardTitle className="text-base">{step.title}</CardTitle>
+                        <div className="flex flex-wrap items-center gap-2">
+                          <CardTitle className="text-base">{step.title}</CardTitle>
+                          {step.completionStatus === "completed" && (
+                            <Badge variant="secondary" className="text-[10px] bg-primary/10 text-primary border-primary/20">
+                              <CheckCircle2 size={11} className="mr-1" /> Complete
+                            </Badge>
+                          )}
+                        </div>
                         <p className="text-xs text-muted-foreground mt-0.5">{step.description}</p>
                         {step.linkedModule && (
                           <div className="flex flex-wrap items-center gap-2 mt-1.5">

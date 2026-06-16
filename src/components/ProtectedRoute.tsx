@@ -11,6 +11,13 @@ const onboardingRoutes: Record<string, string> = {
   consent: "/onboarding/consent",
 };
 
+const normalizeOnboardingStep = (profile: any) => {
+  const step = profile?.onboarding_status || "welcome";
+  if (step === "intent") return profile?.active_intent ? "guided" : "educational_status";
+  if (step === "guided") return "educational_status";
+  return step;
+};
+
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   const { user, loading, isReady, profile } = useAuth();
   const location = useLocation();
@@ -54,7 +61,7 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
 
   // If user has NOT completed onboarding and is NOT on an onboarding route, redirect to their step
   if (profile && profile.onboarding_status !== "complete" && !location.pathname.startsWith("/onboarding")) {
-    const step = profile.onboarding_status || "welcome";
+    const step = normalizeOnboardingStep(profile);
     const route = onboardingRoutes[step] || "/onboarding";
     return <Navigate to={route} replace />;
   }

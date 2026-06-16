@@ -2,7 +2,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route, Outlet } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Outlet, Navigate } from "react-router-dom";
 import { AuthProvider } from "@/contexts/AuthContext";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import MyRaahaLanding from "./pages/MyRaahaLanding";
@@ -32,8 +32,8 @@ import UserTypeSelection from "./pages/onboarding/UserTypeSelection";
 import ConsentStep from "./pages/onboarding/ConsentStep";
 import JourneyDiscovery from "./pages/onboarding/JourneyDiscovery";
 import EducationalStatus from "./pages/onboarding/EducationalStatus";
-// [ARCHIVED] OTP verification flow paused — kept in repo but not routed.
-// import OTPVerification from "./pages/OTPVerification";
+import IntentSelection from "./pages/onboarding/IntentSelection";
+import GuidedOnboarding from "./pages/onboarding/GuidedOnboarding";
 import ResetPassword from "./pages/ResetPassword";
 import DashboardLayout from "./layouts/DashboardLayout";
 import Dashboard from "./pages/Dashboard";
@@ -119,10 +119,13 @@ const App = () => (
             <Route path="/intro" element={<IntroSlides />} />
             <Route path="/auth" element={<Auth />} />
             <Route path="/guest" element={<GuestEntry />} />
-            {/* [ARCHIVED] <Route path="/verify-otp" element={<OTPVerification />} /> */}
+            {/* Legacy OTP deep links are archived and safely returned to auth. */}
+            <Route path="/verify-otp" element={<Navigate to="/auth" replace />} />
             <Route path="/onboarding" element={<ProtectedRoute><Welcome /></ProtectedRoute>} />
             <Route path="/onboarding/user-type" element={<ProtectedRoute><UserTypeSelection /></ProtectedRoute>} />
             <Route path="/onboarding/journey" element={<ProtectedRoute><JourneyDiscovery /></ProtectedRoute>} />
+            <Route path="/onboarding/intent" element={<ProtectedRoute><IntentSelection /></ProtectedRoute>} />
+            <Route path="/onboarding/guided" element={<ProtectedRoute><GuidedOnboarding /></ProtectedRoute>} />
             <Route path="/onboarding/educational-status" element={<ProtectedRoute><EducationalStatus /></ProtectedRoute>} />
             <Route path="/onboarding/consent" element={<ProtectedRoute><ConsentStep /></ProtectedRoute>} />
             <Route path="/dashboard" element={<ProtectedRoute><DashboardLayout /></ProtectedRoute>}>
