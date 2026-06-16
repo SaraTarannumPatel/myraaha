@@ -11,6 +11,18 @@ import OnboardingRewardBanner from "@/components/onboarding/OnboardingRewardBann
 import loginIllustration from "@/assets/auth-login-illustration.png";
 import signupIllustration from "@/assets/auth-signup-illustration.png";
 
+const onboardingRoutes: Record<string, string> = {
+  welcome: "/onboarding",
+  user_type: "/onboarding/user-type",
+  journey_discovery: "/onboarding/journey",
+  intent: "/onboarding/educational-status",
+  guided: "/onboarding/educational-status",
+  educational_status: "/onboarding/educational-status",
+  consent: "/onboarding/consent",
+};
+
+const getOnboardingRoute = (status?: string | null) => onboardingRoutes[status || "welcome"] || "/onboarding";
+
 const Auth = () => {
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState("");
@@ -38,7 +50,7 @@ const Auth = () => {
         // NOT on the Curiosity Compass as if it were their first session.
         navigate("/dashboard", { replace: true });
       } else {
-        navigate("/onboarding", { replace: true });
+        navigate(getOnboardingRoute(profile.onboarding_status), { replace: true });
       }
     }
   }, [user, profile, navigate]);
