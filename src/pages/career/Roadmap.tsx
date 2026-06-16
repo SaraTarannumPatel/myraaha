@@ -90,9 +90,14 @@ export default function Roadmap() {
           eduStatus = (data as any)?.educational_status || null;
         } catch {}
       }
-      const aiSteps = await generateLiveRoadmapForEntity(ent, { educationalStatus: eduStatus });
+      const aiSteps = await generateLiveRoadmapForEntity(ent, {
+        educationalStatus: eduStatus,
+        selfDiscoveryCompleted: selfDiscoveryComplete,
+      });
       if (aiSteps && aiSteps.length) {
-        setSteps((prev) => ({ ...prev, [ent.id]: aiSteps }));
+        const selfDiscoveryStep = buildSelfDiscoveryFitStep(ent, selfDiscoveryComplete);
+        setSteps((prev) => ({ ...prev, [ent.id]: [selfDiscoveryStep, ...aiSteps.filter((s) => s.id !== "step1")] }));
+        if (user) void syncSelfDiscoveryStageForEntity(ent, selfDiscoveryComplete);
         recordSelfGraphSignal({
           source: "learning",
           summary: `Generated live AI roadmap for ${ent.label}`,
@@ -142,9 +147,13 @@ export default function Roadmap() {
           if (!eduStatus) eduStatus = "class_12"; // demo: show education prerequisite stages
         }
         setEntities(ents);
+        const completedSelfDiscovery = demoMode || compassCompletion.allDone;
         const built: Record<string, RoadmapStep[]> = {};
-        ents.forEach((e) => { built[e.id] = buildRoadmapForEntity(e, { educationalStatus: eduStatus }); });
+        ents.forEach((e) => { built[e.id] = buildRoadmapForEntity(e, { educationalStatus: eduStatus, selfDiscoveryCompleted: completedSelfDiscovery }); });
         setSteps(built);
+        if (user && completedSelfDiscovery) {
+          void Promise.all(ents.map((e) => syncSelfDiscoveryStageForEntity(e, completedSelfDiscovery)));
+        }
 
         // Smart navigation pre-select
         let preselect: string | null = null;
@@ -178,7 +187,7 @@ export default function Roadmap() {
         setLoadingEntities(false);
       }
     })();
-  }, [user, demoMode]);
+  }, [user, demoMode, compassCompletion.allDone, selfDiscoveryComplete]);
 
   const activeEntity = useMemo(
     () => entities.find((e) => e.id === activeEntityId) || null,
