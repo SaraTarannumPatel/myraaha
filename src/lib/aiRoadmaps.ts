@@ -44,6 +44,8 @@ export interface RoadmapStep {
   keywords: string[];
   resources?: WebResource[];
   subSteps?: SubStep[];
+  completionStatus?: "not_started" | "in_progress" | "completed";
+  completionSource?: string;
   // Cross-module linkage — every roadmap step ties back to a real module
   // in the app so the user can act on it immediately.
   linkedModule?: string;          // human label, e.g. "Curiosity Compass"
@@ -241,6 +243,56 @@ export async function fetchEntitiesFromInteractions(userId: string): Promise<Ent
 export interface RoadmapBuildContext {
   educationalStatus?: string | null; // e.g. "school_1_10", "class_11", "class_12", "diploma", "undergraduate", "completed_ug"
   highestEducation?: string | null;  // mirror from profile
+  selfDiscoveryCompleted?: boolean;
+}
+
+export function getCompassCompletionStateFromProfile(profile: any) {
+  const responses = profile?.journey_responses || {};
+  const discoveryDone = !!responses.assessment_completed;
+  const psychometricDone = !!responses.psychometric_completed;
+  const interestsDone = !!responses.interests_completed;
+  return {
+    discoveryDone,
+    psychometricDone,
+    interestsDone,
+    allDone: discoveryDone && psychometricDone && interestsDone,
+  };
+}
+
+export function buildSelfDiscoveryFitStep(entity: Entity, completed = false): RoadmapStep {
+  const baseKw = [entity.label, entity.kind, "career roadmap", "how to become"];
+  return {
+    id: "step1",
+    title: "Self-Discovery & Fit",
+    description: completed
+      ? "Your three Curiosity Compass assessments are complete, so this fit-check is already locked in for your roadmap. No cap."
+      : "Complete the three Curiosity Compass assessments so your roadmap reflects your interests, behavior style, and holistic curiosity profile.",
+    keywords: [...baseKw, "curiosity compass", "self discovery", "psychometric", "interests", "career fit"],
+    linkedModule: "Curiosity Compass",
+    linkedRoute: "/dashboard/curiosity-compass",
+    formula: "fit_ready = discovery_done × psychometric_done × interests_done",
+    completionStatus: completed ? "completed" : "not_started",
+    completionSource: completed ? "Curiosity Compass assessments" : undefined,
+    subSteps: [
+      { id: "step1-sub1", title: "Discover Yourself Deeply", description: "Interest discovery assessment completed in Curiosity Compass.", keywords: [...baseKw, "discovery assessment"] },
+      { id: "step1-sub2", title: "Find Out How You Function", description: "Psychometric assessment completed in Curiosity Compass.", keywords: [...baseKw, "psychometric assessment"] },
+      { id: "step1-sub3", title: "Map Your Holistic Interests", description: "Holistic interests assessment completed in Curiosity Compass.", keywords: [...baseKw, "holistic interests assessment"] },
+    ],
+  };
+}
+
+export async function syncSelfDiscoveryStageForEntity(entity: Entity, completed: boolean): Promise<boolean> {
+  try {
+    const { data, error } = await (supabase as any).rpc("sync_ai_roadmap_self_discovery_stage", {
+      _entity_id: entity.id,
+      _entity_label: entity.label,
+    });
+    if (error) throw error;
+    return typeof data === "boolean" ? data : completed;
+  } catch (e) {
+    console.warn("[aiRoadmaps] self-discovery stage sync failed:", e);
+    return completed;
+  }
 }
 
 export function buildRoadmapForEntity(entity: Entity, ctx: RoadmapBuildContext = {}): RoadmapStep[] {
@@ -519,7 +571,7 @@ export function buildRoadmapForEntity(entity: Entity, ctx: RoadmapBuildContext =
   const allowAdvanced = isUGOrLater || hasGraduated;
   const filteredBase = allowAdvanced ? baseStages : baseStages.filter(s => s.id !== "step9");
 
-  return [...eduStages, ...filteredBase];
+  return [buildSelfDiscoveryFitStep(entity, !!ctx.selfDiscoveryCompleted), ...eduStages, ...filteredBase];
 }
 
 export function buildStepQuery(entity: Entity, step: RoadmapStep): string {
