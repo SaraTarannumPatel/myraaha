@@ -91,7 +91,7 @@ const VISUAL_ICONS = [
 ];
 
 // ===== Assessment Test Section (moved from onboarding journey) =====
-const AssessmentTestSection = ({ user, recordSignal, recordMultipleSignals }: { user: any; recordSignal: any; recordMultipleSignals: any }) => {
+const AssessmentTestSection = ({ user, recordSignal, recordMultipleSignals, onAdvance }: { user: any; recordSignal: any; recordMultipleSignals: any; onAdvance?: (tab: string) => void }) => {
   const { profile, updateProfile } = useAuth();
   const { updateProgress } = useAssessmentRewards();
   const userType = profile?.user_type || "school";
@@ -307,6 +307,20 @@ const AssessmentTestSection = ({ user, recordSignal, recordMultipleSignals }: { 
               </div>
             </div>
           )}
+          {onAdvance && (
+            <div className="pt-4">
+              <Button
+                size="lg"
+                onClick={() => onAdvance("psychometric")}
+                className="rounded-full px-8 bg-primary hover:bg-primary/90 text-primary-foreground font-body font-semibold"
+              >
+                Continue to Psychometric Test <ArrowRight size={16} className="ml-1" />
+              </Button>
+              <p className="font-body text-[11px] text-muted-foreground mt-2">
+                Next up: a 22-question deep-dive on how you think and work.
+              </p>
+            </div>
+          )}
         </CardContent>
       </Card>
     );
@@ -355,7 +369,7 @@ const AssessmentTestSection = ({ user, recordSignal, recordMultipleSignals }: { 
               <span className="font-display font-bold text-base text-foreground">Discovery Assessment</span>
             </div>
             <p className="font-body text-xs text-muted-foreground">
-              {phase === "variant" ? "Vibe Check — quick calibration" : meta?.title}
+              {phase === "variant" ? "Vibe Check — quick calibration" : "Tell us how you think, learn, and move"}
             </p>
           </div>
           <Badge variant="outline" className="text-xs px-3 py-1 font-mono rounded-full bg-background border-border/80 text-[#5500cb]">
@@ -1445,7 +1459,7 @@ const CuriosityCompass = () => {
                           </p>
                         </div>
                       </div>
-                      <AssessmentTestSection user={user} recordSignal={recordSignal} recordMultipleSignals={recordMultipleSignals} />
+                      <AssessmentTestSection user={user} recordSignal={recordSignal} recordMultipleSignals={recordMultipleSignals} onAdvance={(t) => { setTab(t); window.scrollTo({ top: 0, behavior: "smooth" }); }} />
                     </div>
                   </div>
                 </TabsContent>
@@ -1470,8 +1484,10 @@ const CuriosityCompass = () => {
                         userId={user!.id}
                         onComplete={() => {
                           if (discoveryDone) {
-                            toast.success("Both assessments complete! All sections unlocked 🎉");
+                            toast.success("Psychometric complete! One last assessment to go ✨");
                           }
+                          setTab("interests");
+                          window.scrollTo({ top: 0, behavior: "smooth" });
                         }}
                         recordSignal={recordSignal}
                       />
@@ -1501,6 +1517,8 @@ const CuriosityCompass = () => {
                           if (discoveryDone && psychometricDone) {
                             toast.success("All three assessments complete! Every section unlocked 🎉");
                           }
+                          setTab("insights");
+                          window.scrollTo({ top: 0, behavior: "smooth" });
                         }}
                         recordSignal={recordSignal}
                       />

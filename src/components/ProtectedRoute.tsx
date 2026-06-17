@@ -66,6 +66,27 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
     return <Navigate to={route} replace />;
   }
 
+  // HARD COMPASS GATE: Once onboarding is complete, no feature unlocks until all three
+  // Curiosity Compass assessments are done. Settings + curiosity-compass routes stay
+  // accessible; everything else redirects back to the compass.
+  if (profile && profile.onboarding_status === "complete") {
+    const jr: any = profile.journey_responses || {};
+    const compassDone =
+      !!jr.assessment_completed &&
+      !!jr.psychometric_completed &&
+      !!jr.interests_completed;
+    const compassAllowlist = [
+      "/dashboard/curiosity-compass",
+      "/dashboard/settings",
+      "/dashboard/notifications",
+    ];
+    const isOnCompass = compassAllowlist.some((p) => location.pathname.startsWith(p));
+    const isDashboardRoot = location.pathname === "/dashboard" || location.pathname === "/dashboard/";
+    if (!compassDone && !isOnCompass && !isDashboardRoot && location.pathname.startsWith("/dashboard")) {
+      return <Navigate to="/dashboard/curiosity-compass" replace state={{ gated: true }} />;
+    }
+  }
+
   return <>{children}</>;
 };
 
