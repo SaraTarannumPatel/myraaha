@@ -355,7 +355,7 @@ const AssessmentTestSection = ({ user, recordSignal, recordMultipleSignals }: { 
               <span className="font-display font-bold text-base text-foreground">Discovery Assessment</span>
             </div>
             <p className="font-body text-xs text-muted-foreground">
-              {phase === "variant" ? "Vibe Check — quick calibration" : meta?.title}
+              {phase === "variant" ? "Vibe Check — quick calibration" : "Tell us how you think, learn, and move"}
             </p>
           </div>
           <Badge variant="outline" className="text-xs px-3 py-1 font-mono rounded-full bg-background border-border/80 text-[#5500cb]">
