@@ -23,8 +23,23 @@ const onboardingRoutes: Record<string, string> = {
 
 const getOnboardingRoute = (status?: string | null) => onboardingRoutes[status || "welcome"] || "/onboarding";
 
+// Published site URL — used for email confirmation redirects so users land on the
+// real published app instead of the preview (which gates with Lovable project access).
+const PUBLIC_SITE_URL =
+  (import.meta as any).env?.VITE_PUBLIC_SITE_URL ||
+  "https://myraaha.lovable.app";
+
 const Auth = () => {
-  const [isLogin, setIsLogin] = useState(true);
+  // Default to login. Landing-page "Sign Up" links pass ?mode=signup, "Sign In" → ?mode=signin.
+  const initialIsLogin = (() => {
+    if (typeof window === "undefined") return true;
+    const params = new URLSearchParams(window.location.search);
+    const mode = params.get("mode");
+    if (mode === "signup") return false;
+    if (mode === "signin" || mode === "login") return true;
+    return true;
+  })();
+  const [isLogin, setIsLogin] = useState(initialIsLogin);
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
@@ -46,8 +61,6 @@ const Auth = () => {
   useEffect(() => {
     if (user && profile) {
       if (profile.onboarding_status === "complete") {
-        // Returning users land on their dashboard (resumes their saved history),
-        // NOT on the Curiosity Compass as if it were their first session.
         navigate("/dashboard", { replace: true });
       } else {
         navigate(getOnboardingRoute(profile.onboarding_status), { replace: true });
