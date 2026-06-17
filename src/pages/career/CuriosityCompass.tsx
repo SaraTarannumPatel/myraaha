@@ -1459,7 +1459,7 @@ const CuriosityCompass = () => {
                           </p>
                         </div>
                       </div>
-                      <AssessmentTestSection user={user} recordSignal={recordSignal} recordMultipleSignals={recordMultipleSignals} />
+                      <AssessmentTestSection user={user} recordSignal={recordSignal} recordMultipleSignals={recordMultipleSignals} onAdvance={(t) => { setTab(t); window.scrollTo({ top: 0, behavior: "smooth" }); }} />
                     </div>
                   </div>
                 </TabsContent>
@@ -1484,8 +1484,10 @@ const CuriosityCompass = () => {
                         userId={user!.id}
                         onComplete={() => {
                           if (discoveryDone) {
-                            toast.success("Both assessments complete! All sections unlocked 🎉");
+                            toast.success("Psychometric complete! One last assessment to go ✨");
                           }
+                          setTab("interests");
+                          window.scrollTo({ top: 0, behavior: "smooth" });
                         }}
                         recordSignal={recordSignal}
                       />
@@ -1515,6 +1517,8 @@ const CuriosityCompass = () => {
                           if (discoveryDone && psychometricDone) {
                             toast.success("All three assessments complete! Every section unlocked 🎉");
                           }
+                          setTab("insights");
+                          window.scrollTo({ top: 0, behavior: "smooth" });
                         }}
                         recordSignal={recordSignal}
                       />
