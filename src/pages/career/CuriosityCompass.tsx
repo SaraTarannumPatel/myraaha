@@ -91,7 +91,7 @@ const VISUAL_ICONS = [
 ];
 
 // ===== Assessment Test Section (moved from onboarding journey) =====
-const AssessmentTestSection = ({ user, recordSignal, recordMultipleSignals }: { user: any; recordSignal: any; recordMultipleSignals: any }) => {
+const AssessmentTestSection = ({ user, recordSignal, recordMultipleSignals, onAdvance }: { user: any; recordSignal: any; recordMultipleSignals: any; onAdvance?: (tab: string) => void }) => {
   const { profile, updateProfile } = useAuth();
   const { updateProgress } = useAssessmentRewards();
   const userType = profile?.user_type || "school";
