@@ -112,7 +112,9 @@ const Auth = () => {
         email,
         password,
         options: {
-          emailRedirectTo: `${window.location.origin}/auth`,
+          // Always redirect to the published site so the confirmation link does NOT
+          // land on the preview domain (which is gated behind Lovable project access).
+          emailRedirectTo: `${PUBLIC_SITE_URL}/auth?mode=signin&verified=1`,
           data: { full_name: email.split("@")[0], phone: cleanPhone },
         },
       });
