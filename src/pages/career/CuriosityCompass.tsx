@@ -307,6 +307,20 @@ const AssessmentTestSection = ({ user, recordSignal, recordMultipleSignals, onAd
               </div>
             </div>
           )}
+          {onAdvance && (
+            <div className="pt-4">
+              <Button
+                size="lg"
+                onClick={() => onAdvance("psychometric")}
+                className="rounded-full px-8 bg-primary hover:bg-primary/90 text-primary-foreground font-body font-semibold"
+              >
+                Continue to Psychometric Test <ArrowRight size={16} className="ml-1" />
+              </Button>
+              <p className="font-body text-[11px] text-muted-foreground mt-2">
+                Next up: a 22-question deep-dive on how you think and work.
+              </p>
+            </div>
+          )}
         </CardContent>
       </Card>
     );
