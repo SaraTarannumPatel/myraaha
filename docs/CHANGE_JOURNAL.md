@@ -127,3 +127,28 @@ CareerMap-CareerScape spec.
 **Benefit:** Onboarding now progresses safely, legacy OTP deep links no longer break the flow, and AI Roadmaps Step 1 is marked complete from the three Curiosity Compass assessment completion flags.
 
 **Files:** `src/App.tsx`, `src/pages/Auth.tsx`, `src/components/ProtectedRoute.tsx`, `src/lib/aiRoadmaps.ts`, `src/pages/career/Roadmap.tsx`, `supabase/functions/roadmap-ai/index.ts`, migration adding `has_completed_curiosity_compass` + roadmap self-discovery sync functions/triggers.
+
+---
+
+## 2026-06-17 — Auth flow + Compass gate + Reminder popup hotfixes
+
+**What changed**
+- **Sign Up / Sign In intent preserved**: `MyRaahaNavbar` now links to `/auth?mode=signup` and `/auth?mode=signin`; `Auth.tsx` reads the `mode` param and opens the matching form instead of defaulting to login.
+- **Email confirmation no longer asks for project access**: `signUp` `emailRedirectTo` now points to the published site (`VITE_PUBLIC_SITE_URL` or `https://myraaha.lovable.app`) with `?mode=signin&verified=1`, so the verification link opens the live app's sign-in page instead of the preview domain (which is gated behind Lovable project access).
+- **Hard Curiosity Compass gate**: `ProtectedRoute` now redirects any `/dashboard/*` route (except compass / settings / notifications / dashboard root) back to `/dashboard/curiosity-compass` until all three assessments (`assessment_completed`, `psychometric_completed`, `interests_completed`) are true. This restores the rule that no other feature unlocks before the compass is done, including after a refresh + re-login.
+- **Onboarding reminder popup now strict**: only renders when `profile.journey_responses.skipped_steps` explicitly contains a step key. If the array is empty/missing → popup never shows. Removes the "Tell us about yourself" loop for users who completed onboarding through a path that didn't write `user_type`.
+- **Curiosity Compass UX**:
+  - Removed misleading `journeyMetas[J1].title` ("curiosity unlocked 🔓") subtitle that was rendering as if it were the user's archetype during the Discovery assessment. Subtitle is now neutral ("Tell us how you think, learn, and move"); the real archetype continues to come from `assessment-synthesizer` and shows on the completion card.
+  - Added explicit "Continue to Psychometric Test →" CTA on the Discovery completion screen, and made the Psychometric / Interests `onComplete` callbacks auto-advance the user to the next tab (`psychometric` → `interests` → `insights`) with a smooth scroll-to-top. Solves the "I don't know where to click next" problem after each assessment.
+
+**Files**
+- `src/pages/Auth.tsx`
+- `src/components/MyRaahaNavbar.tsx`
+- `src/components/ProtectedRoute.tsx`
+- `src/components/OnboardingReminderPopup.tsx`
+- `src/pages/career/CuriosityCompass.tsx`
+
+**Still pending (deferred to next pass)**
+- Response preview + edit step before final submit on all three assessments.
+- `user_progress_snapshots` autosave/restore layer.
+- New `archetypeCalibration.ts` client-side instant calibration (currently still relies on the `assessment-synthesizer` edge function — works, just not as a local fallback).
