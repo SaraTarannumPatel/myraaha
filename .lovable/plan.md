@@ -1,125 +1,69 @@
+# Fix Plan — Curiosity Compass + Auth + Onboarding Reminder
 
-This is purely additive — no existing question, screen, or flow is removed or rewritten. Everything below sits on top of the current 2-assessment system.
+Grouping the 9 issues into 4 work batches. I'll ship them in order, verifying each before moving on.
 
-## 1. New "Holistic Interests Assessment" (12 Qs)
+## Batch 1 — Curiosity Compass: Archetype + Flow (issues 1, 2, 3, 4)
 
-Extracted from doc §CURIOSITY/INTEREST QUESTIONS (Q26–Q37):
-- Q26 Science curiosity (1–5)
-- Q27 Mathematics curiosity (1–5)
-- Q28 Technology curiosity (1–5)
-- Q29 Business curiosity (1–5)
-- Q30 Humanities curiosity (1–5)
-- Q31 Arts curiosity (1–5)
-- Q32 Which problems do you enjoy solving? (A Analytical / B Technical / C Business / D Social / E Creative)
-- Q33 Which activity excites you most? (Building / Analyzing / Leading / Designing / Writing)
-- Q34 What kind of impact would you like to create? (Tech / Business / Social / Creative)
-- Q35 Experimentation curiosity (1–5)
-- Q36 Exploration curiosity (1–5)
-- Q37 Discovery curiosity (1–5)
+**1. Real archetype calibration (replace "curiosity unlocked 🔓" mock)**
+- Read the discovery + psychometric question banks end-to-end.
+- Define an archetype taxonomy grounded in standard career-archetype frameworks (Holland RIASEC + Jungian "explorer / creator / sage / builder / connector / catalyst / strategist / guardian" overlay). Final set (8): **Explorer, Creator, Builder, Strategist, Sage, Connector, Catalyst, Guardian**.
+- Build `src/lib/archetypeCalibration.ts`: pure function `calibrateArchetype(responses)` → `{ primary, secondary, scores, confidence, rationale }`. Each question option maps to weighted contributions across the 8 archetypes (extended from `assessmentSignalMap.ts`).
+- Persist to new column `profiles.archetype_result jsonb` (migration). Also write to `assessment_conclusions` so SelfGraph/Roadmap consume it.
+- Replace the mock "Calibrating…" screen with real-time call to `calibrateArchetype` (instant, no fake loader) and render `primary` + secondary + top-3 trait bars + rationale.
 
-Built as new component `src/components/curiositycompass/InterestsAssessment.tsx` mirroring `PsychometricTest.tsx` behavior:
-- Per-question signal map entry in `src/lib/assessmentSignalMap.ts` (new `INTERESTS_SIGNAL_MAP`).
-- Writes to `user_signals` + `assessment_question_signals` per answer.
-- Calls `useModuleProgress.report("interests", completed, total)`.
-- Stores conclusion in `assessment_conclusions` with `assessment_type="interests"`.
+**2. Response preview + edit before final submit (all 3 assessments)**
+- After last question, instead of auto-submitting, show a **Preview & Edit** screen listing every Q/A with an "Edit" button per row that jumps back to that question. Final **Submit** button on preview triggers persistence + calibration.
+- Apply to Discovery, Psychometric, Interests.
 
-## 2. Gating: 3 assessments instead of 2
+**3. Inter-assessment navigation**
+- After Submit on each assessment, show completion card with explicit **"Next: Psychometric →"** (or **"Next: Interests →"**, or **"See your Compass results →"** on the third). Buttons route within the Curiosity Compass tabs and scroll to top.
+- Add a sticky stepper at the top of CuriosityCompass page: ● Discovery → ○ Psychometric → ○ Interests, with current/done states.
 
-- `AssessmentGate.tsx` adds a third row "Map Your Curiosities" with `interests_completed` flag in `profile.journey_responses`.
-- All explore/quests/domains/insights/behavior tabs stay locked until all three are done.
-- Intro slides for Curiosity Compass mention the third assessment.
+## Batch 2 — Auth Session + Hard Gate (issues 5, 7, 8)
 
-## 3. Rewards parity
+**5. Session not surviving refresh**
+- Audit `AuthContext`: ensure `supabase.auth.getSession()` runs before `setIsReady(true)` and that `onAuthStateChange` doesn't clobber the restored profile. Add `persistSession: true, autoRefreshToken: true` check (client is auto-gen; verify config). Fix any race that nukes the profile on `INITIAL_SESSION`.
+- Add localStorage marker `myraaha_last_route` updated on route change; restore after refresh.
 
-- New `TestType` value `"interests"` added to `useAssessmentRewards`.
-- Seed 4 rows in `reward_milestones` (25/50/75/100) for `test_type='interests'` with entitlement keys `interests_25` … `interests_100`.
-- Onboarding rewards list ("what you unlock by completing onboarding") gains an "Interests Assessment unlocked (₹-value test, free on MyRaaha)" card.
+**Hard gate until Curiosity Compass complete**
+- New helper `useCompassGate()` reading `profile.journey_responses.{assessment_completed,psychometric_completed,interests_completed}`.
+- Update `ProtectedRoute`: if onboarding complete AND compass NOT complete AND target route is not `/career/curiosity-compass` (and not allowlisted: settings, logout) → redirect to `/career/curiosity-compass`.
+- Remove any auto-unlock side effects that bypass this.
 
-## 4. Backend (new tables + functions)
+**7. Landing Sign Up vs Sign In buttons**
+- Landing currently routes both to `/auth`. Pass `?mode=signup` / `?mode=signin` and have `Auth.tsx` read the param to set initial tab.
 
-Migration adds:
-- `interests_assessment_responses(user_id, question_id, answer_value, answer_label, construct, created_at)` — RLS owner-only.
-- `user_interest_profile(user_id, science, mathematics, technology, business, humanities, arts, experimentation, exploration, discovery, problem_style, activity_style, impact_style, last_updated)` — recomputed via trigger after each insert.
-- `user_onboarding_sectors(user_id, sector_slug, rank, created_at)` — for the 18-sector multi-select.
-- `assessment_conclusion_keywords(user_id, keyword, weight, source_assessment)` — flat keyword bag used for matching.
-- `explore_entity_keywords(entity_type, entity_id, keyword, weight)` — keyword index over sectors / industries / domains / roles / universities / subjects / skills / colleges / paths.
+**8. Email verification redirect leak ("project access" prompt)**
+- The "project access" screen = Lovable preview's auth gate, triggered because `emailRedirectTo` is set to `window.location.origin` which on preview = the lovable.app preview domain that requires project auth.
+- Fix: set `emailRedirectTo` to the **published site URL** (or current `window.location.origin` only when on the published domain). Use `import.meta.env.VITE_PUBLIC_SITE_URL` with fallback to `window.location.origin`. Add `/auth/callback` route that:
+  1. Reads `?code=` or hash tokens, exchanges via `supabase.auth.exchangeCodeForSession`.
+  2. Pre-fills email in sign-in form and shows "Email verified — sign in to continue".
+- Document that the published domain must be used in confirmation emails.
 
-Extends `update_assessment_progress` to accept `interests`. Adds RPC `match_explore_entities_for_user(user_id, entity_type, limit)` returning ranked entities by keyword overlap × sector filter.
+## Batch 3 — Onboarding Reminder Popup (issue 6)
 
-GRANTs to `authenticated` + `service_role`; full RLS.
+- Current `OnboardingReminderPopup` already checks `onboarding_status === "complete"` then re-evaluates each step. Bug: `user_type` step still flags because `checkFn` doesn't respect that onboarding may have been completed via a path that doesn't set `user_type` (guest/legacy).
+- Fix:
+  - Treat `onboarding_status === "complete"` as authoritative — only show popup for steps the user **explicitly skipped** (tracked via new `profiles.skipped_onboarding_steps text[]`).
+  - Update each onboarding step page to push its key into `skipped_onboarding_steps` only when the user hits a "Skip" button (no skip button → never flagged).
+  - Popup filters by `skipped_onboarding_steps` ∩ still-missing fields. Empty → never renders.
+  - "Complete Now" routes only to that specific skipped step, then removes the key on completion.
 
-## 5. "Current State" onboarding — 18 sectors multi-select
+## Batch 4 — Real-time progress persistence (issue 9)
 
-`EducationalStatus.tsx` gains a new section "Which sectors spark your curiosity?" listing the 18 sectors already in `career_intel_*` tables. Stored in `user_onboarding_sectors`.
+- Generic `useAutoSave` hook + `user_progress_snapshots` table storing `{user_id, module, route, payload jsonb, updated_at}` upserted on every meaningful action (debounced 1.5s).
+- Wire into: Curiosity Compass (current question index per assessment), Roadmap (open step), SkillStacker (active stack), Moodboard. On mount each page reads snapshot and restores.
+- `last_active_route` saved to `profiles` on every navigation; after login user lands there.
 
-## 6. Curiosity Compass 4 sections filtered by sectors + assessments
+## Technical notes
 
-`StoryModeCards`, `ChallengeModeCards`, `CareerCardDeck`, and audio/visual mode all read:
-1. `user_onboarding_sectors` (hard filter)
-2. `assessment_conclusion_keywords` (soft ranking)
-3. Call new RPC `match_explore_entities_for_user` for the curated subset.
+- All migrations include `GRANT` + RLS per project rules.
+- Archetype taxonomy + weights live in `src/lib/archetypes.ts` (source-of-truth), consumed by both client calibration and the edge function `roadmap-ai` for cross-module use.
+- No third-party email service — keep default Supabase confirmation email; only fix the redirect URL.
+- Will NOT touch already-working backend pieces (per prior instruction).
 
-Edge function `curiosity-compass-curated` orchestrates: pulls sectors + keywords → queries Explore taxonomy → returns AI-summarized cards.
+## Rollout
 
-## 7. Explore keyword tagging
+I'll implement Batch 1 first, verify in the preview (Playwright pass through the discovery assessment end-to-end and screenshot the new archetype screen), then move to Batch 2, 3, 4. Each batch ends with a Change Journal entry.
 
-Background edge function `tag-explore-entities` (one-shot, admin-triggered) walks each Explore source table and populates `explore_entity_keywords` from existing fields (description, tags, skills_required). Re-runnable; idempotent.
-
-## 8. Doc cross-check — missing questions
-
-Diff vs. current code:
-- **Demographics onboarding (already present):** name, gender, age, life stage, board, location, language, decision-support, device, digital comfort, subjects/performance → add only if any are missing in `EducationalStatus.tsx`.
-- **Psychometric (current ~22 Qs vs doc's 45):** add the missing Knowledge (Q1–Q5), Skills (Q6–Q15), Cognitive (Q16–Q25), Values (Q38–Q41), Personality (Q42–Q45) — only the ones not already represented. New questions appended to existing `PSYCHOMETRIC_SIGNAL_MAP` with new construct tags, and to `PsychometricTest.tsx` items. Each new Q also seeds `assessment_question_signals` so its answer feeds the right modules.
-- **Discovery:** doc has the same subject-exposure & experience/certifications blocks already in onboarding; nothing new to add unless a gap appears on re-read.
-
-Total: ~30 new psychometric items appended (no replacement). Question IDs prefixed `doc_` to avoid colliding with existing IDs.
-
-## 9. Data flow algorithm
-
-`src/lib/personalizationPipeline.ts` (new) — single function `runUserPersonalization(userId)`:
-1. Pull latest answers from all 3 assessments + sector picks.
-2. Derive keyword bag (constructs + answer labels + sector slugs).
-3. Upsert `assessment_conclusion_keywords`.
-4. Invoke `match_explore_entities_for_user` per entity type, cache results in `ai_cache` keyed by `user_personalization_v1`.
-5. Triggered: after each assessment completion, after sector save, and on dashboard load (debounced 6h).
-
-Consumed by: Curiosity Compass 4 sections, Roadmap suggestions, Job Matching, Mentor Matchmaking, Content Library, Skill Stacker.
-
-## Files (high level)
-
-**New**
-- `src/components/curiositycompass/InterestsAssessment.tsx`
-- `src/lib/personalizationPipeline.ts`
-- `supabase/migrations/<ts>_interests_assessment.sql`
-- `supabase/functions/curiosity-compass-curated/index.ts`
-- `supabase/functions/tag-explore-entities/index.ts`
-
-**Edited (additive only)**
-- `src/lib/assessmentSignalMap.ts` (append INTERESTS_SIGNAL_MAP + new psychometric IDs)
-- `src/components/curiositycompass/PsychometricTest.tsx` (append new Qs)
-- `src/components/curiositycompass/AssessmentGate.tsx` (3rd row)
-- `src/components/curiositycompass/RewardProgressTracker.tsx` (3rd track)
-- `src/hooks/useAssessmentRewards.ts` (add `interests` TestType)
-- `src/pages/career/CuriosityCompass.tsx` (route the 3rd tab, gating)
-- `src/pages/onboarding/EducationalStatus.tsx` (sector multi-select)
-- `src/components/onboarding/OnboardingRewardBanner.tsx` (Interests reward card)
-- `src/pages/career/Explore.tsx` filters fed by sectors
-- The 4 Curiosity Compass section components (Story/Challenge/CareerDeck/AudioVisual) to call the curated edge function
-
-## Order of execution
-
-1. Migration (tables + RPC + milestone seed).
-2. `InterestsAssessment.tsx` + signal map + rewards hook.
-3. Gate / tracker / intro slides updates.
-4. Sector multi-select in EducationalStatus + reward banner.
-5. Doc cross-check: append missing psychometric Qs + signal mappings + DB rows.
-6. Personalization pipeline + curated edge function.
-7. Tag-explore-entities backfill function.
-8. Wire 4 Curiosity Compass sections to curated output.
-
-## Out of scope (confirm if you want these too)
-
-- Replacing existing card/story content with AI-regenerated content (current cards stay; only the *filter* is new).
-- Building admin UI for re-running `tag-explore-entities` (will be invocable from a hidden settings action).
-
-Confirm and I'll execute in the order above.
+Approve and I'll start with Batch 1.
