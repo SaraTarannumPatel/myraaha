@@ -1,7 +1,8 @@
 import { motion, AnimatePresence } from "framer-motion";
-import { Gift, Star, X } from "lucide-react";
-import { useState, useEffect } from "react";
+import { Gift, X } from "lucide-react";
+import { useEffect, useState } from "react";
 import OnboardingRewardCelebration from "./OnboardingRewardCelebration";
+import { useAuth } from "@/contexts/AuthContext";
 
 export interface RewardMilestone {
   percent: number;
@@ -35,27 +36,29 @@ export const ONBOARDING_REWARDS: RewardMilestone[] = [
   },
 ];
 
-const SHOWN_KEY = "myraaha_shown_reward_celebrations";
+// Per-user storage key. Prevents cross-account bleed which was the root cause
+// of "sometimes the reward fires, sometimes it doesn't".
+const shownKey = (uid: string | undefined) =>
+  `myraaha_shown_reward_celebrations__${uid || "guest"}`;
 
-const getShown = (): string[] => {
+const getShown = (uid: string | undefined): string[] => {
   try {
-    return JSON.parse(localStorage.getItem(SHOWN_KEY) || "[]");
+    return JSON.parse(localStorage.getItem(shownKey(uid)) || "[]");
   } catch {
     return [];
   }
 };
 
-const markShown = (rewardKey: string) => {
-  const current = getShown();
+const markShown = (uid: string | undefined, rewardKey: string) => {
+  const current = getShown(uid);
   if (!current.includes(rewardKey)) {
-    localStorage.setItem(SHOWN_KEY, JSON.stringify([...current, rewardKey]));
+    localStorage.setItem(shownKey(uid), JSON.stringify([...current, rewardKey]));
   }
 };
 
 interface OnboardingRewardBannerProps {
   currentProgress: number;
   unlockedRewards?: string[];
-  /** When false, suppresses the auto-celebration popup (e.g., on the final consent step which manages its own popup). */
   showCelebration?: boolean;
 }
 
@@ -64,44 +67,47 @@ const OnboardingRewardBanner = ({
   unlockedRewards = [],
   showCelebration = true,
 }: OnboardingRewardBannerProps) => {
+  const { user } = useAuth();
+  const uid = user?.id;
   const [dismissed, setDismissed] = useState(false);
   const [celebrationReward, setCelebrationReward] = useState<RewardMilestone | null>(null);
 
-  // Auto-trigger celebration popup ONCE per reward across the entire onboarding journey
+  // Deterministic trigger: every time progress crosses a milestone we pop the
+  // celebration card unless this exact reward was already celebrated for this
+  // user. The check is sync + idempotent so it never silently skips.
   useEffect(() => {
     if (!showCelebration) return;
-    const shown = getShown();
-    const newlyUnlocked = ONBOARDING_REWARDS.find(
+    const shown = getShown(uid);
+    const next = ONBOARDING_REWARDS.find(
       (r) => r.percent <= currentProgress && !shown.includes(r.rewardKey)
     );
-    if (newlyUnlocked) {
-      // Small delay so the page can settle first
-      const timer = setTimeout(() => setCelebrationReward(newlyUnlocked), 400);
-      return () => clearTimeout(timer);
+    if (next) {
+      // Mark synchronously to guarantee single-fire even with strict-mode double effects
+      markShown(uid, next.rewardKey);
+      const t = setTimeout(() => setCelebrationReward(next), 350);
+      return () => clearTimeout(t);
     }
-  }, [currentProgress, showCelebration]);
+  }, [currentProgress, showCelebration, uid]);
 
-  const handleCelebrationContinue = () => {
-    if (celebrationReward) markShown(celebrationReward.rewardKey);
-    setCelebrationReward(null);
-  };
+  const handleCelebrationContinue = () => setCelebrationReward(null);
 
   const nextReward = ONBOARDING_REWARDS.find(
     (r) => r.percent > currentProgress && !unlockedRewards.includes(r.rewardKey)
   );
-
   const justUnlocked = ONBOARDING_REWARDS.find(
     (r) => r.percent <= currentProgress && !unlockedRewards.includes(r.rewardKey)
   );
 
-  if (dismissed || !(justUnlocked || nextReward)) return celebrationReward ? (
-    <OnboardingRewardCelebration
-      emoji={celebrationReward.emoji}
-      title={celebrationReward.title}
-      description={celebrationReward.description}
-      onContinue={handleCelebrationContinue}
-    />
-  ) : null;
+  if (dismissed || !(justUnlocked || nextReward)) {
+    return celebrationReward ? (
+      <OnboardingRewardCelebration
+        emoji={celebrationReward.emoji}
+        title={celebrationReward.title}
+        description={celebrationReward.description}
+        onContinue={handleCelebrationContinue}
+      />
+    ) : null;
+  }
 
   const displayReward = justUnlocked || nextReward;
   const isUnlocked = !!justUnlocked;
@@ -149,3 +155,4 @@ const OnboardingRewardBanner = ({
 };
 
 export default OnboardingRewardBanner;
+
