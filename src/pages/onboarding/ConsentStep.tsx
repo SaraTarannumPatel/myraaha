@@ -82,6 +82,9 @@ const ConsentStep = () => {
   const handleEnterApp = () => {
     setShowUID(false);
     localStorage.removeItem("myraaha_uid_reveal_pending");
+    // Always show the Curiosity Compass intro pages the first time the user
+    // lands on the module straight from onboarding completion.
+    localStorage.removeItem("myraaha_compass_intro_seen");
     navigate("/dashboard/curiosity-compass", { replace: true });
   };
 

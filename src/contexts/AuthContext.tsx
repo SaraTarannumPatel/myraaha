@@ -130,8 +130,30 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const signOut = async () => {
-    await supabase.auth.signOut();
+    // Clear React state immediately so UI doesn't wait on network
+    setUser(null);
+    setSession(null);
     setProfile(null);
+    // Wipe local app flags
+    try {
+      const drop = [
+        "myraaha_is_guest",
+        "myraaha_uid_reveal_pending",
+        "myraaha_shown_reward_celebrations",
+        "myraaha_compass_intro_seen",
+        "myraaha_initial_path",
+      ];
+      drop.forEach((k) => localStorage.removeItem(k));
+      Object.keys(localStorage)
+        .filter((k) => k.startsWith("sb-") && k.endsWith("-auth-token"))
+        .forEach((k) => localStorage.removeItem(k));
+    } catch {}
+    // Local-scope signOut is instant; race against a short timeout so the
+    // button never hangs if the network is slow.
+    const localSignOut = supabase.auth.signOut({ scope: "local" } as any).catch(() => {});
+    await Promise.race([localSignOut, new Promise((r) => setTimeout(r, 1200))]);
+    // Hard reload to a clean state
+    window.location.replace("/auth?mode=signin");
   };
 
   const updateProfile = async (updates: Partial<Profile>) => {
