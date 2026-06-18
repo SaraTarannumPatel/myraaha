@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight, Compass, Heart, Users, Sparkles } from "lucide-react";
 import introSlide1 from "@/assets/intro-slide-1.png";
@@ -75,14 +75,17 @@ const slides: Slide[] = [
 const IntroSlides = () => {
   const [current, setCurrent] = useState(0);
   const navigate = useNavigate();
+  const [params] = useSearchParams();
+  const next = params.get("next");
+  const targetAuth = next === "signup" ? "/auth?mode=signup" : "/auth?mode=signin";
   const slide = slides[current];
   const PillIcon = slide.pillIcon;
 
   const handleNext = () => {
     if (current < slides.length - 1) setCurrent(current + 1);
-    else navigate("/auth");
+    else navigate(targetAuth);
   };
-  const handleSkip = () => navigate("/auth");
+  const handleSkip = () => navigate(targetAuth);
 
   return (
     <div className="min-h-[100dvh] bg-background relative overflow-hidden">

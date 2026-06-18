@@ -43,13 +43,13 @@ const MyRaahaNavbar = () => {
         {/* Mobile Auth Buttons */}
         <div className="mobile-only flex flex-col gap-3 w-full mt-6 px-6">
           <Link to="/auth?mode=signin" style={{ color: 'var(--myraaha-text-dark)', fontSize: '1rem', fontWeight: 500, textDecoration: 'none', textAlign: 'center', padding: '0.75rem 0', border: '1px solid #e2e8f0', borderRadius: '8px' }} onClick={closeMenu}>Sign In</Link>
-          <Link to="/auth?mode=signup" style={{ background: 'var(--myraaha-gradient)', color: 'white', fontSize: '1rem', fontWeight: 600, textDecoration: 'none', textAlign: 'center', padding: '0.75rem 0', borderRadius: '8px' }} onClick={closeMenu}>Sign Up</Link>
+          <Link to="/intro?next=signup" style={{ background: 'var(--myraaha-gradient)', color: 'white', fontSize: '1rem', fontWeight: 600, textDecoration: 'none', textAlign: 'center', padding: '0.75rem 0', borderRadius: '8px' }} onClick={closeMenu}>Sign Up</Link>
         </div>
       </div>
 
       <div className="desktop-only flex items-center gap-5 ml-6">
         <Link to="/auth?mode=signin" style={{ color: 'var(--myraaha-text-dark)', fontSize: '0.8rem', fontWeight: 600, textDecoration: 'none' }}>Sign In</Link>
-        <Link to="/auth?mode=signup" style={{ background: 'var(--myraaha-gradient)', color: 'white', fontSize: '0.8rem', fontWeight: 600, textDecoration: 'none', padding: '0.45rem 1.25rem', borderRadius: '99px', boxShadow: '0 4px 10px rgba(85,0,203,0.15)' }}>Sign Up</Link>
+        <Link to="/intro?next=signup" style={{ background: 'var(--myraaha-gradient)', color: 'white', fontSize: '0.8rem', fontWeight: 600, textDecoration: 'none', padding: '0.45rem 1.25rem', borderRadius: '99px', boxShadow: '0 4px 10px rgba(85,0,203,0.15)' }}>Sign Up</Link>
       </div>
     </nav>
     <div className="navbar-spacer" />
