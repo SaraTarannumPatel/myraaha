@@ -32,6 +32,7 @@ import OnboardingCelebration from "@/components/curiositycompass/OnboardingCeleb
 import InsightsView from "@/components/curiositycompass/InsightsView";
 import { useAssessmentRewards } from "@/hooks/useAssessmentRewards";
 import { buildDiscoverySignal } from "@/lib/assessmentSignalMap";
+import { calibrateArchetype } from "@/lib/archetypeCalibration";
 import {
   getVariantQuestions,
   detectVariant,
