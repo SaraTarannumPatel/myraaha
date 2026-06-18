@@ -237,6 +237,42 @@ const AssessmentTestSection = ({ user, recordSignal, recordMultipleSignals, onAd
 
     // Mark discovery test as 100% complete and trigger reward unlocks + synthesizer
     await pushDiscoveryProgress(totalDiscoveryQs);
+
+    // Instant client-side archetype calibration — guarantees a real archetype
+    // is shown even if the edge synthesizer is slow or fails.
+    try {
+      const labels: string[] = [];
+      variantQs.forEach((vq) => {
+        const v = variantAnswers[vq.id];
+        if (v) labels.push(vq.options.find((o: any) => o.value === v)?.label || String(v));
+      });
+      journeyQs.forEach((jq) => {
+        const v = journeyAnswers[jq.id];
+        if (!v) return;
+        if (Array.isArray(v)) {
+          v.forEach((x) => labels.push(jq.options.find((o: any) => o.value === x)?.label || x));
+        } else {
+          labels.push(jq.options.find((o: any) => o.value === v)?.label || String(v));
+        }
+      });
+      const calibrated = calibrateArchetype(labels);
+      setDiscoveryConclusion({
+        archetype: calibrated.title,
+        archetype_description: calibrated.description,
+      });
+      if (user?.id) {
+        await supabase.from("assessment_conclusions" as any).upsert({
+          user_id: user.id,
+          test_type: "discovery",
+          archetype: calibrated.title,
+          archetype_description: calibrated.description,
+          raw_signals: { calibrated_client: true, scores: calibrated.scores, rationale: calibrated.rationale },
+        }, { onConflict: "user_id,test_type" });
+      }
+    } catch (e) {
+      console.warn("Client archetype calibration failed", e);
+    }
+
     try {
       await supabase.functions.invoke("assessment-synthesizer", { body: { test_type: "discovery" } });
       await supabase.functions.invoke("assessment-synthesizer", { body: { test_type: "combined" } });
@@ -245,7 +281,7 @@ const AssessmentTestSection = ({ user, recordSignal, recordMultipleSignals, onAd
     }
 
     setCompleted(true);
-    toast.success("Assessment complete! Your compass is now calibrated 🧭");
+    toast.success("Assessment complete! Your archetype is calibrated 🧭");
   };
 
   const totalSteps = variantQs.length + journeyQs.length;
