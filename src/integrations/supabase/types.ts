@@ -9942,6 +9942,26 @@ export type Database = {
       }
     }
     Views: {
+      leaderboard_public: {
+        Row: {
+          anon_id: string | null
+          avatar_url: string | null
+          badge_count: number | null
+          display_name: string | null
+          id: string | null
+          is_self: boolean | null
+          learning_hours: number | null
+          projects_completed: number | null
+          rank_position: number | null
+          scope: string | null
+          scope_id: string | null
+          streak_days: number | null
+          total_points: number | null
+          updated_at: string | null
+          user_id: string | null
+        }
+        Relationships: []
+      }
       public_insights: {
         Row: {
           author_name: string | null
