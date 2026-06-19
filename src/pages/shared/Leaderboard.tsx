@@ -257,18 +257,18 @@ const Leaderboard = () => {
           <div className="space-y-2">
             {entries.map((entry, i) => {
               const rank = i + 1;
-              const profile = profiles[entry.user_id];
-              const isMe = entry.user_id === user?.id;
+              const isMe = entry.is_self;
+              const name = isMe ? "You" : entry.display_name || "Traveler";
               return (
                 <motion.div key={entry.id} initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.02 }}>
                   <Card className={`p-3 flex items-center gap-3 ${isMe ? "border-primary/30 bg-primary/5" : ""}`}>
                     <div className="w-8 text-center shrink-0">{getRankIcon(rank)}</div>
                     <div className="w-8 h-8 rounded-full bg-muted flex items-center justify-center text-sm font-bold shrink-0">
-                      {profile?.full_name?.charAt(0) || "?"}
+                      {(entry.display_name || "T").charAt(0)}
                     </div>
                     <div className="flex-1 min-w-0">
                       <p className="text-sm font-medium text-foreground truncate">
-                        {isMe ? "You" : profile?.full_name || "User"} {isMe && <Badge className="text-[10px] ml-1">You</Badge>}
+                        {name} {isMe && <Badge className="text-[10px] ml-1">You</Badge>}
                       </p>
                       <div className="flex items-center gap-2 text-[10px] text-muted-foreground">
                         <span>{entry.badge_count} badges</span>
