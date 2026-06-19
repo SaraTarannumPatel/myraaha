@@ -10016,6 +10016,26 @@ export type Database = {
           total_roles: number
         }[]
       }
+      get_leaderboard: {
+        Args: { _limit?: number; _scope?: string; _scope_id?: string }
+        Returns: {
+          anon_id: string
+          avatar_url: string
+          badge_count: number
+          display_name: string
+          id: string
+          is_self: boolean
+          learning_hours: number
+          projects_completed: number
+          rank_position: number
+          scope: string
+          scope_id: string
+          streak_days: number
+          total_points: number
+          updated_at: string
+          user_id: string
+        }[]
+      }
       has_active_entitlement: {
         Args: { _entitlement_key: string }
         Returns: boolean
