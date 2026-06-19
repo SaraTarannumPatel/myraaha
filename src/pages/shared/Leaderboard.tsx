@@ -16,7 +16,7 @@ import {
 
 interface LeaderboardEntry {
   id: string;
-  user_id: string;
+  user_id: string | null;
   total_points: number;
   badge_count: number;
   streak_days: number;
@@ -25,6 +25,10 @@ interface LeaderboardEntry {
   rank_position: number;
   scope: string;
   scope_id: string;
+  anon_id: string;
+  display_name: string;
+  avatar_url: string | null;
+  is_self: boolean;
 }
 
 const SCOPES = [
