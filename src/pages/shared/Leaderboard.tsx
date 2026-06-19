@@ -229,8 +229,8 @@ const Leaderboard = () => {
             <div className="grid grid-cols-3 gap-3">
               {[entries[1], entries[0], entries[2]].map((entry, i) => {
                 const rank = i === 0 ? 2 : i === 1 ? 1 : 3;
-                const profile = profiles[entry.user_id];
-                const isMe = entry.user_id === user?.id;
+                const isMe = entry.is_self;
+                const name = isMe ? "You" : entry.display_name || "Traveler";
                 const heights = ["h-24 sm:h-28", "h-28 sm:h-36", "h-20 sm:h-24"];
                 return (
                   <motion.div key={entry.id} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.1 }}>
