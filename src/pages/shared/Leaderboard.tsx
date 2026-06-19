@@ -238,10 +238,10 @@ const Leaderboard = () => {
                       <div className={`flex flex-col items-center justify-end ${heights[i]}`}>
                         {getRankIcon(rank)}
                         <div className="mt-2 w-10 h-10 rounded-full bg-muted flex items-center justify-center text-lg font-bold">
-                          {profile?.full_name?.charAt(0) || "?"}
+                          {(entry.display_name || "T").charAt(0)}
                         </div>
                         <p className="text-xs font-medium text-foreground mt-1 truncate max-w-full">
-                          {isMe ? "You" : profile?.full_name || "User"}
+                          {name}
                         </p>
                         <p className="text-[10px] text-primary font-bold">{entry.total_points} pts</p>
                         <p className="text-[10px] text-muted-foreground">{entry.badge_count} badges</p>
