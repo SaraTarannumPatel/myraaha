@@ -110,11 +110,11 @@ const Leaderboard = () => {
     return () => { supabase.removeChannel(channel); };
   }, [fetchLeaderboard]);
 
-  const myEntry = useMemo(() => entries.find(e => e.user_id === user?.id), [entries, user]);
+  const myEntry = useMemo(() => entries.find(e => e.is_self), [entries]);
   const myRank = useMemo(() => {
-    const idx = entries.findIndex(e => e.user_id === user?.id);
+    const idx = entries.findIndex(e => e.is_self);
     return idx >= 0 ? idx + 1 : null;
-  }, [entries, user]);
+  }, [entries]);
 
   const tier = useMemo(() => {
     const pts = myEntry?.total_points || 0;
