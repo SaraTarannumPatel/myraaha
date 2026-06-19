@@ -1242,8 +1242,7 @@ const CuriosityCompass = () => {
                 { value: "explore", label: "Explore Interests", icon: Heart, locked: !bothAssessmentsDone },
                 { value: "quests", label: "Quests", icon: Trophy, locked: !bothAssessmentsDone },
                 { value: "domains", label: "Domains", icon: Target, locked: !bothAssessmentsDone },
-                { value: "insights", label: "Insights & Profile", icon: Sparkles, locked: !bothAssessmentsDone },
-                { value: "behavior", label: "Behavior", icon: Activity, locked: !bothAssessmentsDone },
+                { value: "insights", label: "Insights & Behavior", icon: Sparkles, locked: !bothAssessmentsDone },
               ].map((t) => {
                 const isActive = tab === t.value;
                 const IconComponent = t.icon;
@@ -1955,7 +1954,7 @@ const CuriosityCompass = () => {
                   )}
                 </TabsContent>
 
-                {/* Insights Tab */}
+                {/* Insights & Behavior (merged) */}
                 <TabsContent value="insights" className="outline-none mt-0 space-y-8">
                   <InsightsView
                     conclusion={conclusion}
@@ -1964,214 +1963,48 @@ const CuriosityCompass = () => {
                     regenerating={regeneratingConclusion}
                   />
 
-                  {/* Interests Map & AI Compass Insights in 2-column grid on desktop */}
-                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 w-full">
-                    {/* Interests Map */}
-                    <div className="bg-white rounded-3xl border border-border shadow-xl p-6 sm:p-8 relative overflow-hidden space-y-6 flex flex-col justify-between">
-                      <div className="absolute inset-0 bg-gradient-to-b from-primary/[0.01] to-transparent pointer-events-none" />
-                      <div className="relative z-10 space-y-2">
-                        <div className="flex items-center gap-2">
-                          <Sparkles className="text-primary w-5 h-5" />
-                          <span className="font-body text-[10px] text-primary uppercase tracking-wider font-extrabold">Active Vectors</span>
-                        </div>
-                        <h3 className="font-display text-lg font-bold text-foreground">
-                          Your Interest Blueprint
-                        </h3>
-                        <p className="font-body text-xs text-muted-foreground">Live maps synthesized from assessments, article engagement, and curiosity choices.</p>
-                      </div>
-
-                      <div className="relative z-10 flex-1 flex flex-col justify-center min-h-[180px] pt-4">
-                        {interests.length === 0 ? (
-                          <div className="text-center py-8 border border-dashed border-border/80 rounded-2xl">
-                            <p className="text-xs text-muted-foreground font-body leading-relaxed">
-                              Explore more topics or finish assessment questions to begin building your interest cloud.
-                            </p>
-                          </div>
-                        ) : (
-                          <div className="space-y-5">
-                            {Object.entries(
-                              interests.reduce<Record<string, any[]>>((acc, it) => {
-                                const key = it.category || it.source || "general";
-                                (acc[key] ||= []).push(it);
-                                return acc;
-                              }, {})
-                            ).map(([cat, items]) => (
-                              <div key={cat} className="space-y-2">
-                                <p className="font-body text-[10px] uppercase tracking-wider text-muted-foreground font-bold">{cat}</p>
-                                <div className="flex flex-wrap gap-2">
-                                  {items.map((it: any) => {
-                                    const strength = Math.round((it.strength || 0.5) * 100);
-                                    return (
-                                      <motion.div
-                                        key={it.id}
-                                        whileHover={{ y: -2 }}
-                                        className="px-3.5 py-2 rounded-2xl bg-white border border-border/80 shadow-sm flex items-center gap-2 text-xs font-body font-semibold text-foreground"
-                                      >
-                                        <span className={`w-1.5 h-1.5 rounded-full ${strength >= 80 ? "bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)]" : strength >= 50 ? "bg-primary" : "bg-muted-foreground"}`} />
-                                        <span>{it.name}</span>
-                                        <span className="opacity-60 text-[10px] font-bold text-primary">{strength}%</span>
-                                      </motion.div>
-                                    );
-                                  })}
-                                </div>
-                              </div>
-                            ))}
-                          </div>
-                        )}
-                      </div>
-                    </div>
-
-                    {/* AI Insights Panel */}
-                    <div className="bg-white rounded-3xl border border-border shadow-xl p-6 sm:p-8 relative overflow-hidden space-y-6 flex flex-col justify-between">
-                      <div className="absolute inset-0 bg-gradient-to-b from-primary/[0.01] to-transparent pointer-events-none" />
-                      <div className="relative z-10 space-y-2">
-                        <div className="flex items-center gap-2">
-                          <Bot className="text-primary w-5 h-5" />
-                          <span className="font-body text-[10px] text-primary uppercase tracking-wider font-extrabold">Cognitive Analysis</span>
-                        </div>
-                        <h3 className="font-display text-lg font-bold text-foreground">
-                          AI Mindset Insights
-                        </h3>
-                        <p className="font-body text-xs text-muted-foreground">Automated behavioral mapping calculated from interaction friction and choices.</p>
-                      </div>
-
-                      <div className="relative z-10 flex-1 flex flex-col justify-center min-h-[180px] pt-2">
-                        {aiInsights ? (
-                          <div className="space-y-6">
-                            {aiInsights.acknowledgment && (
-                              <div className="p-4 rounded-2xl bg-primary/[0.02] border border-primary/10">
-                                <p className="font-body text-xs leading-relaxed text-foreground">{aiInsights.acknowledgment}</p>
-                              </div>
-                            )}
-                            <div className="space-y-3">
-                              {aiInsights.insights?.slice(0, 3).map((insight: string, i: number) => (
-                                <div key={i} className="flex items-start gap-3 p-3 bg-muted/20 rounded-2xl border border-border/50">
-                                  <div className="w-6 h-6 rounded-lg bg-accent/10 flex items-center justify-center shrink-0 mt-0.5">
-                                    <Lightbulb className="text-accent w-3.5 h-3.5" />
-                                  </div>
-                                  <p className="font-body text-xs text-muted-foreground leading-relaxed flex-1">{insight}</p>
-                                </div>
-                              ))}
-                            </div>
-                            {aiInsights.strengths_detected && (
-                              <div className="space-y-2.5">
-                                <h4 className="font-display text-xs font-bold uppercase tracking-wider text-foreground">Strengths Detected</h4>
-                                <div className="flex flex-wrap gap-1.5">
-                                  {aiInsights.strengths_detected.map((s: string, i: number) => (
-                                    <Badge key={i} variant="secondary" className="text-[10px] rounded-full px-3 py-1 font-body font-semibold">{s}</Badge>
-                                  ))}
-                                </div>
-                              </div>
-                            )}
-                          </div>
-                        ) : (
-                          <div className="text-center py-8 space-y-4">
-                            <div className="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center mx-auto">
-                              <Sparkles className="text-primary w-6 h-6" />
-                            </div>
-                            <div className="space-y-1">
-                              <h4 className="font-display text-sm font-bold text-foreground">Awaiting Generation</h4>
-                              <p className="font-body text-xs text-muted-foreground max-w-xs mx-auto leading-relaxed">
-                                Synthesize your cross-platform responses to generate deeper preference evaluations.
-                              </p>
-                            </div>
-                            <Button 
-                              size="sm" 
-                              onClick={getAIRecommendations} 
-                              disabled={aiLoading} 
-                              className="text-xs rounded-full px-6 bg-primary text-white font-body font-bold h-10 shadow-md transition-all hover:bg-[#4300a3]"
-                            >
-                              {aiLoading ? "Generating AI Insights..." : "Generate AI Insights"}
-                            </Button>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Adaptive Prompts */}
-                  {adaptivePrompts && (
-                    <Card className="rounded-3xl border-border bg-white shadow-xl overflow-hidden w-full">
-                      <CardHeader className="pb-4 border-b border-border/40 bg-muted/10">
-                        <CardTitle className="font-display text-base font-bold flex items-center gap-2">
-                          <Zap className="text-accent w-4 h-4" /> Recommended Reflections
-                        </CardTitle>
-                        <CardDescription className="text-xs text-muted-foreground mt-0.5">Targeted writing prompts based on curiosity triggers</CardDescription>
-                      </CardHeader>
-                      <CardContent className="p-6">
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                          {adaptivePrompts.prompts?.map((p: any, i: number) => (
-                            <motion.div 
-                              key={i} 
-                              whileHover={{ y: -2 }}
-                              className="p-5 rounded-2xl border border-border hover:border-primary/30 bg-card hover:shadow-md transition-all cursor-pointer space-y-2 flex flex-col justify-between"
-                            >
-                              <p className="font-body text-xs font-bold text-foreground leading-relaxed">{p.question}</p>
-                              <p className="font-body text-[10px] text-muted-foreground leading-relaxed bg-muted/20 p-2 rounded-xl border border-border/40">{p.why}</p>
-                            </motion.div>
-                          ))}
-                        </div>
-                      </CardContent>
-                    </Card>
-                  )}
-                </TabsContent>
-
-                {/* Behavior Tab */}
-                <TabsContent value="behavior" className="outline-none mt-0 space-y-8">
-                  {/* Archetype Hero Card Shifted from Insights & Profile */}
+                  {/* Archetype Hero Card (moved from former Behavior tab) */}
                   {conclusion && (
                     <div className="bg-white rounded-3xl border border-border shadow-xl p-6 sm:p-8 relative overflow-hidden space-y-6">
                       <div className="absolute inset-0 bg-gradient-to-r from-primary/[0.02] to-accent/[0.02] pointer-events-none" />
                       <div className="relative z-10 space-y-6">
-                        <div className="flex items-start justify-between gap-4 flex-wrap">
-                          <div className="flex items-center gap-4">
-                            <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-primary to-accent flex items-center justify-center shadow-lg text-white">
-                              <Sparkles size={26} />
-                            </div>
-                            <div className="min-w-0">
-                              <p className="font-body text-[10px] uppercase tracking-wider text-muted-foreground font-extrabold">Your Calibration Archetype</p>
-                              <h2 className="font-display text-2xl text-foreground font-extrabold leading-tight tracking-tight">
-                                {conclusion.archetype || "The Explorer"}
-                              </h2>
-                            </div>
+                        <div className="flex items-center gap-4">
+                          <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-primary to-accent flex items-center justify-center shadow-lg text-white">
+                            <Sparkles size={26} />
                           </div>
-                          <Button 
-                            size="sm" 
-                            variant="outline" 
-                            onClick={regenerateConclusion} 
-                            disabled={regeneratingConclusion} 
-                            className="rounded-full h-10 px-5 text-xs font-bold border-border/80 hover:bg-muted/10 bg-white shadow-sm flex items-center gap-2"
-                          >
-                            <RefreshCw size={13} className={`${regeneratingConclusion ? "animate-spin" : ""}`} />
-                            {regeneratingConclusion ? "Synthesizing…" : "Regenerate Profile"}
-                          </Button>
+                          <div className="min-w-0">
+                            <p className="font-body text-[10px] uppercase tracking-wider text-muted-foreground font-extrabold">Your Calibration Archetype</p>
+                            <h2 className="font-display text-2xl text-foreground font-extrabold leading-tight tracking-tight">
+                              {conclusion.archetype || "The Explorer"}
+                            </h2>
+                          </div>
                         </div>
                         {conclusion.archetype_description && (
                           <p className="font-body text-xs sm:text-sm text-foreground/85 leading-relaxed max-w-4xl bg-muted/10 p-4 rounded-2xl border border-border/50">{conclusion.archetype_description}</p>
                         )}
                         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 pt-2">
-                          <div className="rounded-2xl border border-border/80 bg-white p-4 shadow-sm hover:shadow transition-shadow">
+                          <div className="rounded-2xl border border-border/80 bg-white p-4 shadow-sm">
                             <div className="flex items-center gap-1.5 text-muted-foreground mb-1">
                               <Brain size={14} className="text-primary" />
                               <span className="font-body text-[10px] uppercase tracking-wide font-extrabold">Cognitive Style</span>
                             </div>
                             <p className="font-display text-xs sm:text-sm text-foreground font-bold leading-tight">{conclusion.cognitive_style || "—"}</p>
                           </div>
-                          <div className="rounded-2xl border border-border/80 bg-white p-4 shadow-sm hover:shadow transition-shadow">
+                          <div className="rounded-2xl border border-border/80 bg-white p-4 shadow-sm">
                             <div className="flex items-center gap-1.5 text-muted-foreground mb-1">
                               <Heart size={14} className="text-rose-500" />
                               <span className="font-body text-[10px] uppercase tracking-wide font-extrabold">Motivation</span>
                             </div>
                             <p className="font-display text-xs sm:text-sm text-foreground font-bold leading-tight">{conclusion.motivation_type || "—"}</p>
                           </div>
-                          <div className="rounded-2xl border border-border/80 bg-white p-4 shadow-sm hover:shadow transition-shadow">
+                          <div className="rounded-2xl border border-border/80 bg-white p-4 shadow-sm">
                             <div className="flex items-center gap-1.5 text-muted-foreground mb-1">
                               <Target size={14} className="text-sky-500" />
                               <span className="font-body text-[10px] uppercase tracking-wide font-extrabold">Work Style</span>
                             </div>
                             <p className="font-display text-xs sm:text-sm text-foreground font-bold leading-tight">{conclusion.work_style || "—"}</p>
                           </div>
-                          <div className="rounded-2xl border border-border/80 bg-white p-4 shadow-sm hover:shadow transition-shadow">
+                          <div className="rounded-2xl border border-border/80 bg-white p-4 shadow-sm">
                             <div className="flex items-center gap-1.5 text-muted-foreground mb-1">
                               <Compass size={14} className="text-amber-500" />
                               <span className="font-body text-[10px] uppercase tracking-wide font-extrabold">Match Confidence</span>
@@ -2183,138 +2016,13 @@ const CuriosityCompass = () => {
                     </div>
                   )}
 
-                  {/* Behavioral Details Card */}
-                  <div className="bg-white rounded-3xl border border-border shadow-xl p-6 sm:p-8 relative overflow-hidden space-y-6">
-                    <div className="absolute inset-0 bg-gradient-to-b from-primary/[0.01] to-transparent pointer-events-none" />
-                    <div className="relative z-10 space-y-6">
-                      <div className="space-y-1">
-                        <h3 className="font-display text-base font-bold text-foreground flex items-center gap-2">
-                          <Activity className="text-primary" size={18} />
-                          Behavioral Blueprint Insights
-                        </h3>
-                        <p className="font-body text-xs text-muted-foreground">Mindset calibration mapping response speed, skipping patterns, and active choices.</p>
-                      </div>
-
-                      {behaviorInsights ? (
-                        <div className="space-y-6 pt-1">
-                          {/* Career Archetype */}
-                          {behaviorInsights.career_archetype && (
-                            <div className="p-5 rounded-2xl bg-gradient-to-r from-primary/5 to-accent/5 border border-primary/10 text-center space-y-1.5 shadow-inner">
-                              <p className="font-body text-[10px] text-muted-foreground uppercase tracking-wider font-extrabold">Behavioral Career Archetype</p>
-                              <p className="font-display text-xl sm:text-2xl font-extrabold text-primary">{behaviorInsights.career_archetype}</p>
-                            </div>
-                          )}
-
-                          {/* Cognitive Style & Motivation */}
-                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            {behaviorInsights.cognitive_style && (
-                              <div className="p-4 rounded-2xl border border-border bg-muted/10 space-y-1.5">
-                                <p className="font-body text-[10px] text-muted-foreground font-extrabold uppercase tracking-wide">Cognitive Profile</p>
-                                <p className="font-body text-xs sm:text-sm font-semibold text-foreground">{behaviorInsights.cognitive_style}</p>
-                              </div>
-                            )}
-                            {behaviorInsights.motivation_type && (
-                              <div className="p-4 rounded-2xl border border-border bg-muted/10 space-y-1.5">
-                                <p className="font-body text-[10px] text-muted-foreground font-extrabold uppercase tracking-wide">Primary Motivator</p>
-                                <p className="font-body text-xs sm:text-sm font-semibold text-foreground">{behaviorInsights.motivation_type}</p>
-                              </div>
-                            )}
-                          </div>
-
-                          {/* Ideal Work Environment */}
-                          {behaviorInsights.ideal_work_environment && (
-                            <div className="p-4 rounded-2xl border border-border bg-muted/10 space-y-1.5">
-                              <p className="font-body text-[10px] text-muted-foreground font-extrabold uppercase tracking-wide">Optimized Work Environment</p>
-                              <p className="font-body text-xs sm:text-sm text-foreground leading-relaxed">{behaviorInsights.ideal_work_environment}</p>
-                            </div>
-                          )}
-
-                          {/* Behavioral Patterns */}
-                          {behaviorInsights.behavioral_patterns?.length > 0 && (
-                            <div className="space-y-4">
-                              <h4 className="font-display text-xs font-bold uppercase tracking-wider text-foreground">Signals Detected</h4>
-                              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                {behaviorInsights.behavioral_patterns.map((bp: any, i: number) => {
-                                  const isStrong = bp.strength === "strong";
-                                  const isModerate = bp.strength === "moderate";
-                                  return (
-                                    <div key={i} className={`flex items-start gap-3.5 p-4 rounded-2xl bg-white border shadow-sm transition-all hover:shadow-md
-                                      ${isStrong ? "border-emerald-500/20" : isModerate ? "border-primary/20" : "border-border/80"}`}
-                                    >
-                                      <div className={`w-2 h-2 rounded-full mt-1.5 shrink-0
-                                        ${isStrong ? "bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)]" : isModerate ? "bg-primary shadow-[0_0_8px_rgba(85,0,203,0.3)]" : "bg-muted-foreground"}`}
-                                      />
-                                      <div className="min-w-0 space-y-1">
-                                        <p className="font-body text-xs sm:text-sm font-bold text-foreground">{bp.pattern}</p>
-                                        <p className="font-body text-[11px] text-muted-foreground leading-relaxed">{bp.interpretation}</p>
-                                      </div>
-                                    </div>
-                                  );
-                                })}
-                              </div>
-                            </div>
-                          )}
-
-                          {/* Action Buttons */}
-                          <div className="flex flex-col sm:flex-row gap-4 pt-4 border-t border-border/40">
-                            <Button
-                              onClick={() => { setTab("insights"); getAIRecommendations(); }}
-                              variant="outline"
-                              size="sm"
-                              className="flex-1 text-xs h-11 rounded-full font-body font-bold border-border/80 hover:bg-muted/10 bg-white"
-                            >
-                              <Sparkles size={14} className="mr-1.5 text-primary animate-pulse" /> Synthesis Intelligence Report
-                            </Button>
-                            <Button
-                              onClick={async () => {
-                                if (behaviorInsights.areas_of_resonance) {
-                                  await recordMultipleSignals("curiosity_compass", behaviorInsights.areas_of_resonance, "domain_interest", 0.8);
-                                }
-                                if (behaviorInsights.career_archetype) {
-                                  await recordSignal("curiosity_compass", behaviorInsights.career_archetype, "preference", 0.9);
-                                }
-                                toast.success("Transferring insights to AI Roadmaps...");
-                                navigate("/dashboard/roadmap?source=behavior_analysis");
-                              }}
-                              size="sm"
-                              className="flex-1 text-xs h-11 rounded-full font-body font-bold bg-primary text-white hover:bg-[#4300a3]"
-                            >
-                              <Route size={14} className="mr-1.5" /> Construct AI Career Roadmap
-                            </Button>
-                          </div>
-                        </div>
-                      ) : (
-                        <div className="text-center py-8 space-y-4">
-                          <div className="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center mx-auto">
-                            <Activity className="text-primary w-6 h-6" />
-                          </div>
-                          <div className="space-y-1">
-                            <h4 className="font-display text-sm font-bold text-foreground">Telemetry Analysis Available</h4>
-                            <p className="font-body text-xs text-muted-foreground max-w-xs mx-auto leading-relaxed">
-                              Obtain detailed behavioral profiling by analyzing decision speed, choice depth, and active interests.
-                            </p>
-                          </div>
-                          <Button 
-                            size="sm" 
-                            onClick={getBehaviorInsights} 
-                            disabled={aiLoading} 
-                            className="text-xs rounded-full px-6 h-10 bg-primary text-white font-body font-bold shadow-md transition-all hover:bg-[#4300a3]"
-                          >
-                            {aiLoading ? "Analyzing Telemetry..." : "Analyze My Behavior"}
-                          </Button>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-
-                  {/* Strengths & Growth Areas Card Grid */}
+                  {/* Strengths & Growth Areas (moved from former Behavior tab) */}
                   {conclusion && (
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 w-full">
-                      <div className="bg-white rounded-3xl border border-border shadow-xl p-6 relative overflow-hidden flex flex-col justify-between">
-                        <div className="absolute inset-0 bg-gradient-to-b from-emerald-500/[0.01] to-transparent pointer-events-none" />
-                        <div className="relative z-10 space-y-4">
+                      <div className="bg-white rounded-3xl border border-border shadow-xl p-6">
+                        <div className="space-y-4">
                           <h3 className="font-display text-base font-bold text-emerald-600 flex items-center gap-2">
-                            <Trophy size={18} /> core Strengths
+                            <Trophy size={18} /> Core Strengths
                           </h3>
                           <div className="space-y-2 pt-1">
                             {(conclusion.strengths || []).map((s: string, i: number) => (
@@ -2329,10 +2037,8 @@ const CuriosityCompass = () => {
                           </div>
                         </div>
                       </div>
-
-                      <div className="bg-white rounded-3xl border border-border shadow-xl p-6 relative overflow-hidden flex flex-col justify-between">
-                        <div className="absolute inset-0 bg-gradient-to-b from-amber-500/[0.01] to-transparent pointer-events-none" />
-                        <div className="relative z-10 space-y-4">
+                      <div className="bg-white rounded-3xl border border-border shadow-xl p-6">
+                        <div className="space-y-4">
                           <h3 className="font-display text-base font-bold text-amber-600 flex items-center gap-2">
                             <Lightbulb size={18} /> Development Edges
                           </h3>
@@ -2350,6 +2056,166 @@ const CuriosityCompass = () => {
                         </div>
                       </div>
                     </div>
+                  )}
+
+                  {/* Interest Blueprint */}
+                  <div className="bg-white rounded-3xl border border-border shadow-xl p-6 sm:p-8 space-y-6">
+                    <div className="space-y-2">
+                      <div className="flex items-center gap-2">
+                        <Sparkles className="text-primary w-5 h-5" />
+                        <span className="font-body text-[10px] text-primary uppercase tracking-wider font-extrabold">Active Vectors</span>
+                      </div>
+                      <h3 className="font-display text-lg font-bold text-foreground">Your Interest Blueprint</h3>
+                      <p className="font-body text-xs text-muted-foreground">Live maps synthesized from assessments, article engagement, and curiosity choices.</p>
+                    </div>
+                    <div className="min-h-[180px]">
+                      {interests.length === 0 ? (
+                        <div className="text-center py-8 border border-dashed border-border/80 rounded-2xl">
+                          <p className="text-xs text-muted-foreground font-body leading-relaxed">
+                            Explore more topics or finish assessment questions to begin building your interest cloud.
+                          </p>
+                        </div>
+                      ) : (
+                        <div className="space-y-5">
+                          {Object.entries(
+                            interests.reduce<Record<string, any[]>>((acc, it) => {
+                              const key = it.category || it.source || "general";
+                              (acc[key] ||= []).push(it);
+                              return acc;
+                            }, {})
+                          ).map(([cat, items]) => (
+                            <div key={cat} className="space-y-2">
+                              <p className="font-body text-[10px] uppercase tracking-wider text-muted-foreground font-bold">{cat}</p>
+                              <div className="flex flex-wrap gap-2">
+                                {items.map((it: any) => {
+                                  const strength = Math.round((it.strength || 0.5) * 100);
+                                  return (
+                                    <motion.div
+                                      key={it.id}
+                                      whileHover={{ y: -2 }}
+                                      className="px-3.5 py-2 rounded-2xl bg-white border border-border/80 shadow-sm flex items-center gap-2 text-xs font-body font-semibold text-foreground"
+                                    >
+                                      <span className={`w-1.5 h-1.5 rounded-full ${strength >= 80 ? "bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)]" : strength >= 50 ? "bg-primary" : "bg-muted-foreground"}`} />
+                                      <span>{it.name}</span>
+                                      <span className="opacity-60 text-[10px] font-bold text-primary">{strength}%</span>
+                                    </motion.div>
+                                  );
+                                })}
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Behavioral Patterns (signals detected) */}
+                  <div className="bg-white rounded-3xl border border-border shadow-xl p-6 sm:p-8 space-y-6">
+                    <div className="space-y-1">
+                      <h3 className="font-display text-base font-bold text-foreground flex items-center gap-2">
+                        <Activity className="text-primary" size={18} />
+                        Behavioral Signals Detected
+                      </h3>
+                      <p className="font-body text-xs text-muted-foreground">Mindset calibration mapping response speed, skipping patterns, and active choices.</p>
+                    </div>
+
+                    {behaviorInsights ? (
+                      <div className="space-y-6 pt-1">
+                        {behaviorInsights.ideal_work_environment && (
+                          <div className="p-4 rounded-2xl border border-border bg-muted/10 space-y-1.5">
+                            <p className="font-body text-[10px] text-muted-foreground font-extrabold uppercase tracking-wide">Optimized Work Environment</p>
+                            <p className="font-body text-xs sm:text-sm text-foreground leading-relaxed">{behaviorInsights.ideal_work_environment}</p>
+                          </div>
+                        )}
+
+                        {behaviorInsights.behavioral_patterns?.length > 0 && (
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            {behaviorInsights.behavioral_patterns.map((bp: any, i: number) => {
+                              const isStrong = bp.strength === "strong";
+                              const isModerate = bp.strength === "moderate";
+                              return (
+                                <div key={i} className={`flex items-start gap-3.5 p-4 rounded-2xl bg-white border shadow-sm
+                                  ${isStrong ? "border-emerald-500/20" : isModerate ? "border-primary/20" : "border-border/80"}`}
+                                >
+                                  <div className={`w-2 h-2 rounded-full mt-1.5 shrink-0
+                                    ${isStrong ? "bg-emerald-500" : isModerate ? "bg-primary" : "bg-muted-foreground"}`}
+                                  />
+                                  <div className="min-w-0 space-y-1">
+                                    <p className="font-body text-xs sm:text-sm font-bold text-foreground">{bp.pattern}</p>
+                                    <p className="font-body text-[11px] text-muted-foreground leading-relaxed">{bp.interpretation}</p>
+                                  </div>
+                                </div>
+                              );
+                            })}
+                          </div>
+                        )}
+
+                        <div className="pt-2 border-t border-border/40">
+                          <Button
+                            onClick={async () => {
+                              if (behaviorInsights.areas_of_resonance) {
+                                await recordMultipleSignals("curiosity_compass", behaviorInsights.areas_of_resonance, "domain_interest", 0.8);
+                              }
+                              if (behaviorInsights.career_archetype) {
+                                await recordSignal("curiosity_compass", behaviorInsights.career_archetype, "preference", 0.9);
+                              }
+                              toast.success("Transferring insights to AI Roadmaps...");
+                              navigate("/dashboard/roadmap?source=behavior_analysis");
+                            }}
+                            size="sm"
+                            className="w-full text-xs h-11 rounded-full font-body font-bold bg-primary text-white hover:bg-[#4300a3]"
+                          >
+                            <Route size={14} className="mr-1.5" /> Construct AI Career Roadmap
+                          </Button>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="text-center py-8 space-y-4">
+                        <div className="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center mx-auto">
+                          <Activity className="text-primary w-6 h-6" />
+                        </div>
+                        <div className="space-y-1">
+                          <h4 className="font-display text-sm font-bold text-foreground">Telemetry Analysis Available</h4>
+                          <p className="font-body text-xs text-muted-foreground max-w-xs mx-auto leading-relaxed">
+                            Obtain detailed behavioral profiling by analyzing decision speed, choice depth, and active interests.
+                          </p>
+                        </div>
+                        <Button
+                          size="sm"
+                          onClick={getBehaviorInsights}
+                          disabled={aiLoading}
+                          className="text-xs rounded-full px-6 h-10 bg-primary text-white font-body font-bold shadow-md transition-all hover:bg-[#4300a3]"
+                        >
+                          {aiLoading ? "Analyzing Telemetry..." : "Analyze My Behavior"}
+                        </Button>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Adaptive Prompts */}
+                  {adaptivePrompts && (
+                    <Card className="rounded-3xl border-border bg-white shadow-xl overflow-hidden w-full">
+                      <CardHeader className="pb-4 border-b border-border/40 bg-muted/10">
+                        <CardTitle className="font-display text-base font-bold flex items-center gap-2">
+                          <Zap className="text-accent w-4 h-4" /> Recommended Reflections
+                        </CardTitle>
+                        <CardDescription className="text-xs text-muted-foreground mt-0.5">Targeted writing prompts based on curiosity triggers</CardDescription>
+                      </CardHeader>
+                      <CardContent className="p-6">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          {adaptivePrompts.prompts?.map((p: any, i: number) => (
+                            <motion.div
+                              key={i}
+                              whileHover={{ y: -2 }}
+                              className="p-5 rounded-2xl border border-border hover:border-primary/30 bg-card hover:shadow-md transition-all cursor-pointer space-y-2 flex flex-col justify-between"
+                            >
+                              <p className="font-body text-xs font-bold text-foreground leading-relaxed">{p.question}</p>
+                              <p className="font-body text-[10px] text-muted-foreground leading-relaxed bg-muted/20 p-2 rounded-xl border border-border/40">{p.why}</p>
+                            </motion.div>
+                          ))}
+                        </div>
+                      </CardContent>
+                    </Card>
                   )}
                 </TabsContent>
 

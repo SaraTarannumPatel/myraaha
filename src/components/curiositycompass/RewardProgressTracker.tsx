@@ -36,7 +36,7 @@ const RewardProgressTracker = ({ testType, title, subtitle }: Props) => {
           <Progress value={pct} className="h-2" />
         </div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+        <div className="grid grid-cols-3 gap-2">
           {ms.map((m) => {
             const unlocked = reached >= m.milestone_percent;
             return (
