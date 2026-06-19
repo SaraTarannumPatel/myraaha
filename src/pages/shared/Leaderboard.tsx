@@ -50,7 +50,6 @@ const LEVEL_TIERS = [
 const Leaderboard = () => {
   const { user } = useAuth();
   const [entries, setEntries] = useState<LeaderboardEntry[]>([]);
-  const [profiles, setProfiles] = useState<Record<string, any>>({});
   const [loading, setLoading] = useState(true);
   const [tab, setTab] = useState("rankings");
   const [scope, setScope] = useState("global");
@@ -63,36 +62,25 @@ const Leaderboard = () => {
 
   const fetchLeaderboard = useCallback(async () => {
     setLoading(true);
-    let query = supabase
-      .from("leaderboard_entries")
-      .select("*")
-      .order("total_points", { ascending: false })
-      .limit(50);
-
-    if (scope === "peer_circle" && selectedCircle !== "all") {
-      query = query.eq("scope", "peer_circle").eq("scope_id", selectedCircle);
+    let scopeArg: string | null = "global";
+    let scopeIdArg: string | null = null;
+    if (scope === "peer_circle") {
+      scopeArg = "peer_circle";
+      scopeIdArg = selectedCircle !== "all" ? selectedCircle : null;
     } else if (scope === "skills") {
-      query = query.eq("scope", "skill_challenge");
+      scopeArg = "skill_challenge";
     } else if (scope === "mentorship") {
-      query = query.eq("scope", "mentorship");
+      scopeArg = "mentorship";
     } else if (scope === "domain") {
-      query = query.eq("scope", "domain");
+      scopeArg = "domain";
     }
 
-    const { data } = await query;
-    const entriesData = (data || []) as LeaderboardEntry[];
-    setEntries(entriesData);
-
-    const userIds = [...new Set(entriesData.map(e => e.user_id))];
-    if (userIds.length > 0) {
-      const { data: profilesData } = await supabase
-        .from("profiles")
-        .select("user_id, full_name, avatar_url")
-        .in("user_id", userIds);
-      const profileMap: Record<string, any> = {};
-      (profilesData || []).forEach(p => { profileMap[p.user_id] = p; });
-      setProfiles(profileMap);
-    }
+    const { data } = await supabase.rpc("get_leaderboard", {
+      _scope: scopeArg,
+      _scope_id: scopeIdArg,
+      _limit: 50,
+    });
+    setEntries((data || []) as unknown as LeaderboardEntry[]);
     setLoading(false);
   }, [scope, selectedCircle]);
 
