@@ -16,10 +16,9 @@ import {
   PenLine, BookOpen, Users, Goal, TrendingUp, Activity, Eye, Layers,
   Map, Route, CheckCircle2, ClipboardCheck, Lock, RefreshCw
 } from "lucide-react";
-import CareerCardDeck from "@/components/career/CareerCardDeck";
-import StoryModeCards from "@/components/career/StoryModeCards";
-import ChallengeModeCards from "@/components/career/ChallengeModeCards";
-import BlueprintCard from "@/components/career/BlueprintCard";
+// Career Cards, Story Mode, Challenge Mode and Visual Mode now live in
+// the dedicated Career Navigator module (/dashboard/career-navigator).
+// BlueprintCard is referenced inline by type below; no top-level import needed.
 import { buildBlueprintFromInteractions } from "@/lib/buildBlueprint";
 import { generateBlueprintRoadmap } from "@/lib/blueprintRoadmap";
 import { useUserSignals } from "@/hooks/useUserSignals";
@@ -50,12 +49,9 @@ const MOODS = [
   { id: "bored", label: "Bored", icon: Meh, color: "text-warmth" },
 ];
 
-const MODES = [
-  { id: "story", label: "Story Mode", icon: MessageSquare, desc: "Real career stories told by professionals" },
-  { id: "challenge", label: "Challenge Mode", icon: Target, desc: "Real-world tasks from different careers" },
-  { id: "visual", label: "Visual Mode", icon: Palette, desc: "Pick images and icons that resonate" },
-  { id: "career-cards", label: "Career Cards", icon: Layers, desc: "Browse detailed career path cards" },
-];
+// The four exploration modes (Story / Challenge / Visual / Career Cards)
+// have moved to the Career Navigator module. The Explore Interests tab now
+// links there instead of hosting the modes inline.
 
 const STORY_PROMPTS = [
   { question: "Imagine you have a free day with zero obligations. What's the first thing you do?", type: "open" as const },
@@ -1543,7 +1539,7 @@ const CuriosityCompass = () => {
                         <div>
                           <h2 className="font-display font-bold text-lg text-foreground">Holistic Interests Assessment</h2>
                           <p className="font-body text-xs text-muted-foreground mt-0.5">
-                            A 12-question deep-map of what you're curious about — feeds Career Cards, Story Mode, Challenge Mode, and Audio/Visual exploration.
+                            A 12-question deep-map of what you're curious about — feeds the Career Navigator module.
                           </p>
                         </div>
                       </div>
@@ -1563,139 +1559,37 @@ const CuriosityCompass = () => {
                 </TabsContent>
 
 
-                {/* Interests Assessment Cards */}
+                {/* Explore Interests — moved into Career Navigator module */}
                 <TabsContent value="explore" className="outline-none mt-0 space-y-6">
-                  {!mode ? (
-                    <div className="bg-white rounded-3xl border border-border shadow-xl p-6 sm:p-8 relative overflow-hidden space-y-8">
-                      <div className="absolute inset-0 bg-gradient-to-br from-primary/[0.03] to-transparent pointer-events-none" />
-                      <div className="relative z-10 space-y-2">
-                        <div className="flex items-center gap-3">
-                          <div className="w-10 h-10 rounded-xl bg-terracotta/10 flex items-center justify-center">
-                            <Heart size={20} className="text-terracotta" />
-                          </div>
-                          <div>
-                            <h2 className="font-display font-bold text-lg text-foreground">Interests Exploration</h2>
-                            <p className="font-body text-xs text-muted-foreground mt-0.5">
-                              Choose how you'd like to discover domains. Swap modes at any point. Your decisions enrich your interest mapping.
-                            </p>
-                          </div>
+                  <div className="bg-white rounded-3xl border border-border shadow-xl p-6 sm:p-8 relative overflow-hidden">
+                    <div className="absolute inset-0 bg-gradient-to-br from-primary/[0.05] to-accent/[0.03] pointer-events-none" />
+                    <div className="relative z-10 flex flex-col md:flex-row items-start md:items-center gap-6">
+                      <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-primary to-accent flex items-center justify-center shrink-0 shadow-md">
+                        <Sparkles className="text-white" size={26} />
+                      </div>
+                      <div className="flex-1 min-w-0 space-y-2">
+                        <h2 className="font-display font-bold text-xl text-foreground">
+                          Explore in the Career Navigator
+                        </h2>
+                        <p className="font-body text-sm text-muted-foreground leading-relaxed">
+                          Career Cards, Story Mode, Challenge Mode and Visual Mode now live in their own home — the <strong>Career Navigator</strong>. Every card is personalized from your onboarding answers and Compass results, and we end with 4–5 trending picks from each of the 17 sectors in our backend.
+                        </p>
+                        <div className="flex flex-wrap gap-2 pt-1">
+                          <Badge variant="secondary" className="text-[10px]"><Layers size={10} className="mr-1" /> Career Cards</Badge>
+                          <Badge variant="secondary" className="text-[10px]"><MessageSquare size={10} className="mr-1" /> Story Mode</Badge>
+                          <Badge variant="secondary" className="text-[10px]"><Target size={10} className="mr-1" /> Challenge Mode</Badge>
+                          <Badge variant="secondary" className="text-[10px]"><Palette size={10} className="mr-1" /> Visual Mode</Badge>
                         </div>
                       </div>
-                      
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 relative z-10">
-                        {MODES.map(m => {
-                          const IconComp = m.icon;
-                          return (
-                            <button
-                              key={m.id}
-                              onClick={() => startSession(m.id)}
-                              className="group relative flex flex-col items-start p-6 rounded-2xl border-2 border-border/80 bg-card hover:border-primary hover:shadow-lg transition-all duration-300 text-left w-full gap-4 overflow-hidden"
-                            >
-                              <div className="absolute top-0 right-0 w-24 h-24 bg-primary/[0.02] rounded-full translate-x-8 -translate-y-8 group-hover:bg-primary/[0.05] group-hover:scale-110 transition-all duration-300" />
-                              <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center group-hover:bg-primary text-primary group-hover:text-white transition-all duration-300">
-                                <IconComp size={24} />
-                              </div>
-                              <div className="space-y-1 z-10">
-                                <h3 className="font-display font-bold text-base text-foreground group-hover:text-primary transition-colors flex items-center gap-1.5">
-                                  {m.label}
-                                  <ChevronRight size={14} className="opacity-0 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all" />
-                                </h3>
-                                <p className="font-body text-xs text-muted-foreground leading-relaxed">{m.desc}</p>
-                              </div>
-                            </button>
-                          );
-                        })}
-                      </div>
+                      <Button
+                        onClick={() => navigate("/dashboard/career-navigator")}
+                        size="sm"
+                        className="rounded-full px-6 h-10 text-xs font-semibold shrink-0"
+                      >
+                        Open Career Navigator <ArrowRight size={14} className="ml-1.5" />
+                      </Button>
                     </div>
-                  ) : mode === "visual" ? (
-                    <div className="space-y-6">
-                      <div className="flex items-center justify-between">
-                        <Button variant="ghost" size="sm" onClick={() => setMode(null)} className="h-9 text-xs rounded-full border border-border/80 hover:bg-muted/10">
-                          <ArrowLeft size={14} className="mr-1.5" /> Back to Modes
-                        </Button>
-                        <Badge variant="outline" className="text-xs px-3 py-1 rounded-full bg-background/50 border-border">Visual Exploration</Badge>
-                      </div>
-                      
-                      <Card className="rounded-3xl border-border shadow-xl overflow-hidden bg-white">
-                        <CardHeader className="pb-6 border-b border-border/40 bg-muted/10">
-                          <CardTitle className="text-lg font-display font-bold text-foreground">Pick matching icons that spark curiosity</CardTitle>
-                          <CardDescription className="text-xs text-muted-foreground mt-1">Choose whatever stands out. Trust your gut.</CardDescription>
-                        </CardHeader>
-                        <CardContent className="p-6 space-y-6">
-                          <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-8 gap-3">
-                            {VISUAL_ICONS.map(icon => {
-                              const selected = visualSelections.includes(icon.id);
-                              return (
-                                <button
-                                  key={icon.id}
-                                  onClick={() => handleVisualToggle(icon.id)}
-                                  className={`flex flex-col items-center justify-center gap-2 p-4 rounded-2xl border-2 transition-all duration-300 ${
-                                    selected 
-                                      ? "border-primary bg-primary/[0.04] scale-102 shadow-md font-semibold text-primary" 
-                                      : "border-border/80 bg-card hover:border-primary/40 hover:bg-muted/10 text-foreground"
-                                  }`}
-                                >
-                                  <span className="text-3xl filter drop-shadow-sm group-hover:scale-110 transition-transform">{icon.emoji}</span>
-                                  <span className="font-body text-[10px] text-center font-medium leading-tight line-clamp-1">{icon.label}</span>
-                                </button>
-                              );
-                            })}
-                          </div>
-                          {visualSelections.length >= 3 && !showVisualBlueprint && (
-                            <div className="flex justify-center pt-2">
-                              <Button 
-                                onClick={finishVisualMode} 
-                                size="sm" 
-                                className="w-full sm:w-auto text-xs font-semibold rounded-full px-8 py-5 h-auto bg-primary text-white hover:bg-primary/95 shadow-md"
-                              >
-                                <Brain size={16} className="mr-2" /> Analyze Selections ({visualSelections.length})
-                              </Button>
-                            </div>
-                          )}
-                        </CardContent>
-                      </Card>
-
-                      {showVisualBlueprint && visualBlueprint && (
-                        <BlueprintCard
-                          blueprint={visualBlueprint}
-                          variant="visual"
-                          onGenerateRoadmap={generateVisualRoadmap}
-                          generatingRoadmap={generatingVisualRoadmap}
-                          onClose={() => setShowVisualBlueprint(false)}
-                        />
-                      )}
-                    </div>
-                  ) : mode === "story" ? (
-                    <div className="space-y-6">
-                      <div className="flex items-center justify-between">
-                        <Button variant="ghost" size="sm" onClick={() => setMode(null)} className="h-9 text-xs rounded-full border border-border/80 hover:bg-muted/10">
-                          <ArrowLeft size={14} className="mr-1.5" /> Back to Modes
-                        </Button>
-                        <Badge variant="outline" className="text-xs px-3 py-1 rounded-full bg-background/50 border-border">Story Mode</Badge>
-                      </div>
-                      <StoryModeCards />
-                    </div>
-                  ) : mode === "challenge" ? (
-                    <div className="space-y-6">
-                      <div className="flex items-center justify-between">
-                        <Button variant="ghost" size="sm" onClick={() => setMode(null)} className="h-9 text-xs rounded-full border border-border/80 hover:bg-muted/10">
-                          <ArrowLeft size={14} className="mr-1.5" /> Back to Modes
-                        </Button>
-                        <Badge variant="outline" className="text-xs px-3 py-1 rounded-full bg-background/50 border-border">Challenge Mode</Badge>
-                      </div>
-                      <ChallengeModeCards />
-                    </div>
-                  ) : mode === "career-cards" ? (
-                    <div className="space-y-6">
-                      <div className="flex items-center justify-between">
-                        <Button variant="ghost" size="sm" onClick={() => setMode(null)} className="h-9 text-xs rounded-full border border-border/80 hover:bg-muted/10">
-                          <ArrowLeft size={14} className="mr-1.5" /> Back to Modes
-                        </Button>
-                        <Badge variant="outline" className="text-xs px-3 py-1 rounded-full bg-background/50 border-border">Career Cards</Badge>
-                      </div>
-                      <CareerCardDeck />
-                    </div>
-                  ) : null}
+                  </div>
                 </TabsContent>
 
                 {/* Quests Tab */}

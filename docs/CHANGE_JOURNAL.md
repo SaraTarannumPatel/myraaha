@@ -152,3 +152,24 @@ CareerMap-CareerScape spec.
 - Response preview + edit step before final submit on all three assessments.
 - `user_progress_snapshots` autosave/restore layer.
 - New `archetypeCalibration.ts` client-side instant calibration (currently still relies on the `assessment-synthesizer` edge function — works, just not as a local fallback).
+
+---
+
+## 2026-06-20 — Career Navigator module spun off from Curiosity Compass
+
+**What:** The Career Cards, Story Mode, Challenge Mode and Visual Mode tabs moved out of `CuriosityCompass.tsx` into a new module at `/dashboard/career-navigator`. The Compass "Explore Interests" tab is now a CTA card pointing to the new module.
+
+**Why:** The four exploration modes had outgrown the Compass shell and were buried behind assessments. Giving them their own surface lets us (a) personalize every card from the full Onboarding + Compass signal set, and (b) end the experience with curated trending picks from all 17 sector intel tables.
+
+**Personalization sources** (consumed via `useCuratedCompassFilter` → `runUserPersonalization`):
+- Onboarding: sectors, user_type, journey_responses, education status, intent, demographics.
+- Curiosity Compass: assessment_conclusion_keywords, discovery/psychometric/interests signals, archetype.
+- Visual Mode now pre-selects icons that map to the user's onboarding sectors.
+
+**Trending source:** new `get_sector_trending(_per_sector int)` SECURITY DEFINER SQL function — loops the 17 `career_intel_*` tables and returns the top N most-mentioned `role_name`s per sector. Rendered by `<TrendingSectorRail />` at the bottom of every Navigator tab.
+
+**Benefit:** Compass stays focused on assessment + insights; Navigator becomes the personalized exploration playground; trending picks ground the recommendations in real industry signal.
+
+**Files**
+- New: `src/pages/career/CareerNavigator.tsx`, `src/components/career/TrendingSectorRail.tsx`, migration adding `get_sector_trending`.
+- Edited: `src/App.tsx` (route), `src/layouts/DashboardLayout.tsx` (sidebar entry), `src/pages/career/CuriosityCompass.tsx` (remove 4-mode tab body and imports, add CTA).

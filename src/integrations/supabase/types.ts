@@ -10036,6 +10036,15 @@ export type Database = {
           user_id: string
         }[]
       }
+      get_sector_trending: {
+        Args: { _per_sector?: number }
+        Returns: {
+          mentions: number
+          role_name: string
+          sector: string
+          sub_sector: string
+        }[]
+      }
       has_active_entitlement: {
         Args: { _entitlement_key: string }
         Returns: boolean
