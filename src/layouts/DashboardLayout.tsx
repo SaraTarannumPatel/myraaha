@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import OnboardingReminderPopup from "@/components/OnboardingReminderPopup";
 import RewardCelebrationManager from "@/components/curiositycompass/RewardCelebrationManager";
