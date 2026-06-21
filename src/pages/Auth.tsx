@@ -242,7 +242,7 @@ const Auth = () => {
             </button>
             <span className="text-muted-foreground">/</span>
             <button
-              onClick={() => setIsLogin(false)}
+              onClick={() => navigate("/intro?next=signup")}
               className={`transition-colors py-2 px-3 min-h-[44px] flex items-center ${!isLogin ? "text-foreground font-semibold" : "text-muted-foreground"}`}
             >
               New User
