@@ -342,7 +342,7 @@ const Auth = () => {
             {isLogin ? (
               <div className="flex items-center gap-1 font-body text-sm h-[48px] px-4 flex items-center">
                 <span className="text-muted-foreground">New here?</span>
-                <button onClick={() => setIsLogin(false)} className="text-foreground font-medium py-2">
+                <button onClick={() => navigate("/intro?next=signup")} className="text-foreground font-medium py-2">
                   Sign Up
                 </button>
               </div>
