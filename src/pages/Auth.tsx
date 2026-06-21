@@ -48,12 +48,29 @@ const Auth = () => {
   const { signIn, user, profile } = useAuth();
   const navigate = useNavigate();
 
-  // Detect email verification from URL hash
+  // Detect email verification + pre-fill email (from ?email= query, hash, or saved pending email)
   useEffect(() => {
     const hash = window.location.hash;
+    const params = new URLSearchParams(window.location.search);
+    const verifiedParam = params.get("verified");
+    const emailParam = params.get("email");
+
     if (hash && (hash.includes("type=signup") || hash.includes("type=email"))) {
       setEmailVerified(true);
       setIsLogin(true);
+    }
+    if (verifiedParam === "1") {
+      setEmailVerified(true);
+      setIsLogin(true);
+    }
+
+    const pending = (() => {
+      try { return localStorage.getItem("myraaha_pending_email"); } catch { return null; }
+    })();
+    const prefill = emailParam || pending;
+    if (prefill) setEmail(prefill);
+
+    if (hash || verifiedParam || emailParam) {
       window.history.replaceState(null, "", window.location.pathname);
     }
   }, []);
@@ -61,7 +78,11 @@ const Auth = () => {
   useEffect(() => {
     if (user && profile) {
       if (profile.onboarding_status === "complete") {
-        navigate("/dashboard", { replace: true });
+        let last: string | null = null;
+        try { last = localStorage.getItem("myraaha_last_route"); } catch {}
+        const target = last && last.startsWith("/dashboard") ? last : "/dashboard";
+        try { localStorage.removeItem("myraaha_pending_email"); } catch {}
+        navigate(target, { replace: true });
       } else {
         navigate(getOnboardingRoute(profile.onboarding_status), { replace: true });
       }
