@@ -127,15 +127,14 @@ const Auth = () => {
       }
 
       // [ARCHIVED] Email OTP + phone OTP flow paused. Using default email verification link.
-      // Phone number is collected as profile metadata only (must be the one registered with
-      // the user's school / college / university — i.e. their official institutional number).
+      // Persist the email so we can pre-fill it on the login screen after verification.
+      try { localStorage.setItem("myraaha_pending_email", email); } catch {}
+      const verifyRedirect = `${PUBLIC_SITE_URL}/auth?mode=signin&verified=1&email=${encodeURIComponent(email)}`;
       const { error } = await supabase.auth.signUp({
         email,
         password,
         options: {
-          // Always redirect to the published site so the confirmation link does NOT
-          // land on the preview domain (which is gated behind Lovable project access).
-          emailRedirectTo: `${PUBLIC_SITE_URL}/auth?mode=signin&verified=1`,
+          emailRedirectTo: verifyRedirect,
           data: { full_name: email.split("@")[0], phone: cleanPhone },
         },
       });
