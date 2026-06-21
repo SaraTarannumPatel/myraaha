@@ -117,6 +117,13 @@ const DashboardLayout = () => {
   const navigate = useNavigate();
   const [mobileOpen, setMobileOpen] = useState(false);
 
+  // Track last-visited dashboard route so we can restore it on next sign-in.
+  useEffect(() => {
+    if (location.pathname.startsWith("/dashboard")) {
+      try { localStorage.setItem("myraaha_last_route", location.pathname + location.search); } catch {}
+    }
+  }, [location.pathname, location.search]);
+
   // Default to career view when no intent is set yet — prevents empty sidebar.
   const intent = profile?.active_intent || "career";
   const isCareer = intent === "career";
