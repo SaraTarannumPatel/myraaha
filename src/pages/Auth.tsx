@@ -216,7 +216,7 @@ const Auth = () => {
                     {isLogin ? (
                       <>Hey, Login Now</>
                     ) : (
-                      <>Continue your journey!</>
+                      <>Begin your journey!</>
                     )}
                   </h1>
                   <div className="w-[28%] sm:w-[25%] ml-2">
