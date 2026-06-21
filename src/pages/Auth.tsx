@@ -48,12 +48,29 @@ const Auth = () => {
   const { signIn, user, profile } = useAuth();
   const navigate = useNavigate();
 
-  // Detect email verification from URL hash
+  // Detect email verification + pre-fill email (from ?email= query, hash, or saved pending email)
   useEffect(() => {
     const hash = window.location.hash;
+    const params = new URLSearchParams(window.location.search);
+    const verifiedParam = params.get("verified");
+    const emailParam = params.get("email");
+
     if (hash && (hash.includes("type=signup") || hash.includes("type=email"))) {
       setEmailVerified(true);
       setIsLogin(true);
+    }
+    if (verifiedParam === "1") {
+      setEmailVerified(true);
+      setIsLogin(true);
+    }
+
+    const pending = (() => {
+      try { return localStorage.getItem("myraaha_pending_email"); } catch { return null; }
+    })();
+    const prefill = emailParam || pending;
+    if (prefill) setEmail(prefill);
+
+    if (hash || verifiedParam || emailParam) {
       window.history.replaceState(null, "", window.location.pathname);
     }
   }, []);
@@ -61,7 +78,11 @@ const Auth = () => {
   useEffect(() => {
     if (user && profile) {
       if (profile.onboarding_status === "complete") {
-        navigate("/dashboard", { replace: true });
+        let last: string | null = null;
+        try { last = localStorage.getItem("myraaha_last_route"); } catch {}
+        const target = last && last.startsWith("/dashboard") ? last : "/dashboard";
+        try { localStorage.removeItem("myraaha_pending_email"); } catch {}
+        navigate(target, { replace: true });
       } else {
         navigate(getOnboardingRoute(profile.onboarding_status), { replace: true });
       }
@@ -106,15 +127,14 @@ const Auth = () => {
       }
 
       // [ARCHIVED] Email OTP + phone OTP flow paused. Using default email verification link.
-      // Phone number is collected as profile metadata only (must be the one registered with
-      // the user's school / college / university — i.e. their official institutional number).
+      // Persist the email so we can pre-fill it on the login screen after verification.
+      try { localStorage.setItem("myraaha_pending_email", email); } catch {}
+      const verifyRedirect = `${PUBLIC_SITE_URL}/auth?mode=signin&verified=1&email=${encodeURIComponent(email)}`;
       const { error } = await supabase.auth.signUp({
         email,
         password,
         options: {
-          // Always redirect to the published site so the confirmation link does NOT
-          // land on the preview domain (which is gated behind Lovable project access).
-          emailRedirectTo: `${PUBLIC_SITE_URL}/auth?mode=signin&verified=1`,
+          emailRedirectTo: verifyRedirect,
           data: { full_name: email.split("@")[0], phone: cleanPhone },
         },
       });
@@ -196,7 +216,7 @@ const Auth = () => {
                     {isLogin ? (
                       <>Hey, Login Now</>
                     ) : (
-                      <>Continue your journey!</>
+                      <>Begin your journey!</>
                     )}
                   </h1>
                   <div className="w-[28%] sm:w-[25%] ml-2">
@@ -222,7 +242,7 @@ const Auth = () => {
             </button>
             <span className="text-muted-foreground">/</span>
             <button
-              onClick={() => setIsLogin(false)}
+              onClick={() => navigate("/intro?next=signup")}
               className={`transition-colors py-2 px-3 min-h-[44px] flex items-center ${!isLogin ? "text-foreground font-semibold" : "text-muted-foreground"}`}
             >
               New User
@@ -322,7 +342,7 @@ const Auth = () => {
             {isLogin ? (
               <div className="flex items-center gap-1 font-body text-sm h-[48px] px-4 flex items-center">
                 <span className="text-muted-foreground">New here?</span>
-                <button onClick={() => setIsLogin(false)} className="text-foreground font-medium py-2">
+                <button onClick={() => navigate("/intro?next=signup")} className="text-foreground font-medium py-2">
                   Sign Up
                 </button>
               </div>
