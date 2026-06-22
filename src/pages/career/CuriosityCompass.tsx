@@ -29,6 +29,9 @@ import InterestsAssessment from "@/components/curiositycompass/InterestsAssessme
 import AssessmentGate from "@/components/curiositycompass/AssessmentGate";
 import OnboardingCelebration from "@/components/curiositycompass/OnboardingCelebration";
 import InsightsView from "@/components/curiositycompass/InsightsView";
+import AssessmentAnswerReview from "@/components/curiositycompass/AssessmentAnswerReview";
+import AllAssessmentsCompleteDialog from "@/components/curiositycompass/AllAssessmentsCompleteDialog";
+import CombinedPathMap from "@/components/curiositycompass/CombinedPathMap";
 import { useAssessmentRewards } from "@/hooks/useAssessmentRewards";
 import { buildDiscoverySignal } from "@/lib/assessmentSignalMap";
 import { calibrateArchetype } from "@/lib/archetypeCalibration";
