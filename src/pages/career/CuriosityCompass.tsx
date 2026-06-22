@@ -1590,7 +1590,7 @@ const CuriosityCompass = () => {
                           if (discoveryDone && psychometricDone) {
                             toast.success("All three assessments complete! Every section unlocked 🎉");
                           }
-                          setTab("insights");
+                          setTab("pathmap");
                           window.scrollTo({ top: 0, behavior: "smooth" });
                         }}
                         recordSignal={recordSignal}
