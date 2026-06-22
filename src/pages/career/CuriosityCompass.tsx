@@ -379,6 +379,41 @@ const AssessmentTestSection = ({ user, recordSignal, recordMultipleSignals, onAd
     else setShowReview(true);
   };
 
+  if (showReview && !completed) {
+    const items: Array<{ id: string; section?: string; question: string; answer: string }> = [];
+    variantQs.forEach((vq) => {
+      const v = variantAnswers[vq.id];
+      const lbl = v ? (vq.options.find((o: any) => o.value === v)?.label || String(v)) : "";
+      items.push({ id: `v_${vq.id}`, section: "Vibe Check", question: vq.question, answer: lbl });
+    });
+    journeyQs.forEach((jq) => {
+      const v = journeyAnswers[jq.id];
+      const lbl = !v
+        ? ""
+        : Array.isArray(v)
+          ? v.map((x) => jq.options.find((o: any) => o.value === x)?.label || x).join(", ")
+          : (jq.options.find((o: any) => o.value === v)?.label || String(v));
+      items.push({ id: `j_${jq.id}`, section: "Journey", question: jq.question, answer: lbl });
+    });
+    return (
+      <AssessmentAnswerReview
+        title="your discovery answers"
+        items={items}
+        onEdit={(id) => {
+          if (id.startsWith("v_")) {
+            const idx = variantQs.findIndex((q) => q.id === id.slice(2));
+            if (idx >= 0) { setPhase("variant"); setVariantStep(idx); setShowReview(false); }
+          } else {
+            const idx = journeyQs.findIndex((q) => q.id === id.slice(2));
+            if (idx >= 0) { setPhase("journey"); setJourneyStep(idx); setShowReview(false); }
+          }
+        }}
+        onBack={() => { setShowReview(false); setPhase("journey"); setJourneyStep(journeyQs.length - 1); }}
+        onSubmit={async () => { await handleComplete(); setShowReview(false); }}
+      />
+    );
+  }
+
   return (
     <div className="w-full">
       <motion.div
