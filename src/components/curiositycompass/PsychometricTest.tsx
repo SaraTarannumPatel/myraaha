@@ -10,6 +10,7 @@ import { ArrowRight, ArrowLeft, CheckCircle2, ClipboardCheck, Brain, Check } fro
 import { toast } from "sonner";
 import { useAssessmentRewards } from "@/hooks/useAssessmentRewards";
 import { buildPsychometricSignal, PSYCHOMETRIC_SIGNAL_MAP } from "@/lib/assessmentSignalMap";
+import AssessmentAnswerReview from "@/components/curiositycompass/AssessmentAnswerReview";
 
 interface PsychometricQuestion {
   id: string;
