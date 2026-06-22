@@ -373,7 +373,7 @@ const AssessmentTestSection = ({ user, recordSignal, recordMultipleSignals, onAd
 
   const handleSkipJourney = () => {
     if (journeyStep < journeyQs.length - 1) setJourneyStep(journeyStep + 1);
-    else handleComplete();
+    else setShowReview(true);
   };
 
   return (
