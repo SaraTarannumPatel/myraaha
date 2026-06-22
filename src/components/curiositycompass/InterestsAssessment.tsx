@@ -9,6 +9,7 @@ import { ArrowRight, ArrowLeft, CheckCircle2, Heart, Check } from "lucide-react"
 import { toast } from "sonner";
 import { useAssessmentRewards } from "@/hooks/useAssessmentRewards";
 import { buildInterestsSignal, INTERESTS_QUESTIONS, type InterestsQuestion } from "@/lib/assessmentSignalMap";
+import AssessmentAnswerReview from "@/components/curiositycompass/AssessmentAnswerReview";
 
 interface Props {
   userId: string;
