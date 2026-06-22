@@ -1274,6 +1274,7 @@ const CuriosityCompass = () => {
                 { value: "assessment", label: "Discover Yourself", icon: ClipboardCheck },
                 { value: "psychometric", label: "Psychometric", icon: Brain },
                 { value: "interests", label: "Interests Test", icon: Heart },
+                { value: "pathmap", label: "Path Map", icon: Map, locked: !allThreeDone },
                 { value: "explore", label: "Explore Interests", icon: Heart, locked: !bothAssessmentsDone },
                 { value: "quests", label: "Quests", icon: Trophy, locked: !bothAssessmentsDone },
                 { value: "domains", label: "Domains", icon: Target, locked: !bothAssessmentsDone },
