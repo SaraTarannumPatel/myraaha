@@ -205,7 +205,7 @@ const AssessmentTestSection = ({ user, recordSignal, recordMultipleSignals, onAd
     if (journeyStep < journeyQs.length - 1) {
       setJourneyStep(journeyStep + 1);
     } else {
-      handleComplete();
+      setShowReview(true);
     }
   };
 
