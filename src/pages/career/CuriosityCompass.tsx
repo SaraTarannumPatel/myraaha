@@ -742,6 +742,7 @@ const CuriosityCompass = () => {
   const psychometricDone = !!profile?.journey_responses?.psychometric_completed;
   const interestsDone = !!profile?.journey_responses?.interests_completed;
   const bothAssessmentsDone = discoveryDone && psychometricDone && interestsDone;
+  const allThreeDone = bothAssessmentsDone;
   const [mode, setMode] = useState<string | null>(null);
   const [careerCards, setCareerCards] = useState<any[]>([]);
   const [interactions, setInteractions] = useState<Record<string, string>>({});
