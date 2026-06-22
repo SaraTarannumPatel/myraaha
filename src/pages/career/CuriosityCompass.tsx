@@ -1221,6 +1221,9 @@ const CuriosityCompass = () => {
       {/* Onboarding celebration for fully completed users */}
       <OnboardingCelebration onDismiss={() => { setShowCelebration(false); setTab("assessment"); }} />
 
+      {/* Final completion modal — fires once all three assessments are done */}
+      <AllAssessmentsCompleteDialog />
+
       <Tabs value={tab} onValueChange={(v) => {
         // Block locked tabs
         if (!bothAssessmentsDone && !["assessment", "psychometric", "interests"].includes(v)) {
