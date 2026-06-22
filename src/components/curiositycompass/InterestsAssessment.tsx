@@ -124,6 +124,28 @@ const InterestsAssessment = ({ userId, onComplete, recordSignal }: Props) => {
     );
   }
 
+  if (showReview && !completed) {
+    const items = INTERESTS_QUESTIONS.map((q) => ({
+      id: q.id,
+      section: q.sectionLabel,
+      question: q.question,
+      answer: answers[q.id]?.label || "",
+    }));
+    return (
+      <AssessmentAnswerReview
+        title="your interests answers"
+        items={items}
+        submitting={saving}
+        onEdit={(qid) => {
+          const idx = INTERESTS_QUESTIONS.findIndex((q) => q.id === qid);
+          if (idx >= 0) { setStep(idx); setShowReview(false); }
+        }}
+        onBack={() => { setShowReview(false); setStep(total - 1); }}
+        onSubmit={handleComplete}
+      />
+    );
+  }
+
   return (
     <div className="w-full">
       <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} className="w-full bg-white rounded-3xl border border-border shadow-xl overflow-hidden relative">
