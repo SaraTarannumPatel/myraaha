@@ -132,12 +132,12 @@ const PsychometricTest = ({ userId, onComplete, recordSignal }: Props) => {
 
   const handleNext = () => {
     if (step < total - 1) setStep(step + 1);
-    else handleComplete();
+    else setShowReview(true);
   };
 
   const handleSkip = () => {
     if (step < total - 1) setStep(step + 1);
-    else handleComplete();
+    else setShowReview(true);
   };
 
   const handleComplete = async () => {
