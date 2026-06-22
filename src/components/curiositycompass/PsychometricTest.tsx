@@ -206,6 +206,28 @@ const PsychometricTest = ({ userId, onComplete, recordSignal }: Props) => {
     );
   }
 
+  if (showReview && !completed) {
+    const items = PSYCHOMETRIC_QUESTIONS.map((q) => ({
+      id: q.id,
+      section: q.sectionLabel,
+      question: q.question,
+      answer: answers[q.id] || "",
+    }));
+    return (
+      <AssessmentAnswerReview
+        title="your psychometric answers"
+        items={items}
+        submitting={synthesizing}
+        onEdit={(qid) => {
+          const idx = PSYCHOMETRIC_QUESTIONS.findIndex((q) => q.id === qid);
+          if (idx >= 0) { setStep(idx); setShowReview(false); }
+        }}
+        onBack={() => { setShowReview(false); setStep(total - 1); }}
+        onSubmit={handleComplete}
+      />
+    );
+  }
+
   return (
     <div className="w-full">
       <motion.div
