@@ -173,3 +173,26 @@ CareerMap-CareerScape spec.
 **Files**
 - New: `src/pages/career/CareerNavigator.tsx`, `src/components/career/TrendingSectorRail.tsx`, migration adding `get_sector_trending`.
 - Edited: `src/App.tsx` (route), `src/layouts/DashboardLayout.tsx` (sidebar entry), `src/pages/career/CuriosityCompass.tsx` (remove 4-mode tab body and imports, add CTA).
+
+---
+
+## 2026-06-22 — Curiosity Compass: Review-Before-Submit, Combined Conclusion & Best/Force/No Fit engine
+
+**What**
+- Pruned 3 redundant psychometric questions (`time_horizon`, `goal_setting`, `role_energy`) — total 50 → 47, signal coverage preserved by merging `usedFor` tags into the retained twins.
+- New shared `AssessmentAnswerReview` component: post-test answer preview with per-question Edit + final Submit. Wired into Discovery, Psychometric, and Interests. Final synthesizers + completion flags now fire only on Submit Final, not on the last "Next" click.
+- New `AllAssessmentsCompleteDialog`: one-time congratulations modal triggered when all three assessments are complete (gated by `journey_responses.compass_finale_shown`).
+- New "Path Map" tab in Curiosity Compass surfacing the Combined Conclusion narrative + Best Fit / Force Fit / No Fit lists across roles, industries, sectors, domains, skills and subjects.
+
+**Why**
+- Users needed an explicit checkpoint before locking results.
+- The original journey ended at "Interests done" — there was no synthesis that combined onboarding + 3 assessments into a single identity and matched it against the role universe.
+
+**Backend**
+- New tables `combined_conclusions`, `compass_fit_results` (RLS scoped to `auth.uid()`, GRANTed to authenticated + service_role).
+- New SQL function `compute_compass_fit(_user_id uuid)` — SECURITY DEFINER. Walks `assessment_conclusion_keywords` + `user_onboarding_sectors`, cross-matches against `job_roles_directory`, the 17 `career_intel_*` tables, and the industry/sector/domain/skill/subject directories, scores each entity, and buckets into `best / force / no`.
+- New edge function `combined-conclusion-synthesizer` — pulls all signals, calls Gemini 2.5 Flash for the Combined Conclusion JSON, upserts into `combined_conclusions`, then invokes `compute_compass_fit`. Triggered automatically on Interests submit; user can also recompute from the Path Map UI.
+
+**Files**
+- New: `src/components/curiositycompass/AssessmentAnswerReview.tsx`, `AllAssessmentsCompleteDialog.tsx`, `CombinedPathMap.tsx`; `supabase/functions/combined-conclusion-synthesizer/index.ts`; migration creating `combined_conclusions`, `compass_fit_results`, `compute_compass_fit`.
+- Edited: `src/components/curiositycompass/PsychometricTest.tsx`, `InterestsAssessment.tsx`, `src/pages/career/CuriosityCompass.tsx`.
