@@ -24,6 +24,7 @@ const InterestsAssessment = ({ userId, onComplete, recordSignal }: Props) => {
   const [answers, setAnswers] = useState<Record<string, { value: string; label: string }>>({});
   const [completed, setCompleted] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [showReview, setShowReview] = useState(false);
 
   useEffect(() => {
     if (profile?.journey_responses?.interests_completed) setCompleted(true);
