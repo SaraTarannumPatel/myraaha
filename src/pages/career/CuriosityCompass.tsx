@@ -1599,6 +1599,13 @@ const CuriosityCompass = () => {
                   </div>
                 </TabsContent>
 
+                {/* Combined Path Map — Best / Force / No Fit */}
+                <TabsContent value="pathmap" className="outline-none mt-0">
+                  <CombinedPathMap />
+                </TabsContent>
+
+
+
 
                 {/* Explore Interests — moved into Career Navigator module */}
                 <TabsContent value="explore" className="outline-none mt-0 space-y-6">
