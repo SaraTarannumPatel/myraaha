@@ -101,6 +101,7 @@ const AssessmentTestSection = ({ user, recordSignal, recordMultipleSignals, onAd
   const [journeyStep, setJourneyStep] = useState(0);
   const [journeyAnswers, setJourneyAnswers] = useState<Record<string, string | string[]>>({});
   const [completed, setCompleted] = useState(false);
+  const [showReview, setShowReview] = useState(false);
 
   const journeyQs = getJourneyQuestions(journeyId);
   const meta = journeyMetas[journeyId];
