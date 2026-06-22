@@ -93,6 +93,8 @@ const InterestsAssessment = ({ userId, onComplete, recordSignal }: Props) => {
     try {
       await supabase.functions.invoke("assessment-synthesizer", { body: { test_type: "interests" } });
       await supabase.functions.invoke("assessment-synthesizer", { body: { test_type: "combined" } });
+      // Fire the new combined-conclusion + fit engine (best/force/no fit)
+      await supabase.functions.invoke("combined-conclusion-synthesizer", { body: {} });
       const { runUserPersonalization } = await import("@/lib/personalizationPipeline");
       runUserPersonalization(userId, { force: true }).catch(() => {});
     } catch (e) {
