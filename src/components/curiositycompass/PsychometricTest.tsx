@@ -87,6 +87,7 @@ const PsychometricTest = ({ userId, onComplete, recordSignal }: Props) => {
   const [answers, setAnswers] = useState<Record<string, string>>({});
   const [completed, setCompleted] = useState(false);
   const [synthesizing, setSynthesizing] = useState(false);
+  const [showReview, setShowReview] = useState(false);
 
   useEffect(() => {
     if (profile?.journey_responses?.psychometric_completed) setCompleted(true);
