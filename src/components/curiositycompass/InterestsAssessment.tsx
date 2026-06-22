@@ -9,6 +9,7 @@ import { ArrowRight, ArrowLeft, CheckCircle2, Heart, Check } from "lucide-react"
 import { toast } from "sonner";
 import { useAssessmentRewards } from "@/hooks/useAssessmentRewards";
 import { buildInterestsSignal, INTERESTS_QUESTIONS, type InterestsQuestion } from "@/lib/assessmentSignalMap";
+import AssessmentAnswerReview from "@/components/curiositycompass/AssessmentAnswerReview";
 
 interface Props {
   userId: string;
@@ -23,6 +24,7 @@ const InterestsAssessment = ({ userId, onComplete, recordSignal }: Props) => {
   const [answers, setAnswers] = useState<Record<string, { value: string; label: string }>>({});
   const [completed, setCompleted] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [showReview, setShowReview] = useState(false);
 
   useEffect(() => {
     if (profile?.journey_responses?.interests_completed) setCompleted(true);
@@ -74,7 +76,7 @@ const InterestsAssessment = ({ userId, onComplete, recordSignal }: Props) => {
 
   const handleNext = () => {
     if (step < total - 1) setStep(step + 1);
-    else handleComplete();
+    else setShowReview(true);
   };
 
   const handleComplete = async () => {
@@ -91,6 +93,8 @@ const InterestsAssessment = ({ userId, onComplete, recordSignal }: Props) => {
     try {
       await supabase.functions.invoke("assessment-synthesizer", { body: { test_type: "interests" } });
       await supabase.functions.invoke("assessment-synthesizer", { body: { test_type: "combined" } });
+      // Fire the new combined-conclusion + fit engine (best/force/no fit)
+      await supabase.functions.invoke("combined-conclusion-synthesizer", { body: {} });
       const { runUserPersonalization } = await import("@/lib/personalizationPipeline");
       runUserPersonalization(userId, { force: true }).catch(() => {});
     } catch (e) {
@@ -117,6 +121,28 @@ const InterestsAssessment = ({ userId, onComplete, recordSignal }: Props) => {
           </div>
         </CardContent>
       </Card>
+    );
+  }
+
+  if (showReview && !completed) {
+    const items = INTERESTS_QUESTIONS.map((q) => ({
+      id: q.id,
+      section: q.sectionLabel,
+      question: q.question,
+      answer: answers[q.id]?.label || "",
+    }));
+    return (
+      <AssessmentAnswerReview
+        title="your interests answers"
+        items={items}
+        submitting={saving}
+        onEdit={(qid) => {
+          const idx = INTERESTS_QUESTIONS.findIndex((q) => q.id === qid);
+          if (idx >= 0) { setStep(idx); setShowReview(false); }
+        }}
+        onBack={() => { setShowReview(false); setStep(total - 1); }}
+        onSubmit={handleComplete}
+      />
     );
   }
 

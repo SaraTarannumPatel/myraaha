@@ -10,6 +10,7 @@ import { ArrowRight, ArrowLeft, CheckCircle2, ClipboardCheck, Brain, Check } fro
 import { toast } from "sonner";
 import { useAssessmentRewards } from "@/hooks/useAssessmentRewards";
 import { buildPsychometricSignal, PSYCHOMETRIC_SIGNAL_MAP } from "@/lib/assessmentSignalMap";
+import AssessmentAnswerReview from "@/components/curiositycompass/AssessmentAnswerReview";
 
 interface PsychometricQuestion {
   id: string;
@@ -35,8 +36,7 @@ const PSYCHOMETRIC_QUESTIONS: PsychometricQuestion[] = [
   { id: "persistence_motivation", section: "I", sectionLabel: "Persistence", question: "You're more motivated by:", options: ["Long-term outcomes","Medium-term milestones","Immediate feedback"], usedFor: ["SkillStacker","AI Roadmap"] },
   { id: "feedback_critical", section: "L", sectionLabel: "Feedback Receptivity", question: "When receiving critical feedback, you usually:", options: ["Reflect and apply it","Feel defensive initially but adapt","Feel discouraged","Prefer minimal feedback"], usedFor: ["Career Coach","Mentor Match"] },
   { id: "feedback_style", section: "L", sectionLabel: "Feedback Receptivity", question: "Feedback helps you most when it is:", options: ["Direct and honest","Gentle and supportive","Structured and specific"], usedFor: ["Career Coach","Career Therapist"] },
-  { id: "role_initiative", section: "M", sectionLabel: "Role Orientation", question: "In a new initiative, you naturally:", options: ["Start things from scratch","Improve existing systems","Explore ideas and possibilities","Support execution"], usedFor: ["Project Playground","Job Matching","MVP Builder"] },
-  { id: "role_energy", section: "M", sectionLabel: "Role Orientation", question: "You feel most energized when:", options: ["Creating something new","Solving efficiency problems","Learning and experimenting","Helping others succeed"], usedFor: ["Project Playground","Job Matching"] },
+  { id: "role_initiative", section: "M", sectionLabel: "Role Orientation", question: "In a new initiative, you naturally:", options: ["Start things from scratch","Improve existing systems","Explore ideas and possibilities","Support execution"], usedFor: ["Project Playground","Job Matching","MVP Builder","Career Cards"] },
   { id: "moral_risk", section: "N", sectionLabel: "Moral Courage", question: "If doing the right thing risks personal loss, you're likely to:", options: ["Still do it","Try to find a compromise","Avoid the situation","Not sure"], usedFor: ["Job Matching","SelfGraph"] },
   { id: "moral_authority", section: "N", sectionLabel: "Moral Courage", question: "When authority conflicts with your principles, you:", options: ["Speak up","Express concerns cautiously","Stay silent","Feel conflicted"], usedFor: ["Mentor Match","SelfGraph"] },
   { id: "learning_apply", section: "P", sectionLabel: "Learning Transfer", question: "After learning something new, you usually:", options: ["Apply it quickly","Apply it when needed","Remember it but don't apply much","Forget unless prompted"], usedFor: ["Content Library","Project Playground"] },
@@ -49,8 +49,7 @@ const PSYCHOMETRIC_QUESTIONS: PsychometricQuestion[] = [
   { id: "autonomy_pref", section: "S", sectionLabel: "Autonomy vs Collaboration", question: "You do your best work when:", options: ["Working independently","Pairing with one person","In a small team","In a structured group"], usedFor: ["Job Matching","Peer Circles","Project Playground"] },
   { id: "collab_style", section: "S", sectionLabel: "Autonomy vs Collaboration", question: "In a group project, you usually take the role of:", options: ["Leader","Builder","Connector","Specialist"], usedFor: ["Peer Circles","Mentor Match","Job Matching"] },
   { id: "identity_clarity", section: "T", sectionLabel: "Identity Clarity", question: "How clearly do you know what kind of work suits you?", options: ["Very clearly","Somewhat clearly","Still figuring it out","Not at all"], usedFor: ["SelfGraph","Career Coach","AI Roadmap"] },
-  { id: "future_orientation", section: "U", sectionLabel: "Future Orientation", question: "When thinking about your future, you mostly:", options: ["Plan years ahead","Plan a few months ahead","Take it week by week","Live in the moment"], usedFor: ["AI Roadmap","Transition Planner","SelfGraph"] },
-  { id: "time_horizon", section: "U", sectionLabel: "Future Orientation", question: "Which time horizon feels most natural to commit to?", options: ["5+ years","1–3 years","A few months","A few weeks"], usedFor: ["AI Roadmap","SkillStacker"] },
+  { id: "future_orientation", section: "U", sectionLabel: "Future Orientation", question: "When thinking about your future, you mostly:", options: ["Plan years ahead","Plan a few months ahead","Take it week by week","Live in the moment"], usedFor: ["AI Roadmap","Transition Planner","SelfGraph","SkillStacker"] },
   { id: "energy_recovery", section: "V", sectionLabel: "Energy & Recovery", question: "After intense effort, you recharge best by:", options: ["Alone time","Time with close friends","Active hobbies","Doing nothing"], usedFor: ["Career Therapist","Mindset Builder","Moodboard"] },
   { id: "stress_signal", section: "V", sectionLabel: "Energy & Recovery", question: "Your earliest sign of burnout is usually:", options: ["Low motivation","Irritability","Trouble sleeping","Avoiding people"], usedFor: ["Career Therapist","Mindset Builder"] },
   { id: "conflict_style", section: "W", sectionLabel: "Conflict Resolution", question: "In a disagreement, you usually:", options: ["Address it directly","Try to find common ground","Step back to cool off","Avoid it"], usedFor: ["Peer Circles","Mentor Match","Career Coach"] },
@@ -62,8 +61,7 @@ const PSYCHOMETRIC_QUESTIONS: PsychometricQuestion[] = [
   { id: "recognition_pref", section: "AA", sectionLabel: "Achievement Drive", question: "Recognition matters to you when it comes from:", options: ["Experts in the field","Close peers","A wide audience","Doesn't really matter"], usedFor: ["Mentor Match","Peer Circles","SelfGraph"] },
   { id: "social_comfort", section: "AB", sectionLabel: "Social Comfort", question: "In a new group, you usually:", options: ["Talk to everyone","Find one or two people","Listen and observe","Keep to yourself"], usedFor: ["Peer Circles","Mentor Match","Job Matching"] },
   { id: "leadership_style", section: "AC", sectionLabel: "Leadership Style", question: "When leading others, you most naturally:", options: ["Set vision","Coach individually","Coordinate execution","Lead by example"], usedFor: ["Mentor Match","Job Matching","MVP Builder"] },
-  { id: "planning_style", section: "AD", sectionLabel: "Planning Style", question: "Your default approach to a new goal is:", options: ["Detailed plan first","Rough plan + iterate","Start and figure it out","Wait until clear"], usedFor: ["AI Roadmap","Transition Planner"] },
-  { id: "goal_setting", section: "AD", sectionLabel: "Planning Style", question: "You set goals that are usually:", options: ["Ambitious stretch goals","Realistic and steady","Tied to others' expectations","Open-ended"], usedFor: ["AI Roadmap","SkillStacker"] },
+  { id: "planning_style", section: "AD", sectionLabel: "Planning Style", question: "Your default approach to a new goal is:", options: ["Detailed plan first","Rough plan + iterate","Start and figure it out","Wait until clear"], usedFor: ["AI Roadmap","Transition Planner","SkillStacker"] },
   { id: "structure_pref", section: "AE", sectionLabel: "Structure Preference", question: "You thrive when your day is:", options: ["Tightly structured","Loosely scheduled","Flexible and reactive","Completely free"], usedFor: ["Job Matching","Project Playground"] },
   { id: "deep_vs_broad", section: "AF", sectionLabel: "Skill Breadth", question: "Your ideal expertise looks like:", options: ["Deep specialist","T-shaped (deep + broad)","Generalist","Renaissance polymath"], usedFor: ["SkillStacker","Career Cards"] },
   { id: "learning_pace", section: "AG", sectionLabel: "Learning Pace", question: "You learn best at a pace that is:", options: ["Fast and intensive","Steady and consistent","Slow and reflective","Self-driven on demand"], usedFor: ["Content Library","SkillStacker"] },
@@ -89,6 +87,7 @@ const PsychometricTest = ({ userId, onComplete, recordSignal }: Props) => {
   const [answers, setAnswers] = useState<Record<string, string>>({});
   const [completed, setCompleted] = useState(false);
   const [synthesizing, setSynthesizing] = useState(false);
+  const [showReview, setShowReview] = useState(false);
 
   useEffect(() => {
     if (profile?.journey_responses?.psychometric_completed) setCompleted(true);
@@ -133,12 +132,12 @@ const PsychometricTest = ({ userId, onComplete, recordSignal }: Props) => {
 
   const handleNext = () => {
     if (step < total - 1) setStep(step + 1);
-    else handleComplete();
+    else setShowReview(true);
   };
 
   const handleSkip = () => {
     if (step < total - 1) setStep(step + 1);
-    else handleComplete();
+    else setShowReview(true);
   };
 
   const handleComplete = async () => {
@@ -204,6 +203,28 @@ const PsychometricTest = ({ userId, onComplete, recordSignal }: Props) => {
           )}
         </CardContent>
       </Card>
+    );
+  }
+
+  if (showReview && !completed) {
+    const items = PSYCHOMETRIC_QUESTIONS.map((q) => ({
+      id: q.id,
+      section: q.sectionLabel,
+      question: q.question,
+      answer: answers[q.id] || "",
+    }));
+    return (
+      <AssessmentAnswerReview
+        title="your psychometric answers"
+        items={items}
+        submitting={synthesizing}
+        onEdit={(qid) => {
+          const idx = PSYCHOMETRIC_QUESTIONS.findIndex((q) => q.id === qid);
+          if (idx >= 0) { setStep(idx); setShowReview(false); }
+        }}
+        onBack={() => { setShowReview(false); setStep(total - 1); }}
+        onSubmit={handleComplete}
+      />
     );
   }
 

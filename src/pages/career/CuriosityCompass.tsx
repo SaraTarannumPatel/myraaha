@@ -29,6 +29,9 @@ import InterestsAssessment from "@/components/curiositycompass/InterestsAssessme
 import AssessmentGate from "@/components/curiositycompass/AssessmentGate";
 import OnboardingCelebration from "@/components/curiositycompass/OnboardingCelebration";
 import InsightsView from "@/components/curiositycompass/InsightsView";
+import AssessmentAnswerReview from "@/components/curiositycompass/AssessmentAnswerReview";
+import AllAssessmentsCompleteDialog from "@/components/curiositycompass/AllAssessmentsCompleteDialog";
+import CombinedPathMap from "@/components/curiositycompass/CombinedPathMap";
 import { useAssessmentRewards } from "@/hooks/useAssessmentRewards";
 import { buildDiscoverySignal } from "@/lib/assessmentSignalMap";
 import { calibrateArchetype } from "@/lib/archetypeCalibration";
@@ -101,6 +104,7 @@ const AssessmentTestSection = ({ user, recordSignal, recordMultipleSignals, onAd
   const [journeyStep, setJourneyStep] = useState(0);
   const [journeyAnswers, setJourneyAnswers] = useState<Record<string, string | string[]>>({});
   const [completed, setCompleted] = useState(false);
+  const [showReview, setShowReview] = useState(false);
 
   const journeyQs = getJourneyQuestions(journeyId);
   const meta = journeyMetas[journeyId];
@@ -204,7 +208,7 @@ const AssessmentTestSection = ({ user, recordSignal, recordMultipleSignals, onAd
     if (journeyStep < journeyQs.length - 1) {
       setJourneyStep(journeyStep + 1);
     } else {
-      handleComplete();
+      setShowReview(true);
     }
   };
 
@@ -372,8 +376,43 @@ const AssessmentTestSection = ({ user, recordSignal, recordMultipleSignals, onAd
 
   const handleSkipJourney = () => {
     if (journeyStep < journeyQs.length - 1) setJourneyStep(journeyStep + 1);
-    else handleComplete();
+    else setShowReview(true);
   };
+
+  if (showReview && !completed) {
+    const items: Array<{ id: string; section?: string; question: string; answer: string }> = [];
+    variantQs.forEach((vq) => {
+      const v = variantAnswers[vq.id];
+      const lbl = v ? (vq.options.find((o: any) => o.value === v)?.label || String(v)) : "";
+      items.push({ id: `v_${vq.id}`, section: "Vibe Check", question: vq.question, answer: lbl });
+    });
+    journeyQs.forEach((jq) => {
+      const v = journeyAnswers[jq.id];
+      const lbl = !v
+        ? ""
+        : Array.isArray(v)
+          ? v.map((x) => jq.options.find((o: any) => o.value === x)?.label || x).join(", ")
+          : (jq.options.find((o: any) => o.value === v)?.label || String(v));
+      items.push({ id: `j_${jq.id}`, section: "Journey", question: jq.question, answer: lbl });
+    });
+    return (
+      <AssessmentAnswerReview
+        title="your discovery answers"
+        items={items}
+        onEdit={(id) => {
+          if (id.startsWith("v_")) {
+            const idx = variantQs.findIndex((q) => q.id === id.slice(2));
+            if (idx >= 0) { setPhase("variant"); setVariantStep(idx); setShowReview(false); }
+          } else {
+            const idx = journeyQs.findIndex((q) => q.id === id.slice(2));
+            if (idx >= 0) { setPhase("journey"); setJourneyStep(idx); setShowReview(false); }
+          }
+        }}
+        onBack={() => { setShowReview(false); setPhase("journey"); setJourneyStep(journeyQs.length - 1); }}
+        onSubmit={async () => { await handleComplete(); setShowReview(false); }}
+      />
+    );
+  }
 
   return (
     <div className="w-full">
@@ -703,6 +742,7 @@ const CuriosityCompass = () => {
   const psychometricDone = !!profile?.journey_responses?.psychometric_completed;
   const interestsDone = !!profile?.journey_responses?.interests_completed;
   const bothAssessmentsDone = discoveryDone && psychometricDone && interestsDone;
+  const allThreeDone = bothAssessmentsDone;
   const [mode, setMode] = useState<string | null>(null);
   const [careerCards, setCareerCards] = useState<any[]>([]);
   const [interactions, setInteractions] = useState<Record<string, string>>({});
@@ -1181,9 +1221,12 @@ const CuriosityCompass = () => {
       {/* Onboarding celebration for fully completed users */}
       <OnboardingCelebration onDismiss={() => { setShowCelebration(false); setTab("assessment"); }} />
 
+      {/* Final completion modal — fires once all three assessments are done */}
+      <AllAssessmentsCompleteDialog />
+
       <Tabs value={tab} onValueChange={(v) => {
         // Block locked tabs
-        if (!bothAssessmentsDone && !["assessment", "psychometric", "interests"].includes(v)) {
+        if (!bothAssessmentsDone && !["assessment", "psychometric", "interests", "pathmap"].includes(v)) {
           toast.info("Complete both assessments first to unlock this section.");
           return;
         }
@@ -1235,6 +1278,7 @@ const CuriosityCompass = () => {
                 { value: "assessment", label: "Discover Yourself", icon: ClipboardCheck },
                 { value: "psychometric", label: "Psychometric", icon: Brain },
                 { value: "interests", label: "Interests Test", icon: Heart },
+                { value: "pathmap", label: "Path Map", icon: Map, locked: !allThreeDone },
                 { value: "explore", label: "Explore Interests", icon: Heart, locked: !bothAssessmentsDone },
                 { value: "quests", label: "Quests", icon: Trophy, locked: !bothAssessmentsDone },
                 { value: "domains", label: "Domains", icon: Target, locked: !bothAssessmentsDone },
@@ -1549,7 +1593,7 @@ const CuriosityCompass = () => {
                           if (discoveryDone && psychometricDone) {
                             toast.success("All three assessments complete! Every section unlocked 🎉");
                           }
-                          setTab("insights");
+                          setTab("pathmap");
                           window.scrollTo({ top: 0, behavior: "smooth" });
                         }}
                         recordSignal={recordSignal}
@@ -1557,6 +1601,13 @@ const CuriosityCompass = () => {
                     </div>
                   </div>
                 </TabsContent>
+
+                {/* Combined Path Map — Best / Force / No Fit */}
+                <TabsContent value="pathmap" className="outline-none mt-0">
+                  <CombinedPathMap />
+                </TabsContent>
+
+
 
 
                 {/* Explore Interests — moved into Career Navigator module */}

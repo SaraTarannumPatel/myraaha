@@ -1877,6 +1877,69 @@ export type Database = {
         }
         Relationships: []
       }
+      combined_conclusions: {
+        Row: {
+          cognitive_signature: string | null
+          domain_affinities: Json | null
+          dominant_archetype: string | null
+          generated_at: string
+          growth_orientation: string | null
+          hard_constraints: Json | null
+          id: string
+          identity_summary: string | null
+          narrative_long: string | null
+          raw: Json | null
+          red_flag_traits: Json | null
+          risk_profile: string | null
+          style_axes: Json | null
+          top_motivations: Json | null
+          updated_at: string
+          user_id: string
+          values_anchors: Json | null
+          work_preferences: Json | null
+        }
+        Insert: {
+          cognitive_signature?: string | null
+          domain_affinities?: Json | null
+          dominant_archetype?: string | null
+          generated_at?: string
+          growth_orientation?: string | null
+          hard_constraints?: Json | null
+          id?: string
+          identity_summary?: string | null
+          narrative_long?: string | null
+          raw?: Json | null
+          red_flag_traits?: Json | null
+          risk_profile?: string | null
+          style_axes?: Json | null
+          top_motivations?: Json | null
+          updated_at?: string
+          user_id: string
+          values_anchors?: Json | null
+          work_preferences?: Json | null
+        }
+        Update: {
+          cognitive_signature?: string | null
+          domain_affinities?: Json | null
+          dominant_archetype?: string | null
+          generated_at?: string
+          growth_orientation?: string | null
+          hard_constraints?: Json | null
+          id?: string
+          identity_summary?: string | null
+          narrative_long?: string | null
+          raw?: Json | null
+          red_flag_traits?: Json | null
+          risk_profile?: string | null
+          style_axes?: Json | null
+          top_motivations?: Json | null
+          updated_at?: string
+          user_id?: string
+          values_anchors?: Json | null
+          work_preferences?: Json | null
+        }
+        Relationships: []
+      }
       communities: {
         Row: {
           community_type: string
@@ -2116,6 +2179,45 @@ export type Database = {
           required_skills?: string[] | null
           status?: string | null
           title?: string
+        }
+        Relationships: []
+      }
+      compass_fit_results: {
+        Row: {
+          bucket: string
+          computed_at: string
+          entity_id: string
+          entity_name: string
+          entity_type: string
+          id: string
+          meta: Json | null
+          reasons: Json | null
+          score: number
+          user_id: string
+        }
+        Insert: {
+          bucket: string
+          computed_at?: string
+          entity_id: string
+          entity_name: string
+          entity_type: string
+          id?: string
+          meta?: Json | null
+          reasons?: Json | null
+          score?: number
+          user_id: string
+        }
+        Update: {
+          bucket?: string
+          computed_at?: string
+          entity_id?: string
+          entity_name?: string
+          entity_type?: string
+          id?: string
+          meta?: Json | null
+          reasons?: Json | null
+          score?: number
+          user_id?: string
         }
         Relationships: []
       }
@@ -10003,6 +10105,7 @@ export type Database = {
       }
     }
     Functions: {
+      compute_compass_fit: { Args: { _user_id?: string }; Returns: Json }
       consume_entitlement: {
         Args: { _entitlement_key: string }
         Returns: boolean
