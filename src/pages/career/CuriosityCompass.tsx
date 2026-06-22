@@ -1226,7 +1226,7 @@ const CuriosityCompass = () => {
 
       <Tabs value={tab} onValueChange={(v) => {
         // Block locked tabs
-        if (!bothAssessmentsDone && !["assessment", "psychometric", "interests"].includes(v)) {
+        if (!bothAssessmentsDone && !["assessment", "psychometric", "interests", "pathmap"].includes(v)) {
           toast.info("Complete both assessments first to unlock this section.");
           return;
         }
