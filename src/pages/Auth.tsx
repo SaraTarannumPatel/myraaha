@@ -10,6 +10,9 @@ import OnboardingProgressBar from "@/components/onboarding/OnboardingProgressBar
 import OnboardingRewardBanner from "@/components/onboarding/OnboardingRewardBanner";
 import loginIllustration from "@/assets/auth-login-illustration.png";
 import signupIllustration from "@/assets/auth-signup-illustration.png";
+import { throttleLoginAttempt, recordLoginFailure } from "@/lib/security/authGuard";
+import { emailSchema, passwordSchema } from "@/lib/security/schemas";
+import { safeRedirect } from "@/lib/security/redirectGuard";
 
 const onboardingRoutes: Record<string, string> = {
   welcome: "/onboarding",
@@ -80,7 +83,9 @@ const Auth = () => {
       if (profile.onboarding_status === "complete") {
         let last: string | null = null;
         try { last = localStorage.getItem("myraaha_last_route"); } catch {}
-        const target = last && last.startsWith("/dashboard") ? last : "/dashboard";
+        // SECURITY: safeRedirect blocks open redirects, javascript:/data:/CRLF,
+        // and protocol-relative URLs that could land users on a third-party origin.
+        const target = safeRedirect(last && last.startsWith("/dashboard") ? last : "/dashboard", "/dashboard");
         try { localStorage.removeItem("myraaha_pending_email"); } catch {}
         navigate(target, { replace: true });
       } else {
@@ -114,9 +119,32 @@ const Auth = () => {
     if (e) e.preventDefault();
     setSubmitting(true);
 
+    // SECURITY: defensive input validation. Mirrors what the form already
+    // accepts, just enforces caps & shapes so injection-shaped strings are
+    // rejected before they reach the network.
+    const emailCheck = emailSchema.safeParse(email);
+    if (!emailCheck.success) {
+      toast.error(emailCheck.error.issues[0]?.message || "Invalid email");
+      setSubmitting(false);
+      return;
+    }
+    if (!isLogin) {
+      const pwCheck = passwordSchema.safeParse(password);
+      if (!pwCheck.success) {
+        toast.error(pwCheck.error.issues[0]?.message || "Weak password");
+        setSubmitting(false);
+        return;
+      }
+    }
+
     if (isLogin) {
+      // SECURITY: progressive backoff against credential stuffing / brute force.
+      await throttleLoginAttempt();
       const { error } = await signIn(email, password);
-      if (error) toast.error(error.message);
+      if (error) {
+        recordLoginFailure();
+        toast.error(error.message);
+      }
     } else {
       // Validate phone
       const cleanPhone = getCleanPhone();
