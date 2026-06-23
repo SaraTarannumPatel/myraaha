@@ -4,6 +4,24 @@ Append-only log of MAJOR changes. Each entry: what / why / before / benefit / fi
 
 ---
 
+## 2026-06-23 — Enterprise security hardening layer (additive only)
+
+**What.** Implemented the controls from the three uploaded security briefs (`security_prompts_lovable_ai.md`, `Security Hardening Implementation for Lovable AI.docx`, `Security Implementation Brief for Lovable AI.docx`) without changing any feature, page, route, UI/UX, edge-function business logic, or database schema. New layers: (a) `public/_headers` ships HSTS, X-Frame-Options, X-Content-Type-Options, Referrer-Policy, Permissions-Policy, COOP/CORP, and CSP in **Report-Only** mode; (b) `index.html` gains meta-fallback security headers; (c) `public/sw.js` now bypasses any request carrying `Authorization`, refuses to cache responses with `Set-Cookie`, and handles a `LOGOUT_PURGE` message to wipe every cache on sign-out; (d) new `src/lib/security/` module with `logger` (PII/JWT/UUID/phone/email scrubber that wraps `console.*` in production), `safeStorage` (sensitive-value guard + `purgeOnLogout()`), `authGuard` (progressive backoff on failed login, 30-min idle + 12-h absolute session timers), `redirectGuard` (open-redirect / `javascript:` / CRLF blocker), `schemas` (zod schemas for email/password/name/phone/OTP/URL/journal/message), `sanitize` (dep-free HTML sanitizer + `escapeHtml`); (e) `src/main.tsx` installs the secure logger; (f) `AuthContext` wires the timers + storage purge into sign-out and `onAuthStateChange`; (g) `Auth.tsx` validates inputs with zod, throttles repeated failures, and routes post-login redirect through `safeRedirect`; (h) new edge-function shared helpers `_shared/{cors,requireUser,logger,validate}.ts` (CORS allow-list, in-code JWT verification, scrubbed logger, zod body parser) — available for opt-in adoption without altering any existing function; (i) `vite.config.ts` build-time assert refuses to bundle any service-role-shaped env; (j) `.npmrc` pins exact versions on future installs; (k) new docs `docs/SECURITY.md` and `docs/INCIDENT_RESPONSE.md`.
+
+**Why.** The three briefs require Defense-in-Depth across transport, auth, authorization, input/output, PWA, storage, logging, supply chain, environment isolation, and IR — under a strict no-feature-change constraint.
+
+**Before.** No CSP / HSTS / security headers. Service worker could in theory cache responses with `Authorization`. No client-side login backoff. No idle/absolute session timeout. Logout cleared only a hand-picked key list and didn't tell the SW. No central PII-scrubbing logger. No reusable input validation schemas. No env-leak guard at build time. Edge functions had no shared CORS allow-list or JWT-verification helper.
+
+**Benefit.** Removes the most common PWA leak paths (cached private responses surviving logout), kills credential-stuffing UX, prevents open redirects, makes inputs uniformly validated, prevents PII from landing in production logs, and gives every future edge function a 3-line path to authenticated + validated + CORS-locked handlers — all without touching a single existing feature.
+
+**Files.** `public/_headers` (new), `public/sw.js` (additive), `index.html`, `src/main.tsx`, `src/contexts/AuthContext.tsx`, `src/pages/Auth.tsx`, `src/lib/security/{index,logger,safeStorage,authGuard,redirectGuard,schemas,sanitize}.ts` (new), `supabase/functions/_shared/{cors,requireUser,logger,validate}.ts` (new), `vite.config.ts`, `.npmrc` (new), `docs/SECURITY.md` (new), `docs/INCIDENT_RESPONSE.md` (new).
+
+**Approval-required follow-ups (NOT implemented).** httpOnly-cookie session via edge proxy; admin MFA UI; promote CSP from Report-Only to enforcing; CAPTCHA/Turnstile on auth; per-IP rate-limit table; force global re-login on password change; self-host fonts for SRI; dependency major upgrades; tightening any `anon SELECT` RLS still in use. See `.lovable/plan.md` §2.
+
+---
+
+
+
 ## 2026-06-01 — Sector ingestion + landing CSS de-conflict
 
 **What.** (a) Ran the psql staging loader across Media, NGO, Real Estate, Retail, Sports, Telecom, Transport — added ~7,180 roles to `taxonomy_nodes`, bringing total to 7,946 roles across 11 hierarchy levels. (b) Removed the orphan Vite default `src/App.css` and stray `fix_*.cjs` scripts. (c) Relaxed three blanket `!important` overrides in `src/index.css` that were forcing uniform font-size on every `h1/h2/h3`, `.section-title`, and `.section-subtitle` inside `.myraaha-landing-site`, clobbering each landing page's dedicated typography in `MyRaaha*.css`.
