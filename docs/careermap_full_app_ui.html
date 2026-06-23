@@ -1,0 +1,1056 @@
+
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: var(--font-sans, system-ui); }
+
+.app-shell {
+  width: 100%;
+  border-radius: 14px;
+  border: 0.5px solid var(--color-border-secondary);
+  overflow: hidden;
+  background: #e8f0e4;
+  position: relative;
+}
+
+.screen { display: none; }
+.screen.active { display: block; }
+
+.map-canvas {
+  width: 100%; height: 480px;
+  position: relative; overflow: hidden;
+  background: #e8f0e4;
+  cursor: grab;
+}
+
+.map-road-h {
+  position: absolute; height: 3px; background: #fff; opacity: 0.7;
+}
+.map-road-v {
+  position: absolute; width: 3px; background: #fff; opacity: 0.7;
+}
+.map-road-thick {
+  position: absolute; height: 6px; background: #f5d9a0; opacity: 0.8;
+  border-radius: 3px;
+}
+
+.territory {
+  position: absolute; border-radius: 12px; opacity: 0.82;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  cursor: pointer; transition: opacity 0.15s, transform 0.15s;
+  font-size: 11px; font-weight: 500; text-align: center;
+  padding: 6px 8px; line-height: 1.3;
+}
+.territory:hover { opacity: 1; transform: scale(1.04); }
+
+.career-pin {
+  position: absolute;
+  cursor: pointer;
+  transition: transform 0.15s;
+  display: flex; flex-direction: column; align-items: center;
+}
+.career-pin:hover { transform: scale(1.15); }
+.pin-head {
+  width: 28px; height: 28px; border-radius: 50% 50% 50% 0;
+  transform: rotate(-45deg);
+  display: flex; align-items: center; justify-content: center;
+  border: 2px solid rgba(255,255,255,0.6);
+}
+.pin-icon {
+  transform: rotate(45deg);
+  font-size: 12px; color: white;
+}
+.pin-label {
+  font-size: 9px; font-weight: 500; color: #2c2c2a;
+  background: white; padding: 1px 4px; border-radius: 3px;
+  margin-top: 2px; white-space: nowrap;
+  border: 0.5px solid rgba(0,0,0,0.12);
+}
+
+.you-are-here {
+  position: absolute;
+  width: 18px; height: 18px;
+  background: #3B8BD4;
+  border-radius: 50%;
+  border: 3px solid white;
+  cursor: pointer;
+  animation: blueDot 2s ease-in-out infinite;
+}
+.you-are-here::after {
+  content: ''; position: absolute;
+  width: 36px; height: 36px;
+  background: rgba(59,139,212,0.2);
+  border-radius: 50%;
+  top: -12px; left: -12px;
+  animation: blueDot 2s ease-in-out infinite;
+}
+@keyframes blueDot { 0%,100%{opacity:1} 50%{opacity:0.6} }
+
+.exam-gate-pin {
+  position: absolute;
+  background: #E24B4A;
+  color: white;
+  font-size: 9px; font-weight: 500;
+  padding: 3px 6px;
+  border-radius: 4px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: transform 0.15s;
+  border: 1.5px solid #791F1F;
+}
+.exam-gate-pin:hover { transform: scale(1.1); }
+.exam-gate-pin::before {
+  content: 'G';
+  display: inline-block;
+  width: 12px; height: 12px;
+  background: white; color: #E24B4A;
+  border-radius: 2px;
+  font-size: 8px; font-weight: 700;
+  line-height: 12px; text-align: center;
+  margin-right: 3px;
+}
+
+.hire-pulse {
+  position: absolute;
+  border-radius: 50%;
+  animation: pulse 2s ease-in-out infinite;
+  pointer-events: none;
+}
+@keyframes pulse { 0%,100%{transform:scale(1);opacity:0.6} 50%{transform:scale(1.3);opacity:0.25} }
+
+.search-bar-wrap {
+  position: absolute; top: 12px; left: 12px; right: 12px;
+  z-index: 10;
+}
+.search-bar {
+  width: 100%; height: 44px;
+  background: var(--color-background-primary);
+  border: 0.5px solid var(--color-border-secondary);
+  border-radius: 22px;
+  display: flex; align-items: center; gap: 10px;
+  padding: 0 14px;
+  cursor: text;
+}
+.search-bar input {
+  flex: 1; border: none; background: transparent; outline: none;
+  font-size: 13px; color: var(--color-text-primary);
+  font-family: var(--font-sans);
+}
+.search-bar input::placeholder { color: var(--color-text-tertiary); }
+
+.chip-row {
+  display: flex; gap: 6px; margin-top: 8px; flex-wrap: wrap;
+}
+.chip {
+  background: var(--color-background-primary);
+  border: 0.5px solid var(--color-border-secondary);
+  border-radius: 16px; padding: 5px 12px;
+  font-size: 11px; color: var(--color-text-secondary);
+  cursor: pointer; white-space: nowrap;
+  transition: background 0.12s;
+}
+.chip:hover { background: var(--color-background-secondary); }
+.chip.active { background: #E6F1FB; color: #185FA5; border-color: #3B8BD4; }
+
+.map-controls-right {
+  position: absolute; right: 12px; bottom: 200px;
+  display: flex; flex-direction: column; gap: 6px; z-index: 10;
+}
+.map-btn {
+  width: 38px; height: 38px;
+  background: var(--color-background-primary);
+  border: 0.5px solid var(--color-border-secondary);
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; font-size: 16px; color: var(--color-text-secondary);
+  transition: background 0.12s;
+}
+.map-btn:hover { background: var(--color-background-secondary); }
+
+.layers-btn {
+  position: absolute; left: 12px; bottom: 200px; z-index: 10;
+  background: var(--color-background-primary);
+  border: 0.5px solid var(--color-border-secondary);
+  border-radius: 8px; padding: 8px 12px;
+  font-size: 11px; color: var(--color-text-secondary);
+  cursor: pointer; display: flex; align-items: center; gap: 6px;
+}
+
+.bottom-sheet {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  background: var(--color-background-primary);
+  border-radius: 14px 14px 0 0;
+  border-top: 0.5px solid var(--color-border-secondary);
+  z-index: 20;
+  transition: height 0.3s ease;
+}
+.sheet-handle {
+  width: 32px; height: 3px;
+  background: var(--color-border-secondary);
+  border-radius: 2px;
+  margin: 8px auto 10px;
+  cursor: pointer;
+}
+
+.bs-tabs {
+  display: flex; gap: 0; border-bottom: 0.5px solid var(--color-border-tertiary);
+  padding: 0 16px;
+  overflow-x: auto;
+}
+.bs-tab {
+  padding: 8px 12px; font-size: 12px;
+  color: var(--color-text-tertiary); cursor: pointer; white-space: nowrap;
+  border-bottom: 2px solid transparent; margin-bottom: -0.5px;
+  transition: color 0.12s;
+}
+.bs-tab.active { color: #3B8BD4; border-bottom-color: #3B8BD4; font-weight: 500; }
+
+.bs-content { padding: 12px 16px; }
+
+.career-card {
+  display: flex; align-items: flex-start; gap: 10px;
+  padding: 10px; border-radius: 10px; cursor: pointer;
+  border: 0.5px solid var(--color-border-tertiary);
+  background: var(--color-background-primary);
+  margin-bottom: 8px;
+  transition: background 0.12s;
+}
+.career-card:hover { background: var(--color-background-secondary); }
+.card-dot {
+  width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; margin-top: 3px;
+}
+.card-title { font-size: 13px; font-weight: 500; color: var(--color-text-primary); }
+.card-sub { font-size: 11px; color: var(--color-text-secondary); margin-top: 1px; }
+.card-meta { display: flex; gap: 6px; margin-top: 4px; flex-wrap: wrap; }
+.badge {
+  font-size: 10px; padding: 2px 7px; border-radius: 10px;
+  font-weight: 500;
+}
+.badge-green { background: #E1F5EE; color: #0F6E56; }
+.badge-blue { background: #E6F1FB; color: #185FA5; }
+.badge-amber { background: #FAEEDA; color: #633806; }
+.badge-red { background: #FCEBEB; color: #791F1F; }
+.badge-purple { background: #EEEDFE; color: #3C3489; }
+
+.match-pill {
+  font-size: 10px; font-weight: 500; padding: 1px 6px;
+  border-radius: 8px; background: #E1F5EE; color: #0F6E56;
+}
+
+.action-btns {
+  display: flex; gap: 8px; margin-top: 10px;
+}
+.act-btn {
+  flex: 1; padding: 8px; border-radius: 8px;
+  font-size: 12px; font-weight: 500; text-align: center; cursor: pointer;
+  border: 0.5px solid var(--color-border-secondary);
+  color: var(--color-text-secondary);
+  transition: background 0.12s;
+}
+.act-btn:hover { background: var(--color-background-secondary); }
+.act-btn.primary { background: #3B8BD4; color: white; border-color: #3B8BD4; }
+.act-btn.primary:hover { background: #185FA5; }
+
+.bottom-nav {
+  display: flex; border-top: 0.5px solid var(--color-border-tertiary);
+  background: var(--color-background-primary);
+}
+.nav-item {
+  flex: 1; padding: 10px 0 8px;
+  display: flex; flex-direction: column; align-items: center; gap: 3px;
+  cursor: pointer; transition: color 0.12s;
+  color: var(--color-text-tertiary); font-size: 10px;
+  border: none; background: none;
+}
+.nav-item.active { color: #3B8BD4; }
+.nav-item i { font-size: 20px; }
+
+.role-sheet {
+  background: var(--color-background-primary);
+  border-top: 0.5px solid var(--color-border-secondary);
+  border-radius: 14px 14px 0 0;
+  padding: 0 0 12px;
+}
+.role-header {
+  padding: 14px 16px 10px;
+  border-bottom: 0.5px solid var(--color-border-tertiary);
+}
+.role-img-row {
+  display: flex; gap: 6px; margin-bottom: 10px;
+}
+.role-img-block {
+  flex: 1; height: 52px; border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; font-weight: 500;
+}
+.role-img-block.blue { background: #E6F1FB; color: #185FA5; }
+.role-img-block.green { background: #E1F5EE; color: #0F6E56; }
+.role-img-block.purple { background: #EEEDFE; color: #3C3489; }
+
+.info-row { display: flex; gap: 6px; align-items: center; margin-bottom: 5px; }
+
+.tab-pills { display: flex; gap: 6px; overflow-x: auto; padding: 10px 16px 0; }
+.tab-pill {
+  padding: 5px 12px; border-radius: 14px; font-size: 11px; cursor: pointer;
+  border: 0.5px solid var(--color-border-secondary);
+  background: var(--color-background-secondary);
+  color: var(--color-text-secondary); white-space: nowrap;
+  transition: background 0.12s;
+}
+.tab-pill.active { background: #3B8BD4; color: white; border-color: #3B8BD4; }
+
+.nav-mode {
+  background: #1a1a1a;
+  border-radius: 14px 14px 0 0;
+  padding: 0;
+  color: white;
+}
+.nav-top-bar {
+  background: #2d2d2d; padding: 10px 16px;
+  display: flex; align-items: center; gap: 10px;
+  border-radius: 14px 14px 0 0;
+}
+.nav-arrow-bubble {
+  width: 48px; height: 48px; border-radius: 50%;
+  background: #3B8BD4;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 22px; color: white;
+}
+.nav-instruction { flex: 1; }
+.nav-distance { font-size: 22px; font-weight: 500; color: white; }
+.nav-street { font-size: 12px; color: #aaa; margin-top: 1px; }
+.nav-route-line {
+  height: 3px; background: #3B8BD4; margin: 0; border-radius: 0;
+  position: relative; overflow: visible;
+}
+.nav-progress { height: 3px; background: #1D9E75; width: 38%; border-radius: 0; }
+
+.layers-panel {
+  background: var(--color-background-primary);
+  border: 0.5px solid var(--color-border-secondary);
+  border-radius: 12px; padding: 12px;
+  position: absolute; left: 12px; bottom: 250px; z-index: 30;
+  width: 200px;
+}
+.layer-row {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 6px 0; border-bottom: 0.5px solid var(--color-border-tertiary);
+  font-size: 12px; color: var(--color-text-secondary);
+}
+.layer-row:last-child { border-bottom: none; }
+.toggle-switch {
+  width: 30px; height: 16px; border-radius: 8px;
+  background: var(--color-border-secondary); cursor: pointer;
+  position: relative; transition: background 0.2s;
+}
+.toggle-switch.on { background: #3B8BD4; }
+.toggle-switch::after {
+  content: ''; position: absolute;
+  width: 12px; height: 12px; border-radius: 50%;
+  background: white; top: 2px; left: 2px;
+  transition: transform 0.2s;
+}
+.toggle-switch.on::after { transform: translateX(14px); }
+
+.directions-panel {
+  background: var(--color-background-primary);
+  border-top: 0.5px solid var(--color-border-secondary);
+  border-radius: 14px 14px 0 0; padding: 0;
+}
+.dir-header { padding: 12px 16px; border-bottom: 0.5px solid var(--color-border-tertiary); }
+.dir-inputs { display: flex; flex-direction: column; gap: 6px; }
+.dir-input {
+  display: flex; align-items: center; gap: 8px;
+  background: var(--color-background-secondary);
+  border-radius: 8px; padding: 8px 12px;
+  font-size: 12px; color: var(--color-text-primary);
+}
+.dir-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+
+.route-tabs { display: flex; padding: 10px 16px 0; gap: 8px; }
+.route-tab {
+  flex: 1; padding: 6px; border-radius: 8px; text-align: center;
+  font-size: 11px; cursor: pointer; border: 0.5px solid var(--color-border-secondary);
+  color: var(--color-text-secondary); transition: background 0.12s;
+}
+.route-tab.active { background: #3B8BD4; color: white; border-color: #3B8BD4; }
+
+.route-option {
+  margin: 8px 16px; padding: 10px; border-radius: 10px;
+  border: 0.5px solid var(--color-border-secondary);
+  cursor: pointer; transition: background 0.12s;
+}
+.route-option.selected { border-color: #3B8BD4; background: #E6F1FB; }
+.route-option:hover { background: var(--color-background-secondary); }
+
+.screen-label {
+  font-size: 10px; color: var(--color-text-tertiary);
+  text-align: center; padding: 4px 0 2px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+@keyframes routeAnim { from{stroke-dashoffset:400} to{stroke-dashoffset:0} }
+</style>
+
+<h2 class="sr-only">CareerMap full app UI — a Google Maps-style interface for career navigation with 5 interactive screens</h2>
+
+<div style="display:flex; gap:6px; flex-wrap:wrap; padding:0 0 10px; justify-content:center">
+  <button onclick="showScreen('explore')" id="nav-explore" style="padding:6px 14px;border-radius:16px;font-size:11px;cursor:pointer;border:0.5px solid #3B8BD4;background:#E6F1FB;color:#185FA5;font-weight:500">Map explore</button>
+  <button onclick="showScreen('roleview')" id="nav-roleview" style="padding:6px 14px;border-radius:16px;font-size:11px;cursor:pointer;border:0.5px solid var(--color-border-secondary);background:var(--color-background-secondary);color:var(--color-text-secondary)">Role detail</button>
+  <button onclick="showScreen('pathfinder')" id="nav-pathfinder" style="padding:6px 14px;border-radius:16px;font-size:11px;cursor:pointer;border:0.5px solid var(--color-border-secondary);background:var(--color-background-secondary);color:var(--color-text-secondary)">PathFinder</button>
+  <button onclick="showScreen('navigation')" id="nav-navigation" style="padding:6px 14px;border-radius:16px;font-size:11px;cursor:pointer;border:0.5px solid var(--color-border-secondary);background:var(--color-background-secondary);color:var(--color-text-secondary)">Journey mode</button>
+  <button onclick="showScreen('layers')" id="nav-layers" style="padding:6px 14px;border-radius:16px;font-size:11px;cursor:pointer;border:0.5px solid var(--color-border-secondary);background:var(--color-background-secondary);color:var(--color-text-secondary)">Layers</button>
+</div>
+
+<div class="app-shell" id="app">
+
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <!-- SCREEN 1: EXPLORE (main map) -->
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <div id="screen-explore" class="screen active">
+    <div class="map-canvas" id="map1" onclick="handleMapClick(event)">
+
+      <!-- Road grid (faint white lines like Google Maps roads) -->
+      <div class="map-road-thick" style="top:160px;left:0;right:0"></div>
+      <div class="map-road-thick" style="top:300px;left:0;right:0"></div>
+      <div class="map-road-thick" style="top:0;bottom:0;left:200px;width:6px;height:100%"></div>
+      <div class="map-road-thick" style="top:0;bottom:0;left:430px;width:6px;height:100%"></div>
+      <div class="map-road-h" style="top:90px;left:0;right:0"></div>
+      <div class="map-road-h" style="top:230px;left:0;right:0"></div>
+      <div class="map-road-h" style="top:380px;left:0;right:0"></div>
+      <div class="map-road-v" style="left:100px;top:0;bottom:0;height:100%"></div>
+      <div class="map-road-v" style="left:320px;top:0;bottom:0;height:100%"></div>
+      <div class="map-road-v" style="left:550px;top:0;bottom:0;height:100%"></div>
+
+      <!-- Sector territories (colored zones like Google Maps neighborhoods) -->
+      <div class="territory" style="background:#B5D4F4;color:#0C447C;width:110px;height:68px;top:60px;left:15px" onclick="openRole('swengineer')">
+        <i class="ti ti-code" style="font-size:16px;margin-bottom:2px" aria-hidden="true"></i>
+        Technology
+        <span style="font-size:9px;opacity:0.7;font-weight:400">4,200+ careers</span>
+      </div>
+
+      <div class="territory" style="background:#9FE1CB;color:#085041;width:100px;height:64px;top:58px;left:215px" onclick="openRole('doctor')">
+        <i class="ti ti-stethoscope" style="font-size:16px;margin-bottom:2px" aria-hidden="true"></i>
+        Healthcare
+        <span style="font-size:9px;opacity:0.7;font-weight:400">2,800+ careers</span>
+      </div>
+
+      <div class="territory" style="background:#CECBF6;color:#26215C;width:95px;height:60px;top:62px;left:445px" onclick="openRole('designer')">
+        <i class="ti ti-brush" style="font-size:16px;margin-bottom:2px" aria-hidden="true"></i>
+        Creative
+        <span style="font-size:9px;opacity:0.7;font-weight:400">1,200+ careers</span>
+      </div>
+
+      <div class="territory" style="background:#F5C4B3;color:#712B13;width:88px;height:58px;top:170px;left:15px" onclick="openRole('ias')">
+        <i class="ti ti-building-bank" style="font-size:15px;margin-bottom:2px" aria-hidden="true"></i>
+        Govt
+        <span style="font-size:9px;opacity:0.7;font-weight:400">1,500+ careers</span>
+      </div>
+
+      <div class="territory" style="background:#FAC775;color:#412402;width:100px;height:60px;top:168px;left:330px" onclick="openRole('ca')">
+        <i class="ti ti-chart-pie" style="font-size:16px;margin-bottom:2px" aria-hidden="true"></i>
+        Finance
+        <span style="font-size:9px;opacity:0.7;font-weight:400">1,800+ careers</span>
+      </div>
+
+      <div class="territory" style="background:#C0DD97;color:#173404;width:88px;height:58px;top:168px;left:455px" onclick="openRole('lawyer')">
+        <i class="ti ti-gavel" style="font-size:15px;margin-bottom:2px" aria-hidden="true"></i>
+        Law
+        <span style="font-size:9px;opacity:0.7;font-weight:400">900+ careers</span>
+      </div>
+
+      <div class="territory" style="background:#FAC775;color:#412402;width:92px;height:54px;top:312px;left:10px" onclick="null">
+        <i class="ti ti-school" style="font-size:15px;margin-bottom:2px" aria-hidden="true"></i>
+        Education
+        <span style="font-size:9px;opacity:0.7;font-weight:400">800+ careers</span>
+      </div>
+
+      <div class="territory" style="background:#B5D4F4;color:#0C447C;width:105px;height:54px;top:310px;left:210px" onclick="null">
+        <i class="ti ti-device-laptop" style="font-size:15px;margin-bottom:2px" aria-hidden="true"></i>
+        EdTech / Media
+        <span style="font-size:9px;opacity:0.7;font-weight:400">600+ careers</span>
+      </div>
+
+      <div class="territory" style="background:#9FE1CB;color:#085041;width:100px;height:54px;top:310px;left:450px" onclick="null">
+        <i class="ti ti-leaf" style="font-size:15px;margin-bottom:2px" aria-hidden="true"></i>
+        Agriculture
+        <span style="font-size:9px;opacity:0.7;font-weight:400">600+ careers</span>
+      </div>
+
+      <!-- Hiring pulse rings (traffic layer dots) -->
+      <div class="hire-pulse" style="width:44px;height:44px;background:rgba(29,158,117,0.35);top:78px;left:228px"></div>
+      <div class="hire-pulse" style="width:38px;height:38px;background:rgba(59,139,212,0.3);top:38px;left:52px;animation-delay:0.6s"></div>
+      <div class="hire-pulse" style="width:30px;height:30px;background:rgba(226,75,74,0.25);top:182px;left:342px;animation-delay:1.1s"></div>
+      <div class="hire-pulse" style="width:36px;height:36px;background:rgba(29,158,117,0.3);top:326px;left:228px;animation-delay:0.3s"></div>
+
+      <!-- Career pins -->
+      <div class="career-pin" style="top:112px;left:46px" onclick="openRole('swengineer')">
+        <div class="pin-head" style="background:#3B8BD4"><i class="ti ti-code pin-icon" style="font-size:11px"></i></div>
+        <div class="pin-label">SWE</div>
+      </div>
+      <div class="career-pin" style="top:112px;left:115px" onclick="openRole('pm')">
+        <div class="pin-head" style="background:#3B8BD4"><i class="ti ti-layout-kanban pin-icon" style="font-size:10px"></i></div>
+        <div class="pin-label">PM</div>
+      </div>
+      <div class="career-pin" style="top:94px;left:80px" onclick="openRole('designer')">
+        <div class="pin-head" style="background:#7F77DD"><i class="ti ti-palette pin-icon" style="font-size:10px"></i></div>
+        <div class="pin-label">UX</div>
+      </div>
+      <div class="career-pin" style="top:100px;left:238px" onclick="openRole('doctor')">
+        <div class="pin-head" style="background:#1D9E75"><i class="ti ti-stethoscope pin-icon" style="font-size:10px"></i></div>
+        <div class="pin-label">MBBS</div>
+      </div>
+      <div class="career-pin" style="top:98px;left:295px" onclick="openRole('doctor')">
+        <div class="pin-head" style="background:#1D9E75"><i class="ti ti-heart pin-icon" style="font-size:10px"></i></div>
+        <div class="pin-label">Surgeon</div>
+      </div>
+      <div class="career-pin" style="top:110px;left:470px" onclick="openRole('designer')">
+        <div class="pin-head" style="background:#7F77DD"><i class="ti ti-brush pin-icon" style="font-size:10px"></i></div>
+        <div class="pin-label">Designer</div>
+      </div>
+      <div class="career-pin" style="top:210px;left:25px" onclick="openRole('ias')">
+        <div class="pin-head" style="background:#A32D2D"><i class="ti ti-id pin-icon" style="font-size:10px"></i></div>
+        <div class="pin-label">IAS</div>
+      </div>
+      <div class="career-pin" style="top:208px;left:345px" onclick="openRole('ca')">
+        <div class="pin-head" style="background:#BA7517"><i class="ti ti-receipt pin-icon" style="font-size:10px"></i></div>
+        <div class="pin-label">CA</div>
+      </div>
+      <div class="career-pin" style="top:206px;left:465px" onclick="openRole('lawyer')">
+        <div class="pin-head" style="background:#639922"><i class="ti ti-gavel pin-icon" style="font-size:10px"></i></div>
+        <div class="pin-label">Advocate</div>
+      </div>
+
+      <!-- Exam gate pins -->
+      <div class="exam-gate-pin" style="top:148px;left:222px" onclick="openGate('neet')">NEET</div>
+      <div class="exam-gate-pin" style="top:148px;left:50px" onclick="openGate('jee')">JEE</div>
+      <div class="exam-gate-pin" style="top:148px;left:400px" onclick="openGate('clat')">CLAT</div>
+      <div class="exam-gate-pin" style="top:148px;left:298px" onclick="openGate('upsc')">UPSC</div>
+
+      <!-- YOU ARE HERE dot -->
+      <div class="you-are-here" style="top:242px;left:175px" title="You are here"></div>
+
+      <!-- Search bar -->
+      <div class="search-bar-wrap">
+        <div class="search-bar" onclick="openRole('pm')">
+          <i class="ti ti-search" style="font-size:16px;color:var(--color-text-tertiary)" aria-hidden="true"></i>
+          <input type="text" placeholder="Search careers, skills, roles…" readonly style="cursor:pointer">
+          <i class="ti ti-user-circle" style="font-size:20px;color:#3B8BD4" aria-hidden="true"></i>
+        </div>
+        <div class="chip-row">
+          <div class="chip active"><i class="ti ti-trending-up" style="font-size:12px;margin-right:3px" aria-hidden="true"></i>Trending roles</div>
+          <div class="chip"><i class="ti ti-map-pin" style="font-size:12px;margin-right:3px" aria-hidden="true"></i>Near Pune</div>
+          <div class="chip">No exam gate</div>
+          <div class="chip">Remote-friendly</div>
+          <div class="chip">Emerging roles</div>
+        </div>
+      </div>
+
+      <!-- Map controls -->
+      <div class="map-controls-right">
+        <div class="map-btn" title="Layers" onclick="showScreen('layers')"><i class="ti ti-layers-subtract" aria-label="layers"></i></div>
+        <div class="map-btn" title="Zoom in"><i class="ti ti-plus" aria-label="zoom in"></i></div>
+        <div class="map-btn" title="Zoom out"><i class="ti ti-minus" aria-label="zoom out"></i></div>
+        <div class="map-btn" style="background:#3B8BD4;color:white" title="My location"><i class="ti ti-current-location" aria-label="my location"></i></div>
+      </div>
+
+      <!-- Bottom sheet: collapsed explore state -->
+      <div class="bottom-sheet" style="height:185px">
+        <div class="sheet-handle" onclick="expandSheet()"></div>
+        <div class="bs-tabs">
+          <div class="bs-tab active">Explore</div>
+          <div class="bs-tab" onclick="showScreen('pathfinder')">PathFinder</div>
+          <div class="bs-tab">Dream board</div>
+          <div class="bs-tab">Pulse</div>
+          <div class="bs-tab">Reality checks</div>
+        </div>
+        <div class="bs-content">
+          <div style="display:flex;gap:8px">
+            <div class="career-card" style="flex:1;flex-direction:column;align-items:flex-start" onclick="openRole('pm')">
+              <div style="display:flex;align-items:center;gap:6px">
+                <div class="card-dot" style="background:#3B8BD4"></div>
+                <span class="card-title">Product Manager</span>
+                <span class="match-pill">88%</span>
+              </div>
+              <div class="card-sub" style="margin-top:4px">Technology · Bengaluru</div>
+              <div class="card-meta">
+                <span class="badge badge-green">High demand</span>
+                <span class="badge badge-blue">₹12–25L</span>
+              </div>
+            </div>
+            <div class="career-card" style="flex:1;flex-direction:column;align-items:flex-start" onclick="openRole('designer')">
+              <div style="display:flex;align-items:center;gap:6px">
+                <div class="card-dot" style="background:#7F77DD"></div>
+                <span class="card-title">UX Designer</span>
+                <span class="match-pill">82%</span>
+              </div>
+              <div class="card-sub" style="margin-top:4px">Creative · Remote OK</div>
+              <div class="card-meta">
+                <span class="badge badge-purple">Growing</span>
+                <span class="badge badge-blue">₹8–18L</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom nav bar -->
+    <div class="bottom-nav">
+      <button class="nav-item active" onclick="showScreen('explore')">
+        <i class="ti ti-map-2" aria-hidden="true"></i>Explore
+      </button>
+      <button class="nav-item" onclick="showScreen('pathfinder')">
+        <i class="ti ti-navigation" aria-hidden="true"></i>PathFinder
+      </button>
+      <button class="nav-item" onclick="null">
+        <i class="ti ti-bookmark" aria-hidden="true"></i>Dream board
+      </button>
+      <button class="nav-item" onclick="null">
+        <i class="ti ti-users" aria-hidden="true"></i>Contribute
+      </button>
+      <button class="nav-item" onclick="null">
+        <i class="ti ti-bell" aria-hidden="true"></i>Pulse
+      </button>
+    </div>
+  </div>
+
+
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <!-- SCREEN 2: ROLE DETAIL (Place detail card / Street View) -->
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <div id="screen-roleview" class="screen">
+    <div class="map-canvas" style="height:200px;background:#dce8d6;position:relative">
+      <div class="map-road-thick" style="top:80px;left:0;right:0"></div>
+      <div class="map-road-thick" style="top:0;bottom:0;left:250px;width:6px;height:100%"></div>
+      <div class="territory" style="background:#B5D4F4;color:#0C447C;width:100px;height:60px;top:30px;left:150px;font-size:11px">
+        <i class="ti ti-code" style="font-size:15px;margin-bottom:2px" aria-hidden="true"></i>
+        Technology
+      </div>
+      <div class="career-pin" style="top:30px;left:255px">
+        <div class="pin-head" style="background:#3B8BD4;width:34px;height:34px"><i class="ti ti-layout-kanban pin-icon" style="font-size:14px"></i></div>
+        <div class="pin-label" style="font-size:10px;font-weight:500">Product Manager</div>
+      </div>
+      <div class="you-are-here" style="top:100px;left:160px"></div>
+      <!-- back button -->
+      <div onclick="showScreen('explore')" style="position:absolute;top:12px;left:12px;width:36px;height:36px;background:var(--color-background-primary);border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;border:0.5px solid var(--color-border-secondary)">
+        <i class="ti ti-arrow-left" style="font-size:16px;color:var(--color-text-secondary)" aria-hidden="true"></i>
+      </div>
+    </div>
+
+    <div class="role-sheet">
+      <div class="role-header">
+        <div class="role-img-row">
+          <div class="role-img-block blue"><i class="ti ti-layout-kanban" style="font-size:22px" aria-hidden="true"></i></div>
+          <div class="role-img-block green"><i class="ti ti-users" style="font-size:22px" aria-hidden="true"></i></div>
+          <div class="role-img-block purple"><i class="ti ti-chart-line" style="font-size:22px" aria-hidden="true"></i></div>
+        </div>
+        <div style="display:flex;align-items:flex-start;justify-content:space-between">
+          <div>
+            <div style="font-size:18px;font-weight:500;color:var(--color-text-primary)">Product Manager</div>
+            <div style="font-size:12px;color:var(--color-text-secondary);margin-top:2px">Technology · Product · Bengaluru / Remote</div>
+            <div class="info-row" style="margin-top:6px">
+              <span class="badge badge-green">High demand</span>
+              <span class="badge badge-blue">₹12–25 LPA</span>
+              <span class="badge badge-purple">88% match</span>
+              <span class="badge badge-amber">247 hiring</span>
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:6px;flex-shrink:0">
+            <div style="width:36px;height:36px;border-radius:50%;border:0.5px solid var(--color-border-secondary);display:flex;align-items:center;justify-content:center;cursor:pointer">
+              <i class="ti ti-bookmark" style="font-size:16px;color:var(--color-text-secondary)" aria-hidden="true"></i>
+            </div>
+            <div style="width:36px;height:36px;border-radius:50%;border:0.5px solid var(--color-border-secondary);display:flex;align-items:center;justify-content:center;cursor:pointer">
+              <i class="ti ti-share" style="font-size:16px;color:var(--color-text-secondary)" aria-hidden="true"></i>
+            </div>
+          </div>
+        </div>
+        <div class="action-btns" style="margin-top:10px">
+          <div class="act-btn primary" onclick="showScreen('pathfinder')"><i class="ti ti-navigation" style="font-size:14px;margin-right:4px" aria-hidden="true"></i>Plan my path</div>
+          <div class="act-btn"><i class="ti ti-video" style="font-size:14px;margin-right:4px" aria-hidden="true"></i>RoleView</div>
+          <div class="act-btn"><i class="ti ti-git-compare" style="font-size:14px;margin-right:4px" aria-hidden="true"></i>Compare</div>
+        </div>
+      </div>
+
+      <div class="tab-pills">
+        <div class="tab-pill active">Overview</div>
+        <div class="tab-pill">Day-in-life</div>
+        <div class="tab-pill">Your match</div>
+        <div class="tab-pill">Salary</div>
+        <div class="tab-pill">Career ladder</div>
+        <div class="tab-pill">Exam gates</div>
+        <div class="tab-pill">Companies</div>
+        <div class="tab-pill">City map</div>
+        <div class="tab-pill">AI impact</div>
+        <div class="tab-pill">Reality checks</div>
+        <div class="tab-pill">Workspace tour</div>
+        <div class="tab-pill">Next steps</div>
+      </div>
+
+      <div style="padding:12px 16px">
+        <div style="font-size:12px;color:var(--color-text-secondary);line-height:1.6;margin-bottom:10px">
+          PMs sit at the intersection of business, technology, and user experience. On a Tuesday: 2 sprint meetings, 1 user research call, roadmap prioritisation session, stakeholder review. Travel: low. Remote: possible.
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+          <div style="background:var(--color-background-secondary);border-radius:8px;padding:10px">
+            <div style="font-size:10px;color:var(--color-text-tertiary)">Avg salary (Bengaluru)</div>
+            <div style="font-size:16px;font-weight:500;color:var(--color-text-primary);margin-top:2px">₹18 LPA</div>
+          </div>
+          <div style="background:var(--color-background-secondary);border-radius:8px;padding:10px">
+            <div style="font-size:10px;color:var(--color-text-tertiary)">Time to career-ready</div>
+            <div style="font-size:16px;font-weight:500;color:var(--color-text-primary);margin-top:2px">12–18 mo</div>
+          </div>
+          <div style="background:var(--color-background-secondary);border-radius:8px;padding:10px">
+            <div style="font-size:10px;color:var(--color-text-tertiary)">Automation risk</div>
+            <div style="font-size:14px;font-weight:500;color:#0F6E56;margin-top:2px">Low — safe</div>
+          </div>
+          <div style="background:var(--color-background-secondary);border-radius:8px;padding:10px">
+            <div style="font-size:10px;color:var(--color-text-tertiary)">Gap to close</div>
+            <div style="font-size:14px;font-weight:500;color:#185FA5;margin-top:2px">3 skills</div>
+          </div>
+        </div>
+        <div style="margin-top:10px;background:var(--color-background-secondary);border-radius:8px;padding:10px">
+          <div style="font-size:10px;color:var(--color-text-tertiary);margin-bottom:6px">Your match — 88%</div>
+          <div style="height:8px;border-radius:4px;background:var(--color-border-tertiary)">
+            <div style="height:8px;border-radius:4px;background:#3B8BD4;width:88%"></div>
+          </div>
+          <div style="font-size:11px;color:var(--color-text-secondary);margin-top:5px">Close SQL · Product Analytics · Stakeholder Mgmt → reach 100%</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="bottom-nav">
+      <button class="nav-item" onclick="showScreen('explore')"><i class="ti ti-map-2" aria-hidden="true"></i>Explore</button>
+      <button class="nav-item active" onclick="showScreen('pathfinder')"><i class="ti ti-navigation" aria-hidden="true"></i>PathFinder</button>
+      <button class="nav-item"><i class="ti ti-bookmark" aria-hidden="true"></i>Dream board</button>
+      <button class="nav-item"><i class="ti ti-users" aria-hidden="true"></i>Contribute</button>
+      <button class="nav-item"><i class="ti ti-bell" aria-hidden="true"></i>Pulse</button>
+    </div>
+  </div>
+
+
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <!-- SCREEN 3: PATHFINDER (Directions mode) -->
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <div id="screen-pathfinder" class="screen">
+    <div class="map-canvas" style="height:220px;background:#dce8d6;position:relative;overflow:hidden">
+      <div class="map-road-thick" style="top:100px;left:0;right:0"></div>
+      <div class="map-road-thick" style="top:0;bottom:0;left:220px;width:6px;height:100%"></div>
+      <!-- Animated route line -->
+      <svg style="position:absolute;top:0;left:0;width:100%;height:100%" viewBox="0 0 680 220">
+        <path d="M 90 160 Q 140 160 160 140 Q 180 100 220 100 Q 300 100 340 80 Q 420 60 480 80 Q 540 100 560 80" fill="none" stroke="#3B8BD4" stroke-width="4" stroke-linecap="round" stroke-dasharray="400" style="animation:routeAnim 2s ease forwards"/>
+        <path d="M 90 160 Q 150 160 180 155 Q 230 150 250 160" fill="none" stroke="#1D9E75" stroke-width="3" stroke-linecap="round" stroke-dasharray="200" opacity="0.5" style="animation:routeAnim 2.5s ease forwards"/>
+        <circle cx="90" cy="160" r="7" fill="#3B8BD4"/>
+        <circle cx="90" cy="160" r="4" fill="white"/>
+        <circle cx="560" cy="80" r="9" fill="#E24B4A"/>
+        <text x="568" y="77" font-size="10" fill="#791F1F" font-family="var(--font-sans)" font-weight="500">PM</text>
+      </svg>
+      <div onclick="showScreen('explore')" style="position:absolute;top:12px;left:12px;width:36px;height:36px;background:var(--color-background-primary);border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;border:0.5px solid var(--color-border-secondary)">
+        <i class="ti ti-arrow-left" style="font-size:16px;color:var(--color-text-secondary)" aria-hidden="true"></i>
+      </div>
+    </div>
+
+    <div class="directions-panel">
+      <div class="dir-header">
+        <div style="font-size:13px;font-weight:500;color:var(--color-text-primary);margin-bottom:8px">PathFinder™</div>
+        <div class="dir-inputs">
+          <div class="dir-input">
+            <div class="dir-dot" style="background:#3B8BD4"></div>
+            <span>B.Com Graduate, Indore</span>
+          </div>
+          <div style="width:1px;height:6px;background:var(--color-border-secondary);margin-left:14px"></div>
+          <div class="dir-input">
+            <div class="dir-dot" style="background:#E24B4A;border-radius:2px"></div>
+            <span>Product Manager, Bengaluru</span>
+            <i class="ti ti-x" style="font-size:14px;color:var(--color-text-tertiary);margin-left:auto;cursor:pointer" aria-hidden="true"></i>
+          </div>
+        </div>
+        <div class="route-tabs" style="margin-top:8px;padding:0">
+          <div class="route-tab active">Fastest</div>
+          <div class="route-tab">Safest</div>
+          <div class="route-tab">No-cost</div>
+          <div class="route-tab">Academic</div>
+        </div>
+      </div>
+
+      <div class="route-option selected">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <div>
+            <div style="font-size:13px;font-weight:500;color:#185FA5">Route 1 — Fastest</div>
+            <div style="font-size:11px;color:var(--color-text-secondary);margin-top:2px">PM Bootcamp → 2 Kaggle projects → Internship</div>
+          </div>
+          <div style="text-align:right">
+            <div style="font-size:15px;font-weight:500;color:var(--color-text-primary)">12 mo</div>
+            <div style="font-size:10px;color:#1D9E75">₹80,000 total</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:6px;margin-top:6px">
+          <span class="badge badge-green">High demand on route</span>
+          <span class="badge badge-blue">★★★★</span>
+          <span class="badge badge-amber">70% success rate</span>
+        </div>
+        <div style="background:var(--color-background-secondary);border-radius:6px;padding:8px;margin-top:8px;font-size:11px;color:var(--color-text-secondary)">
+          <div style="margin-bottom:4px;font-weight:500;color:var(--color-text-primary)">Turn-by-turn milestones</div>
+          <div style="margin-bottom:3px">Month 1–3 · Complete PM Bootcamp</div>
+          <div style="margin-bottom:3px">Month 4–6 · Build 2 product case studies</div>
+          <div style="margin-bottom:3px">Month 7–9 · Internship / APM role</div>
+          <div>Month 10–12 · Apply to startups · target PM</div>
+        </div>
+        <button class="act-btn primary" onclick="showScreen('navigation')" style="width:100%;margin-top:10px;padding:10px;font-size:13px">
+          <i class="ti ti-player-play" style="font-size:14px;margin-right:6px" aria-hidden="true"></i>Commit to this path — Start
+        </button>
+      </div>
+
+      <div class="route-option" style="margin-top:0">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <div>
+            <div style="font-size:13px;font-weight:500;color:var(--color-text-primary)">Route 2 — Safest</div>
+            <div style="font-size:11px;color:var(--color-text-secondary);margin-top:2px">Online courses → 4 projects → Freelance → PM</div>
+          </div>
+          <div style="text-align:right">
+            <div style="font-size:15px;font-weight:500;color:var(--color-text-primary)">18 mo</div>
+            <div style="font-size:10px;color:var(--color-text-tertiary)">₹20,000 total</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="bottom-nav">
+      <button class="nav-item" onclick="showScreen('explore')"><i class="ti ti-map-2" aria-hidden="true"></i>Explore</button>
+      <button class="nav-item active"><i class="ti ti-navigation" aria-hidden="true"></i>PathFinder</button>
+      <button class="nav-item"><i class="ti ti-bookmark" aria-hidden="true"></i>Dream board</button>
+      <button class="nav-item"><i class="ti ti-users" aria-hidden="true"></i>Contribute</button>
+      <button class="nav-item"><i class="ti ti-bell" aria-hidden="true"></i>Pulse</button>
+    </div>
+  </div>
+
+
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <!-- SCREEN 4: NAVIGATION MODE (Active journey tracking) -->
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <div id="screen-navigation" class="screen">
+    <div class="map-canvas" style="height:240px;background:#1e2a1e;position:relative;overflow:hidden">
+      <svg style="position:absolute;top:0;left:0;width:100%;height:100%" viewBox="0 0 680 240">
+        <rect width="680" height="240" fill="#1e2a1e"/>
+        <rect x="0" y="100" width="680" height="8" fill="#2d4a2d" rx="3"/>
+        <rect x="0" y="130" width="680" height="5" fill="#263826" rx="2"/>
+        <rect x="0" y="170" width="680" height="6" fill="#2d4a2d" rx="2"/>
+        <rect x="240" y="0" width="8" height="240" fill="#2d4a2d" rx="3"/>
+        <rect x="420" y="0" width="5" height="240" fill="#263826" rx="2"/>
+        <!-- Completed route (green) -->
+        <path d="M 40 200 L 40 104 Q 40 100 44 100 L 240 100 Q 244 100 244 96 L 244 40" fill="none" stroke="#1D9E75" stroke-width="6" stroke-linecap="round"/>
+        <!-- Remaining route (blue) -->
+        <path d="M 244 40 L 244 20 Q 244 16 248 16 L 580 16" fill="none" stroke="#3B8BD4" stroke-width="6" stroke-linecap="round" stroke-dasharray="8 4"/>
+        <!-- Direction arrow -->
+        <polygon points="240,30 248,10 256,30 248,26" fill="#3B8BD4"/>
+        <!-- Current position -->
+        <circle cx="244" cy="40" r="10" fill="#3B8BD4"/>
+        <circle cx="244" cy="40" r="5" fill="white"/>
+        <!-- Destination pin -->
+        <circle cx="580" cy="16" r="10" fill="#E24B4A"/>
+        <text x="580" y="19" font-size="8" fill="white" text-anchor="middle" font-family="var(--font-sans)" font-weight="500">PM</text>
+        <!-- Milestone markers -->
+        <circle cx="40" cy="104" r="5" fill="#1D9E75"/>
+        <text x="52" y="108" font-size="9" fill="#9FE1CB" font-family="var(--font-sans)">Bootcamp done</text>
+        <circle cx="244" cy="100" r="5" fill="#1D9E75"/>
+        <text x="256" y="104" font-size="9" fill="#9FE1CB" font-family="var(--font-sans)">Projects done</text>
+        <circle cx="420" cy="16" r="5" fill="#888780"/>
+        <text x="432" y="20" font-size="9" fill="#888780" font-family="var(--font-sans)">Internship</text>
+      </svg>
+    </div>
+
+    <div class="nav-mode">
+      <div class="nav-top-bar">
+        <div class="nav-arrow-bubble"><i class="ti ti-arrow-up" style="font-size:22px" aria-hidden="true"></i></div>
+        <div class="nav-instruction">
+          <div class="nav-distance">In 3 weeks</div>
+          <div class="nav-street">Complete Module 3: User Research Fundamentals</div>
+        </div>
+        <div onclick="showScreen('pathfinder')" style="width:36px;height:36px;border-radius:50%;border:1px solid rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;cursor:pointer">
+          <i class="ti ti-x" style="font-size:16px;color:rgba(255,255,255,0.6)" aria-hidden="true"></i>
+        </div>
+      </div>
+
+      <div style="background:#252525;padding:10px 16px">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+          <div style="font-size:12px;color:#aaa">Journey progress</div>
+          <div style="font-size:12px;color:#9FE1CB;font-weight:500">Month 7 of 12</div>
+        </div>
+        <div style="height:6px;border-radius:3px;background:#333">
+          <div style="height:6px;border-radius:3px;background:#1D9E75;width:58%"></div>
+        </div>
+        <div style="display:flex;justify-content:space-between;margin-top:6px">
+          <div style="font-size:11px;color:#888">Match score: 88%</div>
+          <div style="font-size:11px;color:#9FE1CB">ETA: 5 months remaining</div>
+        </div>
+      </div>
+
+      <div style="background:#1e1e1e;padding:10px 16px">
+        <div style="display:flex;gap:8px">
+          <div style="flex:1;background:#252525;border-radius:8px;padding:10px;text-align:center">
+            <div style="font-size:10px;color:#888;margin-bottom:3px">XP earned</div>
+            <div style="font-size:16px;font-weight:500;color:white">3,240</div>
+          </div>
+          <div style="flex:1;background:#252525;border-radius:8px;padding:10px;text-align:center">
+            <div style="font-size:10px;color:#888;margin-bottom:3px">Level</div>
+            <div style="font-size:14px;font-weight:500;color:#FAC775">Navigator</div>
+          </div>
+          <div style="flex:1;background:#252525;border-radius:8px;padding:10px;text-align:center">
+            <div style="font-size:10px;color:#888;margin-bottom:3px">Streak</div>
+            <div style="font-size:16px;font-weight:500;color:#9FE1CB">14 days</div>
+          </div>
+        </div>
+        <div style="background:#252525;border-radius:8px;padding:10px;margin-top:8px">
+          <div style="font-size:11px;color:#aaa;margin-bottom:5px">Live pulse — high demand on your route</div>
+          <div style="font-size:12px;color:#9FE1CB">High hiring activity for PM roles this month — ETA reduced by 3 weeks</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="bottom-nav">
+      <button class="nav-item" onclick="showScreen('explore')"><i class="ti ti-map-2" aria-hidden="true"></i>Explore</button>
+      <button class="nav-item active"><i class="ti ti-navigation" aria-hidden="true"></i>Journey</button>
+      <button class="nav-item"><i class="ti ti-bookmark" aria-hidden="true"></i>Dream board</button>
+      <button class="nav-item"><i class="ti ti-users" aria-hidden="true"></i>Contribute</button>
+      <button class="nav-item"><i class="ti ti-bell" aria-hidden="true"></i>Pulse</button>
+    </div>
+  </div>
+
+
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <!-- SCREEN 5: LAYERS PANEL -->
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <div id="screen-layers" class="screen">
+    <div class="map-canvas" style="height:220px;background:#dde8d8;position:relative;overflow:hidden">
+      <div class="map-road-thick" style="top:90px;left:0;right:0"></div>
+      <div class="map-road-thick" style="top:0;bottom:0;left:200px;width:6px;height:100%"></div>
+      <!-- Salary heat overlay -->
+      <div id="heat-overlay" style="position:absolute;inset:0;opacity:0.45;pointer-events:none;border-radius:inherit">
+        <div style="position:absolute;top:30px;left:10px;width:120px;height:70px;background:#E24B4A;border-radius:10px;opacity:0.55"></div>
+        <div style="position:absolute;top:30px;left:210px;width:100px;height:65px;background:#EF9F27;border-radius:10px;opacity:0.5"></div>
+        <div style="position:absolute;top:110px;left:10px;width:90px;height:60px;background:#EF9F27;border-radius:10px;opacity:0.45"></div>
+        <div style="position:absolute;top:110px;left:210px;width:100px;height:60px;background:#1D9E75;border-radius:10px;opacity:0.4"></div>
+        <div style="position:absolute;top:35px;left:445px;width:100px;height:60px;background:#EF9F27;border-radius:10px;opacity:0.45"></div>
+      </div>
+      <div class="territory" style="background:#B5D4F4;color:#0C447C;width:90px;height:55px;top:35px;left:20px;font-size:10px;opacity:0.9">
+        <i class="ti ti-code" style="font-size:14px" aria-hidden="true"></i>Technology
+      </div>
+      <div class="territory" style="background:#9FE1CB;color:#085041;width:82px;height:52px;top:32px;left:220px;font-size:10px;opacity:0.9">
+        <i class="ti ti-stethoscope" style="font-size:14px" aria-hidden="true"></i>Healthcare
+      </div>
+      <div onclick="showScreen('explore')" style="position:absolute;top:12px;left:12px;width:36px;height:36px;background:var(--color-background-primary);border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;border:0.5px solid var(--color-border-secondary);z-index:5">
+        <i class="ti ti-arrow-left" style="font-size:16px;color:var(--color-text-secondary)" aria-hidden="true"></i>
+      </div>
+      <!-- Salary legend -->
+      <div style="position:absolute;bottom:10px;left:12px;background:var(--color-background-primary);border-radius:8px;padding:6px 10px;border:0.5px solid var(--color-border-secondary);display:flex;gap:8px;align-items:center">
+        <div style="width:8px;height:8px;border-radius:50%;background:#E24B4A"></div><span style="font-size:9px;color:var(--color-text-secondary)">₹20L+</span>
+        <div style="width:8px;height:8px;border-radius:50%;background:#EF9F27"></div><span style="font-size:9px;color:var(--color-text-secondary)">₹10–20L</span>
+        <div style="width:8px;height:8px;border-radius:50%;background:#1D9E75"></div><span style="font-size:9px;color:var(--color-text-secondary)">&lt;₹10L</span>
+      </div>
+    </div>
+
+    <div style="background:var(--color-background-primary);border-top:0.5px solid var(--color-border-secondary);border-radius:14px 14px 0 0;padding:14px 16px">
+      <div style="font-size:14px;font-weight:500;color:var(--color-text-primary);margin-bottom:4px">Map type</div>
+      <div style="display:flex;gap:8px;margin-bottom:14px">
+        <div id="view-default" style="flex:1;border:2px solid #3B8BD4;border-radius:10px;padding:8px;text-align:center;cursor:pointer;background:#E6F1FB">
+          <i class="ti ti-map" style="font-size:20px;color:#185FA5;display:block;margin:0 auto 3px" aria-hidden="true"></i>
+          <div style="font-size:11px;color:#185FA5;font-weight:500">Default</div>
+        </div>
+        <div style="flex:1;border:0.5px solid var(--color-border-secondary);border-radius:10px;padding:8px;text-align:center;cursor:pointer" onclick="null">
+          <i class="ti ti-tools" style="font-size:20px;color:var(--color-text-tertiary);display:block;margin:0 auto 3px" aria-hidden="true"></i>
+          <div style="font-size:11px;color:var(--color-text-secondary)">Skills view</div>
+        </div>
+        <div style="flex:1;border:0.5px solid var(--color-border-secondary);border-radius:10px;padding:8px;text-align:center;cursor:pointer">
+          <i class="ti ti-sun" style="font-size:20px;color:var(--color-text-tertiary);display:block;margin:0 auto 3px" aria-hidden="true"></i>
+          <div style="font-size:11px;color:var(--color-text-secondary)">Lifestyle</div>
+        </div>
+        <div style="flex:1;border:0.5px solid var(--color-border-secondary);border-radius:10px;padding:8px;text-align:center;cursor:pointer">
+          <i class="ti ti-currency-rupee" style="font-size:20px;color:var(--color-text-tertiary);display:block;margin:0 auto 3px" aria-hidden="true"></i>
+          <div style="font-size:11px;color:var(--color-text-secondary)">Salary</div>
+        </div>
+      </div>
+
+      <div style="font-size:14px;font-weight:500;color:var(--color-text-primary);margin-bottom:8px">Career layers</div>
+      <div class="layer-row">
+        <div style="display:flex;align-items:center;gap:8px">
+          <i class="ti ti-activity" style="font-size:16px;color:#1D9E75" aria-hidden="true"></i>
+          <span>Live hiring pulse</span>
+        </div>
+        <div class="toggle-switch on" onclick="this.classList.toggle('on')"></div>
+      </div>
+      <div class="layer-row">
+        <div style="display:flex;align-items:center;gap:8px">
+          <i class="ti ti-currency-rupee" style="font-size:16px;color:#BA7517" aria-hidden="true"></i>
+          <span>Salary heat map</span>
+        </div>
+        <div class="toggle-switch on" onclick="this.classList.toggle('on')"></div>
+      </div>
+      <div class="layer-row">
+        <div style="display:flex;align-items:center;gap:8px">
+          <i class="ti ti-robot" style="font-size:16px;color:#E24B4A" aria-hidden="true"></i>
+          <span>Automation risk</span>
+        </div>
+        <div class="toggle-switch" onclick="this.classList.toggle('on')"></div>
+      </div>
+      <div class="layer-row">
+        <div style="display:flex;align-items:center;gap:8px">
+          <i class="ti ti-home" style="font-size:16px;color:#3B8BD4" aria-hidden="true"></i>
+          <span>Remote-friendly</span>
+        </div>
+        <div class="toggle-switch" onclick="this.classList.toggle('on')"></div>
+      </div>
+      <div class="layer-row">
+        <div style="display:flex;align-items:center;gap:8px">
+          <i class="ti ti-git-branch" style="font-size:16px;color:#7F77DD" aria-hidden="true"></i>
+          <span>Career clusters</span>
+        </div>
+        <div class="toggle-switch" onclick="this.classList.toggle('on')"></div>
+      </div>
+      <div class="layer-row">
+        <div style="display:flex;align-items:center;gap:8px">
+          <i class="ti ti-door-enter" style="font-size:16px;color:var(--color-text-tertiary)" aria-hidden="true"></i>
+          <span>Entry barrier</span>
+        </div>
+        <div class="toggle-switch" onclick="this.classList.toggle('on')"></div>
+      </div>
+    </div>
+
+    <div class="bottom-nav">
+      <button class="nav-item" onclick="showScreen('explore')"><i class="ti ti-map-2" aria-hidden="true"></i>Explore</button>
+      <button class="nav-item" onclick="showScreen('pathfinder')"><i class="ti ti-navigation" aria-hidden="true"></i>PathFinder</button>
+      <button class="nav-item"><i class="ti ti-bookmark" aria-hidden="true"></i>Dream board</button>
+      <button class="nav-item"><i class="ti ti-users" aria-hidden="true"></i>Contribute</button>
+      <button class="nav-item active"><i class="ti ti-layers-subtract" aria-hidden="true"></i>Layers</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const screens = ['explore','roleview','pathfinder','navigation','layers'];
+const navBtns = {
+  explore: 'nav-explore', roleview: 'nav-roleview',
+  pathfinder: 'nav-pathfinder', navigation: 'nav-navigation', layers: 'nav-layers'
+};
+function showScreen(name) {
+  screens.forEach(s => {
+    const el = document.getElementById('screen-'+s);
+    if(el) el.classList.toggle('active', s===name);
+  });
+  screens.forEach(s => {
+    const btn = document.getElementById(navBtns[s]);
+    if(!btn) return;
+    if(s===name) {
+      btn.style.background='#E6F1FB'; btn.style.color='#185FA5'; btn.style.borderColor='#3B8BD4';
+    } else {
+      btn.style.background='var(--color-background-secondary)'; btn.style.color='var(--color-text-secondary)'; btn.style.borderColor='var(--color-border-secondary)';
+    }
+  });
+}
+function openRole(role) { showScreen('roleview'); }
+function openGate(gate) { showScreen('roleview'); }
+function handleMapClick(e) {
+  const target = e.target.closest('.territory, .career-pin, .exam-gate-pin');
+  if(target) return;
+}
+</script>
