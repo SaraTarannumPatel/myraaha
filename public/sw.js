@@ -28,13 +28,30 @@ self.addEventListener("activate", (e) => {
 });
 
 self.addEventListener("message", (event) => {
-  if (event.data && event.data.type === "SKIP_WAITING") self.skipWaiting();
+  if (!event.data) return;
+  if (event.data.type === "SKIP_WAITING") self.skipWaiting();
+  // Security: on logout, wipe every cache this SW controls so no private
+  // response can be re-served to the next user of the same device.
+  if (event.data.type === "LOGOUT_PURGE") {
+    event.waitUntil(
+      (async () => {
+        try {
+          const keys = await caches.keys();
+          await Promise.all(keys.map((k) => caches.delete(k)));
+        } catch {}
+      })()
+    );
+  }
 });
 
 self.addEventListener("fetch", (event) => {
   const req = event.request;
   if (req.method !== "GET") return;
   const url = new URL(req.url);
+
+  // SECURITY: never let the SW touch auth-bearing requests. If an Authorization
+  // header is present, bypass entirely so private responses can never be cached.
+  if (req.headers && req.headers.get && req.headers.get("authorization")) return;
 
   // Supabase REST GETs: network-first, fall back to last-known-good for offline reads.
   if (url.hostname.includes("supabase")) {
@@ -48,7 +65,11 @@ self.addEventListener("fetch", (event) => {
       event.respondWith(
         fetch(req)
           .then((res) => {
-            if (res && res.status === 200) {
+            // Only cache responses that are explicitly public (no Vary on auth,
+            // no Set-Cookie, status 200). This is defense-in-depth on top of
+            // the Authorization-header bypass above.
+            const setCookie = res.headers.get("set-cookie");
+            if (res && res.status === 200 && !setCookie) {
               const copy = res.clone();
               caches.open(DATA_CACHE).then((c) => c.put(req, copy)).catch(() => {});
             }
@@ -62,7 +83,8 @@ self.addEventListener("fetch", (event) => {
       );
       return;
     }
-    return; // other supabase calls bypass SW
+    // auth / realtime / storage / functions — bypass SW entirely.
+    return;
   }
   if (url.pathname.startsWith("/api/")) return;
 

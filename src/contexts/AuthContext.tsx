@@ -1,6 +1,8 @@
 import { createContext, useContext, useEffect, useState, ReactNode } from "react";
 import { User, Session } from "@supabase/supabase-js";
 import { supabase } from "@/integrations/supabase/client";
+import { purgeOnLogout } from "@/lib/security/safeStorage";
+import { startSessionTimers, recordLoginSuccess } from "@/lib/security/authGuard";
 
 interface Profile {
   id: string;
@@ -83,14 +85,25 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   useEffect(() => {
+    let stopTimers: (() => void) | null = null;
+
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      (_event, session) => {
+      (event, session) => {
         setSession(session);
         setUser(session?.user ?? null);
         if (session?.user) {
           setTimeout(() => fetchProfile(session.user.id), 0);
+          if (event === "SIGNED_IN") recordLoginSuccess();
+          // Idle (30m) + absolute (12h) timers; cleanup on next state change.
+          if (stopTimers) stopTimers();
+          stopTimers = startSessionTimers(async () => {
+            try { await supabase.auth.signOut({ scope: "local" } as any); } catch {}
+            purgeOnLogout();
+            window.location.replace("/auth?mode=signin");
+          });
         } else {
           setProfile(null);
+          if (stopTimers) { stopTimers(); stopTimers = null; }
         }
       }
     );
@@ -109,7 +122,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       }
     });
 
-    return () => subscription.unsubscribe();
+    return () => {
+      subscription.unsubscribe();
+      if (stopTimers) stopTimers();
+    };
   }, []);
 
   const signUp = async (email: string, password: string, fullName: string) => {
@@ -134,7 +150,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     setUser(null);
     setSession(null);
     setProfile(null);
-    // Wipe local app flags
+    // SECURITY: full storage purge + tell the service worker to wipe its caches
+    // so no private API response can be re-served to the next user on the same
+    // device. Additive — preserves the original explicit-key drop list below.
     try {
       const drop = [
         "myraaha_is_guest",
@@ -144,10 +162,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         "myraaha_initial_path",
       ];
       drop.forEach((k) => localStorage.removeItem(k));
-      Object.keys(localStorage)
-        .filter((k) => k.startsWith("sb-") && k.endsWith("-auth-token"))
-        .forEach((k) => localStorage.removeItem(k));
     } catch {}
+    purgeOnLogout();
     // Local-scope signOut is instant; race against a short timeout so the
     // button never hangs if the network is slow.
     const localSignOut = supabase.auth.signOut({ scope: "local" } as any).catch(() => {});
