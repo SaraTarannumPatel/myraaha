@@ -5213,7 +5213,7 @@ export default function CareerMap() {
                                      location: "Mumbai",
                                      duration: "4 years",
                                      fees: "₹8-10 Lakhs total",
-                                     rating: "4.7",
+                                     rating: 4.7,
                                      exam: "JEE Advanced",
                                      cutoff: "Rank < 2000",
                                      examDate: "May 2027",
@@ -5236,7 +5236,7 @@ export default function CareerMap() {
                                      location: "Bengaluru",
                                      duration: "2 years",
                                      fees: "₹23 Lakhs total",
-                                     rating: "4.8",
+                                     rating: 4.8,
                                      exam: "CAT",
                                      cutoff: "Percentile > 99.5",
                                      examDate: "Nov 2026",
@@ -5259,7 +5259,7 @@ export default function CareerMap() {
                                      location: "Metro Cities",
                                      duration: "1-2 years",
                                      fees: "₹0 (Paid Internship)",
-                                     rating: "4.2",
+                                     rating: 4.2,
                                      exam: "Case Studies / interviews",
                                      cutoff: "Academic record + Case portfolio",
                                      examDate: "Continuous",
@@ -7129,7 +7129,7 @@ export default function CareerMap() {
                           <div className="absolute left-6 -top-6 bg-black/80 text-white p-1.5 rounded-lg border border-amber-500/30 text-[8.5px] w-40 hidden group-hover:block z-30 space-y-1">
                             <span className="font-bold text-amber-400 block">⚠️ Stakeholder Gap</span>
                             Learn to align team priorities.
-                            <Button size="xs" className="h-4 text-[8px] px-1 bg-amber-500 text-black border-none font-bold">▶ Play Tutorial</Button>
+                            <Button size="sm" className="h-4 text-[8px] px-1 bg-amber-500 text-black border-none font-bold">▶ Play Tutorial</Button>
                           </div>
                         </div>
 
