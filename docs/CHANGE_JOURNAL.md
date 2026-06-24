@@ -214,3 +214,27 @@ CareerMap-CareerScape spec.
 **Files**
 - New: `src/components/curiositycompass/AssessmentAnswerReview.tsx`, `AllAssessmentsCompleteDialog.tsx`, `CombinedPathMap.tsx`; `supabase/functions/combined-conclusion-synthesizer/index.ts`; migration creating `combined_conclusions`, `compass_fit_results`, `compute_compass_fit`.
 - Edited: `src/components/curiositycompass/PsychometricTest.tsx`, `InterestsAssessment.tsx`, `src/pages/career/CuriosityCompass.tsx`.
+
+---
+
+## 2026-06-24 — Security Hardening Wave 2 (Items 2-9 from .lovable/plan.md §2)
+
+**What changed**
+- CSP promoted from Report-Only to enforcing in `public/_headers`.
+- Poppins font self-hosted under `/public/fonts/poppins-{300..700}.woff2`; `MyRaahaLanding.css` `@import` replaced with local `@font-face` rules. `googleapis.com` / `gstatic.com` removed from CSP `font-src` and `style-src`.
+- `ResetPassword.tsx` now calls `supabase.auth.signOut({ scope: "global" })` after `updateUser({ password })` and redirects to `/auth` — forces re-login on every device after a password change.
+- New `AdminMfaPanel` component renders ONLY for users with `admin` role in `user_roles`; provides TOTP enrol/verify/unenroll. Mounted at the bottom of `/settings` — invisible to non-admins, no UX impact.
+- New `public.rate_limit_log` table + `public.record_rate_limit_hit(identity, endpoint, window_seconds)` RPC, service-role only. Foundation for per-IP/per-user throttling; no edge-function behavior changed yet.
+- Leaked-password protection (HIBP) enabled at Auth config level.
+- `code--dependency_scan` clean — no high/critical advisories; no major-version upgrades required.
+
+**Why**
+Completes all approved items from `.lovable/plan.md` §2 except (a) httpOnly-cookie session migration and (b) Cloudflare Turnstile — both require infra/UX changes that violate the "no behaviour change" constraint without a separate user-driven decision (Turnstile needs a Cloudflare site/secret key the user must supply).
+
+**Before / After**
+- Before: CSP advisory only, Google Fonts third-party request, password reset left old sessions valid, no admin MFA surface, no rate-limit primitive, HIBP off.
+- After: CSP enforcing same-origin only, no third-party font/style host, global sign-out on password change, admin MFA available, rate-limit table ready, HIBP active.
+
+**Files**
+- edited: `public/_headers`, `src/pages/MyRaahaLanding.css`, `src/pages/ResetPassword.tsx`, `src/pages/shared/Settings.tsx`
+- created: `public/fonts/poppins-{300,400,500,600,700}.woff2`, `src/components/security/AdminMfaPanel.tsx`, migration for `rate_limit_log` + `record_rate_limit_hit`
