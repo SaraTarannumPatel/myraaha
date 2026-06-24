@@ -133,11 +133,12 @@ const ModuleSearchBar = ({
     return [...items, ...customSuggestions];
   }, [dirData, customSuggestions]);
 
-  // Filter suggestions by query
+  // Filter suggestions by query — guard against re-render loops by only
+  // updating state when the result identity actually changes.
   useEffect(() => {
     const q = query.toLowerCase().trim();
     if (!q || q.length < 2) {
-      setSuggestions([]);
+      setSuggestions((prev) => (prev.length === 0 ? prev : []));
       return;
     }
     const filtered = allSuggestions
@@ -147,7 +148,12 @@ const ModuleSearchBar = ({
         s.tags?.some((t) => t.toLowerCase().includes(q))
       )
       .slice(0, 8);
-    setSuggestions(filtered);
+    setSuggestions((prev) => {
+      if (prev.length === filtered.length && prev.every((p, i) => p.id === filtered[i].id)) {
+        return prev;
+      }
+      return filtered;
+    });
   }, [query, allSuggestions]);
 
   const handleChange = useCallback((val: string) => {
