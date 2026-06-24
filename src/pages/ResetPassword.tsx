@@ -44,8 +44,12 @@ const ResetPassword = () => {
     if (error) {
       toast.error(error.message);
     } else {
-      toast.success("Password updated! Redirecting...");
-      setTimeout(() => navigate("/dashboard"), 1500);
+      // Security: force re-login on password change — invalidate ALL other sessions
+      // (current session is replaced by the recovery flow). Additive, does not change UX
+      // beyond requiring the user to sign in once with the new password.
+      try { await supabase.auth.signOut({ scope: "global" }); } catch { /* best effort */ }
+      toast.success("Password updated! Please sign in with your new password.");
+      setTimeout(() => navigate("/auth"), 1500);
     }
     setSubmitting(false);
   };

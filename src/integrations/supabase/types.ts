@@ -7229,6 +7229,33 @@ export type Database = {
           },
         ]
       }
+      rate_limit_log: {
+        Row: {
+          created_at: string
+          endpoint: string
+          hit_count: number
+          id: string
+          identity: string
+          window_started_at: string
+        }
+        Insert: {
+          created_at?: string
+          endpoint: string
+          hit_count?: number
+          id?: string
+          identity: string
+          window_started_at?: string
+        }
+        Update: {
+          created_at?: string
+          endpoint?: string
+          hit_count?: number
+          id?: string
+          identity?: string
+          window_started_at?: string
+        }
+        Relationships: []
+      }
       reflection_prompts: {
         Row: {
           context: string | null
@@ -10171,6 +10198,10 @@ export type Database = {
           entity_name: string
           score: number
         }[]
+      }
+      record_rate_limit_hit: {
+        Args: { _endpoint: string; _identity: string; _window_seconds?: number }
+        Returns: number
       }
       show_limit: { Args: never; Returns: number }
       show_trgm: { Args: { "": string }; Returns: string[] }

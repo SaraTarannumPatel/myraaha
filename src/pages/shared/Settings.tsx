@@ -10,6 +10,7 @@ import {
   Settings as SettingsIcon, User, Shield, ArrowLeftRight, Copy,
   Check, IdCard, Lock, Sparkles
 } from "lucide-react";
+import { AdminMfaPanel } from "@/components/security/AdminMfaPanel";
 
 const Settings = () => {
   const { profile, updateProfile } = useAuth();
@@ -248,6 +249,9 @@ const Settings = () => {
           </div>
         </div>
       </div>
+
+      {/* Admin-only MFA enrollment — renders nothing for non-admins */}
+      <AdminMfaPanel />
 
       <Button
         onClick={save}
