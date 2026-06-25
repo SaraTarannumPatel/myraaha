@@ -1,0 +1,133 @@
+.mobile-login-page {
+  background: var(--myraaha-bg-grey); color: var(--myraaha-text-dark);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.login-header-mobile {
+  padding: 60px 24px 40px;
+  background: var(--myraaha-gradient);
+  color: white;
+  text-align: center;
+}
+
+.login-logo-mobile {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 32px;
+}
+
+.login-logo-mobile span {
+  font-size: 24px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+}
+
+.login-header-mobile h1 {
+  font-size: 32px !important;
+  margin-bottom: 8px !important;
+  color: white !important;
+}
+
+.login-header-mobile p {
+  font-size: 14px !important;
+  opacity: 0.8;
+  color: white !important;
+}
+
+.login-form-mobile {
+  flex: 1;
+  padding: 40px 24px;
+  background: var(--myraaha-bg-grey); color: var(--myraaha-text-dark);
+  border-radius: 32px 32px 0 0;
+  margin-top: -32px;
+}
+
+.login-error-mobile {
+  background: #fef2f2;
+  color: #ef4444;
+  padding: 12px;
+  border-radius: 12px;
+  font-size: 13px;
+  margin-bottom: 24px;
+  border: 1px solid #fee2e2;
+}
+
+.input-with-icon {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input-with-icon svg:first-child {
+  position: absolute;
+  left: 16px;
+  color: var(--myraaha-text-gray);
+  pointer-events: none;
+}
+
+.input-with-icon input {
+  width: 100%;
+  padding: 16px 16px 16px 48px;
+  border: 1.5px solid #f1f5f9;
+  border-radius: 16px;
+  background: #f8fafc;
+  font-size: 16px;
+  transition: all 0.3s;
+}
+
+.input-with-icon input:focus {
+  border-color: var(--myraaha-blue);
+  background: var(--myraaha-bg-grey); color: var(--myraaha-text-dark);
+  outline: none;
+  box-shadow: 0 0 0 4px rgba(85, 0, 203, 0.05);
+}
+
+.eye-toggle {
+  position: absolute;
+  right: 16px;
+  background: none;
+  border: none;
+  color: var(--myraaha-text-gray);
+  cursor: pointer;
+}
+
+.login-footer-mobile {
+  margin-top: 40px;
+  text-align: center;
+}
+
+.login-footer-mobile p {
+  font-size: 14px !important;
+  color: var(--myraaha-text-gray);
+}
+
+.btn-text-mobile {
+  color: var(--myraaha-blue);
+  font-weight: 700;
+  text-decoration: none;
+  margin-top: 8px;
+  display: inline-block;
+}
+
+@media (max-width: 320px) {
+  .login-header-mobile {
+    padding: 40px 15px 40px;
+  }
+
+  .login-header-mobile h1 {
+    font-size: 26px !important;
+  }
+
+  .login-form-mobile {
+    padding: 30px 15px;
+  }
+
+  .input-with-icon input {
+    padding: 14px 14px 14px 44px;
+    font-size: 15px;
+  }
+}

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import OnboardingReminderPopup from "@/components/OnboardingReminderPopup";
 import RewardCelebrationManager from "@/components/curiositycompass/RewardCelebrationManager";
@@ -57,7 +57,9 @@ const entrepMobileBottomNav = [
 const careerNav = [
   { label: "Dashboard", icon: LayoutDashboard, path: "/dashboard", color: "blue" },
   { label: "Curiosity Compass", icon: Compass, path: "/dashboard/curiosity-compass", color: "blue" },
+  { label: "Career Navigator", icon: Navigation, path: "/dashboard/career-navigator", color: "indigo" },
   { label: "AI Roadmap", icon: Map, path: "/dashboard/roadmap", color: "indigo" },
+  { label: "CareerMap", icon: Navigation, path: "/dashboard/careermap", color: "blue" },
   { label: "SelfGraph™", icon: Brain, path: "/dashboard/selfgraph", color: "terracotta" },
   { label: "SkillStacker", icon: Zap, path: "/dashboard/skill-stacker", color: "blue" },
   { label: "Content Library", icon: BookOpen, path: "/dashboard/content-library", color: "indigo" },
@@ -73,6 +75,8 @@ const careerNav = [
   { label: "Transition Planner", icon: RefreshCw, path: "/dashboard/transition-planner", color: "maroon" },
   { label: "My Collections", icon: Heart, path: "/dashboard/career-collections", color: "terracotta" },
   { label: "Explore", icon: Sparkles, path: "/dashboard/explore", color: "primary" },
+  { label: "Blueprint", icon: FileText, path: "/dashboard/blueprint", color: "indigo" },
+  { label: "Taxonomy Search", icon: Globe, path: "/dashboard/taxonomy", color: "blue" },
 ];
 
 const entrepreneurshipNav = [
@@ -114,9 +118,18 @@ const DashboardLayout = () => {
   const navigate = useNavigate();
   const [mobileOpen, setMobileOpen] = useState(false);
 
-  const isCareer = profile?.active_intent === "career";
-  const isEntrepreneurship = profile?.active_intent === "entrepreneurship";
-  const isBoth = profile?.active_intent === "both";
+  // Track last-visited dashboard route so we can restore it on next sign-in.
+  useEffect(() => {
+    if (location.pathname.startsWith("/dashboard")) {
+      try { localStorage.setItem("myraaha_last_route", location.pathname + location.search); } catch {}
+    }
+  }, [location.pathname, location.search]);
+
+  // Default to career view when no intent is set yet — prevents empty sidebar.
+  const intent = profile?.active_intent || "career";
+  const isCareer = intent === "career";
+  const isEntrepreneurship = intent === "entrepreneurship";
+  const isBoth = intent === "both";
 
   const switchIntent = async () => {
     if (isBoth) return;
@@ -259,7 +272,13 @@ const DashboardLayout = () => {
       </div>
 
       <main className="flex-1 min-w-0 lg:ml-64 mt-14 lg:mt-0 pb-20 lg:pb-0">
-        <div className="px-3 sm:px-5 md:px-6 lg:px-8 py-4 sm:py-5 md:py-6 lg:py-8 max-w-6xl mx-auto min-w-0 overflow-x-hidden responsive-page">
+        <div className={`mx-auto min-w-0 responsive-page ${
+          location.pathname === "/dashboard/curiosity-compass"
+            ? "py-4 sm:py-5 md:py-6 lg:py-8 max-w-none w-full px-3 sm:px-5 lg:px-6 lg:overflow-x-visible overflow-x-hidden"
+            : location.pathname === "/dashboard/careermap"
+            ? "pt-0 pb-4 sm:pb-5 md:pb-6 lg:pb-8 max-w-none w-full px-3 sm:px-5 lg:px-6 lg:overflow-x-visible overflow-x-hidden"
+            : "py-4 sm:py-5 md:py-6 lg:py-8 max-w-6xl px-3 sm:px-5 md:px-6 lg:px-8 overflow-x-hidden"
+        }`}>
           <Outlet />
         </div>
       </main>

@@ -191,18 +191,9 @@ export default function CareerInspirations() {
   };
 
   const checkEngagementMilestones = async () => {
-    if (!user) return;
-    const totalEngagements = likedIds.size + bookmarkedIds.size + 1;
-    const milestones: Record<number, string> = { 5: "Inspiration Seeker", 15: "Story Collector", 30: "Motivation Maven", 50: "Inspiration Champion" };
-    const badge = milestones[totalEngagements];
-    if (badge) {
-      await supabase.from("achievements").insert({
-        user_id: user.id, title: badge, achievement_type: "inspiration",
-        description: `Engaged with ${totalEngagements} inspirational stories`, points: totalEngagements * 2,
-      } as any);
-      toast({ title: `🏆 Badge earned: ${badge}!` });
-    }
+    // Inspiration engagement badges are awarded server-side via the Achievements scanner.
   };
+
 
   const saveToMoodboard = async (story: Story) => {
     if (!user) return;

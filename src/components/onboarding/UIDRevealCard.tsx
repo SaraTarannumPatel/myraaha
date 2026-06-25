@@ -55,7 +55,7 @@ const UIDRevealCard = ({ fullName, uid, rewards = [], onContinue }: UIDRevealCar
           initial={{ scale: 0.6, opacity: 0, y: 40 }}
           animate={{ scale: 1, opacity: 1, y: 0 }}
           transition={{ type: "spring", damping: 16, stiffness: 200, delay: 0.15 }}
-          className="bg-card rounded-3xl border border-border shadow-2xl max-w-md w-full overflow-hidden"
+          className="bg-white rounded-3xl border border-border shadow-2xl max-w-md w-full overflow-hidden"
         >
           {/* Header */}
           <div className="gradient-dark px-6 py-5 text-center relative overflow-hidden">
@@ -92,12 +92,12 @@ const UIDRevealCard = ({ fullName, uid, rewards = [], onContinue }: UIDRevealCar
                 <ShieldCheck size={20} className="text-primary" />
               </div>
               <div className="flex items-center gap-2">
-                <code className="flex-1 font-mono text-2xl font-bold text-primary tracking-wider">
+                <code className="flex-1 uid-reveal text-primary">
                   {uid}
                 </code>
                 <button
                   onClick={handleCopy}
-                  className="p-2 rounded-lg bg-primary text-accent hover:bg-primary transition-colors"
+                  className="p-2 rounded-lg bg-primary text-white hover:bg-primary transition-colors"
                   aria-label="Copy UID"
                 >
                   {copied ? <Check size={16} /> : <Copy size={16} />}
@@ -137,7 +137,7 @@ const UIDRevealCard = ({ fullName, uid, rewards = [], onContinue }: UIDRevealCar
 
             <Button
               onClick={onContinue}
-              className="w-full bg-primary text-accent rounded-full py-6 font-body font-semibold hover:bg-primary"
+              className="w-full bg-primary text-white rounded-full h-[52px] min-h-[52px] font-body font-semibold hover:bg-primary"
             >
               Enter Curiosity Compass <ArrowRight size={16} />
             </Button>

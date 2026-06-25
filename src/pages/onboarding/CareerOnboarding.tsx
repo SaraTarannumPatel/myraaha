@@ -130,11 +130,11 @@ const CareerOnboarding = () => {
       <OnboardingProgressBar progress={progress} />
       <OnboardingRewardBanner currentProgress={progress} />
 
-      <div className="flex-1 flex items-center justify-center p-6">
+      <div className="flex-1 flex flex-col items-center justify-center p-6 py-4 pb-6">
       <motion.div
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
-        className="max-w-2xl w-full space-y-8"
+        className="max-w-2xl w-full space-y-4"
       >
         {/* Progress */}
         <div className="flex items-center gap-2">
@@ -147,8 +147,8 @@ const CareerOnboarding = () => {
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary font-body text-xs font-semibold">
             <Sparkles size={12} /> Career Path Setup
           </div>
-          <h1 className="font-display text-3xl md:text-4xl text-foreground">{current.title}</h1>
-          <p className="font-body text-muted-foreground">{current.subtitle}</p>
+          <h1 className="onboarding-step-heading text-foreground">{current.title}</h1>
+          <p className="onboarding-step-desc text-muted-foreground mt-2">{current.subtitle}</p>
         </div>
 
         <AnimatePresence mode="wait">
@@ -193,8 +193,8 @@ const CareerOnboarding = () => {
                       <tool.icon size={20} />
                     </div>
                     <div>
-                      <h3 className="font-display text-sm text-foreground">{tool.name}</h3>
-                      <p className="font-body text-xs text-muted-foreground mt-0.5">{tool.desc}</p>
+                      <h3 className="choice-card-title text-foreground">{tool.name}</h3>
+                      <p className="choice-card-desc text-muted-foreground mt-0.5">{tool.desc}</p>
                     </div>
                   </motion.div>
                 ))}

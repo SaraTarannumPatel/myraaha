@@ -16,7 +16,7 @@ import {
 
 interface LeaderboardEntry {
   id: string;
-  user_id: string;
+  user_id: string | null;
   total_points: number;
   badge_count: number;
   streak_days: number;
@@ -25,6 +25,10 @@ interface LeaderboardEntry {
   rank_position: number;
   scope: string;
   scope_id: string;
+  anon_id: string;
+  display_name: string;
+  avatar_url: string | null;
+  is_self: boolean;
 }
 
 const SCOPES = [
@@ -46,7 +50,6 @@ const LEVEL_TIERS = [
 const Leaderboard = () => {
   const { user } = useAuth();
   const [entries, setEntries] = useState<LeaderboardEntry[]>([]);
-  const [profiles, setProfiles] = useState<Record<string, any>>({});
   const [loading, setLoading] = useState(true);
   const [tab, setTab] = useState("rankings");
   const [scope, setScope] = useState("global");
@@ -59,36 +62,25 @@ const Leaderboard = () => {
 
   const fetchLeaderboard = useCallback(async () => {
     setLoading(true);
-    let query = supabase
-      .from("leaderboard_entries")
-      .select("*")
-      .order("total_points", { ascending: false })
-      .limit(50);
-
-    if (scope === "peer_circle" && selectedCircle !== "all") {
-      query = query.eq("scope", "peer_circle").eq("scope_id", selectedCircle);
+    let scopeArg: string | null = "global";
+    let scopeIdArg: string | null = null;
+    if (scope === "peer_circle") {
+      scopeArg = "peer_circle";
+      scopeIdArg = selectedCircle !== "all" ? selectedCircle : null;
     } else if (scope === "skills") {
-      query = query.eq("scope", "skill_challenge");
+      scopeArg = "skill_challenge";
     } else if (scope === "mentorship") {
-      query = query.eq("scope", "mentorship");
+      scopeArg = "mentorship";
     } else if (scope === "domain") {
-      query = query.eq("scope", "domain");
+      scopeArg = "domain";
     }
 
-    const { data } = await query;
-    const entriesData = (data || []) as LeaderboardEntry[];
-    setEntries(entriesData);
-
-    const userIds = [...new Set(entriesData.map(e => e.user_id))];
-    if (userIds.length > 0) {
-      const { data: profilesData } = await supabase
-        .from("profiles")
-        .select("user_id, full_name, avatar_url")
-        .in("user_id", userIds);
-      const profileMap: Record<string, any> = {};
-      (profilesData || []).forEach(p => { profileMap[p.user_id] = p; });
-      setProfiles(profileMap);
-    }
+    const { data } = await supabase.rpc("get_leaderboard", {
+      _scope: scopeArg,
+      _scope_id: scopeIdArg,
+      _limit: 50,
+    });
+    setEntries((data || []) as unknown as LeaderboardEntry[]);
     setLoading(false);
   }, [scope, selectedCircle]);
 
@@ -118,11 +110,11 @@ const Leaderboard = () => {
     return () => { supabase.removeChannel(channel); };
   }, [fetchLeaderboard]);
 
-  const myEntry = useMemo(() => entries.find(e => e.user_id === user?.id), [entries, user]);
+  const myEntry = useMemo(() => entries.find(e => e.is_self), [entries]);
   const myRank = useMemo(() => {
-    const idx = entries.findIndex(e => e.user_id === user?.id);
+    const idx = entries.findIndex(e => e.is_self);
     return idx >= 0 ? idx + 1 : null;
-  }, [entries, user]);
+  }, [entries]);
 
   const tier = useMemo(() => {
     const pts = myEntry?.total_points || 0;
@@ -237,8 +229,8 @@ const Leaderboard = () => {
             <div className="grid grid-cols-3 gap-3">
               {[entries[1], entries[0], entries[2]].map((entry, i) => {
                 const rank = i === 0 ? 2 : i === 1 ? 1 : 3;
-                const profile = profiles[entry.user_id];
-                const isMe = entry.user_id === user?.id;
+                const isMe = entry.is_self;
+                const name = isMe ? "You" : entry.display_name || "Traveler";
                 const heights = ["h-24 sm:h-28", "h-28 sm:h-36", "h-20 sm:h-24"];
                 return (
                   <motion.div key={entry.id} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.1 }}>
@@ -246,10 +238,10 @@ const Leaderboard = () => {
                       <div className={`flex flex-col items-center justify-end ${heights[i]}`}>
                         {getRankIcon(rank)}
                         <div className="mt-2 w-10 h-10 rounded-full bg-muted flex items-center justify-center text-lg font-bold">
-                          {profile?.full_name?.charAt(0) || "?"}
+                          {(entry.display_name || "T").charAt(0)}
                         </div>
                         <p className="text-xs font-medium text-foreground mt-1 truncate max-w-full">
-                          {isMe ? "You" : profile?.full_name || "User"}
+                          {name}
                         </p>
                         <p className="text-[10px] text-primary font-bold">{entry.total_points} pts</p>
                         <p className="text-[10px] text-muted-foreground">{entry.badge_count} badges</p>
@@ -265,18 +257,18 @@ const Leaderboard = () => {
           <div className="space-y-2">
             {entries.map((entry, i) => {
               const rank = i + 1;
-              const profile = profiles[entry.user_id];
-              const isMe = entry.user_id === user?.id;
+              const isMe = entry.is_self;
+              const name = isMe ? "You" : entry.display_name || "Traveler";
               return (
                 <motion.div key={entry.id} initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.02 }}>
                   <Card className={`p-3 flex items-center gap-3 ${isMe ? "border-primary/30 bg-primary/5" : ""}`}>
                     <div className="w-8 text-center shrink-0">{getRankIcon(rank)}</div>
                     <div className="w-8 h-8 rounded-full bg-muted flex items-center justify-center text-sm font-bold shrink-0">
-                      {profile?.full_name?.charAt(0) || "?"}
+                      {(entry.display_name || "T").charAt(0)}
                     </div>
                     <div className="flex-1 min-w-0">
                       <p className="text-sm font-medium text-foreground truncate">
-                        {isMe ? "You" : profile?.full_name || "User"} {isMe && <Badge className="text-[10px] ml-1">You</Badge>}
+                        {name} {isMe && <Badge className="text-[10px] ml-1">You</Badge>}
                       </p>
                       <div className="flex items-center gap-2 text-[10px] text-muted-foreground">
                         <span>{entry.badge_count} badges</span>

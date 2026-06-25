@@ -1,6 +1,8 @@
 import { createContext, useContext, useEffect, useState, ReactNode } from "react";
 import { User, Session } from "@supabase/supabase-js";
 import { supabase } from "@/integrations/supabase/client";
+import { purgeOnLogout } from "@/lib/security/safeStorage";
+import { startSessionTimers, recordLoginSuccess } from "@/lib/security/authGuard";
 
 interface Profile {
   id: string;
@@ -83,14 +85,33 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   useEffect(() => {
+    let stopTimers: (() => void) | null = null;
+
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      (_event, session) => {
+      (event, session) => {
         setSession(session);
         setUser(session?.user ?? null);
         if (session?.user) {
           setTimeout(() => fetchProfile(session.user.id), 0);
+          if (event === "SIGNED_IN") recordLoginSuccess();
+          // SECURITY: when the user's email/phone/password changes, force a
+          // global re-login on every other device. Additive — does not change
+          // the current device's session.
+          if (event === "USER_UPDATED" || event === "PASSWORD_RECOVERY") {
+            setTimeout(() => {
+              supabase.auth.signOut({ scope: "others" } as any).catch(() => {});
+            }, 0);
+          }
+          // Idle (30m) + absolute (12h) timers; cleanup on next state change.
+          if (stopTimers) stopTimers();
+          stopTimers = startSessionTimers(async () => {
+            try { await supabase.auth.signOut({ scope: "local" } as any); } catch {}
+            purgeOnLogout();
+            window.location.replace("/auth?mode=signin");
+          });
         } else {
           setProfile(null);
+          if (stopTimers) { stopTimers(); stopTimers = null; }
         }
       }
     );
@@ -109,7 +130,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       }
     });
 
-    return () => subscription.unsubscribe();
+    return () => {
+      subscription.unsubscribe();
+      if (stopTimers) stopTimers();
+    };
   }, []);
 
   const signUp = async (email: string, password: string, fullName: string) => {
@@ -130,8 +154,30 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const signOut = async () => {
-    await supabase.auth.signOut();
+    // Clear React state immediately so UI doesn't wait on network
+    setUser(null);
+    setSession(null);
     setProfile(null);
+    // SECURITY: full storage purge + tell the service worker to wipe its caches
+    // so no private API response can be re-served to the next user on the same
+    // device. Additive — preserves the original explicit-key drop list below.
+    try {
+      const drop = [
+        "myraaha_is_guest",
+        "myraaha_uid_reveal_pending",
+        "myraaha_shown_reward_celebrations",
+        "myraaha_compass_intro_seen",
+        "myraaha_initial_path",
+      ];
+      drop.forEach((k) => localStorage.removeItem(k));
+    } catch {}
+    purgeOnLogout();
+    // Local-scope signOut is instant; race against a short timeout so the
+    // button never hangs if the network is slow.
+    const localSignOut = supabase.auth.signOut({ scope: "local" } as any).catch(() => {});
+    await Promise.race([localSignOut, new Promise((r) => setTimeout(r, 1200))]);
+    // Hard reload to a clean state
+    window.location.replace("/auth?mode=signin");
   };
 
   const updateProfile = async (updates: Partial<Profile>) => {

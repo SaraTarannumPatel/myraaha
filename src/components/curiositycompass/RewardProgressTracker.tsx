@@ -20,14 +20,14 @@ const RewardProgressTracker = ({ testType, title, subtitle }: Props) => {
 
   return (
     <Card className="border-primary/20 bg-gradient-to-br from-primary/5 to-accent/5">
-      <CardHeader className="pb-3">
+      <CardHeader className="p-4 sm:p-6 pb-3">
         <CardTitle className="font-display text-base flex items-center gap-2">
           <Sparkles size={16} className="text-primary" />
           {title}
         </CardTitle>
         {subtitle && <p className="font-body text-xs text-muted-foreground">{subtitle}</p>}
       </CardHeader>
-      <CardContent className="space-y-4">
+      <CardContent className="p-4 sm:p-6 space-y-4">
         <div className="space-y-1.5">
           <div className="flex items-center justify-between text-xs font-body">
             <span className="text-muted-foreground">Your progress</span>
@@ -36,7 +36,7 @@ const RewardProgressTracker = ({ testType, title, subtitle }: Props) => {
           <Progress value={pct} className="h-2" />
         </div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+        <div className="grid grid-cols-3 gap-2">
           {ms.map((m) => {
             const unlocked = reached >= m.milestone_percent;
             return (

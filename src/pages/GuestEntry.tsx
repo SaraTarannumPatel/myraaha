@@ -26,7 +26,7 @@ const GuestEntry = () => {
       <OnboardingProgressBar progress={5} />
       <OnboardingRewardBanner currentProgress={5} />
 
-      <div className="flex-1 flex flex-col items-center justify-center px-6 pb-4 max-w-md mx-auto w-full">
+      <div className="flex-1 flex flex-col items-center justify-center px-6 py-8 pb-20 max-w-md mx-auto w-full">
         <div className="relative mb-4 w-full">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -34,7 +34,7 @@ const GuestEntry = () => {
             transition={{ duration: 0.5 }}
             className="flex items-start"
           >
-            <h1 className="font-display text-[3.5rem] sm:text-[4.5rem] lg:text-[5.5rem] leading-[0.90] font-bold text-primary flex-1 z-10">
+            <h1 className="font-display text-[2rem] sm:text-[2.4rem] leading-tight font-bold text-primary flex-1 z-10">
               Find your<br />path, at<br />your<br />pace!
             </h1>
             <div className="w-[50%] sm:w-[45%] lg:w-[40%] -mt-2 -mr-2">

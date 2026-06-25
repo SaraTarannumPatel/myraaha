@@ -127,6 +127,7 @@ Hard rules:
 - All money figures in INR.
 - Each step must be specific, achievable, and time-boxed (estimated_duration).
 - Match the user's stated career stage and behavioral signals.
+- Self-Discovery & Fit is already handled by the app from the 3 Curiosity Compass assessments. If selfDiscoveryCompleted is true, do NOT create a separate unfinished discovery step; start with the next actionable education/learning step.
 - Voice: warm, jargon-free, Gen Z friendly.
 
 Return strict JSON: {
@@ -162,6 +163,7 @@ Current Skills: ${JSON.stringify(context.skills || [])}
 Industry: ${context.industry || "Not specified"}
 Career Stage: ${context.careerStage || "exploring"}
 Areas of Focus: ${JSON.stringify(context.areasOfFocus || [])}
+Self-Discovery Complete: ${context.selfDiscoveryCompleted ? "yes — all 3 Curiosity Compass assessments are complete" : "no"}
 Top Compass Signals: ${JSON.stringify(context.topSignals || [])}
 
 LIVE_WEB_CONTEXT (real, current — use for grounding & resource_url citations):
@@ -389,8 +391,7 @@ Time taken: ${context.timeTaken || "unknown"}.`;
     });
   } catch (e) {
     console.error("roadmap-ai error:", e);
-    return new Response(JSON.stringify({ error: e instanceof Error ? e.message : "Unknown error" }), {
-      status: 500,
+    return new Response(JSON.stringify({ error: "Internal server error" }), { status: 500,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   }

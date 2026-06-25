@@ -257,7 +257,7 @@ const JourneyDiscovery = () => {
 
   const currentQ = demographicQuestions[step];
   const totalSteps = demographicQuestions.length;
-  const progressPercent = 25 + Math.round((step / totalSteps) * 40);
+  const progressPercent = 25 + Math.round((step / totalSteps) * 30);
 
   const canNext = !!answers[currentQ.id]?.trim();
 
@@ -314,9 +314,9 @@ const JourneyDiscovery = () => {
         demographic_answers: answers,
         user_type: profile?.user_type,
       },
-      onboarding_status: "consent" as any,
+      onboarding_status: "educational_status" as any,
     } as any);
-    navigate("/onboarding/consent");
+    navigate("/onboarding/educational-status");
   };
 
   const sectionLabel = currentQ.section;
@@ -325,7 +325,7 @@ const JourneyDiscovery = () => {
     <div className="min-h-screen bg-background flex flex-col">
       <OnboardingProgressBar progress={progressPercent} />
       <OnboardingRewardBanner currentProgress={progressPercent} />
-      <div className="flex-1 flex items-center justify-center p-4 sm:p-6">
+      <div className="flex-1 flex flex-col items-center justify-center p-4 sm:p-6 py-4 pb-6">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
@@ -333,10 +333,10 @@ const JourneyDiscovery = () => {
         >
           <div className="space-y-2">
             <div className="flex items-center justify-between">
-              <span className="font-body text-xs text-muted-foreground uppercase tracking-wider">
+              <span className="progress-step-label text-muted-foreground uppercase tracking-wider">
                 {sectionLabel}
               </span>
-              <span className="font-body text-xs text-muted-foreground">
+              <span className="progress-step-counter text-muted-foreground">
                 {step + 1} / {totalSteps}
               </span>
             </div>
@@ -365,7 +365,7 @@ const JourneyDiscovery = () => {
                 <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-primary/10">
                   <currentQ.icon size={22} className={currentQ.iconColor} />
                 </div>
-                <h1 className="font-display text-2xl sm:text-3xl text-primary">
+                <h1 className="onboarding-step-heading text-primary">
                   {currentQ.question}
                 </h1>
               </div>
@@ -377,7 +377,7 @@ const JourneyDiscovery = () => {
                     placeholder={currentQ.placeholder}
                     value={answers[currentQ.id] || ""}
                     onChange={(e) => handleTextChange(e.target.value)}
-                    className="h-14 rounded-2xl bg-[hsl(0,0%,85%,0.3)] px-5 font-body text-base border-none focus-visible:ring-2 focus-visible:ring-primary"
+                    className="h-12 md:h-12 md:min-h-[48px] min-h-[52px] rounded-md bg-muted px-4 font-body text-base border-none focus-visible:ring-2 focus-visible:ring-primary"
                     onKeyDown={(e) => e.key === "Enter" && canNext && handleNext()}
                   />
                 </div>
@@ -400,8 +400,8 @@ const JourneyDiscovery = () => {
                         onClick={() => handleSelect(opt.value)}
                         className={`${
                           currentQ.options!.length > 5
-                            ? "px-4 py-2.5 rounded-xl"
-                            : "w-full text-left p-4 rounded-xl"
+                            ? "px-4 py-2.5 rounded-lg"
+                            : "w-full text-left p-4 rounded-lg"
                         } border-2 transition-all font-body text-sm ${
                           isSelected
                             ? "border-primary bg-primary/10 text-foreground font-semibold shadow-sm"
@@ -419,15 +419,15 @@ const JourneyDiscovery = () => {
           </AnimatePresence>
 
           <div className="flex justify-between pt-2">
-            <Button variant="ghost" onClick={handleBack} className="font-body">
+            <Button variant="ghost" onClick={handleBack} className="font-body h-[48px] min-h-[48px] px-4 rounded-full">
               <ArrowLeft size={18} /> Back
             </Button>
             <Button
               onClick={handleNext}
               disabled={!canNext}
-              className="bg-primary text-accent rounded-full px-8 font-body font-semibold hover:bg-primary disabled:opacity-50"
+              className="bg-primary text-white rounded-full h-[52px] min-h-[52px] px-8 font-body font-semibold hover:bg-primary/95 disabled:opacity-50"
             >
-              {step === totalSteps - 1 ? "Finish" : "Next"} <ArrowRight size={18} />
+              {step === totalSteps - 1 ? "Finish" : "Next"} <ArrowRight size={18} className="ml-1.5" />
             </Button>
           </div>
         </motion.div>

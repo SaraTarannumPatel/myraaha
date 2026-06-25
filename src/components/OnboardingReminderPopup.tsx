@@ -45,7 +45,7 @@ const onboardingSteps: SkippedStep[] = [
     color: "text-terracotta",
     bgColor: "bg-terracotta/10",
     route: "/onboarding/intent",
-    checkFn: (p) => !p.active_intent || p.active_intent === "career",
+    checkFn: (p) => !p.active_intent,
   },
   {
     key: "consent",
@@ -55,7 +55,10 @@ const onboardingSteps: SkippedStep[] = [
     color: "text-primary",
     bgColor: "bg-primary/10",
     route: "/onboarding/consent",
-    checkFn: (p) => p.consent_data_usage === false && p.consent_mentor_sharing === false,
+    // Only flag consent if the user has NEVER touched the consent step.
+    // consent fields default to false; treat null/undefined as "not seen".
+    checkFn: (p) =>
+      p.consent_data_usage == null && p.consent_mentor_sharing == null,
   },
 ];
 
@@ -72,16 +75,24 @@ const OnboardingReminderPopup = () => {
 
   const getSkippedSteps = useCallback(() => {
     if (!profile || profile.onboarding_status !== "complete") return [];
-    
-    // Check if user has genuinely completed everything - if so, return empty
-    const hasUserType = !!profile.user_type;
-    const hasJourney = !!profile.journey_variant;
-    const hasConsent = profile.consent_data_usage || profile.consent_mentor_sharing;
-    if (hasUserType && hasJourney && hasConsent) return [];
-    
+
+    // STRICT rule (user request): the reminder popup must NEVER show unless the user
+    // explicitly skipped a step. Skipped step keys live in
+    // `profile.journey_responses.skipped_steps` (set when the user taps a Skip button).
+    // If that array is empty / missing, treat onboarding as fully done and show nothing.
+    const skippedExplicit: string[] = Array.isArray(
+      (profile as any)?.journey_responses?.skipped_steps
+    )
+      ? ((profile as any).journey_responses.skipped_steps as string[])
+      : [];
+    if (skippedExplicit.length === 0) return [];
+
     const dismissed: string[] = JSON.parse(localStorage.getItem(DISMISSED_KEY) || "[]");
     return onboardingSteps.filter(
-      (step) => step.checkFn(profile) && !dismissed.includes(step.key)
+      (step) =>
+        skippedExplicit.includes(step.key) &&
+        step.checkFn(profile) &&
+        !dismissed.includes(step.key)
     );
   }, [profile]);
 

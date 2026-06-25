@@ -298,19 +298,8 @@ const AICareerTherapist = () => {
         });
       }
 
-      // Award resilience badge after 5 check-ins
-      const totalCheckins = checkins.length + 1;
-      if (totalCheckins === 5 || totalCheckins === 15 || totalCheckins === 30) {
-        const badgeTitle = totalCheckins === 5 ? "Emotional Explorer" : totalCheckins === 15 ? "Resilience Builder" : "Wellness Champion";
-        const existing = await supabase.from("achievements").select("id").eq("user_id", user.id).eq("title", badgeTitle).maybeSingle();
-        if (!existing.data) {
-          await supabase.from("achievements").insert({
-            user_id: user.id, title: badgeTitle, achievement_type: "resilience",
-            description: `Completed ${totalCheckins} emotional check-ins`, points: totalCheckins * 5,
-          });
-          toast.success(`🏅 Badge unlocked: ${badgeTitle}!`);
-        }
-      }
+      // Resilience badges are awarded server-side via the Achievements scanner.
+
 
       toast.success("Check-in saved 💙");
       setCheckinMood(""); setCheckinReflection(""); setCheckinEnergy(5); setCheckinConfidence(5);

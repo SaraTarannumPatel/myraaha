@@ -77,6 +77,150 @@ export type Database = {
         }
         Relationships: []
       }
+      ai_roadmap_exam_status: {
+        Row: {
+          created_at: string
+          exam_code: string
+          id: string
+          notes: string | null
+          status: string
+          target_year: number | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          exam_code: string
+          id?: string
+          notes?: string | null
+          status?: string
+          target_year?: number | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          exam_code?: string
+          id?: string
+          notes?: string | null
+          status?: string
+          target_year?: number | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      ai_roadmap_module_engagements: {
+        Row: {
+          created_at: string
+          entity_id: string
+          first_opened_at: string
+          id: string
+          last_opened_at: string
+          module_name: string
+          module_route: string
+          open_count: number
+          stage_id: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          entity_id: string
+          first_opened_at?: string
+          id?: string
+          last_opened_at?: string
+          module_name: string
+          module_route: string
+          open_count?: number
+          stage_id: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          entity_id?: string
+          first_opened_at?: string
+          id?: string
+          last_opened_at?: string
+          module_name?: string
+          module_route?: string
+          open_count?: number
+          stage_id?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      ai_roadmap_stage_progress: {
+        Row: {
+          completed_at: string | null
+          created_at: string
+          entity_id: string
+          entity_label: string | null
+          id: string
+          notes_count: number
+          stage_id: string
+          started_at: string | null
+          status: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          completed_at?: string | null
+          created_at?: string
+          entity_id: string
+          entity_label?: string | null
+          id?: string
+          notes_count?: number
+          stage_id: string
+          started_at?: string | null
+          status?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          completed_at?: string | null
+          created_at?: string
+          entity_id?: string
+          entity_label?: string | null
+          id?: string
+          notes_count?: number
+          stage_id?: string
+          started_at?: string | null
+          status?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      assessment_conclusion_keywords: {
+        Row: {
+          created_at: string
+          id: string
+          keyword: string
+          source_assessment: string
+          user_id: string
+          weight: number
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          keyword: string
+          source_assessment: string
+          user_id: string
+          weight?: number
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          keyword?: string
+          source_assessment?: string
+          user_id?: string
+          weight?: number
+        }
+        Relationships: []
+      }
       assessment_conclusions: {
         Row: {
           archetype: string | null
@@ -427,6 +571,822 @@ export type Database = {
         }
         Relationships: []
       }
+      career_intel_agri_env_natural_resources: {
+        Row: {
+          career_cluster: string | null
+          career_pathway_cluster: string | null
+          created_at: string
+          domain_name: string | null
+          function_name: string | null
+          id: number
+          industry_family: string | null
+          industry_name: string | null
+          job_family: string | null
+          role_name: string
+          sector_name: string | null
+          sub_domain_name: string | null
+          sub_sector_name: string | null
+        }
+        Insert: {
+          career_cluster?: string | null
+          career_pathway_cluster?: string | null
+          created_at?: string
+          domain_name?: string | null
+          function_name?: string | null
+          id?: number
+          industry_family?: string | null
+          industry_name?: string | null
+          job_family?: string | null
+          role_name: string
+          sector_name?: string | null
+          sub_domain_name?: string | null
+          sub_sector_name?: string | null
+        }
+        Update: {
+          career_cluster?: string | null
+          career_pathway_cluster?: string | null
+          created_at?: string
+          domain_name?: string | null
+          function_name?: string | null
+          id?: number
+          industry_family?: string | null
+          industry_name?: string | null
+          job_family?: string | null
+          role_name?: string
+          sector_name?: string | null
+          sub_domain_name?: string | null
+          sub_sector_name?: string | null
+        }
+        Relationships: []
+      }
+      career_intel_education: {
+        Row: {
+          career_cluster: string | null
+          career_pathway_cluster: string | null
+          created_at: string
+          domain_name: string | null
+          function_name: string | null
+          id: number
+          industry_family: string | null
+          industry_name: string | null
+          job_family: string | null
+          role_name: string
+          sector_name: string | null
+          sub_domain_name: string | null
+          sub_sector_name: string | null
+        }
+        Insert: {
+          career_cluster?: string | null
+          career_pathway_cluster?: string | null
+          created_at?: string
+          domain_name?: string | null
+          function_name?: string | null
+          id?: number
+          industry_family?: string | null
+          industry_name?: string | null
+          job_family?: string | null
+          role_name: string
+          sector_name?: string | null
+          sub_domain_name?: string | null
+          sub_sector_name?: string | null
+        }
+        Update: {
+          career_cluster?: string | null
+          career_pathway_cluster?: string | null
+          created_at?: string
+          domain_name?: string | null
+          function_name?: string | null
+          id?: number
+          industry_family?: string | null
+          industry_name?: string | null
+          job_family?: string | null
+          role_name?: string
+          sector_name?: string | null
+          sub_domain_name?: string | null
+          sub_sector_name?: string | null
+        }
+        Relationships: []
+      }
+      career_intel_energy_utilities: {
+        Row: {
+          career_cluster: string | null
+          career_pathway_cluster: string | null
+          created_at: string
+          domain_name: string | null
+          function_name: string | null
+          id: number
+          industry_family: string | null
+          industry_name: string | null
+          job_family: string | null
+          role_name: string
+          sector_name: string | null
+          sub_domain_name: string | null
+          sub_sector_name: string | null
+        }
+        Insert: {
+          career_cluster?: string | null
+          career_pathway_cluster?: string | null
+          created_at?: string
+          domain_name?: string | null
+          function_name?: string | null
+          id?: number
+          industry_family?: string | null
+          industry_name?: string | null
+          job_family?: string | null
+          role_name: string
+          sector_name?: string | null
+          sub_domain_name?: string | null
+          sub_sector_name?: string | null
+        }
+        Update: {
+          career_cluster?: string | null
+          career_pathway_cluster?: string | null
+          created_at?: string
+          domain_name?: string | null
+          function_name?: string | null
+          id?: number
+          industry_family?: string | null
+          industry_name?: string | null
+          job_family?: string | null
+          role_name?: string
+          sector_name?: string | null
+          sub_domain_name?: string | null
+          sub_sector_name?: string | null
+        }
+        Relationships: []
+      }
+      career_intel_financial_services: {
+        Row: {
+          career_cluster: string | null
+          career_pathway_cluster: string | null
+          created_at: string
+          domain_name: string | null
+          function_name: string | null
+          id: number
+          industry_family: string | null
+          industry_name: string | null
+          job_family: string | null
+          role_name: string
+          sector_name: string | null
+          sub_domain_name: string | null
+          sub_sector_name: string | null
+        }
+        Insert: {
+          career_cluster?: string | null
+          career_pathway_cluster?: string | null
+          created_at?: string
+          domain_name?: string | null
+          function_name?: string | null
+          id?: number
+          industry_family?: string | null
+          industry_name?: string | null
+          job_family?: string | null
+          role_name: string
+          sector_name?: string | null
+          sub_domain_name?: string | null
+          sub_sector_name?: string | null
+        }
+        Update: {
+          career_cluster?: string | null
+          career_pathway_cluster?: string | null
+          created_at?: string
+          domain_name?: string | null
+          function_name?: string | null
+          id?: number
+          industry_family?: string | null
+          industry_name?: string | null
+          job_family?: string | null
+          role_name?: string
+          sector_name?: string | null
+          sub_domain_name?: string | null
+          sub_sector_name?: string | null
+        }
+        Relationships: []
+      }
+      career_intel_govt_public_sector: {
+        Row: {
+          career_cluster: string | null
+          career_pathway_cluster: string | null
+          created_at: string
+          domain_name: string | null
+          function_name: string | null
+          id: number
+          industry_family: string | null
+          industry_name: string | null
+          job_family: string | null
+          role_name: string
+          sector_name: string | null
+          sub_domain_name: string | null
+          sub_sector_name: string | null
+        }
+        Insert: {
+          career_cluster?: string | null
+          career_pathway_cluster?: string | null
+          created_at?: string
+          domain_name?: string | null
+          function_name?: string | null
+          id?: number
+          industry_family?: string | null
+          industry_name?: string | null
+          job_family?: string | null
+          role_name: string
+          sector_name?: string | null
+          sub_domain_name?: string | null
+          sub_sector_name?: string | null
+        }
+        Update: {
+          career_cluster?: string | null
+          career_pathway_cluster?: string | null
+          created_at?: string
+          domain_name?: string | null
+          function_name?: string | null
+          id?: number
+          industry_family?: string | null
+          industry_name?: string | null
+          job_family?: string | null
+          role_name?: string
+          sector_name?: string | null
+          sub_domain_name?: string | null
+          sub_sector_name?: string | null
+        }
+        Relationships: []
+      }
+      career_intel_healthcare_life_sciences: {
+        Row: {
+          career_cluster: string | null
+          career_pathway_cluster: string | null
+          created_at: string
+          domain_name: string | null
+          function_name: string | null
+          id: number
+          industry_family: string | null
+          industry_name: string | null
+          job_family: string | null
+          role_name: string
+          sector_name: string | null
+          sub_domain_name: string | null
+          sub_sector_name: string | null
+        }
+        Insert: {
+          career_cluster?: string | null
+          career_pathway_cluster?: string | null
+          created_at?: string
+          domain_name?: string | null
+          function_name?: string | null
+          id?: number
+          industry_family?: string | null
+          industry_name?: string | null
+          job_family?: string | null
+          role_name: string
+          sector_name?: string | null
+          sub_domain_name?: string | null
+          sub_sector_name?: string | null
+        }
+        Update: {
+          career_cluster?: string | null
+          career_pathway_cluster?: string | null
+          created_at?: string
+          domain_name?: string | null
+          function_name?: string | null
+          id?: number
+          industry_family?: string | null
+          industry_name?: string | null
+          job_family?: string | null
+          role_name?: string
+          sector_name?: string | null
+          sub_domain_name?: string | null
+          sub_sector_name?: string | null
+        }
+        Relationships: []
+      }
+      career_intel_hospitality_tourism_travel: {
+        Row: {
+          career_cluster: string | null
+          career_pathway_cluster: string | null
+          created_at: string
+          domain_name: string | null
+          function_name: string | null
+          id: number
+          industry_family: string | null
+          industry_name: string | null
+          job_family: string | null
+          role_name: string
+          sector_name: string | null
+          sub_domain_name: string | null
+          sub_sector_name: string | null
+        }
+        Insert: {
+          career_cluster?: string | null
+          career_pathway_cluster?: string | null
+          created_at?: string
+          domain_name?: string | null
+          function_name?: string | null
+          id?: number
+          industry_family?: string | null
+          industry_name?: string | null
+          job_family?: string | null
+          role_name: string
+          sector_name?: string | null
+          sub_domain_name?: string | null
+          sub_sector_name?: string | null
+        }
+        Update: {
+          career_cluster?: string | null
+          career_pathway_cluster?: string | null
+          created_at?: string
+          domain_name?: string | null
+          function_name?: string | null
+          id?: number
+          industry_family?: string | null
+          industry_name?: string | null
+          job_family?: string | null
+          role_name?: string
+          sector_name?: string | null
+          sub_domain_name?: string | null
+          sub_sector_name?: string | null
+        }
+        Relationships: []
+      }
+      career_intel_legal_prof_services: {
+        Row: {
+          career_cluster: string | null
+          career_pathway_cluster: string | null
+          created_at: string
+          domain_name: string | null
+          function_name: string | null
+          id: number
+          industry_family: string | null
+          industry_name: string | null
+          job_family: string | null
+          role_name: string
+          sector_name: string | null
+          sub_domain_name: string | null
+          sub_sector_name: string | null
+        }
+        Insert: {
+          career_cluster?: string | null
+          career_pathway_cluster?: string | null
+          created_at?: string
+          domain_name?: string | null
+          function_name?: string | null
+          id?: number
+          industry_family?: string | null
+          industry_name?: string | null
+          job_family?: string | null
+          role_name: string
+          sector_name?: string | null
+          sub_domain_name?: string | null
+          sub_sector_name?: string | null
+        }
+        Update: {
+          career_cluster?: string | null
+          career_pathway_cluster?: string | null
+          created_at?: string
+          domain_name?: string | null
+          function_name?: string | null
+          id?: number
+          industry_family?: string | null
+          industry_name?: string | null
+          job_family?: string | null
+          role_name?: string
+          sector_name?: string | null
+          sub_domain_name?: string | null
+          sub_sector_name?: string | null
+        }
+        Relationships: []
+      }
+      career_intel_manufacturing_engineering: {
+        Row: {
+          career_cluster: string | null
+          career_pathway_cluster: string | null
+          created_at: string
+          domain_name: string | null
+          function_name: string | null
+          id: number
+          industry_family: string | null
+          industry_name: string | null
+          job_family: string | null
+          role_name: string
+          sector_name: string | null
+          sub_domain_name: string | null
+          sub_sector_name: string | null
+        }
+        Insert: {
+          career_cluster?: string | null
+          career_pathway_cluster?: string | null
+          created_at?: string
+          domain_name?: string | null
+          function_name?: string | null
+          id?: number
+          industry_family?: string | null
+          industry_name?: string | null
+          job_family?: string | null
+          role_name: string
+          sector_name?: string | null
+          sub_domain_name?: string | null
+          sub_sector_name?: string | null
+        }
+        Update: {
+          career_cluster?: string | null
+          career_pathway_cluster?: string | null
+          created_at?: string
+          domain_name?: string | null
+          function_name?: string | null
+          id?: number
+          industry_family?: string | null
+          industry_name?: string | null
+          job_family?: string | null
+          role_name?: string
+          sector_name?: string | null
+          sub_domain_name?: string | null
+          sub_sector_name?: string | null
+        }
+        Relationships: []
+      }
+      career_intel_media_ent_creative: {
+        Row: {
+          career_cluster: string | null
+          career_pathway_cluster: string | null
+          created_at: string
+          domain_name: string | null
+          function_name: string | null
+          id: number
+          industry_family: string | null
+          industry_name: string | null
+          job_family: string | null
+          role_name: string
+          sector_name: string | null
+          sub_domain_name: string | null
+          sub_sector_name: string | null
+        }
+        Insert: {
+          career_cluster?: string | null
+          career_pathway_cluster?: string | null
+          created_at?: string
+          domain_name?: string | null
+          function_name?: string | null
+          id?: number
+          industry_family?: string | null
+          industry_name?: string | null
+          job_family?: string | null
+          role_name: string
+          sector_name?: string | null
+          sub_domain_name?: string | null
+          sub_sector_name?: string | null
+        }
+        Update: {
+          career_cluster?: string | null
+          career_pathway_cluster?: string | null
+          created_at?: string
+          domain_name?: string | null
+          function_name?: string | null
+          id?: number
+          industry_family?: string | null
+          industry_name?: string | null
+          job_family?: string | null
+          role_name?: string
+          sector_name?: string | null
+          sub_domain_name?: string | null
+          sub_sector_name?: string | null
+        }
+        Relationships: []
+      }
+      career_intel_ngo_development: {
+        Row: {
+          career_cluster: string | null
+          career_pathway_cluster: string | null
+          created_at: string
+          domain_name: string | null
+          function_name: string | null
+          id: number
+          industry_family: string | null
+          industry_name: string | null
+          job_family: string | null
+          role_name: string
+          sector_name: string | null
+          sub_domain_name: string | null
+          sub_sector_name: string | null
+        }
+        Insert: {
+          career_cluster?: string | null
+          career_pathway_cluster?: string | null
+          created_at?: string
+          domain_name?: string | null
+          function_name?: string | null
+          id?: number
+          industry_family?: string | null
+          industry_name?: string | null
+          job_family?: string | null
+          role_name: string
+          sector_name?: string | null
+          sub_domain_name?: string | null
+          sub_sector_name?: string | null
+        }
+        Update: {
+          career_cluster?: string | null
+          career_pathway_cluster?: string | null
+          created_at?: string
+          domain_name?: string | null
+          function_name?: string | null
+          id?: number
+          industry_family?: string | null
+          industry_name?: string | null
+          job_family?: string | null
+          role_name?: string
+          sector_name?: string | null
+          sub_domain_name?: string | null
+          sub_sector_name?: string | null
+        }
+        Relationships: []
+      }
+      career_intel_real_estate_construction: {
+        Row: {
+          career_cluster: string | null
+          career_pathway_cluster: string | null
+          created_at: string
+          domain_name: string | null
+          function_name: string | null
+          id: number
+          industry_family: string | null
+          industry_name: string | null
+          job_family: string | null
+          role_name: string
+          sector_name: string | null
+          sub_domain_name: string | null
+          sub_sector_name: string | null
+        }
+        Insert: {
+          career_cluster?: string | null
+          career_pathway_cluster?: string | null
+          created_at?: string
+          domain_name?: string | null
+          function_name?: string | null
+          id?: number
+          industry_family?: string | null
+          industry_name?: string | null
+          job_family?: string | null
+          role_name: string
+          sector_name?: string | null
+          sub_domain_name?: string | null
+          sub_sector_name?: string | null
+        }
+        Update: {
+          career_cluster?: string | null
+          career_pathway_cluster?: string | null
+          created_at?: string
+          domain_name?: string | null
+          function_name?: string | null
+          id?: number
+          industry_family?: string | null
+          industry_name?: string | null
+          job_family?: string | null
+          role_name?: string
+          sector_name?: string | null
+          sub_domain_name?: string | null
+          sub_sector_name?: string | null
+        }
+        Relationships: []
+      }
+      career_intel_retail_consumer_goods: {
+        Row: {
+          career_cluster: string | null
+          career_pathway_cluster: string | null
+          created_at: string
+          domain_name: string | null
+          function_name: string | null
+          id: number
+          industry_family: string | null
+          industry_name: string | null
+          job_family: string | null
+          role_name: string
+          sector_name: string | null
+          sub_domain_name: string | null
+          sub_sector_name: string | null
+        }
+        Insert: {
+          career_cluster?: string | null
+          career_pathway_cluster?: string | null
+          created_at?: string
+          domain_name?: string | null
+          function_name?: string | null
+          id?: number
+          industry_family?: string | null
+          industry_name?: string | null
+          job_family?: string | null
+          role_name: string
+          sector_name?: string | null
+          sub_domain_name?: string | null
+          sub_sector_name?: string | null
+        }
+        Update: {
+          career_cluster?: string | null
+          career_pathway_cluster?: string | null
+          created_at?: string
+          domain_name?: string | null
+          function_name?: string | null
+          id?: number
+          industry_family?: string | null
+          industry_name?: string | null
+          job_family?: string | null
+          role_name?: string
+          sector_name?: string | null
+          sub_domain_name?: string | null
+          sub_sector_name?: string | null
+        }
+        Relationships: []
+      }
+      career_intel_sports: {
+        Row: {
+          career_cluster: string | null
+          career_pathway_cluster: string | null
+          created_at: string
+          domain_name: string | null
+          function_name: string | null
+          id: number
+          industry_family: string | null
+          industry_name: string | null
+          job_family: string | null
+          role_name: string
+          sector_name: string | null
+          sub_domain_name: string | null
+          sub_sector_name: string | null
+        }
+        Insert: {
+          career_cluster?: string | null
+          career_pathway_cluster?: string | null
+          created_at?: string
+          domain_name?: string | null
+          function_name?: string | null
+          id?: number
+          industry_family?: string | null
+          industry_name?: string | null
+          job_family?: string | null
+          role_name: string
+          sector_name?: string | null
+          sub_domain_name?: string | null
+          sub_sector_name?: string | null
+        }
+        Update: {
+          career_cluster?: string | null
+          career_pathway_cluster?: string | null
+          created_at?: string
+          domain_name?: string | null
+          function_name?: string | null
+          id?: number
+          industry_family?: string | null
+          industry_name?: string | null
+          job_family?: string | null
+          role_name?: string
+          sector_name?: string | null
+          sub_domain_name?: string | null
+          sub_sector_name?: string | null
+        }
+        Relationships: []
+      }
+      career_intel_tech_it: {
+        Row: {
+          career_cluster: string | null
+          career_pathway_cluster: string | null
+          created_at: string
+          domain_name: string | null
+          function_name: string | null
+          id: number
+          industry_family: string | null
+          industry_name: string | null
+          job_family: string | null
+          role_name: string
+          sector_name: string | null
+          sub_domain_name: string | null
+          sub_sector_name: string | null
+        }
+        Insert: {
+          career_cluster?: string | null
+          career_pathway_cluster?: string | null
+          created_at?: string
+          domain_name?: string | null
+          function_name?: string | null
+          id?: number
+          industry_family?: string | null
+          industry_name?: string | null
+          job_family?: string | null
+          role_name: string
+          sector_name?: string | null
+          sub_domain_name?: string | null
+          sub_sector_name?: string | null
+        }
+        Update: {
+          career_cluster?: string | null
+          career_pathway_cluster?: string | null
+          created_at?: string
+          domain_name?: string | null
+          function_name?: string | null
+          id?: number
+          industry_family?: string | null
+          industry_name?: string | null
+          job_family?: string | null
+          role_name?: string
+          sector_name?: string | null
+          sub_domain_name?: string | null
+          sub_sector_name?: string | null
+        }
+        Relationships: []
+      }
+      career_intel_telecommunications: {
+        Row: {
+          career_cluster: string | null
+          career_pathway_cluster: string | null
+          created_at: string
+          domain_name: string | null
+          function_name: string | null
+          id: number
+          industry_family: string | null
+          industry_name: string | null
+          job_family: string | null
+          role_name: string
+          sector_name: string | null
+          sub_domain_name: string | null
+          sub_sector_name: string | null
+        }
+        Insert: {
+          career_cluster?: string | null
+          career_pathway_cluster?: string | null
+          created_at?: string
+          domain_name?: string | null
+          function_name?: string | null
+          id?: number
+          industry_family?: string | null
+          industry_name?: string | null
+          job_family?: string | null
+          role_name: string
+          sector_name?: string | null
+          sub_domain_name?: string | null
+          sub_sector_name?: string | null
+        }
+        Update: {
+          career_cluster?: string | null
+          career_pathway_cluster?: string | null
+          created_at?: string
+          domain_name?: string | null
+          function_name?: string | null
+          id?: number
+          industry_family?: string | null
+          industry_name?: string | null
+          job_family?: string | null
+          role_name?: string
+          sector_name?: string | null
+          sub_domain_name?: string | null
+          sub_sector_name?: string | null
+        }
+        Relationships: []
+      }
+      career_intel_transport_logistics: {
+        Row: {
+          career_cluster: string | null
+          career_pathway_cluster: string | null
+          created_at: string
+          domain_name: string | null
+          function_name: string | null
+          id: number
+          industry_family: string | null
+          industry_name: string | null
+          job_family: string | null
+          role_name: string
+          sector_name: string | null
+          sub_domain_name: string | null
+          sub_sector_name: string | null
+        }
+        Insert: {
+          career_cluster?: string | null
+          career_pathway_cluster?: string | null
+          created_at?: string
+          domain_name?: string | null
+          function_name?: string | null
+          id?: number
+          industry_family?: string | null
+          industry_name?: string | null
+          job_family?: string | null
+          role_name: string
+          sector_name?: string | null
+          sub_domain_name?: string | null
+          sub_sector_name?: string | null
+        }
+        Update: {
+          career_cluster?: string | null
+          career_pathway_cluster?: string | null
+          created_at?: string
+          domain_name?: string | null
+          function_name?: string | null
+          id?: number
+          industry_family?: string | null
+          industry_name?: string | null
+          job_family?: string | null
+          role_name?: string
+          sector_name?: string | null
+          sub_domain_name?: string | null
+          sub_sector_name?: string | null
+        }
+        Relationships: []
+      }
       career_path_interactions: {
         Row: {
           career_path_id: string
@@ -670,6 +1630,69 @@ export type Database = {
           },
         ]
       }
+      career_taxonomy: {
+        Row: {
+          career_cluster: string | null
+          career_pathway_cluster: string | null
+          cluster_id: number | null
+          coord_x: number | null
+          coord_y: number | null
+          created_at: string
+          domain_name: string | null
+          function_name: string | null
+          id: number
+          industry_family: string | null
+          industry_name: string | null
+          job_family: string | null
+          role_name: string
+          role_uuid: string
+          sector_name: string
+          source_workbook: string
+          sub_domain_name: string | null
+          sub_sector_name: string | null
+        }
+        Insert: {
+          career_cluster?: string | null
+          career_pathway_cluster?: string | null
+          cluster_id?: number | null
+          coord_x?: number | null
+          coord_y?: number | null
+          created_at?: string
+          domain_name?: string | null
+          function_name?: string | null
+          id?: number
+          industry_family?: string | null
+          industry_name?: string | null
+          job_family?: string | null
+          role_name: string
+          role_uuid?: string
+          sector_name: string
+          source_workbook: string
+          sub_domain_name?: string | null
+          sub_sector_name?: string | null
+        }
+        Update: {
+          career_cluster?: string | null
+          career_pathway_cluster?: string | null
+          cluster_id?: number | null
+          coord_x?: number | null
+          coord_y?: number | null
+          created_at?: string
+          domain_name?: string | null
+          function_name?: string | null
+          id?: number
+          industry_family?: string | null
+          industry_name?: string | null
+          job_family?: string | null
+          role_name?: string
+          role_uuid?: string
+          sector_name?: string
+          source_workbook?: string
+          sub_domain_name?: string | null
+          sub_sector_name?: string | null
+        }
+        Relationships: []
+      }
       challenge_card_interactions: {
         Row: {
           challenge_id: string
@@ -851,6 +1874,69 @@ export type Database = {
           topic?: string | null
           updated_at?: string
           user_id?: string
+        }
+        Relationships: []
+      }
+      combined_conclusions: {
+        Row: {
+          cognitive_signature: string | null
+          domain_affinities: Json | null
+          dominant_archetype: string | null
+          generated_at: string
+          growth_orientation: string | null
+          hard_constraints: Json | null
+          id: string
+          identity_summary: string | null
+          narrative_long: string | null
+          raw: Json | null
+          red_flag_traits: Json | null
+          risk_profile: string | null
+          style_axes: Json | null
+          top_motivations: Json | null
+          updated_at: string
+          user_id: string
+          values_anchors: Json | null
+          work_preferences: Json | null
+        }
+        Insert: {
+          cognitive_signature?: string | null
+          domain_affinities?: Json | null
+          dominant_archetype?: string | null
+          generated_at?: string
+          growth_orientation?: string | null
+          hard_constraints?: Json | null
+          id?: string
+          identity_summary?: string | null
+          narrative_long?: string | null
+          raw?: Json | null
+          red_flag_traits?: Json | null
+          risk_profile?: string | null
+          style_axes?: Json | null
+          top_motivations?: Json | null
+          updated_at?: string
+          user_id: string
+          values_anchors?: Json | null
+          work_preferences?: Json | null
+        }
+        Update: {
+          cognitive_signature?: string | null
+          domain_affinities?: Json | null
+          dominant_archetype?: string | null
+          generated_at?: string
+          growth_orientation?: string | null
+          hard_constraints?: Json | null
+          id?: string
+          identity_summary?: string | null
+          narrative_long?: string | null
+          raw?: Json | null
+          red_flag_traits?: Json | null
+          risk_profile?: string | null
+          style_axes?: Json | null
+          top_motivations?: Json | null
+          updated_at?: string
+          user_id?: string
+          values_anchors?: Json | null
+          work_preferences?: Json | null
         }
         Relationships: []
       }
@@ -1093,6 +2179,45 @@ export type Database = {
           required_skills?: string[] | null
           status?: string | null
           title?: string
+        }
+        Relationships: []
+      }
+      compass_fit_results: {
+        Row: {
+          bucket: string
+          computed_at: string
+          entity_id: string
+          entity_name: string
+          entity_type: string
+          id: string
+          meta: Json | null
+          reasons: Json | null
+          score: number
+          user_id: string
+        }
+        Insert: {
+          bucket: string
+          computed_at?: string
+          entity_id: string
+          entity_name: string
+          entity_type: string
+          id?: string
+          meta?: Json | null
+          reasons?: Json | null
+          score?: number
+          user_id: string
+        }
+        Update: {
+          bucket?: string
+          computed_at?: string
+          entity_id?: string
+          entity_name?: string
+          entity_type?: string
+          id?: string
+          meta?: Json | null
+          reasons?: Json | null
+          score?: number
+          user_id?: string
         }
         Relationships: []
       }
@@ -2038,6 +3163,36 @@ export type Database = {
         }
         Relationships: []
       }
+      explore_entity_keywords: {
+        Row: {
+          created_at: string
+          entity_id: string
+          entity_name: string | null
+          entity_type: string
+          id: string
+          keyword: string
+          weight: number
+        }
+        Insert: {
+          created_at?: string
+          entity_id: string
+          entity_name?: string | null
+          entity_type: string
+          id?: string
+          keyword: string
+          weight?: number
+        }
+        Update: {
+          created_at?: string
+          entity_id?: string
+          entity_name?: string | null
+          entity_type?: string
+          id?: string
+          keyword?: string
+          weight?: number
+        }
+        Relationships: []
+      }
       founder_profiles: {
         Row: {
           created_at: string
@@ -2696,6 +3851,39 @@ export type Database = {
           source?: string | null
           strength?: number | null
           updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      interests_assessment_responses: {
+        Row: {
+          answer_label: string
+          answer_value: string
+          construct: string | null
+          created_at: string
+          id: string
+          question_id: string
+          question_text: string
+          user_id: string
+        }
+        Insert: {
+          answer_label: string
+          answer_value: string
+          construct?: string | null
+          created_at?: string
+          id?: string
+          question_id: string
+          question_text: string
+          user_id: string
+        }
+        Update: {
+          answer_label?: string
+          answer_value?: string
+          construct?: string | null
+          created_at?: string
+          id?: string
+          question_id?: string
+          question_text?: string
           user_id?: string
         }
         Relationships: []
@@ -6041,6 +7229,33 @@ export type Database = {
           },
         ]
       }
+      rate_limit_log: {
+        Row: {
+          created_at: string
+          endpoint: string
+          hit_count: number
+          id: string
+          identity: string
+          window_started_at: string
+        }
+        Insert: {
+          created_at?: string
+          endpoint: string
+          hit_count?: number
+          id?: string
+          identity: string
+          window_started_at?: string
+        }
+        Update: {
+          created_at?: string
+          endpoint?: string
+          hit_count?: number
+          id?: string
+          identity?: string
+          window_started_at?: string
+        }
+        Relationships: []
+      }
       reflection_prompts: {
         Row: {
           context: string | null
@@ -6452,6 +7667,60 @@ export type Database = {
           },
         ]
       }
+      role_education_requirements: {
+        Row: {
+          alternative_entry_paths: string[]
+          created_at: string
+          entrance_exam_codes: string[]
+          id: string
+          minimum_education_level: string
+          notes: string | null
+          preferred_degree_types: string[]
+          preferred_education_level: string | null
+          required_degree_types: string[]
+          required_stream_class12: string | null
+          required_subjects_class12: string[]
+          required_subjects_undergraduate: string[]
+          role_id: string | null
+          role_label: string
+          updated_at: string
+        }
+        Insert: {
+          alternative_entry_paths?: string[]
+          created_at?: string
+          entrance_exam_codes?: string[]
+          id?: string
+          minimum_education_level: string
+          notes?: string | null
+          preferred_degree_types?: string[]
+          preferred_education_level?: string | null
+          required_degree_types?: string[]
+          required_stream_class12?: string | null
+          required_subjects_class12?: string[]
+          required_subjects_undergraduate?: string[]
+          role_id?: string | null
+          role_label: string
+          updated_at?: string
+        }
+        Update: {
+          alternative_entry_paths?: string[]
+          created_at?: string
+          entrance_exam_codes?: string[]
+          id?: string
+          minimum_education_level?: string
+          notes?: string | null
+          preferred_degree_types?: string[]
+          preferred_education_level?: string | null
+          required_degree_types?: string[]
+          required_stream_class12?: string | null
+          required_subjects_class12?: string[]
+          required_subjects_undergraduate?: string[]
+          role_id?: string | null
+          role_label?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       role_exam_gate_edges: {
         Row: {
           created_at: string
@@ -6537,8 +7806,8 @@ export type Database = {
             foreignKeyName: "role_ksao_vectors_role_id_fkey"
             columns: ["role_id"]
             isOneToOne: false
-            referencedRelation: "taxonomy_nodes"
-            referencedColumns: ["id"]
+            referencedRelation: "career_taxonomy"
+            referencedColumns: ["role_uuid"]
           },
         ]
       }
@@ -6771,6 +8040,39 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      security_audit_log: {
+        Row: {
+          created_at: string
+          event_type: string
+          id: string
+          ip_hash: string | null
+          metadata: Json
+          severity: string
+          user_agent: string | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          event_type: string
+          id?: string
+          ip_hash?: string | null
+          metadata?: Json
+          severity?: string
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          event_type?: string
+          id?: string
+          ip_hash?: string | null
+          metadata?: Json
+          severity?: string
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
       }
       selfgraph_data: {
         Row: {
@@ -8181,6 +9483,120 @@ export type Database = {
           },
         ]
       }
+      user_activities: {
+        Row: {
+          achievement: string | null
+          activity_type: string
+          created_at: string
+          id: string
+          role: string | null
+          title: string
+          user_id: string
+          year: string | null
+        }
+        Insert: {
+          achievement?: string | null
+          activity_type: string
+          created_at?: string
+          id?: string
+          role?: string | null
+          title: string
+          user_id: string
+          year?: string | null
+        }
+        Update: {
+          achievement?: string | null
+          activity_type?: string
+          created_at?: string
+          id?: string
+          role?: string | null
+          title?: string
+          user_id?: string
+          year?: string | null
+        }
+        Relationships: []
+      }
+      user_certifications: {
+        Row: {
+          certificate_url: string | null
+          completion_year: string | null
+          course_name: string
+          created_at: string
+          id: string
+          platform: string | null
+          user_id: string
+        }
+        Insert: {
+          certificate_url?: string | null
+          completion_year?: string | null
+          course_name: string
+          created_at?: string
+          id?: string
+          platform?: string | null
+          user_id: string
+        }
+        Update: {
+          certificate_url?: string | null
+          completion_year?: string | null
+          course_name?: string
+          created_at?: string
+          id?: string
+          platform?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      user_education_status: {
+        Row: {
+          board_or_university_type: string | null
+          career_domains: string[] | null
+          course_program: string | null
+          created_at: string
+          curious_careers: string | null
+          educational_status: string
+          id: string
+          institution_name: string | null
+          looking_for_help: string[] | null
+          prepping_for: string[] | null
+          stream: string | null
+          updated_at: string
+          user_id: string
+          year_of_study: string | null
+        }
+        Insert: {
+          board_or_university_type?: string | null
+          career_domains?: string[] | null
+          course_program?: string | null
+          created_at?: string
+          curious_careers?: string | null
+          educational_status: string
+          id?: string
+          institution_name?: string | null
+          looking_for_help?: string[] | null
+          prepping_for?: string[] | null
+          stream?: string | null
+          updated_at?: string
+          user_id: string
+          year_of_study?: string | null
+        }
+        Update: {
+          board_or_university_type?: string | null
+          career_domains?: string[] | null
+          course_program?: string | null
+          created_at?: string
+          curious_careers?: string | null
+          educational_status?: string
+          id?: string
+          institution_name?: string | null
+          looking_for_help?: string[] | null
+          prepping_for?: string[] | null
+          stream?: string | null
+          updated_at?: string
+          user_id?: string
+          year_of_study?: string | null
+        }
+        Relationships: []
+      }
       user_entitlements: {
         Row: {
           entitlement_key: string
@@ -8226,6 +9642,60 @@ export type Database = {
         }
         Relationships: []
       }
+      user_interest_profile: {
+        Row: {
+          activity_style: string | null
+          arts: number | null
+          business: number | null
+          discovery: number | null
+          experimentation: number | null
+          exploration: number | null
+          humanities: number | null
+          impact_style: string | null
+          last_updated: string
+          mathematics: number | null
+          problem_style: string | null
+          raw: Json
+          science: number | null
+          technology: number | null
+          user_id: string
+        }
+        Insert: {
+          activity_style?: string | null
+          arts?: number | null
+          business?: number | null
+          discovery?: number | null
+          experimentation?: number | null
+          exploration?: number | null
+          humanities?: number | null
+          impact_style?: string | null
+          last_updated?: string
+          mathematics?: number | null
+          problem_style?: string | null
+          raw?: Json
+          science?: number | null
+          technology?: number | null
+          user_id: string
+        }
+        Update: {
+          activity_style?: string | null
+          arts?: number | null
+          business?: number | null
+          discovery?: number | null
+          experimentation?: number | null
+          exploration?: number | null
+          humanities?: number | null
+          impact_style?: string | null
+          last_updated?: string
+          mathematics?: number | null
+          problem_style?: string | null
+          raw?: Json
+          science?: number | null
+          technology?: number | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       user_ksao_vectors: {
         Row: {
           confidence: number
@@ -8267,6 +9737,36 @@ export type Database = {
           },
         ]
       }
+      user_leadership: {
+        Row: {
+          created_at: string
+          description: string | null
+          duration: string | null
+          id: string
+          organization: string | null
+          position_title: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          duration?: string | null
+          id?: string
+          organization?: string | null
+          position_title: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          duration?: string | null
+          id?: string
+          organization?: string | null
+          position_title?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       user_learning_progress: {
         Row: {
           completed_at: string | null
@@ -8299,6 +9799,63 @@ export type Database = {
           notes?: string | null
           score?: number | null
           status?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      user_onboarding_sectors: {
+        Row: {
+          created_at: string
+          id: string
+          rank: number
+          sector_name: string
+          sector_slug: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          rank?: number
+          sector_name: string
+          sector_slug: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          rank?: number
+          sector_name?: string
+          sector_slug?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      user_projects_profile: {
+        Row: {
+          created_at: string
+          description: string | null
+          id: string
+          link: string | null
+          project_name: string
+          skills_used: string[] | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          link?: string | null
+          project_name: string
+          skills_used?: string[] | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          link?: string | null
+          project_name?: string
+          skills_used?: string[] | null
           user_id?: string
         }
         Relationships: []
@@ -8354,6 +9911,30 @@ export type Database = {
         }
         Relationships: []
       }
+      user_skills_profile: {
+        Row: {
+          confidence: string | null
+          created_at: string
+          id: string
+          skill_name: string
+          user_id: string
+        }
+        Insert: {
+          confidence?: string | null
+          created_at?: string
+          id?: string
+          skill_name: string
+          user_id: string
+        }
+        Update: {
+          confidence?: string | null
+          created_at?: string
+          id?: string
+          skill_name?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       user_streaks: {
         Row: {
           current_streak: number | null
@@ -8383,6 +9964,30 @@ export type Database = {
           started_at?: string | null
           streak_type?: string | null
           updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      user_subjects: {
+        Row: {
+          created_at: string
+          id: string
+          relation: string
+          subject_name: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          relation: string
+          subject_name: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          relation?: string
+          subject_name?: string
           user_id?: string
         }
         Relationships: []
@@ -8499,6 +10104,26 @@ export type Database = {
       }
     }
     Views: {
+      leaderboard_public: {
+        Row: {
+          anon_id: string | null
+          avatar_url: string | null
+          badge_count: number | null
+          display_name: string | null
+          id: string | null
+          is_self: boolean | null
+          learning_hours: number | null
+          projects_completed: number | null
+          rank_position: number | null
+          scope: string | null
+          scope_id: string | null
+          streak_days: number | null
+          total_points: number | null
+          updated_at: string | null
+          user_id: string | null
+        }
+        Relationships: []
+      }
       public_insights: {
         Row: {
           author_name: string | null
@@ -8540,13 +10165,55 @@ export type Database = {
       }
     }
     Functions: {
+      compute_compass_fit: { Args: { _user_id?: string }; Returns: Json }
       consume_entitlement: {
         Args: { _entitlement_key: string }
         Returns: boolean
       }
       ensure_profile_public_uid: { Args: never; Returns: string }
+      get_career_map_stats: {
+        Args: never
+        Returns: {
+          cluster_count: number
+          plotted_roles: number
+          total_roles: number
+        }[]
+      }
+      get_leaderboard: {
+        Args: { _limit?: number; _scope?: string; _scope_id?: string }
+        Returns: {
+          anon_id: string
+          avatar_url: string
+          badge_count: number
+          display_name: string
+          id: string
+          is_self: boolean
+          learning_hours: number
+          projects_completed: number
+          rank_position: number
+          scope: string
+          scope_id: string
+          streak_days: number
+          total_points: number
+          updated_at: string
+          user_id: string
+        }[]
+      }
+      get_sector_trending: {
+        Args: { _per_sector?: number }
+        Returns: {
+          mentions: number
+          role_name: string
+          sector: string
+          sub_sector: string
+        }[]
+      }
       has_active_entitlement: {
         Args: { _entitlement_key: string }
+        Returns: boolean
+      }
+      has_completed_curiosity_compass: {
+        Args: { _user_id: string }
         Returns: boolean
       }
       has_role: {
@@ -8557,8 +10224,28 @@ export type Database = {
         Returns: boolean
       }
       is_email_verified: { Args: { _email: string }; Returns: boolean }
+      log_security_event: {
+        Args: { _event_type: string; _metadata?: Json; _severity?: string }
+        Returns: string
+      }
+      match_explore_entities_for_user: {
+        Args: { _entity_type: string; _limit?: number }
+        Returns: {
+          entity_id: string
+          entity_name: string
+          score: number
+        }[]
+      }
+      record_rate_limit_hit: {
+        Args: { _endpoint: string; _identity: string; _window_seconds?: number }
+        Returns: number
+      }
       show_limit: { Args: never; Returns: number }
       show_trgm: { Args: { "": string }; Returns: string[] }
+      sync_ai_roadmap_self_discovery_stage: {
+        Args: { _entity_id?: string; _entity_label?: string; _user_id?: string }
+        Returns: boolean
+      }
       unlock_reward: { Args: { _milestone_key: string }; Returns: Json }
       update_assessment_progress: {
         Args: { _completed: number; _test_type: string; _total: number }

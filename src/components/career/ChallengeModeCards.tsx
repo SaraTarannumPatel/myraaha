@@ -18,6 +18,7 @@ import {
   Loader2, RefreshCw, ArrowRight, BarChart3, Shield, Star,
   TrendingUp
 } from "lucide-react";
+import { useCuratedCompassFilter } from "@/hooks/useCuratedCompassFilter";
 
 type InteractionType = "like" | "love" | "bookmark" | "not_for_me";
 
@@ -199,8 +200,12 @@ const ChallengeModeCards = () => {
     } finally { setGeneratingRoadmap(false); }
   };
 
+  const { scoreEntity, hasPersonalization } = useCuratedCompassFilter();
   const domains = [...new Set(challenges.map(c => c.domain))].sort();
-  const filtered = filterDomains.length > 0 ? challenges.filter(c => filterDomains.includes(c.domain)) : challenges;
+  const baseList = filterDomains.length > 0 ? challenges.filter(c => filterDomains.includes(c.domain)) : challenges;
+  const filtered = hasPersonalization
+    ? [...baseList].sort((a, b) => scoreEntity(b as any) - scoreEntity(a as any))
+    : baseList;
   const current = filtered[currentIndex];
   const interactionCount = Object.keys(interactions).length;
   const stats = {
@@ -237,97 +242,110 @@ const ChallengeModeCards = () => {
 
   return (
     <div className="space-y-6">
-      {/* Stats */}
-      <div className="flex items-center justify-between flex-wrap gap-3">
+      {/* Stats Bar */}
+      <div className="bg-card border border-border rounded-2xl p-4 shadow-sm flex items-center justify-between flex-wrap gap-3">
         <div className="flex items-center gap-4">
-          <span className="flex items-center gap-1.5 text-sm"><Heart size={14} className="text-terracotta" /> <span className="font-body text-muted-foreground">{stats.loved}</span></span>
-          <span className="flex items-center gap-1.5 text-sm"><ThumbsUp size={14} className="text-primary" /> <span className="font-body text-muted-foreground">{stats.liked}</span></span>
-          <span className="flex items-center gap-1.5 text-sm"><Bookmark size={14} className="text-blue-primary" /> <span className="font-body text-muted-foreground">{stats.bookmarked}</span></span>
-          <span className="flex items-center gap-1.5 text-sm"><XCircle size={14} className="text-grey-meta" /> <span className="font-body text-muted-foreground">{stats.skipped}</span></span>
+          <span className="flex items-center gap-1.5 text-xs text-muted-foreground">
+            <Heart size={14} className="text-terracotta fill-terracotta" />
+            <span className="font-body font-semibold text-foreground">{stats.loved}</span> loved
+          </span>
+          <span className="flex items-center gap-1.5 text-xs text-muted-foreground">
+            <ThumbsUp size={14} className="text-primary fill-primary/10" />
+            <span className="font-body font-semibold text-foreground">{stats.liked}</span> liked
+          </span>
+          <span className="flex items-center gap-1.5 text-xs text-muted-foreground">
+            <Bookmark size={14} className="text-blue-500 fill-blue-500/10" />
+            <span className="font-body font-semibold text-foreground">{stats.bookmarked}</span> saved
+          </span>
+          <span className="flex items-center gap-1.5 text-xs text-muted-foreground">
+            <XCircle size={14} className="text-muted-foreground" />
+            <span className="font-body font-semibold text-foreground">{stats.skipped}</span> skipped
+          </span>
         </div>
-        {interactionCount >= 3 && (
-          <Button size="sm" variant="outline" onClick={runAnalysis} disabled={analyzing}>
-            {analyzing ? <><Loader2 size={14} className="mr-2 animate-spin" /> Analyzing...</> : <><BarChart3 size={14} className="mr-2" /> Analyze My Preferences</>}
+        {interactionCount >= 3 && !showBlueprint && (
+          <Button size="sm" variant="outline" onClick={runAnalysis} disabled={analyzing} className="h-8 text-xs rounded-xl border-primary/20 hover:bg-primary/5 hover:text-primary">
+            {analyzing ? <><Loader2 size={12} className="mr-1.5 animate-spin" /> Analyzing...</> : <><BarChart3 size={12} className="mr-1.5" /> Analyze Vibes</>}
           </Button>
         )}
       </div>
 
-      {/* Domain Filter (multi-select dropdown) */}
-      <div className="flex items-center gap-2 flex-wrap">
-        <span className="font-body text-xs text-muted-foreground">Filter by domain:</span>
-        <MultiSelect
-          options={domains}
-          selected={filterDomains}
-          onChange={(next) => { setFilterDomains(next); setCurrentIndex(0); }}
-          label="domains"
-          placeholder="All domains"
-          totalCount={challenges.length}
-        />
-      </div>
-
-      {/* Progress */}
-      <div className="space-y-2">
-        <div className="flex justify-between text-xs font-body text-muted-foreground">
-          <span>Challenge {currentIndex + 1} of {filtered.length}</span>
-          <span>{interactionCount} challenges rated</span>
+      {/* Domain Filter & Progress Card */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-center bg-card/60 border border-border rounded-2xl p-4 shadow-sm">
+        <div className="flex items-center gap-2">
+          <span className="font-body text-xs text-muted-foreground shrink-0">Filter by domain:</span>
+          <MultiSelect
+            options={domains}
+            selected={filterDomains}
+            onChange={(next) => { setFilterDomains(next); setCurrentIndex(0); }}
+            label="domains"
+            placeholder="All domains"
+            totalCount={challenges.length}
+          />
         </div>
-        <Progress value={((currentIndex + 1) / filtered.length) * 100} className="h-1.5" />
+        <div className="space-y-1.5">
+          <div className="flex justify-between text-[11px] font-body text-muted-foreground">
+            <span>Challenge {currentIndex + 1} of {filtered.length}</span>
+            <span>{interactionCount} rated</span>
+          </div>
+          <Progress value={((currentIndex + 1) / filtered.length) * 100} className="h-1" />
+        </div>
       </div>
 
       {/* Challenge Card */}
       <AnimatePresence mode="wait">
         {current && (
-          <motion.div key={current.id} initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -30 }} transition={{ duration: 0.3 }}>
-            <Card className={`overflow-hidden transition-all ${
-              interactions[current.id] === "love" ? "border-terracotta/50 ring-2 ring-terracotta/20" :
-              interactions[current.id] === "like" ? "border-primary/50 ring-2 ring-primary/20" :
-              interactions[current.id] === "bookmark" ? "border-blue-primary/50 ring-2 ring-blue-primary/20" :
-              interactions[current.id] === "not_for_me" ? "opacity-70" : ""
+          <motion.div key={current.id} initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -15 }} transition={{ duration: 0.2 }}>
+            <Card className={`overflow-hidden transition-all duration-300 rounded-2xl border shadow-md hover:shadow-lg ${
+              interactions[current.id] === "love" ? "border-terracotta/40 ring-1 ring-terracotta/10" :
+              interactions[current.id] === "like" ? "border-primary/40 ring-1 ring-primary/10" :
+              interactions[current.id] === "bookmark" ? "border-blue-500/40 ring-1 ring-blue-500/10" :
+              interactions[current.id] === "not_for_me" ? "opacity-75" : ""
             }`}>
+              
               {/* Header */}
-              <div className="bg-gradient-to-r from-primary/10 via-accent/5 to-transparent px-6 py-5">
+              <div className="bg-gradient-to-r from-primary/5 via-accent/5 to-transparent px-6 py-5 border-b border-border/40">
                 <div className="flex items-start justify-between gap-3">
-                  <div>
-                    <h2 className="font-display text-xl text-foreground leading-snug">{current.challenge_name}</h2>
-                    <div className="flex items-center gap-2 mt-2 flex-wrap">
-                      <Badge variant="secondary">{current.domain}</Badge>
+                  <div className="space-y-1">
+                    <h2 className="font-display text-base font-bold text-foreground leading-snug">{current.challenge_name}</h2>
+                    <div className="flex items-center gap-1.5 mt-1 flex-wrap">
+                      <Badge variant="secondary" className="px-2 py-0.5 text-[10px]">{current.domain}</Badge>
                       {(() => {
                         const cfg = difficultyConfig[current.difficulty_level] || difficultyConfig.beginner;
                         return (
-                          <Badge variant="outline" className={`${cfg.color}`}>
-                            <cfg.icon size={12} className="mr-1" /> {current.difficulty_level}
+                          <Badge variant="outline" className={`px-2 py-0.5 text-[10px] ${cfg.color} ${cfg.bg}`}>
+                            <cfg.icon size={10} className="mr-1" /> {current.difficulty_level}
                           </Badge>
                         );
                       })()}
                     </div>
                   </div>
                   <div className="text-right shrink-0">
-                    <div className="flex items-center gap-1 text-muted-foreground">
-                      <Clock size={14} />
-                      <span className="font-body text-sm">{current.estimated_time}</span>
+                    <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-muted/50 border border-border/40 text-muted-foreground">
+                      <Clock size={12} />
+                      <span className="font-body text-xs font-semibold">{current.estimated_time}</span>
                     </div>
                   </div>
                 </div>
               </div>
 
-              <CardContent className="pt-5 space-y-5">
+              <CardContent className="p-3.5 sm:p-6 space-y-4 sm:space-y-5">
                 {/* Task Description */}
-                <div className="p-4 rounded-xl bg-secondary border border-border">
+                <div className="p-4 rounded-2xl bg-muted/30 border border-border/50">
                   <div className="flex items-center gap-2 mb-2">
-                    <Target size={15} className="text-primary" />
-                    <span className="font-display text-sm text-foreground">the actual task</span>
+                    <Target size={14} className="text-primary" />
+                    <span className="font-display text-xs font-semibold text-foreground uppercase tracking-wider">The Actual Task</span>
                   </div>
                   <p className="font-body text-sm text-foreground leading-relaxed">{current.task_description}</p>
                 </div>
 
                 {/* Info Grid */}
-                <div className="grid grid-cols-2 gap-3">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   {/* Tools */}
                   {current.tools_used.length > 0 && (
-                    <div className="p-3 rounded-lg bg-muted/30 border border-border">
-                      <div className="flex items-center gap-2 mb-2">
-                        <Wrench size={14} className="text-primary" />
-                        <span className="font-body text-xs text-muted-foreground">Tools You'll Use</span>
+                    <div className="p-4 rounded-xl bg-card border border-border/60 space-y-2">
+                      <div className="flex items-center gap-1.5">
+                        <Wrench size={13} className="text-primary" />
+                        <span className="font-body text-xs font-semibold text-muted-foreground">Tools You'll Use</span>
                       </div>
                       <div className="flex flex-wrap gap-1">
                         {current.tools_used.map(t => <Badge key={t} variant="outline" className="text-[10px]">{t}</Badge>)}
@@ -337,10 +355,10 @@ const ChallengeModeCards = () => {
 
                   {/* Skills */}
                   {current.skills_needed.length > 0 && (
-                    <div className="p-3 rounded-lg bg-muted/30 border border-border">
-                      <div className="flex items-center gap-2 mb-2">
-                        <Zap size={14} className="text-accent-foreground" />
-                        <span className="font-body text-xs text-muted-foreground">Skills Needed</span>
+                    <div className="p-4 rounded-xl bg-card border border-border/60 space-y-2">
+                      <div className="flex items-center gap-1.5">
+                        <Zap size={13} className="text-accent-foreground" />
+                        <span className="font-body text-xs font-semibold text-muted-foreground">Skills Gained</span>
                       </div>
                       <div className="flex flex-wrap gap-1">
                         {current.skills_needed.map(s => <Badge key={s} variant="secondary" className="text-[10px]">{s}</Badge>)}
@@ -351,11 +369,13 @@ const ChallengeModeCards = () => {
 
                 {/* Compensation */}
                 {current.compensation && (
-                  <div className="p-3 rounded-lg bg-accent/10 border border-accent/20 flex items-center gap-3">
-                    <DollarSign size={18} className="text-accent-foreground shrink-0" />
+                  <div className="p-3.5 rounded-xl bg-accent/5 border border-accent/15 flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-lg bg-accent/10 flex items-center justify-center border border-accent/20">
+                      <DollarSign size={16} className="text-accent-foreground shrink-0" />
+                    </div>
                     <div>
-                      <span className="font-body text-xs text-muted-foreground">what you'd earn</span>
-                      <p className="font-display text-sm text-foreground">{current.compensation}</p>
+                      <span className="font-body text-[10px] text-muted-foreground uppercase tracking-wider font-semibold">Compensation Range</span>
+                      <p className="font-display text-xs font-bold text-foreground">{current.compensation}</p>
                     </div>
                   </div>
                 )}
@@ -368,33 +388,33 @@ const ChallengeModeCards = () => {
                 )}
 
                 {/* Interaction Buttons */}
-                <div className="grid grid-cols-4 gap-2 pt-3 border-t border-border">
+                <div className="grid grid-cols-4 gap-1 sm:gap-2 pt-4 border-t border-border/50">
                   {([
-                    { type: "like" as InteractionType, icon: ThumbsUp, label: "Like", activeClass: "bg-primary hover:bg-primary/90 border-primary text-primary-foreground" },
-                    { type: "love" as InteractionType, icon: Heart, label: "Love", activeClass: "bg-terracotta hover:bg-terracotta/90 border-terracotta text-primary-foreground" },
-                    { type: "bookmark" as InteractionType, icon: Bookmark, label: "Save", activeClass: "bg-[hsl(var(--blue-primary))] hover:bg-[hsl(var(--blue-primary))]/90 border-[hsl(var(--blue-primary))] text-primary-foreground" },
-                    { type: "not_for_me" as InteractionType, icon: XCircle, label: "Not me", activeClass: "bg-muted-foreground hover:bg-muted-foreground/90 text-primary-foreground" },
+                    { type: "like" as InteractionType, icon: ThumbsUp, label: "Like", activeClass: "bg-primary hover:bg-primary/90 border-primary text-primary-foreground font-semibold" },
+                    { type: "love" as InteractionType, icon: Heart, label: "Love", activeClass: "bg-terracotta hover:bg-terracotta/90 border-terracotta text-primary-foreground font-semibold" },
+                    { type: "bookmark" as InteractionType, icon: Bookmark, label: "Save", activeClass: "bg-blue-500 hover:bg-blue-600 border-blue-500 text-white font-semibold" },
+                    { type: "not_for_me" as InteractionType, icon: XCircle, label: "Not Me", activeClass: "bg-muted-foreground hover:bg-muted-foreground/90 text-primary-foreground font-semibold" },
                   ]).map(btn => {
                     const active = interactions[current.id] === btn.type;
                     return (
                       <Button key={btn.type} variant={active ? "default" : "outline"}
-                        className={`flex flex-col items-center gap-1 h-auto py-3 transition-all ${active ? btn.activeClass : ""}`}
+                        className={`flex flex-col items-center gap-1.5 h-auto py-2 sm:py-2.5 px-0.5 sm:px-2 rounded-xl transition-all ${active ? btn.activeClass : "border-border/80 hover:bg-muted/40 hover:border-primary/30"}`}
                         onClick={() => handleInteraction(current.id, btn.type)}
                       >
-                        <btn.icon size={18} className={active ? "fill-current" : ""} />
-                        <span className="text-xs">{btn.label}</span>
+                        <btn.icon size={16} className={active ? "fill-current" : ""} />
+                        <span className="text-[10px] font-body uppercase tracking-wider">{btn.label}</span>
                       </Button>
                     );
                   })}
                 </div>
 
-                {/* Navigation */}
-                <div className="flex justify-between pt-1">
-                  <Button variant="ghost" size="sm" onClick={() => { setCurrentIndex(Math.max(0, currentIndex - 1)); startTimeRef.current = Date.now(); }} disabled={currentIndex === 0}>
-                    <ChevronLeft size={16} className="mr-1" /> Previous
+                {/* Navigation Controls */}
+                <div className="flex justify-between pt-1 border-t border-border/10">
+                  <Button variant="ghost" size="sm" onClick={() => { setCurrentIndex(Math.max(0, currentIndex - 1)); startTimeRef.current = Date.now(); }} disabled={currentIndex === 0} className="text-xs rounded-full h-[36px] px-4">
+                    <ChevronLeft size={14} className="mr-1.5" /> Previous
                   </Button>
-                  <Button variant="ghost" size="sm" onClick={() => { setCurrentIndex(Math.min(filtered.length - 1, currentIndex + 1)); startTimeRef.current = Date.now(); }} disabled={currentIndex >= filtered.length - 1}>
-                    Next <ChevronRight size={16} className="ml-1" />
+                  <Button variant="ghost" size="sm" onClick={() => { setCurrentIndex(Math.min(filtered.length - 1, currentIndex + 1)); startTimeRef.current = Date.now(); }} disabled={currentIndex >= filtered.length - 1} className="text-xs rounded-full h-[36px] px-4">
+                    Next <ChevronRight size={14} className="ml-1.5" />
                   </Button>
                 </div>
               </CardContent>
@@ -403,18 +423,20 @@ const ChallengeModeCards = () => {
         )}
       </AnimatePresence>
 
-      {/* Analysis Trigger */}
-      {interactionCount >= 3 && !showAnalysis && (
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
-          <Card className="border-primary/30 bg-gradient-to-r from-primary/5 to-accent/5">
-            <CardContent className="pt-6 text-center">
-              <Sparkles className="mx-auto text-primary mb-3" size={32} />
-              <h3 className="font-display text-lg mb-2">ready to see what kind of work you actually enjoy?</h3>
-              <p className="font-body text-sm text-muted-foreground mb-4">{interactionCount} challenges rated — AI can now spot your work style patterns</p>
-              <Button onClick={runAnalysis} disabled={analyzing}>
-                {analyzing ? <><Loader2 size={14} className="mr-2 animate-spin" /> analyzing...</> : <><BarChart3 size={14} className="mr-2" /> Show My Work Profile</>}
-              </Button>
-            </CardContent>
+      {/* Analysis Trigger Card */}
+      {interactionCount >= 3 && !showBlueprint && (
+        <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }}>
+          <Card className="border-primary/20 bg-gradient-to-br from-primary/5 via-accent/5 to-transparent rounded-2xl shadow-sm overflow-hidden p-6 text-center space-y-4">
+            <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mx-auto border border-primary/20">
+              <Sparkles className="text-primary" size={22} />
+            </div>
+            <div className="space-y-1.5">
+              <h3 className="font-display font-bold text-base text-foreground">See your career task profile</h3>
+              <p className="font-body text-xs text-muted-foreground max-w-md mx-auto">You've rated {interactionCount} tasks. Let's synthesize your work preferences and tools affinity blueprint.</p>
+            </div>
+            <Button onClick={runAnalysis} disabled={analyzing} className="text-xs rounded-full px-6 h-[40px] font-semibold">
+              {analyzing ? <><Loader2 size={12} className="mr-1.5 animate-spin" /> Analyzing...</> : <><BarChart3 size={12} className="mr-1.5" /> Show My Work Profile</>}
+            </Button>
           </Card>
         </motion.div>
       )}
@@ -422,49 +444,49 @@ const ChallengeModeCards = () => {
       {/* Analysis Results */}
       <AnimatePresence>
         {showAnalysis && analysis && (
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-4">
-            <Card className="border-primary/40 bg-gradient-to-br from-primary/5 to-accent/5">
-              <CardContent className="pt-6 space-y-5">
+          <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} className="space-y-4">
+            <Card className="border-primary/30 bg-card rounded-2xl shadow-md overflow-hidden">
+              <CardContent className="p-6 space-y-6">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
+                  <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center border border-primary/20">
                     <BarChart3 className="text-primary" size={20} />
                   </div>
                   <div>
-                    <h3 className="font-display text-lg text-foreground">your work DNA 🧬</h3>
-                    <p className="font-body text-xs text-muted-foreground">based on {interactionCount} challenge reactions</p>
+                    <h3 className="font-display font-bold text-base text-foreground">Your Work DNA 🧬</h3>
+                    <p className="font-body text-[10px] text-muted-foreground uppercase tracking-wider font-semibold">based on {interactionCount} challenge reactions</p>
                   </div>
                 </div>
 
                 {analysis.career_task_profile && (
-                  <p className="font-body text-sm text-foreground leading-relaxed bg-muted/30 p-4 rounded-lg">{analysis.career_task_profile}</p>
+                  <p className="font-body text-xs text-muted-foreground leading-relaxed bg-muted/40 p-4 rounded-xl border border-border/50">{analysis.career_task_profile}</p>
                 )}
 
-                {/* Work Style */}
+                {/* Work Style Complexity & Duration */}
                 {analysis.work_style_profile && (
-                  <div className="grid grid-cols-2 gap-3">
-                    <div className="p-3 rounded-lg bg-muted/30 border border-border">
-                      <p className="font-body text-[10px] text-muted-foreground uppercase tracking-wider">complexity</p>
-                      <p className="font-display text-sm text-foreground capitalize">{analysis.work_style_profile.preferred_complexity}</p>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="p-3.5 rounded-xl bg-muted/30 border border-border/50 space-y-0.5">
+                      <p className="font-body text-[9px] text-muted-foreground uppercase tracking-wider font-semibold">Complexity</p>
+                      <p className="font-display text-xs font-bold text-foreground capitalize">{analysis.work_style_profile.preferred_complexity}</p>
                     </div>
-                    <div className="p-3 rounded-lg bg-muted/30 border border-border">
-                      <p className="font-body text-[10px] text-muted-foreground uppercase tracking-wider">duration</p>
-                      <p className="font-display text-sm text-foreground capitalize">{analysis.work_style_profile.preferred_duration}</p>
+                    <div className="p-3.5 rounded-xl bg-muted/30 border border-border/50 space-y-0.5">
+                      <p className="font-body text-[9px] text-muted-foreground uppercase tracking-wider font-semibold">Duration</p>
+                      <p className="font-display text-xs font-bold text-foreground capitalize">{analysis.work_style_profile.preferred_duration}</p>
                     </div>
                   </div>
                 )}
 
-                {/* Domain Fit */}
+                {/* Domain Fit Progress Bars */}
                 {analysis.domain_fit?.length > 0 && (
-                  <div>
-                    <h4 className="font-display text-sm mb-3">domain fit scores</h4>
-                    <div className="space-y-2">
+                  <div className="space-y-3.5">
+                    <h4 className="font-display text-xs font-bold text-foreground uppercase tracking-wider">Domain Fit Scores</h4>
+                    <div className="space-y-2.5 bg-muted/20 p-4 rounded-xl border border-border/40">
                       {analysis.domain_fit.sort((a, b) => b.fit_score - a.fit_score).slice(0, 5).map(d => (
                         <div key={d.domain} className="flex items-center gap-3">
-                          <span className="font-body text-sm text-foreground w-24 shrink-0">{d.domain}</span>
-                          <div className="flex-1 h-2 rounded-full bg-muted overflow-hidden">
-                            <div className="h-full rounded-full bg-primary transition-all" style={{ width: `${d.fit_score}%` }} />
+                          <span className="font-body text-xs text-foreground font-semibold w-24 shrink-0 truncate">{d.domain}</span>
+                          <div className="flex-1 h-1.5 rounded-full bg-muted overflow-hidden">
+                            <div className="h-full rounded-full bg-primary transition-all duration-500" style={{ width: `${d.fit_score}%` }} />
                           </div>
-                          <span className="font-display text-xs text-muted-foreground w-8">{d.fit_score}%</span>
+                          <span className="font-display text-xs font-bold text-muted-foreground w-8 text-right">{d.fit_score}%</span>
                         </div>
                       ))}
                     </div>
@@ -473,8 +495,8 @@ const ChallengeModeCards = () => {
 
                 {/* Skills & Tools */}
                 {analysis.work_style_profile?.skill_patterns?.length > 0 && (
-                  <div>
-                    <h4 className="font-display text-sm mb-2">skills you vibe with</h4>
+                  <div className="space-y-2">
+                    <h4 className="font-display text-xs font-bold text-foreground uppercase tracking-wider">Skills You Vibe With</h4>
                     <div className="flex flex-wrap gap-1.5">
                       {analysis.work_style_profile.skill_patterns.map(s => <Badge key={s} variant="outline" className="text-xs">{s}</Badge>)}
                     </div>
@@ -482,8 +504,8 @@ const ChallengeModeCards = () => {
                 )}
 
                 {analysis.work_style_profile?.tool_affinity?.length > 0 && (
-                  <div>
-                    <h4 className="font-display text-sm mb-2">tools you gravitate toward</h4>
+                  <div className="space-y-2">
+                    <h4 className="font-display text-xs font-bold text-foreground uppercase tracking-wider">Tools You Gravitate Toward</h4>
                     <div className="flex flex-wrap gap-1.5">
                       {analysis.work_style_profile.tool_affinity.map(t => <Badge key={t} variant="secondary" className="text-xs">{t}</Badge>)}
                     </div>
@@ -492,27 +514,33 @@ const ChallengeModeCards = () => {
 
                 {/* Roadmap Signals */}
                 {analysis.roadmap_signals?.ready_for?.length > 0 && (
-                  <div className="p-4 rounded-xl bg-success/5 border border-success/20">
-                    <h4 className="font-display text-sm mb-2 flex items-center gap-2"><TrendingUp size={14} className="text-success" /> you're ready for</h4>
+                  <div className="p-4 rounded-xl bg-success/5 border border-success/15 space-y-2">
+                    <h4 className="font-display text-xs font-bold text-success uppercase tracking-wider flex items-center gap-1.5">
+                      <TrendingUp size={12} className="text-success" /> You're Ready For
+                    </h4>
                     <div className="flex flex-wrap gap-1.5">
-                      {analysis.roadmap_signals.ready_for.map(r => <Badge key={r} className="bg-success/10 text-success border-success/30 text-xs">{r}</Badge>)}
+                      {analysis.roadmap_signals.ready_for.map(r => <Badge key={r} className="bg-success/10 text-success border-success/30 hover:bg-success/20 text-xs">{r}</Badge>)}
                     </div>
                   </div>
                 )}
 
+                {/* Next Steps */}
                 {analysis.suggested_next_challenges?.length > 0 && (
-                  <div className="p-3 rounded-lg bg-accent/10 border border-accent/20">
-                    <h4 className="font-display text-xs mb-1.5 text-accent-foreground">💡 try these challenge types next</h4>
-                    <ul className="space-y-1">
+                  <div className="p-3.5 rounded-xl bg-accent/5 border border-accent/15 space-y-1.5">
+                    <h4 className="font-display text-xs font-bold text-accent-foreground">💡 Try These Challenge Types Next</h4>
+                    <ul className="space-y-1 font-body text-xs text-muted-foreground">
                       {analysis.suggested_next_challenges.map((c, i) => (
-                        <li key={i} className="font-body text-xs text-muted-foreground">→ {c}</li>
+                        <li key={i} className="flex items-start gap-1.5">
+                          <span>•</span>
+                          <span>{c}</span>
+                        </li>
                       ))}
                     </ul>
                   </div>
                 )}
 
-                <Button className="w-full" onClick={() => setShowAnalysis(false)}>
-                  Keep Exploring Challenges <ArrowRight size={14} className="ml-2" />
+                <Button variant="outline" className="w-full text-xs rounded-full h-[40px] font-semibold" onClick={() => setShowAnalysis(false)}>
+                  Keep Exploring Challenges
                 </Button>
               </CardContent>
             </Card>
@@ -531,18 +559,18 @@ const ChallengeModeCards = () => {
         />
       )}
 
-      {/* Generate More */}
+      {/* Generate More indicator */}
       {generating && (
-        <div className="text-center py-4">
-          <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground">
-            <Loader2 size={14} className="animate-spin" /> generating more challenges...
+        <div className="text-center py-2">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-muted/40 border border-border text-xs text-muted-foreground">
+            <Loader2 size={12} className="animate-spin text-primary" /> Cooking up new challenges...
           </div>
         </div>
       )}
       {!generating && challenges.length > 0 && (
-        <div className="text-center">
-          <Button variant="ghost" size="sm" onClick={generateChallenges}>
-            <RefreshCw size={14} className="mr-2" /> Generate More Challenges
+        <div className="text-center pt-2">
+          <Button variant="ghost" size="sm" onClick={generateChallenges} className="text-xs rounded-xl text-muted-foreground hover:text-foreground">
+            <RefreshCw size={12} className="mr-1.5" /> Load new career challenges
           </Button>
         </div>
       )}

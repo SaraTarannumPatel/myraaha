@@ -1,0 +1,29 @@
+# MyRaaha — security headers (Lovable hosting / Netlify-style _headers)
+# Additive: do not change any feature, page, route, or UX.
+
+/*
+  Strict-Transport-Security: max-age=63072000; includeSubDomains; preload
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: DENY
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), usb=(), payment=(), magnetometer=(), gyroscope=(), accelerometer=(), midi=(), browsing-topics=()
+  Cross-Origin-Opener-Policy: same-origin
+  Cross-Origin-Resource-Policy: same-origin
+  X-DNS-Prefetch-Control: off
+  X-Permitted-Cross-Domain-Policies: none
+  # Enforcing CSP — promoted from Report-Only after self-hosting Poppins. No third-party font/style origins required.
+  Content-Security-Policy: default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; img-src 'self' data: blob: https:; font-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval' https://cdn.gpteng.co; connect-src 'self' https://*.supabase.co wss://*.supabase.co https://ai.gateway.lovable.dev https://connector-gateway.lovable.dev https://api.firecrawl.dev; worker-src 'self' blob:; manifest-src 'self'; media-src 'self' blob: data:; form-action 'self'; upgrade-insecure-requests
+
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/fonts/*
+  Cache-Control: public, max-age=31536000, immutable
+  Access-Control-Allow-Origin: *
+
+/sw.js
+  Cache-Control: no-cache
+  Service-Worker-Allowed: /
+
+/manifest.webmanifest
+  Cache-Control: no-cache

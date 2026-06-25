@@ -2,25 +2,28 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Outlet, Navigate } from "react-router-dom";
 import { AuthProvider } from "@/contexts/AuthContext";
 import ProtectedRoute from "@/components/ProtectedRoute";
-import Index from "./pages/Index";
+import MyRaahaLanding from "./pages/MyRaahaLanding";
+import MyRaahaAbout from "./pages/MyRaahaAbout";
+import MyRaahaServices from "./pages/MyRaahaServices";
+import MyRaahaPartnerships from "./pages/MyRaahaPartnerships";
+import MyRaahaInsights from "./pages/MyRaahaInsights";
+import MyRaahaInsightsDetail from "./pages/MyRaahaInsightsDetail";
+import MyRaahaCareers from "./pages/MyRaahaCareers";
+import MyRaahaContact from "./pages/MyRaahaContact";
+import MyRaahaPrivacy from "./pages/MyRaahaPrivacy";
+import MyRaahaTerms from "./pages/MyRaahaTerms";
+import MyRaahaCookies from "./pages/MyRaahaCookies";
+
+import CoreTeam from "./pages/career/CoreTeam";
+import Intern from "./pages/career/Intern";
+import Freelancer from "./pages/career/Freelancer";
+import Volunteer from "./pages/career/Volunteer";
+import Facilitator from "./pages/career/Facilitator";
+import RoleDetails from "./pages/career/RoleDetails";
 import NotFound from "./pages/NotFound";
-// Landing site sub-pages
-import WhyWeExist from "./pages/landing/WhyWeExist";
-import HowWeThink from "./pages/landing/HowWeThink";
-import RaahaMarg from "./pages/landing/RaahaMarg";
-import Experience from "./pages/landing/Experience";
-import WhenHelps from "./pages/landing/WhenHelps";
-import Principles from "./pages/landing/Principles";
-import Research from "./pages/landing/Research";
-import Solutions from "./pages/landing/Solutions";
-import Begin from "./pages/landing/Begin";
-import About from "./pages/landing/About";
-import Writing from "./pages/landing/Writing";
-import LandingCareers from "./pages/landing/Careers";
-import Contact from "./pages/landing/Contact";
 import IntroSlides from "./pages/IntroSlides";
 import Auth from "./pages/Auth";
 import GuestEntry from "./pages/GuestEntry";
@@ -28,13 +31,17 @@ import Welcome from "./pages/onboarding/Welcome";
 import UserTypeSelection from "./pages/onboarding/UserTypeSelection";
 import ConsentStep from "./pages/onboarding/ConsentStep";
 import JourneyDiscovery from "./pages/onboarding/JourneyDiscovery";
-import OTPVerification from "./pages/OTPVerification";
+import EducationalStatus from "./pages/onboarding/EducationalStatus";
+import IntentSelection from "./pages/onboarding/IntentSelection";
+import GuidedOnboarding from "./pages/onboarding/GuidedOnboarding";
 import ResetPassword from "./pages/ResetPassword";
 import DashboardLayout from "./layouts/DashboardLayout";
 import Dashboard from "./pages/Dashboard";
 import Insights from "./pages/Insights";
 // Career
 import CuriosityCompass from "./pages/career/CuriosityCompass";
+import CareerNavigator from "./pages/career/CareerNavigator";
+import Roadmap from "./pages/career/Roadmap";
 import CareerMap from "./pages/career/CareerMap";
 import SelfGraph from "./pages/career/SelfGraph";
 import LivingResume from "./pages/career/LivingResume";
@@ -86,35 +93,50 @@ const App = () => (
       <BrowserRouter>
         <AuthProvider>
           <Routes>
-            <Route path="/" element={<Index />} />
-            {/* Landing site */}
-            <Route path="/why" element={<WhyWeExist />} />
-            <Route path="/how" element={<HowWeThink />} />
-            <Route path="/raaha-marg" element={<RaahaMarg />} />
-            <Route path="/experience" element={<Experience />} />
-            <Route path="/when" element={<WhenHelps />} />
-            <Route path="/principles" element={<Principles />} />
-            <Route path="/research" element={<Research />} />
-            <Route path="/solutions" element={<Solutions />} />
-            <Route path="/begin" element={<Begin />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/writing" element={<Writing />} />
-            <Route path="/careers-info" element={<LandingCareers />} />
-            <Route path="/contact" element={<Contact />} />
+            <Route element={<div className="myraaha-landing-site"><Outlet /></div>}>
+              <Route path="/" element={<MyRaahaLanding />} />
+              {/* Landing site */}
+              <Route path="/about" element={<MyRaahaAbout />} />
+              <Route path="/services" element={<MyRaahaServices />} />
+              <Route path="/partnerships" element={<MyRaahaPartnerships />} />
+              <Route path="/insights" element={<MyRaahaInsights />} />
+              <Route path="/insights/:slug" element={<MyRaahaInsightsDetail />} />
+              <Route path="/careers" element={<MyRaahaCareers />} />
+              <Route path="/contact" element={<MyRaahaContact />} />
+              <Route path="/privacy" element={<MyRaahaPrivacy />} />
+              <Route path="/terms" element={<MyRaahaTerms />} />
+              <Route path="/cookies" element={<MyRaahaCookies />} />
+              
+              {/* Career Sub-Roles */}
+              <Route path="/careers/core-team" element={<CoreTeam />} />
+              <Route path="/careers/intern" element={<Intern />} />
+              <Route path="/careers/freelancer" element={<Freelancer />} />
+              <Route path="/careers/volunteer" element={<Volunteer />} />
+              <Route path="/careers/facilitator" element={<Facilitator />} />
+              <Route path="/careers/:roleId" element={<RoleDetails />} />
+            </Route>
+            
+            {/* Old routes archived */}
+            <Route element={<div className="myraaha-app"><Outlet /></div>}>
             <Route path="/intro" element={<IntroSlides />} />
             <Route path="/auth" element={<Auth />} />
             <Route path="/guest" element={<GuestEntry />} />
-            <Route path="/verify-otp" element={<OTPVerification />} />
+            {/* Legacy OTP deep links are archived and safely returned to auth. */}
+            <Route path="/verify-otp" element={<Navigate to="/auth" replace />} />
             <Route path="/onboarding" element={<ProtectedRoute><Welcome /></ProtectedRoute>} />
             <Route path="/onboarding/user-type" element={<ProtectedRoute><UserTypeSelection /></ProtectedRoute>} />
             <Route path="/onboarding/journey" element={<ProtectedRoute><JourneyDiscovery /></ProtectedRoute>} />
+            <Route path="/onboarding/intent" element={<ProtectedRoute><IntentSelection /></ProtectedRoute>} />
+            <Route path="/onboarding/guided" element={<ProtectedRoute><GuidedOnboarding /></ProtectedRoute>} />
+            <Route path="/onboarding/educational-status" element={<ProtectedRoute><EducationalStatus /></ProtectedRoute>} />
             <Route path="/onboarding/consent" element={<ProtectedRoute><ConsentStep /></ProtectedRoute>} />
             <Route path="/dashboard" element={<ProtectedRoute><DashboardLayout /></ProtectedRoute>}>
               <Route index element={<Dashboard />} />
               <Route path="insights" element={<Insights />} />
               {/* Career */}
               <Route path="curiosity-compass" element={<CuriosityCompass />} />
-              <Route path="roadmap" element={<CareerMap />} />
+              <Route path="career-navigator" element={<CareerNavigator />} />
+              <Route path="roadmap" element={<Roadmap />} />
               <Route path="careermap" element={<CareerMap />} />
 
               <Route path="selfgraph" element={<SelfGraph />} />
@@ -159,6 +181,7 @@ const App = () => (
             </Route>
             <Route path="/reset-password" element={<ResetPassword />} />
             <Route path="*" element={<NotFound />} />
+            </Route>
           </Routes>
         </AuthProvider>
       </BrowserRouter>

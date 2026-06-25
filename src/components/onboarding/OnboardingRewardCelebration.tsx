@@ -48,7 +48,8 @@ const OnboardingRewardCelebration = ({ emoji, title, description, onContinue }: 
           initial={{ scale: 0.5, opacity: 0, y: 40 }}
           animate={{ scale: 1, opacity: 1, y: 0 }}
           transition={{ type: "spring", damping: 15, stiffness: 200, delay: 0.2 }}
-          className="bg-card rounded-3xl border border-border shadow-2xl p-8 max-w-sm mx-6 text-center relative overflow-hidden"
+          className="bg-white rounded-3xl border border-border shadow-2xl p-8 max-w-sm mx-6 text-center relative overflow-hidden"
+          style={{ backgroundColor: "#ffffff" }}
         >
           <div className="absolute inset-0 bg-gradient-to-b from-[hsl(48 92% 88%)] to-transparent opacity-50 pointer-events-none" />
           <div className="relative z-10 space-y-4">
@@ -64,11 +65,11 @@ const OnboardingRewardCelebration = ({ emoji, title, description, onContinue }: 
               <span className="font-body text-xs uppercase tracking-wider font-bold">Reward Unlocked!</span>
               <PartyPopper size={16} />
             </div>
-            <h2 className="font-display text-2xl text-foreground">{title}</h2>
+            <h2 className="reward-celebration-title text-foreground">{title}</h2>
             <p className="font-body text-sm text-muted-foreground leading-relaxed">{description}</p>
             <Button
               onClick={onContinue}
-              className="bg-primary text-accent rounded-full px-8 font-body font-semibold mt-2"
+              className="bg-primary text-white rounded-full px-8 font-body font-semibold mt-2"
             >
               Continue <ArrowRight size={16} />
             </Button>

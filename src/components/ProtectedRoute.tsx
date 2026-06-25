@@ -7,7 +7,15 @@ const onboardingRoutes: Record<string, string> = {
   journey_discovery: "/onboarding/journey",
   intent: "/onboarding/intent",
   guided: "/onboarding/guided",
+  educational_status: "/onboarding/educational-status",
   consent: "/onboarding/consent",
+};
+
+const normalizeOnboardingStep = (profile: any) => {
+  const step = profile?.onboarding_status || "welcome";
+  if (step === "intent") return profile?.active_intent ? "guided" : "educational_status";
+  if (step === "guided") return "educational_status";
+  return step;
 };
 
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
@@ -53,9 +61,30 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
 
   // If user has NOT completed onboarding and is NOT on an onboarding route, redirect to their step
   if (profile && profile.onboarding_status !== "complete" && !location.pathname.startsWith("/onboarding")) {
-    const step = profile.onboarding_status || "welcome";
+    const step = normalizeOnboardingStep(profile);
     const route = onboardingRoutes[step] || "/onboarding";
     return <Navigate to={route} replace />;
+  }
+
+  // HARD COMPASS GATE: Once onboarding is complete, no feature unlocks until all three
+  // Curiosity Compass assessments are done. Settings + curiosity-compass routes stay
+  // accessible; everything else redirects back to the compass.
+  if (profile && profile.onboarding_status === "complete") {
+    const jr: any = profile.journey_responses || {};
+    const compassDone =
+      !!jr.assessment_completed &&
+      !!jr.psychometric_completed &&
+      !!jr.interests_completed;
+    const compassAllowlist = [
+      "/dashboard/curiosity-compass",
+      "/dashboard/settings",
+      "/dashboard/notifications",
+    ];
+    const isOnCompass = compassAllowlist.some((p) => location.pathname.startsWith(p));
+    const isDashboardRoot = location.pathname === "/dashboard" || location.pathname === "/dashboard/";
+    if (!compassDone && !isOnCompass && !isDashboardRoot && location.pathname.startsWith("/dashboard")) {
+      return <Navigate to="/dashboard/curiosity-compass" replace state={{ gated: true }} />;
+    }
   }
 
   return <>{children}</>;

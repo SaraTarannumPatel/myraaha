@@ -1,15 +1,25 @@
-import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { useAuth } from "@/contexts/AuthContext";
-import { supabase } from "@/integrations/supabase/client";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Sparkles, Brain, Compass, Target, Zap, Trophy, RefreshCw, ArrowRight, Lightbulb, Heart, Map } from "lucide-react";
-import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
+import { 
+  Brain, 
+  Map, 
+  Zap, 
+  ArrowRight, 
+  RefreshCw, 
+  Sparkles, 
+  Compass, 
+  Trophy, 
+  Target, 
+  Lock, 
+  CheckCircle2, 
+  ChevronRight, 
+  BookOpen, 
+  Sliders, 
+  UserCheck 
+} from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import RewardProgressTracker from "@/components/curiositycompass/RewardProgressTracker";
-import { useAssessmentRewards } from "@/hooks/useAssessmentRewards";
 
 interface Conclusion {
   id?: string;
@@ -30,278 +40,276 @@ interface Conclusion {
   generated_at: string;
 }
 
-const MODULE_ROUTES: Record<string, { path: string; label: string }> = {
-  roadmap: { path: "/dashboard/roadmap", label: "AI Roadmap" },
-  skill_stacker: { path: "/dashboard/skill-stacker", label: "SkillStacker" },
-  job_matching: { path: "/dashboard/job-matching", label: "Job Matching" },
-  mentor_matchmaking: { path: "/dashboard/mentor-matchmaking", label: "Mentor Match" },
-  project_playground: { path: "/dashboard/project-playground", label: "Project Playground" },
-  career_therapist: { path: "/dashboard/career-therapist", label: "Career Therapist" },
-  career_coach: { path: "/dashboard/career-coach", label: "Career Coach" },
-  content_library: { path: "/dashboard/content-library", label: "Content Library" },
-  peer_circles: { path: "/dashboard/peer-circles", label: "Peer Circles" },
-  mvp_builder: { path: "/dashboard/mvp-builder", label: "MVP Builder" },
-  moodboard: { path: "/dashboard/career-moodboard", label: "Career Moodboard" },
-  transition_planner: { path: "/dashboard/transition-planner", label: "Transition Planner" },
-  selfgraph: { path: "/dashboard/selfgraph", label: "SelfGraph™" },
+const MODULE_ROUTES: Record<string, { path: string; label: string; icon: any; color: string }> = {
+  roadmap: { path: "/dashboard/roadmap", label: "AI Roadmap", icon: Map, color: "from-[#5500cb] to-[#7c3aed]" },
+  skill_stacker: { path: "/dashboard/skill-stacker", label: "SkillStacker", icon: Zap, color: "from-amber-500 to-orange-600" },
+  job_matching: { path: "/dashboard/job-matching", label: "Job Matching", icon: UserCheck, color: "from-emerald-500 to-teal-600" },
+  mentor_matchmaking: { path: "/dashboard/mentor-matchmaking", label: "Mentor Match", icon: Compass, color: "from-sky-500 to-blue-600" },
+  project_playground: { path: "/dashboard/project-playground", label: "Project Playground", icon: Sliders, color: "from-pink-500 to-rose-600" },
+  career_therapist: { path: "/dashboard/career-therapist", label: "Career Therapist", icon: Brain, color: "from-purple-500 to-indigo-600" },
+  career_coach: { path: "/dashboard/career-coach", label: "Career Coach", icon: Sparkles, color: "from-violet-500 to-fuchsia-600" },
+  content_library: { path: "/dashboard/content-library", label: "Content Library", icon: BookOpen, color: "from-blue-500 to-indigo-600" },
+  peer_circles: { path: "/dashboard/peer-circles", label: "Peer Circles", icon: Trophy, color: "from-teal-500 to-cyan-600" },
+  mvp_builder: { path: "/dashboard/mvp-builder", label: "MVP Builder", icon: Target, color: "from-red-500 to-orange-600" },
+  moodboard: { path: "/dashboard/career-moodboard", label: "Career Moodboard", icon: Map, color: "from-fuchsia-500 to-pink-600" },
+  transition_planner: { path: "/dashboard/transition-planner", label: "Transition Planner", icon: Sliders, color: "from-indigo-500 to-blue-600" },
+  selfgraph: { path: "/dashboard/selfgraph", label: "SelfGraph™", icon: Brain, color: "from-[#5500cb] to-indigo-600" },
 };
 
-const InsightsView = () => {
-  const { user, profile } = useAuth();
+const InsightsView = ({
+  conclusion = null,
+  loading = false,
+  regenerate,
+  regenerating = false,
+}: {
+  conclusion?: Conclusion | null;
+  loading?: boolean;
+  regenerate?: () => Promise<void>;
+  regenerating?: boolean;
+} = {}) => {
+
+  const { profile } = useAuth();
   const navigate = useNavigate();
-  const [conclusion, setConclusion] = useState<Conclusion | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [regenerating, setRegenerating] = useState(false);
-  const { progress } = useAssessmentRewards();
 
   const discoveryDone = !!profile?.journey_responses?.assessment_completed;
   const psychometricDone = !!profile?.journey_responses?.psychometric_completed;
 
-  const fetchConclusion = async () => {
-    if (!user) return;
-    setLoading(true);
-    const { data } = await supabase
-      .from("assessment_conclusions" as any)
-      .select("*")
-      .eq("user_id", user.id)
-      .order("generated_at", { ascending: false })
-      .limit(1)
-      .maybeSingle();
-    setConclusion((data as any) || null);
-    setLoading(false);
-  };
-
-  useEffect(() => {
-    fetchConclusion();
-  }, [user]);
-
-  const regenerate = async () => {
-    if (!user) return;
-    setRegenerating(true);
-    try {
-      const { data, error } = await supabase.functions.invoke("assessment-synthesizer", {
-        body: { test_type: "combined" },
-      });
-      if (error) throw error;
-      setConclusion(data);
-      toast.success("Insights regenerated from your latest signals.");
-    } catch (e: any) {
-      toast.error(e?.message || "Could not regenerate insights.");
-    } finally {
-      setRegenerating(false);
-    }
-  };
-
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-[400px]">
-        <div className="animate-pulse text-muted-foreground">Loading your insights…</div>
+      <div className="flex flex-col items-center justify-center min-h-[400px] bg-white rounded-3xl border border-border shadow-xl p-8 space-y-6">
+        <div className="relative w-20 h-20">
+          <div className="absolute inset-0 rounded-full border-4 border-primary/10 border-t-primary animate-spin" />
+          <div className="absolute inset-2 rounded-full border-4 border-accent/10 border-b-accent animate-spin" style={{ animationDirection: "reverse" }} />
+          <div className="absolute inset-4 rounded-full bg-gradient-to-br from-primary/10 to-accent/10 flex items-center justify-center">
+            <Sparkles className="text-primary w-6 h-6 animate-pulse" />
+          </div>
+        </div>
+        <div className="text-center space-y-2">
+          <h3 className="font-display text-base font-bold text-foreground">Synthesizing AI Insights...</h3>
+          <p className="font-body text-xs text-muted-foreground max-w-xs leading-relaxed">
+            Consolidating your choices, learning speeds, and cognitive signals into a personalized map.
+          </p>
+        </div>
       </div>
     );
   }
 
   if (!discoveryDone && !psychometricDone) {
     return (
-      <Card className="border-primary/20 bg-primary/5">
-        <CardContent className="pt-6 text-center space-y-3">
-          <Brain className="mx-auto text-primary" size={36} />
-          <h3 className="font-display text-xl">Insights unlock after your assessments</h3>
-          <p className="font-body text-sm text-muted-foreground">
-            Complete the Discovery and Psychometric assessments to generate your personal insights report.
-          </p>
-          <Button onClick={() => navigate("/dashboard/curiosity-compass")}>
-            Go to Curiosity Compass <ArrowRight size={14} className="ml-2" />
+      <div className="bg-white rounded-3xl border border-border shadow-xl p-8 text-center relative overflow-hidden w-full">
+        <div className="absolute inset-0 bg-gradient-to-b from-primary/[0.03] to-transparent pointer-events-none" />
+        <div className="relative z-10 space-y-6 max-w-md mx-auto py-8">
+          <div className="w-16 h-16 mx-auto rounded-2xl bg-gradient-to-br from-[#5500cb] to-accent flex items-center justify-center text-white shadow-lg">
+            <Lock size={28} />
+          </div>
+          <div className="space-y-2">
+            <h3 className="font-display text-xl font-bold text-foreground">Insights Lockbox</h3>
+            <p className="font-body text-xs text-muted-foreground leading-relaxed">
+              Complete either the Discovery or Psychometric assessments to generate your personal intelligence profile and match recommendations.
+            </p>
+          </div>
+          <Button onClick={() => navigate("/dashboard/curiosity-compass")} className="bg-primary hover:bg-[#4300a3] text-white rounded-full px-8 h-11 font-body text-xs font-bold transition-all shadow-md">
+            Go to Assessments <ArrowRight size={14} className="ml-1.5" />
           </Button>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
     );
   }
 
-  return (
-    <div className="space-y-5 sm:space-y-6">
-      {/* Hero */}
-      <Card className="border-primary/30 bg-gradient-to-br from-primary/5 via-card to-accent/5">
-        <CardContent className="pt-6 space-y-4">
-          <div className="flex items-start justify-between gap-3 flex-wrap">
-            <div className="flex items-center gap-3">
-              <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-gradient-to-br from-primary to-accent flex items-center justify-center">
-                <Sparkles size={22} className="text-primary-foreground" />
-              </div>
-              <div className="min-w-0">
-                <p className="font-body text-[11px] sm:text-xs uppercase tracking-wider text-muted-foreground">Your Archetype</p>
-                <h2 className="font-display text-xl sm:text-2xl text-foreground">
-                  {conclusion?.archetype || "The Explorer"}
-                </h2>
-              </div>
-            </div>
-            <Button size="sm" variant="outline" onClick={regenerate} disabled={regenerating}>
-              <RefreshCw size={14} className={`mr-1.5 ${regenerating ? "animate-spin" : ""}`} />
-              {regenerating ? "Synthesizing…" : "Regenerate"}
-            </Button>
-          </div>
-          {conclusion?.archetype_description && (
-            <p className="font-body text-sm text-foreground leading-relaxed">{conclusion.archetype_description}</p>
-          )}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-            <Stat icon={Brain} label="Cognitive" value={conclusion?.cognitive_style || "—"} />
-            <Stat icon={Heart} label="Motivation" value={conclusion?.motivation_type || "—"} />
-            <Stat icon={Target} label="Work style" value={conclusion?.work_style || "—"} />
-            <Stat icon={Compass} label="Confidence" value={`${Math.round((conclusion?.confidence_score || 0.7) * 100)}%`} />
-          </div>
-        </CardContent>
-      </Card>
+  // Calculate percentage matching confidence
+  const confidencePercent = conclusion?.confidence_score 
+    ? Math.round(conclusion.confidence_score * 100) 
+    : 75;
 
-      {/* Reward trackers */}
-      <div className="grid sm:grid-cols-2 gap-4">
-        <RewardProgressTracker
-          testType="discovery"
-          title="Discovery Test rewards"
-          subtitle="Unlock at 25, 50, 75 and 100%"
-        />
-        <RewardProgressTracker
-          testType="psychometric"
-          title="Psychometric Test rewards"
-          subtitle="Unlock at 25, 50, 75 and 100%"
-        />
+  return (
+    <div className="space-y-8 w-full">
+      {/* Premium Dashboard Header Card */}
+      <div className="bg-white rounded-3xl border border-border shadow-xl p-6 sm:p-8 relative overflow-hidden flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+        <div className="absolute inset-0 bg-gradient-to-r from-primary/[0.02] to-accent/[0.02] pointer-events-none" />
+        <div className="relative z-10 space-y-2 flex-1">
+          <div className="flex items-center gap-2">
+            <Sparkles className="text-primary w-5 h-5" />
+            <span className="font-body text-[10px] text-primary uppercase tracking-wider font-extrabold">Profile Intelligence Synthesis</span>
+          </div>
+          <h2 className="font-display text-2xl font-extrabold text-foreground tracking-tight">
+            Your Curiosity Synthesis
+          </h2>
+          <p className="font-body text-xs text-muted-foreground max-w-xl leading-relaxed">
+            This dashboard integrates all active exploration vectors, behavioral traits, and testing signals to construct your optimized progression pathway.
+          </p>
+        </div>
+
+        {/* Confidence Gauge & Action */}
+        <div className="relative z-10 flex items-center gap-4 sm:gap-6 shrink-0 w-full md:w-auto justify-between md:justify-end border-t md:border-t-0 border-border/40 pt-4 md:pt-0">
+          <div className="flex items-center gap-3">
+            <div className="relative w-12 h-12 flex items-center justify-center bg-primary/5 rounded-full border border-primary/20">
+              <span className="font-display text-xs font-extrabold text-primary">{confidencePercent}%</span>
+            </div>
+            <div>
+              <p className="font-body text-[10px] text-muted-foreground uppercase font-bold tracking-wide">Match Confidence</p>
+              <p className="font-body text-xs text-foreground font-semibold">Highly Calibrated</p>
+            </div>
+          </div>
+
+          <Button 
+            size="sm" 
+            variant="outline" 
+            onClick={regenerate} 
+            disabled={regenerating} 
+            className="rounded-full h-10 px-5 text-xs font-bold border-border/80 hover:bg-muted/10 bg-white shadow-sm shrink-0 flex items-center gap-2"
+          >
+            <RefreshCw size={13} className={`${regenerating ? "animate-spin" : ""}`} />
+            {regenerating ? "Synthesizing…" : "Refresh Profiling"}
+          </Button>
+        </div>
       </div>
 
-      {/* Top domains + skills */}
-      <div className="grid lg:grid-cols-2 gap-4">
-        <Card>
-          <CardHeader className="pb-3">
-            <CardTitle className="font-display text-base flex items-center gap-2">
-              <Map size={16} className="text-primary" /> Top domains for you
-            </CardTitle>
-            <CardDescription>Where your signals point most strongly</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="flex flex-wrap gap-2">
+      {/* Top domains + skills in responsive grid */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 w-full">
+        {/* Top Domains for You */}
+        <div className="bg-white rounded-3xl border border-border shadow-xl p-6 relative overflow-hidden flex flex-col justify-between min-h-[200px]">
+          <div className="absolute inset-0 bg-gradient-to-b from-primary/[0.01] to-transparent pointer-events-none" />
+          <div className="relative z-10 space-y-4">
+            <div className="flex justify-between items-start gap-4">
+              <div className="space-y-1">
+                <h3 className="font-display text-base font-bold text-foreground flex items-center gap-2">
+                  <Map size={18} className="text-primary" /> Top Alignment Domains
+                </h3>
+                <p className="font-body text-xs text-muted-foreground">Areas showcasing your strongest curiosity responses</p>
+              </div>
+            </div>
+
+            <div className="flex flex-wrap gap-2 pt-1">
               {(conclusion?.top_domains || []).map((d) => (
-                <Badge key={d} variant="secondary" className="px-3 py-1.5 text-xs cursor-pointer" onClick={() => navigate(`/dashboard/explore?q=${encodeURIComponent(d)}`)}>
-                  {d}
-                </Badge>
+                <motion.div
+                  key={d}
+                  whileHover={{ scale: 1.03 }}
+                  whileTap={{ scale: 0.98 }}
+                  onClick={() => navigate(`/dashboard/explore?q=${encodeURIComponent(d)}`)}
+                  className="px-4 py-2 bg-gradient-to-r from-primary/5 to-accent/5 hover:from-[#5500cb] hover:to-accent text-foreground hover:text-white rounded-2xl cursor-pointer transition-all duration-300 font-body text-xs font-semibold border border-border/80 flex items-center gap-1.5 shadow-sm"
+                >
+                  <span>{d}</span>
+                  <ChevronRight size={12} className="opacity-60" />
+                </motion.div>
               ))}
               {!(conclusion?.top_domains?.length) && (
-                <p className="font-body text-xs text-muted-foreground">No domains yet. Complete more of the assessments.</p>
+                <div className="py-4 text-center w-full">
+                  <p className="font-body text-xs text-muted-foreground">No domains calculated. Complete further career card exploration.</p>
+                </div>
               )}
             </div>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
 
-        <Card>
-          <CardHeader className="pb-3">
-            <CardTitle className="font-display text-base flex items-center gap-2">
-              <Zap size={16} className="text-primary" /> Skills to sharpen
-            </CardTitle>
-            <CardDescription>Pulled into SkillStacker automatically</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="flex flex-wrap gap-2">
+        {/* Skills to Sharpen */}
+        <div className="bg-white rounded-3xl border border-border shadow-xl p-6 relative overflow-hidden flex flex-col justify-between min-h-[200px]">
+          <div className="absolute inset-0 bg-gradient-to-b from-primary/[0.01] to-transparent pointer-events-none" />
+          <div className="relative z-10 space-y-4">
+            <div className="space-y-1">
+              <h3 className="font-display text-base font-bold text-foreground flex items-center gap-2">
+                <Zap size={18} className="text-primary" /> Recommended Skills to Build
+              </h3>
+              <p className="font-body text-xs text-muted-foreground">Competency vectors mapped directly into your SkillStacker dashboard</p>
+            </div>
+
+            <div className="flex flex-wrap gap-2 pt-1">
               {(conclusion?.top_skills || []).map((s) => (
-                <Badge key={s} variant="outline" className="px-3 py-1.5 text-xs">{s}</Badge>
+                <Badge 
+                  key={s} 
+                  variant="outline" 
+                  className="px-3.5 py-2 text-xs rounded-2xl font-body font-semibold border-border/85 bg-muted/20 hover:bg-primary/5 transition-all text-foreground"
+                >
+                  ⚡ {s}
+                </Badge>
               ))}
               {!(conclusion?.top_skills?.length) && (
-                <p className="font-body text-xs text-muted-foreground">No skill suggestions yet.</p>
+                <div className="py-4 text-center w-full">
+                  <p className="font-body text-xs text-muted-foreground">No recommended skills yet.</p>
+                </div>
               )}
             </div>
-          </CardContent>
-        </Card>
-      </div>
-
-      {/* Strengths + growth */}
-      <div className="grid sm:grid-cols-2 gap-4">
-        <Card className="border-success/30 bg-success/5">
-          <CardHeader className="pb-3">
-            <CardTitle className="font-display text-base flex items-center gap-2 text-success">
-              <Trophy size={16} /> Strengths
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-1.5">
-            {(conclusion?.strengths || []).map((s, i) => (
-              <p key={i} className="font-body text-sm flex items-start gap-2">
-                <span className="text-success mt-0.5">●</span> {s}
-              </p>
-            ))}
-          </CardContent>
-        </Card>
-
-        <Card className="border-warmth/30 bg-warmth/5">
-          <CardHeader className="pb-3">
-            <CardTitle className="font-display text-base flex items-center gap-2">
-              <Lightbulb size={16} className="text-warmth" /> Growth edges
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-1.5">
-            {(conclusion?.growth_areas || []).map((s, i) => (
-              <p key={i} className="font-body text-sm flex items-start gap-2">
-                <span className="text-warmth mt-0.5">●</span> {s}
-              </p>
-            ))}
-          </CardContent>
-        </Card>
+          </div>
+        </div>
       </div>
 
       {/* Recommended modules */}
-      <Card>
-        <CardHeader className="pb-3">
-          <CardTitle className="font-display text-base flex items-center gap-2">
-            <ArrowRight size={16} className="text-primary" /> Where to go next
-          </CardTitle>
-          <CardDescription>Modules ranked for your profile</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="grid sm:grid-cols-2 gap-2.5">
-            {(conclusion?.recommended_modules || []).map((m, i) => {
-              const route = MODULE_ROUTES[m.module_key];
-              if (!route) return null;
-              return (
-                <motion.button
-                  key={m.module_key}
-                  whileHover={{ y: -2 }}
-                  onClick={() => navigate(route.path)}
-                  className="text-left p-3 rounded-xl border border-border hover:border-primary/40 transition-all bg-card"
-                >
-                  <div className="flex items-center justify-between mb-1">
-                    <span className="font-display text-sm">{route.label}</span>
-                    <ArrowRight size={14} className="text-primary" />
+      <div className="bg-white rounded-3xl border border-border shadow-xl p-6 sm:p-8 relative overflow-hidden space-y-6 w-full">
+        <div className="absolute inset-0 bg-gradient-to-b from-primary/[0.01] to-transparent pointer-events-none" />
+        <div className="relative z-10 space-y-1">
+          <h3 className="font-display text-base font-bold text-foreground flex items-center gap-2">
+            <ArrowRight size={18} className="text-primary" /> Your Actionable Roadmap Next Steps
+          </h3>
+          <p className="font-body text-xs text-muted-foreground">Optimized platform routes ranked dynamically by your behavioral inputs</p>
+        </div>
+
+        <div className="relative z-10 grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
+          {(conclusion?.recommended_modules || []).map((m) => {
+            const route = MODULE_ROUTES[m.module_key] || {
+              path: `/dashboard/${m.module_key.replace("_", "-")}`,
+              label: m.module_key.split("_").map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(" "),
+              icon: Sparkles,
+              color: "from-primary to-accent"
+            };
+
+            const IconComp = route.icon;
+
+            return (
+              <motion.button
+                key={m.module_key}
+                whileHover={{ y: -3, scale: 1.01 }}
+                onClick={() => navigate(route.path)}
+                className="text-left p-5 rounded-3xl border border-border hover:border-primary/30 hover:shadow-lg transition-all duration-300 bg-white flex items-start gap-4 group relative overflow-hidden"
+              >
+                <div className="absolute inset-0 bg-gradient-to-br from-primary/[0.01] to-transparent pointer-events-none" />
+                <div className={`w-12 h-12 rounded-2xl bg-gradient-to-br ${route.color} flex items-center justify-center shrink-0 text-white shadow-md group-hover:scale-105 transition-transform`}>
+                  <IconComp size={22} />
+                </div>
+                <div className="space-y-1 flex-1 min-w-0">
+                  <div className="flex items-center justify-between">
+                    <span className="font-display text-sm font-extrabold text-foreground group-hover:text-primary transition-colors">{route.label}</span>
+                    <ArrowRight size={14} className="text-muted-foreground group-hover:text-primary group-hover:translate-x-1 transition-all" />
                   </div>
-                  <p className="font-body text-xs text-muted-foreground line-clamp-2">{m.reason}</p>
-                </motion.button>
-              );
-            })}
-          </div>
-        </CardContent>
-      </Card>
+                  <p className="font-body text-xs text-muted-foreground leading-relaxed line-clamp-2">{m.reason}</p>
+                </div>
+              </motion.button>
+            );
+          })}
+          {!(conclusion?.recommended_modules?.length) && (
+            <div className="col-span-2 py-8 text-center border border-dashed border-border/80 rounded-2xl">
+              <p className="font-body text-xs text-muted-foreground">Unlock recommended modules by answering more assessment queries.</p>
+            </div>
+          )}
+        </div>
+      </div>
 
       {/* Career paths */}
       {conclusion?.recommended_career_paths?.length ? (
-        <Card>
-          <CardHeader className="pb-3">
-            <CardTitle className="font-display text-base">Career paths worth exploring</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="flex flex-wrap gap-2">
+        <div className="bg-white rounded-3xl border border-border shadow-xl p-6 sm:p-8 relative overflow-hidden space-y-6 w-full">
+          <div className="absolute inset-0 bg-gradient-to-b from-primary/[0.01] to-transparent pointer-events-none" />
+          <div className="relative z-10 space-y-4">
+            <div className="space-y-1">
+              <h3 className="font-display text-base font-bold text-foreground">Matched Career Directions</h3>
+              <p className="font-body text-xs text-muted-foreground">High-growth paths aligning with your behavioral blueprint</p>
+            </div>
+            <div className="flex flex-wrap gap-2.5 pt-1">
               {conclusion.recommended_career_paths.map((p) => (
-                <Badge key={p} variant="secondary" className="px-3 py-1.5 text-xs cursor-pointer" onClick={() => navigate(`/dashboard/explore?q=${encodeURIComponent(p)}`)}>
-                  {p}
-                </Badge>
+                <motion.div
+                  key={p}
+                  whileHover={{ scale: 1.02 }}
+                  onClick={() => navigate(`/dashboard/explore?q=${encodeURIComponent(p)}`)}
+                  className="px-4 py-2.5 rounded-2xl bg-muted/30 border border-border/80 hover:border-primary/30 font-body text-xs font-semibold text-foreground hover:text-primary cursor-pointer transition-all duration-300 shadow-sm hover:shadow flex items-center gap-1.5"
+                >
+                  <Target size={13} className="text-primary opacity-80" />
+                  <span>{p}</span>
+                  <ChevronRight size={12} className="text-muted-foreground/60 ml-0.5" />
+                </motion.div>
               ))}
             </div>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
       ) : null}
     </div>
   );
 };
-
-const Stat = ({ icon: Icon, label, value }: { icon: any; label: string; value: string }) => (
-  <div className="rounded-xl border border-border bg-card p-2.5 sm:p-3">
-    <div className="flex items-center gap-1.5 text-muted-foreground mb-1">
-      <Icon size={12} />
-      <span className="font-body text-[10px] sm:text-[11px] uppercase tracking-wide">{label}</span>
-    </div>
-    <p className="font-display text-xs sm:text-sm text-foreground line-clamp-2">{value}</p>
-  </div>
-);
 
 export default InsightsView;

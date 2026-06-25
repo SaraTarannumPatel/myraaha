@@ -1,0 +1,1514 @@
+# Agri_Env_NaturalResources_Career_Intelligence.xlsx Data Breakdown
+
+**Total Roles (Rows):** 1024
+
+## Sector Name (1 unique items)
+- Agriculture, Environment & Natural Resources
+
+## Sub-Sector Name (17 unique items)
+- AgriTech & Digital Agriculture
+- Agricultural Biotechnology & Genomics
+- Agricultural Finance, Policy & Rural Development
+- Agricultural Research, Education & Extension
+- Animal Husbandry, Dairy & Livestock
+- Commodity Markets, Trade & Exports
+- Crop Farming & Agronomy
+- Environmental Management & Climate
+- Fisheries, Aquaculture & Marine Resources
+- Food Processing, Value Addition & Agri-Business
+- Forestry, Wildlife & Biodiversity
+- Horticulture, Floriculture & Plantation Crops
+- Irrigation, Farm Mechanisation & Agri-Engineering
+- Mining, Geology & Earth Sciences
+- Natural Resource & Land Management
+- Rural Crafts, Tribal & Traditional Knowledge Systems
+- Sericulture, Beekeeping & Allied Agri Occupations
+
+## Industry Family (73 unique items)
+- Agri Extension & Rural Development
+- Agri-Business Management & Marketing
+- Agri-Drone Operations & Remote Sensing
+- Agri-Finance & InsurTech
+- Agricultural Commodity Trading & Markets
+- Agricultural Drone & Precision Technology
+- Agricultural Education & Academia
+- Agricultural Export & Import
+- Agricultural Extension & Advisory Services
+- Agricultural Finance & Rural Banking
+- Agricultural Policy, Planning & Governance
+- Agricultural Research (ICAR & SAUs)
+- Agricultural Warehousing & Commodity Finance
+- Agronomy & Soil Science
+- Animal Biotechnology
+- Aquatic Animal Health & Disease Management
+- Beekeeping & Honey Production
+- Bio-Inputs & Microbial Biotechnology
+- Biodiversity & Ecology
+- Cash Crop Farming
+- Cattle & Buffalo Management
+- Cereal & Grain Farming
+- Climate Change & Carbon Management
+- Coastal & Marine Resource Management
+- Cold Chain, Logistics & Storage
+- Crop Protection & Plant Pathology
+- Dairy Farming & Milk Production
+- Digital Farming Platforms & Apps
+- Dryland & Rainfed Area Development
+- Environmental Governance & Policy
+- Environmental Science & Impact Assessment
+- Farm Mechanisation & Agricultural Engineering
+- Fertilizer & Agrochemicals
+- Fish Processing & Cold Chain
+- Floriculture & Ornamental Horticulture
+- Food Processing Plant Operations
+- Food Science & Technology
+- Forest Management & Conservation
+- Fruit Cultivation & Orchard Management
+- Geology & Geoscience
+- Goat, Sheep & Small Ruminant Farming
+- Inland Fisheries & Freshwater Aquaculture
+- Irrigation Engineering & Water Management
+- Land Use & Land Resource Management
+- Marine Fisheries & Coastal Aquaculture
+- Medicinal & Aromatic Plant Cultivation
+- Mineral Processing & Metallurgy
+- Mining & Mineral Exploration
+- Mushroom & Agri-Allied Cultivation
+- Non-Timber Forest Products (NTFP)
+- Oil & Gas Exploration & Production
+- Oilseed Farming
+- Organic Farming & Certification
+- Pig, Rabbit & Other Livestock Farming
+- Plant Biotechnology & Genetic Engineering
+- Plantation Crop Farming
+- Pollution Control & Remediation
+- Poultry Farming
+- Protected Cultivation & Precision Horticulture
+- Pulse & Legume Farming
+- Renewable Energy & Sustainability
+- Rural Artisan & Agri-Craft
+- Rural Development & Livelihood Programs
+- Seed Technology & Production
+- Sericulture & Silk Production
+- Silviculture & Forest Plantation
+- Spice Farming
+- Traditional Agricultural Knowledge & Practices
+- Vegetable Farming
+- Veterinary & Animal Health Services
+- Waste Management & Circular Economy
+- Water Resource Management
+- Wildlife Management & Conservation
+
+## Industry Name (11 unique items)
+- AgriTech & Digital Agriculture
+- Agricultural Biotechnology
+- Agricultural Research Institutions
+- Agricultural Universities
+- Agriculture & Food Systems
+- Environmental Services
+- Food & Beverage Processing
+- Forestry & Natural Resources
+- Indigenous & Tribal Agriculture
+- Mining & Extractive Industries
+- Rural Craft Industries
+
+## Domain Name (73 unique items)
+- Agri Export-Import
+- Agri Extension Services
+- Agri-Business
+- Agri-Commodity Markets
+- Agri-Drone & Remote Sensing
+- Agri-FinTech & InsurTech
+- Agri-Warehousing & Finance
+- Agricultural Education
+- Agricultural Extension Services
+- Agricultural Finance
+- Agricultural Logistics & Cold Chain
+- Agricultural Policy
+- Agricultural Research
+- Agronomic Advisory & Soil Health
+- Allied Agricultural Production
+- Animal Biotechnology
+- Apiculture & Honey Industry
+- Aquatic Animal Health
+- Bio-Inputs & Microbiology
+- Biodiversity Conservation
+- Cereal & Grain Cultivation
+- Climate Action & Carbon Markets
+- Coastal Zone Management
+- Commercial Cash Crop Cultivation
+- Controlled Environment Agriculture
+- Dairy Farming & Milk Industry
+- Digital Farming
+- Dryland Agriculture
+- Environmental Assessment
+- Environmental Policy & Regulation
+- Farm Mechanisation
+- Fertilizer & Agrochemical Industry
+- Fish Processing Industry
+- Floriculture & Flower Production
+- Food Processing Industry
+- Food Science & Technology
+- Forest Management
+- Freshwater Fisheries
+- Fruit Horticulture
+- Geology & Earth Sciences
+- Irrigation Engineering
+- Land Resource Management
+- Livestock Management
+- Marine Fisheries
+- Medicinal Plant Farming
+- Mineral Exploration & Mining
+- Mineral Processing
+- Non-Ruminant Livestock
+- Non-Timber Forest Products
+- Oil & Gas Industry
+- Oilseed Cultivation
+- Organic Agriculture
+- Plant Biotechnology
+- Plant Health & Crop Protection
+- Pollution Management
+- Poultry Industry
+- Precision Farming Technology
+- Pulse & Legume Cultivation
+- Renewable Energy & Clean Tech
+- Rural Craft & Agri Industry
+- Rural Development
+- Seed Science & Technology
+- Sericulture & Silk Industry
+- Silviculture & Plantation
+- Small Ruminant Husbandry
+- Spice Crop Cultivation
+- Tea, Coffee, Rubber & Coconut Estates
+- Traditional Farming
+- Vegetable Production
+- Veterinary Services
+- Waste & Resource Management
+- Water Resource Management
+- Wildlife Conservation
+
+## Sub-Domain Name (73 unique items)
+- Agri Product Export Documentation, SPS Compliance & Trade Facilitation
+- Agri-Lending Platforms, Crop Insurance Tech & Weather Data Analytics
+- Air, Water & Soil Pollution Monitoring, Control & Remediation
+- Animal Disease Diagnosis, Treatment & Preventive Medicine
+- Animal Genomics, Embryo Transfer & Veterinary Biotech
+- Aquatic Disease Diagnosis, Biosecurity & Fish Health Management
+- Arhar, Moong, Urad, Chana & Soybean Farming
+- BSc Agri, MSc Agri & PhD Teaching at SAUs & ICAR Institutions
+- Biofertilizers, Bio-pesticides, Mycorrhiza & Rhizobium Production
+- Broiler, Layer & Breeder Poultry Farm Management
+- CRZ, Mangrove Conservation, Marine Biodiversity & Ocean Governance
+- CWC/SWC Warehouse Management, Pledge Finance & Negotiable Warehouse Receipts
+- Canal, Drip, Sprinkler & Micro-Irrigation System Design
+- Cattle Breeding, Feeding & Animal Husbandry
+- Coir, Bamboo, Jute Craft, Tribal Handicraft & Rural Industry
+- Cold Storage, Packhouses, Controlled Atmosphere & Farm Logistics
+- Commodity Trading, Farm-to-Fork Supply Chain & Agricultural Marketing
+- Crop Advisory, Soil Testing & Fertilizer Recommendations
+- Crop Improvement, Soil Research & Agri Technology Development
+- Dairy Herd Management, Milking & Milk Processing
+- Drone Survey, Crop Monitoring, Multispectral Imaging & NDVI Analysis
+- Dryland Farming, Rainfed Area Development & Watershed Programmes
+- EIA, Environmental Auditing & Pollution Monitoring
+- Farm Management Apps, Digital Advisory & e-Agriculture Platforms
+- Farmer Advisory, FLD, Technology Transfer & Digital Extension
+- Farmer Training, KVK Advisory & Rural Tech Transfer
+- Fertilizer Manufacturing, Distribution & Soil Nutrition
+- Fish Farming, Pond Management & Freshwater Aquaculture
+- Fish Processing, Value Addition & Seafood Export
+- Flora, Fauna Survey, Ecological Research & Biodiversity Monitoring
+- Food Factory Operations, Processing & Production Management
+- Food Processing, Quality Control & Food Safety
+- Forest Conservation, Silviculture & Forest Resource Management
+- GHG Inventories, Carbon Credit, Climate Finance & Mitigation
+- GM Crops, Marker-Assisted Selection, Tissue Culture & Plant Genomics
+- Geological Mapping, Hydrogeology, Petrology & Earth Science Research
+- Geological Survey, Mineral Exploration, Mine Planning & Extraction
+- Goat, Sheep & Sheep Wool Production & Management
+- Hive Management, Queen Rearing, Honey Extraction & Marketing
+- Honey, Tendu Leaves, Bamboo & NTFP Harvesting & Marketing
+- Indigenous Varieties, Traditional Cultivation & Folk Agri-Practices
+- Kisan Credit Card, Farm Loan Appraisal & Agri-Lending
+- Land Use Planning, Survey, Degraded Land Reclamation & Land Policy
+- MGNREGA, PMGSY, Rural Livelihoods & Village-Level Development
+- Mango, Banana, Apple, Citrus & Tropical Fruit Cultivation
+- Ministry of Agriculture Policy, NITI Aayog Advisory & State Planning
+- MoEFCC Policy, Environmental Law & Green Regulation
+- Mulberry Cultivation, Silkworm Rearing & Silk Reeling
+- Mushroom Cultivation, Vermicomposting & Agri-Allied Farming
+- Mustard, Sunflower, Sesame & Castor Farming
+- NCDEX/MCX Trading, Mandi Operations & Commodity Pricing
+- Open-Field & Poly-House Vegetable Cultivation
+- Ore Dressing, Metallurgical Processing & Beneficiation
+- Organic Input Production, Certification & Market Development
+- Pest Management, Disease Control & Plant Protection
+- Pig Farming, Rabbit Rearing & Piggery Management
+- Polyhouse, Greenhouse, Hydroponic & Aeroponic Cultivation
+- Rose, Marigold, Gerbera & Ornamental Flower Cultivation
+- SWM, E-Waste, Biomedical Waste & Circular Economy
+- Sea Fishing, Coastal Shrimp Farming & Marine Resource Management
+- Seed Production, Quality Control & Seed Certification
+- Seismic Surveys, Drilling, Well Engineering & Petroleum Production
+- Solar, Wind, Biogas, Biomass & Green Energy Solutions
+- Sugarcane, Cotton, Jute & Tobacco Production
+- Tea, Coffee, Rubber, Coconut & Arecanut Estate Management
+- Tractor, Combine Harvester, Agri-Implement & Custom Hiring
+- Tree Nursery, Plantation, Thinning & Silvicultural Operations
+- Tulsi, Ashwagandha, Aloe Vera & Aromatic Herb Cultivation
+- Turmeric, Ginger, Pepper, Cardamom & Coriander Farming
+- UAV Crop Spraying, Remote Sensing & Precision Agriculture
+- Watershed, Groundwater, Irrigation & Water Conservation
+- Wheat, Rice, Maize & Millet Cultivation
+- Wildlife Protection, Tiger Reserve & National Park Management
+
+## Function Name (68 unique items)
+- Agri Trade
+- Agri-Business Management
+- Agri-Drone Operations
+- Agri-FinTech
+- Agri-Inputs
+- Agri-Warehousing
+- Agricultural Education
+- Agricultural Extension
+- Agricultural Finance
+- Agricultural Policy
+- Agricultural Research
+- Agronomy
+- Allied Agri Operations
+- Animal Biotechnology
+- Animal Husbandry
+- Apiculture
+- Aquaculture
+- Aquatic Animal Health
+- Bio-Inputs
+- Biodiversity Conservation
+- Climate Change Management
+- Coastal Management
+- Commodity Trading
+- Dairy Farming
+- Digital Farming
+- Dryland Agriculture
+- Environmental Governance
+- Environmental Science
+- Extension Services
+- Farm Mechanisation
+- Farming Operations
+- Fish Processing
+- Floriculture
+- Food Processing
+- Food Science
+- Forest Management
+- Geological Sciences
+- Horticulture
+- Irrigation Engineering
+- Land Management
+- Marine Fisheries
+- Medicinal Plant Farming
+- Mineral Processing
+- Mining Engineering
+- NTFP Management
+- Organic Farming
+- Petroleum Engineering
+- Pig & Other Livestock Farming
+- Plant Biotechnology
+- Plant Protection
+- Plantation Management
+- Pollution Control
+- Post-Harvest Logistics
+- Poultry Operations
+- Precision Agriculture
+- Protected Cultivation
+- Renewable Energy
+- Rural Artisan & Craft
+- Rural Development
+- Seed Technology
+- Sericulture
+- Silviculture
+- Small Ruminant Farming
+- Traditional Knowledge
+- Veterinary Practice
+- Waste Management
+- Water Resources
+- Wildlife Management
+
+## Job Family (73 unique items)
+- Agri Export Specialist
+- Agri-Business Manager
+- Agri-Drone Specialist
+- Agri-FinTech Specialist
+- AgriTech Specialist
+- Agricultural Engineer
+- Agricultural Extension Officer
+- Agricultural Extension Specialist
+- Agricultural Finance Specialist
+- Agricultural Policy Analyst
+- Agricultural Professor
+- Agricultural Research Scientist
+- Agronomist
+- Allied Agri Specialist
+- Animal Biotechnologist
+- Animal Husbandry Officer
+- Aquatic Animal Health Specialist
+- Beekeeper
+- Bio-Input Specialist
+- Biodiversity Specialist
+- Cash Crop Farmer
+- Climate Change Specialist
+- Coastal Resource Manager
+- Cold Chain Specialist
+- Commodity Trader
+- Crop Protection Specialist
+- Dairy Farmer
+- Dryland Agriculture Specialist
+- Environmental Policy Specialist
+- Environmental Scientist
+- Fertilizer Specialist
+- Fish Processing Technologist
+- Fishery Officer
+- Floriculturist
+- Food Processing Plant Manager
+- Food Technologist
+- Forest Officer
+- Fruit Horticulturist
+- Geologist
+- Grain Farmer
+- Irrigation Engineer
+- Land Resource Manager
+- Livestock Specialist
+- Marine Fisheries Officer
+- Medicinal Plant Specialist
+- Mineral Processing Engineer
+- Mining Engineer
+- NTFP Specialist
+- Oilseed Farmer
+- Organic Farming Specialist
+- Petroleum Engineer
+- Plant Biotechnologist
+- Plantation Manager
+- Pollution Control Engineer
+- Poultry Farm Manager
+- Precision Agriculture Specialist
+- Protected Cultivation Specialist
+- Pulse Farmer
+- Renewable Energy Engineer
+- Rural Artisan
+- Rural Development Officer
+- Seed Technologist
+- Sericulturist
+- Silviculturist
+- Small Ruminant Specialist
+- Spice Farmer
+- Traditional Farming Specialist
+- Vegetable Grower
+- Veterinarian
+- Warehouse Manager — Agri
+- Waste Management Engineer
+- Water Resource Engineer
+- Wildlife Biologist
+
+## Career Cluster (7 unique items)
+- Agriculture, Food & Natural Resources
+- Education & Training
+- Finance
+- Government & Public Administration
+- Health Science
+- Manufacturing
+- Science, Technology, Engineering & Mathematics
+
+## Career Pathway Cluster (73 unique items)
+- Agri Warehousing & Commodity Finance
+- Agri-Business & Agricultural Marketing
+- Agri-Drone & Remote Sensing
+- Agri-FinTech & InsurTech
+- Agricultural Commodity Trading
+- Agricultural Education
+- Agricultural Export & Import
+- Agricultural Extension
+- Agricultural Extension & Advisory
+- Agricultural Finance
+- Agricultural Policy & Governance
+- Agricultural Research
+- Agronomy
+- Animal Biotechnology
+- Aquatic Animal Health
+- Beekeeping & Honey Production
+- Bio-Inputs & Microbial Biotech
+- Biodiversity & Ecology
+- Cash Crop Farming
+- Cattle & Buffalo Management
+- Cereal & Grain Farming
+- Climate Change & Carbon Management
+- Coastal & Marine Resource Management
+- Cold Chain & Agricultural Logistics
+- Crop Protection & Plant Health
+- Dairy Farming & Milk Production
+- Digital Farming & AgriTech
+- Dryland & Rainfed Agriculture
+- Environmental Governance & Policy
+- Environmental Science
+- Farm Mechanisation
+- Fertilizer & Agrochemical Industry
+- Fish Processing & Seafood Industry
+- Floriculture
+- Food Processing Operations
+- Food Science & Technology
+- Forestry & Forest Management
+- Freshwater Fisheries & Aquaculture
+- Fruit Horticulture
+- Geology & Geoscience
+- Irrigation Engineering
+- Land Resource Management
+- Marine Fisheries
+- Medicinal & Aromatic Plant Farming
+- Mineral Processing & Metallurgy
+- Mining Engineering
+- Mushroom & Agri-Allied Cultivation
+- Non-Timber Forest Products
+- Oil & Gas
+- Oilseed Farming
+- Organic Farming
+- Pig & Rabbit Farming
+- Plant Biotechnology & Genomics
+- Plantation Crop Management
+- Pollution Control & Remediation
+- Poultry Farming
+- Precision Agriculture & AgriTech
+- Protected Cultivation & CEA
+- Pulse & Legume Farming
+- Renewable Energy
+- Rural Craft & Artisan Industry
+- Rural Development & Livelihood
+- Seed Technology
+- Sericulture & Silk
+- Silviculture & Forest Plantation
+- Small Ruminant Farming
+- Spice Farming
+- Traditional & Indigenous Farming
+- Vegetable Farming
+- Veterinary Sciences
+- Waste Management & Circular Economy
+- Water Resource Management
+- Wildlife Management & Conservation
+
+## Role Name (1015 unique items)
+<details><summary>Click to expand all 1,015 Role Names</summary>
+
+- AI (Artificial Insemination) Technician
+- APEDA Export Manager
+- APEDA Officer
+- APMC Trader
+- AYUSH Farming Coordinator
+- Additional Chief Secretary — Agriculture
+- Aeroponic System Operator
+- Afforestation Programme Officer
+- Agarbatti (Incense) Maker
+- Agri Blockchain Specialist
+- Agri Credit Scoring Specialist
+- Agri Data Monetisation Analyst
+- Agri Data Scientist
+- Agri Export Documentation Specialist
+- Agri Export Manager
+- Agri Lending Risk Analyst
+- Agri Research Technician
+- Agri Retail Chain Manager
+- Agri Startup Founder
+- Agri Systems Researcher
+- Agri e-Commerce Manager
+- Agri-Advisory Platform Manager
+- Agri-Business Manager
+- Agri-Commodity Analyst
+- Agri-Drone Spraying Operator
+- Agri-FinTech Product Manager
+- Agri-Finance Consultant
+- Agri-GIS Technician
+- Agri-Genomics Data Analyst
+- Agri-Input Dealer
+- Agri-Loan Appraisal Officer
+- Agri-Product Buyer — International
+- Agri-Satellite Data Analyst
+- Agri-Supply Chain Analyst
+- AgriStack Specialist
+- AgriTech Entrepreneur
+- AgriTech Product Manager
+- Agricultural Biotechnologist
+- Agricultural Commissioner
+- Agricultural Commodity Analyst
+- Agricultural Development Officer
+- Agricultural Drone Pilot
+- Agricultural Drone Pilot (DGCA Certified)
+- Agricultural Economist
+- Agricultural Economist — Policy
+- Agricultural Engineer
+- Agricultural Export Manager
+- Agricultural Finance Officer — Bank
+- Agricultural Finance Specialist
+- Agricultural Heritage Documentation Specialist
+- Agricultural Implement Designer
+- Agricultural Loss Assessment Surveyor
+- Agricultural Machinery Technician
+- Agricultural Marketing Officer
+- Agricultural Policy Analyst
+- Agricultural Price Analyst
+- Agricultural Remote Sensing Analyst
+- Agricultural Risk Analyst — Bank
+- Agricultural Supervisor
+- Agricultural Technology Management Agency (ATMA) Officer
+- Agricultural Warehouse Manager
+- Agricultural Zoologist
+- Agriculture Budget Analyst
+- Agriculture Development Officer
+- Agriculture Diploma Instructor
+- Agriculture Extension Officer
+- Agriculture Field Assistant
+- Agriculture Inspector
+- Agrochemical Product Manager
+- Agrochemical Sales Representative
+- Agroforestry Extension Officer
+- Agroforestry Specialist
+- Agronomist
+- Agronomy Manager
+- Air Quality Analyst
+- Aloe Vera Farmer
+- Angora Rabbit Farmer
+- Animal Biotechnologist
+- Animal Cloning Researcher
+- Animal Disease Diagnostic Specialist
+- Animal Health Inspector
+- Animal Husbandry Officer
+- Animal Molecular Biologist
+- Animal Nutrition Specialist — Dairy
+- Anti-Poaching Officer
+- Apiculture Development Officer
+- Apiculture Trainer
+- Apple Farmer
+- Aquaculture Biosecurity Manager
+- Aquaculture Consultant
+- Aquaculture Technician
+- Aquaponic Farm Operator
+- Aquatic Biotechnologist
+- Aquatic Epidemiologist
+- Aquatic Microbiologist
+- Aquatic Pathologist
+- Aquifer Management Expert
+- Arecanut Plantation Supervisor
+- Arhar (Tur) Dal Farmer
+- Aromatic Plant Specialist
+- Aseptic Processing Technician
+- Ashwagandha Cultivator
+- Assayer
+- Assistant Conservator of Forests
+- Assistant Director of Agriculture
+- Assistant Mine Manager
+- Assistant Professor — Agriculture
+- Assistant Wildlife Warden
+- Associate Professor — Agriculture
+- Avocado Farmer
+- Bajra (Pearl Millet) Farmer
+- Bakery Technologist
+- Bamboo Harvesting Manager
+- Bamboo Product Artisan
+- Bamboo Product Developer
+- Bamboo Specialist
+- Banana Cultivator
+- Barley Farmer
+- Bee Disease Inspector
+- Bee Venom Collector
+- Beekeeper
+- Beeswax Processing Specialist
+- Beverage Technologist
+- Bio-Fertilizer Technician
+- Bio-Input Quality Control Officer
+- Bio-Pesticide Developer
+- Bio-pesticide Researcher
+- Biocultural Diversity Specialist
+- Biodiversity GIS Analyst
+- Biodiversity Specialist
+- Biodynamic Farming Specialist
+- Biofertilizer Manufacturer
+- Biofertilizer Scientist
+- Biogas Plant Engineer
+- Bioindicator Analyst
+- Bioinformatician — Crop Genomics
+- Biological Control Specialist
+- Biomass Energy Specialist
+- Biomedical Waste Manager
+- Bitter Gourd Farmer
+- Black Pepper Grower
+- Blanching Operator
+- Blast Technician
+- Block Agriculture Officer
+- Block Development Officer (BDO)
+- Block Level Officer (BLO)
+- Blue Economy Specialist
+- Botanical Survey Scientist
+- Bottle Gourd Cultivator
+- Bovine Genomics Specialist
+- Brahmi Farmer
+- Breed Improvement Specialist
+- Brinjal Farmer
+- Broiler Farm Supervisor
+- Buffalo Farm Manager
+- Bulk Milk Cooler (BMC) Operator
+- Bulk Storage Engineer — Grain
+- Butter & Ghee Production Specialist
+- Button Mushroom Producer
+- CAMPA Fund Manager
+- CITES Authority Officer
+- CPCB/SPCB Officer
+- CRISPR-Cas9 Plant Scientist
+- CSB (Central Silk Board) Officer
+- Cadastral Surveyor
+- Canal Irrigation Officer
+- Canal Maintenance Engineer
+- Canning Plant Operator
+- Capsicum Grower
+- Carbon Accounting Manager
+- Carbon Credit Auditor
+- Carbon Footprint Analyst
+- Carbon Market Specialist
+- Cardamom Estate Superintendent
+- Cardamom Planter
+- Carnation Cultivator
+- Cash Crop Farm Manager
+- Cashew Estate Manager
+- Castor Cultivator
+- Catchment Area Treatment Specialist
+- Catchment Treatment Specialist
+- Catfish Farmer
+- Cattle Breeder
+- Cattle Feed Specialist
+- Cattle Nutritionist
+- Cereal Technologist
+- Chana (Chickpea) Grower
+- Check Dam Construction Supervisor
+- Cheese Maker
+- Chief Conservator of Forests
+- Chief Engineer — Water Resources
+- Chief Veterinary Officer (Govt)
+- Chilli Farmer
+- Chilli Seed Producer
+- Chrysanthemum Farmer
+- Circular Economy Consultant
+- Citizen Science Coordinator — Biodiversity
+- Citrus Grower
+- Clean Development Mechanism (CDM) Specialist
+- Climate Adaptation Planner
+- Climate Change Analyst
+- Climate Control Technician — Greenhouse
+- Climate Finance Specialist
+- Climate Modeller
+- Climate Risk Analyst
+- Clove Plantation Worker
+- Cluster Coordinator — Rural
+- Coal Mine Manager
+- Coastal Aquaculture Specialist
+- Coastal Fisheries Extension Officer
+- Coastal Geomorphologist
+- Coastal Zone Management Specialist
+- Cocoa Plantation Manager
+- Coconut Farm Manager
+- Coffee Board Trade Officer
+- Coffee Estate Manager
+- Coffee Planter
+- Coir Board Technician
+- Coir Product Maker
+- Cold Chain Logistics Manager
+- Cold Chain Route Planner
+- Cold Chain Supervisor
+- Cold Storage Manager
+- Cold Storage Manager — Fisheries
+- Collateral Manager — Agri
+- Combine Harvester Operator
+- Command Area Development Officer
+- Commercial Apiarist
+- Commodity Quality Grader
+- Commodity Risk Manager
+- Commodity Trader — Agriculture
+- Common Effluent Treatment Plant (CETP) Manager
+- Community Forestry Specialist
+- Compost Plant Manager
+- Composting Microbiologist
+- Confectionery Technologist
+- Consent Management Officer
+- Conservation Biologist
+- Conservator of Forests
+- Contract Farming Coordinator
+- Contract Poultry Farmer
+- Controlled Atmosphere (CA) Storage Specialist
+- Controlled Environment Agriculture (CEA) Specialist
+- Cooperative Society Manager
+- Coral Reef Ecologist
+- Core Sample Analyst
+- Coriander Farmer
+- Corporate Sustainability Manager
+- Corporate Sustainability Officer
+- Cotton Farmer
+- Crop Ecologist
+- Crop Health Mapping Specialist
+- Crop Insurance Advisor
+- Crop Insurance Claims Officer
+- Crop Insurance Technology Analyst
+- Crop Modelling Specialist
+- Crop Physiologist
+- Crop Protection Manager
+- Crop Scientist
+- Crop Simulation Modeller
+- Crystallographer
+- Cumin (Jeera) Grower
+- Custom Hiring Centre Manager
+- Cut Flower Export Manager
+- DILRMP Officer
+- Dairy Cattle Specialist
+- Dairy Co-operative Manager
+- Dairy Development Officer
+- Dairy Extension Officer
+- Dairy Farm Manager
+- Dairy Farmer
+- Dairy Goat Specialist
+- Dairy Herd Manager
+- Dairy Plant Operator
+- Dairy Processing Manager
+- Dairy Technologist
+- Dam Safety Engineer
+- Dean — Faculty of Agriculture
+- Deep Sea Fisherman
+- Deputy Conservator of Forests
+- Deputy Director of Agriculture
+- Deputy Director — Agriculture
+- Deputy Secretary — Agriculture
+- Digital Agriculture Extension Officer
+- Digital Agriculture Specialist
+- Digital Extension Specialist
+- Digital KCC Product Manager
+- Director of Agriculture
+- Director — Animal Husbandry (Govt)
+- Director — ICAR Institute
+- Distribution Manager — Agri Inputs
+- District Agriculture Officer
+- District Rural Development Agency (DRDA) Officer
+- Drilling Engineer
+- Drilling Engineer — Mining
+- Drip Irrigation Specialist
+- Drone Spraying Technician
+- Dryland Agriculture Specialist
+- E-Waste Recycling Specialist
+- EIA Coordinator
+- ESG Analyst — Climate
+- ESG Manager
+- ESIA Consultant
+- Earthworm Farmer
+- Ecologist
+- Economic Geologist
+- Ecosystem Services Researcher
+- Effluent Treatment Plant (ETP) Operator
+- Egg Grading Supervisor
+- Electrometallurgist
+- Elephant Conservation Specialist
+- Embryo Transfer Scientist
+- Embryo Transfer Technician
+- Energy Auditor (BEE Certified)
+- Energy Manager — Manufacturing
+- Engineering Geologist
+- Entomologist
+- Environment Secretary (Govt)
+- Environmental Auditor
+- Environmental Compliance Officer
+- Environmental Consultant
+- Environmental DNA Analyst
+- Environmental Geologist
+- Environmental Health Specialist
+- Environmental Impact Assessment (EIA) Specialist
+- Environmental Impact Assessment Authority Member
+- Environmental Law Specialist
+- Environmental Legal Officer
+- Environmental Planning Specialist
+- Environmental Policy Analyst
+- Environmental Project Manager
+- Environmental Remediation Specialist
+- Environmental Scientist
+- Epidemiologist — Animal Diseases
+- Equipment Dealer — Agri
+- Eri Silk Producer
+- Essential Oil Extraction Technician
+- Estate Labour Supervisor
+- Estuarine Ecologist
+- Ethnobotanist
+- Eucalyptus Farm Supervisor
+- Exploration Geologist
+- Explosives Engineer
+- Extended Producer Responsibility (EPR) Manager
+- Extension Agronomist
+- FCI District Manager
+- FCI Regional Manager
+- FPO (Farmer Producer Organisation) CEO
+- FPO Finance Specialist
+- FPO Manager
+- FSSAI Compliance Officer
+- FSSAI Import Clearance Officer
+- Fair Trade Certification Specialist
+- Farm Boundary Mapping Specialist
+- Farm Data Analyst
+- Farm Machinery Operator
+- Farm Management App Developer
+- Farm Management Consultant
+- Farm Management Software Consultant
+- Farm Manager — Grains
+- Farm Mechanic
+- Farm Operating System Developer
+- Farm School Facilitator
+- Farm Superintendent — Agricultural College
+- Farm Supervisor — Cereals
+- Farmer Connect Manager
+- Fennel Farmer
+- Fenugreek Grower
+- Fermentation Scientist — Agri
+- Fertilizer Quality Controller
+- Fertilizer Sales Officer
+- Fertilizer Technical Advisor
+- Field Agronomist
+- Field Scout
+- Fingerling Producer
+- Fish Auctioneer
+- Fish Canning Technician
+- Fish Disease Diagnostician
+- Fish Drying Specialist
+- Fish Farmer
+- Fish Feed Technician
+- Fish Fillet Operator
+- Fish Health Specialist
+- Fish Landing Centre Officer
+- Fish Meal Plant Manager
+- Fish Processing Plant Manager
+- Fish Processing Technologist
+- Fisheries Inspector
+- Fishery Development Officer
+- Fishery Supervisor
+- Fishing Vessel Crew
+- Floriculturist
+- Flotation Engineer
+- Flower Farm Manager
+- Food Chemist
+- Food Factory Worker
+- Food Grading & Sorting Supervisor
+- Food Microbiologist
+- Food Packaging Technologist
+- Food Packing Machine Operator
+- Food Processing Plant Manager
+- Food Product Development Manager
+- Food Quality Control Manager
+- Food Safety Auditor
+- Food Safety Officer
+- Food Scientist
+- Food Security Analyst
+- Food Sensory Analyst
+- Food Technologist
+- Forest Advisory Committee Member
+- Forest Beat Officer
+- Forest Development Officer
+- Forest Ecologist
+- Forest Fire Management Officer
+- Forest Guard
+- Forest Inspector
+- Forest Inventory Specialist
+- Forest Manager — Corporate
+- Forest Nursery Manager
+- Forest Produce Procurement Manager
+- Forest Range Officer
+- Forest Ranger
+- Forest Sub-Inspector
+- Forest Surveyor
+- Freeze-Drying Technician
+- Freshwater Ecologist
+- Fruit Horticulturist
+- Fruit Quality Inspector
+- Fumigation Specialist
+- Functional Food Developer
+- Futures & Options Analyst — Agri
+- GHG Inventory Specialist
+- GIS Analyst — Agriculture
+- GIS Specialist — Geology
+- GPS Survey Technician — Agriculture
+- GRIHA Consultant
+- Geochemist
+- Geographical Indication (GI) Agri-Product Coordinator
+- Geological Driller
+- Geological Survey Technician
+- Geological Survey of India (GSI) Scientist
+- Geologist
+- Geophysicist
+- Geophysicist — Seismic
+- Gerbera Grower
+- Ginger Cultivator
+- Goat Breed Improvement Specialist
+- Goat Farmer
+- Godown Keeper
+- Government Procurement Agent (FCI/CCI)
+- Grading & Sorting Operator
+- Grain Scientist — FCI
+- Grain Silo Manager
+- Gram Sachiv
+- Grape Cultivator
+- Green Building Consultant
+- Green Chemistry Specialist
+- Green Hydrogen Specialist
+- Greenhouse Manager
+- Ground Truth Data Collector
+- Groundnut Farmer
+- Groundwater Development Officer
+- Groundwater Hydrologist
+- Guava Grower
+- HACCP Manager — Seafood
+- HACCP Specialist
+- HSE Engineer — O&G
+- Harbour Master — Fisheries
+- Hatchery Manager
+- Hatchery Technician
+- Hazardous Waste Handler
+- Hazardous Waste Manager
+- Head of Agronomy
+- Head of Department — Agriculture
+- Head — Dairy Operations
+- Head — Seed Division
+- Herbal Farm Manager
+- Herd Health Manager
+- Herpetologist
+- Honey Export Coordinator
+- Honey Extraction Supervisor
+- Honey Extractor Operator
+- Honey Quality Tester
+- Hybrid Seed Developer
+- Hydrogeologist
+- Hydrology Modeller
+- Hydrometallurgist
+- Hydroponic Farm Manager
+- ICAR Director General
+- IEC Officer — Swachh Bharat Mission
+- IPM (Integrated Pest Management) Specialist
+- IQF (Individual Quick Freeze) Operator
+- IWMP Programme Officer
+- Ice Cream Technologist
+- In Vitro Fertilisation (IVF) — Animal Specialist
+- Indian Forest Service (IFS) Officer
+- Indigenous Farmer
+- Indigo Cultivator
+- Industrial Ecology Specialist
+- Industrial Effluent Treatment Engineer
+- Inland Fisheries Officer
+- Integrated Coastal Zone Management (ICZM) Specialist
+- International Agricultural Negotiator (WTO/FAO)
+- IoT Agri Sensor Specialist
+- Iron Ore Mine Manager
+- Irrigation Engineer
+- Irrigation Management Specialist
+- Jhum Cultivation Farmer
+- Joint Director of Agriculture
+- Joint Director — Agriculture
+- Joint Director — Animal Husbandry (Govt)
+- Joint Secretary — Agriculture Ministry
+- Jute Craft Artisan
+- Jute Cultivator
+- KVIC Programme Officer
+- KVK Programme Coordinator
+- Kambala (Traditional Agri Festival) Coordinator
+- Khadi & Village Industries Worker
+- Kharif Crop Farmer
+- Kisan Credit Card (KCC) Specialist
+- Kiwi Farmer
+- Krishi Vigyan Kendra (KVK) Scientist
+- LED Grow Light Technician
+- LEED AP Consultant
+- Lab Technician — Agricultural College
+- Labelling Operator
+- Lac Cultivation Expert
+- Lac Cultivation Specialist
+- Land Consolidation Officer
+- Land Degradation Neutrality Specialist
+- Land GIS Analyst
+- Land Records Digitisation Manager
+- Land Resource Management Specialist
+- Land Use Planner
+- Landscape Ecologist
+- Landscape Horticulturist
+- Large Animal Veterinarian
+- Last-Mile Agri Delivery Specialist
+- Layer Farm Manager
+- Leaching Process Engineer
+- Leafy Vegetable Grower
+- Lecturer — Agriculture Polytechnic
+- Lemongrass Cultivator
+- Library Assistant — Agriculture
+- Linseed Farmer
+- Litchi Grower
+- Livelihood Mission State Lead
+- Livestock Development Commissioner (Govt)
+- Livestock Development Officer
+- Livestock Disease Control Officer
+- Livestock Farm Manager
+- Livestock Genomics Specialist
+- Livestock Health Worker
+- Livestock Inspector
+- Lobster Farm Manager
+- MAP (Medicinal & Aromatic Plants) Specialist
+- MGNREGA Supervisor
+- MGNREGA Technical Assistant
+- MGNREGA Technical Assistant — Agriculture
+- Mahua Collector Coordinator
+- Maize Grower
+- Mammalogist
+- Mandal Officer — Agri
+- Mandi Trader / Commission Agent (Arhatiya)
+- Mango Grower
+- Mangrove Conservation Officer
+- Marigold Farmer
+- Marine Biodiversity Researcher
+- Marine Biologist — Fisheries
+- Marine Ecologist
+- Marine Fisheries Officer
+- Marine Protected Area Manager
+- Maritime Spatial Planner
+- Marker-Assisted Selection Specialist
+- Masoor Farmer
+- Medicinal Plant Grower
+- Metallurgical Engineer
+- Micro-Irrigation Project Engineer
+- Microbial Consortium Developer
+- Microgreens Producer
+- Micropropagation Specialist
+- Milk Collection Agent
+- Milk Product Technologist
+- Milk Quality Testing Technician
+- Milking Technician
+- Mine Foreman
+- Mine Manager
+- Mine Planner
+- Mine Safety Inspector
+- Mine Safety Officer
+- Mine Superintendent
+- Mine Surveyor
+- Mine Ventilation Engineer
+- Mineral Analyst
+- Mineral Economist
+- Mineral Processing Engineer
+- Mineralogist
+- Mining Engineer
+- Mining Geologist
+- Ministry of Agriculture Official
+- Mint Farmer
+- MoEFCC (Ministry Official)
+- Moong Dal Cultivator
+- Mud Engineer
+- Mud Logging Engineer
+- Muga Silk Producer
+- Mulberry Cultivator
+- Multispectral Image Analyst
+- Mushroom Cultivator
+- Mushroom Processing Technician
+- Mushroom Spawn Producer
+- Mussel & Oyster Farmer
+- Mustard Farmer
+- Mutton Production Manager
+- Mycorrhiza Specialist
+- NABARD Development Specialist
+- NABARD Officer — Grade A
+- NABARD Officer — Grade B
+- NABARD Watershed Officer
+- NCDEX / MCX Agri-Trader
+- NDC Implementation Officer
+- NDVI Analyst
+- NFT System Operator
+- NITI Aayog Specialist — Agriculture
+- NPV Bio-Pesticide Producer
+- NRLM (DAY-NRLM) Officer
+- NTFP Marketing Officer
+- NTFP Value Chain Manager
+- National Green Tribunal (NGT) Representative
+- National Land Records Modernisation Programme (NLRMP) Officer
+- National Park Manager
+- Natural Farming Advisor (Zero Budget NF)
+- Nematologist
+- Net Zero Strategy Consultant
+- Niger Seed Farmer
+- Noise Pollution Specialist
+- Nursery Manager
+- Nutmeg Cultivator
+- Nutraceutical Specialist
+- Nutrition Policy Advisor
+- ONGC / OIL Engineer
+- Ocean Policy Analyst
+- Offshore Rig Crew
+- Oilseed Farm Supervisor
+- Onion Farmer
+- Open-Cast Mining Engineer
+- Opencast Mining Supervisor
+- Orchard Manager
+- Orchard Technician
+- Orchid Cultivator
+- Ore Beneficiation Specialist
+- Organic Certification Export Specialist
+- Organic Certification Inspector
+- Organic Export Manager
+- Organic Farm Consultant
+- Organic Farmer
+- Organic Farming Specialist
+- Organic Input Manufacturer
+- Organic Input Specialist
+- Organic Market Developer
+- Organic Retail Buyer
+- Organic Seed Producer
+- Ornamental Fish Breeder
+- Ornamental Plant Specialist
+- Ornithologist
+- Oyster Mushroom Farmer
+- PACS Secretary
+- PGS (Participatory Guarantee System) Coordinator
+- PM Krishi Sinchayee Yojana Officer
+- PMAY-G Programme Officer
+- PMFBY (Pradhan Mantri Fasal Bima Yojana) Officer
+- PMKSY (Har Khet Ko Pani) Officer
+- Packhouse Manager
+- Paddy Cultivator
+- Paleontologist
+- Palm Weaver
+- Panchayat Agriculture Assistant
+- Papad Making Cooperative Worker
+- Papaya Farmer
+- Para-Vet
+- Pashmina Wool Expert
+- Pedologist
+- Pepper Plantation Manager
+- Pesticide Application Technician
+- Pesticide Formulation Chemist
+- Petroleum Engineer
+- Petroleum Geologist
+- Petrology Scientist
+- Petrophysicist
+- Phytosanitary Inspector
+- Pickle Making Specialist
+- Pig Farm Manager
+- Pig Nutritionist
+- Piggery Supervisor
+- Pipeline Engineer — O&G
+- Plant Biotechnologist
+- Plant Breeder
+- Plant Breeder — Seeds
+- Plant Disease Diagnostician
+- Plant Geneticist
+- Plant Genomics Researcher
+- Plant Molecular Biologist
+- Plant Nursery Technician
+- Plant Pathologist
+- Plant Protection Officer
+- Plant Quarantine Officer
+- Plant Transformation Scientist
+- Plantation Field Officer
+- Plantation Supervisor
+- Planting Advisor
+- Plastic Waste Recycling Technician
+- Pollination Service Provider
+- Pollution Control Engineer
+- Polyhouse Farmer
+- Polyhouse Vegetable Farmer
+- Pomegranate Farmer
+- Pond Manager
+- Post-Doctoral Researcher — Agriculture
+- Post-Harvest Horticulturist
+- Post-Harvest Machinery Operator
+- Potato Cultivator
+- Poultry Breeder
+- Poultry Export Manager
+- Poultry Extension Officer
+- Poultry Farm Manager
+- Poultry Farm Veterinarian
+- Poultry Feed Formulation Specialist
+- Poultry Geneticist
+- Poultry Health Manager
+- Poultry Nutritionist
+- Poultry Processing Plant Manager
+- Poultry Technician
+- Power Tiller Operator
+- Pre-Cooling Technician
+- Precision Agriculture Engineer
+- Precision Agriculture Specialist
+- Precision Farming Consultant
+- Precision Irrigation Specialist
+- Primary Processing Centre Manager
+- Principal Chief Conservator of Forests
+- Principal Scientist — ICAR
+- Procurement Officer — Agri-Commodities
+- Production Engineer — O&G
+- Production Manager — Food
+- Professor — Agriculture
+- Protected Cultivation Specialist
+- Pulse Production Manager
+- Pyrometallurgist
+- QTL Mapping Scientist
+- Quality Assurance Analyst — Food
+- Quarry Manager
+- Queen Bee Rearer
+- REDD+ Coordinator
+- RRB (Regional Rural Bank) Agricultural Officer
+- Rabbit Farmer
+- Rabi Crop Farmer
+- Ragi (Finger Millet) Farmer
+- Rainfed Area Development Officer
+- Rainwater Harvesting Engineer
+- Rajma Grower
+- Ready-to-Eat Product Developer
+- Refinery Engineer
+- Reforestation Specialist
+- Refrigeration Technician — Cold Chain
+- Regional Officer — Pollution Control Board
+- Regulatory Affairs Officer — Agri Chemicals
+- Remote Sensing Analyst — Agriculture
+- Remote Sensing Geologist
+- Remote Sensing Scientist — ICAR
+- Renewable Energy Project Developer
+- Research Agronomist
+- Research Associate — Agriculture
+- Research Director — SAU
+- Research Fellow (SRF/JRF) — Agriculture
+- Reservoir Engineer
+- Retort Operator
+- Revenue Inspector (Patwari / Lekhpal)
+- Rhizobium Specialist
+- Rice Farmer
+- Rig Supervisor
+- Ripening Chamber Operator
+- River Basin Management Specialist
+- Rock Mechanics Engineer
+- Rohu/Katla Cultivator
+- Rose Cultivator
+- Rozgar Sevak
+- Rubber Board Officer
+- Rubber Estate Manager
+- Rubber Tapping Supervisor
+- Rural Development Officer
+- Rural Entrepreneurship Trainer
+- Rural FMCG Producer
+- Rural Potter
+- Rural Tech Innovator
+- SHG (Self Help Group) Coordinator
+- SPCB Chairman / Member Secretary
+- SPS (Sanitary & Phytosanitary) Compliance Officer
+- SWM Project Manager
+- Safflower Grower
+- Sample Preparation Technician
+- Satellite Imagery Analyst — Agriculture
+- Satellite-Based Crop Loss Analyst
+- Scientist — ICAR
+- Sea Level Rise Adaptation Planner
+- Seafood Export Manager
+- Seafood Quality Inspector
+- Seaweed Cultivator
+- Seaweed Farmer (Coastal)
+- Seed Bank Manager
+- Seed Certification Officer
+- Seed Drill Operator
+- Seed Genomics Specialist
+- Seed Keeper (Traditional Variety Custodian)
+- Seed Marketing Officer
+- Seed Orchard Manager — Forestry
+- Seed Processing Engineer
+- Seed Production Specialist
+- Seed Quality Control Analyst
+- Seed Storage Technician
+- Seed Technologist
+- Seismic Interpreter
+- Seismologist
+- Senior Agronomist
+- Senior Environmental Scientist
+- Senior Food Technologist
+- Senior Geologist
+- Senior Hydrologist
+- Senior Mining Engineer
+- Senior Scientist — ICAR
+- Senior Seed Scientist
+- Senior Veterinarian
+- Senna Cultivator
+- Sericulture Extension Officer
+- Sericulturist
+- Service Engineer — Agri Equipment
+- Sesame (Til) Farmer
+- Settlement Officer — Land
+- Sex-Sorted Semen Technologist
+- Sheep Farmer
+- Sheep Shearer
+- Shift Supervisor — Food Processing
+- Shrimp Farm Manager
+- Silk Export Manager
+- Silk Quality Inspector
+- Silk Reeling Operator
+- Silk Research Scientist
+- Silk Weaving Supervisor
+- Silk Worm Rearing Specialist
+- Silk Worm Rearing Technician
+- Silviculturist
+- Small Animal Veterinarian
+- Small Hydro Power Engineer
+- Small Ruminant Extension Officer
+- Small Ruminant Farm Manager
+- Smart Irrigation Programmer
+- Smelter Operator
+- Snack Food Technologist
+- Social Forestry Officer
+- Soil & Water Conservation Engineer
+- Soil Carbon Mapping Specialist
+- Soil Chemist
+- Soil Conservationist
+- Soil Health Analyst
+- Soil Mapping Specialist
+- Soil Microbiome Analyst
+- Soil Physicist
+- Soil Remediation Engineer
+- Soil Scientist
+- Soil Survey Officer
+- Soil Testing Technician
+- Soilless Culture Specialist
+- Solar Energy Engineer
+- Solid Waste Management Engineer
+- Somatic Hybridization Researcher
+- Sorghum (Jowar) Grower
+- Soybean Cultivator
+- Species Recovery Specialist
+- Spectrochemical Analyst — Minerals
+- Spice Board Export Officer
+- Spice Estate Manager
+- Spirulina Cultivator
+- Spot Market Analyst
+- Spray Drying Technician
+- Sprinkler Irrigation Engineer
+- Sprout Farmer
+- State Agriculture Commissioner
+- State Agriculture Secretary
+- State Trading Corporation (Agri) Manager
+- Stevia Grower
+- Storm Surge Analyst
+- Strategic Environmental Assessment (SEA) Analyst
+- Stratigrapher
+- Strawberry Cultivator
+- Structural Geologist
+- Sub-Divisional Agriculture Officer
+- Subject Matter Specialist (SMS)
+- Sugarcane Estate Manager
+- Sugarcane Grower
+- Sunflower Grower
+- Surface Water Specialist
+- Sustainability Analyst
+- Sustainability Manager
+- Swayam Siddha Coordinator
+- Tassar Silk Producer
+- Taxonomist
+- Tea Board Export Specialist
+- Tea Cultivation Superintendent
+- Tea Estate Manager
+- Tea Garden Assistant Manager
+- Tea Planting Advisor
+- Teak Plantation Manager
+- Tendu Leaf Collector / Supervisor
+- Thatch Craftsperson
+- Third Party Organic Certifier
+- Thresher Operator
+- Tidal Flat Ecologist
+- Tiger Reserve Manager
+- Tilapia Farmer
+- Tissue Culture Technician
+- Tobacco Grower
+- Tomato Grower
+- Tool Pusher
+- Tractor Operator
+- Tractor Sales Executive
+- Trade Negotiator — Agriculture
+- Traditional Herbal Farmer — Tribal
+- Traditional Irrigation Specialist (Ahars, Pynes, Kuhls)
+- Transgenic Animal Researcher
+- Transgenic Crop Developer
+- Transplanter Operator
+- Trawler Captain
+- Tree Nursery Technician
+- Tribal Agriculture Specialist
+- Tribal Craft Artisan
+- Tribal NTFP Development Officer
+- Trichoderma Production Technician
+- Trout Farmer
+- Tube Well Operator
+- Tuberose Grower
+- Tulsi Farmer
+- Tunnel Engineer
+- Turmeric Farmer
+- Under Secretary — Agriculture Ministry
+- Underground Mine Engineer
+- Urad Dal Farmer
+- Urban SWM Coordinator
+- Value Chain Development Specialist
+- Variable Rate Technology (VRT) Specialist
+- Vegetable Farm Supervisor
+- Vegetable Farmer
+- Vegetable Production Manager
+- Vermicompost Producer
+- Vermicompost Production Specialist
+- Vertical Farm Manager
+- Veterinarian
+- Veterinary Assistant
+- Veterinary Biochemist
+- Veterinary Microbiologist
+- Veterinary Officer (Govt)
+- Veterinary Pathologist
+- Veterinary Pharmacologist
+- Veterinary Surgeon
+- Vice-Chancellor — Agricultural University
+- Village Level Worker (VLW)
+- Volcanologist
+- WDRA (Warehousing Development & Regulatory Authority) Officer
+- WDRA Warehouse Registration Officer
+- Warehouse Manager — CWC/SWC
+- Warehouse Receipt Finance Specialist
+- Warehouse Receipt Financing Specialist
+- Washing & Cleaning Operator
+- Waste-to-Energy Engineer
+- Wasteland Development Officer
+- Water Auditor
+- Water Conservation Officer
+- Water Harvesting Structure Engineer
+- Water Meter Technician
+- Water Policy Analyst
+- Water Pollution Specialist
+- Water Quality Analyst
+- Water Quality Analyst — Aquaculture
+- Water Resource Engineer
+- Water Shed Development Officer
+- Water User Association Coordinator
+- Watershed Development Officer
+- Watershed Management Specialist
+- Weather Index Insurance Specialist
+- Weather Index Modeller — Agriculture
+- Weed Scientist
+- Well Completion Engineer
+- Well Site Geologist
+- Wheat Cultivator
+- Wildlife Biologist
+- Wildlife Biologist — Research
+- Wildlife Conservationist
+- Wildlife Crime Control Bureau Officer
+- Wildlife Crime Investigator
+- Wildlife Ecologist
+- Wildlife Educator
+- Wildlife Forensics Specialist
+- Wildlife Inspector
+- Wildlife Photographer — Conservation
+- Wildlife Ranger
+- Wildlife Vet
+- Wildlife Warden
+- Wind Energy Engineer
+- Wool Grader
+- Yield Prediction Analyst
+- Zero Waste Programme Manager
+- Zoological Survey Scientist
+- Zoonotic Disease Specialist
+- e-Extension Specialist
+- eNAM Operator
+- eNAM Platform Manager
+- mKisan Platform Manager
+
+</details>
+
