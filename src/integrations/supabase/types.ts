@@ -8041,6 +8041,39 @@ export type Database = {
           },
         ]
       }
+      security_audit_log: {
+        Row: {
+          created_at: string
+          event_type: string
+          id: string
+          ip_hash: string | null
+          metadata: Json
+          severity: string
+          user_agent: string | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          event_type: string
+          id?: string
+          ip_hash?: string | null
+          metadata?: Json
+          severity?: string
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          event_type?: string
+          id?: string
+          ip_hash?: string | null
+          metadata?: Json
+          severity?: string
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       selfgraph_data: {
         Row: {
           context: Json | null
@@ -10191,6 +10224,10 @@ export type Database = {
         Returns: boolean
       }
       is_email_verified: { Args: { _email: string }; Returns: boolean }
+      log_security_event: {
+        Args: { _event_type: string; _metadata?: Json; _severity?: string }
+        Returns: string
+      }
       match_explore_entities_for_user: {
         Args: { _entity_type: string; _limit?: number }
         Returns: {
