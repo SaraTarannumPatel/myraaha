@@ -52,3 +52,24 @@ export const safeUrlSchema = z
   .trim()
   .url()
   .refine((u) => /^https:\/\//i.test(u), "Only https URLs are allowed");
+
+export const profileSchema = z.object({
+  full_name: fullNameSchema.optional(),
+  bio: z.string().trim().max(1_000).optional(),
+  location: z.string().trim().max(120).optional(),
+  short_term_goals: z.string().trim().max(2_000).optional(),
+  long_term_goals: z.string().trim().max(2_000).optional(),
+  mobile_number: phoneSchema.optional(),
+});
+
+export const communityPostSchema = z.object({
+  title: z.string().trim().min(1).max(200),
+  content: z.string().trim().min(1).max(10_000),
+  tags: z.array(z.string().trim().min(1).max(40)).max(10).optional(),
+});
+
+export const inspirationStorySchema = z.object({
+  title: z.string().trim().min(1).max(200),
+  body: z.string().trim().min(1).max(20_000),
+  media_url: safeUrlSchema.optional(),
+});

@@ -94,6 +94,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         if (session?.user) {
           setTimeout(() => fetchProfile(session.user.id), 0);
           if (event === "SIGNED_IN") recordLoginSuccess();
+          // SECURITY: when the user's email/phone/password changes, force a
+          // global re-login on every other device. Additive — does not change
+          // the current device's session.
+          if (event === "USER_UPDATED" || event === "PASSWORD_RECOVERY") {
+            setTimeout(() => {
+              supabase.auth.signOut({ scope: "others" } as any).catch(() => {});
+            }, 0);
+          }
           // Idle (30m) + absolute (12h) timers; cleanup on next state change.
           if (stopTimers) stopTimers();
           stopTimers = startSessionTimers(async () => {
