@@ -161,7 +161,7 @@ export function useCareerMapData({
       viewportW,
       viewportH
     });
-    if (allPins.length === 0 || debouncedZoom < 1.0) return [];
+    if (allPins.length === 0 || debouncedZoom < 0.3) return [];
 
     // Compute the world-space bounding box of the current viewport.
     // The transform applied to the canvas is:

@@ -758,39 +758,40 @@ export default function CareerMap() {
       ctx.clearRect(0, 0, currentW, currentH);
 
       let canvasAlpha = 1.0;
-      if (currentScale > 1.0) {
+      if (currentScale > 0.3) {
         canvasAlpha = 0;
       }
 
-      if (canvasAlpha <= 0) return;
-      ctx.globalAlpha = canvasAlpha;
-
-      const pinsByColor: Record<string, typeof allPins> = {};
       const PAD = 20;
-      
-      for (let i = 0; i < allPins.length; i++) {
-        const pin = allPins[i];
-        const screenX = pin.worldX * currentScale + currentX;
-        const screenY = pin.worldY * currentScale + currentY;
-        
-        if (screenX >= -PAD && screenX <= currentW + PAD && screenY >= -PAD && screenY <= currentH + PAD) {
-          const col = getCategoryColor(pin.category);
-          if (!pinsByColor[col.border]) pinsByColor[col.border] = [];
-          pinsByColor[col.border].push(pin);
-        }
-      }
 
-      for (const [color, pins] of Object.entries(pinsByColor)) {
-        ctx.fillStyle = color;
-        ctx.beginPath();
-        for (let i = 0; i < pins.length; i++) {
-          const pin = pins[i];
+      if (canvasAlpha > 0) {
+        ctx.globalAlpha = canvasAlpha;
+
+        const pinsByColor: Record<string, typeof allPins> = {};
+        for (let i = 0; i < allPins.length; i++) {
+          const pin = allPins[i];
           const screenX = pin.worldX * currentScale + currentX;
           const screenY = pin.worldY * currentScale + currentY;
-          ctx.moveTo(screenX, screenY);
-          ctx.arc(screenX, screenY, 4.5, 0, Math.PI * 2);
+          
+          if (screenX >= -PAD && screenX <= currentW + PAD && screenY >= -PAD && screenY <= currentH + PAD) {
+            const col = getCategoryColor(pin.category).border;
+            if (!pinsByColor[col]) pinsByColor[col] = [];
+            pinsByColor[col].push(pin);
+          }
         }
-        ctx.fill();
+
+        for (const [color, pins] of Object.entries(pinsByColor)) {
+          ctx.fillStyle = color;
+          ctx.beginPath();
+          for (let i = 0; i < pins.length; i++) {
+            const pin = pins[i];
+            const screenX = pin.worldX * currentScale + currentX;
+            const screenY = pin.worldY * currentScale + currentY;
+            ctx.moveTo(screenX, screenY);
+            ctx.arc(screenX, screenY, 4.5, 0, Math.PI * 2);
+          }
+          ctx.fill();
+        }
       }
 
       // --- ACADEMIC & EXAM OVERLAY INJECTION ---
@@ -2183,13 +2184,13 @@ export default function CareerMap() {
             </div>
 
             {/* Dynamic Real Role Pins (Google Maps Semantic LOD) */}
-            {zoomScale > 1.0 && visiblePins.map((pin) => {
+            {zoomScale > 0.3 && visiblePins.map((pin) => {
               const isSelected = selectedRole.id === pin.id;
               const isSaved = isRoleSaved(pin.id);
               const col = getCategoryColor(pin.category);
 
               // Semantic LOD Zoom Levels
-              const isTinyZoom = zoomScale > 1.0 && zoomScale <= 1.5;
+              const isTinyZoom = zoomScale > 0.3 && zoomScale <= 0.6;
 
               // Base styling
               const pinBg = col.border;
@@ -2276,7 +2277,7 @@ export default function CareerMap() {
             })}
 
             {/* Emerging Role Pins — spec L301–302, L467: "New" badge on AI Prompt Engineer, Sustainability Consultant */}
-            {zoomScale > 1.0 && [
+            {zoomScale > 0.3 && [
               { label: "AI Prompt Engineer", x: 340, y: 80, color: "#7C3AED" },
               { label: "Sustainability Consultant", x: 560, y: 145, color: "#059669" }
             ].map((emerging, i) => (
@@ -2302,7 +2303,7 @@ export default function CareerMap() {
             ))}
 
             {/* Exam Gate Toll-Booth Pins */}
-            {zoomScale > 1.0 && (
+            {zoomScale > 0.3 && (
               <>
                 <div 
                   className="absolute bg-[#E24B4A] hover:scale-105 text-white text-[9px] font-medium py-1 px-2 rounded-md shadow border border-[#791F1F] z-30 cursor-pointer flex items-center gap-1 select-none"
@@ -2340,7 +2341,7 @@ export default function CareerMap() {
             )}
 
             {/* Co-Explore Mode simulation cursor pointer */}
-            {zoomScale > 1.0 && coExploreActive && (
+            {zoomScale > 0.3 && coExploreActive && (
               <div 
                 className="absolute z-40 flex flex-col items-start transition-all duration-700 pointer-events-none animate-bounce"
                 style={{ 
@@ -2363,7 +2364,7 @@ export default function CareerMap() {
             )}
 
             {/* SelfGraph location indicator: Pulsing Blue Dot or Incognito grey dot */}
-            {zoomScale > 1.0 && selfGraphCompleted && (
+            {zoomScale > 0.3 && selfGraphCompleted && (
               <div 
                 className={`absolute w-5 h-5 border-2 border-white rounded-full cursor-pointer z-20 shadow-md flex items-center justify-center ${
                   isIncognito ? "bg-neutral-600" : "bg-[#3B8BD4] " + (neurodivergentMode ? "" : "animate-blue-dot")
