@@ -110,16 +110,22 @@ self.addEventListener("fetch", (event) => {
   // Same-origin hashed assets: stale-while-revalidate.
   if (url.origin === self.location.origin) {
     event.respondWith(
-      caches.match(req).then((cached) => {
+      (async () => {
+        const cached = await caches.match(req);
         const fetched = fetch(req)
           .then((res) => {
-            const copy = res.clone();
-            caches.open(VERSION).then((c) => c.put(req, copy)).catch(() => {});
+            try {
+              const copy = res.clone();
+              caches.open(VERSION).then((c) => c.put(req, copy)).catch(() => {});
+            } catch {}
             return res;
           })
-          .catch(() => cached);
-        return cached || fetched;
-      })
+          .catch(() => null);
+        if (cached) return cached;
+        const res = await fetched;
+        if (res) return res;
+        return new Response("", { status: 504, statusText: "Offline" });
+      })()
     );
   }
 });
