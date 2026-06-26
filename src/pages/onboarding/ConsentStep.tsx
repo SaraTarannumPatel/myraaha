@@ -62,15 +62,14 @@ const ConsentStep = () => {
     });
 
     if (user) {
-      const rewards = ONBOARDING_REWARDS.map((r) => ({
-        user_id: user.id,
-        milestone_percent: r.percent,
-        reward_key: r.rewardKey,
-        reward_title: r.title,
-        reward_description: r.description,
-      }));
-      await supabase.from("onboarding_rewards").upsert(rewards, { onConflict: "user_id,reward_key" });
+      // Route reward claims through a SECURITY DEFINER function so the server
+      // validates the reward_key against a fixed allow-list. Clients can no
+      // longer write arbitrary reward records into onboarding_rewards.
+      for (const r of ONBOARDING_REWARDS) {
+        await (supabase as any).rpc("claim_onboarding_reward", { _reward_key: r.rewardKey });
+      }
     }
+
 
     await createWelcomeNotifications();
     localStorage.removeItem("myraaha_initial_path");

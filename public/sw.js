@@ -3,11 +3,25 @@
 // old caches; navigations are strictly network-first and the HTML response is
 // NEVER cached so the user always gets the latest bundle the moment the
 // network is reachable.
-const VERSION = "myraaha-v4-2026-06-18";
+const VERSION = "myraaha-v5-2026-06-26";
 const DATA_CACHE = "myraaha-data-v2";
 const CORE = ["/manifest.webmanifest", "/myraaha-logo.png", "/favicon.png"];
+const HOSTNAME = self.location.hostname;
+const DISABLE_APP_SW =
+  HOSTNAME.startsWith("id-preview--") ||
+  HOSTNAME.startsWith("preview--") ||
+  HOSTNAME === "lovableproject.com" ||
+  HOSTNAME.endsWith(".lovableproject.com") ||
+  HOSTNAME === "lovableproject-dev.com" ||
+  HOSTNAME.endsWith(".lovableproject-dev.com") ||
+  HOSTNAME === "beta.lovable.dev" ||
+  HOSTNAME.endsWith(".beta.lovable.dev");
 
 self.addEventListener("install", (e) => {
+  if (DISABLE_APP_SW) {
+    self.skipWaiting();
+    return;
+  }
   e.waitUntil(caches.open(VERSION).then((c) => c.addAll(CORE)).catch(() => {}));
   self.skipWaiting();
 });
@@ -15,6 +29,18 @@ self.addEventListener("install", (e) => {
 self.addEventListener("activate", (e) => {
   e.waitUntil(
     (async () => {
+      if (DISABLE_APP_SW) {
+        try {
+          const keys = await caches.keys();
+          await Promise.all(keys.filter((k) => k.startsWith("myraaha-")).map((k) => caches.delete(k)));
+          await self.clients.claim();
+          const clients = await self.clients.matchAll({ type: "window" });
+          clients.forEach((client) => client.navigate(client.url).catch(() => {}));
+        } finally {
+          await self.registration.unregister();
+        }
+        return;
+      }
       const keys = await caches.keys();
       await Promise.all(
         keys.filter((k) => k !== VERSION && k !== DATA_CACHE).map((k) => caches.delete(k))
@@ -45,6 +71,7 @@ self.addEventListener("message", (event) => {
 });
 
 self.addEventListener("fetch", (event) => {
+  if (DISABLE_APP_SW) return;
   const req = event.request;
   if (req.method !== "GET") return;
   const url = new URL(req.url);
@@ -94,15 +121,16 @@ self.addEventListener("fetch", (event) => {
   // tiny offline shell when the network is completely unreachable.
   if (req.mode === "navigate") {
     event.respondWith(
-      fetch(req, { cache: "no-store" }).catch(() =>
-        caches.match("/manifest.webmanifest").then(
-          () =>
-            new Response(
-              "<!doctype html><meta charset=utf-8><title>Offline</title><p>You appear to be offline.</p>",
-              { headers: { "Content-Type": "text/html" } }
-            )
-        )
-      )
+      (async () => {
+        try {
+          return await fetch(req, { cache: "no-store" });
+        } catch {
+          return new Response(
+            "<!doctype html><meta charset=utf-8><title>Offline</title><p>You appear to be offline.</p>",
+            { headers: { "Content-Type": "text/html" } }
+          );
+        }
+      })()
     );
     return;
   }
@@ -110,16 +138,22 @@ self.addEventListener("fetch", (event) => {
   // Same-origin hashed assets: stale-while-revalidate.
   if (url.origin === self.location.origin) {
     event.respondWith(
-      caches.match(req).then((cached) => {
+      (async () => {
+        const cached = await caches.match(req);
         const fetched = fetch(req)
           .then((res) => {
-            const copy = res.clone();
-            caches.open(VERSION).then((c) => c.put(req, copy)).catch(() => {});
+            try {
+              const copy = res.clone();
+              caches.open(VERSION).then((c) => c.put(req, copy)).catch(() => {});
+            } catch {}
             return res;
           })
-          .catch(() => cached);
-        return cached || fetched;
-      })
+          .catch(() => null);
+        if (cached) return cached;
+        const res = await fetched;
+        if (res) return res;
+        return new Response("", { status: 504, statusText: "Offline" });
+      })()
     );
   }
 });
