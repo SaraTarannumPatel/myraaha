@@ -94,15 +94,16 @@ self.addEventListener("fetch", (event) => {
   // tiny offline shell when the network is completely unreachable.
   if (req.mode === "navigate") {
     event.respondWith(
-      fetch(req, { cache: "no-store" }).catch(() =>
-        caches.match("/manifest.webmanifest").then(
-          () =>
-            new Response(
-              "<!doctype html><meta charset=utf-8><title>Offline</title><p>You appear to be offline.</p>",
-              { headers: { "Content-Type": "text/html" } }
-            )
-        )
-      )
+      (async () => {
+        try {
+          return await fetch(req, { cache: "no-store" });
+        } catch {
+          return new Response(
+            "<!doctype html><meta charset=utf-8><title>Offline</title><p>You appear to be offline.</p>",
+            { headers: { "Content-Type": "text/html" } }
+          );
+        }
+      })()
     );
     return;
   }
