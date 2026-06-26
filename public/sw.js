@@ -94,15 +94,16 @@ self.addEventListener("fetch", (event) => {
   // tiny offline shell when the network is completely unreachable.
   if (req.mode === "navigate") {
     event.respondWith(
-      fetch(req, { cache: "no-store" }).catch(() =>
-        caches.match("/manifest.webmanifest").then(
-          () =>
-            new Response(
-              "<!doctype html><meta charset=utf-8><title>Offline</title><p>You appear to be offline.</p>",
-              { headers: { "Content-Type": "text/html" } }
-            )
-        )
-      )
+      (async () => {
+        try {
+          return await fetch(req, { cache: "no-store" });
+        } catch {
+          return new Response(
+            "<!doctype html><meta charset=utf-8><title>Offline</title><p>You appear to be offline.</p>",
+            { headers: { "Content-Type": "text/html" } }
+          );
+        }
+      })()
     );
     return;
   }
@@ -110,16 +111,22 @@ self.addEventListener("fetch", (event) => {
   // Same-origin hashed assets: stale-while-revalidate.
   if (url.origin === self.location.origin) {
     event.respondWith(
-      caches.match(req).then((cached) => {
+      (async () => {
+        const cached = await caches.match(req);
         const fetched = fetch(req)
           .then((res) => {
-            const copy = res.clone();
-            caches.open(VERSION).then((c) => c.put(req, copy)).catch(() => {});
+            try {
+              const copy = res.clone();
+              caches.open(VERSION).then((c) => c.put(req, copy)).catch(() => {});
+            } catch {}
             return res;
           })
-          .catch(() => cached);
-        return cached || fetched;
-      })
+          .catch(() => null);
+        if (cached) return cached;
+        const res = await fetched;
+        if (res) return res;
+        return new Response("", { status: 504, statusText: "Offline" });
+      })()
     );
   }
 });
