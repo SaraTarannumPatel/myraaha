@@ -5,7 +5,36 @@
 export function registerServiceWorker() {
   if (typeof window === "undefined") return;
   if (!("serviceWorker" in navigator)) return;
-  if (import.meta.env.DEV) return;
+
+  const hostname = window.location.hostname;
+  const isBlockedRuntime =
+    import.meta.env.DEV ||
+    window.self !== window.top ||
+    hostname.startsWith("id-preview--") ||
+    hostname.startsWith("preview--") ||
+    hostname === "lovableproject.com" ||
+    hostname.endsWith(".lovableproject.com") ||
+    hostname === "lovableproject-dev.com" ||
+    hostname.endsWith(".lovableproject-dev.com") ||
+    hostname === "beta.lovable.dev" ||
+    hostname.endsWith(".beta.lovable.dev") ||
+    new URLSearchParams(window.location.search).get("sw") === "off";
+
+  const unregisterAppWorker = () => {
+    navigator.serviceWorker
+      .getRegistrations()
+      .then((registrations) => {
+        registrations
+          .filter((registration) => registration.active?.scriptURL.endsWith("/sw.js") || registration.installing?.scriptURL.endsWith("/sw.js") || registration.waiting?.scriptURL.endsWith("/sw.js"))
+          .forEach((registration) => registration.unregister().catch(() => {}));
+      })
+      .catch(() => {});
+  };
+
+  if (isBlockedRuntime) {
+    unregisterAppWorker();
+    return;
+  }
 
   window.addEventListener("load", () => {
     navigator.serviceWorker.register("/sw.js").then((reg) => {
