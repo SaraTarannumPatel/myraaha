@@ -9516,6 +9516,57 @@ export type Database = {
         }
         Relationships: []
       }
+      user_activity_events: {
+        Row: {
+          created_at: string
+          event: string
+          id: string
+          payload: Json
+          route: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          event: string
+          id?: string
+          payload?: Json
+          route?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          event?: string
+          id?: string
+          payload?: Json
+          route?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      user_activity_state: {
+        Row: {
+          last_context: Json
+          last_module: string | null
+          last_route: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          last_context?: Json
+          last_module?: string | null
+          last_route?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          last_context?: Json
+          last_module?: string | null
+          last_route?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       user_certifications: {
         Row: {
           certificate_url: string | null
@@ -10205,6 +10256,10 @@ export type Database = {
         Returns: boolean
       }
       is_email_verified: { Args: { _email: string }; Returns: boolean }
+      log_activity_event: {
+        Args: { _event: string; _payload?: Json; _route?: string }
+        Returns: string
+      }
       log_security_event: {
         Args: { _event_type: string; _metadata?: Json; _severity?: string }
         Returns: string
@@ -10231,6 +10286,22 @@ export type Database = {
       update_assessment_progress: {
         Args: { _completed: number; _test_type: string; _total: number }
         Returns: Json
+      }
+      upsert_user_activity: {
+        Args: { _context?: Json; _module?: string; _route: string }
+        Returns: {
+          last_context: Json
+          last_module: string | null
+          last_route: string | null
+          updated_at: string
+          user_id: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "user_activity_state"
+          isOneToOne: true
+          isSetofReturn: false
+        }
       }
     }
     Enums: {
