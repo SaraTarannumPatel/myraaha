@@ -135,8 +135,8 @@ export default function SharedResume(): JSX.Element {
             <button
               type="button"
               className="mt-3 w-full px-4 py-2 bg-blue-600 text-white rounded-lg type-ui-button"
-              onClick={() => {
-                if (enteredPassword === expectedPassword) {
+              onClick={async () => {
+                if (await tryUnlock()) {
                   setUnlocked(true);
                 } else {
                   alert('Incorrect password');
