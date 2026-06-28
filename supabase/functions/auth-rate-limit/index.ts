@@ -106,7 +106,8 @@ Deno.serve(async (req) => {
   });
 
   if (error) {
-    return new Response(JSON.stringify({ error: "rpc_failed", detail: error.message }), {
+    console.error("auth-rate-limit rpc error", error.message);
+    return new Response(JSON.stringify({ error: "rpc_failed" }), {
       status: 500,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
