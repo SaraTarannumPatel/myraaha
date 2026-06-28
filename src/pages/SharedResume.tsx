@@ -44,13 +44,30 @@ export default function SharedResume(): JSX.Element {
     return Boolean(payload?.sharingSettings?.passwordProtected);
   }, [payload]);
 
-  const expectedPassword = useMemo(() => {
-    const p = payload?.sharingSettings?.sharePassword;
-    return typeof p === 'string' ? p : '';
+  // Only trust a pre-hashed password digest. The legacy plaintext
+  // `sharePassword` field is intentionally ignored so it cannot be
+  // recovered from localStorage via DevTools.
+  const expectedPasswordHash = useMemo(() => {
+    const h = payload?.sharingSettings?.sharePasswordHash;
+    return typeof h === "string" ? h.toLowerCase() : "";
   }, [payload]);
 
   const [enteredPassword, setEnteredPassword] = useState('');
   const [unlocked, setUnlocked] = useState(false);
+
+  async function sha256Hex(input: string): Promise<string> {
+    const buf = new TextEncoder().encode(input);
+    const digest = await crypto.subtle.digest("SHA-256", buf);
+    return Array.from(new Uint8Array(digest))
+      .map((b) => b.toString(16).padStart(2, "0"))
+      .join("");
+  }
+
+  async function tryUnlock(): Promise<boolean> {
+    if (!expectedPasswordHash) return false;
+    const h = await sha256Hex(enteredPassword);
+    return h === expectedPasswordHash;
+  }
 
   if (!shareId) return <Navigate to="/" replace />;
 
@@ -118,8 +135,8 @@ export default function SharedResume(): JSX.Element {
             <button
               type="button"
               className="mt-3 w-full px-4 py-2 bg-blue-600 text-white rounded-lg type-ui-button"
-              onClick={() => {
-                if (enteredPassword === expectedPassword) {
+              onClick={async () => {
+                if (await tryUnlock()) {
                   setUnlocked(true);
                 } else {
                   alert('Incorrect password');
@@ -150,8 +167,8 @@ export default function SharedResume(): JSX.Element {
         unlocked={unlocked}
         enteredPassword={enteredPassword}
         setEnteredPassword={setEnteredPassword}
-        onUnlock={() => {
-          if (enteredPassword === expectedPassword) {
+        onUnlock={async () => {
+          if (await tryUnlock()) {
             setUnlocked(true);
           } else {
             alert('Incorrect password');
