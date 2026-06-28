@@ -16,6 +16,35 @@ serve(async (req) => {
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY is not configured");
 
+    // ── Server-side daily cap (mirrors client entitlement gate) ─────────────
+    try {
+      const SUPABASE_URL = Deno.env.get("SUPABASE_URL");
+      const SERVICE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
+      if (SUPABASE_URL && SERVICE_KEY) {
+        const { createClient } = await import("https://esm.sh/@supabase/supabase-js@2.45.0");
+        const svc = createClient(SUPABASE_URL, SERVICE_KEY);
+        const { data: hitCount } = await svc.rpc("record_rate_limit_hit", {
+          _identity: `ai-therapist:${authedUser.id}`,
+          _endpoint: "ai-therapist",
+          _window_seconds: 86400,
+        });
+        const DAILY_FREE = 30;
+        if (Number(hitCount) > DAILY_FREE) {
+          const { data: unlimited } = await svc.rpc("has_active_entitlement", {
+            _entitlement_key: "ai_therapist_unlimited_24h",
+          });
+          if (!unlimited) {
+            return new Response(JSON.stringify({ error: "daily_limit_reached" }), {
+              status: 402,
+              headers: { ...corsHeaders, "Content-Type": "application/json" },
+            });
+          }
+        }
+      }
+    } catch (entErr) {
+      console.warn("ai-therapist entitlement check failed:", entErr);
+    }
+
     // ---- Resolve user + session for streaming chat persistence ----
     let userId: string | null = null;
     let userClient: any = null;
