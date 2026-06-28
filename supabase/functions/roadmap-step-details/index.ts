@@ -266,7 +266,7 @@ Using ALL the above context, generate a deeply specific, actionable, and resourc
       career_context: parsed.career_context || {},
       guidance: parsed.guidance || {},
       generated_at: new Date().toISOString(),
-    }, { onConflict: "step_id" });
+    }, { onConflict: "step_id,user_id" });
 
     return new Response(JSON.stringify({ ...parsed, cached: false }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
