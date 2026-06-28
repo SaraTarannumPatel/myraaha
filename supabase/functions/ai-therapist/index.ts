@@ -36,8 +36,7 @@ serve(async (req) => {
           const { data: { user } } = await userClient.auth.getUser();
           if (user) {
             userId = user.id;
-            // ensure session
-            if (!sessionId) {
+            const startNewSession = async () => {
               const firstUserMsg = (messages || []).find((m: any) => m.role === "user")?.content || "New conversation";
               const { data: newSess } = await userClient.from("therapist_sessions").insert({
                 user_id: userId,
@@ -45,13 +44,26 @@ serve(async (req) => {
                 context_snapshot: context || {},
               }).select("id").single();
               sessionId = newSess?.id || null;
+              priorMessages = [];
+            };
+            if (!sessionId) {
+              await startNewSession();
             } else {
-              // load prior messages for memory
-              const { data: hist } = await userClient.from("therapist_messages")
-                .select("role, content").eq("session_id", sessionId).order("created_at", { ascending: true }).limit(50);
-              priorMessages = hist || [];
-              // bump last_message_at
-              await userClient.from("therapist_sessions").update({ last_message_at: new Date().toISOString() }).eq("id", sessionId);
+              // Verify the supplied sessionId belongs to the authenticated user
+              // before loading history or mutating the session (prevents IDOR).
+              const { data: ownSess } = await userClient.from("therapist_sessions")
+                .select("id").eq("id", sessionId).eq("user_id", userId).maybeSingle();
+              if (!ownSess) {
+                await startNewSession();
+              } else {
+                const { data: hist } = await userClient.from("therapist_messages")
+                  .select("role, content").eq("session_id", sessionId).eq("user_id", userId)
+                  .order("created_at", { ascending: true }).limit(50);
+                priorMessages = hist || [];
+                await userClient.from("therapist_sessions")
+                  .update({ last_message_at: new Date().toISOString() })
+                  .eq("id", sessionId).eq("user_id", userId);
+              }
             }
             // persist the incoming user message (last one)
             const lastUser = [...(messages || [])].reverse().find((m: any) => m.role === "user");
