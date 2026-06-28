@@ -544,6 +544,9 @@ export type Database = {
           icon_emoji: string | null
           id: string
           skills_related: string[] | null
+          source_role_name: string | null
+          source_sector: string | null
+          source_table: string | null
           tags: string[] | null
           title: string
         }
@@ -555,6 +558,9 @@ export type Database = {
           icon_emoji?: string | null
           id?: string
           skills_related?: string[] | null
+          source_role_name?: string | null
+          source_sector?: string | null
+          source_table?: string | null
           tags?: string[] | null
           title: string
         }
@@ -566,6 +572,9 @@ export type Database = {
           icon_emoji?: string | null
           id?: string
           skills_related?: string[] | null
+          source_role_name?: string | null
+          source_sector?: string | null
+          source_table?: string | null
           tags?: string[] | null
           title?: string
         }
@@ -1541,6 +1550,9 @@ export type Database = {
           narrator_role: string
           pros: string[] | null
           skills_highlighted: string[] | null
+          source_role_name: string | null
+          source_sector: string | null
+          source_table: string | null
           story_content: string
           tags: string[] | null
           title: string
@@ -1561,6 +1573,9 @@ export type Database = {
           narrator_role: string
           pros?: string[] | null
           skills_highlighted?: string[] | null
+          source_role_name?: string | null
+          source_sector?: string | null
+          source_table?: string | null
           story_content: string
           tags?: string[] | null
           title: string
@@ -1581,6 +1596,9 @@ export type Database = {
           narrator_role?: string
           pros?: string[] | null
           skills_highlighted?: string[] | null
+          source_role_name?: string | null
+          source_sector?: string | null
+          source_table?: string | null
           story_content?: string
           tags?: string[] | null
           title?: string
@@ -2665,6 +2683,9 @@ export type Database = {
           is_active: boolean | null
           is_ai_generated: boolean | null
           skills_needed: string[] | null
+          source_role_name: string | null
+          source_sector: string | null
+          source_table: string | null
           tags: string[] | null
           task_description: string
           tools_used: string[] | null
@@ -2681,6 +2702,9 @@ export type Database = {
           is_active?: boolean | null
           is_ai_generated?: boolean | null
           skills_needed?: string[] | null
+          source_role_name?: string | null
+          source_sector?: string | null
+          source_table?: string | null
           tags?: string[] | null
           task_description: string
           tools_used?: string[] | null
@@ -2697,6 +2721,9 @@ export type Database = {
           is_active?: boolean | null
           is_ai_generated?: boolean | null
           skills_needed?: string[] | null
+          source_role_name?: string | null
+          source_sector?: string | null
+          source_table?: string | null
           tags?: string[] | null
           task_description?: string
           tools_used?: string[] | null

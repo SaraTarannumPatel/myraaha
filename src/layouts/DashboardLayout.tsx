@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import OnboardingReminderPopup from "@/components/OnboardingReminderPopup";
-import RewardCelebrationManager from "@/components/curiositycompass/RewardCelebrationManager";
+
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/sheet";
@@ -305,7 +305,8 @@ const DashboardLayout = () => {
       </nav>
 
       <OnboardingReminderPopup />
-      <RewardCelebrationManager />
+      {/* RewardCelebrationManager is now mounted globally in App.tsx so onboarding
+          and Compass routes also receive milestone popups in real time. */}
     </div>
   );
 };

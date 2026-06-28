@@ -68,6 +68,35 @@
     display: none !important;
   }
 
+  /* Re-enable navbar spacer on tablet/mobile where the navbar is position:fixed
+     and the master mobile override compresses section padding. Heights match
+     the actual myraaha-navbar collapsed heights. */
+  @media (max-width: 1024px) {
+    .navbar-spacer { display: block !important; height: 72px !important; }
+  }
+  @media (max-width: 768px) {
+    .navbar-spacer { display: block !important; height: 60px !important; }
+  }
+  @media (max-width: 320px) {
+    .navbar-spacer { display: block !important; height: 50px !important; }
+  }
+
+  /* Higher-specificity guard so the master mobile override
+     (.myraaha-landing section { padding: 60px ... }) cannot collapse the
+     space under the fixed navbar. */
+  @media (max-width: 1024px) {
+    .myraaha-landing .myraaha-hero,
+    .myraaha-landing .standard-page-hero,
+    .myraaha-landing .about-hero,
+    .myraaha-landing .careers-hero,
+    .myraaha-landing .services-hero,
+    .myraaha-landing .contact-hero-v2,
+    .myraaha-landing .insights-hero,
+    .myraaha-landing .partnerships-hero-v2 {
+      padding-top: 8rem !important;
+    }
+  }
+
   /* Landing-site heading defaults — non-!important so each landing page CSS can override per-section. */
   .myraaha-landing-site h1,
   .myraaha-landing-site h2,
