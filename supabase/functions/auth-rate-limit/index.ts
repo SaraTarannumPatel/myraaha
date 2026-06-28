@@ -39,6 +39,34 @@ Deno.serve(async (req) => {
     });
   }
 
+  // Require either a valid JWT or the admin ingest secret. This prevents
+  // anonymous callers from pre-filling rate-limit buckets for other identities
+  // or probing hit counts.
+  const adminSecret = Deno.env.get("ADMIN_INGEST_SECRET");
+  const providedAdmin = req.headers.get("x-admin-secret") || req.headers.get("X-Admin-Secret");
+  const isAdmin = !!(adminSecret && providedAdmin && providedAdmin === adminSecret);
+  const authHeader = req.headers.get("Authorization") || req.headers.get("authorization");
+  if (!isAdmin) {
+    if (!authHeader || !authHeader.toLowerCase().startsWith("bearer ")) {
+      return new Response(JSON.stringify({ error: "unauthorized" }), {
+        status: 401,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+    const verifier = createClient(
+      Deno.env.get("SUPABASE_URL")!,
+      Deno.env.get("SUPABASE_ANON_KEY")!,
+    );
+    const token = authHeader.slice(7).trim();
+    const { data: claims, error: claimsErr } = await verifier.auth.getClaims(token);
+    if (claimsErr || !claims?.claims?.sub) {
+      return new Response(JSON.stringify({ error: "unauthorized" }), {
+        status: 401,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+  }
+
   let body: Body;
   try {
     body = await req.json();
