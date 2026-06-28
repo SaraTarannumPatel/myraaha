@@ -167,8 +167,8 @@ export default function SharedResume(): JSX.Element {
         unlocked={unlocked}
         enteredPassword={enteredPassword}
         setEnteredPassword={setEnteredPassword}
-        onUnlock={() => {
-          if (enteredPassword === expectedPassword) {
+        onUnlock={async () => {
+          if (await tryUnlock()) {
             setUnlocked(true);
           } else {
             alert('Incorrect password');
