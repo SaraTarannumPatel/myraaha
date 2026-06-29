@@ -32,6 +32,39 @@ const PUBLIC_SITE_URL =
   (import.meta as any).env?.VITE_PUBLIC_SITE_URL ||
   "https://myraaha.lovable.app";
 
+// Classify Supabase auth errors so we can show precise UX.
+// Returns { kind, message, retryAfter (seconds) }.
+function parseAuthError(error: any): { kind: 'rate_limited' | 'failed'; message: string; retryAfter: number } {
+  const raw = String(error?.message || '').trim();
+  const lower = raw.toLowerCase();
+  // Supabase rate-limit signatures
+  const isRate =
+    error?.status === 429 ||
+    lower.includes('rate limit') ||
+    lower.includes('rate-limit') ||
+    lower.includes('too many') ||
+    lower.includes('over_email_send_rate_limit') ||
+    lower.includes('email rate limit');
+  if (isRate) {
+    // Try to extract "after N seconds" / "in N minutes" / Retry-After header style
+    let secs = 0;
+    const sMatch = raw.match(/(\d+)\s*second/i);
+    const mMatch = raw.match(/(\d+)\s*minute/i);
+    const hMatch = raw.match(/(\d+)\s*hour/i);
+    if (sMatch) secs = parseInt(sMatch[1], 10);
+    else if (mMatch) secs = parseInt(mMatch[1], 10) * 60;
+    else if (hMatch) secs = parseInt(hMatch[1], 10) * 3600;
+    else secs = 3600; // built-in SMTP cap is ~3-4/hour; default to 1h
+    const mins = Math.ceil(secs / 60);
+    return {
+      kind: 'rate_limited',
+      retryAfter: secs,
+      message: `Verification email is rate-limited. Try again in ~${mins} minute${mins === 1 ? '' : 's'}.`,
+    };
+  }
+  return { kind: 'failed', retryAfter: 0, message: raw || 'Could not send verification email. Please try again.' };
+}
+
 const Auth = () => {
   // Default to login. Landing-page "Sign Up" links pass ?mode=signup, "Sign In" → ?mode=signin.
   const initialIsLogin = (() => {
