@@ -48,6 +48,12 @@ const Auth = () => {
   const [password, setPassword] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [emailVerified, setEmailVerified] = useState(false);
+  // verification UX state: 'idle' | 'sent' | 'rate_limited' | 'failed'
+  const [verifyStatus, setVerifyStatus] = useState<'idle' | 'sent' | 'rate_limited' | 'failed'>('idle');
+  const [verifyMessage, setVerifyMessage] = useState<string>('');
+  const [retryAt, setRetryAt] = useState<number | null>(null);
+  const [retrySecs, setRetrySecs] = useState<number>(0);
+  const [resending, setResending] = useState(false);
   const { signIn, user, profile } = useAuth();
   const navigate = useNavigate();
 
