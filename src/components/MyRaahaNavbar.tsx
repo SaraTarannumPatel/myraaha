@@ -23,7 +23,7 @@ const MyRaahaNavbar = () => {
       <nav className={`myraaha-navbar ${isMenuOpen ? 'menu-open' : ''}`}>
       <div className="myraaha-logo">
         <Link to="/" onClick={closeMenu} style={{ display: 'flex', alignItems: 'center', textDecoration: 'none', color: 'inherit' }}>
-          <img src="/images/myraaha logo.png" alt="MyRaaha Logo" className="nav-logo-img" />
+          <img src="/images/myraaha-logo.png" alt="MyRaaha Logo" className="nav-logo-img" loading="eager" decoding="async" onError={(e)=>{const t=e.currentTarget;if(!t.dataset.fb){t.dataset.fb='1';t.src='/images/myraaha%20logo.png';}}} />
         </Link>
       </div>
 

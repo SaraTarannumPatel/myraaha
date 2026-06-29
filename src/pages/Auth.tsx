@@ -32,6 +32,39 @@ const PUBLIC_SITE_URL =
   (import.meta as any).env?.VITE_PUBLIC_SITE_URL ||
   "https://myraaha.lovable.app";
 
+// Classify Supabase auth errors so we can show precise UX.
+// Returns { kind, message, retryAfter (seconds) }.
+function parseAuthError(error: any): { kind: 'rate_limited' | 'failed'; message: string; retryAfter: number } {
+  const raw = String(error?.message || '').trim();
+  const lower = raw.toLowerCase();
+  // Supabase rate-limit signatures
+  const isRate =
+    error?.status === 429 ||
+    lower.includes('rate limit') ||
+    lower.includes('rate-limit') ||
+    lower.includes('too many') ||
+    lower.includes('over_email_send_rate_limit') ||
+    lower.includes('email rate limit');
+  if (isRate) {
+    // Try to extract "after N seconds" / "in N minutes" / Retry-After header style
+    let secs = 0;
+    const sMatch = raw.match(/(\d+)\s*second/i);
+    const mMatch = raw.match(/(\d+)\s*minute/i);
+    const hMatch = raw.match(/(\d+)\s*hour/i);
+    if (sMatch) secs = parseInt(sMatch[1], 10);
+    else if (mMatch) secs = parseInt(mMatch[1], 10) * 60;
+    else if (hMatch) secs = parseInt(hMatch[1], 10) * 3600;
+    else secs = 3600; // built-in SMTP cap is ~3-4/hour; default to 1h
+    const mins = Math.ceil(secs / 60);
+    return {
+      kind: 'rate_limited',
+      retryAfter: secs,
+      message: `Verification email is rate-limited. Try again in ~${mins} minute${mins === 1 ? '' : 's'}.`,
+    };
+  }
+  return { kind: 'failed', retryAfter: 0, message: raw || 'Could not send verification email. Please try again.' };
+}
+
 const Auth = () => {
   // Default to login. Landing-page "Sign Up" links pass ?mode=signup, "Sign In" → ?mode=signin.
   const initialIsLogin = (() => {
@@ -48,6 +81,12 @@ const Auth = () => {
   const [password, setPassword] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [emailVerified, setEmailVerified] = useState(false);
+  // verification UX state: 'idle' | 'sent' | 'rate_limited' | 'failed'
+  const [verifyStatus, setVerifyStatus] = useState<'idle' | 'sent' | 'rate_limited' | 'failed'>('idle');
+  const [verifyMessage, setVerifyMessage] = useState<string>('');
+  const [retryAt, setRetryAt] = useState<number | null>(null);
+  const [retrySecs, setRetrySecs] = useState<number>(0);
+  const [resending, setResending] = useState(false);
   const { signIn, user, profile } = useAuth();
   const navigate = useNavigate();
 
@@ -93,6 +132,21 @@ const Auth = () => {
       }
     }
   }, [user, profile, navigate]);
+
+  // Tick down rate-limit countdown
+  useEffect(() => {
+    if (!retryAt) return;
+    const id = setInterval(() => {
+      const left = Math.max(0, Math.ceil((retryAt - Date.now()) / 1000));
+      setRetrySecs(left);
+      if (left <= 0) {
+        setRetryAt(null);
+        clearInterval(id);
+      }
+    }, 1000);
+    return () => clearInterval(id);
+  }, [retryAt]);
+
 
   const formatPhone = (value: string) => {
     // Only allow digits after +91
@@ -168,20 +222,69 @@ const Auth = () => {
         },
       });
       if (error) {
-        // Built-in SMTP enforces ~3-4 emails/hour. Surface that clearly.
-        const msg = (error.message || "").toLowerCase();
-        if (msg.includes("rate") || msg.includes("limit") || msg.includes("too many")) {
-          toast.error("Too many verification emails sent recently. Please wait ~1 hour and try again, or sign in if you already received one.");
+        const parsed = parseAuthError(error);
+        if (parsed.kind === 'rate_limited') {
+          setVerifyStatus('rate_limited');
+          setVerifyMessage(parsed.message);
+          const until = Date.now() + parsed.retryAfter * 1000;
+          setRetryAt(until);
+          setRetrySecs(parsed.retryAfter);
+          toast.error(parsed.message);
         } else {
-          toast.error(error.message);
+          setVerifyStatus('failed');
+          setVerifyMessage(parsed.message);
+          toast.error(parsed.message);
         }
       } else {
-        toast.success("Verification email sent! Check your inbox (and spam folder) to confirm your account, then log in.");
+        setVerifyStatus('sent');
+        setVerifyMessage(`Verification email sent to ${email}. Check your inbox (and spam folder) — the link confirms your account.`);
+        toast.success('Verification email sent! Check your inbox and spam folder.');
         setIsLogin(true);
       }
 
     }
     setSubmitting(false);
+  };
+
+  // Resend verification — re-triggers Lovable's built-in verification email
+  const handleResendVerification = async () => {
+    const target = (email || '').trim();
+    const emailCheck = emailSchema.safeParse(target);
+    if (!emailCheck.success) {
+      toast.error('Enter your email above first');
+      return;
+    }
+    if (retryAt && Date.now() < retryAt) {
+      toast.error(`Please wait ${retrySecs}s before resending`);
+      return;
+    }
+    setResending(true);
+    try { localStorage.setItem('myraaha_pending_email', target); } catch {}
+    const { error } = await supabase.auth.resend({
+      type: 'signup',
+      email: target,
+      options: { emailRedirectTo: `${window.location.origin}/auth` },
+    });
+    if (error) {
+      const parsed = parseAuthError(error);
+      if (parsed.kind === 'rate_limited') {
+        setVerifyStatus('rate_limited');
+        setVerifyMessage(parsed.message);
+        const until = Date.now() + parsed.retryAfter * 1000;
+        setRetryAt(until);
+        setRetrySecs(parsed.retryAfter);
+        toast.error(parsed.message);
+      } else {
+        setVerifyStatus('failed');
+        setVerifyMessage(parsed.message);
+        toast.error(parsed.message);
+      }
+    } else {
+      setVerifyStatus('sent');
+      setVerifyMessage(`Verification email re-sent to ${target}. Check your inbox and spam folder.`);
+      toast.success('Verification email re-sent!');
+    }
+    setResending(false);
   };
 
   const handleGoogleSignIn = async () => {
@@ -235,6 +338,65 @@ const Auth = () => {
               </motion.div>
             )}
           </AnimatePresence>
+
+          {/* Verification status banner — sent / rate-limited / failed */}
+          <AnimatePresence>
+            {verifyStatus !== 'idle' && (
+              <motion.div
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                className={`mb-4 p-4 rounded-xl border ${
+                  verifyStatus === 'sent'
+                    ? 'bg-emerald-50 border-emerald-200'
+                    : verifyStatus === 'rate_limited'
+                    ? 'bg-amber-50 border-amber-200'
+                    : 'bg-red-50 border-red-200'
+                }`}
+              >
+                <div className="flex items-start gap-3">
+                  <span className="text-xl">
+                    {verifyStatus === 'sent' ? '📨' : verifyStatus === 'rate_limited' ? '⏳' : '⚠️'}
+                  </span>
+                  <div className="flex-1 min-w-0">
+                    <p className={`font-display text-sm font-bold ${
+                      verifyStatus === 'sent' ? 'text-emerald-800'
+                      : verifyStatus === 'rate_limited' ? 'text-amber-800'
+                      : 'text-red-800'
+                    }`}>
+                      {verifyStatus === 'sent' && 'Verification email sent'}
+                      {verifyStatus === 'rate_limited' && 'Email rate-limited'}
+                      {verifyStatus === 'failed' && 'Could not send verification email'}
+                    </p>
+                    <p className="font-body text-xs text-foreground/70 mt-0.5 break-words">{verifyMessage}</p>
+                    {verifyStatus === 'rate_limited' && retrySecs > 0 && (
+                      <p className="font-body text-xs text-amber-900 mt-1 font-semibold">
+                        You can resend in {Math.floor(retrySecs / 60)}m {retrySecs % 60}s
+                      </p>
+                    )}
+                    <div className="mt-2 flex flex-wrap gap-2">
+                      <button
+                        type="button"
+                        onClick={handleResendVerification}
+                        disabled={resending || (!!retryAt && retrySecs > 0)}
+                        className="text-xs font-semibold px-3 py-1.5 rounded-full bg-primary text-white disabled:opacity-50"
+                      >
+                        {resending ? 'Resending…' : retrySecs > 0 ? `Resend in ${retrySecs}s` : 'Resend verification email'}
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => { setVerifyStatus('idle'); setVerifyMessage(''); }}
+                        className="text-xs px-3 py-1.5 rounded-full bg-muted text-foreground/70"
+                      >
+                        Dismiss
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
           
           <div className="relative mb-2">
             <AnimatePresence mode="wait">

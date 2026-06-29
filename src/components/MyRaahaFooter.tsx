@@ -18,7 +18,7 @@ const MyRaahaFooter = () => {
 
       <div className="footer-main-grid">
         <div className="footer-brand-section">
-          <img src="/images/myraaha white.png" alt="MyRaaha Logo" className="footer-logo-modern" />
+          <img src="/images/myraaha-white.png" alt="MyRaaha Logo" className="footer-logo-modern" loading="eager" decoding="async" onError={(e)=>{const t=e.currentTarget;if(!t.dataset.fb){t.dataset.fb='1';t.src='/images/myraaha%20white.png';}}} />
           <p className="footer-mission">
             Making quality career guidance available for all and at anytime, helping guided capacity building for better demand alignment at local and at national level.
           </p>
