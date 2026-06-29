@@ -154,10 +154,11 @@ const Auth = () => {
         return;
       }
 
-      // [ARCHIVED] Email OTP + phone OTP flow paused. Using default email verification link.
-      // Persist the email so we can pre-fill it on the login screen after verification.
+      // Use Lovable's built-in email verification. Keep emailRedirectTo simple
+      // (origin-based, no query params) so it always matches the project's
+      // redirect allow-list and the built-in SMTP accepts the send.
       try { localStorage.setItem("myraaha_pending_email", email); } catch {}
-      const verifyRedirect = `${PUBLIC_SITE_URL}/auth?mode=signin&verified=1&email=${encodeURIComponent(email)}`;
+      const verifyRedirect = `${window.location.origin}/auth`;
       const { error } = await supabase.auth.signUp({
         email,
         password,
@@ -167,9 +168,15 @@ const Auth = () => {
         },
       });
       if (error) {
-        toast.error(error.message);
+        // Built-in SMTP enforces ~3-4 emails/hour. Surface that clearly.
+        const msg = (error.message || "").toLowerCase();
+        if (msg.includes("rate") || msg.includes("limit") || msg.includes("too many")) {
+          toast.error("Too many verification emails sent recently. Please wait ~1 hour and try again, or sign in if you already received one.");
+        } else {
+          toast.error(error.message);
+        }
       } else {
-        toast.success("Verification email sent! Check your inbox to confirm your account, then log in.");
+        toast.success("Verification email sent! Check your inbox (and spam folder) to confirm your account, then log in.");
         setIsLogin(true);
       }
 
