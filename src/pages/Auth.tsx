@@ -133,6 +133,21 @@ const Auth = () => {
     }
   }, [user, profile, navigate]);
 
+  // Tick down rate-limit countdown
+  useEffect(() => {
+    if (!retryAt) return;
+    const id = setInterval(() => {
+      const left = Math.max(0, Math.ceil((retryAt - Date.now()) / 1000));
+      setRetrySecs(left);
+      if (left <= 0) {
+        setRetryAt(null);
+        clearInterval(id);
+      }
+    }, 1000);
+    return () => clearInterval(id);
+  }, [retryAt]);
+
+
   const formatPhone = (value: string) => {
     // Only allow digits after +91
     const digits = value.replace(/\D/g, "");
