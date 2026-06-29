@@ -174,20 +174,69 @@ const Auth = () => {
         },
       });
       if (error) {
-        // Built-in SMTP enforces ~3-4 emails/hour. Surface that clearly.
-        const msg = (error.message || "").toLowerCase();
-        if (msg.includes("rate") || msg.includes("limit") || msg.includes("too many")) {
-          toast.error("Too many verification emails sent recently. Please wait ~1 hour and try again, or sign in if you already received one.");
+        const parsed = parseAuthError(error);
+        if (parsed.kind === 'rate_limited') {
+          setVerifyStatus('rate_limited');
+          setVerifyMessage(parsed.message);
+          const until = Date.now() + parsed.retryAfter * 1000;
+          setRetryAt(until);
+          setRetrySecs(parsed.retryAfter);
+          toast.error(parsed.message);
         } else {
-          toast.error(error.message);
+          setVerifyStatus('failed');
+          setVerifyMessage(parsed.message);
+          toast.error(parsed.message);
         }
       } else {
-        toast.success("Verification email sent! Check your inbox (and spam folder) to confirm your account, then log in.");
+        setVerifyStatus('sent');
+        setVerifyMessage(`Verification email sent to ${email}. Check your inbox (and spam folder) — the link confirms your account.`);
+        toast.success('Verification email sent! Check your inbox and spam folder.');
         setIsLogin(true);
       }
 
     }
     setSubmitting(false);
+  };
+
+  // Resend verification — re-triggers Lovable's built-in verification email
+  const handleResendVerification = async () => {
+    const target = (email || '').trim();
+    const emailCheck = emailSchema.safeParse(target);
+    if (!emailCheck.success) {
+      toast.error('Enter your email above first');
+      return;
+    }
+    if (retryAt && Date.now() < retryAt) {
+      toast.error(`Please wait ${retrySecs}s before resending`);
+      return;
+    }
+    setResending(true);
+    try { localStorage.setItem('myraaha_pending_email', target); } catch {}
+    const { error } = await supabase.auth.resend({
+      type: 'signup',
+      email: target,
+      options: { emailRedirectTo: `${window.location.origin}/auth` },
+    });
+    if (error) {
+      const parsed = parseAuthError(error);
+      if (parsed.kind === 'rate_limited') {
+        setVerifyStatus('rate_limited');
+        setVerifyMessage(parsed.message);
+        const until = Date.now() + parsed.retryAfter * 1000;
+        setRetryAt(until);
+        setRetrySecs(parsed.retryAfter);
+        toast.error(parsed.message);
+      } else {
+        setVerifyStatus('failed');
+        setVerifyMessage(parsed.message);
+        toast.error(parsed.message);
+      }
+    } else {
+      setVerifyStatus('sent');
+      setVerifyMessage(`Verification email re-sent to ${target}. Check your inbox and spam folder.`);
+      toast.success('Verification email re-sent!');
+    }
+    setResending(false);
   };
 
   const handleGoogleSignIn = async () => {
