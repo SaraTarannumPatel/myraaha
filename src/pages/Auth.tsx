@@ -338,6 +338,65 @@ const Auth = () => {
               </motion.div>
             )}
           </AnimatePresence>
+
+          {/* Verification status banner — sent / rate-limited / failed */}
+          <AnimatePresence>
+            {verifyStatus !== 'idle' && (
+              <motion.div
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                className={`mb-4 p-4 rounded-xl border ${
+                  verifyStatus === 'sent'
+                    ? 'bg-emerald-50 border-emerald-200'
+                    : verifyStatus === 'rate_limited'
+                    ? 'bg-amber-50 border-amber-200'
+                    : 'bg-red-50 border-red-200'
+                }`}
+              >
+                <div className="flex items-start gap-3">
+                  <span className="text-xl">
+                    {verifyStatus === 'sent' ? '📨' : verifyStatus === 'rate_limited' ? '⏳' : '⚠️'}
+                  </span>
+                  <div className="flex-1 min-w-0">
+                    <p className={`font-display text-sm font-bold ${
+                      verifyStatus === 'sent' ? 'text-emerald-800'
+                      : verifyStatus === 'rate_limited' ? 'text-amber-800'
+                      : 'text-red-800'
+                    }`}>
+                      {verifyStatus === 'sent' && 'Verification email sent'}
+                      {verifyStatus === 'rate_limited' && 'Email rate-limited'}
+                      {verifyStatus === 'failed' && 'Could not send verification email'}
+                    </p>
+                    <p className="font-body text-xs text-foreground/70 mt-0.5 break-words">{verifyMessage}</p>
+                    {verifyStatus === 'rate_limited' && retrySecs > 0 && (
+                      <p className="font-body text-xs text-amber-900 mt-1 font-semibold">
+                        You can resend in {Math.floor(retrySecs / 60)}m {retrySecs % 60}s
+                      </p>
+                    )}
+                    <div className="mt-2 flex flex-wrap gap-2">
+                      <button
+                        type="button"
+                        onClick={handleResendVerification}
+                        disabled={resending || (!!retryAt && retrySecs > 0)}
+                        className="text-xs font-semibold px-3 py-1.5 rounded-full bg-primary text-white disabled:opacity-50"
+                      >
+                        {resending ? 'Resending…' : retrySecs > 0 ? `Resend in ${retrySecs}s` : 'Resend verification email'}
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => { setVerifyStatus('idle'); setVerifyMessage(''); }}
+                        className="text-xs px-3 py-1.5 rounded-full bg-muted text-foreground/70"
+                      >
+                        Dismiss
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
           
           <div className="relative mb-2">
             <AnimatePresence mode="wait">
