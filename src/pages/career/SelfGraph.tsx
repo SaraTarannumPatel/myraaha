@@ -503,13 +503,14 @@ const SelfGraph = () => {
     setPrivacySettings(prev => ({ ...prev, [key]: value }));
     const existing = mentorShares[0];
     if (existing) {
-      await supabase.from("mentor_shares").update({ [key]: value }).eq("id", existing.id);
+      await supabase.from("mentor_shares").update({ [key]: value } as any).eq("id", existing.id);
     } else {
       await supabase.from("mentor_shares").insert({
         user_id: user!.id,
         mentor_id: user!.id, // self-reference placeholder
         [key]: value,
-      });
+      } as any);
+
       fetchAll();
     }
   };

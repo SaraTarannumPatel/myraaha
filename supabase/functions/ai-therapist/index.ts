@@ -16,6 +16,35 @@ serve(async (req) => {
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY is not configured");
 
+    // ── Server-side daily cap (mirrors client entitlement gate) ─────────────
+    try {
+      const SUPABASE_URL = Deno.env.get("SUPABASE_URL");
+      const SERVICE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
+      if (SUPABASE_URL && SERVICE_KEY) {
+        const { createClient } = await import("https://esm.sh/@supabase/supabase-js@2.45.0");
+        const svc = createClient(SUPABASE_URL, SERVICE_KEY);
+        const { data: hitCount } = await svc.rpc("record_rate_limit_hit", {
+          _identity: `ai-therapist:${authedUser.id}`,
+          _endpoint: "ai-therapist",
+          _window_seconds: 86400,
+        });
+        const DAILY_FREE = 30;
+        if (Number(hitCount) > DAILY_FREE) {
+          const { data: unlimited } = await svc.rpc("has_active_entitlement", {
+            _entitlement_key: "ai_therapist_unlimited_24h",
+          });
+          if (!unlimited) {
+            return new Response(JSON.stringify({ error: "daily_limit_reached" }), {
+              status: 402,
+              headers: { ...corsHeaders, "Content-Type": "application/json" },
+            });
+          }
+        }
+      }
+    } catch (entErr) {
+      console.warn("ai-therapist entitlement check failed:", entErr);
+    }
+
     // ---- Resolve user + session for streaming chat persistence ----
     let userId: string | null = null;
     let userClient: any = null;
@@ -36,8 +65,7 @@ serve(async (req) => {
           const { data: { user } } = await userClient.auth.getUser();
           if (user) {
             userId = user.id;
-            // ensure session
-            if (!sessionId) {
+            const startNewSession = async () => {
               const firstUserMsg = (messages || []).find((m: any) => m.role === "user")?.content || "New conversation";
               const { data: newSess } = await userClient.from("therapist_sessions").insert({
                 user_id: userId,
@@ -45,13 +73,26 @@ serve(async (req) => {
                 context_snapshot: context || {},
               }).select("id").single();
               sessionId = newSess?.id || null;
+              priorMessages = [];
+            };
+            if (!sessionId) {
+              await startNewSession();
             } else {
-              // load prior messages for memory
-              const { data: hist } = await userClient.from("therapist_messages")
-                .select("role, content").eq("session_id", sessionId).order("created_at", { ascending: true }).limit(50);
-              priorMessages = hist || [];
-              // bump last_message_at
-              await userClient.from("therapist_sessions").update({ last_message_at: new Date().toISOString() }).eq("id", sessionId);
+              // Verify the supplied sessionId belongs to the authenticated user
+              // before loading history or mutating the session (prevents IDOR).
+              const { data: ownSess } = await userClient.from("therapist_sessions")
+                .select("id").eq("id", sessionId).eq("user_id", userId).maybeSingle();
+              if (!ownSess) {
+                await startNewSession();
+              } else {
+                const { data: hist } = await userClient.from("therapist_messages")
+                  .select("role, content").eq("session_id", sessionId).eq("user_id", userId)
+                  .order("created_at", { ascending: true }).limit(50);
+                priorMessages = hist || [];
+                await userClient.from("therapist_sessions")
+                  .update({ last_message_at: new Date().toISOString() })
+                  .eq("id", sessionId).eq("user_id", userId);
+              }
             }
             // persist the incoming user message (last one)
             const lastUser = [...(messages || [])].reverse().find((m: any) => m.role === "user");

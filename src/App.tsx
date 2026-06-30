@@ -85,6 +85,7 @@ import Achievements from "./pages/shared/Achievements";
 import Settings from "./pages/shared/Settings";
 import Notifications from "./pages/shared/Notifications";
 import Leaderboard from "./pages/shared/Leaderboard";
+import RewardCelebrationManager from "@/components/curiositycompass/RewardCelebrationManager";
 
 const queryClient = new QueryClient();
 
@@ -110,6 +111,9 @@ const App = () => {
       <Sonner />
       <BrowserRouter>
         <AuthProvider>
+          {/* Global reward popup — fires during onboarding + Compass too,
+              not only inside DashboardLayout. Manager self-gates to authed users. */}
+          <RewardCelebrationManager />
           <Routes>
             <Route element={<div className="myraaha-landing-site"><Outlet /></div>}>
               <Route path="/" element={<MyRaahaLanding />} />
