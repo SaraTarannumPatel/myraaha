@@ -25,6 +25,28 @@ serve(async (req) => {
 
     const supabase = createClient(SUPABASE_URL!, SUPABASE_SERVICE_ROLE_KEY!);
 
+    // ─── Verify the supplied stepId belongs to the caller ──────────────────
+    if (!stepId || typeof stepId !== "string") {
+      return new Response(JSON.stringify({ error: "stepId required" }), {
+        status: 400,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+    {
+      const { data: ownStep } = await supabase
+        .from("roadmap_steps")
+        .select("id")
+        .eq("id", stepId)
+        .eq("user_id", authedUser.id)
+        .maybeSingle();
+      if (!ownStep) {
+        return new Response(JSON.stringify({ error: "step_not_found" }), {
+          status: 404,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+    }
+
     // ─── Check cache first (scoped to this user) ────────────────────────────
     if (!forceRefresh) {
       const { data: cached } = await supabase
@@ -244,7 +266,7 @@ Using ALL the above context, generate a deeply specific, actionable, and resourc
       career_context: parsed.career_context || {},
       guidance: parsed.guidance || {},
       generated_at: new Date().toISOString(),
-    }, { onConflict: "step_id" });
+    }, { onConflict: "step_id,user_id" });
 
     return new Response(JSON.stringify({ ...parsed, cached: false }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },

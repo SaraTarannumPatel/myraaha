@@ -70,6 +70,40 @@ serve(async (req) => {
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY not configured");
 
+    // ── Server-side entitlement / rate-limit enforcement ──────────────────
+    // Mirrors the client-side `useEntitlement` checks so signed-in users cannot
+    // bypass usage caps by calling this function directly.
+    try {
+      const SUPABASE_URL = Deno.env.get("SUPABASE_URL");
+      const SERVICE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
+      if (SUPABASE_URL && SERVICE_KEY) {
+        const { createClient } = await import("https://esm.sh/@supabase/supabase-js@2.45.0");
+        const svc = createClient(SUPABASE_URL, SERVICE_KEY);
+        // Hard daily cap per user (covers anyone without a paid/unlimited entitlement)
+        const ident = `roadmap-ai:${user.id}`;
+        const { data: hitCount } = await svc.rpc("record_rate_limit_hit", {
+          _identity: ident,
+          _endpoint: "roadmap-ai",
+          _window_seconds: 86400,
+        });
+        const DAILY_FREE = 10;
+        if (Number(hitCount) > DAILY_FREE) {
+          // If user holds an unlimited entitlement, allow through.
+          const { data: hasUnlimited } = await svc.rpc("has_active_entitlement", {
+            _entitlement_key: "roadmap_unlimited",
+          });
+          if (!hasUnlimited) {
+            return new Response(JSON.stringify({ error: "usage_limit_reached" }), {
+              status: 402,
+              headers: { ...corsHeaders, "Content-Type": "application/json" },
+            });
+          }
+        }
+      }
+    } catch (entErr) {
+      console.warn("roadmap-ai entitlement check failed:", entErr);
+    }
+
     // Enrich context with real user signals from the database when authenticated
     let context = { ...(rawContext || {}) };
     try {
