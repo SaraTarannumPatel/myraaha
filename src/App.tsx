@@ -1,3 +1,6 @@
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import SplashScreen from "@/components/shared/SplashScreen";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -86,10 +89,25 @@ import RewardCelebrationManager from "@/components/curiositycompass/RewardCelebr
 
 const queryClient = new QueryClient();
 
-const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
+const App = () => {
+  const [showSplash, setShowSplash] = useState(true);
+
+  return (
+    <QueryClientProvider client={queryClient}>
+      <TooltipProvider>
+        <AnimatePresence mode="wait">
+          {showSplash && (
+            <motion.div
+              key="splash-screen"
+              exit={{ opacity: 0, scale: 1.05 }}
+              transition={{ duration: 0.5, ease: "easeInOut" }}
+              className="fixed inset-0 z-[99999]"
+            >
+              <SplashScreen onComplete={() => setShowSplash(false)} />
+            </motion.div>
+          )}
+        </AnimatePresence>
+        <Toaster />
       <Sonner />
       <BrowserRouter>
         <AuthProvider>
@@ -191,6 +209,7 @@ const App = () => (
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>
-);
+  );
+};
 
 export default App;
