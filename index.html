@@ -29,10 +29,183 @@
     <meta name="twitter:image" content="/myraaha-logo.png">
     <meta name="twitter:title" content="MyRaaha — Career &amp; Business Decisions Without Guesswork">
     <meta name="twitter:description" content="MyRaaha is your AI-powered decision operating system for career navigation and entrepreneurship. Soft direction. Real outcomes.">
+    <style>
+      #static-splash {
+        position: fixed;
+        inset: 0;
+        z-index: 99999;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        background-color: #ffffff;
+        color: #1b1b1b;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        user-select: none;
+      }
+      #static-logo-container {
+        position: absolute;
+        left: 50%;
+        top: 38%;
+        transform: translate(-50%, -50%);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        width: 280px;
+      }
+      #static-logo-shield {
+        position: relative;
+        width: 96px;
+        height: 96px;
+        border-radius: 50%;
+        padding: 8px;
+        border: 1px solid #1b1b1b;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 15px 45px rgba(85,0,203,0.1);
+        background-color: transparent;
+      }
+      #static-logo-img {
+        width: 90%;
+        height: 90%;
+        object-fit: contain;
+        border-radius: 50%;
+      }
+      #static-brand-text {
+        margin-top: 16px;
+      }
+      #static-title {
+        margin: 0;
+        font-size: 28px;
+        font-weight: 700;
+        letter-spacing: 0.05em;
+        color: #5500cb;
+      }
+      #static-tagline {
+        margin: 2px 0 0 0;
+        font-size: 11px;
+        color: #1b1b1b;
+        letter-spacing: 0.15em;
+        font-weight: 300;
+      }
+      #static-loading-container {
+        position: absolute;
+        bottom: 48px;
+        width: 80%;
+        max-width: 320px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+      }
+      #static-status {
+        margin: 0;
+        font-size: 11px;
+        color: #1b1b1b;
+        font-weight: 500;
+        letter-spacing: 0.05em;
+        height: 18px;
+        text-align: center;
+      }
+      #static-progress-track {
+        width: 100%;
+        height: 4px;
+        background-color: #d3d3d3;
+        border-radius: 2px;
+        overflow: hidden;
+      }
+      #static-progress-bar {
+        width: 0%;
+        height: 100%;
+        background-color: #5500cb;
+        transition: width 0.3s ease;
+      }
+      #static-percentage {
+        font-size: 10px;
+        color: rgba(27, 27, 27, 0.5);
+        font-family: monospace;
+        letter-spacing: 0.1em;
+        margin-top: 2px;
+      }
+
+      /* Media Queries for responsiveness down to 290px */
+      @media (max-width: 360px) {
+        #static-logo-shield {
+          width: 64px;
+          height: 64px;
+          padding: 6px;
+        }
+        #static-title {
+          font-size: 18px;
+        }
+        #static-tagline {
+          font-size: 8px;
+          letter-spacing: 0.1em;
+        }
+        #static-loading-container {
+          bottom: 32px;
+          max-width: 220px;
+        }
+        #static-status {
+          font-size: 9px;
+        }
+      }
+    </style>
   </head>
 
   <body>
-    <div id="root"></div>
+    <div id="root">
+      <!-- Static App Shell Splash Screen -->
+      <div id="static-splash">
+        <!-- Central Logo Container -->
+        <div id="static-logo-container">
+          <!-- Logo Shield -->
+          <div id="static-logo-shield">
+            <img id="static-logo-img" src="/myraaha-logo.png" alt="MyRaaha Logo" />
+          </div>
+          <!-- Brand Text -->
+          <div id="static-brand-text">
+            <h1 id="static-title">MyRaaha</h1>
+            <p id="static-tagline">Your dream, re-imagined</p>
+          </div>
+        </div>
+        <!-- Bottom Progress Bar -->
+        <div id="static-loading-container">
+          <p id="static-status">Initializing MyRaaha Universe...</p>
+          <div id="static-progress-track">
+            <div id="static-progress-bar"></div>
+          </div>
+          <span id="static-percentage">0%</span>
+        </div>
+      </div>
+      <script>
+        (function() {
+          var progress = 0;
+          var progressBar = document.getElementById('static-progress-bar');
+          var percentageText = document.getElementById('static-percentage');
+          var statusText = document.getElementById('static-status');
+          var statuses = [
+            "Initializing MyRaaha Universe...",
+            "Loading components...",
+            "Downloading assets..."
+          ];
+          var interval = setInterval(function() {
+            if (progress >= 30) {
+              clearInterval(interval);
+            } else {
+              progress += Math.floor(Math.random() * 5) + 3;
+              if (progress > 30) progress = 30;
+              if (progressBar) progressBar.style.width = progress + '%';
+              if (percentageText) percentageText.innerHTML = progress + '%';
+              if (statusText && progress > 15) statusText.innerHTML = statuses[1];
+            }
+          }, 100);
+          window.__initialProgress = progress;
+        })();
+      </script>
+    </div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

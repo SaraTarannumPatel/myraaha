@@ -6,7 +6,7 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Outlet, Navigate } from "react-router-dom";
-import { AuthProvider } from "@/contexts/AuthContext";
+import { AuthProvider, useAuth } from "@/contexts/AuthContext";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import MyRaahaLanding from "./pages/MyRaahaLanding";
 import MyRaahaAbout from "./pages/MyRaahaAbout";
@@ -89,126 +89,135 @@ import RewardCelebrationManager from "@/components/curiositycompass/RewardCelebr
 
 const queryClient = new QueryClient();
 
-const App = () => {
+const AppContent = () => {
   const [showSplash, setShowSplash] = useState(true);
+  const { isReady } = useAuth();
 
+  return (
+    <>
+      <AnimatePresence mode="wait">
+        {showSplash && (
+          <motion.div
+            key="splash-screen"
+            exit={{ opacity: 0, scale: 1.05 }}
+            transition={{ duration: 0.5, ease: "easeInOut" }}
+            className="fixed inset-0 z-[99999]"
+          >
+            <SplashScreen isAppReady={isReady} onComplete={() => setShowSplash(false)} />
+          </motion.div>
+        )}
+      </AnimatePresence>
+      <Toaster />
+      <Sonner />
+      {/* Global reward popup — fires during onboarding + Compass too,
+          not only inside DashboardLayout. Manager self-gates to authed users. */}
+      <RewardCelebrationManager />
+      <Routes>
+        <Route element={<div className="myraaha-landing-site"><Outlet /></div>}>
+          <Route path="/" element={<MyRaahaLanding />} />
+          {/* Landing site */}
+          <Route path="/about" element={<MyRaahaAbout />} />
+          <Route path="/services" element={<MyRaahaServices />} />
+          <Route path="/partnerships" element={<MyRaahaPartnerships />} />
+          <Route path="/insights" element={<MyRaahaInsights />} />
+          <Route path="/insights/:slug" element={<MyRaahaInsightsDetail />} />
+          <Route path="/careers" element={<MyRaahaCareers />} />
+          <Route path="/contact" element={<MyRaahaContact />} />
+          <Route path="/privacy" element={<MyRaahaPrivacy />} />
+          <Route path="/terms" element={<MyRaahaTerms />} />
+          <Route path="/cookies" element={<MyRaahaCookies />} />
+          
+          {/* Career Sub-Roles */}
+          <Route path="/careers/core-team" element={<CoreTeam />} />
+          <Route path="/careers/intern" element={<Intern />} />
+          <Route path="/careers/freelancer" element={<Freelancer />} />
+          <Route path="/careers/volunteer" element={<Volunteer />} />
+          <Route path="/careers/facilitator" element={<Facilitator />} />
+          <Route path="/careers/:roleId" element={<RoleDetails />} />
+        </Route>
+        
+        {/* Old routes archived */}
+        <Route element={<div className="myraaha-app"><Outlet /></div>}>
+          <Route path="/intro" element={<IntroSlides />} />
+          <Route path="/auth" element={<Auth />} />
+          <Route path="/guest" element={<GuestEntry />} />
+          {/* Legacy OTP deep links are archived and safely returned to auth. */}
+          <Route path="/verify-otp" element={<Navigate to="/auth" replace />} />
+          <Route path="/onboarding" element={<ProtectedRoute><Welcome /></ProtectedRoute>} />
+          <Route path="/onboarding/user-type" element={<ProtectedRoute><UserTypeSelection /></ProtectedRoute>} />
+          <Route path="/onboarding/journey" element={<ProtectedRoute><JourneyDiscovery /></ProtectedRoute>} />
+          <Route path="/onboarding/intent" element={<ProtectedRoute><IntentSelection /></ProtectedRoute>} />
+          <Route path="/onboarding/guided" element={<ProtectedRoute><GuidedOnboarding /></ProtectedRoute>} />
+          <Route path="/onboarding/educational-status" element={<ProtectedRoute><EducationalStatus /></ProtectedRoute>} />
+          <Route path="/onboarding/consent" element={<ProtectedRoute><ConsentStep /></ProtectedRoute>} />
+          <Route path="/dashboard" element={<ProtectedRoute><DashboardLayout /></ProtectedRoute>}>
+            <Route index element={<Dashboard />} />
+            <Route path="insights" element={<Insights />} />
+            {/* Career */}
+            <Route path="curiosity-compass" element={<CuriosityCompass />} />
+            <Route path="career-navigator" element={<CareerNavigator />} />
+            <Route path="roadmap" element={<Roadmap />} />
+            <Route path="careermap" element={<CareerMap />} />
+
+            <Route path="selfgraph" element={<SelfGraph />} />
+            <Route path="living-resume" element={<LivingResume />} />
+            <Route path="explore" element={<Explore />} />
+            <Route path="content-library" element={<ContentLibrary />} />
+            <Route path="mentor-matchmaking" element={<MentorMatchmaking />} />
+            <Route path="peer-circles" element={<PeerCircles />} />
+            <Route path="project-playground" element={<ProjectPlayground />} />
+            <Route path="job-matching" element={<JobMatching />} />
+            <Route path="skill-stacker" element={<SkillStacker />} />
+            <Route path="career-coach" element={<VirtualCareerCoach />} />
+            <Route path="career-therapist" element={<AICareerTherapist />} />
+            <Route path="career-moodboard" element={<CareerMoodboard />} />
+            <Route path="career-inspirations" element={<CareerInspirations />} />
+            <Route path="transition-planner" element={<TransitionPlanner />} />
+            <Route path="career-collections" element={<CareerCardCollections />} />
+            <Route path="blueprint" element={<CareerBlueprint />} />
+            <Route path="taxonomy" element={<TaxonomySearch />} />
+            {/* Entrepreneurship */}
+            <Route path="startup-sparks" element={<StartupSparks />} />
+            <Route path="mvp-builder" element={<MVPBuilder />} />
+            <Route path="founder-profile" element={<FounderProfile />} />
+            <Route path="mindset-builder" element={<MindsetBuilder />} />
+            <Route path="startup-lab" element={<StartupLab />} />
+            <Route path="path-selector" element={<PathSelector />} />
+            <Route path="startup-showcase" element={<StartupShowcase />} />
+            <Route path="startup-profiling" element={<StartupProfiling />} />
+            <Route path="startup-support" element={<StartupSupport />} />
+            <Route path="ai-coach" element={<AIEntrepreneurshipCoach />} />
+            <Route path="startup-communities" element={<StartupCommunities />} />
+            <Route path="founders-learning" element={<FoundersLearningLibrary />} />
+            <Route path="moodboard" element={<EntrepreneurshipMoodboard />} />
+            <Route path="inspirations" element={<Inspirations />} />
+            {/* Shared */}
+            <Route path="journal" element={<Journal />} />
+            <Route path="connections" element={<Connections />} />
+            <Route path="achievements" element={<Achievements />} />
+            <Route path="leaderboard" element={<Leaderboard />} />
+            <Route path="notifications" element={<Notifications />} />
+            <Route path="settings" element={<Settings />} />
+          </Route>
+          <Route path="/reset-password" element={<ResetPassword />} />
+          <Route path="*" element={<NotFound />} />
+        </Route>
+      </Routes>
+    </>
+  );
+};
+
+const App = () => {
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
-        <AnimatePresence mode="wait">
-          {showSplash && (
-            <motion.div
-              key="splash-screen"
-              exit={{ opacity: 0, scale: 1.05 }}
-              transition={{ duration: 0.5, ease: "easeInOut" }}
-              className="fixed inset-0 z-[99999]"
-            >
-              <SplashScreen onComplete={() => setShowSplash(false)} />
-            </motion.div>
-          )}
-        </AnimatePresence>
-        <Toaster />
-      <Sonner />
-      <BrowserRouter>
-        <AuthProvider>
-          {/* Global reward popup — fires during onboarding + Compass too,
-              not only inside DashboardLayout. Manager self-gates to authed users. */}
-          <RewardCelebrationManager />
-          <Routes>
-            <Route element={<div className="myraaha-landing-site"><Outlet /></div>}>
-              <Route path="/" element={<MyRaahaLanding />} />
-              {/* Landing site */}
-              <Route path="/about" element={<MyRaahaAbout />} />
-              <Route path="/services" element={<MyRaahaServices />} />
-              <Route path="/partnerships" element={<MyRaahaPartnerships />} />
-              <Route path="/insights" element={<MyRaahaInsights />} />
-              <Route path="/insights/:slug" element={<MyRaahaInsightsDetail />} />
-              <Route path="/careers" element={<MyRaahaCareers />} />
-              <Route path="/contact" element={<MyRaahaContact />} />
-              <Route path="/privacy" element={<MyRaahaPrivacy />} />
-              <Route path="/terms" element={<MyRaahaTerms />} />
-              <Route path="/cookies" element={<MyRaahaCookies />} />
-              
-              {/* Career Sub-Roles */}
-              <Route path="/careers/core-team" element={<CoreTeam />} />
-              <Route path="/careers/intern" element={<Intern />} />
-              <Route path="/careers/freelancer" element={<Freelancer />} />
-              <Route path="/careers/volunteer" element={<Volunteer />} />
-              <Route path="/careers/facilitator" element={<Facilitator />} />
-              <Route path="/careers/:roleId" element={<RoleDetails />} />
-            </Route>
-            
-            {/* Old routes archived */}
-            <Route element={<div className="myraaha-app"><Outlet /></div>}>
-            <Route path="/intro" element={<IntroSlides />} />
-            <Route path="/auth" element={<Auth />} />
-            <Route path="/guest" element={<GuestEntry />} />
-            {/* Legacy OTP deep links are archived and safely returned to auth. */}
-            <Route path="/verify-otp" element={<Navigate to="/auth" replace />} />
-            <Route path="/onboarding" element={<ProtectedRoute><Welcome /></ProtectedRoute>} />
-            <Route path="/onboarding/user-type" element={<ProtectedRoute><UserTypeSelection /></ProtectedRoute>} />
-            <Route path="/onboarding/journey" element={<ProtectedRoute><JourneyDiscovery /></ProtectedRoute>} />
-            <Route path="/onboarding/intent" element={<ProtectedRoute><IntentSelection /></ProtectedRoute>} />
-            <Route path="/onboarding/guided" element={<ProtectedRoute><GuidedOnboarding /></ProtectedRoute>} />
-            <Route path="/onboarding/educational-status" element={<ProtectedRoute><EducationalStatus /></ProtectedRoute>} />
-            <Route path="/onboarding/consent" element={<ProtectedRoute><ConsentStep /></ProtectedRoute>} />
-            <Route path="/dashboard" element={<ProtectedRoute><DashboardLayout /></ProtectedRoute>}>
-              <Route index element={<Dashboard />} />
-              <Route path="insights" element={<Insights />} />
-              {/* Career */}
-              <Route path="curiosity-compass" element={<CuriosityCompass />} />
-              <Route path="career-navigator" element={<CareerNavigator />} />
-              <Route path="roadmap" element={<Roadmap />} />
-              <Route path="careermap" element={<CareerMap />} />
-
-              <Route path="selfgraph" element={<SelfGraph />} />
-              <Route path="living-resume" element={<LivingResume />} />
-              <Route path="explore" element={<Explore />} />
-              <Route path="content-library" element={<ContentLibrary />} />
-              <Route path="mentor-matchmaking" element={<MentorMatchmaking />} />
-              <Route path="peer-circles" element={<PeerCircles />} />
-              <Route path="project-playground" element={<ProjectPlayground />} />
-              <Route path="job-matching" element={<JobMatching />} />
-              <Route path="skill-stacker" element={<SkillStacker />} />
-              <Route path="career-coach" element={<VirtualCareerCoach />} />
-              <Route path="career-therapist" element={<AICareerTherapist />} />
-              <Route path="career-moodboard" element={<CareerMoodboard />} />
-              <Route path="career-inspirations" element={<CareerInspirations />} />
-              <Route path="transition-planner" element={<TransitionPlanner />} />
-              <Route path="career-collections" element={<CareerCardCollections />} />
-              <Route path="blueprint" element={<CareerBlueprint />} />
-              <Route path="taxonomy" element={<TaxonomySearch />} />
-              {/* Entrepreneurship */}
-              <Route path="startup-sparks" element={<StartupSparks />} />
-              <Route path="mvp-builder" element={<MVPBuilder />} />
-              <Route path="founder-profile" element={<FounderProfile />} />
-              <Route path="mindset-builder" element={<MindsetBuilder />} />
-              <Route path="startup-lab" element={<StartupLab />} />
-              <Route path="path-selector" element={<PathSelector />} />
-              <Route path="startup-showcase" element={<StartupShowcase />} />
-              <Route path="startup-profiling" element={<StartupProfiling />} />
-              <Route path="startup-support" element={<StartupSupport />} />
-              <Route path="ai-coach" element={<AIEntrepreneurshipCoach />} />
-              <Route path="startup-communities" element={<StartupCommunities />} />
-              <Route path="founders-learning" element={<FoundersLearningLibrary />} />
-              <Route path="moodboard" element={<EntrepreneurshipMoodboard />} />
-              <Route path="inspirations" element={<Inspirations />} />
-              {/* Shared */}
-              <Route path="journal" element={<Journal />} />
-              <Route path="connections" element={<Connections />} />
-              <Route path="achievements" element={<Achievements />} />
-              <Route path="leaderboard" element={<Leaderboard />} />
-              <Route path="notifications" element={<Notifications />} />
-              <Route path="settings" element={<Settings />} />
-            </Route>
-            <Route path="/reset-password" element={<ResetPassword />} />
-            <Route path="*" element={<NotFound />} />
-            </Route>
-          </Routes>
-        </AuthProvider>
-      </BrowserRouter>
-    </TooltipProvider>
-  </QueryClientProvider>
+        <BrowserRouter>
+          <AuthProvider>
+            <AppContent />
+          </AuthProvider>
+        </BrowserRouter>
+      </TooltipProvider>
+    </QueryClientProvider>
   );
 };
 

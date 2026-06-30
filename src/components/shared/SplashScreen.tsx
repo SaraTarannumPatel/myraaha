@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 
 interface SplashScreenProps {
   onComplete: () => void;
+  isAppReady?: boolean;
 }
 
 // Strictly restricted color scheme:
@@ -86,61 +87,117 @@ const renderSvgIcon = (type: string, color: string) => {
   }
 };
 
-export const SplashScreen: React.FC<SplashScreenProps> = ({ onComplete }) => {
-  const [radius, setRadius] = useState(220);
+export const SplashScreen: React.FC<SplashScreenProps> = ({ onComplete, isAppReady }) => {
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const [progress, setProgress] = useState(0);
   const [statusIndex, setStatusIndex] = useState(0);
-  const [particles, setParticles] = useState<{ x: number; y: number; size: number; delay: number }[]>([]);
+  const [startTime] = useState(() => Date.now());
 
-  // Generate random soft drifting particles using light grey (#d3d3d3)
+  // Track window size for extreme responsiveness down to 290px
   useEffect(() => {
-    const particleCount = window.innerWidth < 640 ? 30 : 60;
-    const generatedParticles = Array.from({ length: particleCount }).map(() => ({
-      x: Math.random() * 100,
-      y: Math.random() * 100,
-      size: Math.random() * 4 + 2,
-      delay: Math.random() * 5,
-    }));
-    setParticles(generatedParticles);
+    const handleResize = () => setWindowWidth(window.innerWidth);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  // Update orbiting radius based on window size
+  // Compute responsive layout coordinates and sizing
+  let radius = 230;
+  let beaconSizeClass = "w-16 h-16";
+  let containerWidth = 140;
+  let marginTopPx = -32;
+  let logoSizeClass = "w-28 h-28";
+  let titleSizeClass = "text-3xl";
+  let taglineSizeClass = "text-xs";
+  let loadingBarMaxWidth = "max-w-sm";
+
+  if (windowWidth < 360) {
+    // Ultra-small mobile (down to 290px)
+    radius = Math.max(75, windowWidth * 0.28);
+    beaconSizeClass = "w-8 h-8";
+    containerWidth = 70;
+    marginTopPx = -16;
+    logoSizeClass = "w-16 h-16";
+    titleSizeClass = "text-lg";
+    taglineSizeClass = "text-[8px]";
+    loadingBarMaxWidth = "max-w-[200px]";
+  } else if (windowWidth < 640) {
+    // Normal mobile
+    radius = 110;
+    beaconSizeClass = "w-10 h-10";
+    containerWidth = 90;
+    marginTopPx = -20;
+    logoSizeClass = "w-20 h-20";
+    titleSizeClass = "text-xl";
+    taglineSizeClass = "text-[9px]";
+    loadingBarMaxWidth = "max-w-[260px]";
+  } else if (windowWidth < 1024) {
+    // Tablet
+    radius = 165;
+    beaconSizeClass = "w-12 h-12";
+    containerWidth = 110;
+    marginTopPx = -24;
+    logoSizeClass = "w-24 h-24";
+    titleSizeClass = "text-2xl";
+    taglineSizeClass = "text-[10px]";
+    loadingBarMaxWidth = "max-w-xs";
+  }
+
+  // Load progress established during early static bootstrap phase
   useEffect(() => {
-    const updateRadius = () => {
-      if (window.innerWidth < 640) {
-        setRadius(120); // Mobile
-      } else if (window.innerWidth < 1024) {
-        setRadius(175); // Tablet
-      } else {
-        setRadius(235); // Desktop
-      }
-    };
-    updateRadius();
-    window.addEventListener("resize", updateRadius);
-    return () => window.removeEventListener("resize", updateRadius);
+    const initialVal = (window as any).__initialProgress || 0;
+    setProgress(initialVal > 0 ? initialVal : 0);
   }, []);
 
-  // Animate progress bar and status text over exactly 10 seconds
+  // Connected loading logic matching the true status in real time
   useEffect(() => {
-    const duration = 9600; // 9.6s progress + 400ms pause = 10s total
     const intervalTime = 40;
-    const increment = 100 / (duration / intervalTime);
+    const minDisplayTime = 5600; // 5.6 seconds minimum display to allow full sequential beacon popout
 
-    const progressTimer = setInterval(() => {
+    const timer = setInterval(() => {
+      const elapsed = Date.now() - startTime;
+      const isTimeElapsed = elapsed >= minDisplayTime;
+
       setProgress((prev) => {
         if (prev >= 100) {
-          clearInterval(progressTimer);
+          clearInterval(timer);
           setTimeout(() => {
             onComplete();
-          }, 400);
+          }, 450);
           return 100;
         }
-        return prev + increment;
+
+        // Phase 1: Rapidly move to 75%
+        if (prev < 75) {
+          return prev + 1.2;
+        }
+
+        // Phase 2: From 75% to 96% (slow down to wait for app/time readiness)
+        if (prev < 96) {
+          if (isAppReady && isTimeElapsed) {
+            return prev + 2.5;
+          }
+          return prev + 0.15;
+        }
+
+        // Phase 3: Hold/Creep at 96-99% until ready
+        if (prev < 99) {
+          if (isAppReady && isTimeElapsed) {
+            return prev + 1.0;
+          }
+          return prev + 0.02;
+        }
+
+        // Phase 4: Final 100% trigger
+        if (isAppReady && isTimeElapsed) {
+          return 100;
+        }
+
+        return prev;
       });
     }, intervalTime);
 
-    return () => clearInterval(progressTimer);
-  }, [onComplete]);
+    return () => clearInterval(timer);
+  }, [isAppReady, onComplete, startTime]);
 
   // Rotate status text based on progress
   useEffect(() => {
@@ -154,18 +211,10 @@ export const SplashScreen: React.FC<SplashScreenProps> = ({ onComplete }) => {
     }
   }, [progress, statusIndex]);
 
-  const isMobile = window.innerWidth < 640;
-  const containerWidth = isMobile ? 96 : 128;
-  const iconRadius = isMobile ? 24 : 32;
-
   return (
     <div className="fixed inset-0 z-[99999] flex flex-col items-center justify-center bg-white text-[#1b1b1b] overflow-hidden select-none">
       
-
-
-
-
-      {/* 4. Orbiting Beacons - Centered around 38% coordinate with fixed size to keep exact distance */}
+      {/* 4. Orbiting Beacons - Centered around 38% coordinate with responsive sizes */}
       {BEACONS.map((beacon, idx) => {
         const angleRad = (beacon.angle * Math.PI) / 180;
         const x = Math.cos(angleRad) * radius;
@@ -183,22 +232,22 @@ export const SplashScreen: React.FC<SplashScreenProps> = ({ onComplete }) => {
             }}
             transition={{
               type: "spring",
-              stiffness: 70,
-              damping: 15,
-              delay: 1.0 + idx * 0.2, // Sequential entry
+              stiffness: 40,
+              damping: 12,
+              delay: 1.2 + idx * 0.6, // Slow sequential entry (600ms apart)
             }}
             className="absolute flex flex-col items-center pointer-events-none"
             style={{
               width: `${containerWidth}px`,
               marginLeft: `${-containerWidth / 2}px`, // Centered horizontally
-              marginTop: `${-iconRadius}px`,         // Centered vertically on the icon circle
+              marginTop: `${marginTopPx}px`,          // Centered vertically
             }}
           >
             {/* Beacon Icon Container - static, no floating */}
             <div className="flex flex-col items-center w-full">
               {/* Circular Node - outline is strictly #1b1b1b, background transparent */}
               <div 
-                className="relative w-12 h-12 sm:w-16 sm:h-16 rounded-full flex items-center justify-center bg-transparent border-2 overflow-hidden shadow-[0_8px_20px_rgba(85,0,203,0.02)]"
+                className={`relative ${beaconSizeClass} rounded-full flex items-center justify-center bg-transparent border-2 overflow-hidden shadow-[0_8px_20px_rgba(85,0,203,0.02)]`}
                 style={{ borderColor: "#1b1b1b" }}
               >
                 {/* Vector illustrations are all colored using #5500cb */}
@@ -209,7 +258,7 @@ export const SplashScreen: React.FC<SplashScreenProps> = ({ onComplete }) => {
               <motion.div 
                 initial={{ opacity: 0, y: 5 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 2.0 + idx * 0.1 }}
+                transition={{ delay: 1.8 + idx * 0.6 }}
                 className="mt-2 text-center hidden sm:block pointer-events-none w-full"
               >
                 {/* Names of all 6 circles are strictly #1b1b1b */}
@@ -224,7 +273,7 @@ export const SplashScreen: React.FC<SplashScreenProps> = ({ onComplete }) => {
               
               {/* Ultra-mini title for mobile screens */}
               <div className="mt-1 text-center sm:hidden pointer-events-none w-full">
-                <span className="text-[8px] font-bold tracking-tight leading-none text-[#1b1b1b]">
+                <span className="text-[7.5px] font-bold tracking-tight leading-none text-[#1b1b1b] block max-w-[85px] mx-auto break-words">
                   {beacon.name}
                 </span>
               </div>
@@ -243,7 +292,7 @@ export const SplashScreen: React.FC<SplashScreenProps> = ({ onComplete }) => {
           width: "280px", // Fixed width locks centering of text perfectly below logo
         }}
       >
-        {/* Core Pulsing Logo Shield - Background set to transparent, outline #1b1b1b, retaining shadow */}
+        {/* Core Logo Shield - Background set to transparent, outline #1b1b1b, retaining shadow */}
         <motion.div
           initial={{ scale: 0, rotate: -45, opacity: 0 }}
           animate={{ scale: 1, rotate: 0, opacity: 1 }}
@@ -253,9 +302,9 @@ export const SplashScreen: React.FC<SplashScreenProps> = ({ onComplete }) => {
             damping: 15,
             delay: 0.3,
           }}
-          className="relative w-24 h-24 sm:w-28 sm:h-28 rounded-full p-2 bg-transparent border border-[#1b1b1b] flex items-center justify-center shadow-[0_15px_45px_rgba(85,0,203,0.1)]"
+          className={`relative ${logoSizeClass} rounded-full p-2 bg-transparent border border-[#1b1b1b] flex items-center justify-center shadow-[0_15px_45px_rgba(85,0,203,0.1)]`}
         >
-          <motion.img
+          <img
             src="/myraaha-logo.png"
             alt="MyRaaha Logo"
             className="w-[90%] h-[90%] object-contain relative z-10 rounded-full"
@@ -269,18 +318,18 @@ export const SplashScreen: React.FC<SplashScreenProps> = ({ onComplete }) => {
           transition={{ delay: 0.8, duration: 0.8 }}
           className="mt-4 text-center"
         >
-          <h1 className="text-2.5xl sm:text-3xl font-bold tracking-wider text-[#5500cb] font-poppins">
+          <h1 className={`${titleSizeClass} font-bold tracking-wider text-[#5500cb] font-poppins`}>
             MyRaaha
           </h1>
           {/* Tagline is strictly "Your dream, re-imagined" in sentence case */}
-          <p className="text-[10px] sm:text-xs text-[#1b1b1b]/80 tracking-[0.15em] font-light mt-0.5">
+          <p className={`${taglineSizeClass} text-[#1b1b1b]/80 tracking-[0.15em] font-light mt-0.5`}>
             Your dream, re-imagined
           </p>
         </motion.div>
       </div>
 
-      {/* 6. Loading Progress & Status Messaging - Moved lower (bottom-4 sm:bottom-6) to prevent overlaps */}
-      <div className="absolute bottom-4 sm:bottom-6 w-[80%] max-w-sm flex flex-col items-center gap-3 z-30">
+      {/* 6. Loading Progress & Status Messaging - Moved lower to prevent overlaps */}
+      <div className={`absolute bottom-6 sm:bottom-8 w-[80%] ${loadingBarMaxWidth} flex flex-col items-center gap-3 z-30`}>
         
         {/* Status Message */}
         <div className="h-6 overflow-hidden flex items-center justify-center">
@@ -291,7 +340,7 @@ export const SplashScreen: React.FC<SplashScreenProps> = ({ onComplete }) => {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
               transition={{ duration: 0.25 }}
-              className="text-[12px] sm:text-xs text-[#1b1b1b]/80 font-medium tracking-wide text-center"
+              className="text-[11px] sm:text-xs text-[#1b1b1b]/80 font-medium tracking-wide text-center"
             >
               {LOADING_STATUSES[statusIndex]}
             </motion.p>
@@ -300,8 +349,8 @@ export const SplashScreen: React.FC<SplashScreenProps> = ({ onComplete }) => {
 
         {/* Loading Progress Bar */}
         <div className="w-full h-[4px] bg-[#d3d3d3] rounded-full overflow-hidden">
-          <motion.div
-            className="h-full bg-[#5500cb] shadow-[0_0_8px_rgba(85,0,203,0.15)]"
+          <div
+            className="h-full bg-[#5500cb] shadow-[0_0_8px_rgba(85,0,203,0.15)] transition-all duration-300 ease-out"
             style={{ width: `${progress}%` }}
           />
         </div>
@@ -312,8 +361,8 @@ export const SplashScreen: React.FC<SplashScreenProps> = ({ onComplete }) => {
         </span>
       </div>
 
-
     </div>
   );
 };
+
 export default SplashScreen;
