@@ -47,6 +47,9 @@ const TABS = [
   { id: "cards", label: "Career Cards", icon: Layers, desc: "Browse detailed career path cards" },
   { id: "story", label: "Story Mode", icon: MessageSquare, desc: "Real career stories from professionals" },
   { id: "challenge", label: "Challenge Mode", icon: Target, desc: "Real-world tasks from each field" },
+  { id: "insights", label: "Insights & Behavior", icon: Sparkles, desc: "Compass conclusions + behavior signals" },
+  { id: "domains", label: "Domains", icon: Brain, desc: "Personalized domain recommendations" },
+  { id: "quests", label: "Quests", icon: Trophy, desc: "Guided reflection quests" },
 ];
 
 const CareerNavigator = () => {
