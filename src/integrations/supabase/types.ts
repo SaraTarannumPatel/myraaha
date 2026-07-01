@@ -10282,6 +10282,10 @@ export type Database = {
         }
         Returns: boolean
       }
+      is_badge_eligible: {
+        Args: { _type: string; _user_id: string }
+        Returns: boolean
+      }
       is_email_verified: { Args: { _email: string }; Returns: boolean }
       log_activity_event: {
         Args: { _event: string; _payload?: Json; _route?: string }
