@@ -304,6 +304,21 @@ const CareerNavigator = () => {
         <TabsContent value="challenge" className="mt-6 outline-none">
           <ChallengeModeCards />
         </TabsContent>
+
+        {/* Insights & Behavior (moved from Curiosity Compass) */}
+        <TabsContent value="insights" className="mt-6 outline-none">
+          <CompassInsightsPanel />
+        </TabsContent>
+
+        {/* Domains (moved from Curiosity Compass) */}
+        <TabsContent value="domains" className="mt-6 outline-none">
+          <CompassDomainsPanel />
+        </TabsContent>
+
+        {/* Quests (moved from Curiosity Compass) */}
+        <TabsContent value="quests" className="mt-6 outline-none">
+          <CompassQuestsPanel />
+        </TabsContent>
       </Tabs>
 
       {/* Trending picks from every sector */}
