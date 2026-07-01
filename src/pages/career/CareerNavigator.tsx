@@ -10,13 +10,14 @@ import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 import {
   Navigation, MessageSquare, Target, Palette, Layers, Sparkles, ArrowLeft,
-  Brain, Loader2,
+  Brain, Loader2, Trophy,
 } from "lucide-react";
 import CareerCardDeck from "@/components/career/CareerCardDeck";
 import StoryModeCards from "@/components/career/StoryModeCards";
 import ChallengeModeCards from "@/components/career/ChallengeModeCards";
 import BlueprintCard, { type Blueprint } from "@/components/career/BlueprintCard";
 import TrendingSectorRail from "@/components/career/TrendingSectorRail";
+import { CompassInsightsPanel, CompassDomainsPanel, CompassQuestsPanel } from "@/components/career/CompassSignalPanels";
 import { useUserSignals } from "@/hooks/useUserSignals";
 import { useCuratedCompassFilter } from "@/hooks/useCuratedCompassFilter";
 import { buildBlueprintFromInteractions } from "@/lib/buildBlueprint";
@@ -46,6 +47,9 @@ const TABS = [
   { id: "cards", label: "Career Cards", icon: Layers, desc: "Browse detailed career path cards" },
   { id: "story", label: "Story Mode", icon: MessageSquare, desc: "Real career stories from professionals" },
   { id: "challenge", label: "Challenge Mode", icon: Target, desc: "Real-world tasks from each field" },
+  { id: "insights", label: "Insights & Behavior", icon: Sparkles, desc: "Compass conclusions + behavior signals" },
+  { id: "domains", label: "Domains", icon: Brain, desc: "Personalized domain recommendations" },
+  { id: "quests", label: "Quests", icon: Trophy, desc: "Guided reflection quests" },
 ];
 
 const CareerNavigator = () => {
@@ -299,6 +303,21 @@ const CareerNavigator = () => {
         {/* Challenge Mode */}
         <TabsContent value="challenge" className="mt-6 outline-none">
           <ChallengeModeCards />
+        </TabsContent>
+
+        {/* Insights & Behavior (moved from Curiosity Compass) */}
+        <TabsContent value="insights" className="mt-6 outline-none">
+          <CompassInsightsPanel />
+        </TabsContent>
+
+        {/* Domains (moved from Curiosity Compass) */}
+        <TabsContent value="domains" className="mt-6 outline-none">
+          <CompassDomainsPanel />
+        </TabsContent>
+
+        {/* Quests (moved from Curiosity Compass) */}
+        <TabsContent value="quests" className="mt-6 outline-none">
+          <CompassQuestsPanel />
         </TabsContent>
       </Tabs>
 
