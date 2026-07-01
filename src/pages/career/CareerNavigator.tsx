@@ -10,13 +10,14 @@ import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 import {
   Navigation, MessageSquare, Target, Palette, Layers, Sparkles, ArrowLeft,
-  Brain, Loader2,
+  Brain, Loader2, Trophy,
 } from "lucide-react";
 import CareerCardDeck from "@/components/career/CareerCardDeck";
 import StoryModeCards from "@/components/career/StoryModeCards";
 import ChallengeModeCards from "@/components/career/ChallengeModeCards";
 import BlueprintCard, { type Blueprint } from "@/components/career/BlueprintCard";
 import TrendingSectorRail from "@/components/career/TrendingSectorRail";
+import { CompassInsightsPanel, CompassDomainsPanel, CompassQuestsPanel } from "@/components/career/CompassSignalPanels";
 import { useUserSignals } from "@/hooks/useUserSignals";
 import { useCuratedCompassFilter } from "@/hooks/useCuratedCompassFilter";
 import { buildBlueprintFromInteractions } from "@/lib/buildBlueprint";
