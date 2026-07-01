@@ -1502,7 +1502,7 @@ const CuriosityCompass = () => {
                         <Button size="sm" variant="outline" className="text-xs h-7 px-3 rounded-lg">Set Goal</Button>
                       </div>
 
-                      <Button className="w-full text-xs" size="sm" onClick={() => { setShowNextSteps(false); setTab("domains"); }}>
+                      <Button className="w-full text-xs" size="sm" onClick={() => { setShowNextSteps(false); navigate("/dashboard/career-navigator"); }}>
                         View All Recommendations <ArrowRight size={12} className="ml-1.5" />
                       </Button>
                     </CardContent>
