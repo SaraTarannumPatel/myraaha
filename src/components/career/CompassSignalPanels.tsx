@@ -11,11 +11,47 @@ import { toast } from "sonner";
 import {
   Brain, Sparkles, Trophy, Target, Play, Check, ArrowRight, ArrowLeft,
   MessageSquare, Palette, BookmarkPlus, ChevronRight, Activity, Route,
-  Lightbulb, Heart, Compass,
+  Lightbulb, Heart, Compass, AlertTriangle, RefreshCw,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import InsightsView from "@/components/curiositycompass/InsightsView";
 import { useUserSignals } from "@/hooks/useUserSignals";
+import { Skeleton } from "@/components/ui/skeleton";
+
+/* ---------------- Shared loading + error primitives ---------------- */
+const PanelSkeleton = ({ rows = 3 }: { rows?: number }) => (
+  <div className="grid grid-cols-1 md:grid-cols-2 gap-6" aria-busy="true" aria-live="polite">
+    {Array.from({ length: rows }).map((_, i) => (
+      <div key={i} className="bg-white rounded-3xl border border-border/60 shadow-sm p-6 space-y-4">
+        <div className="flex items-start gap-4">
+          <Skeleton className="w-12 h-12 rounded-2xl" />
+          <div className="flex-1 space-y-2">
+            <Skeleton className="h-4 w-2/3" />
+            <Skeleton className="h-3 w-full" />
+            <Skeleton className="h-3 w-4/5" />
+          </div>
+        </div>
+        <Skeleton className="h-9 w-32 rounded-full" />
+      </div>
+    ))}
+  </div>
+);
+
+const PanelError = ({ message, onRetry }: { message: string; onRetry?: () => void }) => (
+  <Card className="rounded-3xl border-destructive/30 bg-destructive/5 shadow-sm">
+    <CardContent className="pt-6 pb-6 text-center space-y-3">
+      <div className="w-12 h-12 rounded-full bg-destructive/10 flex items-center justify-center mx-auto">
+        <AlertTriangle className="text-destructive w-6 h-6" />
+      </div>
+      <p className="font-body text-xs text-foreground max-w-sm mx-auto">{message}</p>
+      {onRetry && (
+        <Button size="sm" variant="outline" onClick={onRetry} className="rounded-full h-9 text-xs">
+          <RefreshCw size={12} className="mr-1.5" /> Try again
+        </Button>
+      )}
+    </CardContent>
+  </Card>
+);
 
 /* ---------------- Insights & Behavior ---------------- */
 export const CompassInsightsPanel = () => {
@@ -29,24 +65,37 @@ export const CompassInsightsPanel = () => {
   const [behaviorInsights, setBehaviorInsights] = useState<any>(null);
   const [aiLoading, setAiLoading] = useState(false);
 
+  const [error, setError] = useState<string | null>(null);
+
   const fetchConclusion = async () => {
     if (!user) return;
     setLoading(true);
-    const { data } = await supabase
-      .from("assessment_conclusions" as any)
-      .select("*")
-      .eq("user_id", user.id)
-      .eq("test_type", "combined")
-      .order("generated_at", { ascending: false })
-      .maybeSingle();
-    setConclusion(data);
-    setLoading(false);
+    setError(null);
+    try {
+      const { data, error: qErr } = await supabase
+        .from("assessment_conclusions" as any)
+        .select("*")
+        .eq("user_id", user.id)
+        .eq("test_type", "combined")
+        .order("generated_at", { ascending: false })
+        .maybeSingle();
+      if (qErr) throw qErr;
+      setConclusion(data);
+    } catch (e: any) {
+      setError(e?.message || "Could not load your insights.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
     if (!user) return;
     fetchConclusion();
-    supabase.from("interests").select("*").eq("user_id", user.id).then(({ data }) => setInterests(data || []));
+    supabase
+      .from("interests")
+      .select("*")
+      .eq("user_id", user.id)
+      .then(({ data }) => setInterests(data || []));
   }, [user?.id]);
 
   const regenerateConclusion = async () => {
@@ -90,12 +139,14 @@ export const CompassInsightsPanel = () => {
 
   return (
     <div className="space-y-8">
+      {error && <PanelError message={error} onRetry={fetchConclusion} />}
       <InsightsView
         conclusion={conclusion}
         loading={loading}
         regenerate={regenerateConclusion}
         regenerating={regenerating}
       />
+
 
       {/* Interest Blueprint */}
       <div className="bg-white rounded-3xl border border-border shadow-xl p-6 sm:p-8 space-y-6">
@@ -214,18 +265,29 @@ export const CompassDomainsPanel = () => {
   const { user } = useAuth();
   const [domains, setDomains] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const load = async () => {
+    if (!user) return;
+    setLoading(true);
+    setError(null);
+    try {
+      const { data, error: qErr } = await supabase
+        .from("domain_recommendations")
+        .select("*")
+        .eq("user_id", user.id)
+        .order("match_score", { ascending: false });
+      if (qErr) throw qErr;
+      setDomains(data || []);
+    } catch (e: any) {
+      setError(e?.message || "Could not load domain recommendations.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    if (!user) return;
-    supabase
-      .from("domain_recommendations")
-      .select("*")
-      .eq("user_id", user.id)
-      .order("match_score", { ascending: false })
-      .then(({ data }) => {
-        setDomains(data || []);
-        setLoading(false);
-      });
+    load();
   }, [user?.id]);
 
   const saveDomain = async (id: string) => {
@@ -234,7 +296,9 @@ export const CompassDomainsPanel = () => {
     toast.success("Domain saved");
   };
 
-  if (loading) return <p className="text-xs text-muted-foreground text-center py-8">Loading domains…</p>;
+  if (loading) return <PanelSkeleton rows={4} />;
+  if (error) return <PanelError message={error} onRetry={load} />;
+
 
   if (domains.length === 0) {
     return (
@@ -312,17 +376,33 @@ export const CompassQuestsPanel = () => {
   const [activeQuest, setActiveQuest] = useState<any | null>(null);
   const [promptIndex, setPromptIndex] = useState(0);
   const [responses, setResponses] = useState<Record<string, any>>({});
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
+  const loadQuests = async () => {
     if (!user) return;
-    Promise.all([
-      supabase.from("curiosity_quests").select("*"),
-      supabase.from("curiosity_quest_progress").select("*").eq("user_id", user.id),
-    ]).then(([q, p]) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const [q, p] = await Promise.all([
+        supabase.from("curiosity_quests").select("*"),
+        supabase.from("curiosity_quest_progress").select("*").eq("user_id", user.id),
+      ]);
+      if (q.error) throw q.error;
+      if (p.error) throw p.error;
       setQuests(q.data || []);
       setProgress(p.data || []);
-    });
+    } catch (e: any) {
+      setError(e?.message || "Could not load quests.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    loadQuests();
   }, [user?.id]);
+
 
   const getStatus = (id: string) => progress.find((p) => p.quest_id === id)?.status || "not_started";
 
@@ -351,8 +431,12 @@ export const CompassQuestsPanel = () => {
     setProgress(data || []);
   };
 
+  if (loading) return <PanelSkeleton rows={4} />;
+  if (error) return <PanelError message={error} onRetry={loadQuests} />;
+
   return (
     <AnimatePresence mode="wait">
+
       {activeQuest ? (
         <motion.div key="active" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
           <Card className="rounded-3xl border-border shadow-xl bg-white">
