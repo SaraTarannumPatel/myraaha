@@ -11,11 +11,47 @@ import { toast } from "sonner";
 import {
   Brain, Sparkles, Trophy, Target, Play, Check, ArrowRight, ArrowLeft,
   MessageSquare, Palette, BookmarkPlus, ChevronRight, Activity, Route,
-  Lightbulb, Heart, Compass,
+  Lightbulb, Heart, Compass, AlertTriangle, RefreshCw,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import InsightsView from "@/components/curiositycompass/InsightsView";
 import { useUserSignals } from "@/hooks/useUserSignals";
+import { Skeleton } from "@/components/ui/skeleton";
+
+/* ---------------- Shared loading + error primitives ---------------- */
+const PanelSkeleton = ({ rows = 3 }: { rows?: number }) => (
+  <div className="grid grid-cols-1 md:grid-cols-2 gap-6" aria-busy="true" aria-live="polite">
+    {Array.from({ length: rows }).map((_, i) => (
+      <div key={i} className="bg-white rounded-3xl border border-border/60 shadow-sm p-6 space-y-4">
+        <div className="flex items-start gap-4">
+          <Skeleton className="w-12 h-12 rounded-2xl" />
+          <div className="flex-1 space-y-2">
+            <Skeleton className="h-4 w-2/3" />
+            <Skeleton className="h-3 w-full" />
+            <Skeleton className="h-3 w-4/5" />
+          </div>
+        </div>
+        <Skeleton className="h-9 w-32 rounded-full" />
+      </div>
+    ))}
+  </div>
+);
+
+const PanelError = ({ message, onRetry }: { message: string; onRetry?: () => void }) => (
+  <Card className="rounded-3xl border-destructive/30 bg-destructive/5 shadow-sm">
+    <CardContent className="pt-6 pb-6 text-center space-y-3">
+      <div className="w-12 h-12 rounded-full bg-destructive/10 flex items-center justify-center mx-auto">
+        <AlertTriangle className="text-destructive w-6 h-6" />
+      </div>
+      <p className="font-body text-xs text-foreground max-w-sm mx-auto">{message}</p>
+      {onRetry && (
+        <Button size="sm" variant="outline" onClick={onRetry} className="rounded-full h-9 text-xs">
+          <RefreshCw size={12} className="mr-1.5" /> Try again
+        </Button>
+      )}
+    </CardContent>
+  </Card>
+);
 
 /* ---------------- Insights & Behavior ---------------- */
 export const CompassInsightsPanel = () => {
