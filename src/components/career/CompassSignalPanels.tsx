@@ -376,17 +376,33 @@ export const CompassQuestsPanel = () => {
   const [activeQuest, setActiveQuest] = useState<any | null>(null);
   const [promptIndex, setPromptIndex] = useState(0);
   const [responses, setResponses] = useState<Record<string, any>>({});
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
+  const loadQuests = async () => {
     if (!user) return;
-    Promise.all([
-      supabase.from("curiosity_quests").select("*"),
-      supabase.from("curiosity_quest_progress").select("*").eq("user_id", user.id),
-    ]).then(([q, p]) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const [q, p] = await Promise.all([
+        supabase.from("curiosity_quests").select("*"),
+        supabase.from("curiosity_quest_progress").select("*").eq("user_id", user.id),
+      ]);
+      if (q.error) throw q.error;
+      if (p.error) throw p.error;
       setQuests(q.data || []);
       setProgress(p.data || []);
-    });
+    } catch (e: any) {
+      setError(e?.message || "Could not load quests.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    loadQuests();
   }, [user?.id]);
+
 
   const getStatus = (id: string) => progress.find((p) => p.quest_id === id)?.status || "not_started";
 
