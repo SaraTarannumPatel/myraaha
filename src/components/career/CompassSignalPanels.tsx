@@ -139,12 +139,14 @@ export const CompassInsightsPanel = () => {
 
   return (
     <div className="space-y-8">
+      {error && <PanelError message={error} onRetry={fetchConclusion} />}
       <InsightsView
         conclusion={conclusion}
         loading={loading}
         regenerate={regenerateConclusion}
         regenerating={regenerating}
       />
+
 
       {/* Interest Blueprint */}
       <div className="bg-white rounded-3xl border border-border shadow-xl p-6 sm:p-8 space-y-6">
