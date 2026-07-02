@@ -265,18 +265,29 @@ export const CompassDomainsPanel = () => {
   const { user } = useAuth();
   const [domains, setDomains] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const load = async () => {
+    if (!user) return;
+    setLoading(true);
+    setError(null);
+    try {
+      const { data, error: qErr } = await supabase
+        .from("domain_recommendations")
+        .select("*")
+        .eq("user_id", user.id)
+        .order("match_score", { ascending: false });
+      if (qErr) throw qErr;
+      setDomains(data || []);
+    } catch (e: any) {
+      setError(e?.message || "Could not load domain recommendations.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    if (!user) return;
-    supabase
-      .from("domain_recommendations")
-      .select("*")
-      .eq("user_id", user.id)
-      .order("match_score", { ascending: false })
-      .then(({ data }) => {
-        setDomains(data || []);
-        setLoading(false);
-      });
+    load();
   }, [user?.id]);
 
   const saveDomain = async (id: string) => {
@@ -285,7 +296,9 @@ export const CompassDomainsPanel = () => {
     toast.success("Domain saved");
   };
 
-  if (loading) return <p className="text-xs text-muted-foreground text-center py-8">Loading domains…</p>;
+  if (loading) return <PanelSkeleton rows={4} />;
+  if (error) return <PanelError message={error} onRetry={load} />;
+
 
   if (domains.length === 0) {
     return (
