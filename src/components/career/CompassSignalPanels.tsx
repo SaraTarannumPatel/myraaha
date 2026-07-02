@@ -65,24 +65,37 @@ export const CompassInsightsPanel = () => {
   const [behaviorInsights, setBehaviorInsights] = useState<any>(null);
   const [aiLoading, setAiLoading] = useState(false);
 
+  const [error, setError] = useState<string | null>(null);
+
   const fetchConclusion = async () => {
     if (!user) return;
     setLoading(true);
-    const { data } = await supabase
-      .from("assessment_conclusions" as any)
-      .select("*")
-      .eq("user_id", user.id)
-      .eq("test_type", "combined")
-      .order("generated_at", { ascending: false })
-      .maybeSingle();
-    setConclusion(data);
-    setLoading(false);
+    setError(null);
+    try {
+      const { data, error: qErr } = await supabase
+        .from("assessment_conclusions" as any)
+        .select("*")
+        .eq("user_id", user.id)
+        .eq("test_type", "combined")
+        .order("generated_at", { ascending: false })
+        .maybeSingle();
+      if (qErr) throw qErr;
+      setConclusion(data);
+    } catch (e: any) {
+      setError(e?.message || "Could not load your insights.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
     if (!user) return;
     fetchConclusion();
-    supabase.from("interests").select("*").eq("user_id", user.id).then(({ data }) => setInterests(data || []));
+    supabase
+      .from("interests")
+      .select("*")
+      .eq("user_id", user.id)
+      .then(({ data }) => setInterests(data || []));
   }, [user?.id]);
 
   const regenerateConclusion = async () => {
