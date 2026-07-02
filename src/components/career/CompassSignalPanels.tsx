@@ -431,8 +431,12 @@ export const CompassQuestsPanel = () => {
     setProgress(data || []);
   };
 
+  if (loading) return <PanelSkeleton rows={4} />;
+  if (error) return <PanelError message={error} onRetry={loadQuests} />;
+
   return (
     <AnimatePresence mode="wait">
+
       {activeQuest ? (
         <motion.div key="active" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
           <Card className="rounded-3xl border-border shadow-xl bg-white">
