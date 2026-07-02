@@ -77,14 +77,14 @@
 /* Split Image Layout Redesign */
 .role-split-container {
   display: grid;
-  grid-template-columns: 1fr 1fr !important;
+  grid-template-columns: 1fr 1fr;
   gap: 6rem;
   align-items: center;
   margin-bottom: 6rem;
 }
 
 .role-split-container.reversed {
-  grid-template-columns: 1fr 1fr !important;
+  grid-template-columns: 1fr 1fr;
 }
 
 .role-split-text {

@@ -270,200 +270,204 @@ const CareerCardDeck = () => {
                 </div>
               </div>
 
-              <CardContent className="p-3.5 sm:p-6 space-y-4 sm:space-y-5">
-                {/* Description */}
-                {current.description && (
-                  <p className="font-body text-sm text-foreground leading-relaxed whitespace-pre-line">{current.description}</p>
-                )}
+              <CardContent className="p-3.5 sm:p-6 flex flex-col min-h-0">
+                <div className="career-navigator-card-body space-y-4 sm:space-y-5 pr-1 pb-2">
+                  {/* Description */}
+                  {current.description && (
+                    <p className="font-body text-sm text-foreground leading-relaxed whitespace-pre-line">{current.description}</p>
+                  )}
 
-                {/* Key Info Grid */}
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
-                  {current.salary_range && (
-                    <div className="p-3.5 rounded-xl bg-card border border-border/60 space-y-0.5 shadow-sm">
-                      <div className="flex items-center gap-1.5">
-                        <DollarSign size={13} className="text-accent-foreground" />
-                        <span className="font-body text-[10px] text-muted-foreground uppercase tracking-wider font-semibold">Salary Range</span>
+                  {/* Key Info Grid */}
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
+                    {current.salary_range && (
+                      <div className="p-3.5 rounded-xl bg-card border border-border/60 space-y-0.5 shadow-sm">
+                        <div className="flex items-center gap-1.5">
+                          <DollarSign size={13} className="text-accent-foreground" />
+                          <span className="font-body text-[10px] text-muted-foreground uppercase tracking-wider font-semibold">Salary Range</span>
+                        </div>
+                        <p className="font-display text-xs font-bold text-foreground">{current.salary_range}</p>
                       </div>
-                      <p className="font-display text-xs font-bold text-foreground">{current.salary_range}</p>
-                    </div>
-                  )}
-                  {current.demand_level && (
-                    <div className="p-3.5 rounded-xl bg-card border border-border/60 space-y-0.5 shadow-sm">
-                      <div className="flex items-center gap-1.5">
-                        <TrendingUp size={13} className={demandColor(current.demand_level)} />
-                        <span className="font-body text-[10px] text-muted-foreground uppercase tracking-wider font-semibold">Market Demand</span>
+                    )}
+                    {current.demand_level && (
+                      <div className="p-3.5 rounded-xl bg-card border border-border/60 space-y-0.5 shadow-sm">
+                        <div className="flex items-center gap-1.5">
+                          <TrendingUp size={13} className={demandColor(current.demand_level)} />
+                          <span className="font-body text-[10px] text-muted-foreground uppercase tracking-wider font-semibold">Market Demand</span>
+                        </div>
+                        <p className={`font-display text-xs font-bold ${demandColor(current.demand_level)}`}>{current.demand_level}</p>
                       </div>
-                      <p className={`font-display text-xs font-bold ${demandColor(current.demand_level)}`}>{current.demand_level}</p>
-                    </div>
-                  )}
-                  {current.growth_trajectory && (
-                    <div className="p-3.5 rounded-xl bg-card border border-border/60 space-y-0.5 shadow-sm">
-                      <div className="flex items-center gap-1.5">
-                        <Zap size={13} className="text-primary" />
-                        <span className="font-body text-[10px] text-muted-foreground uppercase tracking-wider font-semibold">Growth Potential</span>
+                    )}
+                    {current.growth_trajectory && (
+                      <div className="p-3.5 rounded-xl bg-card border border-border/60 space-y-0.5 shadow-sm">
+                        <div className="flex items-center gap-1.5">
+                          <Zap size={13} className="text-primary" />
+                          <span className="font-body text-[10px] text-muted-foreground uppercase tracking-wider font-semibold">Growth Potential</span>
+                        </div>
+                        <p className="font-display text-xs font-bold text-foreground">{current.growth_trajectory}</p>
                       </div>
-                      <p className="font-display text-xs font-bold text-foreground">{current.growth_trajectory}</p>
-                    </div>
-                  )}
-                </div>
-
-                {/* Day in the life */}
-                {current.day_to_day && (
-                  <div className="p-4 rounded-2xl bg-muted/30 border border-border/50">
-                    <div className="flex items-center gap-2 mb-1.5">
-                      <Clock size={14} className="text-primary" />
-                      <span className="font-display text-xs font-semibold text-foreground uppercase tracking-wider">A Typical Day</span>
-                    </div>
-                    <p className="font-body text-xs text-muted-foreground leading-relaxed">{current.day_to_day}</p>
+                    )}
                   </div>
-                )}
 
-                {/* Expandable CTA */}
-                <button
-                  onClick={() => setExpanded(!expanded)}
-                  className="w-full text-center font-body text-xs text-primary font-medium hover:underline py-1.5 border-t border-border/20"
-                >
-                  {expanded ? "Collapse detailed breakdown ↑" : "Reveal detailed requirements (skills, trends, courses) ↓"}
-                </button>
-
-                <AnimatePresence>
-                  {expanded && (
-                    <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} exit={{ height: 0, opacity: 0 }} className="space-y-4 overflow-hidden pt-2">
-                      {/* Skills */}
-                      {current.related_skills && current.related_skills.length > 0 && (
-                        <div className="space-y-1.5">
-                          <h4 className="font-display text-xs font-semibold flex items-center gap-1.5 text-foreground"><Brain size={13} className="text-primary" /> Skills Required</h4>
-                          <div className="flex flex-wrap gap-1.5">
-                            {current.related_skills.map(s => <Badge key={s} variant="outline" className="text-xs">{s}</Badge>)}
-                          </div>
-                        </div>
-                      )}
-
-                      {/* Tools */}
-                      {current.tools_certifications && current.tools_certifications.length > 0 && (
-                        <div className="space-y-1.5">
-                          <h4 className="font-display text-xs font-semibold flex items-center gap-1.5 text-foreground"><Star size={13} className="text-accent-foreground" /> Tools & Certifications</h4>
-                          <div className="flex flex-wrap gap-1.5">
-                            {current.tools_certifications.map(t => <Badge key={t} variant="secondary" className="text-xs">{t}</Badge>)}
-                          </div>
-                        </div>
-                      )}
-
-                      {/* Industry Trends */}
-                      {current.industry_trends && (
-                        <div className="p-3.5 rounded-xl bg-accent/5 border border-accent/15 space-y-1.5">
-                          <div className="flex items-center gap-2">
-                            <TrendingUp size={13} className="text-accent-foreground" />
-                            <span className="font-display text-xs font-semibold text-foreground uppercase tracking-wider">Industry Trends</span>
-                          </div>
-                          <p className="font-body text-xs text-muted-foreground leading-relaxed">{current.industry_trends}</p>
-                        </div>
-                      )}
-
-                      {/* Soft Skills */}
-                      {current.soft_skills && current.soft_skills.length > 0 && (
-                        <div className="space-y-1.5">
-                          <h4 className="font-display text-xs font-semibold flex items-center gap-1.5 text-foreground">💬 Soft Skills</h4>
-                          <div className="flex flex-wrap gap-1.5">
-                            {current.soft_skills.map(s => <Badge key={s} variant="outline" className="text-xs">{s}</Badge>)}
-                          </div>
-                        </div>
-                      )}
-
-                      {/* Interests */}
-                      {current.interests && current.interests.length > 0 && (
-                        <div className="space-y-1.5">
-                          <h4 className="font-display text-xs font-semibold flex items-center gap-1.5 text-foreground">✨ Fit indicators</h4>
-                          <div className="flex flex-wrap gap-1.5">
-                            {current.interests.map(s => <Badge key={s} variant="secondary" className="text-xs">{s}</Badge>)}
-                          </div>
-                        </div>
-                      )}
-
-                      {/* Countries in demand */}
-                      {current.countries_in_demand && current.countries_in_demand.length > 0 && (
-                        <div className="space-y-1.5">
-                          <h4 className="font-display text-xs font-semibold flex items-center gap-1.5 text-foreground">🌍 Global Demand Locations</h4>
-                          <div className="flex flex-wrap gap-1.5">
-                            {current.countries_in_demand.map(c => <Badge key={c} variant="outline" className="text-xs">{c}</Badge>)}
-                          </div>
-                        </div>
-                      )}
-
-                      {/* Related job roles */}
-                      {current.related_job_roles && current.related_job_roles.length > 0 && (
-                        <div className="space-y-1.5">
-                          <h4 className="font-display text-xs font-semibold flex items-center gap-1.5 text-foreground">👔 Related Job Titles</h4>
-                          <div className="flex flex-wrap gap-1.5">
-                            {current.related_job_roles.map(r => <Badge key={r} variant="outline" className="text-xs">{r}</Badge>)}
-                          </div>
-                        </div>
-                      )}
-
-                      {/* Related subjects */}
-                      {current.related_subjects && current.related_subjects.length > 0 && (
-                        <div className="space-y-1.5">
-                          <h4 className="font-display text-xs font-semibold flex items-center gap-1.5 text-foreground">📚 Related Academic Subjects</h4>
-                          <div className="flex flex-wrap gap-1.5">
-                            {current.related_subjects.map(s => <Badge key={s} variant="outline" className="text-xs">{s}</Badge>)}
-                          </div>
-                        </div>
-                      )}
-
-                      {/* Related universities */}
-                      {current.related_universities && current.related_universities.length > 0 && (
-                        <div className="space-y-1.5">
-                          <h4 className="font-display text-xs font-semibold flex items-center gap-1.5 text-foreground">🎓 Key Target Universities</h4>
-                          <div className="flex flex-wrap gap-1.5">
-                            {current.related_universities.slice(0, 12).map(u => <Badge key={u} variant="outline" className="text-xs">{u}</Badge>)}
-                          </div>
-                        </div>
-                      )}
-
-                      {/* Related courses */}
-                      {current.related_courses && current.related_courses.length > 0 && (
-                        <div className="space-y-1.5">
-                          <h4 className="font-display text-xs font-semibold flex items-center gap-1.5 text-foreground">💻 Suggested Learning Courses</h4>
-                          <div className="flex flex-wrap gap-1.5">
-                            {current.related_courses.slice(0, 12).map(c => <Badge key={c} variant="outline" className="text-xs">{c}</Badge>)}
-                          </div>
-                        </div>
-                      )}
-                    </motion.div>
+                  {/* Day in the life */}
+                  {current.day_to_day && (
+                    <div className="p-4 rounded-2xl bg-muted/30 border border-border/50">
+                      <div className="flex items-center gap-2 mb-1.5">
+                        <Clock size={14} className="text-primary" />
+                        <span className="font-display text-xs font-semibold text-foreground uppercase tracking-wider">A Typical Day</span>
+                      </div>
+                      <p className="font-body text-xs text-muted-foreground leading-relaxed">{current.day_to_day}</p>
+                    </div>
                   )}
-                </AnimatePresence>
 
-                {/* Interaction Buttons */}
-                <div className="grid grid-cols-4 gap-1 sm:gap-2 pt-4 border-t border-border/50 font-body">
-                  {([
-                    { type: "like" as InteractionType, icon: ThumbsUp, label: "Like", activeClass: "bg-primary hover:bg-primary/90 border-primary text-primary-foreground font-semibold" },
-                    { type: "love" as InteractionType, icon: Heart, label: "Love", activeClass: "bg-terracotta hover:bg-terracotta/90 border-terracotta text-primary-foreground font-semibold" },
-                    { type: "bookmark" as InteractionType, icon: Bookmark, label: "Save", activeClass: "bg-blue-500 hover:bg-blue-600 border-blue-500 text-white font-semibold" },
-                    { type: "not_for_me" as InteractionType, icon: XCircle, label: "Not Me", activeClass: "bg-muted-foreground hover:bg-muted-foreground/90 text-primary-foreground font-semibold" },
-                  ]).map(btn => {
-                    const active = interactions[current.id] === btn.type;
-                    return (
-                      <Button
-                        key={btn.type}
-                        variant={active ? "default" : "outline"}
-                        className={`flex flex-col items-center gap-1.5 h-auto py-2 sm:py-2.5 px-0.5 sm:px-2 rounded-xl transition-all ${active ? btn.activeClass : "border-border/80 hover:bg-muted/40 hover:border-primary/30"}`}
-                        onClick={() => handleInteraction(current.id, btn.type)}
-                      >
-                        <btn.icon size={16} className={active ? "fill-current" : ""} />
-                        <span className="text-[10px] uppercase tracking-wider">{btn.label}</span>
-                      </Button>
-                    );
-                  })}
+                  {/* Expandable CTA */}
+                  <button
+                    onClick={() => setExpanded(!expanded)}
+                    className="w-full text-center font-body text-xs text-primary font-medium hover:underline py-1.5 border-t border-border/20"
+                  >
+                    {expanded ? "Collapse detailed breakdown ↑" : "Reveal detailed requirements (skills, trends, courses) ↓"}
+                  </button>
+
+                  <AnimatePresence>
+                    {expanded && (
+                      <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} exit={{ height: 0, opacity: 0 }} className="space-y-4 overflow-hidden pt-2">
+                        {/* Skills */}
+                        {current.related_skills && current.related_skills.length > 0 && (
+                          <div className="space-y-1.5">
+                            <h4 className="font-display text-xs font-semibold flex items-center gap-1.5 text-foreground"><Brain size={13} className="text-primary" /> Skills Required</h4>
+                            <div className="flex flex-wrap gap-1.5">
+                              {current.related_skills.map(s => <Badge key={s} variant="outline" className="text-xs">{s}</Badge>)}
+                            </div>
+                          </div>
+                        )}
+
+                        {/* Tools */}
+                        {current.tools_certifications && current.tools_certifications.length > 0 && (
+                          <div className="space-y-1.5">
+                            <h4 className="font-display text-xs font-semibold flex items-center gap-1.5 text-foreground"><Star size={13} className="text-accent-foreground" /> Tools & Certifications</h4>
+                            <div className="flex flex-wrap gap-1.5">
+                              {current.tools_certifications.map(t => <Badge key={t} variant="secondary" className="text-xs">{t}</Badge>)}
+                            </div>
+                          </div>
+                        )}
+
+                        {/* Industry Trends */}
+                        {current.industry_trends && (
+                          <div className="p-3.5 rounded-xl bg-accent/5 border border-accent/15 space-y-1.5">
+                            <div className="flex items-center gap-2">
+                              <TrendingUp size={13} className="text-accent-foreground" />
+                              <span className="font-display text-xs font-semibold text-foreground uppercase tracking-wider">Industry Trends</span>
+                            </div>
+                            <p className="font-body text-xs text-muted-foreground leading-relaxed">{current.industry_trends}</p>
+                          </div>
+                        )}
+
+                        {/* Soft Skills */}
+                        {current.soft_skills && current.soft_skills.length > 0 && (
+                          <div className="space-y-1.5">
+                            <h4 className="font-display text-xs font-semibold flex items-center gap-1.5 text-foreground">💬 Soft Skills</h4>
+                            <div className="flex flex-wrap gap-1.5">
+                              {current.soft_skills.map(s => <Badge key={s} variant="outline" className="text-xs">{s}</Badge>)}
+                            </div>
+                          </div>
+                        )}
+
+                        {/* Interests */}
+                        {current.interests && current.interests.length > 0 && (
+                          <div className="space-y-1.5">
+                            <h4 className="font-display text-xs font-semibold flex items-center gap-1.5 text-foreground">✨ Fit indicators</h4>
+                            <div className="flex flex-wrap gap-1.5">
+                              {current.interests.map(s => <Badge key={s} variant="secondary" className="text-xs">{s}</Badge>)}
+                            </div>
+                          </div>
+                        )}
+
+                        {/* Countries in demand */}
+                        {current.countries_in_demand && current.countries_in_demand.length > 0 && (
+                          <div className="space-y-1.5">
+                            <h4 className="font-display text-xs font-semibold flex items-center gap-1.5 text-foreground">🌍 Global Demand Locations</h4>
+                            <div className="flex flex-wrap gap-1.5">
+                              {current.countries_in_demand.map(c => <Badge key={c} variant="outline" className="text-xs">{c}</Badge>)}
+                            </div>
+                          </div>
+                        )}
+
+                        {/* Related job roles */}
+                        {current.related_job_roles && current.related_job_roles.length > 0 && (
+                          <div className="space-y-1.5">
+                            <h4 className="font-display text-xs font-semibold flex items-center gap-1.5 text-foreground">👔 Related Job Titles</h4>
+                            <div className="flex flex-wrap gap-1.5">
+                              {current.related_job_roles.map(r => <Badge key={r} variant="outline" className="text-xs">{r}</Badge>)}
+                            </div>
+                          </div>
+                        )}
+
+                        {/* Related subjects */}
+                        {current.related_subjects && current.related_subjects.length > 0 && (
+                          <div className="space-y-1.5">
+                            <h4 className="font-display text-xs font-semibold flex items-center gap-1.5 text-foreground">📚 Related Academic Subjects</h4>
+                            <div className="flex flex-wrap gap-1.5">
+                              {current.related_subjects.map(s => <Badge key={s} variant="outline" className="text-xs">{s}</Badge>)}
+                            </div>
+                          </div>
+                        )}
+
+                        {/* Related universities */}
+                        {current.related_universities && current.related_universities.length > 0 && (
+                          <div className="space-y-1.5">
+                            <h4 className="font-display text-xs font-semibold flex items-center gap-1.5 text-foreground">🎓 Key Target Universities</h4>
+                            <div className="flex flex-wrap gap-1.5">
+                              {current.related_universities.slice(0, 12).map(u => <Badge key={u} variant="outline" className="text-xs">{u}</Badge>)}
+                            </div>
+                          </div>
+                        )}
+
+                        {/* Related courses */}
+                        {current.related_courses && current.related_courses.length > 0 && (
+                          <div className="space-y-1.5">
+                            <h4 className="font-display text-xs font-semibold flex items-center gap-1.5 text-foreground">💻 Suggested Learning Courses</h4>
+                            <div className="flex flex-wrap gap-1.5">
+                              {current.related_courses.slice(0, 12).map(c => <Badge key={c} variant="outline" className="text-xs">{c}</Badge>)}
+                            </div>
+                          </div>
+                        )}
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
                 </div>
 
-                {/* Navigation Controls */}
-                <div className="flex justify-between pt-1 border-t border-border/10">
-                  <Button variant="ghost" size="sm" onClick={() => { setCurrentIndex(Math.max(0, currentIndex - 1)); setExpanded(false); }} disabled={currentIndex === 0} className="text-xs rounded-full h-[36px] px-4">
-                    <ChevronLeft size={14} className="mr-1.5" /> Previous
-                  </Button>
-                  <Button variant="ghost" size="sm" onClick={() => { setCurrentIndex(Math.min(filtered.length - 1, currentIndex + 1)); setExpanded(false); }} disabled={currentIndex >= filtered.length - 1} className="text-xs rounded-full h-[36px] px-4">
-                    Next <ChevronRight size={14} className="ml-1.5" />
-                  </Button>
+                <div className="pt-4 border-t border-border/50 space-y-4">
+                  {/* Interaction Buttons */}
+                  <div className="grid grid-cols-4 gap-1 sm:gap-2 font-body">
+                    {([
+                      { type: "like" as InteractionType, icon: ThumbsUp, label: "Like", activeClass: "bg-primary hover:bg-primary/90 border-primary text-primary-foreground font-semibold" },
+                      { type: "love" as InteractionType, icon: Heart, label: "Love", activeClass: "bg-terracotta hover:bg-terracotta/90 border-terracotta text-primary-foreground font-semibold" },
+                      { type: "bookmark" as InteractionType, icon: Bookmark, label: "Save", activeClass: "bg-blue-500 hover:bg-blue-600 border-blue-500 text-white font-semibold" },
+                      { type: "not_for_me" as InteractionType, icon: XCircle, label: "Not Me", activeClass: "bg-muted-foreground hover:bg-muted-foreground/90 text-primary-foreground font-semibold" },
+                    ]).map(btn => {
+                      const active = interactions[current.id] === btn.type;
+                      return (
+                        <Button
+                          key={btn.type}
+                          variant={active ? "default" : "outline"}
+                          className={`flex flex-col items-center gap-1.5 h-auto py-2 sm:py-2.5 px-0.5 sm:px-2 rounded-xl transition-all ${active ? btn.activeClass : "border-border/80 hover:bg-muted/40 hover:border-primary/30"}`}
+                          onClick={() => handleInteraction(current.id, btn.type)}
+                        >
+                          <btn.icon size={16} className={active ? "fill-current" : ""} />
+                          <span className="text-[10px] uppercase tracking-wider">{btn.label}</span>
+                        </Button>
+                      );
+                    })}
+                  </div>
+
+                  {/* Navigation Controls */}
+                  <div className="flex justify-between pt-1 border-t border-border/10">
+                    <Button variant="ghost" size="sm" onClick={() => { setCurrentIndex(Math.max(0, currentIndex - 1)); setExpanded(false); }} disabled={currentIndex === 0} className="text-xs rounded-full h-[36px] px-4">
+                      <ChevronLeft size={14} className="mr-1.5" /> Previous
+                    </Button>
+                    <Button variant="ghost" size="sm" onClick={() => { setCurrentIndex(Math.min(filtered.length - 1, currentIndex + 1)); setExpanded(false); }} disabled={currentIndex >= filtered.length - 1} className="text-xs rounded-full h-[36px] px-4">
+                      Next <ChevronRight size={14} className="ml-1.5" />
+                    </Button>
+                  </div>
                 </div>
               </CardContent>
             </Card>

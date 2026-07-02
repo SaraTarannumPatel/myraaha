@@ -660,7 +660,7 @@
 .job-modal-content {
   width: 100%;
   max-width: 800px;
-  height: 100vh;
+  height: 100dvh;
   background: var(--myraaha-bg-grey);
   padding: 6rem 5rem;
   overflow-y: auto;
@@ -1079,7 +1079,7 @@
   /* Modals Optimization */
   .job-modal-content, .apply-modal-content {
     width: 100% !important;
-    height: 100vh !important;
+    height: 100dvh !important;
     border-radius: 0 !important;
     padding: 4rem 1.5rem 2rem !important;
     overflow-y: auto;

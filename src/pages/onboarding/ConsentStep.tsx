@@ -88,7 +88,7 @@ const ConsentStep = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background flex flex-col">
+    <div className="min-h-[100dvh] bg-background flex flex-col overflow-hidden">
       <OnboardingProgressBar progress={90} />
       <OnboardingRewardBanner currentProgress={90} showCelebration={!showUID} />
       {showUID && profile && (
@@ -99,11 +99,11 @@ const ConsentStep = () => {
           onContinue={handleEnterApp}
         />
       )}
-      <div className="flex-1 flex flex-col items-center justify-center p-6 py-4 pb-6">
+      <div className="flex-1 onboarding-scroll-safe onboarding-page-inner flex flex-col items-center justify-center p-6 py-4 pb-6">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
-          className="max-w-xl w-full space-y-4"
+          className="max-w-xl w-full space-y-4 my-auto"
         >
           <div className="text-center space-y-2">
             <p className="progress-step-label text-primary uppercase tracking-wider">Almost There!</p>

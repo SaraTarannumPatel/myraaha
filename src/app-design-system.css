@@ -1120,3 +1120,166 @@
   transition-duration: 200ms !important;
   transition-timing-function: ease !important;
 }
+
+/* ==========================================================================
+   VERTICAL VIEWPORT RESPONSIVENESS
+   Short screens (Capacitor APK, landscape, iPhone SE, split-screen, etc.)
+   These rules fire when the *height* is constrained — they compress padding
+   and spacing so that onboarding, auth, and intro pages all fit without
+   clipping or requiring forced scrolling.
+   ========================================================================== */
+
+/* --- SHORT screens (max-height: 700px) ----------------------------------- */
+@media (max-height: 700px) {
+  /* Onboarding: compress vertical rhythm */
+  .myraaha-app .onboarding-welcome-headline {
+    font-size: 26px !important;
+    margin-top: 0 !important;
+  }
+  .myraaha-app .onboarding-welcome-desc {
+    font-size: 13px !important;
+    margin-top: 0.5rem !important;
+  }
+  .myraaha-app .onboarding-step-heading {
+    font-size: 22px !important;
+  }
+  .myraaha-app .onboarding-step-desc {
+    font-size: 13px !important;
+  }
+  /* Reduce inner padding on all onboarding flex containers */
+  .myraaha-app .onboarding-page-inner {
+    padding-top: 0.75rem !important;
+    padding-bottom: 0.75rem !important;
+    gap: 0.75rem !important;
+  }
+  /* Reduce progress banner height */
+  .myraaha-app [class*="onboarding-reward"],
+  .myraaha-app [class*="OnboardingReward"] {
+    padding-top: 0.5rem !important;
+    padding-bottom: 0.5rem !important;
+  }
+
+  /* Auth styles for short screens */
+  .myraaha-app .auth-illustration {
+    display: none !important;
+  }
+  .myraaha-app .auth-input {
+    height: 42px !important;
+    min-height: 42px !important;
+    font-size: 14px !important;
+    padding-left: 0.75rem !important;
+    padding-right: 0.75rem !important;
+  }
+  .myraaha-app .social-btn {
+    width: 40px !important;
+    height: 40px !important;
+  }
+}
+
+/* --- ULTRA-SHORT screens (max-height: 580px) ------------------------------ */
+@media (max-height: 580px) {
+  .myraaha-app .onboarding-welcome-headline {
+    font-size: 22px !important;
+  }
+  .myraaha-app .onboarding-step-heading {
+    font-size: 18px !important;
+  }
+  /* On very short screens, the icon topper can be reduced */
+  .myraaha-app .onboarding-icon-topper {
+    width: 44px !important;
+    height: 44px !important;
+  }
+}
+
+/* ==========================================================================
+   SCROLLABLE FALLBACK FOR APP PAGES
+   When content overflows the viewport height (e.g. EducationalStatus with many
+   options, JourneyDiscovery with 15 questions), allow native scrolling.
+   This is applied to the outer wrapper of each onboarding page's content zone.
+   ========================================================================== */
+.myraaha-app .onboarding-scroll-safe {
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  max-height: 100dvh;
+}
+
+/* Mobile bottom nav responsive scaling */
+@media (max-width: 430px) {
+  .mobile-bottom-nav-label {
+    display: none !important;
+  }
+  .mobile-bottom-nav-link {
+    gap: 0 !important;
+  }
+}
+
+/* Landing page word wrapping fixes */
+@media (max-width: 768px) {
+  .myraaha-landing .hero-title, 
+  .myraaha-landing .section-title, 
+  .myraaha-landing .mission-title, 
+  .myraaha-landing .beacon-title, 
+  .myraaha-landing .n-v3-title, 
+  .myraaha-landing .footer-cta-title,
+  .hero-title, 
+  .section-title, 
+  .mission-title, 
+  .beacon-title, 
+  .n-v3-title, 
+  .footer-cta-title {
+    word-break: normal !important;
+    overflow-wrap: break-word !important;
+    hyphens: none !important;
+  }
+}
+
+/* ==========================================================================
+   CAREER NAVIGATOR VERTICAL RESPONSIVENESS
+   Constrain card height and provide scrollable fallbacks on short screen heights
+   to ensure action buttons are always visible on mobile/hybrid views.
+   ========================================================================== */
+.career-navigator-card-body {
+  display: block;
+}
+
+@media (max-height: 760px), (max-width: 640px) {
+  .career-navigator-card-body {
+    max-height: clamp(200px, 42dvh, 320px);
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    padding-right: 6px;
+    margin-bottom: 2px;
+  }
+
+  /* Sleek custom scrollbars */
+  .career-navigator-card-body::-webkit-scrollbar {
+    width: 4px;
+  }
+  .career-navigator-card-body::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .career-navigator-card-body::-webkit-scrollbar-thumb {
+    background: rgba(156, 163, 175, 0.3);
+    border-radius: 9999px;
+  }
+  .career-navigator-card-body::-webkit-scrollbar-thumb:hover {
+    background: rgba(156, 163, 175, 0.5);
+  }
+}
+
+/* Compact overrides for header & visual mode items on short viewports */
+@media (max-height: 720px) {
+  .career-navigator-header-padding {
+    padding: 0.75rem 1rem !important;
+  }
+  .career-navigator-header-title {
+    font-size: 1.25rem !important;
+  }
+  .career-navigator-header-desc {
+    font-size: 0.75rem !important;
+    margin-top: 0.25rem !important;
+  }
+}
+
+
+

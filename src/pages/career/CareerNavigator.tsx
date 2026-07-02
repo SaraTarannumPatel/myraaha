@@ -155,17 +155,17 @@ const CareerNavigator = () => {
   return (
     <div className="space-y-6 px-3 sm:px-4 py-4 sm:py-6 max-w-6xl mx-auto">
       {/* Header */}
-      <div className="bg-white rounded-3xl border border-border shadow-xl p-5 sm:p-6 relative overflow-hidden">
+      <div className="bg-white rounded-3xl border border-border shadow-xl p-5 sm:p-6 relative overflow-hidden career-navigator-header-padding">
         <div className="absolute inset-0 bg-gradient-to-br from-primary/[0.05] to-accent/[0.03] pointer-events-none" />
         <div className="relative z-10 flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-6">
           <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-primary to-accent flex items-center justify-center shrink-0 shadow-md">
             <Navigation className="text-white" size={26} />
           </div>
           <div className="flex-1 min-w-0">
-            <h1 className="font-display text-2xl font-bold text-[#5500cb] tracking-tight">
+            <h1 className="font-display text-2xl font-bold text-[#5500cb] tracking-tight career-navigator-header-title">
               Career Navigator
             </h1>
-            <p className="font-body text-sm text-muted-foreground mt-1">
+            <p className="font-body text-sm text-muted-foreground mt-1 career-navigator-header-desc">
               Hey {greeting} — every card here is hand-picked from what you shared during onboarding and your Curiosity Compass results.
             </p>
             {hasPersonalization && personalization && (

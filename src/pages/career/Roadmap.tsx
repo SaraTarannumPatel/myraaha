@@ -369,12 +369,12 @@ export default function Roadmap() {
       {coachNote && (
         <Card className="border-indigo-200 bg-indigo-50/60">
           <CardContent className="p-4 space-y-3">
-            <div className="flex items-start justify-between gap-3">
+            <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3">
               <div>
                 <p className="font-semibold text-indigo-900">Virtual Coach suggests a reroute</p>
                 <p className="text-sm text-indigo-800 mt-1">{coachNote.reason}</p>
               </div>
-              <div className="flex gap-2 shrink-0">
+              <div className="flex flex-wrap gap-2 w-full sm:w-auto sm:shrink-0 mt-2 sm:mt-0 justify-start sm:justify-end">
                 <Button size="sm" variant="ghost" onClick={dismissCoach}>Dismiss</Button>
                 <Button size="sm" variant="outline" onClick={ackCoach}>Acknowledge & Save</Button>
                 <Button size="sm" onClick={applyCoachMilestones}>Apply milestones</Button>
@@ -402,12 +402,12 @@ export default function Roadmap() {
       {therapistAdjust?.adjustmentProposals?.length > 0 && (
         <Card className="border-emerald-200 bg-emerald-50/60">
           <CardContent className="p-4 space-y-3">
-            <div className="flex items-start justify-between gap-3">
+            <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3">
               <div>
                 <p className="font-semibold text-emerald-900">Career Therapist pacing adjustments</p>
                 <p className="text-sm text-emerald-800 mt-1">Emotional readiness: {therapistAdjust.emotionalReadiness || "—"}</p>
               </div>
-              <Button size="sm" onClick={applyTherapistAdjustments}>Apply</Button>
+              <Button size="sm" onClick={applyTherapistAdjustments} className="w-full sm:w-auto mt-2 sm:mt-0">Apply</Button>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
               {therapistAdjust.adjustmentProposals.slice(0, 6).map((p: any, i: number) => (
@@ -427,7 +427,7 @@ export default function Roadmap() {
           <h1 className="text-2xl md:text-3xl font-bold">AI Roadmaps</h1>
           <p className="text-sm text-muted-foreground">Adaptive learning paths built from what you liked, loved, and bookmarked.</p>
         </div>
-        <div className="flex gap-2 items-center">
+        <div className="flex flex-wrap gap-2 items-center w-full sm:w-auto mt-2 sm:mt-0">
           <Badge variant={demoMode ? "default" : "outline"} className="text-[10px]">
             {demoMode ? "Demo Mode ON" : "Live Mode"}
           </Badge>

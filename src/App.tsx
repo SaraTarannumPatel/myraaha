@@ -90,7 +90,9 @@ import RewardCelebrationManager from "@/components/curiositycompass/RewardCelebr
 const queryClient = new QueryClient();
 
 const AppContent = () => {
-  const [showSplash, setShowSplash] = useState(true);
+  const [showSplash, setShowSplash] = useState(() => {
+    return !window.location.pathname.startsWith("/dashboard");
+  });
   const { isReady } = useAuth();
 
   return (

@@ -25,15 +25,15 @@ const UserTypeSelection = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background flex flex-col">
+    <div className="min-h-[100dvh] bg-background flex flex-col overflow-hidden">
       <OnboardingProgressBar progress={20} />
       <OnboardingRewardBanner currentProgress={20} />
 
-      <div className="flex-1 flex flex-col items-center justify-center p-4 sm:p-6 py-4 pb-6">
+      <div className="flex-1 onboarding-scroll-safe onboarding-page-inner flex flex-col items-center justify-center p-4 sm:p-6 py-4 pb-6">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
-          className="max-w-md w-full space-y-5"
+          className="max-w-md w-full space-y-5 my-auto"
         >
           <div className="text-center space-y-2">
             <p className="progress-step-label text-[#5500cb] tracking-wider uppercase text-xs font-semibold">Step 1 of 4</p>

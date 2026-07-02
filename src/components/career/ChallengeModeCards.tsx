@@ -328,94 +328,98 @@ const ChallengeModeCards = () => {
                 </div>
               </div>
 
-              <CardContent className="p-3.5 sm:p-6 space-y-4 sm:space-y-5">
-                {/* Task Description */}
-                <div className="p-4 rounded-2xl bg-muted/30 border border-border/50">
-                  <div className="flex items-center gap-2 mb-2">
-                    <Target size={14} className="text-primary" />
-                    <span className="font-display text-xs font-semibold text-foreground uppercase tracking-wider">The Actual Task</span>
+              <CardContent className="p-3.5 sm:p-6 flex flex-col min-h-0">
+                <div className="career-navigator-card-body space-y-4 sm:space-y-5 pr-1 pb-2">
+                  {/* Task Description */}
+                  <div className="p-4 rounded-2xl bg-muted/30 border border-border/50">
+                    <div className="flex items-center gap-2 mb-2">
+                      <Target size={14} className="text-primary" />
+                      <span className="font-display text-xs font-semibold text-foreground uppercase tracking-wider">The Actual Task</span>
+                    </div>
+                    <p className="font-body text-sm text-foreground leading-relaxed">{current.task_description}</p>
                   </div>
-                  <p className="font-body text-sm text-foreground leading-relaxed">{current.task_description}</p>
-                </div>
 
-                {/* Info Grid */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  {/* Tools */}
-                  {current.tools_used.length > 0 && (
-                    <div className="p-4 rounded-xl bg-card border border-border/60 space-y-2">
-                      <div className="flex items-center gap-1.5">
-                        <Wrench size={13} className="text-primary" />
-                        <span className="font-body text-xs font-semibold text-muted-foreground">Tools You'll Use</span>
+                  {/* Info Grid */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    {/* Tools */}
+                    {current.tools_used.length > 0 && (
+                      <div className="p-4 rounded-xl bg-card border border-border/60 space-y-2">
+                        <div className="flex items-center gap-1.5">
+                          <Wrench size={13} className="text-primary" />
+                          <span className="font-body text-xs font-semibold text-muted-foreground">Tools You'll Use</span>
+                        </div>
+                        <div className="flex flex-wrap gap-1">
+                          {current.tools_used.map(t => <Badge key={t} variant="outline" className="text-[10px]">{t}</Badge>)}
+                        </div>
                       </div>
-                      <div className="flex flex-wrap gap-1">
-                        {current.tools_used.map(t => <Badge key={t} variant="outline" className="text-[10px]">{t}</Badge>)}
+                    )}
+
+                    {/* Skills */}
+                    {current.skills_needed.length > 0 && (
+                      <div className="p-4 rounded-xl bg-card border border-border/60 space-y-2">
+                        <div className="flex items-center gap-1.5">
+                          <Zap size={13} className="text-accent-foreground" />
+                          <span className="font-body text-xs font-semibold text-muted-foreground">Skills Gained</span>
+                        </div>
+                        <div className="flex flex-wrap gap-1">
+                          {current.skills_needed.map(s => <Badge key={s} variant="secondary" className="text-[10px]">{s}</Badge>)}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Compensation */}
+                  {current.compensation && (
+                    <div className="p-3.5 rounded-xl bg-accent/5 border border-accent/15 flex items-center gap-3">
+                      <div className="w-8 h-8 rounded-lg bg-accent/10 flex items-center justify-center border border-accent/20">
+                        <DollarSign size={16} className="text-accent-foreground shrink-0" />
+                      </div>
+                      <div>
+                        <span className="font-body text-[10px] text-muted-foreground uppercase tracking-wider font-semibold">Compensation Range</span>
+                        <p className="font-display text-xs font-bold text-foreground">{current.compensation}</p>
                       </div>
                     </div>
                   )}
 
-                  {/* Skills */}
-                  {current.skills_needed.length > 0 && (
-                    <div className="p-4 rounded-xl bg-card border border-border/60 space-y-2">
-                      <div className="flex items-center gap-1.5">
-                        <Zap size={13} className="text-accent-foreground" />
-                        <span className="font-body text-xs font-semibold text-muted-foreground">Skills Gained</span>
-                      </div>
-                      <div className="flex flex-wrap gap-1">
-                        {current.skills_needed.map(s => <Badge key={s} variant="secondary" className="text-[10px]">{s}</Badge>)}
-                      </div>
+                  {/* Tags */}
+                  {current.tags.length > 0 && (
+                    <div className="flex flex-wrap gap-1.5">
+                      {current.tags.map(t => <Badge key={t} variant="secondary" className="text-[10px]">#{t}</Badge>)}
                     </div>
                   )}
                 </div>
 
-                {/* Compensation */}
-                {current.compensation && (
-                  <div className="p-3.5 rounded-xl bg-accent/5 border border-accent/15 flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-lg bg-accent/10 flex items-center justify-center border border-accent/20">
-                      <DollarSign size={16} className="text-accent-foreground shrink-0" />
-                    </div>
-                    <div>
-                      <span className="font-body text-[10px] text-muted-foreground uppercase tracking-wider font-semibold">Compensation Range</span>
-                      <p className="font-display text-xs font-bold text-foreground">{current.compensation}</p>
-                    </div>
+                <div className="pt-4 border-t border-border/50 space-y-4">
+                  {/* Interaction Buttons */}
+                  <div className="grid grid-cols-4 gap-1 sm:gap-2 font-body">
+                    {([
+                      { type: "like" as InteractionType, icon: ThumbsUp, label: "Like", activeClass: "bg-primary hover:bg-primary/90 border-primary text-primary-foreground font-semibold" },
+                      { type: "love" as InteractionType, icon: Heart, label: "Love", activeClass: "bg-terracotta hover:bg-terracotta/90 border-terracotta text-primary-foreground font-semibold" },
+                      { type: "bookmark" as InteractionType, icon: Bookmark, label: "Save", activeClass: "bg-blue-500 hover:bg-blue-600 border-blue-500 text-white font-semibold" },
+                      { type: "not_for_me" as InteractionType, icon: XCircle, label: "Not Me", activeClass: "bg-muted-foreground hover:bg-muted-foreground/90 text-primary-foreground font-semibold" },
+                    ]).map(btn => {
+                      const active = interactions[current.id] === btn.type;
+                      return (
+                        <Button key={btn.type} variant={active ? "default" : "outline"}
+                          className={`flex flex-col items-center gap-1.5 h-auto py-2 sm:py-2.5 px-0.5 sm:px-2 rounded-xl transition-all ${active ? btn.activeClass : "border-border/80 hover:bg-muted/40 hover:border-primary/30"}`}
+                          onClick={() => handleInteraction(current.id, btn.type)}
+                        >
+                          <btn.icon size={16} className={active ? "fill-current" : ""} />
+                          <span className="text-[10px] font-body uppercase tracking-wider">{btn.label}</span>
+                        </Button>
+                      );
+                    })}
                   </div>
-                )}
 
-                {/* Tags */}
-                {current.tags.length > 0 && (
-                  <div className="flex flex-wrap gap-1.5">
-                    {current.tags.map(t => <Badge key={t} variant="secondary" className="text-[10px]">#{t}</Badge>)}
+                  {/* Navigation Controls */}
+                  <div className="flex justify-between pt-1 border-t border-border/10">
+                    <Button variant="ghost" size="sm" onClick={() => { setCurrentIndex(Math.max(0, currentIndex - 1)); startTimeRef.current = Date.now(); }} disabled={currentIndex === 0} className="text-xs rounded-full h-[36px] px-4">
+                      <ChevronLeft size={14} className="mr-1.5" /> Previous
+                    </Button>
+                    <Button variant="ghost" size="sm" onClick={() => { setCurrentIndex(Math.min(filtered.length - 1, currentIndex + 1)); startTimeRef.current = Date.now(); }} disabled={currentIndex >= filtered.length - 1} className="text-xs rounded-full h-[36px] px-4">
+                      Next <ChevronRight size={14} className="ml-1.5" />
+                    </Button>
                   </div>
-                )}
-
-                {/* Interaction Buttons */}
-                <div className="grid grid-cols-4 gap-1 sm:gap-2 pt-4 border-t border-border/50">
-                  {([
-                    { type: "like" as InteractionType, icon: ThumbsUp, label: "Like", activeClass: "bg-primary hover:bg-primary/90 border-primary text-primary-foreground font-semibold" },
-                    { type: "love" as InteractionType, icon: Heart, label: "Love", activeClass: "bg-terracotta hover:bg-terracotta/90 border-terracotta text-primary-foreground font-semibold" },
-                    { type: "bookmark" as InteractionType, icon: Bookmark, label: "Save", activeClass: "bg-blue-500 hover:bg-blue-600 border-blue-500 text-white font-semibold" },
-                    { type: "not_for_me" as InteractionType, icon: XCircle, label: "Not Me", activeClass: "bg-muted-foreground hover:bg-muted-foreground/90 text-primary-foreground font-semibold" },
-                  ]).map(btn => {
-                    const active = interactions[current.id] === btn.type;
-                    return (
-                      <Button key={btn.type} variant={active ? "default" : "outline"}
-                        className={`flex flex-col items-center gap-1.5 h-auto py-2 sm:py-2.5 px-0.5 sm:px-2 rounded-xl transition-all ${active ? btn.activeClass : "border-border/80 hover:bg-muted/40 hover:border-primary/30"}`}
-                        onClick={() => handleInteraction(current.id, btn.type)}
-                      >
-                        <btn.icon size={16} className={active ? "fill-current" : ""} />
-                        <span className="text-[10px] font-body uppercase tracking-wider">{btn.label}</span>
-                      </Button>
-                    );
-                  })}
-                </div>
-
-                {/* Navigation Controls */}
-                <div className="flex justify-between pt-1 border-t border-border/10">
-                  <Button variant="ghost" size="sm" onClick={() => { setCurrentIndex(Math.max(0, currentIndex - 1)); startTimeRef.current = Date.now(); }} disabled={currentIndex === 0} className="text-xs rounded-full h-[36px] px-4">
-                    <ChevronLeft size={14} className="mr-1.5" /> Previous
-                  </Button>
-                  <Button variant="ghost" size="sm" onClick={() => { setCurrentIndex(Math.min(filtered.length - 1, currentIndex + 1)); startTimeRef.current = Date.now(); }} disabled={currentIndex >= filtered.length - 1} className="text-xs rounded-full h-[36px] px-4">
-                    Next <ChevronRight size={14} className="ml-1.5" />
-                  </Button>
                 </div>
               </CardContent>
             </Card>

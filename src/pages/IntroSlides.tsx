@@ -88,7 +88,7 @@ const IntroSlides = () => {
   const handleSkip = () => navigate(targetAuth);
 
   return (
-    <div className="min-h-[100dvh] bg-background relative overflow-hidden">
+    <div className="min-h-[100dvh] bg-background relative overflow-hidden flex flex-col">
       {/* Background decorative blobs */}
       <div
         aria-hidden
@@ -112,7 +112,7 @@ const IntroSlides = () => {
       </header>
 
       {/* Main */}
-      <main className="relative z-10 max-w-7xl mx-auto px-5 sm:px-8 lg:px-14 pt-6 sm:pt-10 lg:pt-14 pb-10">
+      <main className="relative z-10 flex-1 max-w-7xl mx-auto w-full px-5 sm:px-8 lg:px-14 pt-4 sm:pt-10 lg:pt-14 pb-6 flex items-center">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
           {/* Illustration card */}
           <div className="order-1 lg:order-2 lg:col-span-6">
@@ -123,13 +123,13 @@ const IntroSlides = () => {
                 animate={{ opacity: 1, scale: 1, rotate: 0 }}
                 exit={{ opacity: 0, scale: 0.94, rotate: 2 }}
                 transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-                className="relative mx-auto w-full max-w-md sm:max-w-lg lg:max-w-none"
+                className="relative mx-auto w-full max-w-xs sm:max-w-lg lg:max-w-none"
               >
                 {/* Yellow card behind */}
                 <div className="absolute inset-0 translate-x-3 translate-y-3 rounded-[2rem] bg-accent" />
                 {/* Main image card */}
                 <div className="relative rounded-[2rem] bg-background border-2 border-primary/10 shadow-card overflow-hidden">
-                  <div className="aspect-square sm:aspect-[5/4] lg:aspect-square flex items-center justify-center bg-gradient-to-br from-accent/30 to-background p-6 sm:p-10">
+                  <div className="aspect-[4/3] sm:aspect-square lg:aspect-square flex items-center justify-center bg-gradient-to-br from-accent/30 to-background p-4 sm:p-10">
                     <img
                       src={slide.image}
                       alt=""
@@ -172,16 +172,16 @@ const IntroSlides = () => {
                   <Sparkles className="w-3 h-3" />
                   {slide.eyebrow}
                 </span>
-                <h1 className="font-display text-primary text-[2.5rem] leading-[1.05] sm:text-5xl md:text-6xl lg:text-[4.5rem] xl:text-[5rem] tracking-tight mb-5 sm:mb-6">
+                <h1 className="font-display text-primary text-[2rem] leading-[1.1] sm:text-5xl md:text-6xl lg:text-[4.5rem] xl:text-[5rem] tracking-tight mb-3 sm:mb-6">
                   {slide.title}
                 </h1>
                 <p
-                  className="font-body text-base sm:text-lg lg:text-xl text-foreground/75 leading-relaxed max-w-xl mb-6 sm:mb-8"
+                  className="font-body text-sm sm:text-lg lg:text-xl text-foreground/75 leading-relaxed max-w-xl mb-4 sm:mb-8"
                   dangerouslySetInnerHTML={{ __html: slide.body.replace(/&apos;/g, "'") }}
                 />
 
                 {/* CTA pill */}
-                <div className="inline-flex items-center gap-2 bg-accent text-primary rounded-full pl-3 pr-5 py-2 sm:py-2.5 mb-8 sm:mb-10 shadow-soft">
+                <div className="hidden sm:inline-flex items-center gap-2 bg-accent text-primary rounded-full pl-3 pr-5 py-2 sm:py-2.5 mb-6 sm:mb-10 shadow-soft">
                   <span className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-primary flex items-center justify-center">
                     <PillIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-accent" />
                   </span>

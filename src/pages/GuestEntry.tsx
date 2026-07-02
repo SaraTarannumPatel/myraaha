@@ -22,11 +22,11 @@ const GuestEntry = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background flex flex-col">
+    <div className="min-h-[100dvh] bg-background flex flex-col">
       <OnboardingProgressBar progress={5} />
       <OnboardingRewardBanner currentProgress={5} />
 
-      <div className="flex-1 flex flex-col items-center justify-center px-6 py-8 pb-20 max-w-md mx-auto w-full">
+      <div className="flex-1 flex flex-col items-center justify-center px-6 py-4 pb-6 max-w-md mx-auto w-full overflow-y-auto">
         <div className="relative mb-4 w-full">
           <motion.div
             initial={{ opacity: 0, y: 20 }}

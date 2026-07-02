@@ -1726,7 +1726,7 @@ export default function CareerMap() {
       <div className="w-full rounded-2xl border border-border bg-slate-100 dark:bg-slate-950 shadow-2xl relative">
         {/* Floating Map Status Overlay */}
         <div 
-          className="absolute bottom-6 left-4 z-[70] bg-background/95 shadow-lg rounded-xl border border-border px-3 py-2 flex items-center gap-2 max-w-xs sm:max-w-md backdrop-blur-sm pointer-events-auto select-none transition-all duration-300"
+          className="absolute bottom-3 sm:bottom-6 left-4 z-[70] bg-background/95 shadow-lg rounded-xl border border-border px-3 py-2 flex items-center gap-2 max-w-xs sm:max-w-md backdrop-blur-sm pointer-events-auto select-none transition-all duration-300"
           onMouseDown={(e) => e.stopPropagation()}
           onMouseMove={(e) => e.stopPropagation()}
           onMouseUp={(e) => e.stopPropagation()}
@@ -1748,7 +1748,7 @@ export default function CareerMap() {
 
         <div 
           ref={mapContainerRef}
-          className="w-full relative bg-[#e8f0e4] dark:bg-[#111612] h-[calc(100vh-200px)] min-h-[600px] select-none rounded-2xl"
+          className="w-full relative bg-[#e8f0e4] dark:bg-[#111612] h-[calc(100dvh-200px)] min-h-[480px] sm:min-h-[600px] select-none rounded-2xl"
           style={{ 
             cursor: isPanning 
               ? "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='%23000000' stroke='%23ffffff' stroke-width='1.5'%3E%3Cpath d='M10 14V9.5a1.5 1.5 0 0 1 3 0V11a.5.5 0 0 0 1 0V9.5a1.5 1.5 0 0 1 3 0V11a.5.5 0 0 0 1 0V9.5a1.5 1.5 0 0 1 3 0V14a8 8 0 0 1-16 0v-5a1.5 1.5 0 0 1 3 0V14a.5.5 0 0 0 1 0z'/%3E%3C/svg%3E\") 12 12, grabbing"
@@ -2445,7 +2445,7 @@ export default function CareerMap() {
 
           {/* FLOATING MAP CONTROLS: LAYERS & ZOOM (Spec L555-557, L843, L1114-1122) */}
           <div 
-            className="absolute bottom-8 right-4 z-[70] flex flex-col gap-3 items-end pointer-events-auto"
+            className="absolute bottom-4 sm:bottom-8 right-4 z-[70] flex flex-col gap-3 items-end pointer-events-auto"
             onMouseDown={(e) => e.stopPropagation()}
             onMouseMove={(e) => e.stopPropagation()}
             onMouseUp={(e) => e.stopPropagation()}
@@ -2977,8 +2977,8 @@ export default function CareerMap() {
               className={sidebarMode === "detail"
                 ? `${isDetailsFullScreen ? "fixed z-[110] inset-0 rounded-none w-full h-full" : "absolute z-[80] rounded-xl"} flex flex-col pointer-events-auto overflow-hidden shadow-2xl min-h-0`
                 : sidebarMode === "menu"
-                  ? "absolute top-[88px] right-4 bottom-3 w-[380px] max-w-[calc(100vw-2rem)] z-[80] flex flex-col pointer-events-auto"
-                  : "absolute top-[122px] left-3 bottom-3 w-[380px] max-w-[calc(100vw-1.5rem)] z-[80] flex flex-col pointer-events-auto"
+                  ? "absolute top-[88px] right-4 bottom-3 max-h-[calc(100dvh-110px)] w-[380px] max-w-[calc(100vw-2rem)] z-[80] flex flex-col pointer-events-auto overflow-hidden"
+                  : "absolute top-[122px] left-3 bottom-3 max-h-[calc(100dvh-140px)] w-[380px] max-w-[calc(100vw-1.5rem)] z-[80] flex flex-col pointer-events-auto overflow-hidden"
               }
               onMouseDown={(e) => e.stopPropagation()}
               onMouseMove={(e) => e.stopPropagation()}
@@ -6499,7 +6499,7 @@ export default function CareerMap() {
 
                   {/* MODE: ROLEVIEW DETAIL (18 TABS SYSTEM) */}
                   {sidebarMode === "detail" && (
-                    <div className="flex flex-col h-full bg-background overflow-y-auto scrollbar-hidden select-text">
+                    <div className="flex flex-col h-full bg-background overflow-hidden select-text">
                       {/* Hero Image / Video Banner */}
                       <div className="w-full h-24 bg-slate-800 relative overflow-hidden shrink-0">
                         <div className="absolute inset-0 bg-cover bg-center opacity-60" style={{ backgroundImage: `url('https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=600')` }} />
@@ -6625,7 +6625,7 @@ export default function CareerMap() {
                       </div>
 
                       {/* 18 TABS DETAILS CONTENT AREA — standardizing on text-xs for premium feel */}
-                      <div data-scroll-container className="p-4 space-y-4 text-xs h-auto" style={{ WebkitOverflowScrolling: 'touch' }}>
+                      <div data-scroll-container className="flex-1 overflow-y-auto min-h-0 p-4 space-y-4 text-xs scrollbar-hidden" style={{ WebkitOverflowScrolling: 'touch' }}>
                         
                         {/* TAB 1: OVERVIEW */}
                         {activeRoleTab === "Overview" && (
@@ -8198,7 +8198,7 @@ export default function CareerMap() {
           {/* SKILL GAP AR VIEW DIALOG OVERLAY (Spec L2840-2920) */}
           {showSkillGapAR && (
             <div className="absolute inset-0 bg-slate-955/80 backdrop-blur-md z-50 flex items-center justify-center pointer-events-auto p-3 text-foreground">
-              <div className="bg-background border border-border w-full max-w-lg rounded-3xl p-5 shadow-2xl space-y-4 text-xs animate-in zoom-in-95 duration-200 flex flex-col h-[90vh]">
+              <div className="bg-background border border-border w-full max-w-lg rounded-3xl p-4 sm:p-5 shadow-2xl space-y-3 sm:space-y-4 text-xs animate-in zoom-in-95 duration-200 flex flex-col h-[90dvh] max-h-[700px]">
                 
                 {/* Header */}
                 <div className="flex justify-between items-center border-b border-border pb-3 shrink-0">

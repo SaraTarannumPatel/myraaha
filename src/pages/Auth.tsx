@@ -309,11 +309,11 @@ const Auth = () => {
   if (user) return null;
 
   return (
-    <div className="min-h-screen bg-background flex flex-col">
+    <div className="min-h-[100dvh] bg-background flex flex-col">
       {!isLogin && <OnboardingProgressBar progress={5} />}
       {!isLogin && <OnboardingRewardBanner currentProgress={5} />}
 
-      <div className="flex-1 flex flex-col items-center justify-center px-4 py-2 pb-4">
+      <div className="flex-1 flex flex-col items-center justify-center px-4 py-4 pb-4 overflow-y-auto">
         <div className="flex flex-col w-full max-w-md">
 
           {/* Email verification banner */}
@@ -416,7 +416,7 @@ const Auth = () => {
                       <>Begin your journey!</>
                     )}
                   </h1>
-                  <div className="w-[28%] sm:w-[25%] ml-2">
+                  <div className="w-[28%] sm:w-[25%] ml-2 auth-illustration">
                     <img
                       src={isLogin ? loginIllustration : signupIllustration}
                       alt=""
@@ -453,7 +453,7 @@ const Auth = () => {
               onChange={(e) => setEmail(e.target.value)}
               placeholder={isLogin ? "Email" : "Email"}
               required
-              className="w-full h-12 md:h-12 md:min-h-[48px] min-h-[52px] rounded-md bg-muted px-4 font-body text-base placeholder:text-muted-foreground outline-none border-none focus:ring-2 focus:ring-primary transition-all"
+              className="auth-input w-full h-12 md:h-12 md:min-h-[48px] min-h-[52px] rounded-md bg-muted px-4 font-body text-base placeholder:text-muted-foreground outline-none border-none focus:ring-2 focus:ring-primary transition-all"
             />
 
             {!isLogin && (
@@ -464,7 +464,7 @@ const Auth = () => {
                   onChange={(e) => handlePhoneChange(e.target.value)}
                   placeholder="+91 XXXXX XXXXX"
                   required
-                  className="w-full h-12 md:h-12 md:min-h-[48px] min-h-[52px] rounded-md bg-muted px-4 font-body text-base placeholder:text-muted-foreground outline-none border-none focus:ring-2 focus:ring-primary transition-all"
+                  className="auth-input w-full h-12 md:h-12 md:min-h-[48px] min-h-[52px] rounded-md bg-muted px-4 font-body text-base placeholder:text-muted-foreground outline-none border-none focus:ring-2 focus:ring-primary transition-all"
                   onFocus={() => !phone && setPhone("+91 ")}
                 />
                 <p className="font-body text-[11px] text-muted-foreground px-1 -mt-1">
@@ -480,7 +480,7 @@ const Auth = () => {
               placeholder="Password"
               required
               minLength={6}
-              className="w-full h-12 md:h-12 md:min-h-[48px] min-h-[52px] rounded-md bg-muted px-4 font-body text-base placeholder:text-muted-foreground outline-none border-none focus:ring-2 focus:ring-primary transition-all"
+              className="auth-input w-full h-12 md:h-12 md:min-h-[48px] min-h-[52px] rounded-md bg-muted px-4 font-body text-base placeholder:text-muted-foreground outline-none border-none focus:ring-2 focus:ring-primary transition-all"
             />
 
             {isLogin && (

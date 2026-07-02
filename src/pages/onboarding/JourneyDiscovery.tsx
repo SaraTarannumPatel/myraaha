@@ -322,14 +322,14 @@ const JourneyDiscovery = () => {
   const sectionLabel = currentQ.section;
 
   return (
-    <div className="min-h-screen bg-background flex flex-col">
+    <div className="min-h-[100dvh] bg-background flex flex-col overflow-hidden">
       <OnboardingProgressBar progress={progressPercent} />
       <OnboardingRewardBanner currentProgress={progressPercent} />
-      <div className="flex-1 flex flex-col items-center justify-center p-4 sm:p-6 py-4 pb-6">
+      <div className="flex-1 onboarding-scroll-safe onboarding-page-inner flex flex-col items-center justify-center p-4 sm:p-6 py-4 pb-6">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
-          className="max-w-xl w-full space-y-6"
+          className="max-w-xl w-full space-y-6 my-auto"
         >
           <div className="space-y-2">
             <div className="flex items-center justify-between">

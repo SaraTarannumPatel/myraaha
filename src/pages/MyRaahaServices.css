@@ -465,15 +465,21 @@ p {
 
   .bullet-item {
     font-size: 0.95rem !important;
-    text-align: center;
-    justify-content: center;
+    text-align: left;
+    justify-content: flex-start;
+    align-items: flex-start;
     width: 100%;
     max-width: 320px;
-    padding: 0.75rem 1rem;
+    padding: 1rem 1.25rem;
     background: white;
     border-radius: 12px;
     box-shadow: 0 4px 15px rgba(0,0,0,0.02);
     border: 1px solid #f1f5f9;
+  }
+
+  .bullet-item svg {
+    flex-shrink: 0;
+    margin-top: 0.15rem;
   }
 
   .btn-learn-more {

@@ -819,15 +819,20 @@ const CuriosityCompass = () => {
   }, [user]);
 
   const fetchAll = async () => {
-    await Promise.all([
-      fetchCareerCards(),
-      fetchQuests(),
-      fetchDomains(),
-      fetchInterests(),
-      fetchNextStepData(),
-      fetchConclusion(),
-    ]);
-    setLoading(false);
+    try {
+      await Promise.all([
+        fetchCareerCards().catch((e) => console.error("Error fetching career cards:", e)),
+        fetchQuests().catch((e) => console.error("Error fetching quests:", e)),
+        fetchDomains().catch((e) => console.error("Error fetching domains:", e)),
+        fetchInterests().catch((e) => console.error("Error fetching interests:", e)),
+        fetchNextStepData().catch((e) => console.error("Error fetching next step data:", e)),
+        fetchConclusion().catch((e) => console.error("Error fetching conclusion:", e)),
+      ]);
+    } catch (e) {
+      console.error("General error in fetchAll:", e);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const fetchCareerCards = async () => {

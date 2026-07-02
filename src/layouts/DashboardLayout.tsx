@@ -244,7 +244,7 @@ const DashboardLayout = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background flex overflow-x-hidden">
+    <div className="min-h-screen bg-background flex overflow-x-hidden myraaha-app">
       <aside className="hidden lg:flex w-64 border-r border-border bg-card flex-col fixed h-screen">
         <NavContent />
       </aside>
@@ -271,7 +271,7 @@ const DashboardLayout = () => {
         </div>
       </div>
 
-      <main className="flex-1 min-w-0 lg:ml-64 mt-14 lg:mt-0 pb-20 lg:pb-0">
+      <main className="flex-1 min-w-0 lg:ml-64 pt-20 lg:pt-0 pb-20 lg:pb-0">
         <div className={`mx-auto min-w-0 responsive-page ${
           location.pathname === "/dashboard/curiosity-compass"
             ? "py-4 sm:py-5 md:py-6 lg:py-8 max-w-none w-full px-3 sm:px-5 lg:px-6 lg:overflow-x-visible overflow-x-hidden"
@@ -292,12 +292,13 @@ const DashboardLayout = () => {
               <Link
                 key={item.path}
                 to={item.path}
-                className={`flex flex-col items-center justify-center gap-0.5 text-[10px] transition-colors ${
+                className={`flex flex-col items-center justify-center gap-0.5 text-[10px] transition-colors mobile-bottom-nav-link ${
                   isActive ? "text-primary" : "text-muted-foreground hover:text-foreground"
                 }`}
+                title={item.label}
               >
                 <item.icon size={18} />
-                <span className="truncate px-1">{item.label}</span>
+                <span className="truncate px-1 mobile-bottom-nav-label">{item.label}</span>
               </Link>
             );
           })}

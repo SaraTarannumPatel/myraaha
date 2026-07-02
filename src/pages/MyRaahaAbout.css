@@ -1884,7 +1884,7 @@
   background: #ffffff; /* White background */
   width: 100%;
   max-width: 580px;
-  max-height: 85vh;
+  max-height: 85dvh;
   border-radius: 25px;
   position: relative;
   overflow: visible; /* Allow photo to pop out */
@@ -2159,7 +2159,7 @@
 
 @media (max-width: 640px) {
   .profile-modal-sheet {
-    height: 100vh;
+    height: 100dvh;
     border-radius: 0;
     max-width: 100%;
   }
@@ -2431,7 +2431,7 @@
 .motivation-hero-title {
   font-size: 4rem;
   font-weight: 700;
-  color: white;
+  color: white !important;
   line-height: 1.1;
   margin-bottom: 1.5rem;
 }
@@ -2704,6 +2704,13 @@
 .ns-icon {
   width: 40px;
   height: 40px;
+}
+
+.ns-data {
+  display: flex;
+  align-items: baseline;
+  gap: 0.35rem;
+  flex-wrap: wrap;
 }
 
 .ns-data span {
@@ -3268,7 +3275,7 @@
   /* Modal Bottom Sheet */
   .profile-modal-overlay { align-items: flex-end; padding: 0; }
   .profile-modal-sheet { 
-    max-height: 85vh; 
+    max-height: 85dvh; 
     border-radius: 32px 32px 0 0; 
     width: 100%; 
     animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
@@ -3463,7 +3470,7 @@
   /* Modal Bottom Sheet */
   .profile-modal-overlay { align-items: flex-end; padding: 0; }
   .profile-modal-sheet { 
-    max-height: 85vh; 
+    max-height: 85dvh; 
     border-radius: 32px 32px 0 0; 
     width: 100%; 
     animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
@@ -3958,7 +3965,7 @@
     padding: 0;
   }
   .profile-modal-sheet {
-    max-height: 85vh;
+    max-height: 85dvh;
     border-radius: 32px 32px 0 0;
     width: 100%;
     animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);

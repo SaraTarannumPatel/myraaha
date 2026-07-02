@@ -21,16 +21,16 @@ const Welcome = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background flex flex-col">
+    <div className="min-h-[100dvh] bg-background flex flex-col overflow-hidden">
       <OnboardingProgressBar progress={10} />
       <OnboardingRewardBanner currentProgress={10} />
 
-      <div className="flex-1 flex flex-col items-center justify-center p-4 sm:p-6 py-4 pb-6">
+      <div className="flex-1 onboarding-scroll-safe onboarding-page-inner flex flex-col items-center justify-center p-4 sm:p-6 py-4 pb-6">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7 }}
-          className="max-w-lg w-full text-center space-y-3 sm:space-y-4"
+          className="max-w-lg w-full text-center space-y-3 sm:space-y-4 my-auto"
         >
           <div className="space-y-2">
             <motion.div

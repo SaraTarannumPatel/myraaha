@@ -254,7 +254,8 @@
   }
   
   .grid-filters {
-    justify-content: center;
+    justify-content: flex-start !important;
+    padding: 0 1.5rem 1rem !important;
   }
 
   .insight-card-content {

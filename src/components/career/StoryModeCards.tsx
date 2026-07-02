@@ -431,129 +431,133 @@ const StoryModeCards = () => {
                 </div>
               </div>
 
-              <CardContent className="p-3.5 sm:p-6 space-y-4 sm:space-y-5">
-                {/* Main Story */}
-                <div className="relative">
-                  <Quote size={20} className="absolute -top-1 -left-1 text-primary/10" />
-                  <p className="font-body text-sm text-foreground leading-relaxed pl-7 whitespace-pre-line">
-                    {current.story_content}
-                  </p>
-                </div>
-
-                {/* Day in Life */}
-                {current.day_in_life && (
-                  <div className="p-4 rounded-2xl bg-muted/30 border border-border/50">
-                    <div className="flex items-center gap-2 mb-1.5">
-                      <Clock size={14} className="text-primary" />
-                      <span className="font-display text-xs font-semibold text-foreground uppercase tracking-wider">A day in my life</span>
-                    </div>
-                    <p className="font-body text-xs text-muted-foreground leading-relaxed">{current.day_in_life}</p>
+              <CardContent className="p-3.5 sm:p-6 flex flex-col min-h-0">
+                <div className="career-navigator-card-body space-y-4 sm:space-y-5 pr-1 pb-2">
+                  {/* Main Story */}
+                  <div className="relative">
+                    <Quote size={20} className="absolute -top-1 -left-1 text-primary/10" />
+                    <p className="font-body text-sm text-foreground leading-relaxed pl-7 whitespace-pre-line">
+                      {current.story_content}
+                    </p>
                   </div>
-                )}
 
-                {/* Expandable Details CTA */}
-                <button
-                  onClick={() => setExpanded(!expanded)}
-                  className="w-full text-center font-body text-xs text-primary font-medium hover:underline py-1.5 border-t border-border/20"
-                >
-                  {expanded ? "Collapse detailed overview ↑" : "Reveal real career stats (pros, cons, skills) ↓"}
-                </button>
-
-                <AnimatePresence>
-                  {expanded && (
-                    <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} exit={{ height: 0, opacity: 0 }} className="space-y-4 overflow-hidden pt-2">
-                      {/* Pros & Cons */}
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                        <div className="p-3.5 rounded-xl bg-success/5 border border-success/15">
-                          <h4 className="font-display text-xs font-semibold mb-2 flex items-center gap-1.5 text-success">
-                            <CheckCircle2 size={13} className="text-success" /> The Good Stuff
-                          </h4>
-                          <ul className="space-y-1">
-                            {current.pros.map((p, i) => (
-                              <li key={i} className="font-body text-[11px] text-muted-foreground flex items-start gap-1.5 leading-relaxed">
-                                <span className="text-success font-bold mt-0.5">•</span> {p}
-                              </li>
-                            ))}
-                          </ul>
-                        </div>
-                        <div className="p-3.5 rounded-xl bg-warmth/5 border border-warmth/15">
-                          <h4 className="font-display text-xs font-semibold mb-2 flex items-center gap-1.5 text-warmth">
-                            <AlertTriangle size={13} className="text-warmth" /> Challenges
-                          </h4>
-                          <ul className="space-y-1">
-                            {current.cons.map((c, i) => (
-                              <li key={i} className="font-body text-[11px] text-muted-foreground flex items-start gap-1.5 leading-relaxed">
-                                <span className="text-warmth font-bold mt-0.5">•</span> {c}
-                              </li>
-                            ))}
-                          </ul>
-                        </div>
+                  {/* Day in Life */}
+                  {current.day_in_life && (
+                    <div className="p-4 rounded-2xl bg-muted/30 border border-border/50">
+                      <div className="flex items-center gap-2 mb-1.5">
+                        <Clock size={14} className="text-primary" />
+                        <span className="font-display text-xs font-semibold text-foreground uppercase tracking-wider">A day in my life</span>
                       </div>
-
-                      {/* Skills */}
-                      {current.skills_highlighted.length > 0 && (
-                        <div className="space-y-1.5">
-                          <h4 className="font-display text-xs font-semibold flex items-center gap-1.5 text-foreground">
-                            <Zap size={13} className="text-primary" /> Key Skills Needed
-                          </h4>
-                          <div className="flex flex-wrap gap-1.5">
-                            {current.skills_highlighted.map(s => <Badge key={s} variant="outline" className="text-xs">{s}</Badge>)}
-                          </div>
-                        </div>
-                      )}
-
-                      {/* Advice */}
-                      {current.advice && (
-                        <div className="p-3.5 rounded-xl bg-accent/5 border border-accent/15">
-                          <div className="flex items-center gap-2 mb-1.5">
-                            <Lightbulb size={14} className="text-accent-foreground" />
-                            <span className="font-display text-xs font-semibold text-foreground uppercase tracking-wider">Professional Advice</span>
-                          </div>
-                          <p className="font-body text-xs text-muted-foreground italic leading-relaxed">"{current.advice}"</p>
-                        </div>
-                      )}
-
-                      {/* Tags */}
-                      {current.tags.length > 0 && (
-                        <div className="flex flex-wrap gap-1.5 pt-1">
-                          {current.tags.map(t => <Badge key={t} variant="secondary" className="text-[10px]">#{t}</Badge>)}
-                        </div>
-                      )}
-                    </motion.div>
+                      <p className="font-body text-xs text-muted-foreground leading-relaxed">{current.day_in_life}</p>
+                    </div>
                   )}
-                </AnimatePresence>
 
-                {/* Interaction Buttons */}
-                <div className="grid grid-cols-4 gap-1 sm:gap-2 pt-4 border-t border-border/50">
-                  {([
-                    { type: "like" as InteractionType, icon: ThumbsUp, label: "Like", activeClass: "bg-primary hover:bg-primary/90 border-primary text-primary-foreground font-semibold" },
-                    { type: "love" as InteractionType, icon: Heart, label: "Love", activeClass: "bg-terracotta hover:bg-terracotta/90 border-terracotta text-primary-foreground font-semibold" },
-                    { type: "bookmark" as InteractionType, icon: Bookmark, label: "Save", activeClass: "bg-blue-500 hover:bg-blue-600 border-blue-500 text-white font-semibold" },
-                    { type: "not_for_me" as InteractionType, icon: XCircle, label: "Not Me", activeClass: "bg-muted-foreground hover:bg-muted-foreground/90 text-primary-foreground font-semibold" },
-                  ]).map(btn => {
-                    const active = interactions[current.id] === btn.type;
-                    return (
-                      <Button
-                        key={btn.type}
-                        variant={active ? "default" : "outline"}
-                        className={`flex flex-col items-center gap-1.5 h-auto py-2 sm:py-2.5 px-0.5 sm:px-2 rounded-xl transition-all ${active ? btn.activeClass : "border-border/80 hover:bg-muted/40 hover:border-primary/30"}`}
-                        onClick={() => handleInteraction(current.id, btn.type)}
-                      >
-                        <btn.icon size={16} className={active ? "fill-current" : ""} />
-                        <span className="text-[10px] font-body uppercase tracking-wider">{btn.label}</span>
-                      </Button>
-                    );
-                  })}
+                  {/* Expandable Details CTA */}
+                  <button
+                    onClick={() => setExpanded(!expanded)}
+                    className="w-full text-center font-body text-xs text-primary font-medium hover:underline py-1.5 border-t border-border/20"
+                  >
+                    {expanded ? "Collapse detailed overview ↑" : "Reveal real career stats (pros, cons, skills) ↓"}
+                  </button>
+
+                  <AnimatePresence>
+                    {expanded && (
+                      <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} exit={{ height: 0, opacity: 0 }} className="space-y-4 overflow-hidden pt-2">
+                        {/* Pros & Cons */}
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                          <div className="p-3.5 rounded-xl bg-success/5 border border-success/15">
+                            <h4 className="font-display text-xs font-semibold mb-2 flex items-center gap-1.5 text-success">
+                              <CheckCircle2 size={13} className="text-success" /> The Good Stuff
+                            </h4>
+                            <ul className="space-y-1">
+                              {current.pros.map((p, i) => (
+                                <li key={i} className="font-body text-[11px] text-muted-foreground flex items-start gap-1.5 leading-relaxed">
+                                  <span className="text-success font-bold mt-0.5">•</span> {p}
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                          <div className="p-3.5 rounded-xl bg-warmth/5 border border-warmth/15">
+                            <h4 className="font-display text-xs font-semibold mb-2 flex items-center gap-1.5 text-warmth">
+                              <AlertTriangle size={13} className="text-warmth" /> Challenges
+                            </h4>
+                            <ul className="space-y-1">
+                              {current.cons.map((c, i) => (
+                                <li key={i} className="font-body text-[11px] text-muted-foreground flex items-start gap-1.5 leading-relaxed">
+                                  <span className="text-warmth font-bold mt-0.5">•</span> {c}
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        </div>
+
+                        {/* Skills */}
+                        {current.skills_highlighted.length > 0 && (
+                          <div className="space-y-1.5">
+                            <h4 className="font-display text-xs font-semibold flex items-center gap-1.5 text-foreground">
+                              <Zap size={13} className="text-primary" /> Key Skills Needed
+                            </h4>
+                            <div className="flex flex-wrap gap-1.5">
+                              {current.skills_highlighted.map(s => <Badge key={s} variant="outline" className="text-xs">{s}</Badge>)}
+                            </div>
+                          </div>
+                        )}
+
+                        {/* Advice */}
+                        {current.advice && (
+                          <div className="p-3.5 rounded-xl bg-accent/5 border border-accent/15">
+                            <div className="flex items-center gap-2 mb-1.5">
+                              <Lightbulb size={14} className="text-accent-foreground" />
+                              <span className="font-display text-xs font-semibold text-foreground uppercase tracking-wider">Professional Advice</span>
+                            </div>
+                            <p className="font-body text-xs text-muted-foreground italic leading-relaxed">"{current.advice}"</p>
+                          </div>
+                        )}
+
+                        {/* Tags */}
+                        {current.tags.length > 0 && (
+                          <div className="flex flex-wrap gap-1.5 pt-1">
+                            {current.tags.map(t => <Badge key={t} variant="secondary" className="text-[10px]">#{t}</Badge>)}
+                          </div>
+                        )}
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
                 </div>
 
-                {/* Navigation Controls */}
-                <div className="flex justify-between pt-1 border-t border-border/10">
-                  <Button variant="ghost" size="sm" onClick={() => { setCurrentIndex(Math.max(0, currentIndex - 1)); setExpanded(false); startTimeRef.current = Date.now(); }} disabled={currentIndex === 0} className="text-xs rounded-full h-[36px] px-4">
-                    <ChevronLeft size={14} className="mr-1.5" /> Previous
-                  </Button>
-                  <Button variant="ghost" size="sm" onClick={() => { setCurrentIndex(Math.min(filtered.length - 1, currentIndex + 1)); setExpanded(false); startTimeRef.current = Date.now(); }} disabled={currentIndex >= filtered.length - 1} className="text-xs rounded-full h-[36px] px-4">
-                    Next <ChevronRight size={14} className="ml-1.5" />
-                  </Button>
+                <div className="pt-4 border-t border-border/50 space-y-4">
+                  {/* Interaction Buttons */}
+                  <div className="grid grid-cols-4 gap-1 sm:gap-2 font-body">
+                    {([
+                      { type: "like" as InteractionType, icon: ThumbsUp, label: "Like", activeClass: "bg-primary hover:bg-primary/90 border-primary text-primary-foreground font-semibold" },
+                      { type: "love" as InteractionType, icon: Heart, label: "Love", activeClass: "bg-terracotta hover:bg-terracotta/90 border-terracotta text-primary-foreground font-semibold" },
+                      { type: "bookmark" as InteractionType, icon: Bookmark, label: "Save", activeClass: "bg-blue-500 hover:bg-blue-600 border-blue-500 text-white font-semibold" },
+                      { type: "not_for_me" as InteractionType, icon: XCircle, label: "Not Me", activeClass: "bg-muted-foreground hover:bg-muted-foreground/90 text-primary-foreground font-semibold" },
+                    ]).map(btn => {
+                      const active = interactions[current.id] === btn.type;
+                      return (
+                        <Button
+                          key={btn.type}
+                          variant={active ? "default" : "outline"}
+                          className={`flex flex-col items-center gap-1.5 h-auto py-2 sm:py-2.5 px-0.5 sm:px-2 rounded-xl transition-all ${active ? btn.activeClass : "border-border/80 hover:bg-muted/40 hover:border-primary/30"}`}
+                          onClick={() => handleInteraction(current.id, btn.type)}
+                        >
+                          <btn.icon size={16} className={active ? "fill-current" : ""} />
+                          <span className="text-[10px] font-body uppercase tracking-wider">{btn.label}</span>
+                        </Button>
+                      );
+                    })}
+                  </div>
+
+                  {/* Navigation Controls */}
+                  <div className="flex justify-between pt-1 border-t border-border/10">
+                    <Button variant="ghost" size="sm" onClick={() => { setCurrentIndex(Math.max(0, currentIndex - 1)); setExpanded(false); startTimeRef.current = Date.now(); }} disabled={currentIndex === 0} className="text-xs rounded-full h-[36px] px-4">
+                      <ChevronLeft size={14} className="mr-1.5" /> Previous
+                    </Button>
+                    <Button variant="ghost" size="sm" onClick={() => { setCurrentIndex(Math.min(filtered.length - 1, currentIndex + 1)); setExpanded(false); startTimeRef.current = Date.now(); }} disabled={currentIndex >= filtered.length - 1} className="text-xs rounded-full h-[36px] px-4">
+                      Next <ChevronRight size={14} className="ml-1.5" />
+                    </Button>
+                  </div>
                 </div>
               </CardContent>
             </Card>
